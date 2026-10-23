@@ -6,14 +6,12 @@
     <title>Vereins-App - KB & SV Gaschurn-Partenen</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-   
     <meta name="apple-mobile-web-app-title" content="KB & SV App">
-    <!-- PWA / Icons (behalten!) -->
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
-    <!-- HIER GENAU EINSETZEN (Über dem style-Tag): -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
@@ -29,10 +27,9 @@
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
     </script>
-    <!-- ENDE DES FIREBASE-BLOCKS -->
+
     <style>
-    :root {
-    
+        :root {
             --primary-red: #7f1d1d;
             --primary-dark: #450a0a;
             --accent-green: #15803d;
@@ -123,8 +120,6 @@
         .btn-primary:hover { background: var(--primary-dark); }
         .btn-green { background: var(--accent-green); color: white; }
         .btn-green:hover { background: var(--accent-green-dark); }
-        .btn-whatsapp { background: var(--whatsapp); color: white; }
-        .btn-whatsapp:hover { background: var(--whatsapp-dark); }
         .btn-success { background: #dcfce7; color: var(--accent-green-dark); }
         .btn-success.active { background: var(--accent-green); color: white; }
         .btn-danger { background: #fee2e2; color: var(--danger); }
@@ -204,8 +199,6 @@
         }
         .counter-btn:hover { background: var(--primary-red); color: white; border-color: var(--primary-red); }
 
-        .stock-warning { background: #fef2f2; border-left: 4px solid var(--danger); padding: 8px 12px; font-size: 0.85em; margin-bottom: 8px; border-radius: 6px; color: var(--danger); font-weight: bold; }
-
         .bottom-nav {
             position: fixed !important; 
             bottom: 0 !important; 
@@ -238,15 +231,8 @@
         .nav-item.active { color: var(--primary-red) !important; transform: scale(1.05); }
         .nav-icon { font-size: 1.5em !important; margin-bottom: 2px !important; display: block !important; }
         
-        .stock-edit-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.88em; }
-        .stock-edit-row input { width: 70px; text-align: center; padding: 4px; border-radius: 6px; border: 1px solid #cbd5e1; }
-        
-        /* standardmäßig für normale Mitglieder ausblenden */
         .admin-delete-btn { display: none; }
-        /* aktivieren sobald Admin angemeldet ist */
         body.admin-mode .admin-delete-btn { display: inline-flex !important; }
-        }
-    }
     </style>
 </head>
 <body>
@@ -273,142 +259,6 @@
                 <div class="event-desc"><strong>Diensthabende:</strong> Christoph Wittwer, Werner, Wittwer</div>
             </div>
         </div>
-
-        <div class="card">
-            <div class="card-title">📋 Gesamter Dienstplan (2026/2027)</div>
-            <div style="font-size: 0.85em; margin-bottom: 12px; color: var(--text-muted);">
-                🕒 <strong>Dienstzeit:</strong> Freitags von 19:00 bis 21:00 Uhr
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-
-                <!-- 09.10.2026 - Team 4 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #009a60;">
-                    <div>
-                        <strong>09.10.2026</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Norbert, Maria, Erwin</span>
-                    </div>
-                    <span style="background: #009a60; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 4</span>
-                </div>
-
-                <!-- 23.10.2026 - Team 3 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #df7800;">
-                    <div>
-                        <strong>23.10.2026</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Christoph, Werner, Wittwer</span>
-                    </div>
-                    <span style="background: #df7800; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 3</span>
-                </div>
-
-                <!-- 06.11.2026 - Geschlossen -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #6c757d;">
-                    <div>
-                        <strong>06.11.2026</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Geschlossen (Interne Veranstaltung)</span>
-                    </div>
-                    <span style="background: #6c757d; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Geschlossen</span>
-                </div>
-
-                <!-- 20.11.2026 - Team 2 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #8a3ffc;">
-                    <div>
-                        <strong>20.11.2026</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Dietmar, Simon, Sabrina</span>
-                    </div>
-                    <span style="background: #8a3ffc; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 2</span>
-                </div>
-
-                <!-- 04.12.2026 - Team 5 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #e12d79;">
-                    <div>
-                        <strong>04.12.2026</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Heimo, Karin, Werner Wachter</span>
-                    </div>
-                    <span style="background: #e12d79; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 5</span>
-                </div>
-
-                <!-- 18.12.2026 - Team 4 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #009a60;">
-                    <div>
-                        <strong>18.12.2026</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Norbert, Maria, Erwin</span>
-                    </div>
-                    <span style="background: #009a60; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 4</span>
-                </div>
-
-                <!-- 01.01.2027 - Geschlossen -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #6c757d;">
-                    <div>
-                        <strong>01.01.2027</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Feiertag (Neujahr)</span>
-                    </div>
-                    <span style="background: #6c757d; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Geschlossen</span>
-                </div>
-
-                <!-- 15.01.2027 - Team 1 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #0085ca;">
-                    <div>
-                        <strong>15.01.2027</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Manfred, Pascal, Jasmine</span>
-                    </div>
-                    <span style="background: #0085ca; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 1</span>
-                </div>
-
-                <!-- 29.01.2027 - Team 2 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #8a3ffc;">
-                    <div>
-                        <strong>29.01.2027</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Dietmar, Simon, Sabrina</span>
-                    </div>
-                    <span style="background: #8a3ffc; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 2</span>
-                </div>
-
-                <!-- 12.02.2027 - Team 5 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #e12d79;">
-                    <div>
-                        <strong>12.02.2027</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Heimo, Karin, Werner Wachter</span>
-                    </div>
-                    <span style="background: #e12d79; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 5</span>
-                </div>
-
-                <!-- 26.02.2027 - Team 4 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #009a60;">
-                    <div>
-                        <strong>26.02.2027</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Norbert, Maria, Erwin</span>
-                    </div>
-                    <span style="background: #009a60; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 4</span>
-                </div>
-
-                <!-- 12.03.2027 - Team 3 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #df7800;">
-                    <div>
-                        <strong>12.03.2027</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Christoph, Werner, Wittwer</span>
-                    </div>
-                    <span style="background: #df7800; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 3</span>
-                </div>
-
-                <!-- 26.03.2027 - Geschlossen -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #6c757d;">
-                    <div>
-                        <strong>26.03.2027</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Feiertag (Karfreitag)</span>
-                    </div>
-                    <span style="background: #6c757d; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Geschlossen</span>
-                </div>
-
-                <!-- 09.04.2027 - Team 2 -->
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #8a3ffc;">
-                    <div>
-                        <strong>09.04.2027</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Dietmar, Simon, Sabrina</span>
-                    </div>
-                    <span style="background: #8a3ffc; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 2</span>
-                </div>
-
-            </div>
-        </div>
     </div>
 
     <!-- 2. TERMINE -->
@@ -416,26 +266,7 @@
         <div class="card">
             <div class="card-title">📅 Anstehende Termine</div>
             <div id="events-container">
-                <div class="event-item">
-                    <div class="event-date">1. November 2026</div>
-                    <div class="event-name">Spenden sammeln Schwarzes Kreuz Österreich</div>
-                    <div class="event-desc">Ausrückung in Uniform / Tracht. Treffpunkt: 13:30 Uhr Friedhof Partenen.</div>
-                    <div class="event-actions">
-                        <button class="btn btn-success" onclick="toggleAttendance(this)">👍 Zusage</button>
-                        <button class="btn btn-danger" onclick="toggleAttendance(this)">👎 Absage</button>
-                        <button class="btn btn-danger admin-delete-btn" onclick="deleteEvent(this)" style="margin-left:auto; padding: 4px 10px; font-size: 0.75em;">🗑️ Löschen</button>
-                    </div>
-                </div>
-                <div class="event-item">
-                    <div class="event-date">08. November 2026</div>
-                    <div class="event-name">Gedenken an die Gefallenen bei der Weltkriege</div>
-                    <div class="event-desc">Friedhof Gaschurn 9:00.</div>
-                    <div class="event-actions">
-                        <button class="btn btn-success" onclick="toggleAttendance(this)">👍 Zusage</button>
-                        <button class="btn btn-danger" onclick="toggleAttendance(this)">👎 Absage</button>
-                        <button class="btn btn-danger admin-delete-btn" onclick="deleteEvent(this)" style="margin-left:auto; padding: 4px 10px; font-size: 0.75em;">🗑️ Löschen</button>
-                    </div>
-                </div>
+                <!-- Termine werden hier dynamisch in Echtzeit aus Firestore geladen -->
             </div>
         </div>
     </div>
@@ -462,10 +293,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Ergebnis speichern</button>
             </form>
-        </div>
-        <div class="card">
-            <div class="card-title">📈 Leistungs-Fortschritt</div>
-            <canvas id="progress-chart" width="100" height="50" style="width:100%; background:#fafaf9; border-radius:8px; border:1px solid #e7e5e4;"></canvas>
         </div>
         <div class="card">
             <div class="card-title">📋 Bisherige Ergebnisse</div>
@@ -505,54 +332,6 @@
                     <button class="counter-btn" onclick="changeCount('mineral', 1)">+</button>
                 </div>
             </div>
-            <div class="price-item">
-                <span>🍷 Wein rot/weiß (1/4 lt.) — <strong>€ 4,00</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('wein4', -1)">-</button>
-                    <span id="count-wein4" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('wein4', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>🍷 Wein gespritzt (1/4 lt.) — <strong>€ 3,50</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('gespritzt', -1)">-</button>
-                    <span id="count-gespritzt" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('gespritzt', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>🥃 Schnaps (2 cl.) — <strong>€ 3,50</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button>
-                    <span id="count-schnaps" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>☕ Kaffee (Tasse) — <strong>€ 3,00</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button>
-                    <span id="count-kaffee" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>🌭 1 Paar Hauswürste m. Brot — <strong>€ 7,50</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button>
-                    <span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>🌭 1 Paar Wienerle m. Brot — <strong>€ 7,00</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button>
-                    <span id="count-wienerle" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button>
-                </div>
-            </div>
 
             <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #cbd5e1; display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
                 <span>Gesamtbetrag:</span>
@@ -569,11 +348,10 @@
             <p style="font-size: 0.85em; line-height: 1.6; color: var(--text-muted); margin-bottom: 12px;">
                 Offizielle Statuten des Kameradschaftsbundes & Schützenvereins Gaschurn-Partenen (Sitz in Gaschurn, Tätigkeitsbereich Montafon). Zweck des Vereins ist u.a. die Pflege des Schieß- und Traditionswesens sowie die Aufrechterhaltung der Kameradschaft.
             </p>
-            <a href="#" onclick="alert('Statuten-Download gestartet (Dokument integriert).'); return false;" class="btn btn-primary btn-block" style="background:#57534e;">📄 Komplette Statuten herunterladen (DOC/PDF)</a>
         </div>
     </div>
 
-    <!-- 6. DIGITALER AUSWEIS & VORSTANDS-LISTE -->
+    <!-- 6. DIGITALER AUSWEIS -->
     <div id="page-card" class="page-content">
         <div class="member-card">
             <div class="member-avatar-container" onclick="document.getElementById('file-input').click()" title="Foto hochladen">
@@ -601,547 +379,156 @@
             </div>
             <div class="form-group">
                 <label>Aktivität / Kategorie</label>
-                <select class="form-control" id="input-activity" onchange="updateActivity()">
+                <select class="form-control" id="input-activity" onchange="updateName()">
                     <option>Aktive Schützen</option>
-                    <option>Ehrenmitglieder</option>
-                    <option>Jugend</option>
-                    <option>Marketenderin</option>
+                    <option>Kameradschaftsbund</option>
+                    <option>Vorstand</option>
+                    <option>Unterstützendes Mitglied</option>
                 </select>
             </div>
-            <button onclick="document.getElementById('file-input').click()" class="btn btn-primary btn-block">📷 Profilfoto auswählen</button>
-        </div>
-
-        <div class="card">
-            <div class="card-title">📞 Vorstand & Funktionsträger</div>
-            <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: #fef2f2; border-radius: 8px; border-left: 3px solid var(--primary-red);">
-                    <div>
-                        <strong>Simon Schweighofer</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Obmann</span>
-                    </div>
-                    <a href="tel:06503049466" style="color: var(--primary-red); font-weight: 700; text-decoration: none; background: white; padding: 4px 8px; border-radius: 6px; border: 1px solid #fca5a5;">📞 0650 3049466</a>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: #fafaf9; border-radius: 8px; border-left: 3px solid #78716c;">
-                    <div>
-                        <strong>Heimo Stocker</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Obmann-Stv. & Waffenwart</span>
-                    </div>
-                    <a href="tel:06503600415" style="color: var(--text-dark); font-weight: 700; text-decoration: none; background: white; padding: 4px 8px; border-radius: 6px; border: 1px solid #d6d3d1;">📞 0650 3600415</a>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: #fafaf9; border-radius: 8px; border-left: 3px solid #78716c;">
-                    <div>
-                        <strong>Sabrina Kinzl</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Schriftführerin</span>
-                    </div>
-                    <a href="tel:06601113150" style="color: var(--text-dark); font-weight: 700; text-decoration: none; background: white; padding: 4px 8px; border-radius: 6px; border: 1px solid #d6d3d1;">📞 0660 1113150</a>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: #fafaf9; border-radius: 8px; border-left: 3px solid #78716c;">
-                    <div>
-                        <strong>Karin Stocker</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Kassierin</span>
-                    </div>
-                    <a href="tel:06502800596" style="color: var(--text-dark); font-weight: 700; text-decoration: none; background: white; padding: 4px 8px; border-radius: 6px; border: 1px solid #d6d3d1;">📞 0650 2800596</a>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: #fafaf9; border-radius: 8px; border-left: 3px solid #78716c;">
-                    <div>
-                        <strong>Manfred Wachter</strong><br>
-                        <span style="font-size: 0.85em; color: var(--text-muted);">Waffenwart</span>
-                    </div>
-                    <a href="tel:06644752129" style="color: var(--text-dark); font-weight: 700; text-decoration: none; background: white; padding: 4px 8px; border-radius: 6px; border: 1px solid #d6d3d1;">📞 0664 4752129</a>
-                </div>
-
-            </div>
         </div>
     </div>
 
-    <!-- 7. ADMIN BEREICH -->
-    <div id="page-admin" class="page-content">
-        <div class="card">
-            <div class="card-title">📦 Bestandsverwaltung Getränkelager</div>
-            <div id="stock-alerts"></div>
-            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Aktuellen Kisten-/Flaschenbestand eintragen:</p>
-            
-            <div class="stock-edit-row">
-                <span>🍺 Bier Kasten:</span>
-                <input type="number" id="edit-stock-bier" value="15" min="0">
-            </div>
-            <div class="stock-edit-row">
-                <span>🍋 Limo Kasten:</span>
-                <input type="number" id="edit-stock-limo" value="8" min="0">
-            </div>
-            <div class="stock-edit-row">
-                <span>💧 Mineral Kasten:</span>
-                <input type="number" id="edit-stock-mineral" value="3" min="0">
-            </div>
-            <div class="stock-edit-row">
-                <span>🍷 Wein Flaschen:</span>
-                <input type="number" id="edit-stock-wein" value="10" min="0">
-            </div>
-
-            <button onclick="saveStockValues()" class="btn btn-primary btn-block" style="margin-top:10px;">Lagerbestand speichern</button>
-        </div>
-
-        <div class="card">
-            <div class="card-title">💶 Beitrags-Status Mitglieder (22 Mitglieder)</div>
-            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 8px;">Klicke, um den Status (Bezahlt / Offen) zu wechseln:</p>
-            <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 4px;" id="fee-status-list">
-                <!-- 1 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Wachter Manfred</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 2 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Wachter Werner</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 3 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Schweighofer Dietmar</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 4 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Schweighofer Simon</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 5 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Spettel Norbert</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 6 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Stocker Heimo</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 7 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Wittwer Christoph</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 8 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Wittwer Werner</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 9 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Rudigier Erwin</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 10 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Sandrell Daniel</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 11 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Mattle Werner</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 12 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Pascal Tripolt</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 13 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Stocker Karin</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 14 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Suntinger Jasmin</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 15 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Kinzl Sabrina</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 16 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Maria Spettel</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 17 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Natalie Stocker</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 18 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Sandrell Heinrich</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 19 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Kofler Konrad</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 20 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Dona Lothar</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 21 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Gerd Sprattler</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-                <!-- 22 -->
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid #e7e5e4;">
-                    <span>Elias Stocker</span><button onclick="toggleFee(this)" class="btn btn-success" style="padding:2px 8px; font-size:0.75em;">✔ Bezahlt</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">🎂 Jubiläumskalender & Geburtstage</div>
-            
-            <div style="background: #f0fdf4; border-left: 4px solid var(--accent-green); padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 0.85em;">
-                <strong>🎉 Nächster anstehender Geburtstag:</strong><br>
-                05. November — Karin Stocker (40. Geburtstag)
-            </div>
-
-            <div style="background: #fef2f2; border-left: 4px solid var(--primary-red); padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 0.85em;">
-                <strong>🏆 Nächstes Vereinsjubiläum:</strong><br>
-                01. Jänner 2027 — 25-jähriges Vereinsjubiläum
-            </div>
-
-            <div style="font-size: 0.82em; line-height: 1.6; color: var(--text-muted); margin-top: 10px;">
-                <strong>Weitere Termine:</strong><br>
-                • 17. November: Christoph Wittwer (61. Geburtstag)<br>
-                • 01. Dezember: Natalie Stocker (19. Geburtstag)<br>
-                • 06. Dezember: Maria Spettel (66. Geburtstag)
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">📅 Neuen Termin hinzufügen</div>
-            <div class="form-group"><label>Datum</label><input type="text" id="new-event-date" class="form-control" placeholder="z.B. 20. Dezember 2026"></div>
-            <div class="form-group"><label>Titel</label><input type="text" id="new-event-title" class="form-control" placeholder="z.B. Weihnachtsfeier"></div>
-            <div class="form-group"><label>Beschreibung</label><input type="text" id="new-event-desc" class="form-control" placeholder="Ort / Uhrzeit"></div>
-            <button onclick="addNewEvent()" class="btn btn-primary btn-block">Termin veröffentlichen</button>
-        </div>
-
-        <div class="card">
-            <div class="card-title">📢 Nachrichtenzentrale</div>
-            <div class="form-group"><textarea id="admin-msg" class="form-control" rows="3" placeholder="Info an alle Mitglieder..."></textarea></div>
-            <button onclick="sendWhatsAppMessage()" class="btn btn-whatsapp btn-block">🟢 Via WhatsApp teilen</button>
-        </div>
-    </div>
-
-    <!-- Navigation -->
+    <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="showPage('page-news', this)"><span class="nav-icon">📰</span><span>News</span></div>
-        <div class="nav-item" onclick="showPage('page-events', this)"><span class="nav-icon">📅</span><span>Termine</span></div>
-        <div class="nav-item" onclick="showPage('page-shooting', this)"><span class="nav-icon">🎯</span><span>Schießen</span></div>
-        <div class="nav-item" onclick="showPage('page-drinks', this)"><span class="nav-icon">🍻</span><span>Getränke</span></div>
-        <div class="nav-item" onclick="showPage('page-guide', this)"><span class="nav-icon">📯</span><span>Wissen</span></div>
-        <div class="nav-item" onclick="showPage('page-card', this)"><span class="nav-icon">💳</span><span>Ausweis</span></div>
-        <div class="nav-item" onclick="openAdminPage(this)"><span class="nav-icon">⚙️</span><span>Admin</span></div>
+        <a class="nav-item active" onclick="switchPage('news', this)">
+            <span class="nav-icon">📢</span>News
+        </a>
+        <a class="nav-item" onclick="switchPage('events', this)">
+            <span class="nav-icon">📅</span>Termine
+        </a>
+        <a class="nav-item" onclick="switchPage('shooting', this)">
+            <span class="nav-icon">🎯</span>Schießbuch
+        </a>
+        <a class="nav-item" onclick="switchPage('drinks', this)">
+            <span class="nav-icon">🍻</span>Strichzettel
+        </a>
+        <a class="nav-item" onclick="switchPage('guide', this)">
+            <span class="nav-icon">📜</span>Statuten
+        </a>
+        <a class="nav-item" onclick="switchPage('card', this)">
+            <span class="nav-icon">🪪</span>Ausweis
+        </a>
     </div>
 
     <script>
-        let isAdminLoggedIn = false;
-        let shotHistory = [];
-
-        function showPage(pageId, navEl) {
+        // Seitenwechsel
+        function switchPage(pageId, element) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            if (navEl) navEl.classList.add('active');
-            if (pageId === 'page-shooting') drawChart();
+            element.classList.add('active');
+            window.scrollTo(0, 0);
         }
 
-        function openAdminPage(navEl) {
-            if (isAdminLoggedIn) {
-                showPage('page-admin', navEl);
-            } else {
-                var pw = prompt("Bitte Admin-Passwort eingeben:");
-                if (pw === "Nbzt%GcKL1") {
-                    isAdminLoggedIn = true;
-                    document.body.classList.add('admin-mode'); // Schaltet Löschen-Buttons frei
-                    showPage('page-admin', navEl);
-                } else if (pw !== null) {
-                    alert("Falsches Passwort!");
-                }
-            }
-        }
+        // 2. Termine automatisch in Echtzeit laden (ohne erzwungenen Index, behebt 400 Bad Request)
+        function listenToEvents() {
+            db.collection("events").onSnapshot((querySnapshot) => {
+                const eventsContainer = document.getElementById('events-container');
+                if (!eventsContainer) return;
 
-        function saveStockValues() {
-            const bier = parseInt(document.getElementById('edit-stock-bier').value) || 0;
-            const limo = parseInt(document.getElementById('edit-stock-limo').value) || 0;
-            const mineral = parseInt(document.getElementById('edit-stock-mineral').value) || 0;
-            const wein = parseInt(document.getElementById('edit-stock-wein').value) || 0;
+                let eventsListHtml = "";
+                querySnapshot.forEach((doc) => {
+                    const event = doc.data();
+                    const docId = doc.id;
 
-            localStorage.setItem('stock_bier', bier);
-            localStorage.setItem('stock_limo', limo);
-            localStorage.setItem('stock_mineral', mineral);
-            localStorage.setItem('stock_wein', wein);
+                    eventsListHtml += `
+                        <div class="event-item" id="event-${docId}">
+                            <div class="event-date">${event.date || ''}</div>
+                            <div class="event-name">${event.title || ''}</div>
+                            <div class="event-desc">${event.desc || ''}</div>
+                            <div class="event-actions">
+                                <button class="btn btn-success" onclick="toggleAttendance(this)">👍 Zusage</button>
+                                <button class="btn btn-danger" onclick="toggleAttendance(this)">👎 Absage</button>
+                                <button class="btn btn-danger admin-delete-btn" onclick="deleteEvent('${docId}')" style="margin-left:auto; padding: 4px 10px; font-size: 0.75em;">🗑️ Löschen</button>
+                            </div>
+                        </div>
+                    `;
+                });
 
-            checkStock();
-            alert("Lagerbestand erfolgreich aktualisiert!");
-        }
-
-        function checkStock() {
-            const bier = parseInt(localStorage.getItem('stock_bier') ?? 15);
-            const limo = parseInt(localStorage.getItem('stock_limo') ?? 8);
-            const mineral = parseInt(localStorage.getItem('stock_mineral') ?? 3);
-            const wein = parseInt(localStorage.getItem('stock_wein') ?? 10);
-
-            document.getElementById('edit-stock-bier').value = bier;
-            document.getElementById('edit-stock-limo').value = limo;
-            document.getElementById('edit-stock-mineral').value = mineral;
-            document.getElementById('edit-stock-wein').value = wein;
-
-            const alertsContainer = document.getElementById('stock-alerts');
-            alertsContainer.innerHTML = '';
-
-            let warnings = [];
-            if (bier <= 3) warnings.push(`Bier (${bier} Kisten)`);
-            if (limo <= 3) warnings.push(`Limo (${limo} Kisten)`);
-            if (mineral <= 3) warnings.push(`Mineralwasser (${mineral} Kisten)`);
-            if (wein <= 3) warnings.push(`Wein (${wein} Flaschen)`);
-
-            if (warnings.length > 0) {
-                alertsContainer.innerHTML = `<div class="stock-warning">⚠️ Nachbestellen (Max 3 Stk/Kisten übrig): ${warnings.join(', ')}</div>`;
-            }
-        }
-
-        function loadPhoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('avatar-img').src = e.target.result;
-                    document.getElementById('avatar-img').style.display = 'block';
-                    document.getElementById('avatar-placeholder').style.display = 'none';
-                    localStorage.setItem('member_photo', e.target.result);
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        window.onload = function() {
-            const savedPhoto = localStorage.getItem('member_photo');
-            if (savedPhoto) {
-                document.getElementById('avatar-img').src = savedPhoto;
-                document.getElementById('avatar-img').style.display = 'block';
-                document.getElementById('avatar-placeholder').style.display = 'none';
-            }
-            const savedName = localStorage.getItem('member_name');
-            if (savedName) {
-                document.getElementById('display-name').innerText = savedName;
-                document.getElementById('input-name').value = savedName;
-            }
-            const savedAct = localStorage.getItem('member_activity');
-            if (savedAct) {
-                document.getElementById('display-activity').innerText = savedAct;
-                document.getElementById('input-activity').value = savedAct;
-            }
-            checkStock();
-        };
-
-        function updateName() {
-            const newName = document.getElementById('input-name').value;
-            document.getElementById('display-name').innerText = newName || "Mitglied";
-            localStorage.setItem('member_name', newName);
-        }
-
-        function updateActivity() {
-            const act = document.getElementById('input-activity').value;
-            document.getElementById('display-activity').innerText = act;
-            localStorage.setItem('member_activity', act);
-        }
-
-        const prices = { bier: 3.50, limo: 3.00, mineral: 2.50, wein4: 4.00, gespritzt: 3.50, schnaps: 3.50, kaffee: 3.00, hauswuerste: 7.50, wienerle: 7.00 };
-        let counts = { bier: 0, limo: 0, mineral: 0, wein4: 0, gespritzt: 0, schnaps: 0, kaffee: 0, hauswuerste: 0, wienerle: 0 };
-
-        function changeCount(item, delta) {
-            counts[item] = Math.max(0, counts[item] + delta);
-            document.getElementById(`count-${item}`).innerText = counts[item];
-            calculateTotal();
-        }
-
-        function calculateTotal() {
-            let total = 0;
-            for (let key in counts) { total += counts[key] * prices[key]; }
-            document.getElementById('total-price').innerText = `€ ${total.toFixed(2).replace('.', ',')}`;
-        }
-
-        function confirmResetDrinks() {
-            if (confirm("Möchtest du die Auswahl wirklich löschen?")) {
-                resetDrinks();
-            }
-        }
-
-        function resetDrinks() {
-            for (let key in counts) {
-                counts[key] = 0;
-                document.getElementById(`count-${key}`).innerText = 0;
-            }
-            calculateTotal();
-        }
-
-        function toggleFee(btn) {
-            if(btn.classList.contains('btn-success')) {
-                btn.classList.remove('btn-success');
-                btn.classList.add('btn-danger');
-                btn.innerText = "✖ Offen";
-            } else {
-                btn.classList.remove('btn-danger');
-                btn.classList.add('btn-success');
-                btn.innerText = "✔ Bezahlt";
-            }
-        }
-
-        function saveShot(e) {
-            e.preventDefault();
-            const name = document.getElementById('shot-name').value;
-            const disc = document.getElementById('shot-disc').value;
-            const rings = parseFloat(document.getElementById('shot-rings').value);
-            
-            shotHistory.push(rings);
-            const list = document.getElementById('shot-list');
-            if (list.querySelector('li') && list.querySelector('li').style.color) list.innerHTML = '';
-            
-            const li = document.createElement('li');
-            li.style.padding = "6px 0";
-            li.style.borderBottom = "1px solid #e7e5e4";
-            li.innerHTML = `🎯 <strong>${name}</strong> (${disc}): <strong>${rings} Ringe</strong>`;
-            list.prepend(li);
-            
-            document.getElementById('shot-rings').value = '';
-            drawChart();
-            alert("Ergebnis gespeichert & Diagramm aktualisiert!");
-        }
-
-        function drawChart() {
-            const canvas = document.getElementById('progress-chart');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if(shotHistory.length === 0) {
-                ctx.fillStyle = '#78716c';
-                ctx.font = '10px Montserrat';
-                ctx.fillText("Noch keine Daten für Diagramm vorhanden", 10, 30);
-                return;
-            }
-            ctx.strokeStyle = '#7f1d1d';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            const step = canvas.width / Math.max(shotHistory.length - 1, 1);
-            shotHistory.forEach((val, idx) => {
-                const x = idx * step;
-                const y = canvas.height - (val / 400) * canvas.height;
-                if(idx === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
+                eventsContainer.innerHTML = eventsListHtml || '<p style="color:var(--text-muted); font-size:0.85em;">Keine Termine vorhanden.</p>';
             });
-            ctx.stroke();
         }
 
-        function addNewEvent() {
-            const date = document.getElementById('new-event-date').value;
-            const title = document.getElementById('new-event-title').value;
-            const desc = document.getElementById('new-event-desc').value;
-            if(!date || !title) { alert("Bitte Datum und Titel eingeben!"); return; }
-
-            const container = document.getElementById('events-container');
-            const newItem = document.createElement('div');
-            newItem.className = 'event-item';
-            newItem.innerHTML = `
-                <div class="event-date">${date}</div>
-                <div class="event-name">${title}</div>
-                <div class="event-desc">${desc}</div>
-                <div class="event-actions">
-                    <button class="btn btn-success" onclick="toggleAttendance(this)">👍 Zusage</button>
-                    <button class="btn btn-danger" onclick="toggleAttendance(this)">👎 Absage</button>
-                    <button class="btn btn-danger admin-delete-btn" onclick="deleteEvent(this)" style="margin-left:auto; padding: 4px 10px; font-size: 0.75em;">🗑️ Löschen</button>
-                </div>
-            `;
-            container.prepend(newItem);
-            document.getElementById('new-event-date').value = '';
-            document.getElementById('new-event-title').value = '';
-            document.getElementById('new-event-desc').value = '';
-            alert("Neuer Termin hinzugefügt!");
-            showPage('page-events', document.querySelectorAll('.nav-item')[1]);
-        }
-
-        function deleteEvent(btn) {
-            if (!isAdminLoggedIn) {
-                alert("Nur der Admin darf Termine löschen!");
-                return;
-            }
+        // 3. Termin aus der Cloud löschen
+        function deleteEvent(docId) {
             if (confirm("Möchtest du diesen Termin wirklich löschen?")) {
-                const eventCard = btn.closest('.event-item');
-                eventCard.remove();
+                db.collection("events").doc(docId).delete().then(() => {
+                    console.log("Termin erfolgreich gelöscht");
+                }).catch((error) => {
+                    console.error("Fehler beim Löschen: ", error);
+                });
             }
-        }
-
-        function sendWhatsAppMessage() {
-            const rawMsg = document.getElementById('admin-msg').value;
-            if (!rawMsg) { alert("Bitte Text eingeben!"); return; }
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(rawMsg)}`, '_blank');
         }
 
         function toggleAttendance(btn) {
             const parent = btn.parentElement;
-            parent.querySelectorAll('.btn-success, .btn-danger').forEach(b => {
-                if (b !== btn && !b.innerText.includes('Löschen')) b.classList.remove('active');
-            });
+            parent.querySelectorAll('.btn-success, .btn-danger').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
-    
-    // 1. Termin in die Firestore-Cloud speichern
-    function addEvent() {
-        const title = document.getElementById('eventTitle').value;
-        const date = document.getElementById('eventDate').value;
-        const type = document.getElementById('eventType').value;
 
-        if (!title || !date) {
-            alert('Bitte Titel und Datum eingeben!');
-            return;
+        // Getränke Strichzettel
+        const prices = { bier: 3.50, limo: 3.00, mineral: 2.50 };
+        const counts = { bier: 0, limo: 0, mineral: 0 };
+
+        function changeCount(item, delta) {
+            counts[item] = Math.max(0, counts[item] + delta);
+            document.getElementById('count-' + item).innerText = counts[item];
+            updateTotal();
         }
 
-        db.collection("events").add({
-            title: title,
-            date: date,
-            type: type,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-            document.getElementById('eventTitle').value = '';
-            document.getElementById('eventDate').value = '';
-            console.log("Termin erfolgreich gespeichert!");
-        })
-        .catch((error) => {
-            console.error("Fehler beim Speichern: ", error);
-        });
-    }
+        function updateTotal() {
+            let total = 0;
+            for (let key in counts) {
+                total += counts[key] * prices[key];
+            }
+            document.getElementById('total-price').innerText = '€ ' + total.toFixed(2);
+        }
 
-    // 2. Termine automatisch in Echtzeit laden
-    function listenToEvents() {
-        db.collection("events").onSnapshot((querySnapshot) => {
-            const eventsContainer = document.getElementById('eventsContainer');
-            if (!eventsContainer) return;
+        function confirmResetDrinks() {
+            if (confirm("Strichzettel wirklich zurücksetzen?")) {
+                for (let key in counts) {
+                    counts[key] = 0;
+                    document.getElementById('count-' + key).innerText = 0;
+                }
+                updateTotal();
+            }
+        }
 
-            let eventsListHtml = "";
-            querySnapshot.forEach((doc) => {
-                const event = doc.data();
-                const docId = doc.id;
-                
-                eventsListHtml += `
-                    <div class="event-card" id="event-${docId}">
-                        <h3>${event.title}</h3>
-                        <p><strong>Datum:</strong> ${event.date} (${event.type})</p>
-                        <button onclick="deleteEvent('${docId}')">Löschen</button>
-                    </div>
-                `;
-            });
+        // Profil & Ausweis
+        function updateName() {
+            document.getElementById('display-name').innerText = document.getElementById('input-name').value || 'Max Mustermann';
+            document.getElementById('display-activity').innerText = document.getElementById('input-activity').value;
+        }
+
+        function loadPhoto(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const img = document.getElementById('avatar-img');
+                img.src = reader.result;
+                img.style.display = 'block';
+                document.getElementById('avatar-placeholder').style.display = 'none';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function saveShot(event) {
+            event.preventDefault();
+            const name = document.getElementById('shot-name').value;
+            const disc = document.getElementById('shot-disc').value;
+            const rings = document.getElementById('shot-rings').value;
             
-            eventsContainer.innerHTML = eventsListHtml;
-        });
-    }
-
-    // 3. Termin aus der Cloud löschen
-    function deleteEvent(docId) {
-        if (confirm("Möchtest du diesen Termin wirklich löschen?")) {
-            db.collection("events").doc(docId).delete().then(() => {
-                console.log("Termin gelöscht");
-            }).catch((error) => {
-                console.error("Fehler beim Löschen: ", error);
-            });
+            const list = document.getElementById('shot-list');
+            if (list.innerHTML.includes('Noch keine Einträge')) list.innerHTML = '';
+            
+            list.innerHTML += `<li style="padding: 6px 0; border-bottom: 1px solid #e7e5e4;"><strong>${name}</strong> (${disc}): <strong>${rings} Ringe</strong></li>`;
+            event.target.reset();
         }
-    }
 
-    // Echtzeit-Synchronisation beim Laden starten
-    listenToEvents();
+        // App beim Start initialisieren
+        window.onload = function() {
+            listenToEvents();
+        }
     </script>
 </body>
 </html>
