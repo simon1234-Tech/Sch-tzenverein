@@ -14,6 +14,7 @@
     <!-- Firebase SDKs (v8.10.1) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 
     <script>
       const firebaseConfig = {
@@ -26,6 +27,7 @@
       };
       firebase.initializeApp(firebaseConfig);
       const db = firebase.firestore();
+      const messaging = firebase.messaging();
     </script>
 
     <style>
@@ -90,7 +92,6 @@
             justify-content: space-between;
         }
 
-        /* Spezielles Design für Admin-Karten (Anderes Farbschema) */
         body.admin-mode .admin-card {
             border-color: #bfdbfe;
             background: #f8fafc;
@@ -177,7 +178,6 @@
         }
         .counter-btn:hover { background: var(--primary-red); color: white; border-color: var(--primary-red); }
 
-        /* Vergrößerte untere Navigationsleiste & Buttons */
         .bottom-nav {
             position: fixed !important; 
             bottom: 0 !important; 
@@ -406,7 +406,7 @@
         </div>
     </div>
 
-    <!-- 5. RECHNUNG (Umbenannt von Abrechnungen) -->
+    <!-- 5. RECHNUNG -->
     <div id="page-guide" class="page-content">
         <div class="card">
             <div class="card-title">📜 Gespeicherte Strichzettel & Rechnungen</div>
@@ -437,6 +437,13 @@
                 <div class="card-title" style="color: var(--admin-blue);">🔓 Admin-Modus Aktiv</div>
                 <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Vorstands-Funktionen & Bearbeitungs-Optionen im exklusiven Admin-Design freigeschaltet.</p>
                 <button class="btn btn-danger btn-block" onclick="logoutAdmin()">Admin-Modus Beenden</button>
+            </div>
+
+            <!-- PUSH BENACHRICHTIGUNGEN AKTIVIEREN -->
+            <div class="card admin-card" style="width: 100%;">
+                <div class="card-title">🔔 Push-Benachrichtigungen</div>
+                <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 10px;">Aktiviere Push-Benachrichtigungen für dieses Gerät (inkl. Admin-Status):</p>
+                <button class="btn btn-admin btn-block" onclick="requestPushPermission(true)">Benachrichtigungen erlauben</button>
             </div>
 
             <!-- NEWS BEITRAG ERSTELLEN -->
@@ -540,7 +547,7 @@
         </div>
     </div>
 
-    <!-- Bottom Navigation (Vergrößert & mit geänderten Tabs) -->
+    <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <a class="nav-item active" onclick="switchPage('news', this)">
             <span class="nav-icon">📢</span>News
@@ -569,6 +576,29 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             element.classList.add('active');
             window.scrollTo(0, 0);
+        }
+
+        /* FCM Push Token registrieren */
+        function requestPushPermission(isAdmin = false) {
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    messaging.getToken().then((currentToken) => {
+                        if (currentToken) {
+                            db.collection("fcm_tokens").doc(currentToken).set({
+                                token: currentToken,
+                                isAdmin: isAdmin,
+                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                            }, { merge: true }).then(() => {
+                                alert("Push-Benachrichtigungen erfolgreich aktiviert!");
+                            });
+                        }
+                    }).catch((err) => {
+                        console.log("Fehler beim Abrufen des FCM-Tokens: ", err);
+                    });
+                } else {
+                    alert("Benachrichtigungen wurden blockiert oder abgelehnt.");
+                }
+            });
         }
 
         function listenToNews() {
