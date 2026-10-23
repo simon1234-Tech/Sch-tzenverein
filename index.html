@@ -1075,6 +1075,71 @@
             });
             btn.classList.add('active');
         }
+    
+    // 1. Termin in die Firestore-Cloud speichern
+    function addEvent() {
+        const title = document.getElementById('eventTitle').value;
+        const date = document.getElementById('eventDate').value;
+        const type = document.getElementById('eventType').value;
+
+        if (!title || !date) {
+            alert('Bitte Titel und Datum eingeben!');
+            return;
+        }
+
+        db.collection("events").add({
+            title: title,
+            date: date,
+            type: type,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventDate').value = '';
+            console.log("Termin erfolgreich gespeichert!");
+        })
+        .catch((error) => {
+            console.error("Fehler beim Speichern: ", error);
+        });
+    }
+
+    // 2. Termine automatisch in Echtzeit laden
+    function listenToEvents() {
+        db.collection("events").orderBy("date", "asc").onSnapshot((querySnapshot) => {
+            const eventsContainer = document.getElementById('eventsContainer');
+            if (!eventsContainer) return;
+
+            let eventsListHtml = "";
+            querySnapshot.forEach((doc) => {
+                const event = doc.data();
+                const docId = doc.id;
+                
+                eventsListHtml += `
+                    <div class="event-card" id="event-${docId}">
+                        <h3>${event.title}</h3>
+                        <p><strong>Datum:</strong> ${event.date} (${event.type})</p>
+                        <button onclick="deleteEvent('${docId}')">Löschen</button>
+                    </div>
+                `;
+            });
+            
+            eventsContainer.innerHTML = eventsListHtml;
+        });
+    }
+
+    // 3. Termin aus der Cloud löschen
+    function deleteEvent(docId) {
+        if (confirm("Möchtest du diesen Termin wirklich löschen?")) {
+            db.collection("events").doc(docId).delete().then(() => {
+                console.log("Termin gelöscht");
+            }).catch((error) => {
+                console.error("Fehler beim Löschen: ", error);
+            });
+        }
+    }
+
+    // Echtzeit-Synchronisation beim Laden starten
+    listenToEvents();
     </script>
 </body>
 </html>
