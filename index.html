@@ -578,11 +578,13 @@
             window.scrollTo(0, 0);
         }
 
-        /* FCM Push Token registrieren */
+        /* FCM Push Token registrieren mit VAPID-Schlüssel */
         function requestPushPermission(isAdmin = false) {
             Notification.requestPermission().then((permission) => {
                 if (permission === 'granted') {
-                    messaging.getToken().then((currentToken) => {
+                    messaging.getToken({
+                        vapidKey: "BF2_KfUG_keimCkr0oKTA8BGXXOAv4QsmEsSUjjHwwgUG0H-vKJhWYm3rMqS-YfPJ6LlLrn2Ip-vAzT5hm2-2dg"
+                    }).then((currentToken) => {
                         if (currentToken) {
                             db.collection("fcm_tokens").doc(currentToken).set({
                                 token: currentToken,
@@ -594,6 +596,7 @@
                         }
                     }).catch((err) => {
                         console.log("Fehler beim Abrufen des FCM-Tokens: ", err);
+                        alert("Fehler beim Token-Abruf: " + err.message);
                     });
                 } else {
                     alert("Benachrichtigungen wurden blockiert oder abgelehnt.");
