@@ -8,8 +8,8 @@
 
     <meta name="apple-mobile-web-app-title" content="KB & SV App">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="logo.jpg">
-    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
 
     <!-- Firebase SDKs (v8.10.1) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -578,13 +578,18 @@
             window.scrollTo(0, 0);
         }
 
-        /* FCM Push Token registrieren mit VAPID-Schlüssel */
+        /* FCM Push Token registrieren mit expliziter Service-Worker-Registrierung */
         function requestPushPermission(isAdmin = false) {
             Notification.requestPermission().then((permission) => {
                 if (permission === 'granted') {
-                    messaging.getToken({
-                        vapidKey: "BF2_KfUG_keimCkr0oKTA8BGXXOAv4QsmEsSUjjHwwgUG0H-vKJhWYm3rMqS-YfPJ6LlLrn2Ip-vAzT5hm2-2dg"
-                    }).then((currentToken) => {
+                    navigator.serviceWorker.register('firebase-messaging-sw.js')
+                    .then((registration) => {
+                        return messaging.getToken({
+                            vapidKey: "BF2_KfUG_keimCkr0oKTA8BGXXOAv4QsmEsSUjjHwwgUG0H-vKJhWYm3rMqS-YfPJ6LlLrn2Ip-vAzT5hm2-2dg",
+                            swReg: registration
+                        });
+                    })
+                    .then((currentToken) => {
                         if (currentToken) {
                             db.collection("fcm_tokens").doc(currentToken).set({
                                 token: currentToken,
