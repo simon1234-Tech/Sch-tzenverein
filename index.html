@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vereins-App - KB & SV Gaschurn-Partenen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #991b1b;        /* Dunkelrot */
+            --primary-dark: #7f1d1d;   /* Sehr dunkles Rot */
+            --accent: #15803d;         /* Klassisches Vereinsgrün */
+            --accent-light: #dcfce7;   /* Helles Softgrün */
+            --bg-overlay: rgba(20, 10, 10, 0.45); /* Abdunkelung für Lesbarkeit */
+            --card-bg: rgba(255, 255, 255, 0.94); /* Leicht transparente Karten */
+            --text-dark: #1c1917;
+            --text-muted: #57534e;
+            --border-color: #fee2e2;
+            --success: #15803d;
+            --danger: #b91c1c;
+            --whatsapp: #25D366;
+            --whatsapp-dark: #1da851;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-dark);
+            padding-bottom: 90px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            min-height: 100vh;
+        }
+
+        /* App Header mit beiden Logos & Adler */
+        .app-header {
+            background: linear-gradient(135deg, rgba(127,29,29,0.96), rgba(153,27,27,0.96), rgba(69,10,10,0.98));
+            color: white;
+            padding: 16px 12px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            border-bottom: 3px solid var(--accent);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .header-logo {
+            width: 62px;
+            height: 62px;
+            object-fit: contain;
+            filter: drop-shadow(0px 3px 5px rgba(0,0,0,0.5));
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .header-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .header-center {
+            flex-grow: 1;
+            padding: 0 4px;
+        }
+
+        .app-header h1 { 
+            font-size: 1.25em; 
+            font-weight: 800; 
+            letter-spacing: 0.5px; 
+            text-shadow: 1px 2px 4px rgba(0,0,0,0.6);
+            line-height: 1.2;
+        }
+
+        .app-header p { 
+            font-size: 0.78em; 
+            opacity: 0.95; 
+            margin-top: 4px; 
+            color: #fecdd3; 
+            font-weight: 500;
+        }
+
+        /* Container & Navigation Pages */
+        .page-content { padding: 15px; display: none; }
+        .page-content.active { display: block; animation: fadeIn 0.25s ease-in-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Karten Design mit Milchglas-Effekt */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .card-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Termin Elemente */
+        .event-item {
+            border-left: 4px solid var(--accent);
+            padding: 12px 15px;
+            background: rgba(240, 253, 244, 0.9);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #dcfce7;
+            border-left-width: 4px;
+        }
+        .event-date { font-size: 0.8em; font-weight: 700; color: var(--accent); text-transform: uppercase; }
+        .event-name { font-size: 1em; font-weight: 700; margin: 3px 0; color: var(--text-dark); }
+        .event-desc { font-size: 0.85em; color: var(--text-muted); }
+        .event-actions { display: flex; gap: 10px; margin-top: 10px; }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-accent { background: var(--accent); color: white; }
+        .btn-accent:hover { background: #166534; }
+        .btn-whatsapp { background: var(--whatsapp); color: white; }
+        .btn-whatsapp:hover { background: var(--whatsapp-dark); }
+        .btn-success { background: var(--accent-light); color: var(--accent); border: 1px solid #bbf7d0; }
+        .btn-success.active { background: var(--accent); color: white; }
+        .btn-danger { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; }
+        .btn-danger.active { background: var(--danger); color: white; }
+        .btn-block { width: 100%; margin-top: 8px; }
+
+        /* Formular Felder */
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 0.85em; font-weight: 600; margin-bottom: 5px; color: var(--text-muted); }
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #fca5a5;
+            font-family: inherit;
+            font-size: 0.95em;
+            background-color: #fff;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(153, 27, 27, 0.15);
+        }
+
+        /* Digitaler Mitgliedsausweis mit Foto */
+        .member-card {
+            background: linear-gradient(135deg, #450a0a, #7f1d1d, #991b1b);
+            color: white;
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            overflow: hidden;
+            border: 2px solid var(--accent);
+        }
+        .member-avatar-container {
+            flex-shrink: 0;
+            width: 80px;
+            height: 100px;
+            background: #2a0808;
+            border-radius: 8px;
+            border: 2px solid #bbf7d0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .member-avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .member-avatar-placeholder {
+            font-size: 2em;
+            color: #86efac;
+        }
+        .member-info { flex-grow: 1; }
+        .member-card-header { font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; color: #fecdd3; }
+        .member-name { font-size: 1.2em; font-weight: 800; margin: 4px 0; color: #ffffff; }
+        .member-details { font-size: 0.8em; opacity: 0.9; line-height: 1.4; color: #ffe4e6; }
+        .member-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: 700;
+            margin-top: 8px;
+            border: 1px solid #86efac;
+        }
+
+        /* Getränke Strichzettel Positionen */
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9em;
+        }
+        .counter-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .counter-btn {
+            background: #f0fdf4;
+            color: var(--accent);
+            border: 1px solid #bbf7d0;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+        .counter-btn:hover { background: var(--accent); color: white; }
+
+        /* Untere Navigationsleiste */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0; right: 0;
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            border-top: 1px solid #fca5a5;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.7em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .nav-item.active { color: var(--primary); font-weight: 800; }
+        .nav-icon { font-size: 1.3em; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+    <!-- App Header mit Adler (links) & Schützenverein Wappen (rechts) -->
+    <div class="app-header">
+        <!-- Doppeladler Wappen Links -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Imperial_Coat_of_Arms_of_the_Empire_of_Austria_%281815%29.svg/512px-Imperial_Coat_of_Arms_of_the_Empire_of_Austria_%281815%29.svg.png" 
+             alt="Doppeladler Wappen" 
+             class="header-logo"
+             title="Kaiserlicher Doppeladler">
+
+        <!-- Zentrierter Titel -->
+        <div class="header-center">
+            <h1>Gaschurn-Partenen</h1>
+            <p>Kameradschaftsbund & Schützenverein</p>
+        </div>
+
+        <!-- Kamera- / Schützenverein Logo Rechts -->
+        <svg class="header-logo" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="250" cy="250" r="240" fill="#121212" stroke="#ffffff" stroke-width="12"/>
+            <circle cx="250" cy="250" r="225" fill="none" stroke="#ffffff" stroke-width="4"/>
+            <!-- Text oben und unten simuliert -->
+            <path id="textPathTop" d="M 60,250 A 190,190 0 1,1 440,250" fill="none"/>
+            <path id="textPathBottom" d="M 440,250 A 190,190 0 0,1 60,250" fill="none"/>
+            <text fill="#ffffff" font-family="Montserrat" font-weight="800" font-size="32" text-anchor="middle">
+                <textPath href="#textPathTop" startOffset="50%">Kameradschaftsbund</textPath>
+            </text>
+            <text fill="#ffffff" font-family="Montserrat" font-weight="800" font-size="32" text-anchor="middle">
+                <textPath href="#textPathBottom" startOffset="50%">Schützenverein</textPath>
+            </text>
+            <!-- Eisernes Kreuz in der Mitte -->
+            <g transform="translate(100, 100) scale(0.6)">
+                <path d="M 250 50 C 200 150 180 180 50 180 L 50 320 C 180 320 200 350 250 450 C 300 350 320 320 450 320 L 450 180 C 320 180 300 150 250 50 Z" fill="#ffffff" stroke="#000000" stroke-width="8"/>
+                <!-- Wappen im Kreuz -->
+                <rect x="190" y="190" width="120" height="140" rx="10" fill="#991b1b" stroke="#facc15" stroke-width="6"/>
+                <path d="M 250 210 L 250 310 M 210 260 L 290 260" stroke="#ffffff" stroke-width="12"/>
+            </g>
+            <!-- Zielscheibe unten rechts -->
+            <g transform="translate(280, 280)">
+                <circle cx="80" cy="80" r="70" fill="#ffffff" stroke="#000000" stroke-width="6"/>
+                <circle cx="80" cy="80" r="50" fill="none" stroke="#000000" stroke-width="5"/>
+                <circle cx="80" cy="80" r="30" fill="none" stroke="#000000" stroke-width="5"/>
+                <circle cx="80" cy="80" r="15" fill="#000000"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 1. START / NEWS -->
+    <div id="page-news" class="page-content active">
+        <div class="card">
+            <div class="card-title">📢 Aktuelle Vereins-News</div>
+            <p style="font-size: 0.9em; line-height: 1.6; color: #334155;">
+                Willkommen in der offiziellen App des Kameradschaftsbunds & Schützenvereins Gaschurn-Partenen! Hier findest du alle Termine, Ergebnisse und Neuigkeiten auf einen Blick.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">🎯 Nächstes Training</div>
+            <div class="event-item">
+                <div class="event-date">Freitag, 19:00 Uhr</div>
+                <div class="event-name">Luftgewehr & Luftpistole</div>
+                <div class="event-desc">Schützenhaus Partenen - Training für alle Leistungsklassen.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. TERMINE -->
+    <div id="page-events" class="page-content">
+        <div class="card">
+            <div class="card-title">📅 Anstehende Termine</div>
+            <div class="event-item">
+                <div class="event-date">15. November 2026</div>
+                <div class="event-name">Gefallenengedenkfeier</div>
+                <div class="event-desc">Ausrückung in Uniform / Tracht. Treffpunkt: 09:30 Uhr Kirche.</div>
+                <div class="event-actions">
+                    <button class="btn btn-success" onclick="toggleAttendance(this)">👍 Zusage</button>
+                    <button class="btn btn-danger" onclick="toggleAttendance(this)">👎 Absage</button>
+                </div>
+            </div>
+            <div class="event-item">
+                <div class="event-date">05. Dezember 2026</div>
+                <div class="event-name">Jahreshauptversammlung</div>
+                <div class="event-desc">Vereinsheim / Schützenhaus Partenen um 20:00 Uhr.</div>
+                <div class="event-actions">
+                    <button class="btn btn-success" onclick="toggleAttendance(this)">👍 Zusage</button>
+                    <button class="btn btn-danger" onclick="toggleAttendance(this)">👎 Absage</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. SCHIESSBUCH -->
+    <div id="page-shooting" class="page-content">
+        <div class="card">
+            <div class="card-title">🎯 Digitales Schießbuch</div>
+            <form onsubmit="saveShot(event)">
+                <div class="form-group">
+                    <label>Disziplin</label>
+                    <select class="form-control" id="shot-disc">
+                        <option>Luftgewehr (10m)</option>
+                        <option>Luftpistole (10m)</option>
+                        <option>Kleinkaliber</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Erreichte Ringe</label>
+                    <input type="number" step="0.1" class="form-control" id="shot-rings" placeholder="z.B. 385.5" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Ergebnis speichern</button>
+            </form>
+        </div>
+        <div class="card">
+            <div class="card-title">📈 Bisherige Trainingsergebnisse</div>
+            <ul id="shot-list" style="list-style: none; font-size: 0.85em;">
+                <li style="color: var(--text-muted);">Noch keine Einträge vorhanden.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 4. SCHÜTZENHEIM & PREISE (STRICHZETTEL) -->
+    <div id="page-drinks" class="page-content">
+        <div class="card">
+            <div class="card-title">🍻 Schützenheim Strichzettel</div>
+            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 12px;">Preise laut offizieller Preisliste Gaschurn/Partenen:</p>
+            
+            <div class="price-item">
+                <span>🍺 Bier (0,33 lt.) — <strong>€ 3,50</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('bier', -1)">-</button>
+                    <span id="count-bier" style="font-weight: bold; width: 20px; text-align: center;">0</span>
+                    <button class="counter-btn" onclick="changeCount('bier', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>🍋 Limo (0,3 lt.) — <strong>€ 3,00</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('limo', -1)">-</button>
+                    <span id="count-limo" style="font-weight: bold; width: 20px; text-align: center;">0</span>
+                    <button class="counter-btn" onclick="changeCount('limo', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>💧 Mineral (1/4 lt.) — <strong>€ 2,50</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('mineral', -1)">-</button>
+                    <span id="count-mineral" style="font-weight: bold; width: 20px; text-align: center;">0</span>
+                    <button class="counter-btn" onclick="changeCount('mineral', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>🍷 Wein rot/weiß (1/4 lt.) — <strong>€ 4,00</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('wein4', -1)">-</button>
+                    <span id="count-wein4" style="font-weight: bold; width: 20px; text-align: center;">0</span>
+                    <button class="counter-btn" onclick="changeCount('wein4', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>🍷 Wein gespritzt (1/4 lt.) — <strong>€ 3,50</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('gespritzt', -1)">-</button>
+                    <span id="count-gespritzt" style="font-weight: bold; width: 20px; text-align: center;">0</span>
+                    <button class="counter-btn" onclick="changeCount('gespritzt', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>🥃 Schnaps (2 cl.) — <strong>€ 3,50</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button>
+                    <span id="count-schnaps" style="font-weight: bold; width: 20px; text-align: center;">0</span>
+                    <button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>☕ Kaffee (Tasse) — <strong>€ 3,00</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button>
+                    <span id="count-kaffee" style="font-weight: bold; width: 20px; text-align: center;">0</span>
+                    <button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>🌭 1 Paar Hauswürste m. Brot — <strong>€ 7,50</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button>
+                    <span id="count-hauswuerste" style="font-weight: bold; width: 20px; text-align: center;">0</span>
+                    <button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>🌭 1 Paar Wienerle m. Brot — <strong>€ 7,00</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button>
+                    <span id="count-wienerle" style="font-weight: bold; width: 20px; text-align: center;">0</span>
+                    <button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 15px; padding-top: 12px; border-top: 2px solid var(--accent); display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
+                <span>Gesamtbetrag:</span>
+                <span id="total-price" style="color: var(--accent);">€ 0,00</span>
+            </div>
+            <button onclick="resetDrinks()" class="btn btn-danger btn-block" style="margin-top: 10px;">Strichzettel zurücksetzen</button>
+        </div>
+    </div>
+
+    <!-- 5. WISSEN & KNIGGE -->
+    <div id="page-guide" class="page-content">
+        <div class="card">
+            <div class="card-title">📯 Ausrückungs-Knigge & Uniform</div>
+            <p style="font-size: 0.85em; line-height: 1.5; color: var(--text-muted);">
+                <strong>Checkliste für Ausrückungen:</strong><br>
+                1. Hut sitzt leicht nach links geneigt.<br>
+                2. Sauber gebügelte Tracht / Uniform.<br>
+                3. Korrektes Abzeichen-Tragen gemäß Kameradschaftsbund.<br>
+                4. Pünktliches Antreten beim Sammelplatz.
+            </p>
+        </div>
+        <div class="card">
+            <div class="card-title">📜 Wichtige Downloads</div>
+            <a href="#" class="btn btn-accent btn-block">📄 Vereinsstatuten (PDF)</a>
+            <a href="#" class="btn btn-accent btn-block">📄 Beitrittserklärung (PDF)</a>
+        </div>
+    </div>
+
+    <!-- 6. DIGITALER AUSWEIS MIT FOTO-UPLOAD -->
+    <div id="page-card" class="page-content">
+        <div class="member-card">
+            <div class="member-avatar-container" onclick="document.getElementById('file-input').click()" title="Foto hochladen">
+                <img id="avatar-img" src="" alt="" style="display: none;">
+                <div id="avatar-placeholder" class="member-avatar-placeholder">📷</div>
+            </div>
+            <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="loadPhoto(event)">
+            
+            <div class="member-info">
+                <div class="member-card-header">Mitgliedsausweis</div>
+                <div class="member-name" id="display-name">Max Mustermann</div>
+                <div class="member-details">
+                    ZVR-Nr: <strong>624291509</strong><br>
+                    Verein: <strong>Gaschurn-Partenen</strong>
+                </div>
+                <div class="member-badge">Traditions- & Sportschütze</div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 15px;">
+            <div class="card-title">👤 Profil & Foto anpassen</div>
+            <div class="form-group">
+                <label>Dein Name</label>
+                <input type="text" class="form-control" id="input-name" value="Max Mustermann" onchange="updateName()">
+            </div>
+            <button onclick="document.getElementById('file-input').click()" class="btn btn-accent btn-block">📷 Profilfoto auswählen</button>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📞 Vorstand & Kontakt</div>
+            <p style="font-size: 0.85em; line-height: 1.6;">
+                <strong>Obmann & OSM:</strong> Simon Schweighofer (Tel: 0650 3049466)<br>
+                <strong>Obmann STV:</strong> Heimo Stocker<br>
+                <strong>Zustelladresse:</strong> Valschavielstraße 160, A-6793 Gaschurn<br>
+                <strong>E-Mail:</strong> <a href="mailto:schutzenvereingaschurn@gmail.com" style="color: var(--primary); text-decoration: none; font-weight: 600;">schutzenvereingaschurn@gmail.com</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- 7. ADMIN BEREICH -->
+    <div id="page-admin" class="page-content">
+        <div class="card">
+            <div class="card-title">🔐 Vorstand / Nachrichtenzentrale</div>
+            <div class="form-group">
+                <label>Nachrichtentext</label>
+                <textarea id="admin-msg" class="form-control" rows="4" placeholder="z.B. Info an alle Mitglieder..."></textarea>
+            </div>
+            <button onclick="sendWhatsAppMessage()" class="btn btn-whatsapp btn-block">🟢 Text über WhatsApp teilen</button>
+            <button onclick="openWhatsAppGroup()" class="btn btn-whatsapp btn-block" style="background: #128C7E;">💬 WhatsApp-Gruppe direkt öffnen</button>
+            <button onclick="sendEmail()" class="btn btn-primary btn-block" style="margin-top: 10px;">✉️ E-Mail-Rundschreiben</button>
+        </div>
+        <div class="card">
+            <div class="card-title">🔗 WhatsApp-Gruppen-Link</div>
+            <input type="text" id="wa-group-link" class="form-control" value="https://chat.whatsapp.com/DEIN_LINK_HIER">
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showPage('page-news', this)"><span class="nav-icon">📰</span><span>News</span></div>
+        <div class="nav-item" onclick="showPage('page-events', this)"><span class="nav-icon">📅</span><span>Termine</span></div>
+        <div class="nav-item" onclick="showPage('page-shooting', this)"><span class="nav-icon">🎯</span><span>Schießen</span></div>
+        <div class="nav-item" onclick="showPage('page-drinks', this)"><span class="nav-icon">🍻</span><span>Getränke</span></div>
+        <div class="nav-item" onclick="showPage('page-guide', this)"><span class="nav-icon">📯</span><span>Wissen</span></div>
+        <div class="nav-item" onclick="showPage('page-card', this)"><span class="nav-icon">💳</span><span>Ausweis</span></div>
+        <div class="nav-item" onclick="openAdminPage(this)"><span class="nav-icon">⚙️</span><span>Admin</span></div>
+    </div>
+
+    <script>
+        let isAdminLoggedIn = false;
+
+        function showPage(pageId, navEl) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if (navEl) navEl.classList.add('active');
+        }
+
+        function openAdminPage(navEl) {
+            if (isAdminLoggedIn) {
+                showPage('page-admin', navEl);
+            } else {
+                var pw = prompt("Bitte Admin-Passwort eingeben:");
+                if (pw === "schützen2026") {
+                    isAdminLoggedIn = true;
+                    showPage('page-admin', navEl);
+                } else if (pw !== null) {
+                    alert("Falsches Passwort!");
+                }
+            }
+        }
+
+        // Foto Upload Funktion
+        function loadPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('avatar-img');
+                    const placeholder = document.getElementById('avatar-placeholder');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    localStorage.setItem('member_photo', e.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        window.onload = function() {
+            const savedPhoto = localStorage.getItem('member_photo');
+            if (savedPhoto) {
+                const img = document.getElementById('avatar-img');
+                const placeholder = document.getElementById('avatar-placeholder');
+                img.src = savedPhoto;
+                img.style.display = 'block';
+                placeholder.style.display = 'none';
+            }
+            const savedName = localStorage.getItem('member_name');
+            if (savedName) {
+                document.getElementById('display-name').innerText = savedName;
+                document.getElementById('input-name').value = savedName;
+            }
+        };
+
+        function updateName() {
+            const newName = document.getElementById('input-name').value;
+            document.getElementById('display-name').innerText = newName || "Mitglied";
+            localStorage.setItem('member_name', newName);
+        }
+
+        // Getränke Preise & Strichzettel
+        const prices = {
+            bier: 3.50,
+            limo: 3.00,
+            mineral: 2.50,
+            wein4: 4.00,
+            gespritzt: 3.50,
+            schnaps: 3.50,
+            kaffee: 3.00,
+            hauswuerste: 7.50,
+            wienerle: 7.00
+        };
+        let counts = { bier: 0, limo: 0, mineral: 0, wein4: 0, gespritzt: 0, schnaps: 0, kaffee: 0, hauswuerste: 0, wienerle: 0 };
+
+        function changeCount(item, delta) {
+            counts[item] = Math.max(0, counts[item] + delta);
+            document.getElementById(`count-${item}`).innerText = counts[item];
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            for (let key in counts) {
+                total += counts[key] * prices[key];
+            }
+            document.getElementById('total-price').innerText = `€ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function resetDrinks() {
+            for (let key in counts) {
+                counts[key] = 0;
+                document.getElementById(`count-${key}`).innerText = 0;
+            }
+            calculateTotal();
+        }
+
+        function sendWhatsAppMessage() {
+            const rawMsg = document.getElementById('admin-msg').value;
+            if (!rawMsg) { alert("Bitte Text eingeben!"); return; }
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(rawMsg)}`, '_blank');
+        }
+
+        function openWhatsAppGroup() {
+            const link = document.getElementById('wa-group-link').value.trim();
+            window.open(link, '_blank');
+        }
+
+        function sendEmail() {
+            const msg = encodeURIComponent(document.getElementById('admin-msg').value);
+            window.location.href = `mailto:schutzenvereingaschurn@gmail.com?subject=Vereins-Info&body=${msg}`;
+        }
+
+        function toggleAttendance(btn) {
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function saveShot(e) {
+            e.preventDefault();
+            const disc = document.getElementById('shot-disc').value;
+            const rings = document.getElementById('shot-rings').value;
+            const list = document.getElementById('shot-list');
+            if (list.querySelector('li') && list.querySelector('li').style.color) list.innerHTML = '';
+            const li = document.createElement('li');
+            li.style.padding = "6px 0";
+            li.style.borderBottom = "1px solid var(--border-color)";
+            li.innerHTML = `🎯 <strong>${disc}:</strong> ${rings} Ringe`;
+            list.prepend(li);
+            e.target.reset();
+            alert("Ergebnis gespeichert!");
+        }
+    </script>
+</body>
+</html>
