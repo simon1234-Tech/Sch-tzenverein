@@ -233,6 +233,9 @@
         
         .admin-delete-btn { display: none; }
         body.admin-mode .admin-delete-btn { display: inline-flex !important; }
+
+        .badge-paid { background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 12px; font-weight: 700; font-size: 0.75em; }
+        .badge-open { background: #fee2e2; color: #dc2626; padding: 4px 8px; border-radius: 12px; font-weight: 700; font-size: 0.75em; }
     </style>
 </head>
 <body>
@@ -259,15 +262,136 @@
                 <div class="event-desc"><strong>Diensthabende:</strong> Christoph Wittwer, Werner, Wittwer</div>
             </div>
         </div>
+
+        <div class="card">
+            <div class="card-title">📋 Gesamter Dienstplan (2026/2027)</div>
+            <div style="font-size: 0.85em; margin-bottom: 12px; color: var(--text-muted);">
+                🕒 <strong>Dienstzeit:</strong> Freitags von 19:00 bis 21:00 Uhr
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #009a60;">
+                    <div><strong>09.10.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Norbert, Maria, Erwin</span></div>
+                    <span style="background: #009a60; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 4</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #df7800;">
+                    <div><strong>23.10.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Christoph, Werner, Wittwer</span></div>
+                    <span style="background: #df7800; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 3</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #6c757d;">
+                    <div><strong>06.11.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Geschlossen (Interne Veranstaltung)</span></div>
+                    <span style="background: #6c757d; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Geschlossen</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #8a3ffc;">
+                    <div><strong>20.11.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Dietmar, Simon, Sabrina</span></div>
+                    <span style="background: #8a3ffc; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 2</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #e12d79;">
+                    <div><strong>04.12.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Heimo, Karin, Werner Wachter</span></div>
+                    <span style="background: #e12d79; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 5</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #009a60;">
+                    <div><strong>18.12.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Norbert, Maria, Erwin</span></div>
+                    <span style="background: #009a60; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 4</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #6c757d;">
+                    <div><strong>01.01.2027</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Feiertag (Neujahr)</span></div>
+                    <span style="background: #6c757d; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Geschlossen</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #0085ca;">
+                    <div><strong>15.01.2027</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Manfred, Pascal, Jasmine</span></div>
+                    <span style="background: #0085ca; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 1</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #8a3ffc;">
+                    <div><strong>29.01.2027</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Dietmar, Simon, Sabrina</span></div>
+                    <span style="background: #8a3ffc; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 2</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #e12d79;">
+                    <div><strong>12.02.2027</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Heimo, Karin, Werner Wachter</span></div>
+                    <span style="background: #e12d79; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 5</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #009a60;">
+                    <div><strong>26.02.2027</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Norbert, Maria, Erwin</span></div>
+                    <span style="background: #009a60; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 4</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #df7800;">
+                    <div><strong>12.03.2027</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Christoph, Werner, Wittwer</span></div>
+                    <span style="background: #df7800; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 3</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #6c757d;">
+                    <div><strong>26.03.2027</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Feiertag (Karfreitag)</span></div>
+                    <span style="background: #6c757d; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Geschlossen</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #8a3ffc;">
+                    <div><strong>09.04.2027</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Dietmar, Simon, Sabrina</span></div>
+                    <span style="background: #8a3ffc; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 2</span>
+                </div>
+
+            </div>
+        </div>
     </div>
 
     <!-- 2. TERMINE -->
     <div id="page-events" class="page-content">
         <div class="card">
             <div class="card-title">📅 Anstehende Termine</div>
-            <div id="events-container">
-                <!-- Termine werden hier dynamisch in Echtzeit aus Firestore geladen -->
+            
+            <!-- Standard-Termine -->
+            <div class="event-item">
+                <div class="event-date">01. November 2026</div>
+                <div class="event-name">Spenden sammeln Schwarzes Kreuz Österreich</div>
+                <div class="event-desc">Ausrückung in Uniform / Tracht. Treffpunkt: 13:30 Uhr Friedhof Partenen.</div>
+                <div class="event-actions">
+                    <button class="btn btn-success" onclick="toggleAttendance(this)">👍 Zusage</button>
+                    <button class="btn btn-danger" onclick="toggleAttendance(this)">👎 Absage</button>
+                </div>
             </div>
+
+            <div class="event-item">
+                <div class="event-date">08. November 2026</div>
+                <div class="event-name">Gedenken an die Gefallenen bei der Weltkriege</div>
+                <div class="event-desc">Friedhof Gaschurn 9:00.</div>
+                <div class="event-actions">
+                    <button class="btn btn-success" onclick="toggleAttendance(this)">👍 Zusage</button>
+                    <button class="btn btn-danger" onclick="toggleAttendance(this)">👎 Absage</button>
+                </div>
+            </div>
+
+            <!-- Dynamische Firestore-Termine -->
+            <div id="events-container"></div>
+        </div>
+
+        <!-- Admin-Formular für neue Termine -->
+        <div class="card admin-delete-btn" style="flex-direction: column;">
+            <div class="card-title">➕ Neuen Termin anlegen (Admin)</div>
+            <form onsubmit="addEvent(event)">
+                <div class="form-group">
+                    <label>Titel des Termins</label>
+                    <input type="text" class="form-control" id="new-event-title" required>
+                </div>
+                <div class="form-group">
+                    <label>Datum</label>
+                    <input type="text" class="form-control" id="new-event-date" placeholder="z.B. 05. Dezember 2026" required>
+                </div>
+                <div class="form-group">
+                    <label>Beschreibung</label>
+                    <input type="text" class="form-control" id="new-event-desc">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Termin speichern</button>
+            </form>
         </div>
     </div>
 
@@ -302,7 +426,7 @@
         </div>
     </div>
 
-    <!-- 4. GETRÄNKE & STRICHZETTEL -->
+    <!-- 4. GETRÄNKE & SPEISEN STRICHZETTEL -->
     <div id="page-drinks" class="page-content">
         <div class="card">
             <div class="card-title">🍻 Schützenheim Strichzettel</div>
@@ -332,6 +456,54 @@
                     <button class="counter-btn" onclick="changeCount('mineral', 1)">+</button>
                 </div>
             </div>
+            <div class="price-item">
+                <span>🍷 Wein rot/weiß (1/4 lt.) — <strong>€ 4,00</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('wein4', -1)">-</button>
+                    <span id="count-wein4" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
+                    <button class="counter-btn" onclick="changeCount('wein4', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>🍷 Wein gespritzt (1/4 lt.) — <strong>€ 3,50</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('gespritzt', -1)">-</button>
+                    <span id="count-gespritzt" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
+                    <button class="counter-btn" onclick="changeCount('gespritzt', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>🥃 Schnaps (2 cl.) — <strong>€ 3,50</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button>
+                    <span id="count-schnaps" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
+                    <button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>☕ Kaffee (Tasse) — <strong>€ 3,00</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button>
+                    <span id="count-kaffee" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
+                    <button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>🌭 1 Paar Hauswürste m. Brot — <strong>€ 7,50</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button>
+                    <span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
+                    <button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button>
+                </div>
+            </div>
+            <div class="price-item">
+                <span>🌭 1 Paar Wienerle m. Brot — <strong>€ 7,00</strong></span>
+                <div class="counter-controls">
+                    <button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button>
+                    <span id="count-wienerle" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
+                    <button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button>
+                </div>
+            </div>
 
             <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #cbd5e1; display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
                 <span>Gesamtbetrag:</span>
@@ -341,17 +513,18 @@
         </div>
     </div>
 
-    <!-- 5. WISSEN & STATUTEN -->
+    <!-- 5. STATUTEN -->
     <div id="page-guide" class="page-content">
         <div class="card">
             <div class="card-title">📜 Vereinsstatuten (KB-SV-GP)</div>
             <p style="font-size: 0.85em; line-height: 1.6; color: var(--text-muted); margin-bottom: 12px;">
                 Offizielle Statuten des Kameradschaftsbundes & Schützenvereins Gaschurn-Partenen (Sitz in Gaschurn, Tätigkeitsbereich Montafon). Zweck des Vereins ist u.a. die Pflege des Schieß- und Traditionswesens sowie die Aufrechterhaltung der Kameradschaft.
             </p>
+            <a href="#" onclick="alert('Statuten-Download gestartet (Dokument integriert).'); return false;" class="btn btn-primary btn-block" style="background:#57534e;">📄 Komplette Statuten herunterladen (DOC/PDF)</a>
         </div>
     </div>
 
-    <!-- 6. DIGITALER AUSWEIS -->
+    <!-- 6. DIGITALER AUSWEIS & ADMIN BEREICH -->
     <div id="page-card" class="page-content">
         <div class="member-card">
             <div class="member-avatar-container" onclick="document.getElementById('file-input').click()" title="Foto hochladen">
@@ -386,6 +559,63 @@
                     <option>Unterstützendes Mitglied</option>
                 </select>
             </div>
+            <button class="btn btn-primary btn-block" onclick="toggleAdminPrompt()">🔐 Admin-Login</button>
+        </div>
+
+        <!-- ADMIN AREA: LAGERBESTAND & MITGLIEDERLISTE -->
+        <div class="admin-delete-btn" style="flex-direction: column; width: 100%;">
+            
+            <!-- ADMIN 1: LAGERBESTAND -->
+            <div class="card" style="width: 100%;">
+                <div class="card-title">📦 Lagerbestand (Vorstand)</div>
+                <div class="price-item">
+                    <span>🍺 Bier (Kisten)</span>
+                    <input type="number" id="stock-bier" value="12" style="width:60px; text-align:center;" class="form-control">
+                </div>
+                <div class="price-item">
+                    <span>🍋 Limo (Kisten)</span>
+                    <input type="number" id="stock-limo" value="8" style="width:60px; text-align:center;" class="form-control">
+                </div>
+                <div class="price-item">
+                    <span>🌭 Hauswürste (Paar)</span>
+                    <input type="number" id="stock-wuerste" value="25" style="width:60px; text-align:center;" class="form-control">
+                </div>
+                <button class="btn btn-green btn-block" onclick="alert('Lagerbestand aktualisiert!')">Bestand speichern</button>
+            </div>
+
+            <!-- ADMIN 2: MITGLIEDERLISTE & MITGLIEDSBEITRÄGE -->
+            <div class="card" style="width: 100%;">
+                <div class="card-title">👥 Mitgliederbeiträge (2026/2027)</div>
+                <div class="price-item">
+                    <div>
+                        <strong>Simon Schweighofer</strong><br>
+                        <span style="font-size: 0.8em; color: var(--text-muted);">Obmann / Schütze</span>
+                    </div>
+                    <span class="badge-paid">Bezahlt (€ 25)</span>
+                </div>
+                <div class="price-item">
+                    <div>
+                        <strong>Heimo Stocker</strong><br>
+                        <span style="font-size: 0.8em; color: var(--text-muted);">Obmann-Stellvertreter</span>
+                    </div>
+                    <span class="badge-paid">Bezahlt (€ 25)</span>
+                </div>
+                <div class="price-item">
+                    <div>
+                        <strong>Karin Stocker</strong><br>
+                        <span style="font-size: 0.8em; color: var(--text-muted);">Kassierin</span>
+                    </div>
+                    <span class="badge-paid">Bezahlt (€ 25)</span>
+                </div>
+                <div class="price-item">
+                    <div>
+                        <strong>Max Mustermann</strong><br>
+                        <span style="font-size: 0.8em; color: var(--text-muted);">Mitglied</span>
+                    </div>
+                    <span class="badge-open">Offen (€ 25)</span>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -421,7 +651,7 @@
             window.scrollTo(0, 0);
         }
 
-        // 2. Termine automatisch in Echtzeit laden (ohne erzwungenen Index, behebt 400 Bad Request)
+        // Firebase: Termine laden
         function listenToEvents() {
             db.collection("events").onSnapshot((querySnapshot) => {
                 const eventsContainer = document.getElementById('events-container');
@@ -446,15 +676,35 @@
                     `;
                 });
 
-                eventsContainer.innerHTML = eventsListHtml || '<p style="color:var(--text-muted); font-size:0.85em;">Keine Termine vorhanden.</p>';
+                eventsContainer.innerHTML = eventsListHtml;
             });
         }
 
-        // 3. Termin aus der Cloud löschen
+        // Firebase: neuen Termin hinzufügen
+        function addEvent(event) {
+            event.preventDefault();
+            const title = document.getElementById('new-event-title').value;
+            const date = document.getElementById('new-event-date').value;
+            const desc = document.getElementById('new-event-desc').value;
+
+            db.collection("events").add({
+                title: title,
+                date: date,
+                desc: desc,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                event.target.reset();
+                alert("Termin erfolgreich gespeichert!");
+            }).catch((err) => {
+                alert("Fehler beim Speichern: " + err.message);
+            });
+        }
+
+        // Firebase: Termin löschen
         function deleteEvent(docId) {
             if (confirm("Möchtest du diesen Termin wirklich löschen?")) {
                 db.collection("events").doc(docId).delete().then(() => {
-                    console.log("Termin erfolgreich gelöscht");
+                    console.log("Termin gelöscht");
                 }).catch((error) => {
                     console.error("Fehler beim Löschen: ", error);
                 });
@@ -467,9 +717,23 @@
             btn.classList.add('active');
         }
 
-        // Getränke Strichzettel
-        const prices = { bier: 3.50, limo: 3.00, mineral: 2.50 };
-        const counts = { bier: 0, limo: 0, mineral: 0 };
+        // Strichzettel Preise & Zähler
+        const prices = {
+            bier: 3.50,
+            limo: 3.00,
+            mineral: 2.50,
+            wein4: 4.00,
+            gespritzt: 3.50,
+            schnaps: 3.50,
+            kaffee: 3.00,
+            hauswuerste: 7.50,
+            wienerle: 7.00
+        };
+
+        const counts = {
+            bier: 0, limo: 0, mineral: 0, wein4: 0,
+            gespritzt: 0, schnaps: 0, kaffee: 0, hauswuerste: 0, wienerle: 0
+        };
 
         function changeCount(item, delta) {
             counts[item] = Math.max(0, counts[item] + delta);
@@ -489,9 +753,21 @@
             if (confirm("Strichzettel wirklich zurücksetzen?")) {
                 for (let key in counts) {
                     counts[key] = 0;
-                    document.getElementById('count-' + key).innerText = 0;
+                    const el = document.getElementById('count-' + key);
+                    if (el) el.innerText = 0;
                 }
                 updateTotal();
+            }
+        }
+
+        // Admin Modus umschalten
+        function toggleAdminPrompt() {
+            const pwd = prompt("Bitte Admin-Passwort eingeben:");
+            if (pwd === "1234" || pwd === "admin") {
+                document.body.classList.add('admin-mode');
+                alert("Admin-Modus aktiviert!");
+            } else {
+                alert("Falsches Passwort!");
             }
         }
 
@@ -525,7 +801,6 @@
             event.target.reset();
         }
 
-        // App beim Start initialisieren
         window.onload = function() {
             listenToEvents();
         }
