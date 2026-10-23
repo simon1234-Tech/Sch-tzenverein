@@ -6,14 +6,33 @@
     <title>Vereins-App - KB & SV Gaschurn-Partenen</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+   
+    <meta name="apple-mobile-web-app-title" content="KB & SV App">
+    <!-- PWA / Icons (behalten!) -->
     <link rel="manifest" href="manifest.json">
-    <!-- App-Icon und Einstellungen für den Startbildschirm -->
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="KB & SV App">
+
+    <!-- HIER GENAU EINSETZEN (Über dem style-Tag): -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDchsz_qOTMpvT48cKBYLqUmX30Lw39iGA",
+        authDomain: "kb-sv-vereinsapp.firebaseapp.com",
+        projectId: "kb-sv-vereinsapp",
+        storageBucket: "kb-sv-vereinsapp.appspot.com",
+        messagingSenderId: "1015802588615",
+        appId: "1:1015802588615:web:bcecb74526a2096d2ebde2"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+    <!-- ENDE DES FIREBASE-BLOCKS -->
     <style>
-        :root {
+    :root {
+    
             --primary-red: #7f1d1d;
             --primary-dark: #450a0a;
             --accent-green: #15803d;
@@ -25,7 +44,7 @@
             --whatsapp: #25D366;
             --whatsapp-dark: #1da851;
         }
-
+        </style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
