@@ -1107,7 +1107,7 @@
 
     // 2. Termine automatisch in Echtzeit laden
     function listenToEvents() {
-        db.collection("events").orderBy("date", "asc").onSnapshot((querySnapshot) => {
+        db.collection("events").onSnapshot((querySnapshot) => {
             const eventsContainer = document.getElementById('eventsContainer');
             if (!eventsContainer) return;
 
