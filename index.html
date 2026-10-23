@@ -8,8 +8,8 @@
 
     <meta name="apple-mobile-web-app-title" content="KB & SV App">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="logo.png">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
 
     <!-- Firebase SDKs (v8.10.1) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -38,8 +38,6 @@
             --text-muted: #57534e;
             --card-bg: #ffffff;
             --danger: #dc2626;
-            --whatsapp: #25D366;
-            --whatsapp-dark: #1da851;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -87,7 +85,7 @@
             margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
         }
 
         .event-item {
@@ -101,6 +99,14 @@
         .event-name { font-size: 0.95em; font-weight: 700; margin: 3px 0; color: var(--text-dark); }
         .event-desc { font-size: 0.85em; color: var(--text-muted); }
         .event-actions { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+
+        .attendance-summary {
+            font-size: 0.8em;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #cbd5e1;
+            color: var(--text-dark);
+        }
 
         .btn {
             padding: 10px 16px;
@@ -121,9 +127,7 @@
         .btn-green { background: var(--accent-green); color: white; }
         .btn-green:hover { background: var(--accent-green-dark); }
         .btn-success { background: #dcfce7; color: var(--accent-green-dark); }
-        .btn-success.active { background: var(--accent-green); color: white; }
         .btn-danger { background: #fee2e2; color: var(--danger); }
-        .btn-danger.active { background: var(--danger); color: white; }
         .btn-block { width: 100%; margin-top: 8px; }
 
         .form-group { margin-bottom: 12px; }
@@ -193,10 +197,18 @@
         .nav-icon { font-size: 1.5em !important; margin-bottom: 2px !important; display: block !important; }
         
         .admin-delete-btn { display: none; }
-        body.admin-mode .admin-delete-btn { display: flex !important; }
+        body.admin-mode .admin-delete-btn { display: inline-flex !important; }
 
         .badge-paid { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
         .badge-open { background: #fee2e2; color: #dc2626; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
+        
+        .news-img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -208,19 +220,15 @@
 
     <!-- 1. NEWS & DIENSTPLAN -->
     <div id="page-news" class="page-content active">
-        <div class="card">
-            <div class="card-title">📢 Aktuelle Vereins-News</div>
-            <p style="font-size: 0.9em; line-height: 1.5; color: #44403c;">
-                Gute Stimmung. Gemeinschaft. Tradition. Willkommen in der offiziellen App unseres Vereins!
-            </p>
-        </div>
+        <!-- Dynamische News aus Firestore -->
+        <div id="news-container"></div>
 
         <div class="card">
             <div class="card-title">🍻 Nächster Dienst im Schützenhaus</div>
             <div class="event-item" style="border-left-color: var(--primary-red); background: #fef2f2;">
                 <div class="event-date" style="color: var(--primary-red);">Freitag, 23. Oktober 2026 (19:00 - 21:00 Uhr)</div>
                 <div class="event-name">Team 3</div>
-                <div class="event-desc"><strong>Diensthabende:</strong> Christoph Wittwer, Werner, Wittwer</div>
+                <div class="event-desc"><strong>Diensthabende:</strong> Christoph Wittwer, Werner Wittwer</div>
             </div>
         </div>
 
@@ -237,7 +245,7 @@
                 </div>
 
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #df7800;">
-                    <div><strong>23.10.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Christoph, Werner, Wittwer</span></div>
+                    <div><strong>23.10.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Christoph, Werner Wittwer</span></div>
                     <span style="background: #df7800; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 3</span>
                 </div>
 
@@ -287,7 +295,7 @@
                 </div>
 
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #df7800;">
-                    <div><strong>12.03.2027</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Christoph, Werner, Wittwer</span></div>
+                    <div><strong>12.03.2027</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Christoph, Werner Wittwer</span></div>
                     <span style="background: #df7800; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 3</span>
                 </div>
 
@@ -309,32 +317,11 @@
     <div id="page-events" class="page-content">
         <div class="card">
             <div class="card-title">📅 Anstehende Termine</div>
-            
-            <div class="event-item">
-                <div class="event-date">1. November 2026</div>
-                <div class="event-name">Spenden sammeln Schwarzes Kreuz Österreich</div>
-                <div class="event-desc">Ausrückung in Uniform / Tracht. Treffpunkt: 13:30 Uhr Friedhof Partenen.</div>
-                <div class="event-actions">
-                    <button class="btn btn-success" onclick="toggleAttendance(this)">👍 Zusage</button>
-                    <button class="btn btn-danger" onclick="toggleAttendance(this)">👎 Absage</button>
-                </div>
-            </div>
-
-            <div class="event-item">
-                <div class="event-date">08. November 2026</div>
-                <div class="event-name">Gedenken an die Gefallenen bei der Weltkriege</div>
-                <div class="event-desc">Friedhof Gaschurn 9:00.</div>
-                <div class="event-actions">
-                    <button class="btn btn-success" onclick="toggleAttendance(this)">👍 Zusage</button>
-                    <button class="btn btn-danger" onclick="toggleAttendance(this)">👎 Absage</button>
-                </div>
-            </div>
-
             <div id="events-container"></div>
         </div>
     </div>
 
-    <!-- 3. SCHIESSBUCH -->
+    <!-- 3. SCHIESSBUCH (Kleinkaliber entfernt) -->
     <div id="page-shooting" class="page-content">
         <div class="card">
             <div class="card-title">🎯 Digitales Schießbuch</div>
@@ -348,7 +335,6 @@
                     <select class="form-control" id="shot-disc">
                         <option>Luftgewehr (10m)</option>
                         <option>Luftpistole (10m)</option>
-                        <option>Kleinkaliber (50m)</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -443,25 +429,31 @@
                 <span>Gesamtbetrag:</span>
                 <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
             </div>
-            <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 10px;">Strichzettel zurücksetzen</button>
+
+            <!-- NAME FÜR ABRECHNUNG -->
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Name / Verein / Firma / Anlass</label>
+                <input type="text" class="form-control" id="tally-client-name" placeholder="z.B. Feuerwehr Gaschurn, Privatfest, Max Mustermann">
+            </div>
+            <button onclick="saveTallyBilling()" class="btn btn-green btn-block">💾 Abrechnung speichern</button>
+            <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 8px;">Zurücksetzen</button>
         </div>
     </div>
 
-    <!-- 5. STATUTEN -->
+    <!-- 5. ABRECHNUNGEN (Ehemals Statuten) -->
     <div id="page-guide" class="page-content">
         <div class="card">
-            <div class="card-title">📜 Vereinsstatuten (KB-SV-GP)</div>
-            <p style="font-size: 0.85em; line-height: 1.6; color: var(--text-muted); margin-bottom: 12px;">
-                Offizielle Statuten des Kameradschaftsbundes & Schützenvereins Gaschurn-Partenen (Sitz in Gaschurn, Tätigkeitsbereich Montafon). Zweck des Vereins ist u.a. die Pflege des Schieß- und Traditionswesens sowie die Aufrechterhaltung der Kameradschaft.
-            </p>
-            <a href="#" onclick="alert('Statuten-Download gestartet (Dokument integriert).'); return false;" class="btn btn-primary btn-block" style="background:#57534e;">📄 Komplette Statuten herunterladen (DOC/PDF)</a>
+            <div class="card-title">📜 Gespeicherte Strichzettel & Abrechnungen</div>
+            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 12px;">Hier sind alle gespeicherten Konsumationen zur Nachvollziehbarkeit aufgelistet:</p>
+            <div id="tally-history-list">
+                <p style="color: var(--text-muted); font-size: 0.85em;">Lade Abrechnungen...</p>
+            </div>
         </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH (Ersetzt die alte Ausweis-Seite) -->
+    <!-- 6. ADMIN-BEREICH -->
     <div id="page-card" class="page-content">
 
-        <!-- LOGIN FORMULAR (Passwort verdeckt) -->
         <div class="card" id="admin-login-card">
             <div class="card-title">🔐 Admin-Login</div>
             <form onsubmit="handleAdminLogin(event)">
@@ -473,16 +465,35 @@
             </form>
         </div>
 
-        <!-- ADMIN BEREICH (Sichtbar nach erfolgreichem Login) -->
         <div class="admin-delete-btn" style="flex-direction: column; width: 100%;">
             
             <div class="card" style="width: 100%; background: #fef2f2; border: 1px solid var(--danger);">
                 <div class="card-title" style="color: var(--danger);">🔓 Admin-Modus Aktiv</div>
-                <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Vorstands-Funktionen & Admin-Optionen freigeschaltet.</p>
+                <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Vorstands-Funktionen & Bearbeitungs-Optionen freigeschaltet.</p>
                 <button class="btn btn-danger btn-block" onclick="logoutAdmin()">Admin-Modus Beenden</button>
             </div>
 
-            <!-- ECHTZEIT-LAGERBESTAND (Speichert in Cloud) -->
+            <!-- NEWS BEITRAG ERSTELLEN -->
+            <div class="card" style="width: 100%;">
+                <div class="card-title">📢 Neue Vereins-News / Foto posten</div>
+                <form onsubmit="addNewsItem(event)">
+                    <div class="form-group">
+                        <label>Titel / Überschrift</label>
+                        <input type="text" class="form-control" id="news-title" placeholder="z.B. Erfogreiches Königsschießen" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Text-Inhalt</label>
+                        <textarea class="form-control" id="news-text" rows="3" placeholder="Details zur Nachricht..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Foto hinzufügen (optional)</label>
+                        <input type="file" id="news-photo-input" accept="image/*" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">News veröffentlichen</button>
+                </form>
+            </div>
+
+            <!-- ECHTZEIT-LAGERBESTAND -->
             <div class="card" style="width: 100%;">
                 <div class="card-title">📦 Lagerbestand (Schützenheim)</div>
                 <div class="price-item">
@@ -520,7 +531,7 @@
                 </form>
             </div>
 
-            <!-- SCHIESSBUCH ERGEBNISSE (Nur für Admin sichtbar) -->
+            <!-- SCHIESSBUCH ERGEBNISSE -->
             <div class="card" style="width: 100%;">
                 <div class="card-title">🎯 Schießbuch Ergebnisse</div>
                 <ul id="admin-shot-list" style="list-style: none; font-size: 0.85em;">
@@ -578,7 +589,7 @@
             <span class="nav-icon">🍻</span>Strichzettel
         </a>
         <a class="nav-item" onclick="switchPage('guide', this)">
-            <span class="nav-icon">📜</span>Statuten
+            <span class="nav-icon">📜</span>Abrechnungen
         </a>
         <a class="nav-item" onclick="switchPage('card', this)">
             <span class="nav-icon">🔐</span>Admin
@@ -595,7 +606,82 @@
             window.scrollTo(0, 0);
         }
 
-        // Firebase: Termine laden
+        // 1. NEWS-BEITRÄGE LADEN & VERWALTEN
+        function listenToNews() {
+            db.collection("news").onSnapshot((querySnapshot) => {
+                const newsContainer = document.getElementById('news-container');
+                if (!newsContainer) return;
+
+                let html = "";
+                querySnapshot.forEach((doc) => {
+                    const news = doc.data();
+                    const docId = doc.id;
+
+                    html += `
+                        <div class="card">
+                            <div class="card-title">
+                                📢 ${news.title || 'Vereins-News'}
+                                <button class="btn btn-danger admin-delete-btn" onclick="deleteNews('${docId}')" style="padding: 3px 8px; font-size: 0.75em;">🗑️ Löschen</button>
+                            </div>
+                            ${news.photo ? `<img src="${news.photo}" class="news-img">` : ''}
+                            <p style="font-size: 0.9em; line-height: 1.5; color: #44403c;">${news.text || ''}</p>
+                        </div>
+                    `;
+                });
+
+                if (html === "") {
+                    html = `
+                        <div class="card">
+                            <div class="card-title">📢 Willkommen beim KB & SV Gaschurn-Partenen</div>
+                            <p style="font-size: 0.9em; line-height: 1.5; color: #44403c;">
+                                Gute Stimmung. Gemeinschaft. Tradition. Willkommen in der offiziellen App unseres Vereins!
+                            </p>
+                        </div>
+                    `;
+                }
+
+                newsContainer.innerHTML = html;
+            });
+        }
+
+        function addNewsItem(event) {
+            event.preventDefault();
+            const title = document.getElementById('news-title').value;
+            const text = document.getElementById('news-text').value;
+            const photoInput = document.getElementById('news-photo-input');
+
+            const createNewsDoc = (photoUrl = "") => {
+                db.collection("news").add({
+                    title: title,
+                    text: text,
+                    photo: photoUrl,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    event.target.reset();
+                    alert("News-Beitrag erfolgreich veröffentlicht!");
+                }).catch((err) => {
+                    alert("Fehler beim Veröffentlichen: " + err.message);
+                });
+            };
+
+            if (photoInput.files && photoInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    createNewsDoc(e.target.result);
+                };
+                reader.readAsDataURL(photoInput.files[0]);
+            } else {
+                createNewsDoc();
+            }
+        }
+
+        function deleteNews(docId) {
+            if (confirm("Diesen News-Beitrag wirklich löschen?")) {
+                db.collection("news").doc(docId).delete();
+            }
+        }
+
+        // 2. TERMINE & ZUSAGEN/ABSAGEN LADEN
         function listenToEvents() {
             db.collection("events").onSnapshot((querySnapshot) => {
                 const eventsContainer = document.getElementById('events-container');
@@ -606,14 +692,23 @@
                     const event = doc.data();
                     const docId = doc.id;
 
+                    const accepts = event.accepts || [];
+                    const declines = event.declines || [];
+
                     eventsListHtml += `
                         <div class="event-item" id="event-${docId}">
                             <div class="event-date">${event.date || ''}</div>
                             <div class="event-name">${event.title || ''}</div>
                             <div class="event-desc">${event.desc || ''}</div>
+                            
+                            <div class="attendance-summary">
+                                <div><strong>👍 Zusagen (${accepts.length}):</strong> ${accepts.length > 0 ? accepts.join(', ') : 'Noch keine'}</div>
+                                <div style="margin-top:2px;"><strong>👎 Absagen (${declines.length}):</strong> ${declines.length > 0 ? declines.join(', ') : 'Keine'}</div>
+                            </div>
+
                             <div class="event-actions">
-                                <button class="btn btn-success" onclick="toggleAttendance(this)">👍 Zusage</button>
-                                <button class="btn btn-danger" onclick="toggleAttendance(this)">👎 Absage</button>
+                                <button class="btn btn-success" onclick="registerAttendance('${docId}', 'accept')">👍 Zusage</button>
+                                <button class="btn btn-danger" onclick="registerAttendance('${docId}', 'decline')">👎 Absage</button>
                                 <button class="btn btn-danger admin-delete-btn" onclick="deleteEvent('${docId}')" style="margin-left:auto; padding: 4px 10px; font-size: 0.75em;">🗑️ Löschen</button>
                             </div>
                         </div>
@@ -624,7 +719,37 @@
             });
         }
 
-        // Firebase: Neuen Termin anlegen
+        function registerAttendance(docId, type) {
+            const name = prompt("Bitte gib deinen Namen für die Rückmeldung ein:");
+            if (!name || name.trim() === "") return;
+
+            const cleanName = name.trim();
+            const docRef = db.collection("events").doc(docId);
+
+            docRef.get().then((doc) => {
+                if (!doc.exists) return;
+                const data = doc.data();
+                let accepts = data.accepts || [];
+                let declines = data.declines || [];
+
+                // Entferne Namen aus beiden Listen, falls er schon reagiert hatte
+                accepts = accepts.filter(n => n !== cleanName);
+                declines = declines.filter(n => n !== cleanName);
+
+                if (type === 'accept') {
+                    accepts.push(cleanName);
+                } else {
+                    declines.push(cleanName);
+                }
+
+                return docRef.update({ accepts: accepts, declines: declines });
+            }).then(() => {
+                alert("Deine Rückmeldung wurde gespeichert!");
+            }).catch((err) => {
+                alert("Fehler beim Speichern: " + err.message);
+            });
+        }
+
         function addEvent(event) {
             event.preventDefault();
             const title = document.getElementById('new-event-title').value;
@@ -635,6 +760,8 @@
                 title: title,
                 date: date,
                 desc: desc,
+                accepts: [],
+                declines: [],
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 event.target.reset();
@@ -644,24 +771,13 @@
             });
         }
 
-        // Firebase: Termin löschen
         function deleteEvent(docId) {
             if (confirm("Möchtest du diesen Termin wirklich löschen?")) {
-                db.collection("events").doc(docId).delete().then(() => {
-                    console.log("Termin erfolgreich gelöscht");
-                }).catch((error) => {
-                    console.error("Fehler beim Löschen: ", error);
-                });
+                db.collection("events").doc(docId).delete();
             }
         }
 
-        function toggleAttendance(btn) {
-            const parent = btn.parentElement;
-            parent.querySelectorAll('.btn-success, .btn-danger').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-
-        // Firebase: Lagerbestand in Echtzeit synchronisieren
+        // 3. ECHTZEIT-LAGERBESTAND
         function listenToInventory() {
             db.collection("inventory").doc("main").onSnapshot((doc) => {
                 if (doc.exists) {
@@ -684,13 +800,11 @@
                 wuerste: wuerste,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
-                alert("Lagerbestand erfolgreich in Echtzeit für alle Admins gespeichert!");
-            }).catch((err) => {
-                alert("Fehler beim Speichern: " + err.message);
+                alert("Lagerbestand erfolgreich gespeichert!");
             });
         }
 
-        // Firebase: Schießbuch-Ergebnisse speichern & nur im Admin-Bereich live laden
+        // 4. SCHIESSBUCH
         function saveShot(event) {
             event.preventDefault();
             const name = document.getElementById('shot-name').value;
@@ -705,8 +819,6 @@
             }).then(() => {
                 alert("Ergebnis erfolgreich gespeichert!");
                 event.target.reset();
-            }).catch((err) => {
-                alert("Fehler beim Speichern: " + err.message);
             });
         }
 
@@ -725,10 +837,16 @@
             });
         }
 
-        // Strichzettel Logik
+        // 5. STRICHZETTEL & ABRECHNUNGEN
         const prices = {
             bier: 3.50, limo: 3.00, mineral: 2.50, wein4: 4.00,
             gespritzt: 3.50, schnaps: 3.50, kaffee: 3.00, hauswuerste: 7.50, wienerle: 7.00
+        };
+
+        const itemNames = {
+            bier: "Bier", limo: "Limo", mineral: "Mineral", wein4: "Wein 1/4",
+            gespritzt: "Gespritzter", schnaps: "Schnaps", kaffee: "Kaffee",
+            hauswuerste: "Hauswürste", wienerle: "Wienerle"
         };
 
         const counts = {
@@ -749,6 +867,7 @@
                 total += counts[key] * prices[key];
             }
             document.getElementById('total-price').innerText = '€ ' + total.toFixed(2);
+            return total;
         }
 
         function confirmResetDrinks() {
@@ -758,11 +877,83 @@
                     const el = document.getElementById('count-' + key);
                     if (el) el.innerText = 0;
                 }
+                document.getElementById('tally-client-name').value = '';
                 updateTotal();
             }
         }
 
-        // Admin Login mit verdecktem Passwort (Passwort: 1234)
+        function saveTallyBilling() {
+            const clientName = document.getElementById('tally-client-name').value.trim();
+            const total = updateTotal();
+
+            if (!clientName) {
+                alert("Bitte gib einen Namen / Verein / Anlass für die Abrechnung ein!");
+                return;
+            }
+
+            if (total === 0) {
+                alert("Der Strichzettel ist leer! Bitte konsumierte Getränke/Speisen eintragen.");
+                return;
+            }
+
+            let itemsSummary = [];
+            for (let key in counts) {
+                if (counts[key] > 0) {
+                    itemsSummary.push(`${counts[key]}x ${itemNames[key]}`);
+                }
+            }
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('de-AT') + ' ' + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
+
+            db.collection("tally_billings").add({
+                clientName: clientName,
+                total: total.toFixed(2),
+                items: itemsSummary.join(', '),
+                dateStr: dateStr,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert(`Abrechnung für "${clientName}" (€ ${total.toFixed(2)}) erfolgreich gespeichert!`);
+                confirmResetDrinks();
+            }).catch((err) => {
+                alert("Fehler beim Speichern: " + err.message);
+            });
+        }
+
+        function listenToTallyBillings() {
+            db.collection("tally_billings").onSnapshot((querySnapshot) => {
+                const container = document.getElementById('tally-history-list');
+                if (!container) return;
+
+                let html = "";
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const docId = doc.id;
+
+                    html += `
+                        <div class="event-item" style="border-left-color: var(--primary-red); background: #fafaf9;">
+                            <div class="event-date" style="color: var(--primary-red);">${data.dateStr || ''}</div>
+                            <div class="event-name">${data.clientName || 'Unbenannt'}</div>
+                            <div class="event-desc"><strong>Konsumation:</strong> ${data.items || ''}</div>
+                            <div style="font-weight: 800; color: var(--accent-green-dark); margin-top: 5px; font-size: 1em;">
+                                Gesamtbetrag: € ${data.total || '0.00'}
+                            </div>
+                            <button class="btn btn-danger admin-delete-btn" onclick="deleteBilling('${docId}')" style="margin-top: 8px; padding: 4px 10px; font-size: 0.75em;">🗑️ Abrechnung Löschen</button>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html || '<p style="color: var(--text-muted); font-size: 0.85em;">Noch keine gespeicherten Abrechnungen vorhanden.</p>';
+            });
+        }
+
+        function deleteBilling(docId) {
+            if (confirm("Diese Abrechnung wirklich löschen?")) {
+                db.collection("tally_billings").doc(docId).delete();
+            }
+        }
+
+        // ADMIN LOGIN (Passwort: 1234)
         function handleAdminLogin(event) {
             event.preventDefault();
             const password = document.getElementById('admin-password-input').value;
@@ -770,7 +961,7 @@
                 document.body.classList.add('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'none';
                 document.getElementById('admin-password-input').value = '';
-                alert("Admin-Modus erfolgreich aktiviert!");
+                alert("Admin-Modus aktiv!");
             } else {
                 alert("Falsches Passwort!");
                 document.getElementById('admin-password-input').value = '';
@@ -796,9 +987,11 @@
         }
 
         window.onload = function() {
+            listenToNews();
             listenToEvents();
             listenToInventory();
             listenToShootingResults();
+            listenToTallyBillings();
         }
     </script>
 </body>
