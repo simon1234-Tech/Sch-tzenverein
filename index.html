@@ -578,15 +578,15 @@
             window.scrollTo(0, 0);
         }
 
-        /* FCM Push Token registrieren mit expliziter Service-Worker-Registrierung */
+        /* FCM Push Token registrieren mit expliziter Service-Worker-Bindung */
         function requestPushPermission(isAdmin = false) {
             Notification.requestPermission().then((permission) => {
                 if (permission === 'granted') {
                     navigator.serviceWorker.register('firebase-messaging-sw.js')
                     .then((registration) => {
+                        messaging.useServiceWorker(registration);
                         return messaging.getToken({
-                            vapidKey: "BF2_KfUG_keimCkr0oKTA8BGXXOAv4QsmEsSUjjHwwgUG0H-vKJhWYm3rMqS-YfPJ6LlLrn2Ip-vAzT5hm2-2dg",
-                            swReg: registration
+                            vapidKey: "BF2_KfUG_keimCkr0oKTA8BGXXOAv4QsmEsSUjjHwwgUG0H-vKJhWYm3rMqS-YfPJ6LlLrn2Ip-vAzT5hm2-2dg"
                         });
                     })
                     .then((currentToken) => {
