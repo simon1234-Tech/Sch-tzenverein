@@ -11,7 +11,7 @@
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs (v8.10.1) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
@@ -138,45 +138,6 @@
             background: white;
         }
 
-        .member-card {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary-red));
-            color: white;
-            border-radius: 16px;
-            padding: 20px;
-            position: relative;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            overflow: hidden;
-        }
-        .member-avatar-container {
-            flex-shrink: 0;
-            width: 80px; height: 100px;
-            background: #292524;
-            border-radius: 8px;
-            border: 2px solid #fef08a;
-            overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-        }
-        .member-avatar-container img { width: 100%; height: 100%; object-fit: cover; }
-        .member-avatar-placeholder { font-size: 2em; color: #fef08a; }
-        .member-info { flex-grow: 1; }
-        .member-card-header { font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; color: #fef08a; font-weight: 700; }
-        .member-name { font-size: 1.2em; font-weight: 800; margin: 4px 0; }
-        .member-details { font-size: 0.8em; opacity: 0.9; line-height: 1.4; }
-        .member-badge {
-            display: inline-block;
-            background: var(--accent-green);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.7em;
-            font-weight: 700;
-            margin-top: 8px;
-        }
-
         .price-item {
             display: flex;
             justify-content: space-between;
@@ -232,10 +193,10 @@
         .nav-icon { font-size: 1.5em !important; margin-bottom: 2px !important; display: block !important; }
         
         .admin-delete-btn { display: none; }
-        body.admin-mode .admin-delete-btn { display: inline-flex !important; }
+        body.admin-mode .admin-delete-btn { display: flex !important; }
 
-        .badge-paid { background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 12px; font-weight: 700; font-size: 0.75em; }
-        .badge-open { background: #fee2e2; color: #dc2626; padding: 4px 8px; border-radius: 12px; font-weight: 700; font-size: 0.75em; }
+        .badge-paid { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
+        .badge-open { background: #fee2e2; color: #dc2626; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -349,9 +310,8 @@
         <div class="card">
             <div class="card-title">📅 Anstehende Termine</div>
             
-            <!-- Standard-Termine -->
             <div class="event-item">
-                <div class="event-date">01. November 2026</div>
+                <div class="event-date">1. November 2026</div>
                 <div class="event-name">Spenden sammeln Schwarzes Kreuz Österreich</div>
                 <div class="event-desc">Ausrückung in Uniform / Tracht. Treffpunkt: 13:30 Uhr Friedhof Partenen.</div>
                 <div class="event-actions">
@@ -370,28 +330,7 @@
                 </div>
             </div>
 
-            <!-- Dynamische Firestore-Termine -->
             <div id="events-container"></div>
-        </div>
-
-        <!-- Admin-Formular für neue Termine -->
-        <div class="card admin-delete-btn" style="flex-direction: column;">
-            <div class="card-title">➕ Neuen Termin anlegen (Admin)</div>
-            <form onsubmit="addEvent(event)">
-                <div class="form-group">
-                    <label>Titel des Termins</label>
-                    <input type="text" class="form-control" id="new-event-title" required>
-                </div>
-                <div class="form-group">
-                    <label>Datum</label>
-                    <input type="text" class="form-control" id="new-event-date" placeholder="z.B. 05. Dezember 2026" required>
-                </div>
-                <div class="form-group">
-                    <label>Beschreibung</label>
-                    <input type="text" class="form-control" id="new-event-desc">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Termin speichern</button>
-            </form>
         </div>
     </div>
 
@@ -409,6 +348,7 @@
                     <select class="form-control" id="shot-disc">
                         <option>Luftgewehr (10m)</option>
                         <option>Luftpistole (10m)</option>
+                        <option>Kleinkaliber (50m)</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -417,12 +357,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Ergebnis speichern</button>
             </form>
-        </div>
-        <div class="card">
-            <div class="card-title">📋 Bisherige Ergebnisse</div>
-            <ul id="shot-list" style="list-style: none; font-size: 0.85em;">
-                <li style="color: var(--text-muted);">Noch keine Einträge vorhanden.</li>
-            </ul>
         </div>
     </div>
 
@@ -524,96 +458,106 @@
         </div>
     </div>
 
-    <!-- 6. DIGITALER AUSWEIS & ADMIN BEREICH -->
+    <!-- 6. ADMIN-BEREICH (Ersetzt die alte Ausweis-Seite) -->
     <div id="page-card" class="page-content">
-        <div class="member-card">
-            <div class="member-avatar-container" onclick="document.getElementById('file-input').click()" title="Foto hochladen">
-                <img id="avatar-img" src="" alt="" style="display: none;">
-                <div id="avatar-placeholder" class="member-avatar-placeholder">📷</div>
-            </div>
-            <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="loadPhoto(event)">
-            
-            <div class="member-info">
-                <div class="member-card-header">Mitgliedsausweis</div>
-                <div class="member-name" id="display-name">Max Mustermann</div>
-                <div class="member-details">
-                    Aktivität: <strong id="display-activity">Aktive Schützen</strong><br>
-                    Verein: <strong>Gaschurn-Partenen</strong>
+
+        <!-- LOGIN FORMULAR (Passwort verdeckt) -->
+        <div class="card" id="admin-login-card">
+            <div class="card-title">🔐 Admin-Login</div>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="form-group">
+                    <label>Admin-Passwort</label>
+                    <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required>
                 </div>
-                <div class="member-badge">KB-SV-GP Mitglied</div>
-            </div>
+                <button type="submit" class="btn btn-primary btn-block">Anmelden</button>
+            </form>
         </div>
 
-        <div class="card" style="margin-top: 15px;">
-            <div class="card-title">👤 Profil & Aktivität anpassen</div>
-            <div class="form-group">
-                <label>Dein Name</label>
-                <input type="text" class="form-control" id="input-name" value="Max Mustermann" onchange="updateName()">
-            </div>
-            <div class="form-group">
-                <label>Aktivität / Kategorie</label>
-                <select class="form-control" id="input-activity" onchange="updateName()">
-                    <option>Aktive Schützen</option>
-                    <option>Kameradschaftsbund</option>
-                    <option>Vorstand</option>
-                    <option>Unterstützendes Mitglied</option>
-                </select>
-            </div>
-            <button class="btn btn-primary btn-block" onclick="toggleAdminPrompt()">🔐 Admin-Login</button>
-        </div>
-
-        <!-- ADMIN AREA: LAGERBESTAND & MITGLIEDERLISTE -->
+        <!-- ADMIN BEREICH (Sichtbar nach erfolgreichem Login) -->
         <div class="admin-delete-btn" style="flex-direction: column; width: 100%;">
             
-            <!-- ADMIN 1: LAGERBESTAND -->
+            <div class="card" style="width: 100%; background: #fef2f2; border: 1px solid var(--danger);">
+                <div class="card-title" style="color: var(--danger);">🔓 Admin-Modus Aktiv</div>
+                <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Vorstands-Funktionen & Admin-Optionen freigeschaltet.</p>
+                <button class="btn btn-danger btn-block" onclick="logoutAdmin()">Admin-Modus Beenden</button>
+            </div>
+
+            <!-- ECHTZEIT-LAGERBESTAND (Speichert in Cloud) -->
             <div class="card" style="width: 100%;">
-                <div class="card-title">📦 Lagerbestand (Vorstand)</div>
+                <div class="card-title">📦 Lagerbestand (Schützenheim)</div>
                 <div class="price-item">
                     <span>🍺 Bier (Kisten)</span>
-                    <input type="number" id="stock-bier" value="12" style="width:60px; text-align:center;" class="form-control">
+                    <input type="number" id="stock-bier" value="10" style="width:65px; text-align:center;" class="form-control">
                 </div>
                 <div class="price-item">
                     <span>🍋 Limo (Kisten)</span>
-                    <input type="number" id="stock-limo" value="8" style="width:60px; text-align:center;" class="form-control">
+                    <input type="number" id="stock-limo" value="10" style="width:65px; text-align:center;" class="form-control">
                 </div>
                 <div class="price-item">
                     <span>🌭 Hauswürste (Paar)</span>
-                    <input type="number" id="stock-wuerste" value="25" style="width:60px; text-align:center;" class="form-control">
+                    <input type="number" id="stock-wuerste" value="10" style="width:65px; text-align:center;" class="form-control">
                 </div>
-                <button class="btn btn-green btn-block" onclick="alert('Lagerbestand aktualisiert!')">Bestand speichern</button>
+                <button class="btn btn-green btn-block" onclick="saveInventory()">Bestand speichern</button>
             </div>
 
-            <!-- ADMIN 2: MITGLIEDERLISTE & MITGLIEDSBEITRÄGE -->
+            <!-- NEUEN TERMIN ANLEGEN -->
             <div class="card" style="width: 100%;">
-                <div class="card-title">👥 Mitgliederbeiträge (2026/2027)</div>
-                <div class="price-item">
-                    <div>
-                        <strong>Simon Schweighofer</strong><br>
-                        <span style="font-size: 0.8em; color: var(--text-muted);">Obmann / Schütze</span>
+                <div class="card-title">➕ Neuen Termin anlegen</div>
+                <form onsubmit="addEvent(event)">
+                    <div class="form-group">
+                        <label>Titel des Termins</label>
+                        <input type="text" class="form-control" id="new-event-title" placeholder="z.B. Jahreshauptversammlung" required>
                     </div>
-                    <span class="badge-paid">Bezahlt (€ 25)</span>
-                </div>
-                <div class="price-item">
-                    <div>
-                        <strong>Heimo Stocker</strong><br>
-                        <span style="font-size: 0.8em; color: var(--text-muted);">Obmann-Stellvertreter</span>
+                    <div class="form-group">
+                        <label>Datum & Uhrzeit</label>
+                        <input type="text" class="form-control" id="new-event-date" placeholder="z.B. 15. Dezember 2026, 19:00 Uhr" required>
                     </div>
-                    <span class="badge-paid">Bezahlt (€ 25)</span>
-                </div>
-                <div class="price-item">
-                    <div>
-                        <strong>Karin Stocker</strong><br>
-                        <span style="font-size: 0.8em; color: var(--text-muted);">Kassierin</span>
+                    <div class="form-group">
+                        <label>Beschreibung</label>
+                        <input type="text" class="form-control" id="new-event-desc" placeholder="Treffpunkt, Dresscode, etc.">
                     </div>
-                    <span class="badge-paid">Bezahlt (€ 25)</span>
-                </div>
-                <div class="price-item">
-                    <div>
-                        <strong>Max Mustermann</strong><br>
-                        <span style="font-size: 0.8em; color: var(--text-muted);">Mitglied</span>
-                    </div>
-                    <span class="badge-open">Offen (€ 25)</span>
-                </div>
+                    <button type="submit" class="btn btn-primary btn-block">Termin in Cloud speichern</button>
+                </form>
+            </div>
+
+            <!-- SCHIESSBUCH ERGEBNISSE (Nur für Admin sichtbar) -->
+            <div class="card" style="width: 100%;">
+                <div class="card-title">🎯 Schießbuch Ergebnisse</div>
+                <ul id="admin-shot-list" style="list-style: none; font-size: 0.85em;">
+                    <li style="color: var(--text-muted);">Ergebnisse werden geladen...</li>
+                </ul>
+            </div>
+
+            <!-- MITGLIEDERLISTE AUS EXCEL -->
+            <div class="card" style="width: 100%;">
+                <div class="card-title">👥 Mitgliederbeiträge 2026 (Aktive & Ehrenm.)</div>
+                <p style="font-size:0.75em; color:var(--text-muted); margin-bottom:10px;">Klicke auf den Status, um zwischen Bezahlt / Offen zu wechseln:</p>
+
+                <div class="price-item"><div><strong>Wachter Manfred</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Wachter Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Schweighofer Dietmar</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Schweighofer Simon</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann / Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Spettel Norbert</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Stocker Heimo</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann-Stellvertreter</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Wittwer Christoph</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Wittwer Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Rudigier Erwin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 25)</span></div>
+                <div class="price-item"><div><strong>Sandrell Daniel</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 25)</span></div>
+                <div class="price-item"><div><strong>Mattle Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 25)</span></div>
+                <div class="price-item"><div><strong>Pascal Tripolt</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 25)</span></div>
+
+                <div class="price-item"><div><strong>Stocker Karin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Kassierin / Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Suntinger Jasmin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Kinzl Sabrina</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Schriftführerin / Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Maria Spettel</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Natalie Stocker</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+
+                <div class="price-item"><div><strong>Elias Stocker</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Jugendmitglied</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+
+                <div class="price-item"><div><strong>Sandrell Heinrich</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#e0f2fe; color:#0369a1;">Befreit</span></div>
+                <div class="price-item"><div><strong>Kofler Konrad</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#e0f2fe; color:#0369a1;">Befreit</span></div>
+                <div class="price-item"><div><strong>Dona Lothar</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#e0f2fe; color:#0369a1;">Befreit</span></div>
+                <div class="price-item"><div><strong>Gerd Sprattler</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#e0f2fe; color:#0369a1;">Befreit</span></div>
             </div>
 
         </div>
@@ -637,7 +581,7 @@
             <span class="nav-icon">📜</span>Statuten
         </a>
         <a class="nav-item" onclick="switchPage('card', this)">
-            <span class="nav-icon">🪪</span>Ausweis
+            <span class="nav-icon">🔐</span>Admin
         </a>
     </div>
 
@@ -680,7 +624,7 @@
             });
         }
 
-        // Firebase: neuen Termin hinzufügen
+        // Firebase: Neuen Termin anlegen
         function addEvent(event) {
             event.preventDefault();
             const title = document.getElementById('new-event-title').value;
@@ -694,7 +638,7 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 event.target.reset();
-                alert("Termin erfolgreich gespeichert!");
+                alert("Termin erfolgreich in der Cloud gespeichert!");
             }).catch((err) => {
                 alert("Fehler beim Speichern: " + err.message);
             });
@@ -704,7 +648,7 @@
         function deleteEvent(docId) {
             if (confirm("Möchtest du diesen Termin wirklich löschen?")) {
                 db.collection("events").doc(docId).delete().then(() => {
-                    console.log("Termin gelöscht");
+                    console.log("Termin erfolgreich gelöscht");
                 }).catch((error) => {
                     console.error("Fehler beim Löschen: ", error);
                 });
@@ -717,17 +661,74 @@
             btn.classList.add('active');
         }
 
-        // Strichzettel Preise & Zähler
+        // Firebase: Lagerbestand in Echtzeit synchronisieren
+        function listenToInventory() {
+            db.collection("inventory").doc("main").onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data.bier !== undefined) document.getElementById('stock-bier').value = data.bier;
+                    if (data.limo !== undefined) document.getElementById('stock-limo').value = data.limo;
+                    if (data.wuerste !== undefined) document.getElementById('stock-wuerste').value = data.wuerste;
+                }
+            });
+        }
+
+        function saveInventory() {
+            const bier = parseInt(document.getElementById('stock-bier').value) || 0;
+            const limo = parseInt(document.getElementById('stock-limo').value) || 0;
+            const wuerste = parseInt(document.getElementById('stock-wuerste').value) || 0;
+
+            db.collection("inventory").doc("main").set({
+                bier: bier,
+                limo: limo,
+                wuerste: wuerste,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert("Lagerbestand erfolgreich in Echtzeit für alle Admins gespeichert!");
+            }).catch((err) => {
+                alert("Fehler beim Speichern: " + err.message);
+            });
+        }
+
+        // Firebase: Schießbuch-Ergebnisse speichern & nur im Admin-Bereich live laden
+        function saveShot(event) {
+            event.preventDefault();
+            const name = document.getElementById('shot-name').value;
+            const disc = document.getElementById('shot-disc').value;
+            const rings = document.getElementById('shot-rings').value;
+
+            db.collection("shooting_results").add({
+                name: name,
+                disc: disc,
+                rings: rings,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert("Ergebnis erfolgreich gespeichert!");
+                event.target.reset();
+            }).catch((err) => {
+                alert("Fehler beim Speichern: " + err.message);
+            });
+        }
+
+        function listenToShootingResults() {
+            db.collection("shooting_results").onSnapshot((querySnapshot) => {
+                const list = document.getElementById('admin-shot-list');
+                if (!list) return;
+
+                let html = "";
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    html += `<li style="padding: 6px 0; border-bottom: 1px solid #e7e5e4;"><strong>${data.name}</strong> (${data.disc}): <strong>${data.rings} Ringe</strong></li>`;
+                });
+
+                list.innerHTML = html || '<li style="color: var(--text-muted);">Noch keine Einträge vorhanden.</li>';
+            });
+        }
+
+        // Strichzettel Logik
         const prices = {
-            bier: 3.50,
-            limo: 3.00,
-            mineral: 2.50,
-            wein4: 4.00,
-            gespritzt: 3.50,
-            schnaps: 3.50,
-            kaffee: 3.00,
-            hauswuerste: 7.50,
-            wienerle: 7.00
+            bier: 3.50, limo: 3.00, mineral: 2.50, wein4: 4.00,
+            gespritzt: 3.50, schnaps: 3.50, kaffee: 3.00, hauswuerste: 7.50, wienerle: 7.00
         };
 
         const counts = {
@@ -737,7 +738,8 @@
 
         function changeCount(item, delta) {
             counts[item] = Math.max(0, counts[item] + delta);
-            document.getElementById('count-' + item).innerText = counts[item];
+            const countEl = document.getElementById('count-' + item);
+            if (countEl) countEl.innerText = counts[item];
             updateTotal();
         }
 
@@ -760,49 +762,43 @@
             }
         }
 
-        // Admin Modus umschalten
-        function toggleAdminPrompt() {
-            const pwd = prompt("Bitte Admin-Passwort eingeben:");
-            if (pwd === "1234" || pwd === "admin") {
+        // Admin Login mit verdecktem Passwort (Passwort: 1234)
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            const password = document.getElementById('admin-password-input').value;
+            if (password === "1234" || password === "admin") {
                 document.body.classList.add('admin-mode');
-                alert("Admin-Modus aktiviert!");
+                document.getElementById('admin-login-card').style.display = 'none';
+                document.getElementById('admin-password-input').value = '';
+                alert("Admin-Modus erfolgreich aktiviert!");
             } else {
                 alert("Falsches Passwort!");
+                document.getElementById('admin-password-input').value = '';
             }
         }
 
-        // Profil & Ausweis
-        function updateName() {
-            document.getElementById('display-name').innerText = document.getElementById('input-name').value || 'Max Mustermann';
-            document.getElementById('display-activity').innerText = document.getElementById('input-activity').value;
+        function logoutAdmin() {
+            document.body.classList.remove('admin-mode');
+            document.getElementById('admin-login-card').style.display = 'block';
+            alert("Admin-Modus beendet.");
         }
 
-        function loadPhoto(event) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                const img = document.getElementById('avatar-img');
-                img.src = reader.result;
-                img.style.display = 'block';
-                document.getElementById('avatar-placeholder').style.display = 'none';
+        function togglePayStatus(badge) {
+            if (badge.classList.contains('badge-paid')) {
+                badge.classList.remove('badge-paid');
+                badge.classList.add('badge-open');
+                badge.innerText = 'Offen (€ 25)';
+            } else if (badge.classList.contains('badge-open')) {
+                badge.classList.remove('badge-open');
+                badge.classList.add('badge-paid');
+                badge.innerText = 'Bezahlt (€ 25)';
             }
-            reader.readAsDataURL(event.target.files[0]);
-        }
-
-        function saveShot(event) {
-            event.preventDefault();
-            const name = document.getElementById('shot-name').value;
-            const disc = document.getElementById('shot-disc').value;
-            const rings = document.getElementById('shot-rings').value;
-            
-            const list = document.getElementById('shot-list');
-            if (list.innerHTML.includes('Noch keine Einträge')) list.innerHTML = '';
-            
-            list.innerHTML += `<li style="padding: 6px 0; border-bottom: 1px solid #e7e5e4;"><strong>${name}</strong> (${disc}): <strong>${rings} Ringe</strong></li>`;
-            event.target.reset();
         }
 
         window.onload = function() {
             listenToEvents();
+            listenToInventory();
+            listenToShootingResults();
         }
     </script>
 </body>
