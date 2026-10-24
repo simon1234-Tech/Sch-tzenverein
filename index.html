@@ -42,10 +42,11 @@
             --card-bg: #1e2229; /* Dunkles Anthrazit / Mattschwarz */
             --text-light: #f3f4f6;
             --text-muted: #9ca3af;
-            --accent-green: #15803d;
-            --accent-green-dark: #166534;
+            --accent-green: #22c55e; /* Giftgrün */
+            --accent-green-dark: #15803d;
             --danger: #dc2626;
-            --admin-blue: #1e3a8a;
+            --admin-blue: #2563eb;
+            --admin-card-bg: #1e293b;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -98,18 +99,27 @@
             justify-content: space-between;
         }
 
-        /* SEHR AUFFÄLLIGE HERVORHEBUNG FÜR NÄCHSTEN DIENST */
-        .next-duty-banner {
-            border: 2px solid #ef4444;
-            background: linear-gradient(135deg, #450a0a, #7f1d1d) !important;
-            border-left: 6px solid #ff0000;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
-            animation: pulse-border 2s infinite;
+        /* GIFTGRÜNE HERVORHEBUNG FÜR NÄCHSTEN DIENST */
+        .next-duty-banner-green {
+            border: 2px solid var(--accent-green);
+            background: linear-gradient(135deg, #052e16, #14532d) !important;
+            border-left: 6px solid var(--accent-green);
+            box-shadow: 0 0 18px rgba(34, 197, 94, 0.4);
+            animation: pulse-green 2s infinite;
         }
-        @keyframes pulse-border {
-            0% { border-color: #ef4444; }
-            50% { border-color: #fca5a5; }
-            100% { border-color: #ef4444; }
+        @keyframes pulse-green {
+            0% { border-color: #22c55e; }
+            50% { border-color: #86efac; }
+            100% { border-color: #22c55e; }
+        }
+
+        /* SPEZIELLES PARADIES-FARBSCHEMA FÜR BEREICH ADMIN */
+        .admin-card {
+            background: var(--admin-card-bg) !important;
+            border: 1px solid #334155 !important;
+        }
+        .admin-card .card-title {
+            color: #60a5fa !important;
         }
 
         .event-item {
@@ -139,8 +149,8 @@
         }
         .btn-primary { background: var(--primary-red); color: white; }
         .btn-primary:hover { background: var(--primary-dark); }
-        .btn-green { background: var(--accent-green); color: white; }
-        .btn-green:hover { background: var(--accent-green-dark); }
+        .btn-green { background: var(--accent-green-dark); color: white; }
+        .btn-green:hover { background: #166534; }
         .btn-danger { background: #7f1d1d; color: #fca5a5; }
         .btn-admin { background: var(--admin-blue); color: white; }
         .btn-block { width: 100%; margin-top: 8px; }
@@ -182,7 +192,7 @@
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* UNTERE NAVIGATION (Anthrazit mit rotem Akzent & runden Buttons) */
+        /* UNTERE NAVIGATION */
         .bottom-nav {
             position: fixed !important; 
             bottom: 0 !important; 
@@ -251,9 +261,9 @@
     <div id="page-news" class="page-content active">
         <div id="news-container"></div>
 
-        <!-- SOFORT SICHTBARER, AUFFÄLLIGER NÄCHSTER DIENST -->
-        <div class="card next-duty-banner">
-            <div class="card-title" style="color: #ffffff; font-size: 1.15em;">🚨 NÄCHSTER DIENST IM SCHÜTZENHAUS</div>
+        <!-- GIFTGRÜNE HERVORHEBUNG FÜR NÄCHSTEN DIENST -->
+        <div class="card next-duty-banner-green">
+            <div class="card-title" style="color: #86efac; font-size: 1.15em;">🚨 NÄCHSTER DIENST IM SCHÜTZENHAUS</div>
             <div id="next-duty-widget"></div>
         </div>
 
@@ -321,7 +331,7 @@
         </div>
     </div>
 
-    <!-- 5. RECHNUNG & KONTAKTE (VORSTAND & AKTIVE) -->
+    <!-- 5. MITGLIEDER & KONTAKTE (VORSTAND & AKTIVE) -->
     <div id="page-guide" class="page-content">
         <!-- VORSTAND & KONTAKTE -->
         <div class="card">
@@ -355,33 +365,28 @@
                 <div class="price-item"><div><strong>Werner Wittwer</strong></div><a href="tel:06502501910" style="color:#38bdf8; font-weight:700;">0650 2501910</a></div>
             </div>
         </div>
-
-        <div class="card">
-            <div class="card-title">📜 Gespeicherte Strichlisten & Rechnungen</div>
-            <div id="tally-history-list"><p style="color: var(--text-muted); font-size: 0.85em;">Lade Rechnungen...</p></div>
-        </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH -->
+    <!-- 6. ADMIN-BEREICH (MIT EIGENER FARBGEBUNG) -->
     <div id="page-card" class="page-content">
-        <div class="card" id="admin-login-card" style="border: 1px solid var(--primary-red);">
+        <div class="card admin-card" id="admin-login-card">
             <div class="card-title">🔐 Admin-Login</div>
             <form onsubmit="handleAdminLogin(event)">
                 <div class="form-group"><label>Admin-Passwort</label><input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required></div>
-                <button type="submit" class="btn btn-primary btn-block">Anmelden</button>
+                <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
             </form>
         </div>
 
         <div class="admin-delete-btn">
-            <div class="card admin-card" style="width: 100%; border: 1px solid var(--admin-blue); background: #1a202c;">
-                <div class="card-title" style="color: #60a5fa;">🔓 Admin-Modus Aktiv</div>
+            <div class="card admin-card" style="width: 100%;">
+                <div class="card-title">🔓 Admin-Modus Aktiv</div>
                 <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Vorstands-Funktionen, Mitgliederbeiträge & Lösch-Optionen sind freigeschaltet.</p>
                 <button class="btn btn-danger btn-block" onclick="logoutAdmin()">Admin-Modus Beenden</button>
             </div>
 
-            <!-- GESPEICHERTE RECHNUNGEN IM ADMIN-BEREICH -->
+            <!-- GESPEICHERTE RECHNUNGEN (NUR IM ADMIN-BEREICH) -->
             <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">💶 Gespeicherte Strichlisten & Rechnungen (Admin)</div>
+                <div class="card-title">💶 Gespeicherte Strichlisten & Rechnungen</div>
                 <div id="admin-tally-history-list"><p style="color: var(--text-muted); font-size: 0.85em;">Lade Rechnungen...</p></div>
             </div>
 
@@ -483,13 +488,13 @@
         </div>
     </div>
 
-    <!-- UNTERE NAVIGATION -->
+    <!-- UNTERE NAVIGATION (MIT BUTTON "MITGLIEDER") -->
     <nav class="bottom-nav">
         <a onclick="switchTab('news')" class="nav-item active" id="nav-news"><span class="nav-icon">📢</span><span>News</span></a>
         <a onclick="switchTab('events')" class="nav-item" id="nav-events"><span class="nav-icon">📅</span><span>Termine</span></a>
         <a onclick="switchTab('shooting')" class="nav-item" id="nav-shooting"><span class="nav-icon">🎯</span><span>Schießbuch</span></a>
         <a onclick="switchTab('drinks')" class="nav-item" id="nav-drinks"><span class="nav-icon">🍻</span><span>Strichliste</span></a>
-        <a onclick="switchTab('guide')" class="nav-item" id="nav-guide"><span class="nav-icon">💶</span><span>Rechnung</span></a>
+        <a onclick="switchTab('guide')" class="nav-item" id="nav-guide"><span class="nav-icon">👥</span><span>Mitglieder</span></a>
         <a onclick="switchTab('card')" class="nav-item" id="nav-card"><span class="nav-icon">🔒</span><span>Admin</span></a>
     </nav>
 
@@ -534,13 +539,13 @@
                 
                 if(next.status === 'closed') {
                     nextWidget.innerHTML = `
-                        <div style="font-size: 0.9em; color: #fca5a5;">📅 ${dateFormatted}</div>
+                        <div style="font-size: 0.9em; color: #86efac;">📅 ${dateFormatted}</div>
                         <div style="font-size: 1.2em; font-weight: 800; margin: 4px 0; color: #fff;">Schützenhaus Geschlossen</div>
                         <div style="font-size: 0.9em; opacity: 0.9;">${next.names}</div>
                     `;
                 } else {
                     nextWidget.innerHTML = `
-                        <div style="font-size: 0.9em; color: #fca5a5; font-weight: 700;">📅 ${dateFormatted} (19:00 - 21:00 Uhr)</div>
+                        <div style="font-size: 0.9em; color: #86efac; font-weight: 700;">📅 ${dateFormatted} (19:00 - 21:00 Uhr)</div>
                         <div style="font-size: 1.3em; font-weight: 800; margin: 4px 0; color: #fff;">${next.team}</div>
                         <div style="font-size: 0.95em; opacity: 0.95;"><strong>Diensthabende:</strong> ${next.names}</div>
                     `;
@@ -562,7 +567,7 @@
 
                     let style = `display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: ${bg}; border-radius: 8px; border-left: 4px solid ${borderColor};`;
                     if(isPast) style += " opacity: 0.4; text-decoration: line-through;";
-                    if(isNext) style += " background: #261717; border: 2px solid var(--primary-red);";
+                    if(isNext) style += " background: #14532d; border: 2px solid var(--accent-green);";
 
                     html += `
                         <div style="${style}">
@@ -669,17 +674,15 @@
                 alert("Abrechnung gespeichert!");
                 confirmResetDrinks();
                 loadTallyHistory();
-                switchTab('guide');
+                switchTab('card');
             } catch (err) { console.error(err); }
         }
 
         async function loadTallyHistory() {
-            const listEl = document.getElementById('tally-history-list');
             const adminListEl = document.getElementById('admin-tally-history-list');
             try {
                 const snapshot = await db.collection("invoices").orderBy("createdAt", "desc").get();
                 if (snapshot.empty) {
-                    if(listEl) listEl.innerHTML = '<p style="color: var(--text-muted);">Keine Rechnungen vorhanden.</p>';
                     if(adminListEl) adminListEl.innerHTML = '<p style="color: var(--text-muted);">Keine Rechnungen vorhanden.</p>';
                     return;
                 }
@@ -689,18 +692,17 @@
                     const inv = doc.data();
                     const totalStr = (inv.total || 0).toFixed(2).replace('.', ',') + ' €';
                     html += `
-                        <div class="card" style="background: #111317; margin-bottom: 10px;">
-                            <h4 style="margin: 0 0 5px 0; color: var(--primary-red);">${inv.recipientName} (${inv.invoiceNum})</h4>
+                        <div class="card" style="background: #0f172a; border: 1px solid #334155; margin-bottom: 10px;">
+                            <h4 style="margin: 0 0 5px 0; color: #60a5fa;">${inv.recipientName} (${inv.invoiceNum})</h4>
                             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 5px;">${inv.recipientAddress}, ${inv.recipientZipCity}</p>
                             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Datum: ${inv.date} | <b>Gesamt: ${totalStr}</b></p>
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <button class="btn btn-primary" style="flex: 1;" onclick='generateInvoicePDF(${JSON.stringify(inv)})'>📄 PDF herunterladen</button>
+                                <button class="btn btn-admin" style="flex: 1;" onclick='generateInvoicePDF(${JSON.stringify(inv)})'>📄 PDF herunterladen</button>
                                 <button class="btn btn-danger admin-only-delete" onclick="deleteItem('invoices', '${doc.id}')">🗑️ Löschen</button>
                             </div>
                         </div>
                     `;
                 });
-                if(listEl) listEl.innerHTML = html;
                 if(adminListEl) adminListEl.innerHTML = html;
             } catch (e) { console.error(e); }
         }
@@ -970,7 +972,7 @@
                 snapshot.forEach(doc => {
                     const s = doc.data();
                     html += `
-                        <li style="padding: 8px 0; border-bottom: 1px solid #2d333b; display: flex; justify-content: space-between; align-items: center;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center;">
                             <span><b>${s.name}</b> (${s.disc}): <b>${s.rings} Ringe</b> <span style="font-size:0.75em; color:var(--text-muted);">[${s.date}]</span></span>
                             <button class="btn btn-danger admin-only-delete" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteItem('shots', '${doc.id}')">🗑️</button>
                         </li>
