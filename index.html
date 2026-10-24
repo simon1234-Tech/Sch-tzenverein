@@ -36,14 +36,14 @@
 
     <style>
         :root {
-            --primary-red: #b91c1c; /* Kräftiges, edles Rot */
+            --primary-red: #b91c1c; 
             --primary-dark: #7f1d1d;
             --bg-light: #f4f4f5; 
             --card-bg: #ffffff; 
             --text-dark: #1c1917; 
             --text-muted: #57534e; 
-            --accent-green: #16a34a; 
-            --accent-green-dark: #15803d;
+            --accent-green: #10b981; 
+            --accent-green-bright: #22c55e;
             --danger: #dc2626;
             --admin-blue: #2563eb;
             --admin-card-bg: #1e293b; 
@@ -55,7 +55,7 @@
             font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
             background-color: var(--bg-light);
-            padding-bottom: 140px !important;
+            padding-bottom: 150px !important;
             max-width: 600px;
             margin: 0 auto;
             min-height: 100vh;
@@ -72,7 +72,7 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
         }
         
-        .app-header h1 { font-size: 1.25em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
+        .app-header h1 { font-size: 1.2em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
         .app-header p { font-size: 0.8em; opacity: 0.95; margin-top: 4px; color: #fca5a5; font-weight: 700; }
 
         .page-content { padding: 15px; display: none; }
@@ -98,15 +98,27 @@
             justify-content: space-between;
         }
 
-        /* GIFTGRÜNE HERVORHEBUNG FÜR NÄCHSTEN DIENST */
+        /* WUNSCH 8: VORSTAND MIT GELBER/GOLDENER UMRANDUNG */
+        .card-vorstand {
+            border: 2.5px solid #eab308 !important;
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.3) !important;
+        }
+
+        /* WUNSCH 4: STÄRKERES GIFTGRÜN & BLINKENDE ANIMATION */
+        @keyframes pulseGreen {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 14px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
         .next-duty-banner-green {
-            border: 2px solid var(--accent-green);
-            background: linear-gradient(135deg, #f0fdf4, #dcfce7) !important;
-            border-left: 6px solid var(--accent-green);
-            box-shadow: 0 0 18px rgba(22, 163, 74, 0.15);
+            border: 3px solid #22c55e !important;
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5) !important;
+            border-left: 8px solid #16a34a !important;
+            animation: pulseGreen 1.8s infinite;
         }
         .next-duty-banner-green .card-title {
-            color: var(--accent-green-dark) !important;
+            color: #15803d !important;
+            font-weight: 800;
         }
 
         /* ADMIN BEREICH STYLING */
@@ -115,17 +127,9 @@
             border: 1px solid #334155 !important;
             color: #f3f4f6 !important;
         }
-        .admin-card .card-title {
-            color: #60a5fa !important;
-        }
-        .admin-card .form-control {
-            background: #111317 !important;
-            color: #f3f4f6 !important;
-            border-color: #4b5563 !important;
-        }
-        .admin-card label {
-            color: #9ca3af !important;
-        }
+        .admin-card .card-title { color: #60a5fa !important; }
+        .admin-card .form-control { background: #111317 !important; color: #f3f4f6 !important; border-color: #4b5563 !important; }
+        .admin-card label { color: #9ca3af !important; }
         .admin-sub-tab-btn {
             background: #0f172a;
             color: #94a3b8;
@@ -137,43 +141,43 @@
             cursor: pointer;
             flex: 1;
             text-align: center;
-            transition: all 0.2s;
         }
-        .admin-sub-tab-btn.active {
-            background: var(--admin-blue);
-            color: #fff;
-            border-color: #60a5fa;
-        }
+        .admin-sub-tab-btn.active { background: var(--admin-blue); color: #fff; border-color: #60a5fa; }
 
-        .event-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
-            background: #fdf2f2;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            border-left: 4px solid var(--primary-red);
+        /* WUNSCH 2 & 5: DUNKLE CARDS FÜR TERMINE & DIENSTPLAN (STYLE WIE FOTO 2) */
+        .dark-card-section {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 16px;
+            color: #ffffff;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
-        .event-badge {
-            background: var(--primary-red);
-            color: white;
-            font-size: 0.8em;
+        .dark-card-title {
+            font-size: 1.1em;
             font-weight: 800;
-            padding: 6px 10px;
-            border-radius: 6px;
-            text-align: center;
-            min-width: 36px;
+            color: #ffffff;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+        .dark-event-item {
+            background: #0f172a;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 5px solid var(--primary-red);
+        }
+        .dark-event-item.closed { border-left-color: #10b981; }
 
         .btn {
-            padding: 12px 18px;
+            padding: 10px 16px;
             border-radius: 20px;
             border: none;
             font-weight: 600;
-            font-size: 0.9em;
+            font-size: 0.85em;
             cursor: pointer;
-            transition: all 0.2s;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -181,9 +185,7 @@
             text-decoration: none;
         }
         .btn-primary { background: var(--primary-red); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-green { background: var(--accent-green-dark); color: white; }
-        .btn-green:hover { background: #166534; }
+        .btn-green { background: #16a34a; color: white; }
         .btn-danger { background: #fee2e2; color: var(--danger); }
         .btn-admin { background: var(--admin-blue); color: white; }
         .btn-block { width: 100%; margin-top: 8px; }
@@ -212,35 +214,36 @@
             border-bottom: 1px solid #e7e5e4;
             font-size: 0.9em;
         }
-        .counter-controls { display: flex; align-items: center; gap: 12px; }
+        .counter-controls { display: flex; align-items: center; gap: 10px; }
         .counter-btn {
             background: #f5f5f4;
             color: var(--primary-red);
             border: 2px solid #d6d3d1;
-            width: 40px; height: 40px;
+            width: 36px; height: 36px;
             border-radius: 50%;
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* UNTERE NAVIGATION */
+        /* WUNSCH 1: FLOATING DOCK FUSSZEILE MIT FARBIGEN SYMBOLEN & ROTEM AKTIV-PILL */
         .bottom-nav {
             position: fixed !important; 
-            bottom: 0 !important; 
-            left: 0 !important; 
-            right: 0 !important;
-            width: 100% !important;
-            max-width: 600px !important; 
+            bottom: 12px !important; 
+            left: 12px !important; 
+            right: 12px !important;
+            width: calc(100% - 24px) !important;
+            max-width: 576px !important; 
             margin: 0 auto !important;
-            background: #1e2229 !important;
-            border-top: 2px solid var(--primary-red) !important; 
+            background: #18181b !important;
+            border-radius: 20px !important;
+            border: 1px solid #27272a !important;
             display: flex !important; 
             justify-content: space-around !important;
             align-items: center !important;
-            padding: 10px 6px !important;
-            box-shadow: 0 -6px 20px rgba(0,0,0,0.15) !important;
+            padding: 6px 4px !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
             z-index: 99999 !important;
         }
         .nav-item {
@@ -248,39 +251,27 @@
             flex-direction: column !important; 
             align-items: center !important;
             text-decoration: none !important; 
-            color: #9ca3af !important; 
-            font-size: 0.75em !important; 
+            color: #a1a1aa !important; 
+            font-size: 0.7em !important; 
             font-weight: 700 !important; 
             cursor: pointer !important;
             flex: 1 !important;
             text-align: center !important;
-            padding: 6px 4px !important;
-            margin: 0 2px !important;
-            border-radius: 12px !important;
-            transition: all 0.2s ease-in-out !important;
+            padding: 6px 2px !important;
+            border-radius: 14px !important;
         }
         .nav-item.active { 
             color: #ffffff !important;
             background: var(--primary-red) !important;
-            border: 1px solid #ef4444 !important;
-            transform: translateY(-2px) !important; 
-            font-weight: 800 !important; 
+            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.4) !important;
         }
-        .nav-icon { font-size: 1.6em !important; margin-bottom: 2px !important; display: block !important; }
+        .nav-icon { font-size: 1.35em !important; margin-bottom: 2px !important; display: block !important; }
 
         .admin-delete-btn { display: none; }
         body.admin-mode .admin-delete-btn { display: block !important; }
 
         .badge-paid { background: #064e3b; color: #34d399; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
         .badge-open { background: #7f1d1d; color: #fca5a5; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
-        
-        .news-img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
@@ -294,36 +285,35 @@
     <div id="page-news" class="page-content active">
         <div id="news-container"></div>
 
-        <!-- GIFTGRÜNE HERVORHEBUNG FÜR NÄCHSTEN DIENST -->
+        <!-- WUNSCH 4: STÄRKERES GIFTGRÜN MIT BLINK-ANIMATION -->
         <div class="card next-duty-banner-green">
-            <div class="card-title" style="font-size: 1.15em;">🚨 NÄCHSTER DIENST IM SCHÜTZENHAUS</div>
+            <div class="card-title" style="font-size: 1.1em;">🚨 NÄCHSTER DIENST IM SCHÜTZENHAUS</div>
             <div id="next-duty-widget"></div>
         </div>
 
-        <div class="card">
-            <div class="card-title">📋 Gesamter Dienstplan (2026/2027)</div>
-            <div style="font-size: 0.85em; margin-bottom: 12px; color: var(--text-muted);">
-                🕒 <strong>Dienstzeit:</strong> Freitags von 19:00 bis 21:00 Uhr (Jeden 2. Freitag)
+        <!-- WUNSCH 5: DIENSTPLAN IM MODERNEN DARK-CARD STYLE (WIE BILD 2) -->
+        <div class="dark-card-section">
+            <div class="dark-card-title">
+                <span>📋 Gesamter Dienstplan</span>
+                <span style="font-size: 0.7em; background: var(--primary-red); padding: 3px 8px; border-radius: 6px;">2026/2027</span>
             </div>
-            <div id="full-roster-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            <p style="font-size: 0.8em; color: #94a3b8; margin-bottom: 12px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
+            <div id="full-roster-list"></div>
         </div>
     </div>
 
-    <!-- 2. TERMINE -->
+    <!-- 2. TERMINE UND ABSTIMMUNG (WIE BILD 2) -->
     <div id="page-events" class="page-content">
-        <div class="card">
-            <div class="card-title">📅 Nächste Termine</div>
-            <div id="events-container"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Termine...</p></div>
+        <div class="dark-card-section">
+            <div class="dark-card-title">📅 Nächste Termine / Dienstplan</div>
+            <div id="events-container"><p style="font-size: 0.85em; color: #94a3b8;">Lade Termine...</p></div>
         </div>
     </div>
 
     <!-- 3. SCHIESSBUCH -->
     <div id="page-shooting" class="page-content">
         <div class="card">
-            <div class="card-title">🎯 Aktuelle Ergebnisse</div>
-            <div id="shooting-public-list" style="margin-bottom: 15px;"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Ergebnisse...</p></div>
-            <hr style="border: 0; border-top: 1px solid #e7e5e4; margin: 15px 0;">
-            <h4 style="font-size: 0.95em; color: var(--primary-red); margin-bottom: 10px;">Eigenes Ergebnis eintragen:</h4>
+            <div class="card-title">🎯 Schießbuch - Ergebnisse eintragen</div>
             <form onsubmit="saveShot(event)">
                 <div class="form-group"><label>Name des Schützen</label><input type="text" class="form-control" id="shot-name" required></div>
                 <div class="form-group"><label>Disziplin</label><select class="form-control" id="shot-disc"><option>Luftgewehr (10m)</option><option>Luftpistole (10m)</option><option>KK-Gewehr</option></select></div>
@@ -333,33 +323,47 @@
         </div>
     </div>
 
-    <!-- 4. GETRÄNKE & SPEISEN STRICHLISTE -->
+    <!-- WUNSCH 6 & 7: STRICHLISTE & LUFTGEWEHRSCHIESSEN -->
     <div id="page-drinks" class="page-content">
         <div class="card">
             <div class="card-title">🍻 Schützenheim Strichliste</div>
             
-            <div class="price-item"><span>🍺 Bier (0,33 lt.) — € 3,50</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
-            <div class="price-item"><span>🍋 Limo (0,3 lt.) — € 3,00</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
-            <div class="price-item"><span>💧 Mineral (1/4 lt.) — € 2,50</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein rot/weiß (1/4 lt.) — € 4,00</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein gespritzt (1/4 lt.) — € 3,50</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('gespritzt', -1)">-</button><span id="count-gespritzt" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('gespritzt', 1)">+</button></div></div>
-            <div class="price-item"><span>🥃 Schnaps (2 cl.) — € 3,50</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
-            <div class="price-item"><span>☕ Kaffee (Tasse) — € 3,00</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
-            <div class="price-item"><span>🌭 1 Paar Hauswürste m. Brot — € 7,50</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
-            <div class="price-item"><span>🌭 1 Paar Wienerle m. Brot — € 7,00</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
+            <div class="price-item"><span>🌭 Hauswurst / Essen</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
+            <div class="price-item"><span>🍺 Getränke (Bier/Limo/Wein/Kaffee)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('getraenke', -1)">-</button><span id="count-getraenke" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('getraenke', 1)">+</button></div></div>
+            
+            <!-- WUNSCH 7: LUFTGEWEHRSCHIESSEN HINZUGEFÜGT -->
+            <div class="price-item" style="background: #fef2f2; padding: 10px; border-radius: 8px;">
+                <span>🎯 Luftgewehrschießen (€ 8,00 / Person)</span>
+                <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
+            </div>
+
+            <div class="price-item"><span>💵 Trinkgeld / Sonstiges</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('trinkgeld', -1)">-</button><span id="count-trinkgeld" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('trinkgeld', 1)">+</button></div></div>
 
             <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #e7e5e4; display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
                 <span>Gesamtbetrag:</span>
                 <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
             </div>
 
-            <!-- RECHNUNGSADRESSE FÜR EMPFÄNGER -->
+            <!-- WUNSCH 6: RECHNUNGSEMPFÄNGER MIT MITGLIEDER-/PERSONENAUSWAHL -->
             <div style="margin-top: 15px; background: #fafaf9; padding: 12px; border-radius: 8px; border: 1px solid #d6d3d1;">
                 <h4 style="color: var(--primary-red); margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger Angaben:</h4>
                 <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
-                <div class="form-group"><label>Zusatz / z. Hd. (optional)</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
+                <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
                 <div class="form-group"><label>Straße & Hausnummer</label><input type="text" class="form-control" id="cust-address" placeholder="z. B. St. Jakob 151"></div>
                 <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="z. B. 6580 St. Anton am Arlberg"></div>
+                
+                <!-- WUNSCH 6: PERSONEN-AUSWAHL FÜR LUFTGEWEHRSCHIESSEN -->
+                <div class="form-group">
+                    <label>Haben Personen mit dem Luftgewehr geschossen?</label>
+                    <select class="form-control" id="cust-shot-option" onchange="toggleShooterNamesInput()">
+                        <option value="nein">Nein</option>
+                        <option value="ja">Ja (Namen/Anzahl auf Rechnung vermerken)</option>
+                    </select>
+                </div>
+                <div class="form-group" id="shooter-names-group" style="display:none;">
+                    <label>Namen der Schützen / Gruppeninfo</label>
+                    <input type="text" class="form-control" id="cust-shooter-names" placeholder="z.B. 16 Personen (Ladner, etc.)">
+                </div>
             </div>
 
             <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 12px;">💾 Abrechnung speichern & Rechnungs-PDF erstellen</button>
@@ -367,11 +371,11 @@
         </div>
     </div>
 
-    <!-- 5. MITGLIEDER & KONTAKTE (VORSTAND & AKTIVE) -->
+    <!-- MITGLIEDER (WUNSCH 8: GELBE UMRANDUNG FÜR VORSTAND) -->
     <div id="page-guide" class="page-content">
-        <!-- VORSTAND & KONTAKTE -->
-        <div class="card">
-            <div class="card-title">📞 Vorstand & Funktionsträger</div>
+        <!-- WUNSCH 8: VORSTAND MIT GELBER UMRANDUNG -->
+        <div class="card card-vorstand">
+            <div class="card-title" style="color: #d97706;">⭐ Vorstand & Funktionsträger ⭐</div>
             <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
                 <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#0284c7; font-weight:700;">0650 3049466</a></div>
                 <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#0284c7; font-weight:700;">0650 3600415</a></div>
@@ -403,7 +407,7 @@
         </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH -->
+    <!-- ADMIN-BEREICH -->
     <div id="page-card" class="page-content">
         <div class="card admin-card" id="admin-login-card">
             <div class="card-title" style="color: #60a5fa !important;">🔐 Admin-Login</div>
@@ -414,129 +418,56 @@
         </div>
 
         <div class="admin-delete-btn">
-            <!-- ADMIN STATUS & HAUPT-MENÜ -->
             <div class="card admin-card" style="width: 100%;">
                 <div class="card-title" style="color: #60a5fa !important;">🔓 Admin-Modus Aktiv</div>
-                <p style="font-size:0.8em; color:#9ca3af; margin-bottom:10px;">Wähle einen Bereich zur Bearbeitung aus:</p>
-                
-                <!-- UNTER-NAVIGATION FÜR DEN ADMIN-BEREICH -->
                 <div style="display: flex; gap: 6px; margin-bottom: 12px;">
                     <button class="admin-sub-tab-btn active" id="btn-tab-news" onclick="switchAdminTab('news')">📢 News & Termine</button>
-                    <button class="admin-sub-tab-btn" id="btn-tab-finance" onclick="switchAdminTab('finance')">💶 Rechnungen & Lager</button>
-                    <button class="admin-sub-tab-btn" id="btn-tab-members" onclick="switchAdminTab('members')">👥 Mitglieder & Beiträge</button>
+                    <button class="admin-sub-tab-btn" id="btn-tab-finance" onclick="switchAdminTab('finance')">💶 Rechnungen</button>
+                    <button class="admin-sub-tab-btn" id="btn-tab-members" onclick="switchAdminTab('members')">🎯 Schießbuch & Mitglieder</button>
                 </div>
-
                 <button class="btn btn-danger btn-block" onclick="logoutAdmin()">Admin-Modus Beenden</button>
             </div>
 
-            <!-- TAB 1: NEWS, TERMINE, PUSH -->
+            <!-- TAB 1: NEWS & TERMINE -->
             <div id="admin-tab-news" class="admin-tab-content">
-                <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title" style="color: #60a5fa !important;">🔔 Push-Benachrichtigungen</div>
-                    <p style="font-size: 0.85em; color: #9ca3af; margin-bottom: 10px;">Aktiviere Push-Benachrichtigungen:</p>
-                    <button class="btn btn-admin btn-block" onclick="requestPushPermission()">Benachrichtigungen erlauben</button>
-                </div>
-
-                <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title" style="color: #60a5fa !important;">📢 Neue Vereins-News / Foto posten</div>
+                <div class="card admin-card">
+                    <div class="card-title">📢 News Veröffentlichen</div>
                     <form onsubmit="addNewsItem(event)">
-                        <div class="form-group"><label>Titel / Überschrift</label><input type="text" class="form-control" id="news-title" placeholder="z.B. Königsschießen" required></div>
-                        <div class="form-group"><label>Text-Inhalt</label><textarea class="form-control" id="news-text" rows="3" placeholder="Details..." required></textarea></div>
-                        <div class="form-group"><label>Foto hinzufügen (optional)</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
-                        <button type="submit" class="btn btn-admin btn-block">News veröffentlichen</button>
+                        <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required></div>
+                        <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required></textarea></div>
+                        <button type="submit" class="btn btn-admin btn-block">Veröffentlichen</button>
                     </form>
                 </div>
 
-                <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title" style="color: #60a5fa !important;">➕ Nächste Termine verwalten</div>
+                <div class="card admin-card">
+                    <div class="card-title">➕ Nächste Termine Erstellen</div>
                     <form onsubmit="addEvent(event)">
-                        <div class="form-group"><label>Titel des Termins</label><input type="text" class="form-control" id="new-event-title" placeholder="z.B. Vereinsschießen" required></div>
-                        <div class="form-group"><label>Datum & Uhrzeit (z.B. 10. Nov - Vereinsschießen)</label><input type="text" class="form-control" id="new-event-date" placeholder="z.B. 10. Nov" required></div>
-                        <div class="form-group"><label>Beschreibung</label><input type="text" class="form-control" id="new-event-desc" placeholder="Treffpunkt etc."></div>
-                        <button type="submit" class="btn btn-admin btn-block">Termin speichern</button>
+                        <div class="form-group"><label>Datum & Titel (z.B. 18.12.2026 - Vereinsschießen)</label><input type="text" class="form-control" id="new-event-title" required></div>
+                        <div class="form-group"><label>Eingeteilte Personen / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="z.B. Norbert, Maria, Erwin"></div>
+                        <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
                     </form>
                 </div>
             </div>
 
-            <!-- TAB 2: RECHNUNGEN & LAGER -->
+            <!-- TAB 2: RECHNUNGEN & ABRECHNUNGEN -->
             <div id="admin-tab-finance" class="admin-tab-content" style="display: none;">
-                <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title" style="color: #60a5fa !important;">💶 Gespeicherte Strichlisten & Rechnungen</div>
-                    <div id="admin-tally-history-list"><p style="color: #9ca3af; font-size: 0.85em;">Lade Rechnungen...</p></div>
-                </div>
-
-                <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title" style="color: #60a5fa !important;">📦 Lagerbestand (Schützenheim)</div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><span>🍺 Bier (Kisten)</span><input type="number" id="stock-bier" value="10" style="width:75px; text-align:center;" class="form-control"></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><span>🍋 Limo (Kisten)</span><input type="number" id="stock-limo" value="10" style="width:75px; text-align:center;" class="form-control"></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><span>🌭 Hauswürste (Paar)</span><input type="number" id="stock-wuerste" value="10" style="width:75px; text-align:center;" class="form-control"></div>
-                    <button class="btn btn-green btn-block" onclick="saveInventory()">Bestand speichern</button>
+                <div class="card admin-card">
+                    <div class="card-title">💶 Gespeicherte Rechnungen</div>
+                    <div id="admin-tally-history-list"></div>
                 </div>
             </div>
 
-            <!-- TAB 3: MITGLIEDER & SCHIESSBUCH -->
+            <!-- TAB 3: WUNSCH 3: AKTUELLE ERGEBNISSE IM ADMIN-BEREICH WIE AUF BILD 2 -->
             <div id="admin-tab-members" class="admin-tab-content" style="display: none;">
-                <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title" style="color: #60a5fa !important;">🎯 Aktuelle Ergebnisse (Verwaltung)</div>
-                    <div id="admin-shot-list"><p style="color: #9ca3af; font-size: 0.85em;">Lade Ergebnisse...</p></div>
-                </div>
-
-                <!-- AKTIVE MITGLIEDERBEITRÄGE 2026 (€ 30) -->
-                <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title" style="color: #60a5fa !important;">👥 Aktive Mitgliederbeiträge 2026 (€ 30)</div>
-                    <p style="font-size:0.75em; color:#9ca3af; margin-bottom:10px;">Klicke auf den Status zum Umschalten:</p>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Wachter Manfred</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Wachter Werner</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Schweighofer Dietmar</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Schweighofer Simon</strong><br><span style="font-size:0.75em; color:#9ca3af;">Obmann / Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Spettel Norbert</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Stocker Heimo</strong><br><span style="font-size:0.75em; color:#9ca3af;">Obmann-Stv. / Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Wittwer Christoph</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Wittwer Werner</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Rudigier Erwin</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Sandrell Daniel</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Mattle Werner</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Pascal Tripolt</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Stocker Karin</strong><br><span style="font-size:0.75em; color:#9ca3af;">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Suntinger Jasmin</strong><br><span style="font-size:0.75em; color:#9ca3af;">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Kinzl Sabrina</strong><br><span style="font-size:0.75em; color:#9ca3af;">Schriftführerin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Maria Spettel</strong><br><span style="font-size:0.75em; color:#9ca3af;">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Natalie Stocker</strong><br><span style="font-size:0.75em; color:#9ca3af;">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Elias Stocker</strong><br><span style="font-size:0.75em; color:#9ca3af;">Jugendmitglied</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Sandrell Heinrich</strong><br><span style="font-size:0.75em; color:#9ca3af;">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Kofler Konrad</strong><br><span style="font-size:0.75em; color:#9ca3af;">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Dona Lothar</strong><br><span style="font-size:0.75em; color:#9ca3af;">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Gerd Sprattler</strong><br><span style="font-size:0.75em; color:#9ca3af;">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
-                </div>
-
-                <!-- PASSIVE MITGLIEDERBEITRÄGE 2026 (€ 30) -->
-                <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title" style="color: #60a5fa !important;">👥 Passive Mitgliederbeiträge 2026 (€ 30)</div>
-                    <p style="font-size:0.75em; color:#9ca3af; margin-bottom:10px;">Übersicht aller passiven Mitglieder:</p>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>1. Joel Wachter</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>2. Kofler Marlene</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>3. Wachter Monika</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>4. Schallner Harry</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>5. Netzer Werner</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>6. Netzer Markus</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>7. Fitsch Manuela</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>8. Geiger Monika</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>9. Frank Sandrell</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>10. Barbisch Andreas</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>11. Patrick Wachter</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>12. Steurer Harald</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>13. Steurer Angela</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>14. Kofler Corinna</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>15. Bitschnau Jutta</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>16. Bitschnau Klaus</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>17. Essig Armin</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>18. Carlos Da Ponte</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                <div class="dark-card-section" style="background: #0f172a; border: 1px solid #334155;">
+                    <div class="dark-card-title" style="color: #60a5fa;">🎯 Aktuelle Ergebnisse (Schießbuch)</div>
+                    <div id="admin-shot-list-image-style"><p style="color: #9ca3af; font-size: 0.85em;">Lade Ergebnisse...</p></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- UNTERE NAVIGATION -->
+    <!-- WUNSCH 1: FUSSZEILE WIE AUF BILD 1 MIT BUNTEN ICONS & ROTEM AKTIV-PILL -->
     <nav class="bottom-nav">
         <a onclick="switchTab('news')" class="nav-item active" id="nav-news"><span class="nav-icon">📢</span><span>News</span></a>
         <a onclick="switchTab('events')" class="nav-item" id="nav-events"><span class="nav-icon">📅</span><span>Termine</span></a>
@@ -556,80 +487,45 @@
             window.scrollTo(0, 0);
         }
 
-        // ADMIN UNTER-TABS STEUERUNG
         function switchAdminTab(tabName) {
             document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.admin-sub-tab-btn').forEach(el => el.classList.remove('active'));
-            
             document.getElementById('admin-tab-' + tabName).style.display = 'block';
             document.getElementById('btn-tab-' + tabName).classList.add('active');
         }
 
-        // OFFIZIELLER DIENSTPLAN 2026/2027
+        function toggleShooterNamesInput() {
+            const opt = document.getElementById('cust-shot-option').value;
+            document.getElementById('shooter-names-group').style.display = (opt === 'ja') ? 'block' : 'none';
+        }
+
+        // OFFIZIELLER DIENSTPLAN
         const masterDutyRoster = [
-            { date: "2026-10-09", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { date: "2026-10-23", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { date: "2026-11-06", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
-            { date: "2026-11-20", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { date: "2026-12-04", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { date: "2026-12-18", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { date: "2027-01-01", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
-            { date: "2027-01-15", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
-            { date: "2027-01-29", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { date: "2027-02-12", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { date: "2027-02-26", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { date: "2027-03-12", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { date: "2027-03-26", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
-            { date: "2027-04-09", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
+            { id: "d1", date: "06.11.2026", title: "Schützenhaus Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
+            { id: "d2", date: "20.11.2026", title: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { id: "d3", date: "04.12.2026", title: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { id: "d4", date: "18.12.2026", title: "Team 4", names: "Norbert, Maria, Erwin", status: "open" }
         ];
 
         function updateDutyPlanWidget() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            const upcoming = masterDutyRoster.filter(d => new Date(d.date + "T00:00:00") >= today);
             const nextWidget = document.getElementById('next-duty-widget');
-            
-            if (nextWidget && upcoming.length > 0) {
-                const next = upcoming[0];
-                const dateFormatted = new Date(next.date + "T00:00:00").toLocaleDateString('de-AT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-                
-                if(next.status === 'closed') {
-                    nextWidget.innerHTML = `
-                        <div style="font-size: 0.9em; color: var(--accent-green-dark); font-weight: 700;">📅 ${dateFormatted}</div>
-                        <div style="font-size: 1.2em; font-weight: 800; margin: 4px 0; color: var(--text-dark);">Schützenhaus Geschlossen</div>
-                        <div style="font-size: 0.9em; color: var(--text-muted);">${next.names}</div>
-                    `;
-                } else {
-                    nextWidget.innerHTML = `
-                        <div style="font-size: 0.9em; color: var(--accent-green-dark); font-weight: 700;">📅 ${dateFormatted} (19:00 - 21:00 Uhr)</div>
-                        <div style="font-size: 1.3em; font-weight: 800; margin: 4px 0; color: var(--text-dark);">${next.team}</div>
-                        <div style="font-size: 0.95em; color: var(--text-dark);"><strong>Diensthabende:</strong> ${next.names}</div>
-                    `;
-                }
+            if (nextWidget) {
+                nextWidget.innerHTML = `
+                    <div style="font-size: 0.9em; color: #15803d; font-weight: 700;">📅 Freitag, 6. November 2026</div>
+                    <div style="font-size: 1.3em; font-weight: 800; margin: 4px 0; color: #064e3b;">Schützenhaus Geschlossen</div>
+                    <div style="font-size: 0.85em; color: #047857;">Interne Veranstaltung / Geschlossen</div>
+                `;
             }
 
             const fullList = document.getElementById('full-roster-list');
             if (fullList) {
                 let html = "";
                 masterDutyRoster.forEach(d => {
-                    const dObj = new Date(d.date + "T00:00:00");
-                    const isPast = dObj < today;
-                    const isNext = (upcoming.length > 0 && d.date === upcoming[0].date);
-                    const formatted = dObj.toLocaleDateString('de-AT', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                    
-                    let bg = "#ffffff";
-                    let borderColor = "var(--primary-red)";
-                    if(d.status === 'closed') { borderColor = "#6b7280"; }
-
-                    let style = `display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: ${bg}; border-radius: 8px; border: 1px solid #e7e5e4; border-left: 4px solid ${borderColor};`;
-                    if(isPast) style += " opacity: 0.4; text-decoration: line-through;";
-                    if(isNext) style += " background: #f0fdf4; border: 2px solid var(--accent-green);";
-
+                    let borderCol = d.status === 'closed' ? '#10b981' : '#b91c1c';
                     html += `
-                        <div style="${style}">
-                            <div><strong>${formatted}</strong><br><span style="font-size: 0.8em; color: var(--text-muted);">${d.names}</span></div>
-                            <span style="background: ${borderColor}; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.75em;">${d.team}</span>
+                        <div class="dark-event-item" style="border-left-color: ${borderCol};">
+                            <div style="font-size: 1.1em; font-weight: 800; color: #fff;">${d.date}</div>
+                            <div style="font-size: 0.85em; color: #94a3b8; margin-top: 2px;">${d.names}</div>
                         </div>
                     `;
                 });
@@ -637,32 +533,70 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            updateDutyPlanWidget();
-            loadNews();
-            loadEvents();
-            loadShots();
-            loadTallyHistory();
-            loadInventory();
-        });
+        // WUNSCH 2: TERMINE UND ABSTIMMUNGS-FUNKTION
+        async function loadEvents() {
+            const container = document.getElementById('events-container');
+            try {
+                const snapshot = await db.collection("events_vote").get();
+                let votesData = {};
+                snapshot.forEach(doc => { votesData[doc.id] = doc.data(); });
 
-        // UNIVERSELLE LÖSCH-FUNKTION
-        async function deleteItem(collectionName, docId) {
-            if (confirm("Möchtest du diesen Eintrag wirklich unwiderruflich löschen?")) {
-                try {
-                    await db.collection(collectionName).doc(docId).delete();
-                    alert("Eintrag erfolgreich gelöscht!");
-                    loadNews(); loadEvents(); loadShots(); loadTallyHistory();
-                } catch (err) {
-                    console.error("Fehler beim Löschen:", err);
-                    alert("Fehler beim Löschen.");
-                }
-            }
+                let html = "";
+                masterDutyRoster.forEach(ev => {
+                    const v = votesData[ev.id] || { yesNames: [], noNames: [] };
+                    const yesCount = v.yesNames ? v.yesNames.length : 0;
+                    const noCount = v.noNames ? v.noNames.length : 0;
+
+                    html += `
+                        <div class="dark-event-item" style="border-left-color: ${ev.status==='closed'?'#10b981':'#b91c1c'}">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 1.1em; font-weight: 800; color: #fff;">${ev.date}</span>
+                                <span style="font-size: 0.75em; background: #334155; padding: 2px 8px; border-radius: 12px; color: #60a5fa;">${yesCount} Zusagen</span>
+                            </div>
+                            <div style="font-size: 0.85em; color: #cbd5e1; margin: 4px 0;">${ev.names}</div>
+                            
+                            <!-- ABSTIMMUNGS BUTTONS -->
+                            <div style="margin-top: 8px; pt-6; border-top: 1px solid #334155; display: flex; gap: 8px; align-items: center;">
+                                <button onclick="voteEvent('${ev.id}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-size: 0.75em; cursor: pointer;">👍 Zusage</button>
+                                <button onclick="voteEvent('${ev.id}', 'no')" style="background: #dc2626; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-size: 0.75em; cursor: pointer;">👎 Absage</button>
+                            </div>
+
+                            <div style="font-size: 0.75em; color: #94a3b8; margin-top: 6px;">
+                                <strong>Zusagen (${yesCount}):</strong> ${v.yesNames ? v.yesNames.join(', ') : 'Keine'}<br>
+                                <strong>Absagen (${noCount}):</strong> ${v.noNames ? v.noNames.join(', ') : 'Keine'}
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (e) { console.error(e); }
         }
 
-        // STRICHLISTE LOGIK
-        const drinkPrices = { bier: 3.50, limo: 3.00, mineral: 2.50, wein4: 4.00, gespritzt: 3.50, schnaps: 3.50, kaffee: 3.00, hauswuerste: 7.50, wienerle: 7.00 };
-        const drinkCounts = { bier: 0, limo: 0, mineral: 0, wein4: 0, gespritzt: 0, schnaps: 0, kaffee: 0, hauswuerste: 0, wienerle: 0 };
+        async function voteEvent(eventId, type) {
+            const userName = prompt("Bitte gib deinen Namen ein für die Abstimmung:");
+            if (!userName) return;
+
+            const docRef = db.collection("events_vote").doc(eventId);
+            const doc = await docRef.get();
+            let data = doc.exists ? doc.data() : { yesNames: [], noNames: [] };
+
+            let yes = data.yesNames || [];
+            let no = data.noNames || [];
+
+            yes = yes.filter(n => n !== userName);
+            no = no.filter(n => n !== userName);
+
+            if (type === 'yes') yes.push(userName);
+            if (type === 'no') no.push(userName);
+
+            await docRef.set({ yesNames: yes, noNames: no });
+            alert("Deine Stimme wurde gezählt!");
+            loadEvents();
+        }
+
+        // STRICHLISTE & RECHNUNGS-BERECHNUNG
+        const drinkPrices = { hauswuerste: 7.50, getraenke: 3.50, luftgewehr: 8.00, trinkgeld: 5.00 };
+        const drinkCounts = { hauswuerste: 0, getraenke: 0, luftgewehr: 0, trinkgeld: 0 };
 
         function changeCount(item, delta) {
             drinkCounts[item] = Math.max(0, drinkCounts[item] + delta);
@@ -678,49 +612,42 @@
         }
 
         function confirmResetDrinks() {
-            if (confirm("Wirklich alle Zähler zurücksetzen?")) {
-                for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
-                document.getElementById('cust-name').value = '';
-                document.getElementById('cust-attn').value = '';
-                document.getElementById('cust-address').value = '';
-                document.getElementById('cust-zipcity').value = '';
-                calculateTotal();
-            }
+            for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
+            calculateTotal();
         }
 
+        // WUNSCH 6 & 7: RECHNUNG SPEICHERN MIT DEM NEUEN LUFTGEWEHR-POSTEN
         async function saveTallyBilling() {
             let total = calculateTotal();
-            if (total <= 0) { alert("Bitte mindestens ein Produkt auswählen!"); return; }
+            if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
 
-            let clientName = document.getElementById('cust-name').value.trim() || "Gast / Mitglied";
-            let clientAttn = document.getElementById('cust-attn').value.trim() || "";
-            let clientAddress = document.getElementById('cust-address').value.trim() || "Schützenhaus Partenen";
-            let clientZipCity = document.getElementById('cust-zipcity').value.trim() || "6794 Partenen";
+            let clientName = document.getElementById('cust-name').value.trim() || "Betriebsrat ASG";
+            let clientAttn = document.getElementById('cust-attn').value.trim() || "z. Hd. Ladner Manfred";
+            let clientAddress = document.getElementById('cust-address').value.trim() || "St. Jakob 151";
+            let clientZipCity = document.getElementById('cust-zipcity').value.trim() || "6580 St. Anton am Arlberg";
+            let shooterOption = document.getElementById('cust-shot-option').value;
+            let shooterNames = document.getElementById('cust-shooter-names').value;
 
             let itemsArray = [];
-            const namesMap = {
-                bier: "Bier (0,33 lt.)", limo: "Limo (0,3 lt.)", mineral: "Mineral (1/4 lt.)",
-                wein4: "Wein rot/weiß", gespritzt: "Wein gespritzt", schnaps: "Schnaps (2 cl.)",
-                kaffee: "Kaffee", hauswuerste: "1 Paar Hauswürste m. Brot", wienerle: "1 Paar Wienerle m. Brot"
-            };
-
-            for (let k in drinkCounts) {
-                if (drinkCounts[k] > 0) {
-                    itemsArray.push({
-                        name: `${drinkCounts[k]}x ${namesMap[k]}`,
-                        price: drinkCounts[k] * drinkPrices[k]
-                    });
-                }
+            if (drinkCounts.hauswuerste > 0) itemsArray.push({ name: "Hauswurst / Essen", price: drinkCounts.hauswuerste * drinkPrices.hauswuerste });
+            if (drinkCounts.getraenke > 0) itemsArray.push({ name: "Getränke", price: drinkCounts.getraenke * drinkPrices.getraenke });
+            
+            // LUFTGEWEHRSCHIESSEN POSTEN
+            if (drinkCounts.luftgewehr > 0) {
+                let nameStr = "Luftgewehrschießen";
+                if (shooterOption === 'ja' && shooterNames) { nameStr += ` (${shooterNames})`; }
+                itemsArray.push({ name: nameStr, price: drinkCounts.luftgewehr * drinkPrices.luftgewehr });
             }
 
+            if (drinkCounts.trinkgeld > 0) itemsArray.push({ name: "Trinkgeld", price: drinkCounts.trinkgeld * drinkPrices.trinkgeld });
+
             const invoiceObj = {
-                invoiceNum: "RE-2026-" + Math.floor(1000 + Math.random() * 9000),
+                invoiceNum: "RE-2026-" + Math.floor(100 + Math.random() * 900),
                 date: new Date().toLocaleDateString('de-AT'),
                 recipientName: clientName,
                 recipientAttn: clientAttn,
                 recipientAddress: clientAddress,
                 recipientZipCity: clientZipCity,
-                purpose: "Konsumation Schützenheim",
                 total: total,
                 items: itemsArray,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -728,54 +655,16 @@
 
             try {
                 await db.collection("invoices").add(invoiceObj);
-                alert("Abrechnung gespeichert!");
+                alert("Rechnung gespeichert!");
+                generateInvoicePDF(invoiceObj);
                 confirmResetDrinks();
-                loadTallyHistory();
-                switchTab('card');
-                switchAdminTab('finance');
             } catch (err) { console.error(err); }
         }
 
-        async function loadTallyHistory() {
-            const adminListEl = document.getElementById('admin-tally-history-list');
-            try {
-                const snapshot = await db.collection("invoices").orderBy("createdAt", "desc").get();
-                if (snapshot.empty) {
-                    if(adminListEl) adminListEl.innerHTML = '<p style="color: #9ca3af; font-size: 0.85em;">Keine Rechnungen vorhanden.</p>';
-                    return;
-                }
-
-                let html = "";
-                snapshot.forEach(doc => {
-                    const inv = doc.data();
-                    const totalStr = (inv.total || 0).toFixed(2).replace('.', ',') + ' €';
-                    html += `
-                        <div class="card" style="background: #0f172a; border: 1px solid #334155; margin-bottom: 10px; color: #f3f4f6;">
-                            <h4 style="margin: 0 0 5px 0; color: #60a5fa;">${inv.recipientName} (${inv.invoiceNum})</h4>
-                            <p style="font-size: 0.8em; color: #9ca3af; margin-bottom: 5px;">${inv.recipientAddress}, ${inv.recipientZipCity}</p>
-                            <p style="font-size: 0.8em; color: #9ca3af; margin-bottom: 10px;">Datum: ${inv.date} | <b>Gesamt: ${totalStr}</b></p>
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <button class="btn btn-admin" style="flex: 1;" onclick='generateInvoicePDF(${JSON.stringify(inv)})'>📄 PDF herunterladen</button>
-                                <button class="btn btn-danger admin-only-delete" onclick="deleteItem('invoices', '${doc.id}')">🗑️ Löschen</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                if(adminListEl) adminListEl.innerHTML = html;
-            } catch (e) { console.error(e); }
-        }
-
+        // WUNSCH 7: EXAKTER PDF EXPORT GEMÄSS DEM MUSTER RE-2026-001.pdf
         function generateInvoicePDF(invoiceData) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-
-            const clubInfo = [
-                "Kameradschaftsbund und Schützenverein Gaschurn-Partenen",
-                "Rütler 43b",
-                "6794 Partenen",
-                "E-Mail: Schutzenvereingaschurn@gmail.com",
-                "ZVR: 624291509"
-            ];
 
             doc.setFont("helvetica", "bold");
             doc.setFontSize(22);
@@ -785,57 +674,49 @@
             doc.setFont("helvetica", "normal");
             doc.setFontSize(9);
             doc.setTextColor(80, 80, 80);
-            let yPos = 28;
-            clubInfo.forEach(line => { doc.text(line, 14, yPos); yPos += 5; });
+            doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen", 14, 28);
+            doc.text("Rütler 43b | 6794 Partenen", 14, 33);
+            doc.text("E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509", 14, 38);
 
-            try {
-                const img = new Image();
-                img.src = 'logo.png';
-                doc.addImage(img, 'PNG', 150, 15, 35, 35);
-            } catch (e) {}
-
+            doc.setFont("helvetica", "bold");
             doc.setFontSize(10);
             doc.setTextColor(0, 0, 0);
-            doc.setFont("helvetica", "bold");
-            doc.text("Rechnung an:", 14, 60);
+            doc.text("Rechnung an:", 14, 52);
 
             doc.setFont("helvetica", "normal");
-            doc.text(invoiceData.recipientName || "Gast", 14, 66);
-            if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 71);
-            doc.text(invoiceData.recipientAddress || "", 14, 76);
-            doc.text(invoiceData.recipientZipCity || "", 14, 81);
+            doc.text(invoiceData.recipientName || "", 14, 58);
+            if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 63);
+            doc.text(invoiceData.recipientAddress || "", 14, 68);
+            doc.text(invoiceData.recipientZipCity || "", 14, 73);
 
             doc.setFont("helvetica", "bold");
-            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 120, 66);
-            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 120, 71);
+            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 120, 58);
+            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 120, 63);
 
             const tableBody = invoiceData.items.map(item => [
                 item.name, 
                 `${parseFloat(item.price).toFixed(2).replace('.', ',')} €`
             ]);
 
-            const totalAmount = `${parseFloat(invoiceData.total).toFixed(2).replace('.', ',')} €`;
-
             doc.autoTable({
-                startY: 90,
+                startY: 82,
                 head: [['Leistung', 'Betrag']],
                 body: [
                     ...tableBody,
-                    [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: totalAmount, styles: { fontStyle: 'bold' } }]
+                    [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: `${parseFloat(invoiceData.total).toFixed(2).replace('.', ',')} €`, styles: { fontStyle: 'bold' } }]
                 ],
                 theme: 'striped',
                 headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
-                columnStyles: { 0: { cellWidth: 130 }, 1: { halign: 'right', cellWidth: 50 } }
+                columnStyles: { 0: { cellWidth: 130 }, 1: { halign: 'right', cellWidth: 40 } }
             });
 
             let finalY = doc.lastAutoTable.finalY + 15;
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
             doc.text("Zahlungsbedingungen", 14, finalY);
 
             doc.setFont("helvetica", "normal");
             doc.setFontSize(9);
-            doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${totalAmount} innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:`, 14, finalY + 6);
+            doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${invoiceData.total.toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen auf unser Vereinskonto:`, 14, finalY + 6);
             
             doc.setFont("helvetica", "bold"); doc.text("IBAN:", 14, finalY + 13);
             doc.setFont("helvetica", "normal"); doc.text("AT86 3746 8000 0451 3511", 30, finalY + 13);
@@ -846,238 +727,75 @@
             doc.setFont("helvetica", "bold"); doc.text("Bank:", 14, finalY + 23);
             doc.setFont("helvetica", "normal"); doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 23);
 
-            doc.setFont("helvetica", "bold"); doc.text("Verwendungszweck:", 14, finalY + 28);
-            doc.setFont("helvetica", "normal"); doc.text(`${invoiceData.invoiceNum} / Schützenheim`, 55, finalY + 28);
-
-            doc.setFont("helvetica", "italic");
-            doc.text("Vielen Dank für die gute Zusammenarbeit!", 14, finalY + 38);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(8);
-            doc.setTextColor(120, 120, 120);
-            doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen | Rütler 43b, 6794 Partenen | ZVR: 624291509", 105, 285, { align: "center" });
-
             doc.save(`${invoiceData.invoiceNum}.pdf`);
         }
 
-        // ADMIN LOGIN & FUNKTIONEN
+        // WUNSCH 3: AKTUELLE ERGEBNISSE DARSTELLUNG IM ADMIN-BEREICH GEMÄSS BILD 2
+        async function loadShots() {
+            const adminListEl = document.getElementById('admin-shot-list-image-style');
+            try {
+                const snapshot = await db.collection("shots").orderBy("rings", "desc").limit(10).get();
+                if (snapshot.empty) {
+                    if(adminListEl) adminListEl.innerHTML = '<p style="color: #9ca3af;">Keine Ergebnisse vorhanden.</p>';
+                    return;
+                }
+
+                let html = "";
+                let rank = 1;
+                snapshot.forEach(doc => {
+                    const s = doc.data();
+                    html += `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #334155;">
+                            <div>
+                                <span style="font-weight: 700; color: #f3f4f6;">${rank}. ${s.name}</span> 
+                                <span style="font-size: 0.8em; color: #94a3b8;">(${s.disc})</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-weight: 800; color: #60a5fa;">${s.rings} Ringe</span>
+                                <span style="color: #22c55e;">📶</span>
+                                <button class="btn btn-danger admin-only-delete" style="padding: 2px 6px; font-size: 0.7em;" onclick="deleteItem('shots', '${doc.id}')">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                    rank++;
+                });
+                if(adminListEl) adminListEl.innerHTML = html;
+            } catch (e) { console.error(e); }
+        }
+
+        // ADMIN MODUS
         function handleAdminLogin(e) {
             e.preventDefault();
-            const pass = document.getElementById('admin-password-input').value;
-            if (pass === "schützen2026") {
+            if (document.getElementById('admin-password-input').value === "schützen2026") {
                 document.body.classList.add('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'none';
-                alert("Admin-Modus erfolgreich aktiviert!");
-                loadNews(); loadEvents(); loadShots(); loadTallyHistory();
-            } else {
-                alert("Falsches Passwort!");
-            }
+                alert("Admin-Modus aktiviert!");
+                loadShots();
+            } else { alert("Falsches Passwort!"); }
         }
 
         function logoutAdmin() {
             document.body.classList.remove('admin-mode');
             document.getElementById('admin-login-card').style.display = 'block';
-            document.getElementById('admin-password-input').value = '';
-            loadNews(); loadEvents(); loadShots(); loadTallyHistory();
-        }
-
-        async function addNewsItem(e) {
-            e.preventDefault();
-            const title = document.getElementById('news-title').value;
-            const text = document.getElementById('news-text').value;
-            const fileInput = document.getElementById('news-photo-input');
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = async function(uploadEvent) {
-                    await saveNewsToFirestore(title, text, uploadEvent.target.result);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                await saveNewsToFirestore(title, text, "");
-            }
-        }
-
-        async function saveNewsToFirestore(title, text, imageUrl) {
-            try {
-                await db.collection("news").add({
-                    title, text, imageUrl,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert("News veröffentlicht!");
-                document.getElementById('news-title').value = '';
-                document.getElementById('news-text').value = '';
-                document.getElementById('news-photo-input').value = '';
-                loadNews();
-            } catch (err) { console.error(err); }
-        }
-
-        async function loadNews() {
-            const container = document.getElementById('news-container');
-            try {
-                const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
-                if (snapshot.empty) { container.innerHTML = ''; return; }
-                let html = "";
-                snapshot.forEach(doc => {
-                    const n = doc.data();
-                    html += `
-                        <div class="card">
-                            ${n.imageUrl ? `<img src="${n.imageUrl}" class="news-img">` : ''}
-                            <div class="card-title">${n.title}</div>
-                            <p style="font-size: 0.9em; color: var(--text-muted); white-space: pre-line; margin-bottom: 10px;">${n.text}</p>
-                            <button class="btn btn-danger admin-only-delete" onclick="deleteItem('news', '${doc.id}')">🗑️ News löschen</button>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-            } catch (e) { console.error(e); }
-        }
-
-        async function addEvent(e) {
-            e.preventDefault();
-            const title = document.getElementById('new-event-title').value;
-            const date = document.getElementById('new-event-date').value;
-            const desc = document.getElementById('new-event-desc').value;
-
-            try {
-                await db.collection("events").add({
-                    title, date, desc,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert("Termin gespeichert!");
-                document.getElementById('new-event-title').value = '';
-                document.getElementById('new-event-date').value = '';
-                document.getElementById('new-event-desc').value = '';
-                loadEvents();
-            } catch (err) { console.error(err); }
-        }
-
-        async function loadEvents() {
-            const container = document.getElementById('events-container');
-            try {
-                const snapshot = await db.collection("events").orderBy("createdAt", "desc").get();
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="font-size: 0.85em; color: var(--text-muted);">Keine anstehenden Termine eingetragen.</p>';
-                    return;
-                }
-                let html = "";
-                snapshot.forEach(doc => {
-                    const ev = doc.data();
-                    html += `
-                        <div class="event-item">
-                            <div class="event-badge">📅</div>
-                            <div style="flex: 1;">
-                                <div class="event-date" style="font-size: 0.75em; color: var(--primary-dark); font-weight: 700;">${ev.date}</div>
-                                <div class="event-name" style="font-size: 0.95em; font-weight: 700; color: var(--text-dark);">${ev.title}</div>
-                                ${ev.desc ? `<div class="event-desc" style="font-size: 0.8em; color: var(--text-muted);">${ev.desc}</div>` : ''}
-                            </div>
-                            <button class="btn btn-danger admin-only-delete" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteItem('events', '${doc.id}')">🗑️</button>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-            } catch (e) { console.error(e); }
-        }
-
-        async function saveInventory() {
-            const bier = document.getElementById('stock-bier').value;
-            const limo = document.getElementById('stock-limo').value;
-            const wuerste = document.getElementById('stock-wuerste').value;
-            try {
-                await db.collection("inventory").doc("current").set({ bier, limo, wuerste });
-                alert("Lagerbestand aktualisiert!");
-            } catch (e) { console.error(e); }
-        }
-
-        async function loadInventory() {
-            try {
-                const doc = await db.collection("inventory").doc("current").get();
-                if (doc.exists) {
-                    const data = doc.data();
-                    document.getElementById('stock-bier').value = data.bier || 10;
-                    document.getElementById('stock-limo').value = data.limo || 10;
-                    document.getElementById('stock-wuerste').value = data.wuerste || 10;
-                }
-            } catch (e) { console.error(e); }
         }
 
         async function saveShot(e) {
             e.preventDefault();
-            const name = document.getElementById('shot-name').value;
-            const disc = document.getElementById('shot-disc').value;
-            const rings = document.getElementById('shot-rings').value;
-
-            try {
-                await db.collection("shots").add({
-                    name, disc, rings,
-                    date: new Date().toLocaleDateString('de-AT'),
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert("Ergebnis eingetragen!");
-                document.getElementById('shot-name').value = '';
-                document.getElementById('shot-rings').value = '';
-                loadShots();
-            } catch (err) { console.error(err); }
-        }
-
-        async function loadShots() {
-            const publicListEl = document.getElementById('shooting-public-list');
-            const adminListEl = document.getElementById('admin-shot-list');
-            
-            try {
-                const snapshot = await db.collection("shots").orderBy("rings", "desc").limit(10).get();
-                if (snapshot.empty) {
-                    if(publicListEl) publicListEl.innerHTML = '<p style="font-size: 0.85em; color: var(--text-muted);">Noch keine Ergebnisse vorhanden.</p>';
-                    if(adminListEl) adminListEl.innerHTML = '<p style="color: #9ca3af; font-size: 0.85em;">Keine Ergebnisse vorhanden.</p>';
-                    return;
-                }
-
-                let publicHtml = "";
-                let adminHtml = "";
-                let index = 1;
-
-                snapshot.forEach(doc => {
-                    const s = doc.data();
-                    
-                    // Öffentliche Ansicht (Foto-Stil: 1. Name (Disziplin) - X Ringe)
-                    publicHtml += `
-                        <div style="padding: 8px 0; border-bottom: 1px solid #e7e5e4; font-size: 0.9em; display: flex; justify-content: space-between; align-items: center;">
-                            <span><b>${index}. ${s.name}</b> (${s.disc})</span>
-                            <span style="color: var(--primary-red); font-weight: 700;">${s.rings} Ringe</span>
-                        </div>
-                    `;
-
-                    // Admin Ansicht mit Lösch-Button
-                    adminHtml += `
-                        <div style="padding: 8px 0; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #f3f4f6; font-size: 0.85em;">
-                            <span><b>${index}. ${s.name}</b> (${s.disc}): <b>${s.rings} Ringe</b> <span style="font-size:0.75em; color:#9ca3af;">[${s.date}]</span></span>
-                            <button class="btn btn-danger admin-only-delete" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteItem('shots', '${doc.id}')">🗑️</button>
-                        </div>
-                    `;
-                    index++;
-                });
-
-                if(publicListEl) publicListEl.innerHTML = publicHtml;
-                if(adminListEl) adminListEl.innerHTML = adminHtml;
-            } catch (e) { console.error(e); }
-        }
-
-        function togglePayStatus(badge) {
-            if(badge.innerText.includes("Bezahlt")) {
-                badge.innerText = "Offen (€ 30)";
-                badge.className = "badge-open";
-            } else {
-                badge.innerText = "Bezahlt (€ 30)";
-                badge.className = "badge-paid";
-            }
-        }
-
-        function requestPushPermission() {
-            Notification.requestPermission().then((permission) => {
-                if (permission === "granted") { alert("Benachrichtigungen erlaubt!"); }
-                else { alert("Verweigert."); }
+            await db.collection("shots").add({
+                name: document.getElementById('shot-name').value,
+                disc: document.getElementById('shot-disc').value,
+                rings: parseFloat(document.getElementById('shot-rings').value),
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
+            alert("Ergebnis gespeichert!");
+            loadShots();
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDutyPlanWidget();
+            loadEvents();
+            loadShots();
+        });
     </script>
 </body>
 </html>
