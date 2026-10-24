@@ -36,42 +36,44 @@
 
     <style>
         :root {
-            --primary-red: #dc2626; /* Knalliges Rot */
-            --primary-dark: #b91c1c;
+            --primary-red: #b91c1c; /* Kräftiges, edles Rot */
+            --primary-dark: #7f1d1d;
+            --bg-dark: #121418;
+            --card-bg: #1e2229; /* Dunkles Anthrazit / Mattschwarz */
+            --text-light: #f3f4f6;
+            --text-muted: #9ca3af;
             --accent-green: #15803d;
             --accent-green-dark: #166534;
-            --text-dark: #1c1917;
-            --text-muted: #57534e;
-            --card-bg: #ffffff;
             --danger: #dc2626;
-            --admin-blue: #1e3a8a;
+            --admin-blue: #3b82f6;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
             font-family: 'Montserrat', sans-serif;
-            color: var(--text-dark);
+            color: var(--text-light);
+            background-color: var(--bg-dark);
             padding-bottom: 140px !important;
             max-width: 600px;
             margin: 0 auto;
             min-height: 100vh;
-            background-color: #f5f5f4;
-            box-shadow: 0 0 25px rgba(0,0,0,0.1);
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
         }
 
         .app-header {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary-red));
+            background: linear-gradient(135deg, #111317, var(--card-bg));
             color: white;
             padding: 20px;
             text-align: center;
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-bottom: 2px solid var(--primary-red);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
         }
         
-        .app-header h1 { font-size: 1.25em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
-        .app-header p { font-size: 0.8em; opacity: 0.9; margin-top: 4px; color: #ffffff; font-weight: 600; }
+        .app-header h1 { font-size: 1.25em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
+        .app-header p { font-size: 0.8em; opacity: 0.9; margin-top: 4px; color: var(--primary-red); font-weight: 700; }
 
         .page-content { padding: 15px; display: none; }
         .page-content.active { display: block; }
@@ -81,8 +83,9 @@
             border-radius: 14px;
             padding: 18px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: 1px solid #e7e5e4;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 1px solid #2d333b;
+            color: var(--text-light);
         }
         
         .card-title {
@@ -96,14 +99,14 @@
         }
 
         .event-item {
-            border-left: 4px solid var(--accent-green);
+            border-left: 4px solid var(--primary-red);
             padding: 12px 15px;
-            background: #f0fdf4;
+            background: #261717;
             border-radius: 8px;
             margin-bottom: 12px;
         }
-        .event-date { font-size: 0.8em; font-weight: 700; color: var(--accent-green-dark); text-transform: uppercase; }
-        .event-name { font-size: 0.95em; font-weight: 700; margin: 3px 0; color: var(--text-dark); }
+        .event-date { font-size: 0.8em; font-weight: 700; color: #fca5a5; text-transform: uppercase; }
+        .event-name { font-size: 0.95em; font-weight: 700; margin: 3px 0; color: var(--text-light); }
         .event-desc { font-size: 0.85em; color: var(--text-muted); }
 
         .btn {
@@ -124,9 +127,13 @@
         .btn-primary:hover { background: var(--primary-dark); }
         .btn-green { background: var(--accent-green); color: white; }
         .btn-green:hover { background: var(--accent-green-dark); }
-        .btn-danger { background: #fee2e2; color: var(--danger); }
+        .btn-danger { background: #7f1d1d; color: #fca5a5; }
         .btn-admin { background: var(--admin-blue); color: white; }
         .btn-block { width: 100%; margin-top: 8px; }
+
+        /* Admin-Lösch-Buttons standardmäßig unsichtbar, werden im Admin-Modus eingeblendet */
+        .admin-only-delete { display: none !important; }
+        body.admin-mode .admin-only-delete { display: inline-flex !important; }
 
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 0.85em; font-weight: 600; margin-bottom: 5px; color: var(--text-muted); }
@@ -134,10 +141,11 @@
             width: 100%;
             padding: 10px 12px;
             border-radius: 8px;
-            border: 1px solid #cbd5e1;
+            border: 1px solid #4b5563;
             font-family: inherit;
             font-size: 0.95em;
-            background: white;
+            background: #111317;
+            color: var(--text-light);
         }
 
         .price-item {
@@ -145,14 +153,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
-            border-bottom: 1px solid #e7e5e4;
+            border-bottom: 1px solid #2d333b;
             font-size: 0.9em;
         }
         .counter-controls { display: flex; align-items: center; gap: 12px; }
         .counter-btn {
-            background: #f5f5f4;
+            background: #111317;
             color: var(--primary-red);
-            border: 2px solid #d6d3d1;
+            border: 2px solid #4b5563;
             width: 40px; height: 40px;
             border-radius: 50%;
             font-size: 1.2em;
@@ -161,7 +169,7 @@
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* UNTERE NAVIGATION MIT RUNDEN BUTTONS */
+        /* UNTERE NAVIGATION (Anthrazit mit rotem Akzent & runden Buttons) */
         .bottom-nav {
             position: fixed !important; 
             bottom: 0 !important; 
@@ -170,13 +178,13 @@
             width: 100% !important;
             max-width: 600px !important; 
             margin: 0 auto !important;
-            background: #dc2626 !important; /* Knalliges Rot */
-            border-top: 2px solid #ffffff !important; 
+            background: #1e2229 !important;
+            border-top: 2px solid var(--primary-red) !important; 
             display: flex !important; 
             justify-content: space-around !important;
             align-items: center !important;
             padding: 10px 6px !important;
-            box-shadow: 0 -6px 20px rgba(0,0,0,0.15) !important;
+            box-shadow: 0 -6px 20px rgba(0,0,0,0.5) !important;
             z-index: 99999 !important;
         }
         .nav-item {
@@ -184,7 +192,7 @@
             flex-direction: column !important; 
             align-items: center !important;
             text-decoration: none !important; 
-            color: #ffffff !important; 
+            color: var(--text-muted) !important; 
             font-size: 0.75em !important; 
             font-weight: 700 !important; 
             cursor: pointer !important;
@@ -192,14 +200,13 @@
             text-align: center !important;
             padding: 6px 4px !important;
             margin: 0 2px !important;
-            border-radius: 12px !important; /* Runde Abrundung */
+            border-radius: 12px !important;
             transition: all 0.2s ease-in-out !important;
-            opacity: 0.85;
         }
         .nav-item.active { 
-            opacity: 1 !important; 
-            background: rgba(255, 255, 255, 0.22) !important; /* Abgerundeter aktiver Hintergrund */
-            border: 1px solid rgba(255, 255, 255, 0.5) !important;
+            color: #ffffff !important;
+            background: var(--primary-red) !important;
+            border: 1px solid #ef4444 !important;
             transform: translateY(-2px) !important; 
             font-weight: 800 !important; 
         }
@@ -207,6 +214,17 @@
 
         .admin-delete-btn { display: none; }
         body.admin-mode .admin-delete-btn { display: flex !important; flex-direction: column; width: 100%; }
+
+        .badge-paid { background: #064e3b; color: #34d399; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
+        .badge-open { background: #7f1d1d; color: #fca5a5; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
+        
+        .news-img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -219,12 +237,17 @@
     <!-- 1. NEWS & DIENSTPLAN -->
     <div id="page-news" class="page-content active">
         <div id="news-container"></div>
+
         <div class="card">
             <div class="card-title">🍻 Nächster Dienst im Schützenhaus</div>
             <div id="next-duty-widget"></div>
         </div>
+
         <div class="card">
             <div class="card-title">📋 Gesamter Dienstplan (2026/2027)</div>
+            <div style="font-size: 0.85em; margin-bottom: 12px; color: var(--text-muted);">
+                🕒 <strong>Dienstzeit:</strong> Freitags von 19:00 bis 21:00 Uhr (Jeden 2. Freitag)
+            </div>
             <div id="full-roster-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
         </div>
     </div>
@@ -265,30 +288,18 @@
             <div class="price-item"><span>🌭 1 Paar Hauswürste m. Brot — € 7,50</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
             <div class="price-item"><span>🌭 1 Paar Wienerle m. Brot — € 7,00</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
 
-            <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #cbd5e1; display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
+            <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #2d333b; display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
                 <span>Gesamtbetrag:</span>
                 <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
             </div>
 
-            <!-- VOLLSTÄNDIGE RECHNUNGSADRESSE FÜR DEN EMPFÄNGER -->
-            <div style="margin-top: 15px; background: #fdf2f2; padding: 12px; border-radius: 8px; border: 1px solid #fca5a5;">
+            <!-- RECHNUNGSADRESSE FÜR EMPFÄNGER -->
+            <div style="margin-top: 15px; background: #111317; padding: 12px; border-radius: 8px; border: 1px solid #4b5563;">
                 <h4 style="color: var(--primary-red); margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger Angaben:</h4>
-                <div class="form-group">
-                    <label>Name / Firma</label>
-                    <input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG">
-                </div>
-                <div class="form-group">
-                    <label>Zusatz / z. Hd. (optional)</label>
-                    <input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred">
-                </div>
-                <div class="form-group">
-                    <label>Straße & Hausnummer</label>
-                    <input type="text" class="form-control" id="cust-address" placeholder="z. B. St. Jakob 151">
-                </div>
-                <div class="form-group">
-                    <label>PLZ & Ort</label>
-                    <input type="text" class="form-control" id="cust-zipcity" placeholder="z. B. 6580 St. Anton am Arlberg">
-                </div>
+                <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
+                <div class="form-group"><label>Zusatz / z. Hd. (optional)</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
+                <div class="form-group"><label>Straße & Hausnummer</label><input type="text" class="form-control" id="cust-address" placeholder="z. B. St. Jakob 151"></div>
+                <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="z. B. 6580 St. Anton am Arlberg"></div>
             </div>
 
             <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 12px;">💾 Abrechnung speichern & Rechnungs-PDF erstellen</button>
@@ -309,20 +320,77 @@
         <div class="card" id="admin-login-card">
             <div class="card-title">🔐 Admin-Login</div>
             <form onsubmit="handleAdminLogin(event)">
-                <div class="form-group"><label>Admin-Passwort</label><input type="password" class="form-control" id="admin-password-input" required></div>
+                <div class="form-group"><label>Admin-Passwort</label><input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required></div>
                 <button type="submit" class="btn btn-primary btn-block">Anmelden</button>
             </form>
         </div>
 
         <div class="admin-delete-btn">
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">🔓 Admin-Modus Aktiv</div>
+            <div class="card admin-card" style="width: 100%; border: 1px solid var(--admin-blue);">
+                <div class="card-title" style="color: var(--admin-blue);">🔓 Admin-Modus Aktiv</div>
+                <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Vorstands-Funktionen & Lösch-Optionen sind freigeschaltet.</p>
                 <button class="btn btn-danger btn-block" onclick="logoutAdmin()">Admin-Modus Beenden</button>
+            </div>
+
+            <!-- PUSH BENACHRICHTIGUNGEN -->
+            <div class="card admin-card" style="width: 100%;">
+                <div class="card-title">🔔 Push-Benachrichtigungen</div>
+                <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 10px;">Aktiviere Push-Benachrichtigungen für dieses Gerät:</p>
+                <button class="btn btn-admin btn-block" onclick="requestPushPermission()">Benachrichtigungen erlauben</button>
+            </div>
+
+            <!-- NEWS BEITRAG ERSTELLEN -->
+            <div class="card admin-card" style="width: 100%;">
+                <div class="card-title">📢 Neue Vereins-News / Foto posten</div>
+                <form onsubmit="addNewsItem(event)">
+                    <div class="form-group"><label>Titel / Überschrift</label><input type="text" class="form-control" id="news-title" placeholder="z.B. Königsschießen" required></div>
+                    <div class="form-group"><label>Text-Inhalt</label><textarea class="form-control" id="news-text" rows="3" placeholder="Details..." required></textarea></div>
+                    <div class="form-group"><label>Foto hinzufügen (optional)</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
+                    <button type="submit" class="btn btn-admin btn-block">News veröffentlichen</button>
+                </form>
+            </div>
+
+            <!-- LAGERBESTAND -->
+            <div class="card admin-card" style="width: 100%;">
+                <div class="card-title">📦 Lagerbestand (Schützenheim)</div>
+                <div class="price-item"><span>🍺 Bier (Kisten)</span><input type="number" id="stock-bier" value="10" style="width:75px; text-align:center;" class="form-control"></div>
+                <div class="price-item"><span>🍋 Limo (Kisten)</span><input type="number" id="stock-limo" value="10" style="width:75px; text-align:center;" class="form-control"></div>
+                <div class="price-item"><span>🌭 Hauswürste (Paar)</span><input type="number" id="stock-wuerste" value="10" style="width:75px; text-align:center;" class="form-control"></div>
+                <button class="btn btn-green btn-block" onclick="saveInventory()">Bestand speichern</button>
+            </div>
+
+            <!-- NEUEN TERMIN ANLEGEN -->
+            <div class="card admin-card" style="width: 100%;">
+                <div class="card-title">➕ Neuen Termin anlegen</div>
+                <form onsubmit="addEvent(event)">
+                    <div class="form-group"><label>Titel des Termins</label><input type="text" class="form-control" id="new-event-title" placeholder="z.B. Jahreshauptversammlung" required></div>
+                    <div class="form-group"><label>Datum & Uhrzeit</label><input type="text" class="form-control" id="new-event-date" placeholder="z.B. 15. Dez 2026, 19:00 Uhr" required></div>
+                    <div class="form-group"><label>Beschreibung</label><input type="text" class="form-control" id="new-event-desc" placeholder="Treffpunkt etc."></div>
+                    <button type="submit" class="btn btn-admin btn-block">Termin speichern</button>
+                </form>
+            </div>
+
+            <!-- SCHIESSBUCH ERGEBNISSE -->
+            <div class="card admin-card" style="width: 100%;">
+                <div class="card-title">🎯 Schießbuch Ergebnisse</div>
+                <ul id="admin-shot-list" style="list-style: none; font-size: 0.85em;"><li style="color: var(--text-muted);">Lade Ergebnisse...</li></ul>
+            </div>
+
+            <!-- MITGLIEDERBEITRÄGE 2026 -->
+            <div class="card admin-card" style="width: 100%;">
+                <div class="card-title">👥 Mitgliederbeiträge 2026</div>
+                <p style="font-size:0.75em; color:var(--text-muted); margin-bottom:10px;">Klicke auf den Status zum Umschalten:</p>
+                <div class="price-item"><div><strong>Wachter Manfred</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Wachter Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Schweighofer Dietmar</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Schweighofer Simon</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann / Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Stocker Heimo</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann-Stv.</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+                <div class="price-item"><div><strong>Kinzl Sabrina</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Schriftführerin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
             </div>
         </div>
     </div>
 
-    <!-- UNTERE NAVIGATION (Mit abgerundeten Buttons & "Strichliste") -->
+    <!-- UNTERE NAVIGATION -->
     <nav class="bottom-nav">
         <a onclick="switchTab('news')" class="nav-item active" id="nav-news"><span class="nav-icon">📢</span><span>News</span></a>
         <a onclick="switchTab('events')" class="nav-item" id="nav-events"><span class="nav-icon">📅</span><span>Termine</span></a>
@@ -342,6 +410,109 @@
             window.scrollTo(0, 0);
         }
 
+        // OFFIZIELLER DIENSTPLAN 2026/2027
+        const masterDutyRoster = [
+            { date: "2026-10-09", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { date: "2026-10-23", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { date: "2026-11-06", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
+            { date: "2026-11-20", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { date: "2026-12-04", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { date: "2026-12-18", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { date: "2027-01-01", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
+            { date: "2027-01-15", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
+            { date: "2027-01-29", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { date: "2027-02-12", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { date: "2027-02-26", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { date: "2027-03-12", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { date: "2027-03-26", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
+            { date: "2027-04-09", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
+        ];
+
+        function updateDutyPlanWidget() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const upcoming = masterDutyRoster.filter(d => new Date(d.date + "T00:00:00") >= today);
+            const nextWidget = document.getElementById('next-duty-widget');
+            
+            if (nextWidget && upcoming.length > 0) {
+                const next = upcoming[0];
+                const dateFormatted = new Date(next.date + "T00:00:00").toLocaleDateString('de-AT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                
+                if(next.status === 'closed') {
+                    nextWidget.innerHTML = `
+                        <div class="event-item" style="border-left-color: #6b7280; background: #1a1d23;">
+                            <div class="event-date" style="color: #9ca3af;">${dateFormatted}</div>
+                            <div class="event-name">Schützenhaus Geschlossen</div>
+                            <div class="event-desc">${next.names}</div>
+                        </div>
+                    `;
+                } else {
+                    nextWidget.innerHTML = `
+                        <div class="event-item">
+                            <div class="event-date">${dateFormatted} (19:00 - 21:00 Uhr)</div>
+                            <div class="event-name">${next.team}</div>
+                            <div class="event-desc"><strong>Diensthabende:</strong> ${next.names}</div>
+                        </div>
+                    `;
+                }
+            }
+
+            const fullList = document.getElementById('full-roster-list');
+            if (fullList) {
+                let html = "";
+                masterDutyRoster.forEach(d => {
+                    const dObj = new Date(d.date + "T00:00:00");
+                    const isPast = dObj < today;
+                    const isNext = (upcoming.length > 0 && d.date === upcoming[0].date);
+                    const formatted = dObj.toLocaleDateString('de-AT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                    
+                    let bg = "#111317";
+                    let borderColor = "var(--primary-red)";
+                    if(d.status === 'closed') { borderColor = "#6b7280"; }
+
+                    let style = `display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: ${bg}; border-radius: 8px; border-left: 4px solid ${borderColor};`;
+                    if(isPast) style += " opacity: 0.4; text-decoration: line-through;";
+                    if(isNext) style += " background: #261717; border: 2px solid var(--primary-red);";
+
+                    html += `
+                        <div style="${style}">
+                            <div><strong>${formatted}</strong><br><span style="font-size: 0.8em; color: var(--text-muted);">${d.names}</span></div>
+                            <span style="background: ${borderColor}; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.75em;">${d.team}</span>
+                        </div>
+                    `;
+                });
+                fullList.innerHTML = html;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDutyPlanWidget();
+            loadNews();
+            loadEvents();
+            loadShots();
+            loadTallyHistory();
+            loadInventory();
+        });
+
+        // UNIVERSELLE LÖSCH-FUNKTION FÜR ADMINS
+        async function deleteItem(collectionName, docId) {
+            if (confirm("Möchtest du diesen Eintrag wirklich unwiderruflich löschen?")) {
+                try {
+                    await db.collection(collectionName).doc(docId).delete();
+                    alert("Eintrag erfolgreich gelöscht!");
+                    if (collectionName === 'news') loadNews();
+                    else if (collectionName === 'events') loadEvents();
+                    else if (collectionName === 'shots') loadShots();
+                    else if (collectionName === 'invoices') loadTallyHistory();
+                } catch (err) {
+                    console.error("Fehler beim Löschen:", err);
+                    alert("Fehler beim Löschen des Eintrags.");
+                }
+            }
+        }
+
+        // STRICHLISTE LOGIK
         const drinkPrices = { bier: 3.50, limo: 3.00, mineral: 2.50, wein4: 4.00, gespritzt: 3.50, schnaps: 3.50, kaffee: 3.00, hauswuerste: 7.50, wienerle: 7.00 };
         const drinkCounts = { bier: 0, limo: 0, mineral: 0, wein4: 0, gespritzt: 0, schnaps: 0, kaffee: 0, hauswuerste: 0, wienerle: 0 };
 
@@ -409,7 +580,7 @@
 
             try {
                 await db.collection("invoices").add(invoiceObj);
-                alert("Abrechnung gespeichert! Rechnung wurde für " + clientName + " erstellt.");
+                alert("Abrechnung gespeichert!");
                 confirmResetDrinks();
                 loadTallyHistory();
                 switchTab('guide');
@@ -429,11 +600,14 @@
                     const inv = doc.data();
                     const totalStr = (inv.total || 0).toFixed(2).replace('.', ',') + ' €';
                     html += `
-                        <div class="card" style="background: #fafaf9; margin-bottom: 10px;">
+                        <div class="card" style="background: #111317; margin-bottom: 10px;">
                             <h4 style="margin: 0 0 5px 0; color: var(--primary-red);">${inv.recipientName} (${inv.invoiceNum})</h4>
                             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 5px;">${inv.recipientAddress}, ${inv.recipientZipCity}</p>
                             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Datum: ${inv.date} | <b>Gesamt: ${totalStr}</b></p>
-                            <button class="btn btn-primary" onclick='generateInvoicePDF(${JSON.stringify(inv)})'>📄 Offizielle PDF-Rechnung herunterladen</button>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button class="btn btn-primary" style="flex: 1;" onclick='generateInvoicePDF(${JSON.stringify(inv)})'>📄 PDF herunterladen</button>
+                                <button class="btn btn-danger admin-only-delete" onclick="deleteItem('invoices', '${doc.id}')">🗑️ Löschen</button>
+                            </div>
                         </div>
                     `;
                 });
@@ -455,7 +629,7 @@
 
             doc.setFont("helvetica", "bold");
             doc.setFontSize(22);
-            doc.setTextColor(220, 38, 38);
+            doc.setTextColor(185, 28, 28);
             doc.text("RECHNUNG", 14, 20);
 
             doc.setFont("helvetica", "normal");
@@ -500,7 +674,7 @@
                     [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: totalAmount, styles: { fontStyle: 'bold' } }]
                 ],
                 theme: 'striped',
-                headStyles: { fillColor: [220, 38, 38], textColor: [255, 255, 255], fontStyle: 'bold' },
+                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
                 columnStyles: { 0: { cellWidth: 130 }, 1: { halign: 'right', cellWidth: 50 } }
             });
 
@@ -534,6 +708,209 @@
             doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen | Rütler 43b, 6794 Partenen | ZVR: 624291509", 105, 285, { align: "center" });
 
             doc.save(`${invoiceData.invoiceNum}.pdf`);
+        }
+
+        // ADMIN LOGIN & FUNKTIONEN
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('admin-password-input').value;
+            if (pass === "schützen2026") {
+                document.body.classList.add('admin-mode');
+                document.getElementById('admin-login-card').style.display = 'none';
+                alert("Admin-Modus erfolgreich aktiviert!");
+                loadNews();
+                loadEvents();
+                loadShots();
+                loadTallyHistory();
+            } else {
+                alert("Falsches Passwort!");
+            }
+        }
+
+        function logoutAdmin() {
+            document.body.classList.remove('admin-mode');
+            document.getElementById('admin-login-card').style.display = 'block';
+            document.getElementById('admin-password-input').value = '';
+            loadNews();
+            loadEvents();
+            loadShots();
+            loadTallyHistory();
+        }
+
+        async function addNewsItem(e) {
+            e.preventDefault();
+            const title = document.getElementById('news-title').value;
+            const text = document.getElementById('news-text').value;
+            const fileInput = document.getElementById('news-photo-input');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = async function(uploadEvent) {
+                    await saveNewsToFirestore(title, text, uploadEvent.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                await saveNewsToFirestore(title, text, "");
+            }
+        }
+
+        async function saveNewsToFirestore(title, text, imageUrl) {
+            try {
+                await db.collection("news").add({
+                    title, text, imageUrl,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("News veröffentlicht!");
+                document.getElementById('news-title').value = '';
+                document.getElementById('news-text').value = '';
+                document.getElementById('news-photo-input').value = '';
+                loadNews();
+            } catch (err) { console.error(err); }
+        }
+
+        async function loadNews() {
+            const container = document.getElementById('news-container');
+            try {
+                const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
+                if (snapshot.empty) { container.innerHTML = ''; return; }
+                let html = "";
+                snapshot.forEach(doc => {
+                    const n = doc.data();
+                    html += `
+                        <div class="card">
+                            ${n.imageUrl ? `<img src="${n.imageUrl}" class="news-img">` : ''}
+                            <div class="card-title">${n.title}</div>
+                            <p style="font-size: 0.9em; color: var(--text-muted); white-space: pre-line; margin-bottom: 10px;">${n.text}</p>
+                            <button class="btn btn-danger admin-only-delete" onclick="deleteItem('news', '${doc.id}')">🗑️ News löschen</button>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (e) { console.error(e); }
+        }
+
+        async function addEvent(e) {
+            e.preventDefault();
+            const title = document.getElementById('new-event-title').value;
+            const date = document.getElementById('new-event-date').value;
+            const desc = document.getElementById('new-event-desc').value;
+
+            try {
+                await db.collection("events").add({
+                    title, date, desc,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("Termin gespeichert!");
+                document.getElementById('new-event-title').value = '';
+                document.getElementById('new-event-date').value = '';
+                document.getElementById('new-event-desc').value = '';
+                loadEvents();
+            } catch (err) { console.error(err); }
+        }
+
+        async function loadEvents() {
+            const container = document.getElementById('events-container');
+            try {
+                const snapshot = await db.collection("events").orderBy("createdAt", "desc").get();
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="font-size: 0.85em; color: var(--text-muted);">Keine anstehenden Termine eingetragen.</p>';
+                    return;
+                }
+                let html = "";
+                snapshot.forEach(doc => {
+                    const ev = doc.data();
+                    html += `
+                        <div class="event-item">
+                            <div class="event-date">${ev.date}</div>
+                            <div class="event-name">${ev.title}</div>
+                            <div class="event-desc">${ev.desc}</div>
+                            <button class="btn btn-danger admin-only-delete" style="margin-top: 8px; font-size: 0.8em; padding: 6px 12px;" onclick="deleteItem('events', '${doc.id}')">🗑️ Termin löschen</button>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (e) { console.error(e); }
+        }
+
+        async function saveInventory() {
+            const bier = document.getElementById('stock-bier').value;
+            const limo = document.getElementById('stock-limo').value;
+            const wuerste = document.getElementById('stock-wuerste').value;
+            try {
+                await db.collection("inventory").doc("current").set({ bier, limo, wuerste });
+                alert("Lagerbestand aktualisiert!");
+            } catch (e) { console.error(e); }
+        }
+
+        async function loadInventory() {
+            try {
+                const doc = await db.collection("inventory").doc("current").get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById('stock-bier').value = data.bier || 10;
+                    document.getElementById('stock-limo').value = data.limo || 10;
+                    document.getElementById('stock-wuerste').value = data.wuerste || 10;
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function saveShot(e) {
+            e.preventDefault();
+            const name = document.getElementById('shot-name').value;
+            const disc = document.getElementById('shot-disc').value;
+            const rings = document.getElementById('shot-rings').value;
+
+            try {
+                await db.collection("shots").add({
+                    name, disc, rings,
+                    date: new Date().toLocaleDateString('de-AT'),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("Ergebnis eingetragen!");
+                document.getElementById('shot-name').value = '';
+                document.getElementById('shot-rings').value = '';
+                loadShots();
+            } catch (err) { console.error(err); }
+        }
+
+        async function loadShots() {
+            const listEl = document.getElementById('admin-shot-list');
+            if(!listEl) return;
+            try {
+                const snapshot = await db.collection("shots").orderBy("createdAt", "desc").limit(10).get();
+                if (snapshot.empty) {
+                    listEl.innerHTML = '<li style="color: var(--text-muted);">Keine Ergebnisse vorhanden.</li>';
+                    return;
+                }
+                let html = "";
+                snapshot.forEach(doc => {
+                    const s = doc.data();
+                    html += `
+                        <li style="padding: 8px 0; border-bottom: 1px solid #2d333b; display: flex; justify-content: space-between; align-items: center;">
+                            <span><b>${s.name}</b> (${s.disc}): <b>${s.rings} Ringe</b> <span style="font-size:0.75em; color:var(--text-muted);">[${s.date}]</span></span>
+                            <button class="btn btn-danger admin-only-delete" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteItem('shots', '${doc.id}')">🗑️</button>
+                        </li>
+                    `;
+                });
+                listEl.innerHTML = html;
+            } catch (e) { console.error(e); }
+        }
+
+        function togglePayStatus(badge) {
+            if(badge.innerText.includes("Bezahlt")) {
+                badge.innerText = "Offen (€ 25)";
+                badge.className = "badge-open";
+            } else {
+                badge.innerText = "Bezahlt (€ 25)";
+                badge.className = "badge-paid";
+            }
+        }
+
+        function requestPushPermission() {
+            Notification.requestPermission().then((permission) => {
+                if (permission === "granted") { alert("Benachrichtigungen erlaubt!"); }
+                else { alert("Verweigert."); }
+            });
         }
     </script>
 </body>
