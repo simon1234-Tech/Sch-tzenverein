@@ -38,43 +38,42 @@
         :root {
             --primary-red: #b91c1c; /* Kräftiges, edles Rot */
             --primary-dark: #7f1d1d;
-            --bg-dark: #121418;
-            --card-bg: #1e2229; /* Dunkles Anthrazit / Mattschwarz */
-            --text-light: #f3f4f6;
-            --text-muted: #9ca3af;
-            --accent-green: #22c55e; /* Giftgrün */
+            --bg-light: #f4f4f5; /* Hocker / Heller Hintergrund */
+            --card-bg: #ffffff; /* Weißer Karten-Hintergrund */
+            --text-dark: #1c1917; /* Dunkler Text für Lesbarkeit */
+            --text-muted: #57534e; /* Gedämpfter Text */
+            --accent-green: #16a34a; /* Giftgrün */
             --accent-green-dark: #15803d;
             --danger: #dc2626;
             --admin-blue: #2563eb;
-            --admin-card-bg: #1e293b;
+            --admin-card-bg: #1e293b; /* Admin-Farbe bleibt dunkel wie gewünscht */
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
             font-family: 'Montserrat', sans-serif;
-            color: var(--text-light);
-            background-color: var(--bg-dark);
+            color: var(--text-dark);
+            background-color: var(--bg-light);
             padding-bottom: 140px !important;
             max-width: 600px;
             margin: 0 auto;
             min-height: 100vh;
-            box-shadow: 0 0 25px rgba(0,0,0,0.5);
+            box-shadow: 0 0 25px rgba(0,0,0,0.1);
         }
 
         .app-header {
-            background: linear-gradient(135deg, #111317, var(--card-bg));
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-red));
             color: white;
             padding: 20px;
             text-align: center;
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
-            border-bottom: 2px solid var(--primary-red);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
         }
         
         .app-header h1 { font-size: 1.25em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
-        .app-header p { font-size: 0.8em; opacity: 0.9; margin-top: 4px; color: var(--primary-red); font-weight: 700; }
+        .app-header p { font-size: 0.8em; opacity: 0.95; margin-top: 4px; color: #fca5a5; font-weight: 700; }
 
         .page-content { padding: 15px; display: none; }
         .page-content.active { display: block; }
@@ -84,9 +83,9 @@
             border-radius: 14px;
             padding: 18px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            border: 1px solid #2d333b;
-            color: var(--text-light);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border: 1px solid #e7e5e4;
+            color: var(--text-dark);
         }
         
         .card-title {
@@ -102,24 +101,30 @@
         /* GIFTGRÜNE HERVORHEBUNG FÜR NÄCHSTEN DIENST */
         .next-duty-banner-green {
             border: 2px solid var(--accent-green);
-            background: linear-gradient(135deg, #052e16, #14532d) !important;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7) !important;
             border-left: 6px solid var(--accent-green);
-            box-shadow: 0 0 18px rgba(34, 197, 94, 0.4);
-            animation: pulse-green 2s infinite;
+            box-shadow: 0 0 18px rgba(22, 163, 74, 0.15);
         }
-        @keyframes pulse-green {
-            0% { border-color: #22c55e; }
-            50% { border-color: #86efac; }
-            100% { border-color: #22c55e; }
+        .next-duty-banner-green .card-title {
+            color: var(--accent-green-dark) !important;
         }
 
-        /* ADMIN BEREICH STYLING */
+        /* ADMIN BEREICH STYLING (BLEIBT DUNKEL) */
         .admin-card {
             background: var(--admin-card-bg) !important;
             border: 1px solid #334155 !important;
+            color: #f3f4f6 !important;
         }
         .admin-card .card-title {
             color: #60a5fa !important;
+        }
+        .admin-card .form-control {
+            background: #111317 !important;
+            color: #f3f4f6 !important;
+            border-color: #4b5563 !important;
+        }
+        .admin-card label {
+            color: #9ca3af !important;
         }
         .admin-sub-tab-btn {
             background: #0f172a;
@@ -143,12 +148,12 @@
         .event-item {
             border-left: 4px solid var(--primary-red);
             padding: 12px 15px;
-            background: #261717;
+            background: #fdf2f2;
             border-radius: 8px;
             margin-bottom: 12px;
         }
-        .event-date { font-size: 0.8em; font-weight: 700; color: #fca5a5; text-transform: uppercase; }
-        .event-name { font-size: 0.95em; font-weight: 700; margin: 3px 0; color: var(--text-light); }
+        .event-date { font-size: 0.8em; font-weight: 700; color: var(--primary-dark); text-transform: uppercase; }
+        .event-name { font-size: 0.95em; font-weight: 700; margin: 3px 0; color: var(--text-dark); }
         .event-desc { font-size: 0.85em; color: var(--text-muted); }
 
         .btn {
@@ -169,7 +174,7 @@
         .btn-primary:hover { background: var(--primary-dark); }
         .btn-green { background: var(--accent-green-dark); color: white; }
         .btn-green:hover { background: #166534; }
-        .btn-danger { background: #7f1d1d; color: #fca5a5; }
+        .btn-danger { background: #fee2e2; color: var(--danger); }
         .btn-admin { background: var(--admin-blue); color: white; }
         .btn-block { width: 100%; margin-top: 8px; }
 
@@ -182,11 +187,11 @@
             width: 100%;
             padding: 10px 12px;
             border-radius: 8px;
-            border: 1px solid #4b5563;
+            border: 1px solid #cbd5e1;
             font-family: inherit;
             font-size: 0.95em;
-            background: #111317;
-            color: var(--text-light);
+            background: #ffffff;
+            color: var(--text-dark);
         }
 
         .price-item {
@@ -194,14 +199,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
-            border-bottom: 1px solid #2d333b;
+            border-bottom: 1px solid #e7e5e4;
             font-size: 0.9em;
         }
         .counter-controls { display: flex; align-items: center; gap: 12px; }
         .counter-btn {
-            background: #111317;
+            background: #f5f5f4;
             color: var(--primary-red);
-            border: 2px solid #4b5563;
+            border: 2px solid #d6d3d1;
             width: 40px; height: 40px;
             border-radius: 50%;
             font-size: 1.2em;
@@ -225,7 +230,7 @@
             justify-content: space-around !important;
             align-items: center !important;
             padding: 10px 6px !important;
-            box-shadow: 0 -6px 20px rgba(0,0,0,0.5) !important;
+            box-shadow: 0 -6px 20px rgba(0,0,0,0.15) !important;
             z-index: 99999 !important;
         }
         .nav-item {
@@ -233,7 +238,7 @@
             flex-direction: column !important; 
             align-items: center !important;
             text-decoration: none !important; 
-            color: var(--text-muted) !important; 
+            color: #9ca3af !important; 
             font-size: 0.75em !important; 
             font-weight: 700 !important; 
             cursor: pointer !important;
@@ -281,7 +286,7 @@
 
         <!-- GIFTGRÜNE HERVORHEBUNG FÜR NÄCHSTEN DIENST -->
         <div class="card next-duty-banner-green">
-            <div class="card-title" style="color: #86efac; font-size: 1.15em;">🚨 NÄCHSTER DIENST IM SCHÜTZENHAUS</div>
+            <div class="card-title" style="font-size: 1.15em;">🚨 NÄCHSTER DIENST IM SCHÜTZENHAUS</div>
             <div id="next-duty-widget"></div>
         </div>
 
@@ -330,13 +335,13 @@
             <div class="price-item"><span>🌭 1 Paar Hauswürste m. Brot — € 7,50</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
             <div class="price-item"><span>🌭 1 Paar Wienerle m. Brot — € 7,00</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
 
-            <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #2d333b; display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
+            <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #e7e5e4; display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
                 <span>Gesamtbetrag:</span>
                 <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
             </div>
 
             <!-- RECHNUNGSADRESSE FÜR EMPFÄNGER -->
-            <div style="margin-top: 15px; background: #111317; padding: 12px; border-radius: 8px; border: 1px solid #4b5563;">
+            <div style="margin-top: 15px; background: #fafaf9; padding: 12px; border-radius: 8px; border: 1px solid #d6d3d1;">
                 <h4 style="color: var(--primary-red); margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger Angaben:</h4>
                 <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
                 <div class="form-group"><label>Zusatz / z. Hd. (optional)</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
@@ -355,40 +360,40 @@
         <div class="card">
             <div class="card-title">📞 Vorstand & Funktionsträger</div>
             <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#38bdf8; font-weight:700;">0650 3049466</a></div>
-                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#38bdf8; font-weight:700;">0650 3600415</a></div>
-                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span></div><a href="tel:06502800596" style="color:#38bdf8; font-weight:700;">0650 2800596</a></div>
-                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span></div><a href="tel:06601113150" style="color:#38bdf8; font-weight:700;">0660 1113150</a></div>
-                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span></div><a href="tel:06641134051" style="color:#38bdf8; font-weight:700;">0664 1134051</a></div>
-                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span></div><a href="tel:06644752129" style="color:#38bdf8; font-weight:700;">0664 4752129</a></div>
-                <div class="price-item"><div><strong>Dietmar Schweighofer</strong><br><span style="color:var(--primary-red);">Fähnrich</span></div><a href="tel:069919281005" style="color:#38bdf8; font-weight:700;">0699 19281005</a></div>
-                <div class="price-item"><div><strong>Norbert Spettel</strong><br><span style="color:var(--primary-red);">Fähnrich-Stv.</span></div><a href="tel:06645413877" style="color:#38bdf8; font-weight:700;">0664 5413877</a></div>
-                <div class="price-item"><div><strong>Konrad Kofler</strong><br><span style="color:var(--primary-red);">Schützen-Ehrenobmann</span></div><a href="tel:06644331385" style="color:#38bdf8; font-weight:700;">0664 4331385</a></div>
+                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#0284c7; font-weight:700;">0650 3049466</a></div>
+                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#0284c7; font-weight:700;">0650 3600415</a></div>
+                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span></div><a href="tel:06502800596" style="color:#0284c7; font-weight:700;">0650 2800596</a></div>
+                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span></div><a href="tel:06601113150" style="color:#0284c7; font-weight:700;">0660 1113150</a></div>
+                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span></div><a href="tel:06641134051" style="color:#0284c7; font-weight:700;">0664 1134051</a></div>
+                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span></div><a href="tel:06644752129" style="color:#0284c7; font-weight:700;">0664 4752129</a></div>
+                <div class="price-item"><div><strong>Dietmar Schweighofer</strong><br><span style="color:var(--primary-red);">Fähnrich</span></div><a href="tel:069919281005" style="color:#0284c7; font-weight:700;">0699 19281005</a></div>
+                <div class="price-item"><div><strong>Norbert Spettel</strong><br><span style="color:var(--primary-red);">Fähnrich-Stv.</span></div><a href="tel:06645413877" style="color:#0284c7; font-weight:700;">0664 5413877</a></div>
+                <div class="price-item"><div><strong>Konrad Kofler</strong><br><span style="color:var(--primary-red);">Schützen-Ehrenobmann</span></div><a href="tel:06644331385" style="color:#0284c7; font-weight:700;">0664 4331385</a></div>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-title">👥 Aktive Mitglieder & Kontakte[cite: 8, 9]</div>
+            <div class="card-title">👥 Aktive Mitglieder & Kontakte</div>
             <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <div class="price-item"><div><strong>Christoph Wittwer</strong></div><a href="tel:067762326458" style="color:#38bdf8; font-weight:700;">0677 62326458</a></div>
-                <div class="price-item"><div><strong>Elias Stocker</strong></div><a href="tel:06767103446" style="color:#38bdf8; font-weight:700;">0676 7103446</a></div>
-                <div class="price-item"><div><strong>Erwin Rudigier</strong></div><a href="tel:06643487459" style="color:#38bdf8; font-weight:700;">0664 3487459</a></div>
-                <div class="price-item"><div><strong>Gerd Sprattler</strong></div><a href="tel:06509600245" style="color:#38bdf8; font-weight:700;">0650 9600245</a></div>
-                <div class="price-item"><div><strong>Jasmine Suntinger</strong></div><a href="tel:06642135908" style="color:#38bdf8; font-weight:700;">0664 2135908</a></div>
-                <div class="price-item"><div><strong>Maria Spettel</strong></div><a href="tel:06647644140" style="color:#38bdf8; font-weight:700;">0664 7644140</a></div>
-                <div class="price-item"><div><strong>Nathalie Stocker</strong></div><a href="tel:06644587288" style="color:#38bdf8; font-weight:700;">0664 4587288</a></div>
-                <div class="price-item"><div><strong>Pascal Tripolt</strong></div><a href="tel:06645162082" style="color:#38bdf8; font-weight:700;">0664 5162082</a></div>
-                <div class="price-item"><div><strong>Werner Mattle</strong></div><a href="tel:06642509274" style="color:#38bdf8; font-weight:700;">0664 2509274</a></div>
-                <div class="price-item"><div><strong>Werner Wachter</strong></div><a href="tel:06642804791" style="color:#38bdf8; font-weight:700;">0664 2804791</a></div>
-                <div class="price-item"><div><strong>Werner Wittwer</strong></div><a href="tel:06502501910" style="color:#38bdf8; font-weight:700;">0650 2501910</a></div>
+                <div class="price-item"><div><strong>Christoph Wittwer</strong></div><a href="tel:067762326458" style="color:#0284c7; font-weight:700;">0677 62326458</a></div>
+                <div class="price-item"><div><strong>Elias Stocker</strong></div><a href="tel:06767103446" style="color:#0284c7; font-weight:700;">0676 7103446</a></div>
+                <div class="price-item"><div><strong>Erwin Rudigier</strong></div><a href="tel:06643487459" style="color:#0284c7; font-weight:700;">0664 3487459</a></div>
+                <div class="price-item"><div><strong>Gerd Sprattler</strong></div><a href="tel:06509600245" style="color:#0284c7; font-weight:700;">0650 9600245</a></div>
+                <div class="price-item"><div><strong>Jasmine Suntinger</strong></div><a href="tel:06642135908" style="color:#0284c7; font-weight:700;">0664 2135908</a></div>
+                <div class="price-item"><div><strong>Maria Spettel</strong></div><a href="tel:06647644140" style="color:#0284c7; font-weight:700;">0664 7644140</a></div>
+                <div class="price-item"><div><strong>Nathalie Stocker</strong></div><a href="tel:06644587288" style="color:#0284c7; font-weight:700;">0664 4587288</a></div>
+                <div class="price-item"><div><strong>Pascal Tripolt</strong></div><a href="tel:06645162082" style="color:#0284c7; font-weight:700;">0664 5162082</a></div>
+                <div class="price-item"><div><strong>Werner Mattle</strong></div><a href="tel:06642509274" style="color:#0284c7; font-weight:700;">0664 2509274</a></div>
+                <div class="price-item"><div><strong>Werner Wachter</strong></div><a href="tel:06642804791" style="color:#0284c7; font-weight:700;">0664 2804791</a></div>
+                <div class="price-item"><div><strong>Werner Wittwer</strong></div><a href="tel:06502501910" style="color:#0284c7; font-weight:700;">0650 2501910</a></div>
             </div>
         </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH (ÜBERSICHTLICH MIT UNTER-TABS) -->
+    <!-- 6. ADMIN-BEREICH (ÜBERSICHTLICH MIT UNTER-TABS & DUNKLEM ADMIN-LOOK) -->
     <div id="page-card" class="page-content">
         <div class="card admin-card" id="admin-login-card">
-            <div class="card-title">🔐 Admin-Login</div>
+            <div class="card-title" style="color: #60a5fa !important;">🔐 Admin-Login</div>
             <form onsubmit="handleAdminLogin(event)">
                 <div class="form-group"><label>Admin-Passwort</label><input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required></div>
                 <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
@@ -398,8 +403,8 @@
         <div class="admin-delete-btn">
             <!-- ADMIN STATUS & HAUPT-MENÜ -->
             <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">🔓 Admin-Modus Aktiv</div>
-                <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Wähle einen Bereich zur Bearbeitung aus:</p>
+                <div class="card-title" style="color: #60a5fa !important;">🔓 Admin-Modus Aktiv</div>
+                <p style="font-size:0.8em; color:#9ca3af; margin-bottom:10px;">Wähle einen Bereich zur Bearbeitung aus:</p>
                 
                 <!-- UNTER-NAVIGATION FÜR DEN ADMIN-BEREICH -->
                 <div style="display: flex; gap: 6px; margin-bottom: 12px;">
@@ -414,13 +419,13 @@
             <!-- TAB 1: NEWS, TERMINE, PUSH -->
             <div id="admin-tab-news" class="admin-tab-content">
                 <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title">🔔 Push-Benachrichtigungen</div>
-                    <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 10px;">Aktiviere Push-Benachrichtigungen:</p>
+                    <div class="card-title" style="color: #60a5fa !important;">🔔 Push-Benachrichtigungen</div>
+                    <p style="font-size: 0.85em; color: #9ca3af; margin-bottom: 10px;">Aktiviere Push-Benachrichtigungen:</p>
                     <button class="btn btn-admin btn-block" onclick="requestPushPermission()">Benachrichtigungen erlauben</button>
                 </div>
 
                 <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title">📢 Neue Vereins-News / Foto posten</div>
+                    <div class="card-title" style="color: #60a5fa !important;">📢 Neue Vereins-News / Foto posten</div>
                     <form onsubmit="addNewsItem(event)">
                         <div class="form-group"><label>Titel / Überschrift</label><input type="text" class="form-control" id="news-title" placeholder="z.B. Königsschießen" required></div>
                         <div class="form-group"><label>Text-Inhalt</label><textarea class="form-control" id="news-text" rows="3" placeholder="Details..." required></textarea></div>
@@ -430,7 +435,7 @@
                 </div>
 
                 <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title">➕ Neuen Termin anlegen</div>
+                    <div class="card-title" style="color: #60a5fa !important;">➕ Neuen Termin anlegen</div>
                     <form onsubmit="addEvent(event)">
                         <div class="form-group"><label>Titel des Termins</label><input type="text" class="form-control" id="new-event-title" placeholder="z.B. Jahreshauptversammlung" required></div>
                         <div class="form-group"><label>Datum & Uhrzeit</label><input type="text" class="form-control" id="new-event-date" placeholder="z.B. 15. Dez 2026, 19:00 Uhr" required></div>
@@ -443,15 +448,15 @@
             <!-- TAB 2: RECHNUNGEN & LAGER -->
             <div id="admin-tab-finance" class="admin-tab-content" style="display: none;">
                 <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title">💶 Gespeicherte Strichlisten & Rechnungen</div>
-                    <div id="admin-tally-history-list"><p style="color: var(--text-muted); font-size: 0.85em;">Lade Rechnungen...</p></div>
+                    <div class="card-title" style="color: #60a5fa !important;">💶 Gespeicherte Strichlisten & Rechnungen</div>
+                    <div id="admin-tally-history-list"><p style="color: #9ca3af; font-size: 0.85em;">Lade Rechnungen...</p></div>
                 </div>
 
                 <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title">📦 Lagerbestand (Schützenheim)</div>
-                    <div class="price-item"><span>🍺 Bier (Kisten)</span><input type="number" id="stock-bier" value="10" style="width:75px; text-align:center;" class="form-control"></div>
-                    <div class="price-item"><span>🍋 Limo (Kisten)</span><input type="number" id="stock-limo" value="10" style="width:75px; text-align:center;" class="form-control"></div>
-                    <div class="price-item"><span>🌭 Hauswürste (Paar)</span><input type="number" id="stock-wuerste" value="10" style="width:75px; text-align:center;" class="form-control"></div>
+                    <div class="card-title" style="color: #60a5fa !important;">📦 Lagerbestand (Schützenheim)</div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><span>🍺 Bier (Kisten)</span><input type="number" id="stock-bier" value="10" style="width:75px; text-align:center;" class="form-control"></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><span>🍋 Limo (Kisten)</span><input type="number" id="stock-limo" value="10" style="width:75px; text-align:center;" class="form-control"></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><span>🌭 Hauswürste (Paar)</span><input type="number" id="stock-wuerste" value="10" style="width:75px; text-align:center;" class="form-control"></div>
                     <button class="btn btn-green btn-block" onclick="saveInventory()">Bestand speichern</button>
                 </div>
             </div>
@@ -459,60 +464,60 @@
             <!-- TAB 3: MITGLIEDER & SCHIESSBUCH -->
             <div id="admin-tab-members" class="admin-tab-content" style="display: none;">
                 <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title">🎯 Schießbuch Ergebnisse</div>
-                    <ul id="admin-shot-list" style="list-style: none; font-size: 0.85em;"><li style="color: var(--text-muted);">Lade Ergebnisse...</li></ul>
+                    <div class="card-title" style="color: #60a5fa !important;">🎯 Schießbuch Ergebnisse</div>
+                    <ul id="admin-shot-list" style="list-style: none; font-size: 0.85em;"><li style="color: #9ca3af;">Lade Ergebnisse...</li></ul>
                 </div>
 
                 <!-- AKTIVE MITGLIEDERBEITRÄGE 2026 (€ 30) -->
                 <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title">👥 Aktive Mitgliederbeiträge 2026 (€ 30)</div>
-                    <p style="font-size:0.75em; color:var(--text-muted); margin-bottom:10px;">Klicke auf den Status zum Umschalten:</p>
-                    <div class="price-item"><div><strong>Wachter Manfred</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Wachter Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Schweighofer Dietmar</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Schweighofer Simon</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann / Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Spettel Norbert</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Stocker Heimo</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann-Stv. / Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Wittwer Christoph</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Wittwer Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Rudigier Erwin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Sandrell Daniel</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Mattle Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Pascal Tripolt</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Stocker Karin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Suntinger Jasmin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Kinzl Sabrina</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Schriftführerin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Maria Spettel</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Natalie Stocker</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Elias Stocker</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Jugendmitglied</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                    <div class="price-item"><div><strong>Sandrell Heinrich</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
-                    <div class="price-item"><div><strong>Kofler Konrad</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
-                    <div class="price-item"><div><strong>Dona Lothar</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
-                    <div class="price-item"><div><strong>Gerd Sprattler</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
+                    <div class="card-title" style="color: #60a5fa !important;">👥 Aktive Mitgliederbeiträge 2026 (€ 30)</div>
+                    <p style="font-size:0.75em; color:#9ca3af; margin-bottom:10px;">Klicke auf den Status zum Umschalten:</p>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Wachter Manfred</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Wachter Werner</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Schweighofer Dietmar</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Schweighofer Simon</strong><br><span style="font-size:0.75em; color:#9ca3af;">Obmann / Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Spettel Norbert</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Stocker Heimo</strong><br><span style="font-size:0.75em; color:#9ca3af;">Obmann-Stv. / Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Wittwer Christoph</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Wittwer Werner</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Rudigier Erwin</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Sandrell Daniel</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Mattle Werner</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Pascal Tripolt</strong><br><span style="font-size:0.75em; color:#9ca3af;">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Stocker Karin</strong><br><span style="font-size:0.75em; color:#9ca3af;">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Suntinger Jasmin</strong><br><span style="font-size:0.75em; color:#9ca3af;">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Kinzl Sabrina</strong><br><span style="font-size:0.75em; color:#9ca3af;">Schriftführerin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Maria Spettel</strong><br><span style="font-size:0.75em; color:#9ca3af;">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Natalie Stocker</strong><br><span style="font-size:0.75em; color:#9ca3af;">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Elias Stocker</strong><br><span style="font-size:0.75em; color:#9ca3af;">Jugendmitglied</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Sandrell Heinrich</strong><br><span style="font-size:0.75em; color:#9ca3af;">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Kofler Konrad</strong><br><span style="font-size:0.75em; color:#9ca3af;">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Dona Lothar</strong><br><span style="font-size:0.75em; color:#9ca3af;">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>Gerd Sprattler</strong><br><span style="font-size:0.75em; color:#9ca3af;">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
                 </div>
 
                 <!-- PASSIVE MITGLIEDERBEITRÄGE 2026 (€ 30) -->
                 <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title">👥 Passive Mitgliederbeiträge 2026 (€ 30)</div>
-                    <p style="font-size:0.75em; color:var(--text-muted); margin-bottom:10px;">Übersicht aller passiven Mitglieder:</p>
-                    <div class="price-item"><div><strong>1. Joel Wachter</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>2. Kofler Marlene</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>3. Wachter Monika</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>4. Schallner Harry</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>5. Netzer Werner</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>6. Netzer Markus</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>7. Fitsch Manuela</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>8. Geiger Monika</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>9. Frank Sandrell</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>10. Barbisch Andreas</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>11. Patrick Wachter</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>12. Steurer Harald</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>13. Steurer Angela</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>14. Kofler Corinna</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>15. Bitschnau Jutta</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>16. Bitschnau Klaus</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>17. Essig Armin</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                    <div class="price-item"><div><strong>18. Carlos Da Ponte</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="card-title" style="color: #60a5fa !important;">👥 Passive Mitgliederbeiträge 2026 (€ 30)</div>
+                    <p style="font-size:0.75em; color:#9ca3af; margin-bottom:10px;">Übersicht aller passiven Mitglieder:</p>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>1. Joel Wachter</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>2. Kofler Marlene</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>3. Wachter Monika</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>4. Schallner Harry</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>5. Netzer Werner</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>6. Netzer Markus</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>7. Fitsch Manuela</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>8. Geiger Monika</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>9. Frank Sandrell</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>10. Barbisch Andreas</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>11. Patrick Wachter</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>12. Steurer Harald</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>13. Steurer Angela</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>14. Kofler Corinna</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>15. Bitschnau Jutta</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>16. Bitschnau Klaus</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>17. Essig Armin</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item" style="border-bottom-color: #334155;"><div><strong>18. Carlos Da Ponte</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
                 </div>
             </div>
         </div>
@@ -578,15 +583,15 @@
                 
                 if(next.status === 'closed') {
                     nextWidget.innerHTML = `
-                        <div style="font-size: 0.9em; color: #86efac;">📅 ${dateFormatted}</div>
-                        <div style="font-size: 1.2em; font-weight: 800; margin: 4px 0; color: #fff;">Schützenhaus Geschlossen</div>
-                        <div style="font-size: 0.9em; opacity: 0.9;">${next.names}</div>
+                        <div style="font-size: 0.9em; color: var(--accent-green-dark); font-weight: 700;">📅 ${dateFormatted}</div>
+                        <div style="font-size: 1.2em; font-weight: 800; margin: 4px 0; color: var(--text-dark);">Schützenhaus Geschlossen</div>
+                        <div style="font-size: 0.9em; color: var(--text-muted);">${next.names}</div>
                     `;
                 } else {
                     nextWidget.innerHTML = `
-                        <div style="font-size: 0.9em; color: #86efac; font-weight: 700;">📅 ${dateFormatted} (19:00 - 21:00 Uhr)</div>
-                        <div style="font-size: 1.3em; font-weight: 800; margin: 4px 0; color: #fff;">${next.team}</div>
-                        <div style="font-size: 0.95em; opacity: 0.95;"><strong>Diensthabende:</strong> ${next.names}</div>
+                        <div style="font-size: 0.9em; color: var(--accent-green-dark); font-weight: 700;">📅 ${dateFormatted} (19:00 - 21:00 Uhr)</div>
+                        <div style="font-size: 1.3em; font-weight: 800; margin: 4px 0; color: var(--text-dark);">${next.team}</div>
+                        <div style="font-size: 0.95em; color: var(--text-dark);"><strong>Diensthabende:</strong> ${next.names}</div>
                     `;
                 }
             }
@@ -600,13 +605,13 @@
                     const isNext = (upcoming.length > 0 && d.date === upcoming[0].date);
                     const formatted = dObj.toLocaleDateString('de-AT', { day: '2-digit', month: '2-digit', year: 'numeric' });
                     
-                    let bg = "#111317";
+                    let bg = "#ffffff";
                     let borderColor = "var(--primary-red)";
                     if(d.status === 'closed') { borderColor = "#6b7280"; }
 
-                    let style = `display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: ${bg}; border-radius: 8px; border-left: 4px solid ${borderColor};`;
+                    let style = `display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: ${bg}; border-radius: 8px; border: 1px solid #e7e5e4; border-left: 4px solid ${borderColor};`;
                     if(isPast) style += " opacity: 0.4; text-decoration: line-through;";
-                    if(isNext) style += " background: #14532d; border: 2px solid var(--accent-green);";
+                    if(isNext) style += " background: #f0fdf4; border: 2px solid var(--accent-green);";
 
                     html += `
                         <div style="${style}">
@@ -723,7 +728,7 @@
             try {
                 const snapshot = await db.collection("invoices").orderBy("createdAt", "desc").get();
                 if (snapshot.empty) {
-                    if(adminListEl) adminListEl.innerHTML = '<p style="color: var(--text-muted);">Keine Rechnungen vorhanden.</p>';
+                    if(adminListEl) adminListEl.innerHTML = '<p style="color: #9ca3af; font-size: 0.85em;">Keine Rechnungen vorhanden.</p>';
                     return;
                 }
 
@@ -732,10 +737,10 @@
                     const inv = doc.data();
                     const totalStr = (inv.total || 0).toFixed(2).replace('.', ',') + ' €';
                     html += `
-                        <div class="card" style="background: #0f172a; border: 1px solid #334155; margin-bottom: 10px;">
+                        <div class="card" style="background: #0f172a; border: 1px solid #334155; margin-bottom: 10px; color: #f3f4f6;">
                             <h4 style="margin: 0 0 5px 0; color: #60a5fa;">${inv.recipientName} (${inv.invoiceNum})</h4>
-                            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 5px;">${inv.recipientAddress}, ${inv.recipientZipCity}</p>
-                            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Datum: ${inv.date} | <b>Gesamt: ${totalStr}</b></p>
+                            <p style="font-size: 0.8em; color: #9ca3af; margin-bottom: 5px;">${inv.recipientAddress}, ${inv.recipientZipCity}</p>
+                            <p style="font-size: 0.8em; color: #9ca3af; margin-bottom: 10px;">Datum: ${inv.date} | <b>Gesamt: ${totalStr}</b></p>
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 <button class="btn btn-admin" style="flex: 1;" onclick='generateInvoicePDF(${JSON.stringify(inv)})'>📄 PDF herunterladen</button>
                                 <button class="btn btn-danger admin-only-delete" onclick="deleteItem('invoices', '${doc.id}')">🗑️ Löschen</button>
@@ -1005,15 +1010,15 @@
             try {
                 const snapshot = await db.collection("shots").orderBy("createdAt", "desc").limit(10).get();
                 if (snapshot.empty) {
-                    listEl.innerHTML = '<li style="color: var(--text-muted);">Keine Ergebnisse vorhanden.</li>';
+                    listEl.innerHTML = '<li style="color: #9ca3af;">Keine Ergebnisse vorhanden.</li>';
                     return;
                 }
                 let html = "";
                 snapshot.forEach(doc => {
                     const s = doc.data();
                     html += `
-                        <li style="padding: 8px 0; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center;">
-                            <span><b>${s.name}</b> (${s.disc}): <b>${s.rings} Ringe</b> <span style="font-size:0.75em; color:var(--text-muted);">[${s.date}]</span></span>
+                        <li style="padding: 8px 0; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #f3f4f6;">
+                            <span><b>${s.name}</b> (${s.disc}): <b>${s.rings} Ringe</b> <span style="font-size:0.75em; color:#9ca3af;">[${s.date}]</span></span>
                             <button class="btn btn-danger admin-only-delete" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteItem('shots', '${doc.id}')">🗑️</button>
                         </li>
                     `;
