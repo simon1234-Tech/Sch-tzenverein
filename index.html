@@ -98,13 +98,11 @@
             justify-content: space-between;
         }
 
-        /* WUNSCH 8: VORSTAND MIT GELBER/GOLDENER UMRANDUNG */
         .card-vorstand {
             border: 2.5px solid #eab308 !important;
             box-shadow: 0 0 15px rgba(234, 179, 8, 0.3) !important;
         }
 
-        /* WUNSCH 4: STÄRKERES GIFTGRÜN & BLINKENDE ANIMATION */
         @keyframes pulseGreen {
             0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
             70% { box-shadow: 0 0 0 14px rgba(34, 197, 94, 0); }
@@ -121,7 +119,6 @@
             font-weight: 800;
         }
 
-        /* ADMIN BEREICH STYLING */
         .admin-card {
             background: var(--admin-card-bg) !important;
             border: 1px solid #334155 !important;
@@ -144,7 +141,6 @@
         }
         .admin-sub-tab-btn.active { background: var(--admin-blue); color: #fff; border-color: #60a5fa; }
 
-        /* WUNSCH 2 & 5: DUNKLE CARDS FÜR TERMINE & DIENSTPLAN (STYLE WIE FOTO 2) */
         .dark-card-section {
             background: #1e293b;
             border-radius: 16px;
@@ -169,7 +165,7 @@
             margin-bottom: 10px;
             border-left: 5px solid var(--primary-red);
         }
-        .dark-event-item.closed { border-left-color: #10b981; }
+        .dark-event-item.closed { border-left-color: #64748b; }
 
         .btn {
             padding: 10px 16px;
@@ -227,7 +223,6 @@
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* WUNSCH 1: FLOATING DOCK FUSSZEILE MIT FARBIGEN SYMBOLEN & ROTEM AKTIV-PILL */
         .bottom-nav {
             position: fixed !important; 
             bottom: 12px !important; 
@@ -285,13 +280,12 @@
     <div id="page-news" class="page-content active">
         <div id="news-container"></div>
 
-        <!-- WUNSCH 4: STÄRKERES GIFTGRÜN MIT BLINK-ANIMATION -->
         <div class="card next-duty-banner-green">
             <div class="card-title" style="font-size: 1.1em;">🚨 NÄCHSTER DIENST IM SCHÜTZENHAUS</div>
             <div id="next-duty-widget"></div>
         </div>
 
-        <!-- WUNSCH 5: DIENSTPLAN IM MODERNEN DARK-CARD STYLE (WIE BILD 2) -->
+        <!-- GESAMTER DIENSTPLAN (VOLLSTÄNDIGE 14 TERMINE) -->
         <div class="dark-card-section">
             <div class="dark-card-title">
                 <span>📋 Gesamter Dienstplan</span>
@@ -302,10 +296,10 @@
         </div>
     </div>
 
-    <!-- 2. TERMINE UND ABSTIMMUNG (WIE BILD 2) -->
+    <!-- 2. TERMINE (VEREINSTERMINE MIT ZUSAGE/ABSAGE, OHNE DIENSTPLAN) -->
     <div id="page-events" class="page-content">
         <div class="dark-card-section">
-            <div class="dark-card-title">📅 Nächste Termine / Dienstplan</div>
+            <div class="dark-card-title">📅 Nächste Vereinstermine</div>
             <div id="events-container"><p style="font-size: 0.85em; color: #94a3b8;">Lade Termine...</p></div>
         </div>
     </div>
@@ -323,7 +317,7 @@
         </div>
     </div>
 
-    <!-- WUNSCH 6 & 7: STRICHLISTE & LUFTGEWEHRSCHIESSEN -->
+    <!-- STRICHLISTE & LUFTGEWEHRSCHIESSEN -->
     <div id="page-drinks" class="page-content">
         <div class="card">
             <div class="card-title">🍻 Schützenheim Strichliste</div>
@@ -331,7 +325,6 @@
             <div class="price-item"><span>🌭 Hauswurst / Essen</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
             <div class="price-item"><span>🍺 Getränke (Bier/Limo/Wein/Kaffee)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('getraenke', -1)">-</button><span id="count-getraenke" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('getraenke', 1)">+</button></div></div>
             
-            <!-- WUNSCH 7: LUFTGEWEHRSCHIESSEN HINZUGEFÜGT -->
             <div class="price-item" style="background: #fef2f2; padding: 10px; border-radius: 8px;">
                 <span>🎯 Luftgewehrschießen (€ 8,00 / Person)</span>
                 <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
@@ -344,7 +337,6 @@
                 <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
             </div>
 
-            <!-- WUNSCH 6: RECHNUNGSEMPFÄNGER MIT MITGLIEDER-/PERSONENAUSWAHL -->
             <div style="margin-top: 15px; background: #fafaf9; padding: 12px; border-radius: 8px; border: 1px solid #d6d3d1;">
                 <h4 style="color: var(--primary-red); margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger Angaben:</h4>
                 <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
@@ -352,7 +344,6 @@
                 <div class="form-group"><label>Straße & Hausnummer</label><input type="text" class="form-control" id="cust-address" placeholder="z. B. St. Jakob 151"></div>
                 <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="z. B. 6580 St. Anton am Arlberg"></div>
                 
-                <!-- WUNSCH 6: PERSONEN-AUSWAHL FÜR LUFTGEWEHRSCHIESSEN -->
                 <div class="form-group">
                     <label>Haben Personen mit dem Luftgewehr geschossen?</label>
                     <select class="form-control" id="cust-shot-option" onchange="toggleShooterNamesInput()">
@@ -371,9 +362,8 @@
         </div>
     </div>
 
-    <!-- MITGLIEDER (WUNSCH 8: GELBE UMRANDUNG FÜR VORSTAND) -->
+    <!-- MITGLIEDER -->
     <div id="page-guide" class="page-content">
-        <!-- WUNSCH 8: VORSTAND MIT GELBER UMRANDUNG -->
         <div class="card card-vorstand">
             <div class="card-title" style="color: #d97706;">⭐ Vorstand & Funktionsträger ⭐</div>
             <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
@@ -440,10 +430,10 @@
                 </div>
 
                 <div class="card admin-card">
-                    <div class="card-title">➕ Nächste Termine Erstellen</div>
+                    <div class="card-title">➕ Nächsten Vereinstermin Erstellen</div>
                     <form onsubmit="addEvent(event)">
-                        <div class="form-group"><label>Datum & Titel (z.B. 18.12.2026 - Vereinsschießen)</label><input type="text" class="form-control" id="new-event-title" required></div>
-                        <div class="form-group"><label>Eingeteilte Personen / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="z.B. Norbert, Maria, Erwin"></div>
+                        <div class="form-group"><label>Datum & Titel (z.B. 05.12.2026 - Waldweihnacht)</label><input type="text" class="form-control" id="new-event-title" required></div>
+                        <div class="form-group"><label>Details / Treffpunkt</label><input type="text" class="form-control" id="new-event-desc" placeholder="z.B. Abenteuerspielplatz Gaschurn"></div>
                         <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
                     </form>
                 </div>
@@ -457,7 +447,7 @@
                 </div>
             </div>
 
-            <!-- TAB 3: WUNSCH 3: AKTUELLE ERGEBNISSE IM ADMIN-BEREICH WIE AUF BILD 2 -->
+            <!-- TAB 3: AKTUELLE ERGEBNISSE IM ADMIN-BEREICH GEMÄSS BILD 2 -->
             <div id="admin-tab-members" class="admin-tab-content" style="display: none;">
                 <div class="dark-card-section" style="background: #0f172a; border: 1px solid #334155;">
                     <div class="dark-card-title" style="color: #60a5fa;">🎯 Aktuelle Ergebnisse (Schießbuch)</div>
@@ -467,7 +457,7 @@
         </div>
     </div>
 
-    <!-- WUNSCH 1: FUSSZEILE WIE AUF BILD 1 MIT BUNTEN ICONS & ROTEM AKTIV-PILL -->
+    <!-- FUSSZEILE MIT FARBIGEN ICONS & ROTEM AKTIV-PILL -->
     <nav class="bottom-nav">
         <a onclick="switchTab('news')" class="nav-item active" id="nav-news"><span class="nav-icon">📢</span><span>News</span></a>
         <a onclick="switchTab('events')" class="nav-item" id="nav-events"><span class="nav-icon">📅</span><span>Termine</span></a>
@@ -499,12 +489,22 @@
             document.getElementById('shooter-names-group').style.display = (opt === 'ja') ? 'block' : 'none';
         }
 
-        // OFFIZIELLER DIENSTPLAN
+        // VOLLSTÄNDIGER DIENSTPLAN 2026/2027 (ALLE 14 TERMINE)
         const masterDutyRoster = [
-            { id: "d1", date: "06.11.2026", title: "Schützenhaus Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
-            { id: "d2", date: "20.11.2026", title: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { id: "d3", date: "04.12.2026", title: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { id: "d4", date: "18.12.2026", title: "Team 4", names: "Norbert, Maria, Erwin", status: "open" }
+            { date: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { date: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { date: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
+            { date: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { date: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { date: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { date: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
+            { date: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
+            { date: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { date: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { date: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { date: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { date: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
+            { date: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
         ];
 
         function updateDutyPlanWidget() {
@@ -521,11 +521,16 @@
             if (fullList) {
                 let html = "";
                 masterDutyRoster.forEach(d => {
-                    let borderCol = d.status === 'closed' ? '#10b981' : '#b91c1c';
+                    let isClosed = d.status === 'closed';
+                    let borderCol = isClosed ? '#64748b' : '#b91c1c';
+                    
                     html += `
-                        <div class="dark-event-item" style="border-left-color: ${borderCol};">
-                            <div style="font-size: 1.1em; font-weight: 800; color: #fff;">${d.date}</div>
-                            <div style="font-size: 0.85em; color: #94a3b8; margin-top: 2px;">${d.names}</div>
+                        <div class="dark-event-item ${isClosed ? 'closed' : ''}" style="border-left-color: ${borderCol}; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 1.05em; font-weight: 800; color: #fff;">${d.date}</div>
+                                <div style="font-size: 0.8em; color: #94a3b8; margin-top: 2px;">${d.names}</div>
+                            </div>
+                            <span style="background: ${borderCol}; color: white; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.7em;">${d.team}</span>
                         </div>
                     `;
                 });
@@ -533,37 +538,46 @@
             }
         }
 
-        // WUNSCH 2: TERMINE UND ABSTIMMUNGS-FUNKTION
+        // 2. VEREINSTERMINE MIT ZUSAGE/ABSAGE (OHNE DIENSTPLAN)
         async function loadEvents() {
             const container = document.getElementById('events-container');
             try {
-                const snapshot = await db.collection("events_vote").get();
+                const snapshot = await db.collection("events").orderBy("createdAt", "desc").get();
+                const votesSnapshot = await db.collection("events_vote").get();
                 let votesData = {};
-                snapshot.forEach(doc => { votesData[doc.id] = doc.data(); });
+                votesSnapshot.forEach(doc => { votesData[doc.id] = doc.data(); });
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="font-size: 0.85em; color: #94a3b8;">Keine anstehenden Vereinstermine eingetragen.</p>';
+                    return;
+                }
 
                 let html = "";
-                masterDutyRoster.forEach(ev => {
-                    const v = votesData[ev.id] || { yesNames: [], noNames: [] };
+                snapshot.forEach(doc => {
+                    const ev = doc.data();
+                    const eventId = doc.id;
+                    const v = votesData[eventId] || { yesNames: [], noNames: [] };
                     const yesCount = v.yesNames ? v.yesNames.length : 0;
                     const noCount = v.noNames ? v.noNames.length : 0;
 
                     html += `
-                        <div class="dark-event-item" style="border-left-color: ${ev.status==='closed'?'#10b981':'#b91c1c'}">
+                        <div class="dark-event-item">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-size: 1.1em; font-weight: 800; color: #fff;">${ev.date}</span>
+                                <span style="font-size: 1.05em; font-weight: 800; color: #fff;">${ev.title}</span>
                                 <span style="font-size: 0.75em; background: #334155; padding: 2px 8px; border-radius: 12px; color: #60a5fa;">${yesCount} Zusagen</span>
                             </div>
-                            <div style="font-size: 0.85em; color: #cbd5e1; margin: 4px 0;">${ev.names}</div>
+                            ${ev.desc ? `<div style="font-size: 0.85em; color: #cbd5e1; margin: 4px 0;">${ev.desc}</div>` : ''}
                             
                             <!-- ABSTIMMUNGS BUTTONS -->
-                            <div style="margin-top: 8px; pt-6; border-top: 1px solid #334155; display: flex; gap: 8px; align-items: center;">
-                                <button onclick="voteEvent('${ev.id}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-size: 0.75em; cursor: pointer;">👍 Zusage</button>
-                                <button onclick="voteEvent('${ev.id}', 'no')" style="background: #dc2626; color: white; border: none; padding: 4px 10px; border-radius: 6px; font-size: 0.75em; cursor: pointer;">👎 Absage</button>
+                            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #334155; display: flex; gap: 8px; align-items: center;">
+                                <button onclick="voteEvent('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👍 Zusage</button>
+                                <button onclick="voteEvent('${eventId}', 'no')" style="background: #dc2626; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👎 Absage</button>
+                                <button class="btn btn-danger admin-only-delete" style="padding: 2px 6px; font-size: 0.7em; margin-left: auto;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
                             </div>
 
-                            <div style="font-size: 0.75em; color: #94a3b8; margin-top: 6px;">
-                                <strong>Zusagen (${yesCount}):</strong> ${v.yesNames ? v.yesNames.join(', ') : 'Keine'}<br>
-                                <strong>Absagen (${noCount}):</strong> ${v.noNames ? v.noNames.join(', ') : 'Keine'}
+                            <div style="font-size: 0.75em; color: #94a3b8; margin-top: 8px;">
+                                <strong>Zusagen (${yesCount}):</strong> ${v.yesNames && v.yesNames.length > 0 ? v.yesNames.join(', ') : 'Keine'}<br>
+                                <strong>Absagen (${noCount}):</strong> ${v.noNames && v.noNames.length > 0 ? v.noNames.join(', ') : 'Keine'}
                             </div>
                         </div>
                     `;
@@ -594,6 +608,23 @@
             loadEvents();
         }
 
+        async function addEvent(e) {
+            e.preventDefault();
+            const title = document.getElementById('new-event-title').value;
+            const desc = document.getElementById('new-event-desc').value;
+
+            try {
+                await db.collection("events").add({
+                    title, desc,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("Vereinstermin gespeichert!");
+                document.getElementById('new-event-title').value = '';
+                document.getElementById('new-event-desc').value = '';
+                loadEvents();
+            } catch (err) { console.error(err); }
+        }
+
         // STRICHLISTE & RECHNUNGS-BERECHNUNG
         const drinkPrices = { hauswuerste: 7.50, getraenke: 3.50, luftgewehr: 8.00, trinkgeld: 5.00 };
         const drinkCounts = { hauswuerste: 0, getraenke: 0, luftgewehr: 0, trinkgeld: 0 };
@@ -616,7 +647,6 @@
             calculateTotal();
         }
 
-        // WUNSCH 6 & 7: RECHNUNG SPEICHERN MIT DEM NEUEN LUFTGEWEHR-POSTEN
         async function saveTallyBilling() {
             let total = calculateTotal();
             if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
@@ -632,7 +662,6 @@
             if (drinkCounts.hauswuerste > 0) itemsArray.push({ name: "Hauswurst / Essen", price: drinkCounts.hauswuerste * drinkPrices.hauswuerste });
             if (drinkCounts.getraenke > 0) itemsArray.push({ name: "Getränke", price: drinkCounts.getraenke * drinkPrices.getraenke });
             
-            // LUFTGEWEHRSCHIESSEN POSTEN
             if (drinkCounts.luftgewehr > 0) {
                 let nameStr = "Luftgewehrschießen";
                 if (shooterOption === 'ja' && shooterNames) { nameStr += ` (${shooterNames})`; }
@@ -661,7 +690,6 @@
             } catch (err) { console.error(err); }
         }
 
-        // WUNSCH 7: EXAKTER PDF EXPORT GEMÄSS DEM MUSTER RE-2026-001.pdf
         function generateInvoicePDF(invoiceData) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -730,7 +758,6 @@
             doc.save(`${invoiceData.invoiceNum}.pdf`);
         }
 
-        // WUNSCH 3: AKTUELLE ERGEBNISSE DARSTELLUNG IM ADMIN-BEREICH GEMÄSS BILD 2
         async function loadShots() {
             const adminListEl = document.getElementById('admin-shot-list-image-style');
             try {
@@ -763,20 +790,30 @@
             } catch (e) { console.error(e); }
         }
 
-        // ADMIN MODUS
+        async function deleteItem(collectionName, docId) {
+            if (confirm("Möchtest du diesen Eintrag wirklich unwiderruflich löschen?")) {
+                try {
+                    await db.collection(collectionName).doc(docId).delete();
+                    alert("Löschen erfolgreich!");
+                    loadEvents(); loadShots();
+                } catch (err) { console.error(err); }
+            }
+        }
+
         function handleAdminLogin(e) {
             e.preventDefault();
             if (document.getElementById('admin-password-input').value === "schützen2026") {
                 document.body.classList.add('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'none';
                 alert("Admin-Modus aktiviert!");
-                loadShots();
+                loadShots(); loadEvents();
             } else { alert("Falsches Passwort!"); }
         }
 
         function logoutAdmin() {
             document.body.classList.remove('admin-mode');
             document.getElementById('admin-login-card').style.display = 'block';
+            loadEvents();
         }
 
         async function saveShot(e) {
