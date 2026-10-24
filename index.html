@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kameradschaftsbund & Schützenverein Gaschurn-Partenen</title>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -11,36 +12,36 @@
   <!-- jsPDF & autoTable for PDF generation -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-  <!-- Chart.js for Schießbuch Trends -->
+  <!-- Chart.js for Schießbuch Trend Diagram -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* Global Glassmorphism Background */
+    /* Global Bright Ambient Gradient */
     body {
-      background: linear-gradient(135deg, #1f293d 0%, #111827 50%, #0f172a 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #0f172a 100%);
       background-attachment: fixed;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #f1f5f9;
+      color: #f8fafc;
     }
 
-    /* Common Glass Card */
+    /* Common Bright Glass Card */
     .glass-card {
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-radius: 1rem;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
     }
 
-    /* Glass Panels with Custom Color Glow Borders */
+    /* Glass Panels with Custom Neon Color Glow Borders */
     .glass-blue {
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-radius: 1rem;
       border: 1.5px solid #00f0ff;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.1);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.08);
     }
 
     .glass-yellow {
@@ -49,7 +50,7 @@
       -webkit-backdrop-filter: blur(16px);
       border-radius: 1rem;
       border: 1.5px solid #eab308;
-      box-shadow: 0 0 15px rgba(234, 179, 8, 0.3), inset 0 0 15px rgba(234, 179, 8, 0.1);
+      box-shadow: 0 0 15px rgba(234, 179, 8, 0.3), inset 0 0 15px rgba(234, 179, 8, 0.08);
     }
 
     .glass-red {
@@ -58,20 +59,20 @@
       -webkit-backdrop-filter: blur(16px);
       border-radius: 1rem;
       border: 1.5px solid #ef4444;
-      box-shadow: 0 0 15px rgba(239, 68, 68, 0.3), inset 0 0 15px rgba(239, 68, 68, 0.1);
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.35), inset 0 0 15px rgba(239, 68, 68, 0.08);
     }
 
     /* Glass Footer Navigation */
     .glass-nav {
-      background: rgba(15, 23, 42, 0.75);
+      background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-top: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    /* Glass Input Controls */
+    /* Glass Inputs */
     .glass-input {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.25);
       color: #ffffff;
       backdrop-filter: blur(8px);
@@ -81,24 +82,40 @@
       outline: none;
       border-color: #38bdf8;
       box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.2);
     }
     .glass-input option {
       background-color: #1e293b;
       color: #ffffff;
     }
 
+    /* Pulsing Neon Animation for Next Duty */
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.8), inset 0 0 10px rgba(0, 240, 255, 0.3);
+        border-color: #00f0ff;
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(0, 240, 255, 1), inset 0 0 15px rgba(0, 240, 255, 0.5);
+        border-color: #7dd3fc;
+      }
+    }
+    .pulsing-duty {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes badgeBlink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(0.96); }
+    }
+    .blink-badge {
+      animation: badgeBlink 1.5s infinite ease-in-out;
+    }
+
     /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.1);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 3px;
-    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
   </style>
 </head>
 <body class="pb-24 min-h-screen">
@@ -118,25 +135,12 @@
 
     <!-- 1. NEWS TAB -->
     <section id="tab-news" class="tab-content">
-      <div class="glass-card p-5 mb-4">
+      <div class="glass-red p-5 mb-4">
         <h2 class="text-xl font-bold mb-3 text-white flex items-center gap-2">
-          <i class="fa-solid fa-bullhorn text-red-400"></i> Aktuelle Ankündigungen
+          <i class="fa-solid fa-bullhorn text-red-400"></i> Aktuelle Nachrichten & News
         </h2>
-        <div class="space-y-4">
-          <div class="p-3 bg-white/5 rounded-lg border border-white/10">
-            <span class="text-xs text-cyan-400 font-semibold">24. OKTOBER 2026</span>
-            <h3 class="font-bold text-white text-sm mt-1">Waldweihnacht 2026 Vorbereitungen</h3>
-            <p class="text-xs text-gray-300 mt-1">
-              Die Vorbereitungen für die traditionelle Waldweihnacht laufen auf Hochtouren. Bitte meldet euch im Dienstplan für die Aufbauteams.
-            </p>
-          </div>
-          <div class="p-3 bg-white/5 rounded-lg border border-white/10">
-            <span class="text-xs text-cyan-400 font-semibold">18. OKTOBER 2026</span>
-            <h3 class="font-bold text-white text-sm mt-1">Schießstand Wartung</h3>
-            <p class="text-xs text-gray-300 mt-1">
-              Am kommenden Samstag findet die halbjährliche Standreinigung und Wartung der elektronischen Stände statt.
-            </p>
-          </div>
+        <div id="news-feed-container" class="space-y-4">
+          <!-- Populated by JS -->
         </div>
       </div>
     </section>
@@ -148,15 +152,15 @@
           <h2 class="text-xl font-bold text-white flex items-center gap-2">
             <i class="fa-solid fa-calendar-days text-cyan-400"></i> Gesamter Dienstplan
           </h2>
-          <span class="text-xs bg-cyan-500/20 text-cyan-300 px-2.5 py-1 rounded-full border border-cyan-400/30">2026/2027</span>
+          <span class="text-xs bg-cyan-500/20 text-cyan-300 px-2.5 py-1 rounded-full border border-cyan-400/30">Saison 2026/2027</span>
         </div>
-        <p class="text-xs text-gray-300 mb-4 bg-white/5 p-2.5 rounded-lg border border-white/10">
+        <p class="text-xs text-gray-200 mb-4 bg-white/10 p-2.5 rounded-lg border border-white/15">
           <i class="fa-regular fa-clock text-cyan-400 mr-1"></i> <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)
         </p>
 
         <!-- Dynamic Duty Roster -->
         <div id="dienstplan-container" class="space-y-3">
-          <!-- Populated by JS -->
+          <!-- Populated dynamically by JS -->
         </div>
       </div>
     </section>
@@ -183,40 +187,30 @@
           <i class="fa-solid fa-crosshair text-cyan-400"></i> Schießbuch - Ergebnis erfassen
         </h2>
 
-        <!-- Quick Member Selector Chips -->
+        <!-- Quick Member Selector Chips (Non-passive only) -->
         <div class="mb-4">
-          <label class="block text-xs font-semibold text-gray-300 mb-1">Schnellauswahl Stammschütze:</label>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Schnellauswahl Schütze:</label>
           <div class="flex flex-wrap gap-2 mb-2" id="schiessbuch-chips">
             <button onclick="selectSchuetze('Simon Schweighofer')" class="px-2.5 py-1 text-xs glass-input rounded-full hover:border-cyan-400">Simon Schweighofer</button>
             <button onclick="selectSchuetze('Dietmar Schweighofer')" class="px-2.5 py-1 text-xs glass-input rounded-full hover:border-cyan-400">Dietmar Schweighofer</button>
             <button onclick="selectSchuetze('Heimo Stocker')" class="px-2.5 py-1 text-xs glass-input rounded-full hover:border-cyan-400">Heimo Stocker</button>
           </div>
           <select id="sb-schuetze" class="w-full p-2.5 rounded-lg glass-input text-sm">
-            <option value="">Schütze wählen...</option>
+            <option value="">Schütze auswählen...</option>
           </select>
         </div>
 
-        <!-- Disziplin & Waffe -->
-        <div class="grid grid-cols-2 gap-3 mb-4">
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1">Disziplin</label>
-            <select id="sb-disziplin" class="w-full p-2.5 rounded-lg glass-input text-sm">
-              <option value="Luftgewehr (10m)">Luftgewehr (10m)</option>
-              <option value="Luftpistole (10m)">Luftpistole (10m)</option>
-              <option value="Kleinkaliber (50m)">Kleinkaliber (50m)</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1">Waffe</label>
-            <select id="sb-waffe" class="w-full p-2.5 rounded-lg glass-input text-sm">
-              <option value="Anschütz 9003">Anschütz 9003</option>
-              <option value="Feinwerkbau P8X">Feinwerkbau P8X</option>
-              <option value="Vereinswaffe LG">Vereinswaffe LG</option>
-            </select>
-          </div>
+        <!-- Disziplin (Simplified - Rifle brand selection removed as requested) -->
+        <div class="mb-4">
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Disziplin</label>
+          <select id="sb-disziplin" class="w-full p-2.5 rounded-lg glass-input text-sm">
+            <option value="Luftgewehr (10m)">Luftgewehr (10m)</option>
+            <option value="Luftpistole (10m)">Luftpistole (10m)</option>
+            <option value="Kleinkaliber (50m)">Kleinkaliber (50m)</option>
+          </select>
         </div>
 
-        <!-- Score Input -->
+        <!-- Precision Score Inputs (Ringe, Zehner, Teiler) -->
         <div class="grid grid-cols-3 gap-2 mb-4">
           <div>
             <label class="block text-xs font-semibold text-gray-300 mb-1">Ringe</label>
@@ -224,7 +218,7 @@
           </div>
           <div>
             <label class="block text-xs font-semibold text-gray-300 mb-1">10er</label>
-            <input type="number" id="sb-zehner" placeholder="32" class="w-full p-2.5 rounded-lg glass-input text-sm text-center font-bold">
+            <input type="number" id="sb-zehner" placeholder="34" class="w-full p-2.5 rounded-lg glass-input text-sm text-center font-bold">
           </div>
           <div>
             <label class="block text-xs font-semibold text-gray-300 mb-1">Teiler</label>
@@ -233,7 +227,7 @@
         </div>
 
         <!-- Trend Chart Widget -->
-        <div class="mb-4 bg-white/5 p-3 rounded-xl border border-white/10">
+        <div class="mb-4 bg-white/10 p-3 rounded-xl border border-white/15">
           <label class="block text-xs font-semibold text-cyan-300 mb-2">Trend der letzten 5 Serien:</label>
           <div class="h-32">
             <canvas id="trendChart"></canvas>
@@ -259,13 +253,13 @@
         </div>
 
         <!-- Total Sum Display -->
-        <div class="flex justify-between items-center p-3 bg-cyan-950/40 rounded-xl border border-cyan-500/30">
+        <div class="flex justify-between items-center p-3.5 bg-cyan-950/60 rounded-xl border border-cyan-400/50">
           <span class="text-lg font-bold text-white">Gesamtbetrag:</span>
-          <span id="strichliste-total" class="text-2xl font-black text-cyan-400">€ 0,00</span>
+          <span id="strichliste-total" class="text-2xl font-black text-cyan-300">€ 0,00</span>
         </div>
 
         <!-- Invoice Details -->
-        <div class="p-4 bg-white/5 rounded-xl border border-white/10 space-y-3">
+        <div class="p-4 bg-white/10 rounded-xl border border-white/15 space-y-3">
           <h3 class="text-sm font-bold text-cyan-300">Rechnungsempfänger Angaben</h3>
           
           <div>
@@ -274,16 +268,16 @@
           </div>
           <div>
             <label class="block text-xs text-gray-300 mb-1">Zusatz / z. Hd.</label>
-            <input type="text" id="inv-zusatz" placeholder="z. B. z. Hd. Ladner Manfred" class="w-full p-2 rounded-lg glass-input text-xs">
+            <input type="text" id="inv-zusatz" placeholder="z. B. z. Hd. Manfred Wachter" class="w-full p-2 rounded-lg glass-input text-xs">
           </div>
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block text-xs text-gray-300 mb-1">Straße & Hausnr.</label>
-              <input type="text" id="inv-strasse" placeholder="z. B. St. Jakob 151" class="w-full p-2 rounded-lg glass-input text-xs">
+              <input type="text" id="inv-strasse" placeholder="z. B. Gaschurn 164" class="w-full p-2 rounded-lg glass-input text-xs">
             </div>
             <div>
               <label class="block text-xs text-gray-300 mb-1">PLZ & Ort</label>
-              <input type="text" id="inv-ort" placeholder="z. B. 6580 St. Anton" class="w-full p-2 rounded-lg glass-input text-xs">
+              <input type="text" id="inv-ort" placeholder="z. B. 6793 Gaschurn" class="w-full p-2 rounded-lg glass-input text-xs">
             </div>
           </div>
           <div>
@@ -296,7 +290,7 @@
         </div>
 
         <button onclick="generatePDFInvoice()" class="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl shadow-lg transition active:scale-95 border border-green-400/50 flex items-center justify-center gap-2">
-          <i class="fa-solid fa-file-pdf"></i> Abrechnung als PDF speichern
+          <i class="fa-solid fa-file-pdf"></i> Abrechnung als PDF speichern & Archivieren
         </button>
       </div>
     </section>
@@ -318,93 +312,166 @@
       </div>
     </section>
 
-    <!-- 7. ADMIN TAB -->
+    <!-- 7. ADMIN TAB (PASSWORD PROTECTED) -->
     <section id="tab-admin" class="tab-content hidden">
-      <div class="glass-red p-5 mb-4 space-y-6">
-        <div class="flex justify-between items-center">
+      
+      <!-- LOCK SCREEN -->
+      <div id="admin-lockscreen" class="glass-red p-6 text-center space-y-4">
+        <i class="fa-solid fa-lock text-4xl text-red-400 mb-2"></i>
+        <h2 class="text-xl font-bold text-white">Geschützter Admin-Bereich</h2>
+        <p class="text-xs text-gray-300">Bitte geben Sie das Admin-Passwort ein (Standard: 1997)</p>
+        <div class="max-w-xs mx-auto space-y-3">
+          <input type="password" id="admin-pass-input" placeholder="Passwort eingeben" class="w-full p-2.5 text-center text-sm rounded-lg glass-input">
+          <button onclick="unlockAdmin()" class="w-full py-2.5 bg-red-600 hover:bg-red-500 font-bold rounded-lg text-sm shadow transition">
+            Entsperren
+          </button>
+        </div>
+      </div>
+
+      <!-- ADMIN CONTENT AREA (HIDDEN UNTIL UNLOCKED) -->
+      <div id="admin-panel" class="glass-red p-5 mb-4 space-y-6 hidden">
+        <div class="flex justify-between items-center pb-3 border-b border-white/10">
           <h2 class="text-xl font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-user-shield text-red-400"></i> Admin-Bereich
+            <i class="fa-solid fa-user-shield text-red-400"></i> Admin-Konsole
           </h2>
-          <span class="text-xs bg-red-500/20 text-red-300 px-2 py-1 rounded border border-red-500/30">Geschützt</span>
+          <button onclick="lockAdmin()" class="text-xs bg-gray-700/60 hover:bg-gray-600 px-2.5 py-1 rounded text-gray-300 border border-white/10">
+            <i class="fa-solid fa-lock mr-1"></i> Sperren
+          </button>
         </div>
 
-        <!-- Fee Management (Beitragsverwaltung 30€) -->
-        <div>
-          <h3 class="text-md font-bold text-white mb-2 flex items-center gap-2">
-            <i class="fa-solid fa-sack-dollar text-amber-400"></i> Beitragsverwaltung (€ 30,-)
+        <!-- News Post Creator (With Image Upload) -->
+        <div class="p-3 bg-white/10 rounded-xl border border-white/15 space-y-3">
+          <h3 class="text-sm font-bold text-red-300 flex items-center gap-2">
+            <i class="fa-solid fa-newspaper"></i> Neue News mit Bild veröffentlichen
           </h3>
-          <div class="space-y-2 max-h-60 overflow-y-auto pr-1" id="admin-beitrag-list">
+          <input type="text" id="news-title-input" placeholder="Titel der Nachricht" class="w-full p-2 rounded-lg glass-input text-xs">
+          <textarea id="news-text-input" placeholder="Inhalt der Ankündigung..." class="w-full p-2 rounded-lg glass-input text-xs h-20"></textarea>
+          <div>
+            <label class="block text-xs text-gray-300 mb-1">Bild hochladen (optional):</label>
+            <input type="file" id="news-image-input" accept="image/*" class="w-full text-xs text-gray-300 glass-input rounded-lg p-1">
+          </div>
+          <button onclick="publishNewsPost()" class="w-full py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg text-xs shadow">
+            Ankündigung veröffentlichen
+          </button>
+        </div>
+
+        <!-- Fee Management (Aktiv & Passiv split - 30€) -->
+        <div class="p-3 bg-white/10 rounded-xl border border-white/15 space-y-3">
+          <h3 class="text-sm font-bold text-amber-300 flex items-center gap-2">
+            <i class="fa-solid fa-sack-dollar"></i> Beitragsverwaltung (€ 30,-)
+          </h3>
+          
+          <!-- Tab selector for Active vs Passive -->
+          <div class="flex border-b border-white/10 mb-2">
+            <button onclick="switchFeeTab('aktiv')" id="fee-tab-aktiv" class="flex-1 py-1 text-xs font-bold text-amber-300 border-b-2 border-amber-400">
+              Aktive & Ehren (22)
+            </button>
+            <button onclick="switchFeeTab('passiv')" id="fee-tab-passiv" class="flex-1 py-1 text-xs font-bold text-gray-400">
+              Passive Mitglieder (18)
+            </button>
+          </div>
+
+          <div id="admin-fee-list" class="space-y-2 max-h-56 overflow-y-auto pr-1">
             <!-- Populated by JS -->
           </div>
         </div>
 
         <!-- Key Management (Schlüsselliste) -->
-        <div>
-          <div class="flex justify-between items-center mb-2">
-            <h3 class="text-md font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-key text-yellow-400"></i> Schlüsselliste & Berechtigungen
+        <div class="p-3 bg-white/10 rounded-xl border border-white/15 space-y-3">
+          <div class="flex justify-between items-center">
+            <h3 class="text-sm font-bold text-yellow-300 flex items-center gap-2">
+              <i class="fa-solid fa-key"></i> Schlüsselliste & Berechtigungen
             </h3>
-            <button onclick="openKeyModal()" class="text-xs bg-cyan-600 hover:bg-cyan-500 px-2 py-1 rounded font-semibold">+ Neu</button>
+            <button onclick="addNewKeyEntry()" class="text-xs bg-cyan-600 hover:bg-cyan-500 px-2 py-1 rounded font-semibold text-white">+ Neu</button>
           </div>
-          <div class="space-y-2 max-h-60 overflow-y-auto pr-1" id="admin-schluessel-list">
+          <div id="admin-schluessel-list" class="space-y-2 max-h-52 overflow-y-auto pr-1">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Saved PDF Invoices Archive -->
+        <div class="p-3 bg-white/10 rounded-xl border border-white/15 space-y-3">
+          <h3 class="text-sm font-bold text-green-300 flex items-center gap-2">
+            <i class="fa-solid fa-file-invoice"></i> Gespeicherte Rechnungen / PDF-Archiv
+          </h3>
+          <div id="admin-invoices-list" class="space-y-2 max-h-40 overflow-y-auto text-xs">
             <!-- Populated by JS -->
           </div>
         </div>
 
         <!-- Admin Event Creator -->
-        <div class="pt-2 border-t border-white/10">
-          <h3 class="text-md font-bold text-white mb-2 flex items-center gap-2">
-            <i class="fa-solid fa-calendar-plus text-cyan-400"></i> Neuen Termin erstellen
+        <div class="p-3 bg-white/10 rounded-xl border border-white/15 space-y-3">
+          <h3 class="text-sm font-bold text-cyan-300 flex items-center gap-2">
+            <i class="fa-solid fa-calendar-plus"></i> Neuen Termin anlegen
           </h3>
-          <div class="space-y-2">
-            <input type="text" id="adm-event-title" placeholder="Titel (z. B. Waldweihnacht)" class="w-full p-2 rounded-lg glass-input text-xs">
-            <input type="text" id="adm-event-date" placeholder="Datum & Zeit (z. B. 05.12.2026, 18:00 Uhr)" class="w-full p-2 rounded-lg glass-input text-xs">
-            <input type="text" id="adm-event-location" placeholder="Ort (z. B. Abenteuerspielplatz)" class="w-full p-2 rounded-lg glass-input text-xs">
-            <button onclick="addEventByAdmin()" class="w-full py-2 bg-red-600 hover:bg-red-500 font-bold rounded-lg text-xs shadow">Termin veröffentlichen</button>
-          </div>
+          <input type="text" id="adm-event-title" placeholder="Titel (z. B. Jahreshauptversammlung)" class="w-full p-2 rounded-lg glass-input text-xs">
+          <input type="text" id="adm-event-date" placeholder="Datum & Zeit (z. B. 15.11.2026, 19:30 Uhr)" class="w-full p-2 rounded-lg glass-input text-xs">
+          <input type="text" id="adm-event-location" placeholder="Ort (z. B. Schützenheim Partenen)" class="w-full p-2 rounded-lg glass-input text-xs">
+          <button onclick="addEventByAdmin()" class="w-full py-2 bg-cyan-600 hover:bg-cyan-500 font-bold rounded-lg text-xs shadow text-white">
+            Termin veröffentlichen
+          </button>
         </div>
+
       </div>
     </section>
 
   </main>
 
-  <!-- GLASS FOOTER NAVIGATION -->
-  <nav class="fixed bottom-0 left-0 right-0 z-50 glass-nav py-2 px-4">
+  <!-- GLASS FOOTER NAVIGATION WITH DYNAMIC ACCENT COLORS -->
+  <nav class="fixed bottom-0 left-0 right-0 z-50 glass-nav py-2 px-3">
     <div class="max-w-md mx-auto flex justify-between items-center text-center">
-      <button onclick="switchTab('news')" id="nav-news" class="flex-1 text-cyan-400 py-1 flex flex-col items-center">
+      <button onclick="switchTab('news')" id="nav-news" class="flex-1 py-1 flex flex-col items-center transition">
         <i class="fa-solid fa-bullhorn text-lg mb-0.5"></i>
         <span class="text-[10px] font-medium">News</span>
       </button>
-      <button onclick="switchTab('dienstplan')" id="nav-dienstplan" class="flex-1 text-gray-400 py-1 flex flex-col items-center">
+      <button onclick="switchTab('dienstplan')" id="nav-dienstplan" class="flex-1 py-1 flex flex-col items-center transition">
         <i class="fa-solid fa-calendar-days text-lg mb-0.5"></i>
         <span class="text-[10px] font-medium">Dienstplan</span>
       </button>
-      <button onclick="switchTab('termine')" id="nav-termine" class="flex-1 text-gray-400 py-1 flex flex-col items-center">
+      <button onclick="switchTab('termine')" id="nav-termine" class="flex-1 py-1 flex flex-col items-center transition">
         <i class="fa-solid fa-calendar-check text-lg mb-0.5"></i>
         <span class="text-[10px] font-medium">Termine</span>
       </button>
-      <button onclick="switchTab('schiessbuch')" id="nav-schiessbuch" class="flex-1 text-gray-400 py-1 flex flex-col items-center">
+      <button onclick="switchTab('schiessbuch')" id="nav-schiessbuch" class="flex-1 py-1 flex flex-col items-center transition">
         <i class="fa-solid fa-crosshair text-lg mb-0.5"></i>
         <span class="text-[10px] font-medium">Schießbuch</span>
       </button>
-      <button onclick="switchTab('strichliste')" id="nav-strichliste" class="flex-1 text-gray-400 py-1 flex flex-col items-center">
+      <button onclick="switchTab('strichliste')" id="nav-strichliste" class="flex-1 py-1 flex flex-col items-center transition">
         <i class="fa-solid fa-beer-mug-empty text-lg mb-0.5"></i>
         <span class="text-[10px] font-medium">Strichliste</span>
       </button>
-      <button onclick="switchTab('mitglieder')" id="nav-mitglieder" class="flex-1 text-gray-400 py-1 flex flex-col items-center">
+      <button onclick="switchTab('mitglieder')" id="nav-mitglieder" class="flex-1 py-1 flex flex-col items-center transition">
         <i class="fa-solid fa-users text-lg mb-0.5"></i>
         <span class="text-[10px] font-medium">Mitglieder</span>
       </button>
-      <button onclick="switchTab('admin')" id="nav-admin" class="flex-1 text-gray-400 py-1 flex flex-col items-center">
+      <button onclick="switchTab('admin')" id="nav-admin" class="flex-1 py-1 flex flex-col items-center transition">
         <i class="fa-solid fa-user-shield text-lg mb-0.5"></i>
         <span class="text-[10px] font-medium">Admin</span>
       </button>
     </div>
   </nav>
 
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- JAVASCRIPT APP LOGIC -->
   <script>
-    // --- STATE & DATA ---
+    // --- DATA STORES ---
+
+    let newsData = [
+      {
+        id: 1,
+        date: "24. OKTOBER 2026",
+        title: "Waldweihnacht 2026 Vorbereitungen",
+        text: "Die Vorbereitungen für die traditionelle Waldweihnacht am 05. Dezember am Abenteuerspielplatz Gaschurn laufen auf Hochtouren. Helfer bitte bei Simon melden!",
+        image: null
+      },
+      {
+        id: 2,
+        date: "18. OKTOBER 2026",
+        title: "Schießstand Reinigungs- und Wartungstag",
+        text: "Am kommenden Samstag findet ab 09:00 Uhr die halbjährliche Reinigung aller 10m-Stände statt.",
+        image: null
+      }
+    ];
+
     const dienstplanData = [
       { date: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
       { date: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
@@ -448,7 +515,9 @@
       { id: "trinkgeld", name: "Trinkgeld / Sonstiges", price: 1.00, qty: 0, icon: "fa-coins" }
     ];
 
+    // Master list of members (Aktiv + Passiv)
     const mitgliederData = [
+      // AKTIVE & FUNKTIONÄRE
       { name: "Wachter Manfred", role: "Aktiv / Waffenwart", type: "aktiv", phone: "0664 4752129", paid: true },
       { name: "Wachter Werner", role: "Aktiv", type: "aktiv", phone: "0664 2804791", paid: true },
       { name: "Schweighofer Dietmar", role: "Aktiv / Fähnrich", type: "aktiv", phone: "0699 19281005", paid: true },
@@ -461,20 +530,42 @@
       { name: "Sandrell Daniel", role: "Bürgermeister / Aktiv", type: "aktiv", phone: "0664 1134051", paid: true },
       { name: "Mattle Werner", role: "Aktiv", type: "aktiv", phone: "0664 2509274", paid: true },
       { name: "Pascal Tripolt", role: "Aktiv", type: "aktiv", phone: "0664 5162082", paid: false },
+      
+      // MARKETENDERINNEN
       { name: "Stocker Karin", role: "Marketenderin / Kassierin", type: "marketenderin", phone: "0650 2800596", paid: true },
       { name: "Suntinger Jasmin", role: "Marketenderin", type: "marketenderin", phone: "0664 2135908", paid: true },
       { name: "Kinzl Sabrina", role: "Marketenderin / Schriftführerin", type: "marketenderin", phone: "0660 1113150", paid: true },
       { name: "Maria Spettel", role: "Marketenderin", type: "marketenderin", phone: "0664 7644140", paid: true },
       { name: "Natalie Stocker", role: "Marketenderin", type: "marketenderin", phone: "0664 4587288", paid: true },
+      
+      // EHRENMITGLIEDER
       { name: "Sandrell Heinrich", role: "Ehrenmitglied", type: "ehren", phone: "0664 1228485", paid: true },
       { name: "Kofler Konrad", role: "Ehrenobmann", type: "ehren", phone: "0664 4331385", paid: true },
       { name: "Dona Lothar", role: "Ehrenmitglied", type: "ehren", phone: "0664 45754735", paid: true },
       { name: "Gerd Sprattler", role: "Ehrenmitglied", type: "ehren", phone: "0650 9600245", paid: true },
+      
+      // JUGEND
       { name: "Elias Stocker", role: "Jugendmitglied", type: "jugend", phone: "0676 7103446", paid: true },
-      { name: "Joel Wachter", role: "Passivmitglied", type: "passiv", phone: "-", paid: false },
-      { name: "Kofler Marlene", role: "Passivmitglied", type: "passiv", phone: "-", paid: true },
-      { name: "Netzer Werner", role: "Passivmitglied", type: "passiv", phone: "-", paid: true },
-      { name: "Netzer Markus", role: "Passivmitglied", type: "passiv", phone: "-", paid: true }
+
+      // PASSIVE MITGLIEDER (OFFIZIELLES REGISTER 2026 - 18 PERSONEN)
+      { name: "Joel Wachter", role: "Passivmitglied (Gaschurn 164e)", type: "passiv", phone: "-", paid: false },
+      { name: "Kofler Marlene", role: "Passivmitglied (Gaschurn 164d)", type: "passiv", phone: "-", paid: true },
+      { name: "Wachter Monika", role: "Passivmitglied (Gaschurn 164e)", type: "passiv", phone: "-", paid: true },
+      { name: "Schallner Harry", role: "Passivmitglied (Gortipohl 100)", type: "passiv", phone: "-", paid: false },
+      { name: "Netzer Werner", role: "Passivmitglied (Gaschurn 35a)", type: "passiv", phone: "-", paid: true },
+      { name: "Netzer Markus", role: "Passivmitglied (Gaschurn 139a)", type: "passiv", phone: "-", paid: true },
+      { name: "Fitsch Manuela", role: "Passivmitglied (Gaschurn)", type: "passiv", phone: "-", paid: true },
+      { name: "Geiger Monika", role: "Passivmitglied (Gaschurn)", type: "passiv", phone: "-", paid: false },
+      { name: "Frank Sandrell", role: "Passivmitglied (Gaschurn 172b)", type: "passiv", phone: "-", paid: true },
+      { name: "Barbisch Andreas", role: "Passivmitglied (Gaschurn 185a)", type: "passiv", phone: "-", paid: false },
+      { name: "Patrick Wachter", role: "Passivmitglied (Gaschurn 153)", type: "passiv", phone: "-", paid: true },
+      { name: "Steurer Harald", role: "Passivmitglied (Gaschurn 165b)", type: "passiv", phone: "-", paid: true },
+      { name: "Steurer Angela", role: "Passivmitglied (Gaschurn 165b)", type: "passiv", phone: "-", paid: true },
+      { name: "Kofler Corinna", role: "Passivmitglied (Gaschurn 164d)", type: "passiv", phone: "-", paid: false },
+      { name: "Bitschnau Jutta", role: "Passivmitglied (U. Venserstr 82)", type: "passiv", phone: "-", paid: true },
+      { name: "Bitschnau Klaus", role: "Passivmitglied (U. Venserstr 82)", type: "passiv", phone: "-", paid: true },
+      { name: "Essig Armin", role: "Passivmitglied (Gaschurn)", type: "passiv", phone: "-", paid: false },
+      { name: "Carlos Da Ponte", role: "Passivmitglied (Gaschurn 164d)", type: "passiv", phone: "-", paid: true }
     ];
 
     let schluesselData = [
@@ -487,25 +578,40 @@
       { name: "Stocker Heimo", perm: "Waffenschrank" },
       { name: "Wittwer Christoph", perm: "Eingang & Büro" },
       { name: "Wittwer Werner", perm: "Eingang & Büro" },
+      { name: "Mattle Werner", perm: "Eingang & Büro" },
+      { name: "Markus Netzer", perm: "Eingang & Büro" },
+      { name: "Werner Netzer", perm: "Eingang & Büro" },
+      { name: "Pascal Tripolt", perm: "Eingang & Büro" },
       { name: "Maria Spettel", perm: "Schlüssel vorhanden" }
     ];
 
-    // Chart Handle
+    let savedInvoicesArchive = [];
+    let activeFeeTab = 'aktiv';
+    let isAdminUnlocked = false;
     let trendChartObj = null;
 
-    // --- TAB SWITCHING ---
+    // --- TAB NAVIGATION & BUTTON COLORING ---
+
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       document.getElementById('tab-' + tabId).classList.remove('hidden');
 
-      // Update Nav highlighting
-      const navButtons = ['news', 'dienstplan', 'termine', 'schiessbuch', 'strichliste', 'mitglieder', 'admin'];
-      navButtons.forEach(btn => {
-        const el = document.getElementById('nav-' + btn);
-        if (btn === tabId) {
-          el.className = "flex-1 text-cyan-400 py-1 flex flex-col items-center font-bold";
+      const tabsConfig = [
+        { id: 'news', activeClass: 'text-red-400 font-bold scale-105' },
+        { id: 'dienstplan', activeClass: 'text-cyan-300 font-bold scale-105' },
+        { id: 'termine', activeClass: 'text-cyan-400 font-bold scale-105' },
+        { id: 'schiessbuch', activeClass: 'text-cyan-400 font-bold scale-105' },
+        { id: 'strichliste', activeClass: 'text-cyan-400 font-bold scale-105' },
+        { id: 'mitglieder', activeClass: 'text-yellow-400 font-bold scale-105' },
+        { id: 'admin', activeClass: 'text-red-400 font-bold scale-105' }
+      ];
+
+      tabsConfig.forEach(tab => {
+        const btn = document.getElementById('nav-' + tab.id);
+        if (tab.id === tabId) {
+          btn.className = `flex-1 py-1 flex flex-col items-center transition ${tab.activeClass}`;
         } else {
-          el.className = "flex-1 text-gray-400 py-1 flex flex-col items-center";
+          btn.className = 'flex-1 py-1 flex flex-col items-center transition text-gray-400 hover:text-gray-200';
         }
       });
 
@@ -514,38 +620,89 @@
       }
     }
 
-    // --- RENDER FUNCTIONS ---
+    // --- RENDERING FUNCTIONS ---
 
-    function renderDienstplan() {
-      const container = document.getElementById('dienstplan-container');
-      container.innerHTML = dienstplanData.map(item => `
-        <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center hover:bg-white/10 transition">
-          <div>
-            <span class="text-xs font-bold ${item.status === 'closed' ? 'text-gray-400' : 'text-cyan-300'}">${item.date}</span>
-            <div class="text-xs text-gray-200 mt-0.5">${item.names}</div>
-          </div>
-          <span class="text-xs px-2.5 py-1 rounded-full font-bold ${item.status === 'closed' ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' : 'bg-red-500/20 text-red-300 border border-red-500/30'}">
-            ${item.team}
-          </span>
+    function renderNews() {
+      const container = document.getElementById('news-feed-container');
+      container.innerHTML = newsData.map(item => `
+        <div class="p-4 bg-white/10 rounded-xl border border-white/15 space-y-2">
+          <span class="text-[10px] font-bold text-red-300 bg-red-500/20 px-2 py-0.5 rounded border border-red-500/30">${item.date}</span>
+          <h3 class="font-bold text-white text-base mt-1">${item.title}</h3>
+          <p class="text-xs text-gray-200 leading-relaxed">${item.text}</p>
+          ${item.image ? `<img src="${item.image}" class="w-full h-48 object-cover rounded-lg mt-2 border border-white/20">` : ''}
         </div>
       `).join('');
+    }
+
+    // 00:00 MIDNIGHT AUTOMATIC DUTY ROSTER HIGHLIGHTING
+    function renderDienstplan() {
+      const container = document.getElementById('dienstplan-container');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      let nextDutyFound = false;
+
+      container.innerHTML = dienstplanData.map(item => {
+        const parts = item.date.split('.');
+        const itemDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+        itemDate.setHours(0, 0, 0, 0);
+
+        let cardClass = 'bg-white/10 border-white/15';
+        let badgeClass = item.status === 'closed' 
+          ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' 
+          : 'bg-red-500/20 text-red-300 border border-red-500/30';
+        let nextBadge = '';
+
+        // Determine next upcoming open duty
+        if (!nextDutyFound && itemDate >= today && item.status !== 'closed') {
+          nextDutyFound = true;
+          cardClass = 'glass-blue pulsing-duty bg-cyan-950/40';
+          nextBadge = '<span class="ml-2 px-2 py-0.5 bg-cyan-400 text-black text-[9px] font-black rounded-full blink-badge shadow-md">NÄCHSTER DIENST</span>';
+        }
+
+        return `
+          <div class="p-3.5 rounded-xl border ${cardClass} flex justify-between items-center transition">
+            <div>
+              <div class="flex items-center">
+                <span class="text-xs font-bold ${item.status === 'closed' ? 'text-gray-400' : 'text-cyan-300'}">${item.date}</span>
+                ${nextBadge}
+              </div>
+              <div class="text-xs text-gray-100 mt-1 font-medium">${item.names}</div>
+            </div>
+            <span class="text-xs px-2.5 py-1 rounded-full font-bold ${badgeClass}">
+              ${item.team}
+            </span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // MIDNIGHT AUTO REFRESH SCHEDULER (00:00 TIMER)
+    function scheduleMidnightUpdate() {
+      const now = new Date();
+      const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+      const msToMidnight = night.getTime() - now.getTime();
+      
+      setTimeout(() => {
+        renderDienstplan();
+        scheduleMidnightUpdate(); // Loop for next midnight
+      }, msToMidnight);
     }
 
     function renderTermine() {
       const container = document.getElementById('termine-container');
       container.innerHTML = termineData.map(item => `
-        <div class="p-4 bg-white/5 rounded-xl border border-cyan-400/30 space-y-3">
+        <div class="p-4 bg-white/10 rounded-xl border border-cyan-400/30 space-y-3">
           <div class="flex justify-between items-start">
             <div>
               <h3 class="font-bold text-white text-sm">${item.title}</h3>
               <p class="text-xs text-cyan-300 mt-1"><i class="fa-regular fa-calendar mr-1"></i> ${item.date} • ${item.time}</p>
             </div>
-            <button onclick="deleteEvent(${item.id})" class="text-xs text-red-400 hover:text-red-300 p-1" title="Löschen (Admin)">
+            <button onclick="deleteEvent(${item.id})" class="text-xs text-red-400 hover:text-red-300 p-1" title="Termin löschen">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
 
-          <!-- Action Buttons -->
           <div class="flex gap-2">
             <button onclick="rsvpEvent(${item.id}, 'zusage')" class="flex-1 py-1.5 bg-green-600/30 hover:bg-green-600/50 text-green-300 border border-green-500/50 rounded-lg text-xs font-bold transition">
               <i class="fa-solid fa-thumbs-up mr-1"></i> Zusage
@@ -555,7 +712,6 @@
             </button>
           </div>
 
-          <!-- Participants Display -->
           <div class="text-[11px] space-y-1 pt-2 border-t border-white/10">
             <div class="text-green-300">
               <strong>Zusagen (${item.zusagen.length}):</strong> ${item.zusagen.length > 0 ? item.zusagen.join(', ') : 'Keine'}
@@ -571,7 +727,7 @@
     function renderStrichliste() {
       const container = document.getElementById('strichliste-items');
       container.innerHTML = strichlisteCatalog.map(item => `
-        <div class="p-3 bg-white/5 rounded-xl border border-white/10 flex justify-between items-center">
+        <div class="p-3 bg-white/10 rounded-xl border border-white/15 flex justify-between items-center">
           <div class="flex items-center gap-3">
             <i class="fa-solid ${item.icon} text-cyan-400 text-lg w-5 text-center"></i>
             <div>
@@ -597,59 +753,170 @@
       const filtered = mitgliederData.filter(m => m.name.toLowerCase().includes(searchVal) || m.role.toLowerCase().includes(searchVal));
 
       container.innerHTML = filtered.map(m => `
-        <div class="p-3 bg-white/5 rounded-xl border border-amber-400/20 flex justify-between items-center">
+        <div class="p-3 bg-white/10 rounded-xl border border-amber-400/30 flex justify-between items-center">
           <div>
             <div class="text-sm font-bold text-white">${m.name}</div>
-            <div class="text-xs text-amber-300/80">${m.role}</div>
+            <div class="text-xs text-amber-300">${m.role}</div>
           </div>
           ${m.phone !== '-' ? `
             <a href="tel:${m.phone}" class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/40 border border-amber-400/40 rounded-lg text-xs text-amber-200 font-medium">
               <i class="fa-solid fa-phone mr-1"></i> Anrufen
             </a>
-          ` : ''}
+          ` : '<span class="text-[10px] text-gray-400">Keine Tel.</span>'}
         </div>
       `).join('');
     }
 
+    // --- ADMIN MODULES ---
+
+    function unlockAdmin() {
+      const input = document.getElementById('admin-pass-input').value;
+      if (input === '1997' || input === 'admin') {
+        isAdminUnlocked = true;
+        document.getElementById('admin-lockscreen').classList.add('hidden');
+        document.getElementById('admin-panel').classList.remove('hidden');
+        renderAdminLists();
+      } else {
+        alert("Falsches Passwort! Zugriff verweigert.");
+      }
+    }
+
+    function lockAdmin() {
+      isAdminUnlocked = false;
+      document.getElementById('admin-pass-input').value = '';
+      document.getElementById('admin-lockscreen').classList.remove('hidden');
+      document.getElementById('admin-panel').classList.add('hidden');
+    }
+
+    function switchFeeTab(tab) {
+      activeFeeTab = tab;
+      if (tab === 'aktiv') {
+        document.getElementById('fee-tab-aktiv').className = 'flex-1 py-1 text-xs font-bold text-amber-300 border-b-2 border-amber-400';
+        document.getElementById('fee-tab-passiv').className = 'flex-1 py-1 text-xs font-bold text-gray-400';
+      } else {
+        document.getElementById('fee-tab-passiv').className = 'flex-1 py-1 text-xs font-bold text-amber-300 border-b-2 border-amber-400';
+        document.getElementById('fee-tab-aktiv').className = 'flex-1 py-1 text-xs font-bold text-gray-400';
+      }
+      renderAdminFeeList();
+    }
+
+    function renderAdminFeeList() {
+      const container = document.getElementById('admin-fee-list');
+      const filtered = mitgliederData.filter(m => activeFeeTab === 'passiv' ? m.type === 'passiv' : m.type !== 'passiv');
+
+      container.innerHTML = filtered.map((m) => {
+        const globalIdx = mitgliederData.findIndex(item => item.name === m.name);
+        return `
+          <div class="p-2 bg-white/10 rounded-lg flex justify-between items-center text-xs">
+            <span class="text-white font-medium">${m.name}</span>
+            <button onclick="toggleFeeStatus(${globalIdx})" class="px-2.5 py-1 rounded font-bold transition ${m.paid ? 'bg-green-500/20 text-green-300 border border-green-500/40' : 'bg-red-500/20 text-red-300 border border-red-500/40'}">
+              ${m.paid ? 'Bezahlt (€30)' : 'Offen (€30)'}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
     function renderAdminLists() {
-      // Fee list
-      const beitragContainer = document.getElementById('admin-beitrag-list');
-      beitragContainer.innerHTML = mitgliederData.map((m, idx) => `
-        <div class="p-2 bg-white/5 rounded-lg flex justify-between items-center text-xs">
-          <span class="text-white">${m.name} (${m.type})</span>
-          <button onclick="toggleFeeStatus(${idx})" class="px-2 py-0.5 rounded font-bold ${m.paid ? 'bg-green-500/20 text-green-300 border border-green-500/40' : 'bg-red-500/20 text-red-300 border border-red-500/40'}">
-            ${m.paid ? 'Bezahlt (€30)' : 'Offen (€30)'}
-          </button>
-        </div>
-      `).join('');
+      renderAdminFeeList();
 
       // Key list
       const schluesselContainer = document.getElementById('admin-schluessel-list');
       schluesselContainer.innerHTML = schluesselData.map((s, idx) => `
-        <div class="p-2 bg-white/5 rounded-lg flex justify-between items-center text-xs">
+        <div class="p-2 bg-white/10 rounded-lg flex justify-between items-center text-xs">
           <div>
             <div class="text-white font-bold">${s.name}</div>
-            <div class="text-gray-300">${s.perm}</div>
+            <div class="text-gray-300 text-[11px]">${s.perm}</div>
           </div>
-          <button onclick="editKeyPerm(${idx})" class="text-cyan-400 hover:text-cyan-300 text-xs">Bearbeiten</button>
+          <button onclick="editKeyPerm(${idx})" class="text-cyan-400 hover:text-cyan-300 text-xs font-semibold">Bearbeiten</button>
         </div>
       `).join('');
+
+      // PDF Invoices Archive
+      const invoicesContainer = document.getElementById('admin-invoices-list');
+      if (savedInvoicesArchive.length === 0) {
+        invoicesContainer.innerHTML = `<div class="text-gray-400 text-center py-2">Noch keine Rechnungen gespeichert.</div>`;
+      } else {
+        invoicesContainer.innerHTML = savedInvoicesArchive.map(inv => `
+          <div class="p-2 bg-white/10 rounded-lg flex justify-between items-center">
+            <div>
+              <div class="text-white font-bold">${inv.name}</div>
+              <div class="text-[10px] text-gray-300">${inv.date} • Summe: € ${inv.total}</div>
+            </div>
+            <button onclick="downloadArchivedInvoice('${inv.id}')" class="px-2 py-1 bg-green-600/40 text-green-300 rounded border border-green-500/50">
+              <i class="fa-solid fa-download"></i> PDF
+            </button>
+          </div>
+        `).join('');
+      }
     }
 
-    // --- INTERACTION LOGIC ---
+    // --- PUBLISH NEWS WITH IMAGE ---
+    function publishNewsPost() {
+      const title = document.getElementById('news-title-input').value;
+      const text = document.getElementById('news-text-input').value;
+      const fileInput = document.getElementById('news-image-input');
 
-    function selectSchuetze(name) {
-      document.getElementById('sb-schuetze').value = name;
+      if (!title || !text) {
+        alert("Bitte geben Sie einen Titel und Text für die News ein.");
+        return;
+      }
+
+      const currentDate = new Date().toLocaleDateString('de-AT', { day: '2-digit', month: 'LONG', year: 'numeric' }).toUpperCase();
+
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          newsData.unshift({
+            id: Date.now(),
+            date: currentDate,
+            title: title,
+            text: text,
+            image: e.target.result
+          });
+          resetNewsForm();
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        newsData.unshift({
+          id: Date.now(),
+          date: currentDate,
+          title: title,
+          text: text,
+          image: null
+        });
+        resetNewsForm();
+      }
     }
+
+    function resetNewsForm() {
+      document.getElementById('news-title-input').value = '';
+      document.getElementById('news-text-input').value = '';
+      document.getElementById('news-image-input').value = '';
+      renderNews();
+      switchTab('news');
+      alert("Nachricht erfolgreich auf der News-Seite veröffentlicht!");
+    }
+
+    // --- SCHIESSBUCH LOGIC (EXCLUDING PASSIVE MEMBERS) ---
 
     function populateSchuetzenDropdown() {
       const select = document.getElementById('sb-schuetze');
-      mitgliederData.forEach(m => {
+      select.innerHTML = '<option value="">Schütze auswählen...</option>';
+      
+      // EXCLUDE PASSIVE MEMBERS ONLY SHOW ACTIVE/EHREN/MARKETENDERINNEN/JUGEND
+      const nonPassiveMembers = mitgliederData.filter(m => m.type !== 'passiv');
+      
+      nonPassiveMembers.forEach(m => {
         const opt = document.createElement('option');
         opt.value = m.name;
         opt.textContent = m.name;
         select.appendChild(opt);
       });
+    }
+
+    function selectSchuetze(name) {
+      document.getElementById('sb-schuetze').value = name;
     }
 
     function initTrendChart() {
@@ -662,10 +929,11 @@
             label: 'Ringe',
             data: [98.1, 97.5, 98.8, 97.2, 98.4],
             borderColor: '#38bdf8',
-            backgroundColor: 'rgba(56, 189, 248, 0.1)',
-            tension: 0.3,
+            backgroundColor: 'rgba(56, 189, 248, 0.15)',
+            tension: 0.35,
             fill: true,
-            pointBackgroundColor: '#00f0ff'
+            pointBackgroundColor: '#00f0ff',
+            pointRadius: 4
           }]
         },
         options: {
@@ -674,7 +942,7 @@
           plugins: { legend: { display: false } },
           scales: {
             x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
-            y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+            y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.08)' } }
           }
         }
       });
@@ -685,15 +953,17 @@
       const ringe = document.getElementById('sb-ringe').value;
 
       if (!schuetze || !ringe) {
-        alert("Bitte wählen Sie einen Schützen und geben Sie das Ergebnis ein.");
+        alert("Bitte wählen Sie einen Schützen aus und tragen Sie das Ergebnis ein.");
         return;
       }
 
-      alert(`Ergebnis gespeichert für ${schuetze}: ${ringe} Ringe!`);
+      alert(`Ergebnis für ${schuetze} (${ringe} Ringe) wurde im Schießbuch gespeichert!`);
       document.getElementById('sb-ringe').value = '';
       document.getElementById('sb-zehner').value = '';
       document.getElementById('sb-teiler').value = '';
     }
+
+    // --- STRICHLISTE LOGIC ---
 
     function updateQty(id, change) {
       const item = strichlisteCatalog.find(i => i.id === id);
@@ -710,7 +980,7 @@
 
     function rsvpEvent(id, type) {
       const event = termineData.find(e => e.id === id);
-      const user = "Simon Schweighofer"; // Current user profile
+      const user = "Simon Schweighofer";
 
       if (type === 'zusage') {
         if (!event.zusagen.includes(user)) event.zusagen.push(user);
@@ -736,7 +1006,7 @@
       const location = document.getElementById('adm-event-location').value;
 
       if (!title || !date) {
-        alert("Bitte mindestens Titel und Datum eingeben.");
+        alert("Bitte geben Sie mindestens Titel und Datum ein.");
         return;
       }
 
@@ -754,18 +1024,28 @@
       document.getElementById('adm-event-location').value = '';
 
       renderTermine();
-      alert("Termin veröffentlicht!");
+      switchTab('termine');
+      alert("Neuer Termin wurde erfolgreich veröffentlicht!");
     }
 
-    function toggleFeeStatus(idx) {
-      mitgliederData[idx].paid = !mitgliederData[idx].paid;
-      renderAdminLists();
+    function toggleFeeStatus(globalIdx) {
+      mitgliederData[globalIdx].paid = !mitgliederData[globalIdx].paid;
+      renderAdminFeeList();
     }
 
     function editKeyPerm(idx) {
-      const newPerm = prompt("Neue Berechtigung eingeben:", schluesselData[idx].perm);
+      const newPerm = prompt("Neue Schlüssel-Berechtigung eingeben:", schluesselData[idx].perm);
       if (newPerm) {
         schluesselData[idx].perm = newPerm;
+        renderAdminLists();
+      }
+    }
+
+    function addNewKeyEntry() {
+      const name = prompt("Name des Mitglieds für Schlüsselberechtigung:");
+      const perm = prompt("Berechtigung (z. B. Eingang & Büro / Waffenschrank):");
+      if (name && perm) {
+        schluesselData.push({ name, perm });
         renderAdminLists();
       }
     }
@@ -774,16 +1054,18 @@
       renderMitglieder();
     }
 
-    // --- PDF INVOICE GENERATION ---
+    // --- PDF INVOICE GENERATION & ARCHIVING ---
     function generatePDFInvoice() {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
 
-      const name = document.getElementById('inv-name').value || 'Gast / Veranstaltung';
+      const name = document.getElementById('inv-name').value || 'Gast / Schützenheim';
       const zusatz = document.getElementById('inv-zusatz').value || '-';
       const strasse = document.getElementById('inv-strasse').value || '-';
       const ort = document.getElementById('inv-ort').value || '-';
       const lg = document.getElementById('inv-luftgewehr').value;
+
+      const totalSum = strichlisteCatalog.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
       // Header
       doc.setFontSize(16);
@@ -792,7 +1074,7 @@
       doc.text("Abrechnung Schützenheim", 14, 26);
       doc.text(`Datum: ${new Date().toLocaleDateString('de-AT')}`, 150, 26);
 
-      // Recipient
+      // Recipient details
       doc.setFontSize(11);
       doc.text("Rechnungsempfänger:", 14, 40);
       doc.setFontSize(10);
@@ -801,30 +1083,47 @@
       doc.text(`Adresse: ${strasse}, ${ort}`, 14, 58);
       doc.text(`Luftgewehr geschossen: ${lg}`, 14, 64);
 
-      // Table items
+      // Table
       const tableBody = strichlisteCatalog
         .filter(item => item.qty > 0)
         .map(item => [item.name, item.qty, `€ ${item.price.toFixed(2)}`, `€ ${(item.price * item.qty).toFixed(2)}`]);
 
-      const totalSum = strichlisteCatalog.reduce((sum, item) => sum + (item.price * item.qty), 0);
-
       doc.autoTable({
         startY: 72,
         head: [['Position', 'Anzahl', 'Einzelpreis', 'Gesamtpreis']],
-        body: tableBody,
+        body: tableBody.length > 0 ? tableBody : [['Keine Positionen ausgewählt', '0', '€ 0.00', '€ 0.00']],
         foot: [['', '', 'Gesamtbetrag:', `€ ${totalSum.toFixed(2)}`]]
       });
 
+      // Save to Admin Archive
+      const invoiceId = 'INV-' + Date.now();
+      savedInvoicesArchive.unshift({
+        id: invoiceId,
+        name: name,
+        date: new Date().toLocaleDateString('de-AT'),
+        total: totalSum.toFixed(2),
+        doc: doc
+      });
+
       doc.save(`Abrechnung_Schuetzenheim_${name.replace(/[^a-z0-9]/gi, '_')}.pdf`);
+      alert("Abrechnungs-PDF wurde heruntergeladen und im Admin-Rechnungsarchiv gespeichert!");
     }
 
-    // --- INITIALIZATION ---
+    function downloadArchivedInvoice(id) {
+      const inv = savedInvoicesArchive.find(i => i.id === id);
+      if (inv) {
+        inv.doc.save(`Archiv_${inv.name.replace(/[^a-z0-9]/gi, '_')}.pdf`);
+      }
+    }
+
+    // --- APP INITIALIZATION ---
     window.onload = function() {
+      renderNews();
       renderDienstplan();
+      scheduleMidnightUpdate(); // Start 00:00 midnight update timer
       renderTermine();
       renderStrichliste();
       renderMitglieder();
-      renderAdminLists();
       populateSchuetzenDropdown();
     };
   </script>
