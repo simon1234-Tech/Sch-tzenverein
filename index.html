@@ -180,7 +180,6 @@
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* ROT HINTERLEGTE KATEGORIEN IN DER STRICHLISTE */
         .strich-category-header {
             background: var(--primary-red);
             color: #ffffff;
@@ -193,7 +192,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* FUSSZEILE */
         .bottom-nav {
             position: fixed !important; 
             bottom: 12px !important; 
@@ -238,8 +236,8 @@
         .admin-delete-btn { display: none; }
         body.admin-mode .admin-delete-btn { display: block !important; }
 
-        .badge-paid { background: #d1fae5; color: #065f46; padding: 3px 8px; border-radius: 10px; font-weight: 700; font-size: 0.7em; border: 1px solid #a7f3d0; cursor: pointer; }
-        .badge-open { background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 10px; font-weight: 700; font-size: 0.7em; border: 1px solid #fecaca; cursor: pointer; }
+        .badge-paid { background: #d1fae5; color: #065f46; padding: 4px 10px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #a7f3d0; cursor: pointer; }
+        .badge-open { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #fecaca; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -271,7 +269,7 @@
         </div>
     </div>
 
-    <!-- 2. TERMINE (VERGRÖßERT & GUT SICHTBAR) -->
+    <!-- 2. TERMINE -->
     <div id="page-events" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">📅 Nächste Vereinstermine</div>
@@ -279,7 +277,7 @@
         </div>
     </div>
 
-    <!-- 3. SCHIESSBUCH (MIT SUCHFUNKTION & LUFTGEWEHR) -->
+    <!-- 3. SCHIESSBUCH -->
     <div id="page-shooting" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">🎯 Schießbuch (Luftgewehr)</div>
@@ -289,7 +287,7 @@
                     <label>Mitglied suchen / auswählen</label>
                     <input type="text" id="shot-search-input" class="form-control" placeholder="🔍 Namen eintippen zum Suchen..." oninput="filterMemberDropdown(this.value)">
                     <select class="form-control" id="shot-member-select" size="4" style="margin-top: 6px;" onchange="selectShooterFromDropdown(this.value)">
-                        <!-- Dynamisch gefüllt -->
+                        <!-- Dynamisch -->
                     </select>
                 </div>
                 <div class="form-group"><label>Gewählter Schütze</label><input type="text" class="form-control" id="shot-name" required readonly placeholder="Bitte oben auswählen"></div>
@@ -303,7 +301,7 @@
         </div>
     </div>
 
-    <!-- 4. STRICHLISTE (MIT ROT HINTERLEGTEN KATEGORIEN) -->
+    <!-- 4. STRICHLISTE -->
     <div id="page-drinks" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">🍻 Strichliste & Preisliste</div>
@@ -355,12 +353,12 @@
         <div class="glass-card glass-card-yellow">
             <div class="card-title" style="color: #ca8a04;">⭐ Vorstand & Funktionsträger ⭐</div>
             <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span>[cite: 14]</div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a>[cite: 14]</div>
-                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span>[cite: 14]</div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a>[cite: 14]</div>
-                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span>[cite: 14]</div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a>[cite: 14]</div>
-                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span>[cite: 14]</div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a>[cite: 14]</div>
-                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span>[cite: 14]</div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a>[cite: 14]</div>
-                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span>[cite: 14]</div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span></div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span></div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span></div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span></div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a>[cite: 14]</div>
             </div>
         </div>
 
@@ -370,7 +368,7 @@
         </div>
     </div>
 
-    <!-- 7, 10. ADMIN-BEREICH (ÜBERSICHTLICH UNTEREINANDER) -->
+    <!-- 7, 10. ADMIN-BEREICH (ÜBERSICHTLICH UNTEREINANDER, LAGERBESTAND GANZ OBEN) -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
             <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
@@ -381,9 +379,19 @@
         </div>
 
         <div class="admin-delete-btn">
-            <!-- ÜBEREINANDER ANGEORDNETE ADMIN-SEKTIONEN -->
             
-            <!-- 1. NEWS & FOTO UPLOAD -->
+            <!-- 1. LAGERBESTAND (GANZ OBEN & BEARBEITBAR) -->
+            <div class="glass-card glass-card-red">
+                <div class="card-title" style="color: #dc2626;">📦 Lagerbestand <button class="btn btn-admin" style="padding: 2px 8px; font-size: 0.75em;" onclick="editInventory()">✏️ Bearbeiten</button></div>
+                <div id="admin-inventory-display">
+                    <div class="price-item"><span>Hauswürste (Paar)</span><strong id="inv-hauswuerste">20 Paar</strong></div>
+                    <div class="price-item"><span>Wienerle (Paar)</span><strong id="inv-wienerle">15 Paar</strong></div>
+                    <div class="price-item"><span>Bier Kisten 0,33l</span><strong id="inv-bier">3 Kisten</strong></div>
+                    <div class="price-item"><span>Limo Kisten 0,3l</span><strong id="inv-limo">2 Kisten</strong></div>
+                </div>
+            </div>
+
+            <!-- 2. NEWS, FOTO & TEXT -->
             <div class="glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">📢 News, Foto & Text Veröffentlichen</div>
                 <form onsubmit="addNewsItem(event)">
@@ -394,7 +402,7 @@
                 </form>
             </div>
 
-            <!-- 2. TERMINE ERSTELLEN & VERWALTEN -->
+            <!-- 3. TERMINE ERSTELLEN & VERWALTEN -->
             <div class="glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">➕ Termin Erstellen / Bearbeiten</div>
                 <form onsubmit="addEvent(event)">
@@ -409,13 +417,13 @@
                 </div>
             </div>
 
-            <!-- 3. GESPEICHERTE RECHNUNGEN -->
+            <!-- 4. GESPEICHERTE RECHNUNGEN (ANSEHEN & HERUNTERLADEN) -->
             <div class="glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">💶 Gespeicherte Rechnungen (PDF)</div>
                 <div id="admin-tally-history-list"></div>
             </div>
 
-            <!-- 4. MITGLIEDER & BEITRÄGE (MIT BEZAHLEDATUM & STATUS) -->
+            <!-- 5. MITGLIEDER & BEITRÄGE (€ 30 MIT STATUS-TOGGLE & DATUM) -->
             <div class="glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">👥 Mitglieder & Beiträge (€ 30)</div>
                 <h4 style="color: #2563eb; font-size: 0.9em; margin: 10px 0 5px 0;">Aktive Mitglieder</h4>
@@ -424,19 +432,10 @@
                 <div id="admin-passive-members-list"></div>
             </div>
 
-            <!-- 5. SCHLÜSSELLISTE (MITTIG ZENTRIERT) -->
+            <!-- 6. SCHLÜSSELLISTE (MITTIG ZENTRIERT & BEARBEITBAR) -->
             <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">🔑 Schlüsselliste (Stand 2026)</div>[cite: 14, 15]
+                <div class="card-title" style="color: #dc2626;">🔑 Schlüsselliste (Stand 2026) <button class="btn btn-admin" style="padding: 2px 8px; font-size: 0.75em;" onclick="editKeyList()">✏️ Bearbeiten</button></div>
                 <div id="admin-keys-list" style="text-align: center;"></div>
-            </div>
-
-            <!-- 6. LAGERBESTAND -->
-            <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">📦 Lagerbestand</div>
-                <div class="price-item"><span>Hauswürste (Paar)</span><strong>20 Paar</strong></div>
-                <div class="price-item"><span>Wienerle (Paar)</span><strong>15 Paar</strong></div>
-                <div class="price-item"><span>Bier Kisten 0,33l</span><strong>3 Kisten</strong></div>
-                <div class="price-item"><span>Limo Kisten 0,3l</span><strong>2 Kisten</strong></div>
             </div>
 
             <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 20px;">Admin-Modus Beenden</button>
@@ -480,7 +479,7 @@
             "Essig Armin", "Carlos Da Ponte"
         ];
 
-        const officialKeysList = [
+        let mutableKeysList = [
             { name: "Konrad Kofler", status: "Eingang & Büro" },
             { name: "Manfred Wachter", status: "Waffenschrank" },
             { name: "Werner Wachter", status: "Eingang & Büro" },
@@ -496,6 +495,39 @@
             { name: "Pascal Tripolt", status: "Eingang & Büro" },
             { name: "Maria Spettel", status: "Schlüssel vorhanden" }
         ];
+
+        let inventoryData = { hauswuerste: "20 Paar", wienerle: "15 Paar", bier: "3 Kisten", limo: "2 Kisten" };
+
+        function editInventory() {
+            inventoryData.hauswuerste = prompt("Hauswürste Bestand:", inventoryData.hauswuerste) || inventoryData.hauswuerste;
+            inventoryData.wienerle = prompt("Wienerle Bestand:", inventoryData.wienerle) || inventoryData.wienerle;
+            inventoryData.bier = prompt("Bier Kisten Bestand:", inventoryData.bier) || inventoryData.bier;
+            inventoryData.limo = prompt("Limo Kisten Bestand:", inventoryData.limo) || inventoryData.limo;
+            
+            document.getElementById('inv-hauswuerste').innerText = inventoryData.hauswuerste;
+            document.getElementById('inv-wienerle').innerText = inventoryData.wienerle;
+            document.getElementById('inv-bier').innerText = inventoryData.bier;
+            document.getElementById('inv-limo').innerText = inventoryData.limo;
+            alert("Lagerbestand aktualisiert!");
+        }
+
+        function editKeyList() {
+            const idx = prompt("Welchen Schlüsselträger (Nr. 1 bis " + mutableKeysList.length + ") möchten Sie bearbeiten?");
+            if (idx === null || isNaN(idx)) return;
+            const i = parseInt(idx) - 1;
+            if (i >= 0 && i < mutableKeysList.length) {
+                const newName = prompt("Name:", mutableKeysList[i].name);
+                const newStatus = prompt("Berechtigung / Status:", mutableKeysList[i].status);
+                if (newName && newStatus) {
+                    mutableKeysList[i].name = newName;
+                    mutableKeysList[i].status = newStatus;
+                    loadAdminKeys();
+                    alert("Schlüsselliste aktualisiert!");
+                }
+            } else {
+                alert("Ungültige Nummer!");
+            }
+        }
 
         // SCHIESSBUCH SUCHFUNKTION
         function populateMemberSelects(filter = "") {
@@ -600,7 +632,7 @@
             }
         }
 
-        // TERMINE (VERGRÖßERT & GUT SICHTBAR)
+        // TERMINE (VERGRÖßERT)
         async function loadEvents() {
             const container = document.getElementById('events-container');
             const adminList = document.getElementById('admin-events-list');
@@ -756,9 +788,13 @@
                 snapshot.forEach(doc => {
                     const inv = doc.data();
                     html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0;">
-                            <div><strong>${inv.invoiceNum}</strong> - ${inv.recipientName} (${inv.total.toFixed(2)} €)</div>
-                            <button class="btn btn-danger" style="padding:2px 6px; font-size:0.7em;" onclick="deleteItem('invoices', '${doc.id}')">🗑️</button>
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; gap: 6px;">
+                            <div style="font-size: 0.85em;"><strong>${inv.invoiceNum}</strong> - ${inv.recipientName} (${inv.total.toFixed(2)} €)</div>
+                            <div style="display: flex; gap: 4px;">
+                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick='viewInvoice(${JSON.stringify(inv)})'>👁️ Ansehen</button>
+                                <button class="btn btn-green" style="padding: 2px 6px; font-size: 0.7em;" onclick='generateInvoicePDF(${JSON.stringify(inv)})'>📥 Download</button>
+                                <button class="btn btn-danger" style="padding: 2px 6px; font-size: 0.7em;" onclick="deleteItem('invoices', '${doc.id}')">🗑️</button>
+                            </div>
                         </div>
                     `;
                 });
@@ -766,7 +802,76 @@
             } catch (e) { console.error(e); }
         }
 
-        // ADMIN MITGLIEDER & BEITRAGSDATUM
+        function viewInvoice(inv) {
+            let details = `Rechnung: ${inv.invoiceNum}\nDatum: ${inv.date}\nEmpfänger: ${inv.recipientName}\nGesamt: ${inv.total.toFixed(2)} €\n\nPositionen:\n`;
+            inv.items.forEach(i => { details += `- ${i.name} (${i.count}x): ${i.price.toFixed(2)} €\n`; });
+            alert(details);
+        }
+
+        function generateInvoicePDF(invoiceData) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(185, 28, 28);
+            doc.text("RECHNUNG", 14, 20);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(9);
+            doc.setTextColor(80, 80, 80);
+            doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen", 14, 28);
+            doc.text("Rütler 43b | 6794 Partenen", 14, 33);
+            doc.text("E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509", 14, 38);
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            doc.text("Rechnung an:", 14, 52);
+
+            doc.setFont("helvetica", "normal");
+            doc.text(invoiceData.recipientName || "", 14, 58);
+            if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 63);
+            doc.text(invoiceData.recipientAddress || "", 14, 68);
+            doc.text(invoiceData.recipientZipCity || "", 14, 73);
+
+            doc.setFont("helvetica", "bold");
+            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 120, 58);
+            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 120, 63);
+
+            const tableBody = invoiceData.items.map(item => [
+                `${item.name} (${item.count}x)`, 
+                `${parseFloat(item.price).toFixed(2).replace('.', ',')} €`
+            ]);
+
+            doc.autoTable({
+                startY: 82,
+                head: [['Leistung', 'Betrag']],
+                body: [
+                    ...tableBody,
+                    [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: `${parseFloat(invoiceData.total).toFixed(2).replace('.', ',')} €`, styles: { fontStyle: 'bold' } }]
+                ],
+                theme: 'striped',
+                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
+                columnStyles: { 0: { cellWidth: 130 }, 1: { halign: 'right', cellWidth: 40 } }
+            });
+
+            doc.save(`${invoiceData.invoiceNum}.pdf`);
+        }
+
+        // TOGGLE BEZAHLT / NICHT BEZAHLT MIT DATUM
+        function togglePaidStatus(el, memberName) {
+            if (el.classList.contains('badge-paid')) {
+                el.classList.remove('badge-paid');
+                el.classList.add('badge-open');
+                el.innerText = 'Offen (€30)';
+            } else {
+                el.classList.remove('badge-open');
+                el.classList.add('badge-paid');
+                el.innerText = 'Bezahlt (€30)';
+            }
+        }
+
         function loadAdminMembers() {
             const activeList = document.getElementById('admin-active-members-list');
             const passiveList = document.getElementById('admin-passive-members-list');
@@ -777,8 +882,8 @@
                     <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
                         <span><strong>${m}</strong></span>
                         <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 110px; padding: 4px; font-size: 0.75em;" placeholder="Bezahl-Datum" id="date-act-${idx}">
-                            <span class="badge-paid" onclick="alert('Bezahlt-Status gespeichert für ${m}')">Bezahlt (€30)</span>
+                            <input type="text" class="form-control" style="width: 105px; padding: 4px; font-size: 0.75em;" placeholder="Bezahl-Datum">
+                            <span class="badge-paid" onclick="togglePaidStatus(this, '${m}')">Bezahlt (€30)</span>
                         </div>
                     </div>`;
             });
@@ -790,8 +895,8 @@
                     <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
                         <span><strong>${m}</strong></span>
                         <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 110px; padding: 4px; font-size: 0.75em;" placeholder="Bezahl-Datum" id="date-pass-${idx}">
-                            <span class="badge-paid" onclick="alert('Bezahlt-Status gespeichert für ${m}')">Bezahlt (€30)</span>
+                            <input type="text" class="form-control" style="width: 105px; padding: 4px; font-size: 0.75em;" placeholder="Bezahl-Datum">
+                            <span class="badge-paid" onclick="togglePaidStatus(this, '${m}')">Bezahlt (€30)</span>
                         </div>
                     </div>`;
             });
@@ -801,7 +906,7 @@
         function loadAdminKeys() {
             const container = document.getElementById('admin-keys-list');
             let html = "";
-            officialKeysList.forEach(k => {
+            mutableKeysList.forEach(k => {
                 html += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.9em;"><strong>${k.name}</strong> — <span style="color:var(--text-muted);">${k.status}</span></div>`;
             });
             container.innerHTML = html;
