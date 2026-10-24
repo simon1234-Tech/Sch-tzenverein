@@ -10,7 +10,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
   <style>
-    /* Grundlegendes Design */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -19,7 +18,6 @@
       color: #333;
     }
 
-    /* Oberer Header / Banner */
     .app-header {
       background-color: #5c1d24;
       color: #ffffff;
@@ -29,10 +27,9 @@
       font-size: 18px;
     }
 
-    /* Inhaltsbereiche */
     .content-section {
       padding: 20px;
-      padding-bottom: 90px; /* Platz für die untere Leiste lassen */
+      padding-bottom: 90px;
       display: none;
     }
 
@@ -40,12 +37,10 @@
       display: block;
     }
 
-    /* ==========================================
-       UNTERE NAVIGATIONSLEISTE IN DUNKELROT (Vorschlag 1)
-       ========================================== */
+    /* UNTERE NAVIGATIONSLEISTE IN DUNKELROT */
     .bottom-nav {
-      background-color: #5c1d24 !important; /* Weinrot */
-      border-top: 2px solid #ffd700;       /* Goldene Trennlinie */
+      background-color: #5c1d24 !important;
+      border-top: 2px solid #ffd700;
       position: fixed;
       bottom: 0;
       left: 0;
@@ -57,7 +52,7 @@
     }
 
     .bottom-nav a, .bottom-nav button, .bottom-nav .nav-item {
-      color: #ffffff !important;           /* Weißer Text & Icons */
+      color: #ffffff !important;
       text-decoration: none;
       font-size: 12px;
       text-align: center;
@@ -67,27 +62,65 @@
     }
 
     .bottom-nav a.active, .bottom-nav .nav-item.active {
-      color: #ffd700 !important;           /* Aktiver Menüpunkt in Goldgelb */
+      color: #ffd700 !important;
       font-weight: bold;
+    }
+
+    /* Formular- & UI-Elemente */
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 12px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button.btn-primary {
+      background: #5c1d24;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+    }
+
+    button.btn-primary:hover {
+      background: #44141a;
     }
   </style>
 </head>
 <body>
 
-  <!-- Oberer Bereich / Titel -->
   <header class="app-header">
     KAMERADSCHAFTSBUND & SCHÜTZENVEREIN<br>
     <span style="font-size: 13px; font-weight: normal; color: #ffd700;">Gaschurn-Partenen</span>
   </header>
 
   <!-- ==========================================
-       1. NEWS-BEREICH (MIT AUTOMATISCHEM DIENSTPLAN)
+       1. NEWS-BEREICH (Nächster Dienst + Gesamtübersicht)
        ========================================== -->
   <div id="section-news" class="content-section active-section">
     <h2>News & Aktuelles</h2>
     
-    <!-- Hier wird der nächste Dienst vollautomatisch eingefügt -->
+    <!-- Automatischer nächster Dienst -->
     <div id="duty-roster-widget"></div>
+
+    <!-- Gesamter Dienstplan als Übersicht -->
+    <div class="card">
+      <h3 style="margin-top: 0; color: #5c1d24;">📅 Gesamter Dienstplan 2026</h3>
+      <div id="full-roster-list"></div>
+    </div>
   </div>
 
   <!-- ==========================================
@@ -107,41 +140,83 @@
   </div>
 
   <!-- ==========================================
-       4. STRICHZETTEL-BEREICH
+       4. STRICHZETTEL-BEREICH (Mit Erfassung)
        ========================================== -->
   <div id="section-strichzettel" class="content-section">
-    <h2>Strichzettel</h2>
-    <p>Hier erfasst du die Konsumationen, die anschließend an die Rechnungen übergeben werden.</p>
-  </div>
+    <h2>Strichzettel-Erfassung</h2>
+    <div class="card">
+      <h3 style="margin-top: 0; color: #5c1d24;">Neuen Strichzettel aufnehmen</h3>
+      <label>Empfänger / Kunde (z.B. Betriebsrat ASG):</label>
+      <input type="text" id="cust-name" placeholder="Name / Firma">
 
-  <!-- ==========================================
-       5. RECHNUNGS-BEREICH (MIT PDF-DOWNLOAD)
-       ========================================== -->
-  <div id="section-rechnung" class="content-section">
-    <h2>Rechnungen</h2>
-    <p>Gespeicherte Strichzettel bereit zur Abrechnung:</p>
-    
-    <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 15px;">
-      <h4 style="margin: 0 0 10px 0;">Betriebsrat ASG (Rechnung RE-2026-001)</h4>
-      <p style="margin: 0 0 15px 0; font-size: 14px; color: #666;">Betrag: 703,00 € | Datum: 08.10.2026</p>
-      <button onclick="downloadSampleInvoice()" style="background: #5c1d24; color: white; padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
-        📄 PDF-Rechnung herunterladen
-      </button>
+      <label>Posten / Leistung (z.B. Getränke, Hauswurst):</label>
+      <input type="text" id="item-desc" placeholder="Bezeichnung">
+
+      <label>Betrag in €:</label>
+      <input type="number" step="0.01" id="item-price" placeholder="0.00">
+
+      <button class="btn-primary" onclick="addStrichzettelItem()">Posten hinzufügen</button>
+      
+      <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+      
+      <h4>Aktuelle Posten auf diesem Strichzettel:</h4>
+      <ul id="current-items-list" style="padding-left: 20px; color: #555;">
+        <li>Noch keine Posten hinzugefügt.</li>
+      </ul>
+
+      <button class="btn-primary" style="background: #27ae60; margin-top: 10px;" onclick="saveStrichzettelToInvoice()">Strichzettel abschließen & an Rechnung übergeben</button>
     </div>
   </div>
 
   <!-- ==========================================
-       6. ADMIN-BEREICH
+       5. RECHNUNGS-BEREICH (PDF-Download)
+       ========================================== -->
+  <div id="section-rechnung" class="content-section">
+    <h2>Rechnungen</h2>
+    <p>Gespeicherte Rechnungen aus Strichzetteln:</p>
+    
+    <div id="invoice-container">
+      <div class="card">
+        <h4 style="margin: 0 0 10px 0;">Betriebsrat ASG (Rechnung RE-2026-001)</h4>
+        <p style="margin: 0 0 15px 0; font-size: 14px; color: #666;">Betrag: 703,00 € | Datum: 08.10.2026</p>
+        <button class="btn-primary" onclick="downloadSampleInvoice()">📄 PDF-Rechnung herunterladen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       6. ADMIN-BEREICH (Mit Passwort-Abfrage)
        ========================================== -->
   <div id="section-admin" class="content-section">
     <h2>Admin-Modus</h2>
-    <p>Vorstands-Funktionen & Bearbeitungs-Optionen.</p>
+    
+    <!-- Login-Box -->
+    <div id="admin-login-box" class="card">
+      <h3 style="margin-top: 0; color: #5c1d24;">🔒 Admin-Anmeldung</h3>
+      <p style="font-size: 13px; color: #666;">Bitte gib das Vorstandspasswort ein, um die Admin-Funktionen freizuschalten.</p>
+      <input type="password" id="admin-pass-input" placeholder="Passwort eingeben">
+      <button class="btn-primary" onclick="checkAdminLogin()">Anmelden</button>
+      <p id="login-error" style="color: red; font-size: 13px; display: none; margin-top: 8px;">Falsches Passwort!</p>
+    </div>
+
+    <!-- Geschützter Admin-Inhalt -->
+    <div id="admin-content-box" style="display: none;">
+      <div class="card" style="border-left: 5px solid #27ae60;">
+        <h3 style="margin-top: 0; color: #27ae60;">✅ Admin-Modus Aktiv</h3>
+        <p style="font-size: 13px; color: #666;">Vorstands-Funktionen & Bearbeitungs-Optionen sind freigeschaltet.</p>
+        <button class="btn-primary" style="background: #c0392b;" onclick="logoutAdmin()">Admin-Modus Beenden</button>
+      </div>
+      
+      <div class="card">
+        <h3>Vereins-Einstellungen & Verwaltung</h3>
+        <p>Hier kannst du Mitglieder verwalten, Push-Benachrichtigungen an alle senden oder den Dienstplan bearbeiten.</p>
+        <button class="btn-primary" onclick="alert('Funktion folgt im nächsten Update')">Push-Nachricht senden</button>
+      </div>
+    </div>
   </div>
 
 
-  <!-- ==========================================
-       UNTERE NAVIGATION
-       ========================================== -->
+  <!-- UNTERE NAVIGATION -->
   <nav class="bottom-nav">
     <a href="#news" onclick="switchSection('news', this)" class="active">📢<br>News</a>
     <a href="#termine" onclick="switchSection('termine', this)">📅<br>Termine</a>
@@ -153,10 +228,9 @@
 
 
   <!-- ==========================================
-       JAVASCRIPT LOGIK (Dienstplan & PDF-Export)
+       JAVASCRIPT LOGIK
        ========================================== -->
   <script>
-    // Navigation umschalten
     function switchSection(sectionId, element) {
       document.querySelectorAll('.content-section').forEach(sec => {
         sec.classList.remove('active-section');
@@ -169,7 +243,7 @@
       element.classList.add('active');
     }
 
-    // --- AUTOMATISCHER DIENSTPLAN ---
+    // --- DIENSTPLAN LOGIK (Nächster Dienst + Gesamte Liste) ---
     const dutyRoster = [
       { date: "2026-10-23", team: "Team 3", names: "Christoph & Werner" },
       { date: "2026-11-06", team: "Team 1", names: "Norbert, Maria & Erwin" },
@@ -181,22 +255,20 @@
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      // Filtert alle Dienste ab heute und in der Zukunft
       const upcomingDuties = dutyRoster.filter(duty => {
         const dutyDate = new Date(duty.date + "T00:00:00");
         return dutyDate >= today;
       });
 
       const widgetContainer = document.getElementById('duty-roster-widget');
-      if (!widgetContainer) return;
+      const fullListContainer = document.getElementById('full-roster-list');
+      if (!widgetContainer || !fullListContainer) return;
 
+      // 1. Nächster Dienst (Widget)
       if (upcomingDuties.length > 0) {
         const nextDuty = upcomingDuties[0];
         const formattedDate = new Date(nextDuty.date + "T00:00:00").toLocaleDateString('de-AT', {
-          weekday: 'long',
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric'
+          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
         });
 
         widgetContainer.innerHTML = `
@@ -207,22 +279,144 @@
           </div>
         `;
       } else {
-        widgetContainer.innerHTML = `
-          <div style="padding: 10px; color: #777;">Keine anstehenden Dienste eingetragen.</div>
-        `;
+        widgetContainer.innerHTML = `<div class="card" style="color: #777;">Keine anstehenden Dienste eingetragen.</div>`;
       }
+
+      // 2. Gesamte Liste als Übersicht
+      let htmlList = '<ul style="list-style: none; padding: 0; margin: 0;">';
+      dutyRoster.forEach(duty => {
+        const dutyDateObj = new Date(duty.date + "T00:00:00");
+        const isPast = dutyDateObj < today;
+        const isNext = (upcomingDuties.length > 0 && duty.date === upcomingDuties[0].date);
+        
+        const formatted = dutyDateObj.toLocaleDateString('de-AT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        
+        let style = "padding: 8px 10px; border-bottom: 1px solid #eee; font-size: 14px; display: flex; justify-content: space-between;";
+        if (isPast) style += " color: #aaa; text-decoration: line-through;";
+        if (isNext) style += " background: #fdf2f2; font-weight: bold; color: #5c1d24; border-left: 4px solid #5c1d24;";
+
+        htmlList += `<li style="${style}"><span>${formatted} (${duty.team})</span><span>${duty.names}</span></li>`;
+      });
+      htmlList += '</ul>';
+      fullListContainer.innerHTML = htmlList;
     }
 
-    // Beim Laden ausführen
     document.addEventListener('DOMContentLoaded', updateDutyWidget);
 
-    // Automatischer Mitternachts-Wechsel (prüft minütlich)
+    // Automatischer Mitternachts-Wechsel
     setInterval(() => {
       const now = new Date();
       if (now.getHours() === 0 && now.getMinutes() === 0) {
         updateDutyWidget();
       }
     }, 60000);
+
+
+    // --- STRICHZETTEL LOGIK ---
+    let tempStrichzettelItems = [];
+
+    function addStrichzettelItem() {
+      const desc = document.getElementById('item-desc').value;
+      const price = parseFloat(document.getElementById('item-price').value);
+
+      if (!desc || isNaN(price)) {
+        alert("Bitte Bezeichnung und gültigen Betrag eingeben!");
+        return;
+      }
+
+      tempStrichzettelItems.push({ name: desc, price: price });
+      
+      // Eingabefelder leeren
+      document.getElementById('item-desc').value = '';
+      document.getElementById('item-price').value = '';
+
+      updateStrichzettelView();
+    }
+
+    function updateStrichzettelView() {
+      const listEl = document.getElementById('current-items-list');
+      if (tempStrichzettelItems.length === 0) {
+        listEl.innerHTML = '<li>Noch keine Posten hinzugefügt.</li>';
+        return;
+      }
+
+      let html = '';
+      let total = 0;
+      tempStrichzettelItems.forEach((item, index) => {
+        total += item.price;
+        html += `<li style="margin-bottom: 5px; display: flex; justify-content: space-between;">
+          <span>${item.name}</span>
+          <span><b>${item.price.toFixed(2).replace('.', ',')} €</b></span>
+        </li>`;
+      });
+      html += `<hr style="border:0; border-top:1px dashed #ccc; margin:8px 0;">
+               <div style="display: flex; justify-content: space-between; font-weight: bold;">
+                 <span>Gesamtsumme:</span>
+                 <span>${total.toFixed(2).replace('.', ',')} €</span>
+               </div>`;
+      listEl.innerHTML = html;
+    }
+
+    function saveStrichzettelToInvoice() {
+      const custName = document.getElementById('cust-name').value || "Vereinsmitglied / Gast";
+      if (tempStrichzettelItems.length === 0) {
+        alert("Der Strichzettel ist leer!");
+        return;
+      }
+
+      let totalSum = tempStrichzettelItems.reduce((sum, item) => sum + item.price, 0);
+
+      const newInvoice = {
+        invoiceNum: "RE-2026-" + Math.floor(100 + Math.random() * 900),
+        date: new Date().toLocaleDateString('de-AT'),
+        recipientName: custName,
+        recipientAttn: "Abrechnung Schießstand",
+        recipientAddress: "Vereinslokal",
+        recipientZipCity: "6794 Partenen",
+        purpose: "Strichzettel Schießstand",
+        total: totalSum,
+        items: [...tempStrichzettelItems]
+      };
+
+      // In der Rechnungs-Ansicht hinzufügen
+      const container = document.getElementById('invoice-container');
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h4 style="margin: 0 0 10px 0;">${newInvoice.recipientName} (Rechnung ${newInvoice.invoiceNum})</h4>
+        <p style="margin: 0 0 15px 0; font-size: 14px; color: #666;">Betrag: ${totalSum.toFixed(2).replace('.', ',')} € | Datum: ${newInvoice.date}</p>
+        <button class="btn-primary" onclick='generateInvoicePDF(${JSON.stringify(newInvoice)})'>📄 PDF-Rechnung herunterladen</button>
+      `;
+      container.prepend(card);
+
+      // Strichzettel zurücksetzen
+      tempStrichzettelItems = [];
+      document.getElementById('cust-name').value = '';
+      updateStrichzettelView();
+
+      alert("Strichzettel erfolgreich an das Rechnungs-Fach übergeben!");
+      switchSection('rechnung', document.querySelectorAll('.bottom-nav a')[4]);
+    }
+
+
+    // --- ADMIN LOGIN LOGIK ---
+    function checkAdminLogin() {
+      const pass = document.getElementById('admin-pass-input').value;
+      // Ändere hier das Passwort nach Wunsch (Standard ist aktuell: "schützen2026")
+      if (pass === "schützen2026") {
+        document.getElementById('admin-login-box').style.display = 'none';
+        document.getElementById('admin-content-box').style.display = 'block';
+        document.getElementById('login-error').style.display = 'none';
+        document.getElementById('admin-pass-input').value = '';
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById('admin-login-box').style.display = 'block';
+      document.getElementById('admin-content-box').style.display = 'none';
+    }
 
 
     // --- PDF-RECHNUNGSGENERATOR ---
@@ -238,13 +432,11 @@
         "ZVR: 624291509"
       ];
 
-      // Titel "RECHNUNG"
       doc.setFont("helvetica", "bold");
       doc.setFontSize(22);
       doc.setTextColor(180, 0, 0);
       doc.text("RECHNUNG", 14, 20);
 
-      // Vereinsdaten
       doc.setFont("helvetica", "normal");
       doc.setFontSize(9);
       doc.setTextColor(80, 80, 80);
@@ -254,7 +446,6 @@
         yPos += 5;
       });
 
-      // Logo (lädt logo.png im Hauptverzeichnis)
       try {
         const img = new Image();
         img.src = 'logo.png';
@@ -263,7 +454,6 @@
         console.log("Logo konnte nicht geladen werden:", e);
       }
 
-      // Empfänger
       doc.setFontSize(10);
       doc.setTextColor(0, 0, 0);
       doc.setFont("helvetica", "bold");
@@ -279,7 +469,6 @@
       doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 120, 66);
       doc.text(`Rechnungsdatum: ${invoiceData.date}`, 120, 71);
 
-      // Leistungstabelle
       const tableBody = invoiceData.items.map(item => [
         item.name, 
         `${parseFloat(item.price).toFixed(2).replace('.', ',')} €`
@@ -302,7 +491,6 @@
         }
       });
 
-      // Zahlungsbedingungen
       let finalY = doc.lastAutoTable.finalY + 15;
       doc.setFont("helvetica", "bold");
       doc.setFontSize(10);
@@ -332,7 +520,6 @@
       doc.setFont("helvetica", "normal");
       doc.text(`${invoiceData.invoiceNum} / ${invoiceData.purpose}`, 55, finalY + 28);
 
-      // Fußzeile
       doc.setFont("helvetica", "italic");
       doc.text("Vielen Dank für die gute Zusammenarbeit!", 14, finalY + 38);
 
@@ -344,7 +531,6 @@
       doc.save(`${invoiceData.invoiceNum}.pdf`);
     }
 
-    // Muster-Rechnung auslösen
     function downloadSampleInvoice() {
       const sampleInvoice = {
         invoiceNum: "RE-2026-001",
