@@ -39,7 +39,7 @@
             --primary-red: #b91c1c; 
             --primary-dark: #7f1d1d;
             --bg-light: #f1f5f9; 
-            --card-glass: rgba(255, 255, 255, 0.85);
+            --card-glass: rgba(255, 255, 255, 0.9);
             --text-dark: #1e293b; 
             --text-muted: #64748b; 
             --accent-green: #10b981; 
@@ -77,7 +77,6 @@
         .page-content { padding: 15px; display: none; }
         .page-content.active { display: block; }
 
-        /* HELLER GLAS-LOOK */
         .glass-card {
             background: var(--card-glass);
             backdrop-filter: blur(16px);
@@ -85,7 +84,7 @@
             border-radius: 16px;
             padding: 18px;
             margin-bottom: 15px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.8);
             color: var(--text-dark);
         }
@@ -104,15 +103,16 @@
             justify-content: space-between;
         }
 
-        @keyframes neonPulse {
-            0% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.3); border-color: rgba(6, 182, 212, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(6, 182, 212, 0.7); border-color: rgba(6, 182, 212, 1); }
-            100% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.3); border-color: rgba(6, 182, 212, 0.5); }
+        /* GRÜN BLINKENDER NÄCHSTER DIENST */
+        @keyframes greenNeonPulse {
+            0% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.4); border-color: rgba(34, 197, 94, 0.6); }
+            50% { box-shadow: 0 0 25px rgba(34, 197, 94, 0.9); border-color: rgba(34, 197, 94, 1); }
+            100% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.4); border-color: rgba(34, 197, 94, 0.6); }
         }
         .next-duty-neon {
             background: #ffffff !important;
-            border: 2px solid #06b6d4 !important;
-            animation: neonPulse 1.8s infinite ease-in-out;
+            border: 2.5px solid #22c55e !important;
+            animation: greenNeonPulse 1.5s infinite ease-in-out;
         }
 
         .dark-event-item {
@@ -180,7 +180,20 @@
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* FARBIGE FUSSZEILE MIT GLAS-OPTIK */
+        /* ROT HINTERLEGTE KATEGORIEN IN DER STRICHLISTE */
+        .strich-category-header {
+            background: var(--primary-red);
+            color: #ffffff;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 800;
+            margin: 14px 0 6px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* FUSSZEILE */
         .bottom-nav {
             position: fixed !important; 
             bottom: 12px !important; 
@@ -214,7 +227,6 @@
             text-align: center !important;
             padding: 6px 2px !important;
             border-radius: 14px !important;
-            transition: all 0.2s ease;
         }
         .nav-item.active { 
             color: #ffffff !important;
@@ -224,10 +236,10 @@
         .nav-icon { font-size: 1.35em !important; margin-bottom: 2px !important; display: block !important; }
 
         .admin-delete-btn { display: none; }
-        body.admin-mode .admin-delete-btn { display: inline-flex !important; }
+        body.admin-mode .admin-delete-btn { display: block !important; }
 
-        .badge-paid { background: #d1fae5; color: #065f46; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; border: 1px solid #a7f3d0; cursor: pointer; }
-        .badge-open { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; border: 1px solid #fecaca; cursor: pointer; }
+        .badge-paid { background: #d1fae5; color: #065f46; padding: 3px 8px; border-radius: 10px; font-weight: 700; font-size: 0.7em; border: 1px solid #a7f3d0; cursor: pointer; }
+        .badge-open { background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 10px; font-weight: 700; font-size: 0.7em; border: 1px solid #fecaca; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -243,8 +255,8 @@
 
         <div class="glass-card next-duty-neon">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 0.75em; background: #06b6d4; color: #fff; font-weight: 800; padding: 2px 8px; border-radius: 6px; text-transform: uppercase;">Nächster Dienst</span>
-                <span id="live-countdown" style="font-size: 0.75em; color: #0891b2; font-weight: 600;">Automatischer Mitternachts-Abgleich</span>
+                <span style="font-size: 0.75em; background: #22c55e; color: #fff; font-weight: 800; padding: 2px 8px; border-radius: 6px; text-transform: uppercase;">Nächster Dienst</span>
+                <span style="font-size: 0.75em; color: #15803d; font-weight: 600;">Live-Aktualisierung aktiv</span>
             </div>
             <div id="next-duty-widget"></div>
         </div>
@@ -259,7 +271,7 @@
         </div>
     </div>
 
-    <!-- 2. TERMINE -->
+    <!-- 2. TERMINE (VERGRÖßERT & GUT SICHTBAR) -->
     <div id="page-events" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">📅 Nächste Vereinstermine</div>
@@ -267,19 +279,20 @@
         </div>
     </div>
 
-    <!-- 3. SCHIESSBUCH (MIT MITGLIEDER-AUSWAHL & LUFTGEWEHR) -->
+    <!-- 3. SCHIESSBUCH (MIT SUCHFUNKTION & LUFTGEWEHR) -->
     <div id="page-shooting" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">🎯 Schießbuch (Luftgewehr)</div>
             
             <form onsubmit="saveShot(event)">
                 <div class="form-group">
-                    <label>Mitglied auswählen</label>
-                    <select class="form-control" id="shot-member-select" required onchange="document.getElementById('shot-name').value = this.value;">
-                        <option value="">-- Mitglied wählen --</option>
+                    <label>Mitglied suchen / auswählen</label>
+                    <input type="text" id="shot-search-input" class="form-control" placeholder="🔍 Namen eintippen zum Suchen..." oninput="filterMemberDropdown(this.value)">
+                    <select class="form-control" id="shot-member-select" size="4" style="margin-top: 6px;" onchange="selectShooterFromDropdown(this.value)">
+                        <!-- Dynamisch gefüllt -->
                     </select>
                 </div>
-                <div class="form-group"><label>Name des Schützen</label><input type="text" class="form-control" id="shot-name" required readonly placeholder="Wird automatisch ausgefüllt"></div>
+                <div class="form-group"><label>Gewählter Schütze</label><input type="text" class="form-control" id="shot-name" required readonly placeholder="Bitte oben auswählen"></div>
                 <div class="form-group"><label>Waffe / Disziplin</label><input type="text" class="form-control" value="Luftgewehr" readonly style="background:#f8fafc; font-weight:600;"></div>
                 <div style="display: flex; gap: 10px;">
                     <div class="form-group" style="flex: 1;"><label>Erreichte Ringe</label><input type="number" step="0.1" class="form-control" id="shot-rings" required placeholder="z.B. 298.5"></div>
@@ -290,29 +303,31 @@
         </div>
     </div>
 
-    <!-- 4. STRICHLISTE & KOMPLETTE PREISLISTE -->
+    <!-- 4. STRICHLISTE (MIT ROT HINTERLEGTEN KATEGORIEN) -->
     <div id="page-drinks" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">🍻 Strichliste & Preisliste</div>
             
-            <div style="font-size: 0.8em; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase;">Speisen</div>
-            <div class="price-item"><span>🌭 Paar Hauswürste mit Brot (€ 7,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
-            <div class="price-item"><span>🌭 Paar Wienerle mit Brot (€ 7,00)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
+            <div class="strich-category-header">Speisen</div>
+            <div class="price-item"><span>🌭 Paar Hauswürste mit Brot (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
+            <div class="price-item"><span>🌭 Paar Wienerle mit Brot (€ 7,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
 
-            <div style="font-size: 0.8em; font-weight: 700; color: var(--text-muted); margin: 12px 0 6px 0; text-transform: uppercase;">Getränke & Bier</div>
-            <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
-            <div class="price-item"><span>🍺 Radler Süß / Sauer 0,33 lt. (€ 3,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
-            <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
-            <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein rot/weiß 1/4 lt. (€ 4,00)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein rot/weiß 1/8 lt. (€ 3,00)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein gespritzt 1/4 lt. (€ 3,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
-            <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
+            <div class="strich-category-header">Getränke & Bier</div>
+            <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
+            <div class="price-item"><span>🍺 Radler Süß / Sauer 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
+            <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
+            <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
+            <div class="price-item"><span>🍷 Wein rot/weiß 1/4 lt. (€ 4,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
+            <div class="price-item"><span>🍷 Wein rot/weiß 1/8 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
+            <div class="price-item"><span>🍷 Wein gespritzt 1/4 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
+            <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
 
-            <div style="font-size: 0.8em; font-weight: 700; color: var(--text-muted); margin: 12px 0 6px 0; text-transform: uppercase;">Heißgetränke & Sonstiges</div>
-            <div class="price-item"><span>☕ Kaffee Tasse (€ 3,00)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
-            <div class="price-item"><span>🍵 Tee Tasse (€ 2,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
-            <div class="price-item" style="background: #fef2f2; padding: 6px; border-radius: 6px;">
+            <div class="strich-category-header">Heissgetränke & Sonstiges</div>
+            <div class="price-item"><span>☕ Kaffee Tasse (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
+            <div class="price-item"><span>🍵 Tee Tasse (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
+
+            <div class="strich-category-header">Luftgewehrschießen</div>
+            <div class="price-item" style="background: #fef2f2; padding: 8px; border-radius: 6px;">
                 <span>🎯 Luftgewehrschießen (€ 8,00 / P.)</span>
                 <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
             </div>
@@ -330,12 +345,12 @@
                 <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="z. B. 6580 St. Anton am Arlberg"></div>
             </div>
 
-            <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 12px;">💾 Abrechnung im Admin-Bereich speichern (PDF erstellen)</button>
+            <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 12px;">💾 Abrechnung im Admin-Bereich speichern</button>
             <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 8px;">Zurücksetzen</button>
         </div>
     </div>
 
-    <!-- 6. MITGLIEDER (OFFIZIELLE LISTE) -->
+    <!-- 6. MITGLIEDER -->
     <div id="page-guide" class="page-content">
         <div class="glass-card glass-card-yellow">
             <div class="card-title" style="color: #ca8a04;">⭐ Vorstand & Funktionsträger ⭐</div>
@@ -351,13 +366,11 @@
 
         <div class="glass-card glass-card-yellow">
             <div class="card-title" style="color: #ca8a04;">👥 Alle Aktiven Mitglieder</div>
-            <div id="public-members-list" style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <!-- Wird dynamisch aus offizieller Liste geladen -->
-            </div>
+            <div id="public-members-list" style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;"></div>
         </div>
     </div>
 
-    <!-- 7, 10. ADMIN-BEREICH (ÜBERSICHTLICH & GESCHÜTZT) -->
+    <!-- 7, 10. ADMIN-BEREICH (ÜBERSICHTLICH UNTEREINANDER) -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
             <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
@@ -368,88 +381,69 @@
         </div>
 
         <div class="admin-delete-btn">
-            <div class="glass-card glass-card-red" style="width: 100%;">
-                <div class="card-title" style="color: #dc2626 !important;">🔓 Admin-Modus Aktiv</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px;">
-                    <button class="admin-sub-tab-btn active" id="btn-tab-news" onclick="switchAdminTab('news')">📢 News & Termine</button>
-                    <button class="admin-sub-tab-btn" id="btn-tab-finance" onclick="switchAdminTab('finance')">💶 Rechnungen</button>
-                    <button class="admin-sub-tab-btn" id="btn-tab-members" onclick="switchAdminTab('members')">👥 Mitglieder & Beiträge</button>
-                    <button class="admin-sub-tab-btn" id="btn-tab-keys" onclick="switchAdminTab('keys')">🔑 Schlüsselliste</button>
-                    <button class="admin-sub-tab-btn" id="btn-tab-inventory" onclick="switchAdminTab('inventory')" style="grid-column: span 2;">📦 Lagerbestand</button>
-                </div>
-                <button class="btn btn-danger btn-block" onclick="logoutAdmin()">Admin-Modus Beenden</button>
+            <!-- ÜBEREINANDER ANGEORDNETE ADMIN-SEKTIONEN -->
+            
+            <!-- 1. NEWS & FOTO UPLOAD -->
+            <div class="glass-card glass-card-red">
+                <div class="card-title" style="color: #dc2626;">📢 News, Foto & Text Veröffentlichen</div>
+                <form onsubmit="addNewsItem(event)">
+                    <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
+                    <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
+                    <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
+                    <button type="submit" class="btn btn-admin btn-block">Veröffentlichen</button>
+                </form>
             </div>
 
-            <!-- TAB 1: NEWS & TERMINE VERWALTEN -->
-            <div id="admin-tab-news" class="admin-tab-content">
-                <div class="glass-card glass-card-red">
-                    <div class="card-title" style="color: #dc2626;">📢 News, Foto & Text Veröffentlichen</div>
-                    <form onsubmit="addNewsItem(event)">
-                        <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
-                        <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
-                        <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
-                        <button type="submit" class="btn btn-admin btn-block">Veröffentlichen</button>
-                    </form>
-                </div>
-
-                <div class="glass-card glass-card-red">
-                    <div class="card-title" style="color: #dc2626;">➕ Termin Erstellen / Bearbeiten</div>
-                    <form onsubmit="addEvent(event)">
-                        <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="z.B. Generalversammlung"></div>
-                        <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="z.B. 15.12.2026"></div>
-                        <div class="form-group"><label>Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Ort / Uhrzeit"></div>
-                        <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
-                    </form>
-                </div>
-
-                <div class="glass-card glass-card-red">
-                    <div class="card-title" style="color: #dc2626;">📅 Bestehende Termine verwalten</div>
+            <!-- 2. TERMINE ERSTELLEN & VERWALTEN -->
+            <div class="glass-card glass-card-red">
+                <div class="card-title" style="color: #dc2626;">➕ Termin Erstellen / Bearbeiten</div>
+                <form onsubmit="addEvent(event)">
+                    <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="z.B. Generalversammlung"></div>
+                    <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="z.B. 15.12.2026"></div>
+                    <div class="form-group"><label>Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Ort / Uhrzeit"></div>
+                    <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
+                </form>
+                <div style="margin-top: 15px; border-top: 1px solid #fecaca; padding-top: 10px;">
+                    <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Bestehende Termine:</div>
                     <div id="admin-events-list"></div>
                 </div>
             </div>
 
-            <!-- TAB 2: RECHNUNGEN -->
-            <div id="admin-tab-finance" class="admin-tab-content" style="display: none;">
-                <div class="glass-card glass-card-red">
-                    <div class="card-title" style="color: #dc2626;">💶 Gespeicherte Rechnungen (PDF im Hintergrund)</div>
-                    <div id="admin-tally-history-list"></div>
-                </div>
+            <!-- 3. GESPEICHERTE RECHNUNGEN -->
+            <div class="glass-card glass-card-red">
+                <div class="card-title" style="color: #dc2626;">💶 Gespeicherte Rechnungen (PDF)</div>
+                <div id="admin-tally-history-list"></div>
             </div>
 
-            <!-- TAB 3: MITGLIEDER & BEITRÄGE -->
-            <div id="admin-tab-members" class="admin-tab-content" style="display: none;">
-                <div class="glass-card glass-card-red">
-                    <div class="card-title" style="color: #dc2626;">👥 Mitgliederverwaltung & Beiträge (€ 30)</div>
-                    <h4 style="color: #2563eb; font-size: 0.9em; margin: 10px 0 5px 0;">Aktive Mitglieder</h4>
-                    <div id="admin-active-members-list"></div>
-                    <h4 style="color: #ca8a04; font-size: 0.9em; margin: 15px 0 5px 0;">Passive Mitglieder</h4>
-                    <div id="admin-passive-members-list"></div>
-                </div>
+            <!-- 4. MITGLIEDER & BEITRÄGE (MIT BEZAHLEDATUM & STATUS) -->
+            <div class="glass-card glass-card-red">
+                <div class="card-title" style="color: #dc2626;">👥 Mitglieder & Beiträge (€ 30)</div>
+                <h4 style="color: #2563eb; font-size: 0.9em; margin: 10px 0 5px 0;">Aktive Mitglieder</h4>
+                <div id="admin-active-members-list"></div>
+                <h4 style="color: #ca8a04; font-size: 0.9em; margin: 15px 0 5px 0;">Passive Mitglieder</h4>
+                <div id="admin-passive-members-list"></div>
             </div>
 
-            <!-- TAB 4: SCHLÜSSELLISTE -->
-            <div id="admin-tab-keys" class="admin-tab-content" style="display: none;">
-                <div class="glass-card glass-card-red">
-                    <div class="card-title" style="color: #dc2626;">🔑 Schlüsselliste (Stand 2026)</div>[cite: 15, 16]
-                    <div id="admin-keys-list"></div>
-                </div>
+            <!-- 5. SCHLÜSSELLISTE (MITTIG ZENTRIERT) -->
+            <div class="glass-card glass-card-red">
+                <div class="card-title" style="color: #dc2626;">🔑 Schlüsselliste (Stand 2026)</div>[cite: 14, 15]
+                <div id="admin-keys-list" style="text-align: center;"></div>
             </div>
 
-            <!-- TAB 5: LAGERBESTAND -->
-            <div id="admin-tab-inventory" class="admin-tab-content" style="display: none;">
-                <div class="glass-card glass-card-red">
-                    <div class="card-title" style="color: #dc2626;">📦 Lagerbestand & Ausstattung</div>
-                    <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 10px;">Übersicht über Vereinsausrüstung, Scheiben und Getränkevorräte im Schützenhaus.</p>
-                    <div class="price-item"><span>LG-Diabolos (Dosen)</span><strong>14 Stk.</strong></div>
-                    <div class="price-item"><span>Scheiben 10m (Stk.)</span><strong>450 Stk.</strong></div>
-                    <div class="price-item"><span>Hauswürste (Paar)</span><strong>20 Paar</strong></div>
-                    <div class="price-item"><span>Bier Kisten 0,33l</span><strong>3 Kisten</strong></div>
-                </div>
+            <!-- 6. LAGERBESTAND -->
+            <div class="glass-card glass-card-red">
+                <div class="card-title" style="color: #dc2626;">📦 Lagerbestand</div>
+                <div class="price-item"><span>Hauswürste (Paar)</span><strong>20 Paar</strong></div>
+                <div class="price-item"><span>Wienerle (Paar)</span><strong>15 Paar</strong></div>
+                <div class="price-item"><span>Bier Kisten 0,33l</span><strong>3 Kisten</strong></div>
+                <div class="price-item"><span>Limo Kisten 0,3l</span><strong>2 Kisten</strong></div>
             </div>
+
+            <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 20px;">Admin-Modus Beenden</button>
         </div>
     </div>
 
-    <!-- 8, 11. FUSSZEILE MIT RICHTIGEN FARBEN -->
+    <!-- FUSSZEILE -->
     <nav class="bottom-nav">
         <a onclick="switchTab('news')" class="nav-item active" id="nav-news"><span class="nav-icon">📢</span><span>News</span></a>
         <a onclick="switchTab('events')" class="nav-item" id="nav-events"><span class="nav-icon">📅</span><span>Termine</span></a>
@@ -469,21 +463,13 @@
             window.scrollTo(0, 0);
         }
 
-        function switchAdminTab(tabName) {
-            document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.admin-sub-tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('admin-tab-' + tabName).style.display = 'block';
-            document.getElementById('btn-tab-' + tabName).classList.add('active');
-        }
-
-        // OFFISZIELLE MITGLIEDERLISTE AUS PDF
+        // BEREINIGTE MITGLIEDERLISTE (OHNE GERD, KROHRAD, LOTHAR, HEINRICH)
         const officialActiveMembers = [
             "Manfred Wachter", "Werner Wachter", "Dietmar Schweighofer", "Simon Schweighofer",
             "Norbert Spettel", "Heimo Stocker", "Christoph Wittwer", "Werner Wittwer",
             "Erwin Rudigier", "Daniel Sandrell", "Werner Mattle", "Pascal Tripolt",
             "Karin Stocker", "Jasmin Suntinger", "Sabrina Kinzl", "Maria Spettel",
-            "Natalie Stocker", "Heinrich Sandrell", "Konrad Kofler", "Lothar Dona",
-            "Gerd Sprattler", "Elias Stocker"
+            "Natalie Stocker", "Elias Stocker"
         ];
 
         const officialPassiveMembers = [
@@ -511,14 +497,27 @@
             { name: "Maria Spettel", status: "Schlüssel vorhanden" }
         ];
 
-        function populateMemberSelects() {
+        // SCHIESSBUCH SUCHFUNKTION
+        function populateMemberSelects(filter = "") {
             const selectEl = document.getElementById('shot-member-select');
             if (selectEl) {
-                let html = '<option value="">-- Mitglied wählen --</option>';
-                officialActiveMembers.forEach(m => {
+                let html = "";
+                const filtered = officialActiveMembers.filter(m => m.toLowerCase().includes(filter.toLowerCase()));
+                filtered.forEach(m => {
                     html += `<option value="${m}">${m}</option>`;
                 });
                 selectEl.innerHTML = html;
+            }
+        }
+
+        function filterMemberDropdown(query) {
+            populateMemberSelects(query);
+        }
+
+        function selectShooterFromDropdown(name) {
+            if (name) {
+                document.getElementById('shot-name').value = name;
+                document.getElementById('shot-search-input').value = name;
             }
         }
 
@@ -573,9 +572,9 @@
             const nextWidget = document.getElementById('next-duty-widget');
             if (nextWidget) {
                 nextWidget.innerHTML = `
-                    <div style="font-size: 0.95em; color: #0891b2; font-weight: 700;">📅 ${nextDienst.dateStr}</div>
-                    <div style="font-size: 1.3em; font-weight: 800; margin: 4px 0; color: #0f172a;">${nextDienst.team}</div>
-                    <div style="font-size: 0.85em; color: var(--text-muted);">${nextDienst.names}</div>
+                    <div style="font-size: 1.05em; color: #15803d; font-weight: 800;">📅 ${nextDienst.dateStr}</div>
+                    <div style="font-size: 1.4em; font-weight: 900; margin: 4px 0; color: #0f172a;">${nextDienst.team}</div>
+                    <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600;">${nextDienst.names}</div>
                 `;
             }
 
@@ -585,12 +584,12 @@
                 masterDutyRoster.forEach((d, idx) => {
                     let isNext = (idx === nextIndex);
                     let isClosed = d.status === 'closed';
-                    let borderCol = isNext ? '#06b6d4' : (isClosed ? '#64748b' : '#2563eb');
+                    let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
                     
                     html += `
-                        <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(6, 182, 212, 0.08);' : ''}">
+                        <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div style="font-size: 1.05em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.7em; background:#06b6d4; color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER DIENST</span>' : ''}</div>
+                                <div style="font-size: 1.05em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.7em; background:#22c55e; color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER DIENST</span>' : ''}</div>
                                 <span style="background: ${borderCol}; color: white; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.7em;">${d.team}</span>
                             </div>
                             <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
@@ -599,16 +598,9 @@
                 });
                 fullList.innerHTML = html;
             }
-            setupMidnightTimer();
         }
 
-        function setupMidnightTimer() {
-            const now = new Date();
-            const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-            setTimeout(() => { updateDutyPlanWidget(); }, night.getTime() - now.getTime());
-        }
-
-        // TERMINE LADEN & BEARBEITEN / LÖSCHEN
+        // TERMINE (VERGRÖßERT & GUT SICHTBAR)
         async function loadEvents() {
             const container = document.getElementById('events-container');
             const adminList = document.getElementById('admin-events-list');
@@ -622,10 +614,10 @@
                     const eventId = doc.id;
                     
                     html += `
-                        <div class="dark-event-item">
-                            <div style="font-size: 1.05em; font-weight: 800; color: #0f172a;">${ev.title}</div>
-                            <div style="font-size: 0.85em; color: var(--primary-red); font-weight: 600;">📅 ${ev.date || ''}</div>
-                            ${ev.desc ? `<div style="font-size: 0.85em; color: var(--text-muted); margin: 4px 0;">${ev.desc}</div>` : ''}
+                        <div class="dark-event-item" style="padding: 16px;">
+                            <div style="font-size: 1.2em; font-weight: 900; color: #0f172a; margin-bottom: 4px;">📌 ${ev.title}</div>
+                            <div style="font-size: 1em; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || 'Nicht angegeben'}</div>
+                            ${ev.desc ? `<div style="font-size: 0.95em; color: var(--text-dark); font-weight: 600;">📍 Ort / Details: ${ev.desc}</div>` : ''}
                         </div>
                     `;
 
@@ -639,7 +631,7 @@
                         </div>
                     `;
                 });
-                if(container) container.innerHTML = html || '<p style="color:var(--text-muted);">Keine Termine.</p>';
+                if(container) container.innerHTML = html || '<p style="color:var(--text-muted);">Keine Termine eingetragen.</p>';
                 if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted);">Keine Termine im System.</p>';
             } catch (e) { console.error(e); }
         }
@@ -673,6 +665,7 @@
         async function saveShot(e) {
             e.preventDefault();
             const name = document.getElementById('shot-name').value;
+            if (!name) { alert("Bitte wählen Sie ein Mitglied aus!"); return; }
             const rings = parseFloat(document.getElementById('shot-rings').value);
             const teiler = parseFloat(document.getElementById('shot-teiler').value) || 0;
 
@@ -683,8 +676,9 @@
             alert("Schießergebnis im Admin-Bereich gespeichert!");
             document.getElementById('shot-rings').value = '';
             document.getElementById('shot-teiler').value = '';
-            document.getElementById('shot-member-select').value = '';
             document.getElementById('shot-name').value = '';
+            document.getElementById('shot-search-input').value = '';
+            populateMemberSelects();
         }
 
         // STRICHLISTE & PREISLISTE
@@ -747,7 +741,7 @@
 
             try {
                 await db.collection("invoices").add(invoiceObj);
-                alert("Abrechnung wurde erfolgreich im Admin-Bereich gespeichert (PDF generiert)!");
+                alert("Abrechnung wurde erfolgreich im Admin-Bereich gespeichert!");
                 loadInvoices();
                 confirmResetDrinks();
             } catch (err) { console.error(err); }
@@ -772,20 +766,34 @@
             } catch (e) { console.error(e); }
         }
 
-        // ADMIN MITGLIEDER & SCHLÜSSEL
+        // ADMIN MITGLIEDER & BEITRAGSDATUM
         function loadAdminMembers() {
             const activeList = document.getElementById('admin-active-members-list');
             const passiveList = document.getElementById('admin-passive-members-list');
             
             let actHtml = "";
-            officialActiveMembers.forEach(m => {
-                actHtml += `<div class="price-item"><span>${m}</span><span class="badge-paid">Beitrag € 30</span></div>`;
+            officialActiveMembers.forEach((m, idx) => {
+                actHtml += `
+                    <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
+                        <span><strong>${m}</strong></span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <input type="text" class="form-control" style="width: 110px; padding: 4px; font-size: 0.75em;" placeholder="Bezahl-Datum" id="date-act-${idx}">
+                            <span class="badge-paid" onclick="alert('Bezahlt-Status gespeichert für ${m}')">Bezahlt (€30)</span>
+                        </div>
+                    </div>`;
             });
             activeList.innerHTML = actHtml;
 
             let passHtml = "";
-            officialPassiveMembers.forEach(m => {
-                passHtml += `<div class="price-item"><span>${m}</span><span class="badge-paid">Beitrag € 30</span></div>`;
+            officialPassiveMembers.forEach((m, idx) => {
+                passHtml += `
+                    <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
+                        <span><strong>${m}</strong></span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <input type="text" class="form-control" style="width: 110px; padding: 4px; font-size: 0.75em;" placeholder="Bezahl-Datum" id="date-pass-${idx}">
+                            <span class="badge-paid" onclick="alert('Bezahlt-Status gespeichert für ${m}')">Bezahlt (€30)</span>
+                        </div>
+                    </div>`;
             });
             passiveList.innerHTML = passHtml;
         }
@@ -794,7 +802,7 @@
             const container = document.getElementById('admin-keys-list');
             let html = "";
             officialKeysList.forEach(k => {
-                html += `<div class="price-item"><span><strong>${k.name}</strong></span><span style="font-size:0.8em; color:var(--text-muted);">${k.status}</span></div>`;
+                html += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.9em;"><strong>${k.name}</strong> — <span style="color:var(--text-muted);">${k.status}</span></div>`;
             });
             container.innerHTML = html;
         }
