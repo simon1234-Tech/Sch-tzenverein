@@ -1,1131 +1,1056 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kameradschaftsbund & Schützenverein Gaschurn-Partenen</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- jsPDF & autoTable for PDF generation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-  <!-- Chart.js for Schießbuch Trend Diagram -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vereins-App - KB & SV Gaschurn-Partenen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <style>
-    /* Global Bright Ambient Gradient */
-    body {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #0f172a 100%);
-      background-attachment: fixed;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #f8fafc;
-    }
+    <!-- Bibliotheken für den PDF-Export (jsPDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
-    /* Common Bright Glass Card */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-    }
+    <meta name="apple-mobile-web-app-title" content="KB & SV App">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
 
-    /* Glass Panels with Custom Neon Color Glow Borders */
-    .glass-blue {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 1rem;
-      border: 1.5px solid #00f0ff;
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.08);
-    }
+    <!-- Firebase SDKs (v8.10.1) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 
-    .glass-yellow {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 1rem;
-      border: 1.5px solid #eab308;
-      box-shadow: 0 0 15px rgba(234, 179, 8, 0.3), inset 0 0 15px rgba(234, 179, 8, 0.08);
-    }
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDchsz_qOTMpvT48cKBYLqUmX30Lw39iGA",
+        authDomain: "kb-sv-vereinsapp.firebaseapp.com",
+        projectId: "kb-sv-vereinsapp",
+        storageBucket: "kb-sv-vereinsapp.appspot.com",
+        messagingSenderId: "1015802588615",
+        appId: "1:1015802588615:web:bcecb74526a2096d2ebde2"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+      const messaging = firebase.messaging();
+    </script>
 
-    .glass-red {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 1rem;
-      border: 1.5px solid #ef4444;
-      box-shadow: 0 0 15px rgba(239, 68, 68, 0.35), inset 0 0 15px rgba(239, 68, 68, 0.08);
-    }
+    <style>
+        :root {
+            --primary-red: #b91c1c; 
+            --primary-dark: #7f1d1d;
+            --bg-light: #0f172a; 
+            --card-glass: rgba(30, 41, 59, 0.75);
+            --card-glass-light: rgba(255, 255, 255, 0.05);
+            --text-dark: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --accent-green: #10b981; 
+            --accent-green-bright: #22c55e;
+            --danger: #dc2626;
+            --admin-blue: #3b82f6;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #090d16 0%, #1e1b4b 100%);
+            background-attachment: fixed;
+            padding-bottom: 160px !important;
+            max-width: 600px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
 
-    /* Glass Footer Navigation */
-    .glass-nav {
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-    }
+        .app-header {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .app-header h1 { font-size: 1.2em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
+        .app-header p { font-size: 0.8em; opacity: 0.95; margin-top: 4px; color: #fca5a5; font-weight: 700; }
 
-    /* Glass Inputs */
-    .glass-input {
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      color: #ffffff;
-      backdrop-filter: blur(8px);
-      transition: all 0.2s ease;
-    }
-    .glass-input:focus {
-      outline: none;
-      border-color: #38bdf8;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-      background: rgba(255, 255, 255, 0.2);
-    }
-    .glass-input option {
-      background-color: #1e293b;
-      color: #ffffff;
-    }
+        .page-content { padding: 15px; display: none; }
+        .page-content.active { display: block; }
 
-    /* Pulsing Neon Animation for Next Duty */
-    @keyframes pulseGlow {
-      0%, 100% {
-        box-shadow: 0 0 15px rgba(0, 240, 255, 0.8), inset 0 0 10px rgba(0, 240, 255, 0.3);
-        border-color: #00f0ff;
-      }
-      50% {
-        box-shadow: 0 0 25px rgba(0, 240, 255, 1), inset 0 0 15px rgba(0, 240, 255, 0.5);
-        border-color: #7dd3fc;
-      }
-    }
-    .pulsing-duty {
-      animation: pulseGlow 2s infinite ease-in-out;
-    }
+        /* GLAS-OPTIK STANDARD CARD */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-dark);
+        }
 
-    @keyframes badgeBlink {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.7; transform: scale(0.96); }
-    }
-    .blink-badge {
-      animation: badgeBlink 1.5s infinite ease-in-out;
-    }
+        /* GLAS-OPTIK MIT BLAUER UMRANDUNG (Termine & Strichliste) */
+        .glass-card-blue {
+            border: 1.5px solid rgba(59, 130, 246, 0.6) !important;
+            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15) !important;
+        }
 
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
-    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 3px; }
-  </style>
+        /* GLAS-OPTIK MIT GELBER UMRANDUNG (Mitglieder / Vorstand) */
+        .glass-card-yellow {
+            border: 2px solid rgba(234, 179, 8, 0.7) !important;
+            box-shadow: 0 8px 32px rgba(234, 179, 8, 0.2) !important;
+        }
+
+        /* GLAS-OPTIK MIT ROTER UMRANDUNG (Admin) */
+        .glass-card-red {
+            border: 2px solid rgba(239, 68, 68, 0.7) !important;
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.2) !important;
+        }
+        
+        .card-title {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* NEON-BLINKELEFFEKT FÜR NÄCHSTEN DIENST */
+        @keyframes neonPulse {
+            0% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.5), inset 0 0 5px rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.6); }
+            50% { box-shadow: 0 0 25px rgba(6, 182, 212, 0.9), inset 0 0 12px rgba(6, 182, 212, 0.5); border-color: rgba(6, 182, 212, 1); }
+            100% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.5), inset 0 0 5px rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.6); }
+        }
+        .next-duty-neon {
+            background: rgba(15, 23, 42, 0.85) !important;
+            border: 2px solid #06b6d4 !important;
+            animation: neonPulse 1.8s infinite ease-in-out;
+        }
+
+        .dark-event-item {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border-left: 5px solid #3b82f6;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-right: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .dark-event-item.closed { border-left-color: #64748b; }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.85em;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--primary-red); color: white; box-shadow: 0 4px 12px rgba(185, 28, 28, 0.4); }
+        .btn-green { background: #16a34a; color: white; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4); }
+        .btn-danger { background: rgba(220, 38, 38, 0.2); color: #fca5a5; border: 1px solid rgba(220, 38, 38, 0.4); }
+        .btn-admin { background: var(--admin-blue); color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); }
+        .btn-block { width: 100%; margin-top: 8px; }
+
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 0.85em; font-weight: 600; margin-bottom: 5px; color: var(--text-muted); }
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: inherit;
+            font-size: 0.95em;
+            background: rgba(15, 23, 42, 0.7);
+            color: var(--text-dark);
+            backdrop-filter: blur(8px);
+        }
+        .form-control:focus { outline: none; border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2); }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.9em;
+        }
+        .counter-controls { display: flex; align-items: center; gap: 10px; }
+        .counter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* SCHÜTZEN CHIPS (SCHNELLSTART) */
+        .shooter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .shooter-chip {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #93c5fd;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .shooter-chip:hover { background: rgba(59, 130, 246, 0.4); color: #fff; }
+
+        /* FUSSZEILE / FLOATING DOCK (FARBIG MIT GLAS-OPTIK) */
+        .bottom-nav {
+            position: fixed !important; 
+            bottom: 12px !important; 
+            left: 12px !important; 
+            right: 12px !important;
+            width: calc(100% - 24px) !important;
+            max-width: 576px !important; 
+            margin: 0 auto !important;
+            background: rgba(15, 23, 42, 0.8) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border-radius: 20px !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            display: flex !important; 
+            justify-content: space-around !important;
+            align-items: center !important;
+            padding: 8px 4px !important;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5) !important;
+            z-index: 99999 !important;
+        }
+        .nav-item {
+            display: flex !important; 
+            flex-direction: column !important; 
+            align-items: center !important;
+            text-decoration: none !important; 
+            color: #94a3b8 !important; 
+            font-size: 0.7em !important; 
+            font-weight: 700 !important; 
+            cursor: pointer !important;
+            flex: 1 !important;
+            text-align: center !important;
+            padding: 6px 2px !important;
+            border-radius: 14px !important;
+            transition: all 0.2s ease;
+        }
+        .nav-item.active { 
+            color: #ffffff !important;
+            background: var(--primary-red) !important;
+            box-shadow: 0 4px 15px rgba(185, 28, 28, 0.5) !important;
+        }
+        .nav-icon { font-size: 1.35em !important; margin-bottom: 2px !important; display: block !important; }
+
+        .admin-delete-btn { display: none; }
+        body.admin-mode .admin-delete-btn { display: inline-flex !important; }
+
+        .badge-paid { background: rgba(6, 78, 59, 0.8); color: #34d399; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; border: 1px solid rgba(52, 211, 153, 0.3); }
+        .badge-open { background: rgba(127, 29, 29, 0.8); color: #fca5a5; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; border: 1px solid rgba(252, 165, 165, 0.3); }
+    </style>
 </head>
-<body class="pb-24 min-h-screen">
+<body>
 
-  <!-- APP HEADER -->
-  <header class="sticky top-0 z-40 p-4 mb-4 glass-card rounded-b-2xl rounded-t-none border-t-0 border-x-0">
-    <div class="max-w-md mx-auto text-center">
-      <h1 class="text-lg font-bold tracking-wider text-white uppercase drop-shadow">
-        Kameradschaftsbund & Schützenverein
-      </h1>
-      <p class="text-xs text-cyan-300 font-medium">Gaschurn-Partenen</p>
+    <div class="app-header">
+        <h1>Kameradschaftsbund & Schützenverein</h1>
+        <p>Gaschurn-Partenen</p>
     </div>
-  </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="max-w-md mx-auto px-4 space-y-6">
+    <!-- 1. NEWS & DIENSTPLAN -->
+    <div id="page-news" class="page-content active">
+        <div id="news-container"></div>
 
-    <!-- 1. NEWS TAB -->
-    <section id="tab-news" class="tab-content">
-      <div class="glass-red p-5 mb-4">
-        <h2 class="text-xl font-bold mb-3 text-white flex items-center gap-2">
-          <i class="fa-solid fa-bullhorn text-red-400"></i> Aktuelle Nachrichten & News
-        </h2>
-        <div id="news-feed-container" class="space-y-4">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. DIENSTPLAN TAB -->
-    <section id="tab-dienstplan" class="tab-content hidden">
-      <div class="glass-card p-5 mb-4">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-calendar-days text-cyan-400"></i> Gesamter Dienstplan
-          </h2>
-          <span class="text-xs bg-cyan-500/20 text-cyan-300 px-2.5 py-1 rounded-full border border-cyan-400/30">Saison 2026/2027</span>
-        </div>
-        <p class="text-xs text-gray-200 mb-4 bg-white/10 p-2.5 rounded-lg border border-white/15">
-          <i class="fa-regular fa-clock text-cyan-400 mr-1"></i> <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)
-        </p>
-
-        <!-- Dynamic Duty Roster -->
-        <div id="dienstplan-container" class="space-y-3">
-          <!-- Populated dynamically by JS -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. TERMINE TAB -->
-    <section id="tab-termine" class="tab-content hidden">
-      <div class="glass-blue p-5 mb-4">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-calendar-check text-cyan-400"></i> Nächste Termine
-          </h2>
-        </div>
-
-        <div id="termine-container" class="space-y-4">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. SCHIESSBUCH TAB -->
-    <section id="tab-schiessbuch" class="tab-content hidden">
-      <div class="glass-blue p-5 mb-4">
-        <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-crosshair text-cyan-400"></i> Schießbuch - Ergebnis erfassen
-        </h2>
-
-        <!-- Quick Member Selector Chips (Non-passive only) -->
-        <div class="mb-4">
-          <label class="block text-xs font-semibold text-gray-300 mb-1">Schnellauswahl Schütze:</label>
-          <div class="flex flex-wrap gap-2 mb-2" id="schiessbuch-chips">
-            <button onclick="selectSchuetze('Simon Schweighofer')" class="px-2.5 py-1 text-xs glass-input rounded-full hover:border-cyan-400">Simon Schweighofer</button>
-            <button onclick="selectSchuetze('Dietmar Schweighofer')" class="px-2.5 py-1 text-xs glass-input rounded-full hover:border-cyan-400">Dietmar Schweighofer</button>
-            <button onclick="selectSchuetze('Heimo Stocker')" class="px-2.5 py-1 text-xs glass-input rounded-full hover:border-cyan-400">Heimo Stocker</button>
-          </div>
-          <select id="sb-schuetze" class="w-full p-2.5 rounded-lg glass-input text-sm">
-            <option value="">Schütze auswählen...</option>
-          </select>
-        </div>
-
-        <!-- Disziplin (Simplified - Rifle brand selection removed as requested) -->
-        <div class="mb-4">
-          <label class="block text-xs font-semibold text-gray-300 mb-1">Disziplin</label>
-          <select id="sb-disziplin" class="w-full p-2.5 rounded-lg glass-input text-sm">
-            <option value="Luftgewehr (10m)">Luftgewehr (10m)</option>
-            <option value="Luftpistole (10m)">Luftpistole (10m)</option>
-            <option value="Kleinkaliber (50m)">Kleinkaliber (50m)</option>
-          </select>
-        </div>
-
-        <!-- Precision Score Inputs (Ringe, Zehner, Teiler) -->
-        <div class="grid grid-cols-3 gap-2 mb-4">
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1">Ringe</label>
-            <input type="number" id="sb-ringe" step="0.1" placeholder="388.5" class="w-full p-2.5 rounded-lg glass-input text-sm text-center font-bold">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1">10er</label>
-            <input type="number" id="sb-zehner" placeholder="34" class="w-full p-2.5 rounded-lg glass-input text-sm text-center font-bold">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1">Teiler</label>
-            <input type="number" id="sb-teiler" step="0.1" placeholder="8.2" class="w-full p-2.5 rounded-lg glass-input text-sm text-center font-bold">
-          </div>
-        </div>
-
-        <!-- Trend Chart Widget -->
-        <div class="mb-4 bg-white/10 p-3 rounded-xl border border-white/15">
-          <label class="block text-xs font-semibold text-cyan-300 mb-2">Trend der letzten 5 Serien:</label>
-          <div class="h-32">
-            <canvas id="trendChart"></canvas>
-          </div>
-        </div>
-
-        <button onclick="saveSchiessbuchEntry()" class="w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-xl shadow-lg transition active:scale-95 border border-cyan-400/50">
-          <i class="fa-solid fa-floppy-disk mr-2"></i> Ergebnis speichern
-        </button>
-      </div>
-    </section>
-
-    <!-- 5. STRICHLISTE TAB -->
-    <section id="tab-strichliste" class="tab-content hidden">
-      <div class="glass-blue p-5 mb-4 space-y-5">
-        <h2 class="text-xl font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-beer-mug-empty text-amber-400"></i> Schützenheim Strichliste
-        </h2>
-
-        <!-- Items Counter -->
-        <div class="space-y-3" id="strichliste-items">
-          <!-- Populated by JS -->
-        </div>
-
-        <!-- Total Sum Display -->
-        <div class="flex justify-between items-center p-3.5 bg-cyan-950/60 rounded-xl border border-cyan-400/50">
-          <span class="text-lg font-bold text-white">Gesamtbetrag:</span>
-          <span id="strichliste-total" class="text-2xl font-black text-cyan-300">€ 0,00</span>
-        </div>
-
-        <!-- Invoice Details -->
-        <div class="p-4 bg-white/10 rounded-xl border border-white/15 space-y-3">
-          <h3 class="text-sm font-bold text-cyan-300">Rechnungsempfänger Angaben</h3>
-          
-          <div>
-            <label class="block text-xs text-gray-300 mb-1">Name / Firma</label>
-            <input type="text" id="inv-name" placeholder="z. B. Betriebsrat ASG" class="w-full p-2 rounded-lg glass-input text-xs">
-          </div>
-          <div>
-            <label class="block text-xs text-gray-300 mb-1">Zusatz / z. Hd.</label>
-            <input type="text" id="inv-zusatz" placeholder="z. B. z. Hd. Manfred Wachter" class="w-full p-2 rounded-lg glass-input text-xs">
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-xs text-gray-300 mb-1">Straße & Hausnr.</label>
-              <input type="text" id="inv-strasse" placeholder="z. B. Gaschurn 164" class="w-full p-2 rounded-lg glass-input text-xs">
+        <!-- NÄCHSTER DIENST (AUTOMATISCH AKTUALISIERT & NEON-BLINKEND) -->
+        <div class="glass-card next-duty-neon">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.75em; background: #06b6d4; color: #000; font-weight: 800; padding: 2px 8px; border-radius: 6px; text-transform: uppercase;">Nächster Dienst</span>
+                <span id="live-countdown" style="font-size: 0.75em; color: #38bdf8; font-weight: 600;">Mitternachts-Sync aktiv</span>
             </div>
-            <div>
-              <label class="block text-xs text-gray-300 mb-1">PLZ & Ort</label>
-              <input type="text" id="inv-ort" placeholder="z. B. 6793 Gaschurn" class="w-full p-2 rounded-lg glass-input text-xs">
+            <div id="next-duty-widget"></div>
+        </div>
+
+        <!-- GESAMTER DIENSTPLAN (MODERN IN GLAS-OPTIK) -->
+        <div class="glass-card">
+            <div class="card-title">
+                <span>📋 Gesamter Dienstplan</span>
+                <span style="font-size: 0.7em; background: var(--primary-red); color: white; padding: 3px 8px; border-radius: 6px;">2026/2027</span>
             </div>
-          </div>
-          <div>
-            <label class="block text-xs text-gray-300 mb-1">Personen mit Luftgewehr geschossen?</label>
-            <select id="inv-luftgewehr" class="w-full p-2 rounded-lg glass-input text-xs">
-              <option value="Nein">Nein</option>
-              <option value="Ja">Ja</option>
-            </select>
-          </div>
+            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 12px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
+            <div id="full-roster-list"></div>
         </div>
-
-        <button onclick="generatePDFInvoice()" class="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl shadow-lg transition active:scale-95 border border-green-400/50 flex items-center justify-center gap-2">
-          <i class="fa-solid fa-file-pdf"></i> Abrechnung als PDF speichern & Archivieren
-        </button>
-      </div>
-    </section>
-
-    <!-- 6. MITGLIEDER TAB -->
-    <section id="tab-mitglieder" class="tab-content hidden">
-      <div class="glass-yellow p-5 mb-4">
-        <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-users text-amber-400"></i> Vereinsmitglieder
-        </h2>
-
-        <!-- Search input -->
-        <input type="text" id="member-search" onkeyup="filterMemberList()" placeholder="Mitglied suchen..." class="w-full p-2.5 mb-4 rounded-lg glass-input text-sm">
-
-        <!-- Member Sections -->
-        <div id="mitglieder-container" class="space-y-4">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 7. ADMIN TAB (PASSWORD PROTECTED) -->
-    <section id="tab-admin" class="tab-content hidden">
-      
-      <!-- LOCK SCREEN -->
-      <div id="admin-lockscreen" class="glass-red p-6 text-center space-y-4">
-        <i class="fa-solid fa-lock text-4xl text-red-400 mb-2"></i>
-        <h2 class="text-xl font-bold text-white">Geschützter Admin-Bereich</h2>
-        <p class="text-xs text-gray-300">Bitte geben Sie das Admin-Passwort ein (Standard: 1997)</p>
-        <div class="max-w-xs mx-auto space-y-3">
-          <input type="password" id="admin-pass-input" placeholder="Passwort eingeben" class="w-full p-2.5 text-center text-sm rounded-lg glass-input">
-          <button onclick="unlockAdmin()" class="w-full py-2.5 bg-red-600 hover:bg-red-500 font-bold rounded-lg text-sm shadow transition">
-            Entsperren
-          </button>
-        </div>
-      </div>
-
-      <!-- ADMIN CONTENT AREA (HIDDEN UNTIL UNLOCKED) -->
-      <div id="admin-panel" class="glass-red p-5 mb-4 space-y-6 hidden">
-        <div class="flex justify-between items-center pb-3 border-b border-white/10">
-          <h2 class="text-xl font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-user-shield text-red-400"></i> Admin-Konsole
-          </h2>
-          <button onclick="lockAdmin()" class="text-xs bg-gray-700/60 hover:bg-gray-600 px-2.5 py-1 rounded text-gray-300 border border-white/10">
-            <i class="fa-solid fa-lock mr-1"></i> Sperren
-          </button>
-        </div>
-
-        <!-- News Post Creator (With Image Upload) -->
-        <div class="p-3 bg-white/10 rounded-xl border border-white/15 space-y-3">
-          <h3 class="text-sm font-bold text-red-300 flex items-center gap-2">
-            <i class="fa-solid fa-newspaper"></i> Neue News mit Bild veröffentlichen
-          </h3>
-          <input type="text" id="news-title-input" placeholder="Titel der Nachricht" class="w-full p-2 rounded-lg glass-input text-xs">
-          <textarea id="news-text-input" placeholder="Inhalt der Ankündigung..." class="w-full p-2 rounded-lg glass-input text-xs h-20"></textarea>
-          <div>
-            <label class="block text-xs text-gray-300 mb-1">Bild hochladen (optional):</label>
-            <input type="file" id="news-image-input" accept="image/*" class="w-full text-xs text-gray-300 glass-input rounded-lg p-1">
-          </div>
-          <button onclick="publishNewsPost()" class="w-full py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg text-xs shadow">
-            Ankündigung veröffentlichen
-          </button>
-        </div>
-
-        <!-- Fee Management (Aktiv & Passiv split - 30€) -->
-        <div class="p-3 bg-white/10 rounded-xl border border-white/15 space-y-3">
-          <h3 class="text-sm font-bold text-amber-300 flex items-center gap-2">
-            <i class="fa-solid fa-sack-dollar"></i> Beitragsverwaltung (€ 30,-)
-          </h3>
-          
-          <!-- Tab selector for Active vs Passive -->
-          <div class="flex border-b border-white/10 mb-2">
-            <button onclick="switchFeeTab('aktiv')" id="fee-tab-aktiv" class="flex-1 py-1 text-xs font-bold text-amber-300 border-b-2 border-amber-400">
-              Aktive & Ehren (22)
-            </button>
-            <button onclick="switchFeeTab('passiv')" id="fee-tab-passiv" class="flex-1 py-1 text-xs font-bold text-gray-400">
-              Passive Mitglieder (18)
-            </button>
-          </div>
-
-          <div id="admin-fee-list" class="space-y-2 max-h-56 overflow-y-auto pr-1">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-
-        <!-- Key Management (Schlüsselliste) -->
-        <div class="p-3 bg-white/10 rounded-xl border border-white/15 space-y-3">
-          <div class="flex justify-between items-center">
-            <h3 class="text-sm font-bold text-yellow-300 flex items-center gap-2">
-              <i class="fa-solid fa-key"></i> Schlüsselliste & Berechtigungen
-            </h3>
-            <button onclick="addNewKeyEntry()" class="text-xs bg-cyan-600 hover:bg-cyan-500 px-2 py-1 rounded font-semibold text-white">+ Neu</button>
-          </div>
-          <div id="admin-schluessel-list" class="space-y-2 max-h-52 overflow-y-auto pr-1">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-
-        <!-- Saved PDF Invoices Archive -->
-        <div class="p-3 bg-white/10 rounded-xl border border-white/15 space-y-3">
-          <h3 class="text-sm font-bold text-green-300 flex items-center gap-2">
-            <i class="fa-solid fa-file-invoice"></i> Gespeicherte Rechnungen / PDF-Archiv
-          </h3>
-          <div id="admin-invoices-list" class="space-y-2 max-h-40 overflow-y-auto text-xs">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-
-        <!-- Admin Event Creator -->
-        <div class="p-3 bg-white/10 rounded-xl border border-white/15 space-y-3">
-          <h3 class="text-sm font-bold text-cyan-300 flex items-center gap-2">
-            <i class="fa-solid fa-calendar-plus"></i> Neuen Termin anlegen
-          </h3>
-          <input type="text" id="adm-event-title" placeholder="Titel (z. B. Jahreshauptversammlung)" class="w-full p-2 rounded-lg glass-input text-xs">
-          <input type="text" id="adm-event-date" placeholder="Datum & Zeit (z. B. 15.11.2026, 19:30 Uhr)" class="w-full p-2 rounded-lg glass-input text-xs">
-          <input type="text" id="adm-event-location" placeholder="Ort (z. B. Schützenheim Partenen)" class="w-full p-2 rounded-lg glass-input text-xs">
-          <button onclick="addEventByAdmin()" class="w-full py-2 bg-cyan-600 hover:bg-cyan-500 font-bold rounded-lg text-xs shadow text-white">
-            Termin veröffentlichen
-          </button>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-  <!-- GLASS FOOTER NAVIGATION WITH DYNAMIC ACCENT COLORS -->
-  <nav class="fixed bottom-0 left-0 right-0 z-50 glass-nav py-2 px-3">
-    <div class="max-w-md mx-auto flex justify-between items-center text-center">
-      <button onclick="switchTab('news')" id="nav-news" class="flex-1 py-1 flex flex-col items-center transition">
-        <i class="fa-solid fa-bullhorn text-lg mb-0.5"></i>
-        <span class="text-[10px] font-medium">News</span>
-      </button>
-      <button onclick="switchTab('dienstplan')" id="nav-dienstplan" class="flex-1 py-1 flex flex-col items-center transition">
-        <i class="fa-solid fa-calendar-days text-lg mb-0.5"></i>
-        <span class="text-[10px] font-medium">Dienstplan</span>
-      </button>
-      <button onclick="switchTab('termine')" id="nav-termine" class="flex-1 py-1 flex flex-col items-center transition">
-        <i class="fa-solid fa-calendar-check text-lg mb-0.5"></i>
-        <span class="text-[10px] font-medium">Termine</span>
-      </button>
-      <button onclick="switchTab('schiessbuch')" id="nav-schiessbuch" class="flex-1 py-1 flex flex-col items-center transition">
-        <i class="fa-solid fa-crosshair text-lg mb-0.5"></i>
-        <span class="text-[10px] font-medium">Schießbuch</span>
-      </button>
-      <button onclick="switchTab('strichliste')" id="nav-strichliste" class="flex-1 py-1 flex flex-col items-center transition">
-        <i class="fa-solid fa-beer-mug-empty text-lg mb-0.5"></i>
-        <span class="text-[10px] font-medium">Strichliste</span>
-      </button>
-      <button onclick="switchTab('mitglieder')" id="nav-mitglieder" class="flex-1 py-1 flex flex-col items-center transition">
-        <i class="fa-solid fa-users text-lg mb-0.5"></i>
-        <span class="text-[10px] font-medium">Mitglieder</span>
-      </button>
-      <button onclick="switchTab('admin')" id="nav-admin" class="flex-1 py-1 flex flex-col items-center transition">
-        <i class="fa-solid fa-user-shield text-lg mb-0.5"></i>
-        <span class="text-[10px] font-medium">Admin</span>
-      </button>
     </div>
-  </nav>
 
-  <!-- JAVASCRIPT APP LOGIC -->
-  <script>
-    // --- DATA STORES ---
-
-    let newsData = [
-      {
-        id: 1,
-        date: "24. OKTOBER 2026",
-        title: "Waldweihnacht 2026 Vorbereitungen",
-        text: "Die Vorbereitungen für die traditionelle Waldweihnacht am 05. Dezember am Abenteuerspielplatz Gaschurn laufen auf Hochtouren. Helfer bitte bei Simon melden!",
-        image: null
-      },
-      {
-        id: 2,
-        date: "18. OKTOBER 2026",
-        title: "Schießstand Reinigungs- und Wartungstag",
-        text: "Am kommenden Samstag findet ab 09:00 Uhr die halbjährliche Reinigung aller 10m-Stände statt.",
-        image: null
-      }
-    ];
-
-    const dienstplanData = [
-      { date: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-      { date: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-      { date: "06.11.2026", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
-      { date: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-      { date: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-      { date: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-      { date: "01.01.2027", team: "Geschlossen", names: "Geschlossen (Neujahr)", status: "closed" },
-      { date: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
-      { date: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-      { date: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-      { date: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-      { date: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-      { date: "26.03.2027", team: "Geschlossen", names: "Geschlossen (Karfreitag)", status: "closed" },
-      { date: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
-    ];
-
-    let termineData = [
-      {
-        id: 1,
-        title: "Spenden Sammeln Schwarzes Kreuz Österreich",
-        date: "01. November 2026",
-        time: "13:00 Uhr Friedhof Partenen",
-        zusagen: ["Simon Schweighofer", "Heimo Stocker"],
-        absagen: []
-      },
-      {
-        id: 2,
-        title: "Gedenken an die Gefallenen beider Weltkriege",
-        date: "08. November 2026",
-        time: "10:00 Uhr Kirche Gaschurn",
-        zusagen: ["Simon Schweighofer", "Sabrina Kinzl", "Dietmar Schweighofer"],
-        absagen: ["Christoph Wittwer"]
-      }
-    ];
-
-    const strichlisteCatalog = [
-      { id: "wurst", name: "Hauswurst / Essen", price: 3.50, qty: 0, icon: "fa-drumstick-bite" },
-      { id: "getraenke", name: "Getränke (Bier/Limo/Wein/Kaffee)", price: 3.00, qty: 0, icon: "fa-beer-mug-empty" },
-      { id: "schiessen", name: "Luftgewehrschießen", price: 8.00, qty: 0, icon: "fa-bullseye" },
-      { id: "trinkgeld", name: "Trinkgeld / Sonstiges", price: 1.00, qty: 0, icon: "fa-coins" }
-    ];
-
-    // Master list of members (Aktiv + Passiv)
-    const mitgliederData = [
-      // AKTIVE & FUNKTIONÄRE
-      { name: "Wachter Manfred", role: "Aktiv / Waffenwart", type: "aktiv", phone: "0664 4752129", paid: true },
-      { name: "Wachter Werner", role: "Aktiv", type: "aktiv", phone: "0664 2804791", paid: true },
-      { name: "Schweighofer Dietmar", role: "Aktiv / Fähnrich", type: "aktiv", phone: "0699 19281005", paid: true },
-      { name: "Schweighofer Simon", role: "Aktiv / Obmann", type: "aktiv", phone: "0650 3049466", paid: true },
-      { name: "Spettel Norbert", role: "Aktiv / Fähnrich-Stellv.", type: "aktiv", phone: "0664 5413877", paid: false },
-      { name: "Stocker Heimo", role: "Aktiv / Obmann-Stellv.", type: "aktiv", phone: "0650 3600415", paid: true },
-      { name: "Wittwer Christoph", role: "Aktiv", type: "aktiv", phone: "0677 62326458", paid: true },
-      { name: "Wittwer Werner", role: "Aktiv", type: "aktiv", phone: "0650 2501910", paid: false },
-      { name: "Rudigier Erwin", role: "Aktiv", type: "aktiv", phone: "0664 3487459", paid: true },
-      { name: "Sandrell Daniel", role: "Bürgermeister / Aktiv", type: "aktiv", phone: "0664 1134051", paid: true },
-      { name: "Mattle Werner", role: "Aktiv", type: "aktiv", phone: "0664 2509274", paid: true },
-      { name: "Pascal Tripolt", role: "Aktiv", type: "aktiv", phone: "0664 5162082", paid: false },
-      
-      // MARKETENDERINNEN
-      { name: "Stocker Karin", role: "Marketenderin / Kassierin", type: "marketenderin", phone: "0650 2800596", paid: true },
-      { name: "Suntinger Jasmin", role: "Marketenderin", type: "marketenderin", phone: "0664 2135908", paid: true },
-      { name: "Kinzl Sabrina", role: "Marketenderin / Schriftführerin", type: "marketenderin", phone: "0660 1113150", paid: true },
-      { name: "Maria Spettel", role: "Marketenderin", type: "marketenderin", phone: "0664 7644140", paid: true },
-      { name: "Natalie Stocker", role: "Marketenderin", type: "marketenderin", phone: "0664 4587288", paid: true },
-      
-      // EHRENMITGLIEDER
-      { name: "Sandrell Heinrich", role: "Ehrenmitglied", type: "ehren", phone: "0664 1228485", paid: true },
-      { name: "Kofler Konrad", role: "Ehrenobmann", type: "ehren", phone: "0664 4331385", paid: true },
-      { name: "Dona Lothar", role: "Ehrenmitglied", type: "ehren", phone: "0664 45754735", paid: true },
-      { name: "Gerd Sprattler", role: "Ehrenmitglied", type: "ehren", phone: "0650 9600245", paid: true },
-      
-      // JUGEND
-      { name: "Elias Stocker", role: "Jugendmitglied", type: "jugend", phone: "0676 7103446", paid: true },
-
-      // PASSIVE MITGLIEDER (OFFIZIELLES REGISTER 2026 - 18 PERSONEN)
-      { name: "Joel Wachter", role: "Passivmitglied (Gaschurn 164e)", type: "passiv", phone: "-", paid: false },
-      { name: "Kofler Marlene", role: "Passivmitglied (Gaschurn 164d)", type: "passiv", phone: "-", paid: true },
-      { name: "Wachter Monika", role: "Passivmitglied (Gaschurn 164e)", type: "passiv", phone: "-", paid: true },
-      { name: "Schallner Harry", role: "Passivmitglied (Gortipohl 100)", type: "passiv", phone: "-", paid: false },
-      { name: "Netzer Werner", role: "Passivmitglied (Gaschurn 35a)", type: "passiv", phone: "-", paid: true },
-      { name: "Netzer Markus", role: "Passivmitglied (Gaschurn 139a)", type: "passiv", phone: "-", paid: true },
-      { name: "Fitsch Manuela", role: "Passivmitglied (Gaschurn)", type: "passiv", phone: "-", paid: true },
-      { name: "Geiger Monika", role: "Passivmitglied (Gaschurn)", type: "passiv", phone: "-", paid: false },
-      { name: "Frank Sandrell", role: "Passivmitglied (Gaschurn 172b)", type: "passiv", phone: "-", paid: true },
-      { name: "Barbisch Andreas", role: "Passivmitglied (Gaschurn 185a)", type: "passiv", phone: "-", paid: false },
-      { name: "Patrick Wachter", role: "Passivmitglied (Gaschurn 153)", type: "passiv", phone: "-", paid: true },
-      { name: "Steurer Harald", role: "Passivmitglied (Gaschurn 165b)", type: "passiv", phone: "-", paid: true },
-      { name: "Steurer Angela", role: "Passivmitglied (Gaschurn 165b)", type: "passiv", phone: "-", paid: true },
-      { name: "Kofler Corinna", role: "Passivmitglied (Gaschurn 164d)", type: "passiv", phone: "-", paid: false },
-      { name: "Bitschnau Jutta", role: "Passivmitglied (U. Venserstr 82)", type: "passiv", phone: "-", paid: true },
-      { name: "Bitschnau Klaus", role: "Passivmitglied (U. Venserstr 82)", type: "passiv", phone: "-", paid: true },
-      { name: "Essig Armin", role: "Passivmitglied (Gaschurn)", type: "passiv", phone: "-", paid: false },
-      { name: "Carlos Da Ponte", role: "Passivmitglied (Gaschurn 164d)", type: "passiv", phone: "-", paid: true }
-    ];
-
-    let schluesselData = [
-      { name: "Kofler Konrad", perm: "Eingang & Büro" },
-      { name: "Wachter Manfred", perm: "Waffenschrank" },
-      { name: "Wachter Werner", perm: "Eingang & Büro" },
-      { name: "Schweighofer Dietmar", perm: "Eingang & Büro" },
-      { name: "Schweighofer Simon", perm: "Waffenschrank" },
-      { name: "Spettel Norbert", perm: "Waffenschrank" },
-      { name: "Stocker Heimo", perm: "Waffenschrank" },
-      { name: "Wittwer Christoph", perm: "Eingang & Büro" },
-      { name: "Wittwer Werner", perm: "Eingang & Büro" },
-      { name: "Mattle Werner", perm: "Eingang & Büro" },
-      { name: "Markus Netzer", perm: "Eingang & Büro" },
-      { name: "Werner Netzer", perm: "Eingang & Büro" },
-      { name: "Pascal Tripolt", perm: "Eingang & Büro" },
-      { name: "Maria Spettel", perm: "Schlüssel vorhanden" }
-    ];
-
-    let savedInvoicesArchive = [];
-    let activeFeeTab = 'aktiv';
-    let isAdminUnlocked = false;
-    let trendChartObj = null;
-
-    // --- TAB NAVIGATION & BUTTON COLORING ---
-
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.getElementById('tab-' + tabId).classList.remove('hidden');
-
-      const tabsConfig = [
-        { id: 'news', activeClass: 'text-red-400 font-bold scale-105' },
-        { id: 'dienstplan', activeClass: 'text-cyan-300 font-bold scale-105' },
-        { id: 'termine', activeClass: 'text-cyan-400 font-bold scale-105' },
-        { id: 'schiessbuch', activeClass: 'text-cyan-400 font-bold scale-105' },
-        { id: 'strichliste', activeClass: 'text-cyan-400 font-bold scale-105' },
-        { id: 'mitglieder', activeClass: 'text-yellow-400 font-bold scale-105' },
-        { id: 'admin', activeClass: 'text-red-400 font-bold scale-105' }
-      ];
-
-      tabsConfig.forEach(tab => {
-        const btn = document.getElementById('nav-' + tab.id);
-        if (tab.id === tabId) {
-          btn.className = `flex-1 py-1 flex flex-col items-center transition ${tab.activeClass}`;
-        } else {
-          btn.className = 'flex-1 py-1 flex flex-col items-center transition text-gray-400 hover:text-gray-200';
-        }
-      });
-
-      if (tabId === 'schiessbuch' && !trendChartObj) {
-        initTrendChart();
-      }
-    }
-
-    // --- RENDERING FUNCTIONS ---
-
-    function renderNews() {
-      const container = document.getElementById('news-feed-container');
-      container.innerHTML = newsData.map(item => `
-        <div class="p-4 bg-white/10 rounded-xl border border-white/15 space-y-2">
-          <span class="text-[10px] font-bold text-red-300 bg-red-500/20 px-2 py-0.5 rounded border border-red-500/30">${item.date}</span>
-          <h3 class="font-bold text-white text-base mt-1">${item.title}</h3>
-          <p class="text-xs text-gray-200 leading-relaxed">${item.text}</p>
-          ${item.image ? `<img src="${item.image}" class="w-full h-48 object-cover rounded-lg mt-2 border border-white/20">` : ''}
+    <!-- 2. TERMINE (MODERN IN GLAS-OPTIK MIT BLAUER UMRANDUNG) -->
+    <div id="page-events" class="page-content">
+        <div class="glass-card glass-card-blue">
+            <div class="card-title" style="color: #60a5fa;">📅 Nächste Vereinstermine</div>
+            <div id="events-container"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Termine...</p></div>
         </div>
-      `).join('');
-    }
+    </div>
 
-    // 00:00 MIDNIGHT AUTOMATIC DUTY ROSTER HIGHLIGHTING
-    function renderDienstplan() {
-      const container = document.getElementById('dienstplan-container');
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+    <!-- 3. SCHIESSBUCH (ERWEITERT MIT SCHNELLSTART, TEILER & MINI-DIAGRAMM) -->
+    <div id="page-shooting" class="page-content">
+        <div class="glass-card glass-card-blue">
+            <div class="card-title" style="color: #60a5fa;">🎯 Schießbuch - Präzision & Ergebnisse</div>
+            
+            <!-- SCHNELLAUSHALT FÜR STAMMSCHÜTZEN (CHIPS) -->
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 0.75em; color: var(--text-muted); display: block; margin-bottom: 4px;">⚡ Schnellstart Stammschützen:</label>
+                <div class="shooter-chips" id="stammschuetzen-chips"></div>
+            </div>
 
-      let nextDutyFound = false;
+            <form onsubmit="saveShot(event)">
+                <div class="form-group"><label>Name des Schützen</label><input type="text" class="form-control" id="shot-name" required placeholder="Name eingeben oder oben wählen"></div>
+                <div class="form-group"><label>Waffe / Disziplin</label>
+                    <select class="form-control" id="shot-disc">
+                        <option>Luftgewehr (LG)</option>
+                        <option>Luftpistole (LP)</option>
+                        <option>KK-Gewehr</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;"><label>Erreichte Ringe</label><input type="number" step="0.1" class="form-control" id="shot-rings" required placeholder="z.B. 298.5"></div>
+                    <div class="form-group" style="flex: 1;"><label>Teiler (Mittelpunkt)</label><input type="number" step="0.1" class="form-control" id="shot-teiler" placeholder="z.B. 12.4"></div>
+                </div>
+                
+                <!-- MINI-ZIELSCHEIBE / TREFFERANZEIGE GADGET -->
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 10px; border-radius: 10px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
+                    <div style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 4px;">🎯 Letzte Serien-Tendenz (Trend-Gadget)</div>
+                    <div style="display: flex; justify-content: center; gap: 6px; align-items: flex-end; height: 35px;" id="trend-gadget-bars">
+                        <!-- Dynamische Trend-Balken -->
+                    </div>
+                </div>
 
-      container.innerHTML = dienstplanData.map(item => {
-        const parts = item.date.split('.');
-        const itemDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-        itemDate.setHours(0, 0, 0, 0);
+                <button type="submit" class="btn btn-primary btn-block">Ergebnis speichern</button>
+            </form>
+        </div>
+    </div>
 
-        let cardClass = 'bg-white/10 border-white/15';
-        let badgeClass = item.status === 'closed' 
-          ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30' 
-          : 'bg-red-500/20 text-red-300 border border-red-500/30';
-        let nextBadge = '';
+    <!-- 4. STRICHLISTE (KOMPLETTE PREISLISTE, GLAS-OPTIK MIT BLAUER UMRANDUNG) -->
+    <div id="page-drinks" class="page-content">
+        <div class="glass-card glass-card-blue">
+            <div class="card-title" style="color: #60a5fa;">🍻 Schützenheim Strichliste (Komplette Preisliste)</div>
+            
+            <div class="price-item"><span>🌭 Hauswurst / Essen (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
+            <div class="price-item"><span>🍺 Bier / Radler (€ 3,80)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
+            <div class="price-item"><span>🥤 Limo / Cola / Almdudler (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
+            <div class="price-item"><span>🍷 Wein / Spritzer (€ 4,20)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein', -1)">-</button><span id="count-wein" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein', 1)">+</button></div></div>
+            <div class="price-item"><span>☕ Kaffee (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
+            
+            <div class="price-item" style="background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 8px;">
+                <span>🎯 Luftgewehrschießen (€ 8,00 / P.)</span>
+                <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
+            </div>
 
-        // Determine next upcoming open duty
-        if (!nextDutyFound && itemDate >= today && item.status !== 'closed') {
-          nextDutyFound = true;
-          cardClass = 'glass-blue pulsing-duty bg-cyan-950/40';
-          nextBadge = '<span class="ml-2 px-2 py-0.5 bg-cyan-400 text-black text-[9px] font-black rounded-full blink-badge shadow-md">NÄCHSTER DIENST</span>';
+            <div class="price-item"><span>💵 Trinkgeld / Sonstiges</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('trinkgeld', -1)">-</button><span id="count-trinkgeld" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('trinkgeld', 1)">+</button></div></div>
+
+            <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
+                <span>Gesamtbetrag:</span>
+                <span id="total-price" style="color: #60a5fa;">€ 0,00</span>
+            </div>
+
+            <div style="margin-top: 15px; background: rgba(15, 23, 42, 0.5); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                <h4 style="color: #60a5fa; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger Angaben:</h4>
+                <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
+                <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
+                <div class="form-group"><label>Straße & Hausnummer</label><input type="text" class="form-control" id="cust-address" placeholder="z. B. St. Jakob 151"></div>
+                <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="z. B. 6580 St. Anton am Arlberg"></div>
+                
+                <div class="form-group">
+                    <label>Luftgewehrschießen Details vermerken?</label>
+                    <select class="form-control" id="cust-shot-option" onchange="toggleShooterNamesInput()">
+                        <option value="nein">Nein</option>
+                        <option value="ja">Ja (Namen/Anzahl auf Rechnung)</option>
+                    </select>
+                </div>
+                <div class="form-group" id="shooter-names-group" style="display:none;">
+                    <label>Namen der Schützen / Gruppeninfo</label>
+                    <input type="text" class="form-control" id="cust-shooter-names" placeholder="z.B. 16 Personen">
+                </div>
+            </div>
+
+            <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 12px;">💾 Abrechnung speichern & Rechnungs-PDF erstellen</button>
+            <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 8px;">Zurücksetzen</button>
+        </div>
+    </div>
+
+    <!-- 6. MITGLIEDER (MODERN IN GLAS-OPTIK MIT GELBER UMRANDUNG) -->
+    <div id="page-guide" class="page-content">
+        <div class="glass-card glass-card-yellow">
+            <div class="card-title" style="color: #facc15;">⭐ Vorstand & Funktionsträger ⭐</div>
+            <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
+                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:#fca5a5;">Obmann</span></div><a href="tel:06503049466" style="color:#60a5fa; font-weight:700;">0650 3049466</a></div>
+                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:#fca5a5;">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#60a5fa; font-weight:700;">0650 3600415</a></div>
+                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:#fca5a5;">Kassierin</span></div><a href="tel:06502800596" style="color:#60a5fa; font-weight:700;">0650 2800596</a></div>
+                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:#fca5a5;">Schriftführerin</span></div><a href="tel:06601113150" style="color:#60a5fa; font-weight:700;">0660 1113150</a></div>
+                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:#fca5a5;">Bürgermeister</span></div><a href="tel:06641134051" style="color:#60a5fa; font-weight:700;">0664 1134051</a></div>
+            </div>
+        </div>
+
+        <div class="glass-card glass-card-yellow">
+            <div class="card-title" style="color: #facc15;">👥 Aktive & Passive Mitglieder</div>
+            <div id="public-members-list" style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
+                <!-- Dynamisch geladen -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 7 & 10. ADMIN-BEREICH (GESCHÜTZT, ROT UMRANDET, UNTERTEILT, BILDER/TEXT UPLOAD) -->
+    <div id="page-card" class="page-content">
+        <div class="glass-card glass-card-red" id="admin-login-card">
+            <div class="card-title" style="color: #f87171 !important;">🔐 Geschützter Admin-Bereich</div>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="form-group"><label>Admin-Passwort</label><input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required></div>
+                <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
+            </form>
+        </div>
+
+        <div class="admin-delete-btn">
+            <div class="glass-card glass-card-red" style="width: 100%;">
+                <div class="card-title" style="color: #f87171 !important;">🔓 Admin-Modus Aktiv</div>
+                <div style="display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;">
+                    <button class="admin-sub-tab-btn active" id="btn-tab-news" onclick="switchAdminTab('news')">📢 News & Upload</button>
+                    <button class="admin-sub-tab-btn" id="btn-tab-finance" onclick="switchAdminTab('finance')">💶 Rechnungen</button>
+                    <button class="admin-sub-tab-btn" id="btn-tab-members" onclick="switchAdminTab('members')">👥 Mitglieder & Beiträge</button>
+                    <button class="admin-sub-tab-btn" id="btn-tab-keys" onclick="switchAdminTab('keys')">🔑 Schlüsselliste</button>
+                </div>
+                <button class="btn btn-danger btn-block" onclick="logoutAdmin()">Admin-Modus Beenden</button>
+            </div>
+
+            <!-- TAB 1: NEWS & FOTO UPLOAD -->
+            <div id="admin-tab-news" class="admin-tab-content">
+                <div class="glass-card glass-card-red">
+                    <div class="card-title" style="color: #f87171;">📢 News, Foto & Text Veröffentlichen</div>
+                    <form onsubmit="addNewsItem(event)">
+                        <div class="form-group"><label>Titel / Überschrift</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
+                        <div class="form-group"><label>Text-Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Beschreibung..."></textarea></div>
+                        <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
+                        <button type="submit" class="btn btn-admin btn-block">Veröffentlichen</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB 2: RECHNUNGEN -->
+            <div id="admin-tab-finance" class="admin-tab-content" style="display: none;">
+                <div class="glass-card glass-card-red">
+                    <div class="card-title" style="color: #f87171;">💶 Gespeicherte Rechnungen (PDF Export)</div>
+                    <div id="admin-tally-history-list"></div>
+                </div>
+            </div>
+
+            <!-- TAB 3: MITGLIEDER & BEITRÄGE (AKTIV & PASSIV UNTERTEILT, 30€, BEARBEITBAR) -->
+            <div id="admin-tab-members" class="admin-tab-content" style="display: none;">
+                <div class="glass-card glass-card-red">
+                    <div class="card-title" style="color: #f87171;">👥 Beitragsverwaltung (Aktiv & Passiv € 30)</div>
+                    <button class="btn btn-green btn-block" style="margin-bottom: 12px;" onclick="openAddMemberModal()">+ Mitglied hinzufügen</button>
+                    
+                    <h4 style="color: #60a5fa; font-size: 0.9em; margin: 10px 0 5px 0;">Aktive Mitglieder</h4>
+                    <div id="admin-active-members-list"></div>
+
+                    <h4 style="color: #facc15; font-size: 0.9em; margin: 15px 0 5px 0;">Passive Mitglieder</h4>
+                    <div id="admin-passive-members-list"></div>
+                </div>
+            </div>
+
+            <!-- TAB 4: SCHLÜSSELLISTE (BEARBEITBAR) -->
+            <div id="admin-tab-keys" class="admin-tab-content" style="display: none;">
+                <div class="glass-card glass-card-red">
+                    <div class="card-title" style="color: #f87171;">🔑 Schlüsselausgabe & Verwaltung</div>
+                    <button class="btn btn-green btn-block" style="margin-bottom: 12px;" onclick="openAddKeyModal()">+ Schlüssel vergeben</button>
+                    <div id="admin-keys-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8 & 11. FUSSZEILE (RICHTIGE FARBEN & GLAS-OPTIK) -->
+    <nav class="bottom-nav">
+        <a onclick="switchTab('news')" class="nav-item active" id="nav-news"><span class="nav-icon">📢</span><span>News</span></a>
+        <a onclick="switchTab('events')" class="nav-item" id="nav-events"><span class="nav-icon">📅</span><span>Termine</span></a>
+        <a onclick="switchTab('shooting')" class="nav-item" id="nav-shooting"><span class="nav-icon">🎯</span><span>Schießbuch</span></a>
+        <a onclick="switchTab('drinks')" class="nav-item" id="nav-drinks"><span class="nav-icon">🍻</span><span>Strichliste</span></a>
+        <a onclick="switchTab('guide')" class="nav-item" id="nav-guide"><span class="nav-icon">👥</span><span>Mitglieder</span></a>
+        <a onclick="switchTab('card')" class="nav-item" id="nav-card"><span class="nav-icon">🔒</span><span>Admin</span></a>
+    </nav>
+
+    <!-- JAVASCRIPT LOGIK -->
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('page-' + tabId).classList.add('active');
+            document.getElementById('nav-' + tabId).classList.add('active');
+            window.scrollTo(0, 0);
         }
 
-        return `
-          <div class="p-3.5 rounded-xl border ${cardClass} flex justify-between items-center transition">
-            <div>
-              <div class="flex items-center">
-                <span class="text-xs font-bold ${item.status === 'closed' ? 'text-gray-400' : 'text-cyan-300'}">${item.date}</span>
-                ${nextBadge}
-              </div>
-              <div class="text-xs text-gray-100 mt-1 font-medium">${item.names}</div>
-            </div>
-            <span class="text-xs px-2.5 py-1 rounded-full font-bold ${badgeClass}">
-              ${item.team}
-            </span>
-          </div>
-        `;
-      }).join('');
-    }
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.admin-sub-tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('admin-tab-' + tabName).style.display = 'block';
+            document.getElementById('btn-tab-' + tabName).classList.add('active');
+        }
 
-    // MIDNIGHT AUTO REFRESH SCHEDULER (00:00 TIMER)
-    function scheduleMidnightUpdate() {
-      const now = new Date();
-      const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-      const msToMidnight = night.getTime() - now.getTime();
-      
-      setTimeout(() => {
-        renderDienstplan();
-        scheduleMidnightUpdate(); // Loop for next midnight
-      }, msToMidnight);
-    }
+        function toggleShooterNamesInput() {
+            const opt = document.getElementById('cust-shot-option').value;
+            document.getElementById('shooter-names-group').style.display = (opt === 'ja') ? 'block' : 'none';
+        }
 
-    function renderTermine() {
-      const container = document.getElementById('termine-container');
-      container.innerHTML = termineData.map(item => `
-        <div class="p-4 bg-white/10 rounded-xl border border-cyan-400/30 space-y-3">
-          <div class="flex justify-between items-start">
-            <div>
-              <h3 class="font-bold text-white text-sm">${item.title}</h3>
-              <p class="text-xs text-cyan-300 mt-1"><i class="fa-regular fa-calendar mr-1"></i> ${item.date} • ${item.time}</p>
-            </div>
-            <button onclick="deleteEvent(${item.id})" class="text-xs text-red-400 hover:text-red-300 p-1" title="Termin löschen">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
+        // VOLLSTÄNDIGER DIENSTPLAN 2026/2027 MIT DATUMS-ABGLEICH
+        const masterDutyRoster = [
+            { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { dateStr: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
+            { dateStr: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { dateStr: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { dateStr: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
+            { dateStr: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
+            { dateStr: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { dateStr: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { dateStr: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { dateStr: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
+            { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
+        ];
 
-          <div class="flex gap-2">
-            <button onclick="rsvpEvent(${item.id}, 'zusage')" class="flex-1 py-1.5 bg-green-600/30 hover:bg-green-600/50 text-green-300 border border-green-500/50 rounded-lg text-xs font-bold transition">
-              <i class="fa-solid fa-thumbs-up mr-1"></i> Zusage
-            </button>
-            <button onclick="rsvpEvent(${item.id}, 'absage')" class="flex-1 py-1.5 bg-red-600/30 hover:bg-red-600/50 text-red-300 border border-red-500/50 rounded-lg text-xs font-bold transition">
-              <i class="fa-solid fa-thumbs-down mr-1"></i> Absage
-            </button>
-          </div>
+        // DATUMS-HILFSFUNKTION (PARST TT.MM.JJJJ)
+        function parseLocalDate(dateStr) {
+            const parts = dateStr.split('.');
+            return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
 
-          <div class="text-[11px] space-y-1 pt-2 border-t border-white/10">
-            <div class="text-green-300">
-              <strong>Zusagen (${item.zusagen.length}):</strong> ${item.zusagen.length > 0 ? item.zusagen.join(', ') : 'Keine'}
-            </div>
-            <div class="text-red-300">
-              <strong>Absagen (${item.absagen.length}):</strong> ${item.absagen.length > 0 ? item.absagen.join(', ') : 'Keine'}
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
+        // AUTOMATISCHER NÄCHSTER DIENST MIT MITDERNIGHT-TIMER (PUNKT 9)
+        function updateDutyPlanWidget() {
+            const today = new Date();
+            today.setHours(0,0,0,0);
 
-    function renderStrichliste() {
-      const container = document.getElementById('strichliste-items');
-      container.innerHTML = strichlisteCatalog.map(item => `
-        <div class="p-3 bg-white/10 rounded-xl border border-white/15 flex justify-between items-center">
-          <div class="flex items-center gap-3">
-            <i class="fa-solid ${item.icon} text-cyan-400 text-lg w-5 text-center"></i>
-            <div>
-              <div class="text-sm font-bold text-white">${item.name}</div>
-              <div class="text-xs text-gray-300">€ ${item.price.toFixed(2)}</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-3">
-            <button onclick="updateQty('${item.id}', -1)" class="w-8 h-8 rounded-full glass-input flex items-center justify-center font-bold text-cyan-400 hover:bg-cyan-500/20 active:scale-95">-</button>
-            <span class="font-bold text-white w-4 text-center text-sm">${item.qty}</span>
-            <button onclick="updateQty('${item.id}', 1)" class="w-8 h-8 rounded-full glass-input flex items-center justify-center font-bold text-cyan-400 hover:bg-cyan-500/20 active:scale-95">+</button>
-          </div>
-        </div>
-      `).join('');
+            let nextIndex = 0;
+            for (let i = 0; i < masterDutyRoster.length; i++) {
+                const dDate = parseLocalDate(masterDutyRoster[i].dateStr);
+                if (dDate >= today) {
+                    nextIndex = i;
+                    break;
+                }
+            }
 
-      calculateTotal();
-    }
+            const nextDienst = masterDutyRoster[nextIndex] || masterDutyRoster[0];
+            const nextWidget = document.getElementById('next-duty-widget');
+            if (nextWidget) {
+                nextWidget.innerHTML = `
+                    <div style="font-size: 0.95em; color: #38bdf8; font-weight: 700;">📅 ${nextDienst.dateStr}</div>
+                    <div style="font-size: 1.3em; font-weight: 800; margin: 4px 0; color: #ffffff;">${nextDienst.team}</div>
+                    <div style="font-size: 0.85em; color: var(--text-muted);">${nextDienst.names}</div>
+                `;
+            }
 
-    function renderMitglieder() {
-      const container = document.getElementById('mitglieder-container');
-      const searchVal = document.getElementById('member-search').value.toLowerCase();
-      
-      const filtered = mitgliederData.filter(m => m.name.toLowerCase().includes(searchVal) || m.role.toLowerCase().includes(searchVal));
+            const fullList = document.getElementById('full-roster-list');
+            if (fullList) {
+                let html = "";
+                masterDutyRoster.forEach((d, idx) => {
+                    let isNext = (idx === nextIndex);
+                    let isClosed = d.status === 'closed';
+                    let borderCol = isNext ? '#06b6d4' : (isClosed ? '#64748b' : '#3b82f6');
+                    
+                    html += `
+                        <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(6, 182, 212, 0.1);' : ''}">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="font-size: 1.05em; font-weight: 800; color: #fff;">${d.dateStr} ${isNext ? '<span style="font-size:0.7em; background:#06b6d4; color:#000; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER DIENST</span>' : ''}</div>
+                                <span style="background: ${borderCol}; color: white; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.7em;">${d.team}</span>
+                            </div>
+                            <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
+                        </div>
+                    `;
+                });
+                fullList.innerHTML = html;
+            }
 
-      container.innerHTML = filtered.map(m => `
-        <div class="p-3 bg-white/10 rounded-xl border border-amber-400/30 flex justify-between items-center">
-          <div>
-            <div class="text-sm font-bold text-white">${m.name}</div>
-            <div class="text-xs text-amber-300">${m.role}</div>
-          </div>
-          ${m.phone !== '-' ? `
-            <a href="tel:${m.phone}" class="px-2.5 py-1 bg-amber-500/20 hover:bg-amber-500/40 border border-amber-400/40 rounded-lg text-xs text-amber-200 font-medium">
-              <i class="fa-solid fa-phone mr-1"></i> Anrufen
-            </a>
-          ` : '<span class="text-[10px] text-gray-400">Keine Tel.</span>'}
-        </div>
-      `).join('');
-    }
+            // Mitternachts-Timer Setup
+            setupMidnightTimer();
+        }
 
-    // --- ADMIN MODULES ---
+        function setupMidnightTimer() {
+            const now = new Date();
+            const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+            const msToMidnight = night.getTime() - now.getTime();
+            
+            setTimeout(() => {
+                updateDutyPlanWidget();
+            }, msToMidnight);
+        }
 
-    function unlockAdmin() {
-      const input = document.getElementById('admin-pass-input').value;
-      if (input === '1997' || input === 'admin') {
-        isAdminUnlocked = true;
-        document.getElementById('admin-lockscreen').classList.add('hidden');
-        document.getElementById('admin-panel').classList.remove('hidden');
-        renderAdminLists();
-      } else {
-        alert("Falsches Passwort! Zugriff verweigert.");
-      }
-    }
+        // 2. TERMINE LADEN & ABSTIMMEN
+        async function loadEvents() {
+            const container = document.getElementById('events-container');
+            try {
+                const snapshot = await db.collection("events").orderBy("createdAt", "desc").get();
+                const votesSnapshot = await db.collection("events_vote").get();
+                let votesData = {};
+                votesSnapshot.forEach(doc => { votesData[doc.id] = doc.data(); });
 
-    function lockAdmin() {
-      isAdminUnlocked = false;
-      document.getElementById('admin-pass-input').value = '';
-      document.getElementById('admin-lockscreen').classList.remove('hidden');
-      document.getElementById('admin-panel').classList.add('hidden');
-    }
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="font-size: 0.85em; color: var(--text-muted);">Keine anstehenden Termine eingetragen.</p>';
+                    return;
+                }
 
-    function switchFeeTab(tab) {
-      activeFeeTab = tab;
-      if (tab === 'aktiv') {
-        document.getElementById('fee-tab-aktiv').className = 'flex-1 py-1 text-xs font-bold text-amber-300 border-b-2 border-amber-400';
-        document.getElementById('fee-tab-passiv').className = 'flex-1 py-1 text-xs font-bold text-gray-400';
-      } else {
-        document.getElementById('fee-tab-passiv').className = 'flex-1 py-1 text-xs font-bold text-amber-300 border-b-2 border-amber-400';
-        document.getElementById('fee-tab-aktiv').className = 'flex-1 py-1 text-xs font-bold text-gray-400';
-      }
-      renderAdminFeeList();
-    }
+                let html = "";
+                snapshot.forEach(doc => {
+                    const ev = doc.data();
+                    const eventId = doc.id;
+                    const v = votesData[eventId] || { yesNames: [], noNames: [] };
+                    const yesCount = v.yesNames ? v.yesNames.length : 0;
+                    const noCount = v.noNames ? v.noNames.length : 0;
 
-    function renderAdminFeeList() {
-      const container = document.getElementById('admin-fee-list');
-      const filtered = mitgliederData.filter(m => activeFeeTab === 'passiv' ? m.type === 'passiv' : m.type !== 'passiv');
+                    html += `
+                        <div class="dark-event-item">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 1.05em; font-weight: 800; color: #fff;">${ev.title}</span>
+                                <span style="font-size: 0.75em; background: rgba(59,130,246,0.3); padding: 2px 8px; border-radius: 12px; color: #60a5fa;">${yesCount} Zusagen</span>
+                            </div>
+                            <div style="font-size: 0.85em; color: #fca5a5; font-weight: 600; margin-top: 2px;">📅 ${ev.date || ''}</div>
+                            ${ev.desc ? `<div style="font-size: 0.85em; color: #cbd5e1; margin: 4px 0;">${ev.desc}</div>` : ''}
+                            
+                            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; align-items: center;">
+                                <button onclick="voteEvent('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👍 Zusage</button>
+                                <button onclick="voteEvent('${eventId}', 'no')" style="background: #dc2626; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👎 Absage</button>
+                                <button class="btn btn-danger admin-only-delete" style="padding: 2px 6px; font-size: 0.7em; margin-left: auto;" onclick="deleteItem('events', '${eventId}')">🗑️ Löschen</button>
+                            </div>
 
-      container.innerHTML = filtered.map((m) => {
-        const globalIdx = mitgliederData.findIndex(item => item.name === m.name);
-        return `
-          <div class="p-2 bg-white/10 rounded-lg flex justify-between items-center text-xs">
-            <span class="text-white font-medium">${m.name}</span>
-            <button onclick="toggleFeeStatus(${globalIdx})" class="px-2.5 py-1 rounded font-bold transition ${m.paid ? 'bg-green-500/20 text-green-300 border border-green-500/40' : 'bg-red-500/20 text-red-300 border border-red-500/40'}">
-              ${m.paid ? 'Bezahlt (€30)' : 'Offen (€30)'}
-            </button>
-          </div>
-        `;
-      }).join('');
-    }
+                            <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 8px;">
+                                <strong>Zusagen (${yesCount}):</strong> ${v.yesNames && v.yesNames.length > 0 ? v.yesNames.join(', ') : 'Keine'}<br>
+                                <strong>Absagen (${noCount}):</strong> ${v.noNames && v.noNames.length > 0 ? v.noNames.join(', ') : 'Keine'}
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (e) { console.error(e); }
+        }
 
-    function renderAdminLists() {
-      renderAdminFeeList();
+        async function voteEvent(eventId, type) {
+            const userName = prompt("Bitte gib deinen Namen ein für die Abstimmung:");
+            if (!userName) return;
 
-      // Key list
-      const schluesselContainer = document.getElementById('admin-schluessel-list');
-      schluesselContainer.innerHTML = schluesselData.map((s, idx) => `
-        <div class="p-2 bg-white/10 rounded-lg flex justify-between items-center text-xs">
-          <div>
-            <div class="text-white font-bold">${s.name}</div>
-            <div class="text-gray-300 text-[11px]">${s.perm}</div>
-          </div>
-          <button onclick="editKeyPerm(${idx})" class="text-cyan-400 hover:text-cyan-300 text-xs font-semibold">Bearbeiten</button>
-        </div>
-      `).join('');
+            const docRef = db.collection("events_vote").doc(eventId);
+            const doc = await docRef.get();
+            let data = doc.exists ? doc.data() : { yesNames: [], noNames: [] };
 
-      // PDF Invoices Archive
-      const invoicesContainer = document.getElementById('admin-invoices-list');
-      if (savedInvoicesArchive.length === 0) {
-        invoicesContainer.innerHTML = `<div class="text-gray-400 text-center py-2">Noch keine Rechnungen gespeichert.</div>`;
-      } else {
-        invoicesContainer.innerHTML = savedInvoicesArchive.map(inv => `
-          <div class="p-2 bg-white/10 rounded-lg flex justify-between items-center">
-            <div>
-              <div class="text-white font-bold">${inv.name}</div>
-              <div class="text-[10px] text-gray-300">${inv.date} • Summe: € ${inv.total}</div>
-            </div>
-            <button onclick="downloadArchivedInvoice('${inv.id}')" class="px-2 py-1 bg-green-600/40 text-green-300 rounded border border-green-500/50">
-              <i class="fa-solid fa-download"></i> PDF
-            </button>
-          </div>
-        `).join('');
-      }
-    }
+            let yes = data.yesNames || [];
+            let no = data.noNames || [];
 
-    // --- PUBLISH NEWS WITH IMAGE ---
-    function publishNewsPost() {
-      const title = document.getElementById('news-title-input').value;
-      const text = document.getElementById('news-text-input').value;
-      const fileInput = document.getElementById('news-image-input');
+            yes = yes.filter(n => n !== userName);
+            no = no.filter(n => n !== userName);
 
-      if (!title || !text) {
-        alert("Bitte geben Sie einen Titel und Text für die News ein.");
-        return;
-      }
+            if (type === 'yes') yes.push(userName);
+            if (type === 'no') no.push(userName);
 
-      const currentDate = new Date().toLocaleDateString('de-AT', { day: '2-digit', month: 'LONG', year: 'numeric' }).toUpperCase();
+            await docRef.set({ yesNames: yes, noNames: no });
+            alert("Deine Stimme wurde gezählt!");
+            loadEvents();
+        }
 
-      if (fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          newsData.unshift({
-            id: Date.now(),
-            date: currentDate,
-            title: title,
-            text: text,
-            image: e.target.result
-          });
-          resetNewsForm();
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        newsData.unshift({
-          id: Date.now(),
-          date: currentDate,
-          title: title,
-          text: text,
-          image: null
+        // STAMMSCHÜTZEN CHIPS & SCHIEßBUCH
+        async function loadStammschuetzenChips() {
+            const container = document.getElementById('stammschuetzen-chips');
+            try {
+                const snapshot = await db.collection("members").where("active", "==", true).get();
+                let html = "";
+                snapshot.forEach(doc => {
+                    const m = doc.data();
+                    html += `<div class="shooter-chip" onclick="selectShooter('${m.name}')">${m.name}</div>`;
+                });
+                container.innerHTML = html || '<span style="font-size:0.75em; color:var(--text-muted);">Keine aktiven Mitglieder gefunden.</span>';
+            } catch (e) { console.error(e); }
+        }
+
+        function selectShooter(name) {
+            document.getElementById('shot-name').value = name;
+        }
+
+        async function saveShot(e) {
+            e.preventDefault();
+            const name = document.getElementById('shot-name').value;
+            const disc = document.getElementById('shot-disc').value;
+            const rings = parseFloat(document.getElementById('shot-rings').value);
+            const teiler = parseFloat(document.getElementById('shot-teiler').value) || 0;
+
+            await db.collection("shots").add({
+                name, disc, rings, teiler,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert("Schießergebnis gespeichert!");
+            document.getElementById('shot-rings').value = '';
+            document.getElementById('shot-teiler').value = '';
+            loadTrendGadget();
+        }
+
+        async function loadTrendGadget() {
+            const gadgetEl = document.getElementById('trend-gadget-bars');
+            try {
+                const snapshot = await db.collection("shots").orderBy("createdAt", "desc").limit(5).get();
+                let data = [];
+                snapshot.forEach(doc => data.push(doc.data().rings || 0));
+                data.reverse();
+
+                if (data.length === 0) {
+                    gadgetEl.innerHTML = '<span style="font-size:0.75em; color:var(--text-muted);">Noch keine Daten für Trend</span>';
+                    return;
+                }
+
+                let html = "";
+                let maxR = Math.max(...data, 300);
+                data.forEach(r => {
+                    let heightPct = Math.min(100, Math.max(15, (r / maxR) * 100));
+                    html += `<div style="background:#3b82f6; width: 12px; height: ${heightPct}%; border-radius: 3px;" title="${r} Ringe"></div>`;
+                });
+                gadgetEl.innerHTML = html;
+            } catch (e) { console.error(e); }
+        }
+
+        // STRICHLISTE & VOLLSTÄNDIGE PREISLISTE
+        const drinkPrices = { hauswuerste: 7.50, bier: 3.80, limo: 3.00, wein: 4.20, kaffee: 2.50, luftgewehr: 8.00, trinkgeld: 5.00 };
+        const drinkCounts = { hauswuerste: 0, bier: 0, limo: 0, wein: 0, kaffee: 0, luftgewehr: 0, trinkgeld: 0 };
+
+        function changeCount(item, delta) {
+            drinkCounts[item] = Math.max(0, drinkCounts[item] + delta);
+            document.getElementById('count-' + item).innerText = drinkCounts[item];
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            for (let k in drinkCounts) { total += drinkCounts[k] * drinkPrices[k]; }
+            document.getElementById('total-price').innerText = '€ ' + total.toFixed(2).replace('.', ',');
+            return total;
+        }
+
+        function confirmResetDrinks() {
+            for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
+            calculateTotal();
+        }
+
+        async function saveTallyBilling() {
+            let total = calculateTotal();
+            if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
+
+            let clientName = document.getElementById('cust-name').value.trim() || "Betriebsrat ASG";
+            let clientAttn = document.getElementById('cust-attn').value.trim() || "z. Hd. Ladner Manfred";
+            let clientAddress = document.getElementById('cust-address').value.trim() || "St. Jakob 151";
+            let clientZipCity = document.getElementById('cust-zipcity').value.trim() || "6580 St. Anton am Arlberg";
+            let shooterOption = document.getElementById('cust-shot-option').value;
+            let shooterNames = document.getElementById('cust-shooter-names').value;
+
+            let itemsArray = [];
+            if (drinkCounts.hauswuerste > 0) itemsArray.push({ name: "Hauswurst / Essen", price: drinkCounts.hauswuerste * drinkPrices.hauswuerste });
+            if (drinkCounts.bier > 0) itemsArray.push({ name: "Bier / Radler", price: drinkCounts.bier * drinkPrices.bier });
+            if (drinkCounts.limo > 0) itemsArray.push({ name: "Limo / Cola", price: drinkCounts.limo * drinkPrices.limo });
+            if (drinkCounts.wein > 0) itemsArray.push({ name: "Wein / Spritzer", price: drinkCounts.wein * drinkPrices.wein });
+            if (drinkCounts.kaffee > 0) itemsArray.push({ name: "Kaffee", price: drinkCounts.kaffee * drinkPrices.kaffee });
+            
+            if (drinkCounts.luftgewehr > 0) {
+                let nameStr = "Luftgewehrschießen";
+                if (shooterOption === 'ja' && shooterNames) { nameStr += ` (${shooterNames})`; }
+                itemsArray.push({ name: nameStr, price: drinkCounts.luftgewehr * drinkPrices.luftgewehr });
+            }
+
+            if (drinkCounts.trinkgeld > 0) itemsArray.push({ name: "Trinkgeld", price: drinkCounts.trinkgeld * drinkPrices.trinkgeld });
+
+            const invoiceObj = {
+                invoiceNum: "RE-2026-" + Math.floor(100 + Math.random() * 900),
+                date: new Date().toLocaleDateString('de-AT'),
+                recipientName: clientName,
+                recipientAttn: clientAttn,
+                recipientAddress: clientAddress,
+                recipientZipCity: clientZipCity,
+                total: total,
+                items: itemsArray,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                await db.collection("invoices").add(invoiceObj);
+                alert("Rechnung gespeichert!");
+                generateInvoicePDF(invoiceObj);
+                confirmResetDrinks();
+            } catch (err) { console.error(err); }
+        }
+
+        function generateInvoicePDF(invoiceData) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(185, 28, 28);
+            doc.text("RECHNUNG", 14, 20);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(9);
+            doc.setTextColor(80, 80, 80);
+            doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen", 14, 28);
+            doc.text("Rütler 43b | 6794 Partenen", 14, 33);
+            doc.text("E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509", 14, 38);
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            doc.text("Rechnung an:", 14, 52);
+
+            doc.setFont("helvetica", "normal");
+            doc.text(invoiceData.recipientName || "", 14, 58);
+            if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 63);
+            doc.text(invoiceData.recipientAddress || "", 14, 68);
+            doc.text(invoiceData.recipientZipCity || "", 14, 73);
+
+            doc.setFont("helvetica", "bold");
+            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 120, 58);
+            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 120, 63);
+
+            const tableBody = invoiceData.items.map(item => [
+                item.name, 
+                `${parseFloat(item.price).toFixed(2).replace('.', ',')} €`
+            ]);
+
+            doc.autoTable({
+                startY: 82,
+                head: [['Leistung', 'Betrag']],
+                body: [
+                    ...tableBody,
+                    [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: `${parseFloat(invoiceData.total).toFixed(2).replace('.', ',')} €`, styles: { fontStyle: 'bold' } }]
+                ],
+                theme: 'striped',
+                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
+                columnStyles: { 0: { cellWidth: 130 }, 1: { halign: 'right', cellWidth: 40 } }
+            });
+
+            let finalY = doc.lastAutoTable.finalY + 15;
+            doc.setFont("helvetica", "bold");
+            doc.text("Zahlungsbedingungen", 14, finalY);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(9);
+            doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${invoiceData.total.toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen auf unser Vereinskonto:`, 14, finalY + 6);
+            
+            doc.setFont("helvetica", "bold"); doc.text("IBAN:", 14, finalY + 13);
+            doc.setFont("helvetica", "normal"); doc.text("AT86 3746 8000 0451 3511", 30, finalY + 13);
+
+            doc.setFont("helvetica", "bold"); doc.text("BIC:", 14, finalY + 18);
+            doc.setFont("helvetica", "normal"); doc.text("RVVGAT2B468", 30, finalY + 18);
+
+            doc.setFont("helvetica", "bold"); doc.text("Bank:", 14, finalY + 23);
+            doc.setFont("helvetica", "normal"); doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 23);
+
+            doc.save(`${invoiceData.invoiceNum}.pdf`);
+        }
+
+        // MITGLIEDER LADEN (AKTIV / PASSIV OHNE PASSIVE IN SCHNELLSTART)
+        async function loadPublicMembers() {
+            const container = document.getElementById('public-members-list');
+            try {
+                const snapshot = await db.collection("members").get();
+                let html = "";
+                snapshot.forEach(doc => {
+                    const m = doc.data();
+                    let badge = m.active ? '<span style="color:#60a5fa;">[Aktiv]</span>' : '<span style="color:#facc15;">[Passiv]</span>';
+                    html += `<div class="price-item"><div><strong>${m.name}</strong> ${badge}</div><span style="font-size:0.8em; color:var(--text-muted);">Beitrag: € 30,00</span></div>`;
+                });
+                container.innerHTML = html || '<p style="color:var(--text-muted);">Keine Mitglieder eingetragen.</p>';
+            } catch (e) { console.error(e); }
+        }
+
+        // ADMIN FUNKTIONEN: MITGLIEDER & SCHLÜSSEL BEARBEITEN
+        async function loadAdminMembers() {
+            const activeList = document.getElementById('admin-active-members-list');
+            const passiveList = document.getElementById('admin-passive-members-list');
+            try {
+                const snapshot = await db.collection("members").get();
+                let activeHtml = "";
+                let passiveHtml = "";
+
+                snapshot.forEach(doc => {
+                    const m = doc.data();
+                    const id = doc.id;
+                    let paidBadge = m.paid ? `<span class="badge-paid" onclick="toggleMemberPaid('${id}', false)">Bezahlt (€30)</span>` : `<span class="badge-open" onclick="toggleMemberPaid('${id}', true)">Offen (€30)</span>`;
+                    
+                    let itemHtml = `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                            <div><strong>${m.name}</strong></div>
+                            <div style="display:flex; gap:8px; align-items:center;">
+                                ${paidBadge}
+                                <button class="btn btn-danger" style="padding:2px 6px; font-size:0.7em;" onclick="deleteItem('members', '${id}')">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+
+                    if (m.active) { activeHtml += itemHtml; } else { passiveHtml += itemHtml; }
+                });
+
+                activeList.innerHTML = activeHtml || '<p style="color:var(--text-muted); font-size:0.8em;">Keine aktiven Mitglieder.</p>';
+                passiveList.innerHTML = passiveHtml || '<p style="color:var(--text-muted); font-size:0.8em;">Keine passiven Mitglieder.</p>';
+            } catch (e) { console.error(e); }
+        }
+
+        async function openAddMemberModal() {
+            const name = prompt("Name des Mitglieds:");
+            if (!name) return;
+            const type = prompt("Typ? (1 für Aktiv, 2 für Passiv):");
+            const active = (type === "1");
+
+            await db.collection("members").add({
+                name, active, paid: false,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            loadAdminMembers();
+            loadStammschuetzenChips();
+            loadPublicMembers();
+        }
+
+        async function toggleMemberPaid(id, paidStatus) {
+            await db.collection("members").doc(id).update({ paid: paidStatus });
+            loadAdminMembers();
+        }
+
+        async function loadAdminKeys() {
+            const container = document.getElementById('admin-keys-list');
+            try {
+                const snapshot = await db.collection("keys").get();
+                let html = "";
+                snapshot.forEach(doc => {
+                    const k = doc.data();
+                    html += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                            <div><strong>${k.holder}</strong> <span style="font-size:0.8em; color:var(--text-muted);">(${k.keyNumber})</span></div>
+                            <button class="btn btn-danger" style="padding:2px 6px; font-size:0.7em;" onclick="deleteItem('keys', '${doc.id}')">🗑️</button>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.8em;">Keine Schlüssel vergeben.</p>';
+            } catch (e) { console.error(e); }
+        }
+
+        async function openAddKeyModal() {
+            const holder = prompt("Name des Schlüsselinhabers:");
+            if (!holder) return;
+            const keyNumber = prompt("Schlüssel-Nummer (z.B. Nr. 04):");
+
+            await db.collection("keys").add({
+                holder, keyNumber,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            loadAdminKeys();
+        }
+
+        // NEWS HOCHLADEN & FOTO
+        async function addNewsItem(e) {
+            e.preventDefault();
+            const title = document.getElementById('news-title').value;
+            const text = document.getElementById('news-text').value;
+            const fileInput = document.getElementById('news-photo-input');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = async function(uploadEvent) {
+                    await saveNewsToFirestore(title, text, uploadEvent.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                await saveNewsToFirestore(title, text, "");
+            }
+        }
+
+        async function saveNewsToFirestore(title, text, imageUrl) {
+            try {
+                await db.collection("news").add({
+                    title, text, imageUrl,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("News & Foto erfolgreich veröffentlicht!");
+                document.getElementById('news-title').value = '';
+                document.getElementById('news-text').value = '';
+                document.getElementById('news-photo-input').value = '';
+                loadNews();
+            } catch (err) { console.error(err); }
+        }
+
+        async function loadNews() {
+            const container = document.getElementById('news-container');
+            try {
+                const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
+                if (snapshot.empty) { container.innerHTML = ''; return; }
+                let html = "";
+                snapshot.forEach(doc => {
+                    const n = doc.data();
+                    html += `
+                        <div class="glass-card">
+                            ${n.imageUrl ? `<img src="${n.imageUrl}" style="width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; margin-bottom: 10px;">` : ''}
+                            <div class="card-title">${n.title}</div>
+                            <p style="font-size: 0.9em; color: var(--text-muted); white-space: pre-line; margin-bottom: 10px;">${n.text}</p>
+                            <button class="btn btn-danger admin-only-delete" onclick="deleteItem('news', '${doc.id}')">🗑️ News löschen</button>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (e) { console.error(e); }
+        }
+
+        async function deleteItem(collectionName, docId) {
+            if (confirm("Möchtest du diesen Eintrag wirklich unwiderruflich löschen?")) {
+                try {
+                    await db.collection(collectionName).doc(docId).delete();
+                    alert("Löschen erfolgreich!");
+                    loadEvents(); loadNews(); loadAdminMembers(); loadAdminKeys();
+                } catch (err) { console.error(err); }
+            }
+        }
+
+        // ADMIN LOGIN
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            if (document.getElementById('admin-password-input').value === "schützen2026") {
+                document.body.classList.add('admin-mode');
+                document.getElementById('admin-login-card').style.display = 'none';
+                alert("Admin-Modus aktiviert!");
+                loadNews(); loadAdminMembers(); loadAdminKeys();
+            } else { alert("Falsches Passwort!"); }
+        }
+
+        function logoutAdmin() {
+            document.body.classList.remove('admin-mode');
+            document.getElementById('admin-login-card').style.display = 'block';
+            loadNews();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDutyPlanWidget();
+            loadEvents();
+            loadNews();
+            loadStammschuetzenChips();
+            loadPublicMembers();
+            loadTrendGadget();
         });
-        resetNewsForm();
-      }
-    }
-
-    function resetNewsForm() {
-      document.getElementById('news-title-input').value = '';
-      document.getElementById('news-text-input').value = '';
-      document.getElementById('news-image-input').value = '';
-      renderNews();
-      switchTab('news');
-      alert("Nachricht erfolgreich auf der News-Seite veröffentlicht!");
-    }
-
-    // --- SCHIESSBUCH LOGIC (EXCLUDING PASSIVE MEMBERS) ---
-
-    function populateSchuetzenDropdown() {
-      const select = document.getElementById('sb-schuetze');
-      select.innerHTML = '<option value="">Schütze auswählen...</option>';
-      
-      // EXCLUDE PASSIVE MEMBERS ONLY SHOW ACTIVE/EHREN/MARKETENDERINNEN/JUGEND
-      const nonPassiveMembers = mitgliederData.filter(m => m.type !== 'passiv');
-      
-      nonPassiveMembers.forEach(m => {
-        const opt = document.createElement('option');
-        opt.value = m.name;
-        opt.textContent = m.name;
-        select.appendChild(opt);
-      });
-    }
-
-    function selectSchuetze(name) {
-      document.getElementById('sb-schuetze').value = name;
-    }
-
-    function initTrendChart() {
-      const ctx = document.getElementById('trendChart').getContext('2d');
-      trendChartObj = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['S1', 'S2', 'S3', 'S4', 'S5'],
-          datasets: [{
-            label: 'Ringe',
-            data: [98.1, 97.5, 98.8, 97.2, 98.4],
-            borderColor: '#38bdf8',
-            backgroundColor: 'rgba(56, 189, 248, 0.15)',
-            tension: 0.35,
-            fill: true,
-            pointBackgroundColor: '#00f0ff',
-            pointRadius: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { ticks: { color: '#94a3b8' }, grid: { display: false } },
-            y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.08)' } }
-          }
-        }
-      });
-    }
-
-    function saveSchiessbuchEntry() {
-      const schuetze = document.getElementById('sb-schuetze').value;
-      const ringe = document.getElementById('sb-ringe').value;
-
-      if (!schuetze || !ringe) {
-        alert("Bitte wählen Sie einen Schützen aus und tragen Sie das Ergebnis ein.");
-        return;
-      }
-
-      alert(`Ergebnis für ${schuetze} (${ringe} Ringe) wurde im Schießbuch gespeichert!`);
-      document.getElementById('sb-ringe').value = '';
-      document.getElementById('sb-zehner').value = '';
-      document.getElementById('sb-teiler').value = '';
-    }
-
-    // --- STRICHLISTE LOGIC ---
-
-    function updateQty(id, change) {
-      const item = strichlisteCatalog.find(i => i.id === id);
-      if (item) {
-        item.qty = Math.max(0, item.qty + change);
-        renderStrichliste();
-      }
-    }
-
-    function calculateTotal() {
-      const total = strichlisteCatalog.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      document.getElementById('strichliste-total').innerText = `€ ${total.toFixed(2)}`;
-    }
-
-    function rsvpEvent(id, type) {
-      const event = termineData.find(e => e.id === id);
-      const user = "Simon Schweighofer";
-
-      if (type === 'zusage') {
-        if (!event.zusagen.includes(user)) event.zusagen.push(user);
-        event.absagen = event.absagen.filter(u => u !== user);
-      } else {
-        if (!event.absagen.includes(user)) event.absagen.push(user);
-        event.zusagen = event.zusagen.filter(u => u !== user);
-      }
-
-      renderTermine();
-    }
-
-    function deleteEvent(id) {
-      if (confirm("Möchten Sie diesen Termin wirklich löschen?")) {
-        termineData = termineData.filter(e => e.id !== id);
-        renderTermine();
-      }
-    }
-
-    function addEventByAdmin() {
-      const title = document.getElementById('adm-event-title').value;
-      const date = document.getElementById('adm-event-date').value;
-      const location = document.getElementById('adm-event-location').value;
-
-      if (!title || !date) {
-        alert("Bitte geben Sie mindestens Titel und Datum ein.");
-        return;
-      }
-
-      termineData.push({
-        id: Date.now(),
-        title: title,
-        date: date,
-        time: location,
-        zusagen: [],
-        absagen: []
-      });
-
-      document.getElementById('adm-event-title').value = '';
-      document.getElementById('adm-event-date').value = '';
-      document.getElementById('adm-event-location').value = '';
-
-      renderTermine();
-      switchTab('termine');
-      alert("Neuer Termin wurde erfolgreich veröffentlicht!");
-    }
-
-    function toggleFeeStatus(globalIdx) {
-      mitgliederData[globalIdx].paid = !mitgliederData[globalIdx].paid;
-      renderAdminFeeList();
-    }
-
-    function editKeyPerm(idx) {
-      const newPerm = prompt("Neue Schlüssel-Berechtigung eingeben:", schluesselData[idx].perm);
-      if (newPerm) {
-        schluesselData[idx].perm = newPerm;
-        renderAdminLists();
-      }
-    }
-
-    function addNewKeyEntry() {
-      const name = prompt("Name des Mitglieds für Schlüsselberechtigung:");
-      const perm = prompt("Berechtigung (z. B. Eingang & Büro / Waffenschrank):");
-      if (name && perm) {
-        schluesselData.push({ name, perm });
-        renderAdminLists();
-      }
-    }
-
-    function filterMemberList() {
-      renderMitglieder();
-    }
-
-    // --- PDF INVOICE GENERATION & ARCHIVING ---
-    function generatePDFInvoice() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      const name = document.getElementById('inv-name').value || 'Gast / Schützenheim';
-      const zusatz = document.getElementById('inv-zusatz').value || '-';
-      const strasse = document.getElementById('inv-strasse').value || '-';
-      const ort = document.getElementById('inv-ort').value || '-';
-      const lg = document.getElementById('inv-luftgewehr').value;
-
-      const totalSum = strichlisteCatalog.reduce((sum, item) => sum + (item.price * item.qty), 0);
-
-      // Header
-      doc.setFontSize(16);
-      doc.text("Kameradschaftsbund & Schützenverein Gaschurn-Partenen", 14, 20);
-      doc.setFontSize(10);
-      doc.text("Abrechnung Schützenheim", 14, 26);
-      doc.text(`Datum: ${new Date().toLocaleDateString('de-AT')}`, 150, 26);
-
-      // Recipient details
-      doc.setFontSize(11);
-      doc.text("Rechnungsempfänger:", 14, 40);
-      doc.setFontSize(10);
-      doc.text(`Name/Firma: ${name}`, 14, 46);
-      doc.text(`z. Hd.: ${zusatz}`, 14, 52);
-      doc.text(`Adresse: ${strasse}, ${ort}`, 14, 58);
-      doc.text(`Luftgewehr geschossen: ${lg}`, 14, 64);
-
-      // Table
-      const tableBody = strichlisteCatalog
-        .filter(item => item.qty > 0)
-        .map(item => [item.name, item.qty, `€ ${item.price.toFixed(2)}`, `€ ${(item.price * item.qty).toFixed(2)}`]);
-
-      doc.autoTable({
-        startY: 72,
-        head: [['Position', 'Anzahl', 'Einzelpreis', 'Gesamtpreis']],
-        body: tableBody.length > 0 ? tableBody : [['Keine Positionen ausgewählt', '0', '€ 0.00', '€ 0.00']],
-        foot: [['', '', 'Gesamtbetrag:', `€ ${totalSum.toFixed(2)}`]]
-      });
-
-      // Save to Admin Archive
-      const invoiceId = 'INV-' + Date.now();
-      savedInvoicesArchive.unshift({
-        id: invoiceId,
-        name: name,
-        date: new Date().toLocaleDateString('de-AT'),
-        total: totalSum.toFixed(2),
-        doc: doc
-      });
-
-      doc.save(`Abrechnung_Schuetzenheim_${name.replace(/[^a-z0-9]/gi, '_')}.pdf`);
-      alert("Abrechnungs-PDF wurde heruntergeladen und im Admin-Rechnungsarchiv gespeichert!");
-    }
-
-    function downloadArchivedInvoice(id) {
-      const inv = savedInvoicesArchive.find(i => i.id === id);
-      if (inv) {
-        inv.doc.save(`Archiv_${inv.name.replace(/[^a-z0-9]/gi, '_')}.pdf`);
-      }
-    }
-
-    // --- APP INITIALIZATION ---
-    window.onload = function() {
-      renderNews();
-      renderDienstplan();
-      scheduleMidnightUpdate(); // Start 00:00 midnight update timer
-      renderTermine();
-      renderStrichliste();
-      renderMitglieder();
-      populateSchuetzenDropdown();
-    };
-  </script>
+    </script>
 </body>
 </html>
