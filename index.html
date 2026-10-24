@@ -38,15 +38,14 @@
         :root {
             --primary-red: #b91c1c; 
             --primary-dark: #7f1d1d;
-            --bg-light: #0f172a; 
-            --card-glass: rgba(30, 41, 59, 0.75);
-            --card-glass-light: rgba(255, 255, 255, 0.05);
-            --text-dark: #f8fafc; 
-            --text-muted: #94a3b8; 
+            --bg-light: #f1f5f9; 
+            --card-glass: rgba(255, 255, 255, 0.85);
+            --text-dark: #1e293b; 
+            --text-muted: #64748b; 
             --accent-green: #10b981; 
             --accent-green-bright: #22c55e;
             --danger: #dc2626;
-            --admin-blue: #3b82f6;
+            --admin-blue: #2563eb;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -54,7 +53,7 @@
         body {
             font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
-            background: linear-gradient(135deg, #090d16 0%, #1e1b4b 100%);
+            background: linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%);
             background-attachment: fixed;
             padding-bottom: 160px !important;
             max-width: 600px;
@@ -63,16 +62,13 @@
         }
 
         .app-header {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #7f1d1d, #b91c1c);
             color: white;
             padding: 20px;
             text-align: center;
             border-bottom-left-radius: 24px;
             border-bottom-right-radius: 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
         
         .app-header h1 { font-size: 1.2em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
@@ -81,71 +77,53 @@
         .page-content { padding: 15px; display: none; }
         .page-content.active { display: block; }
 
-        /* GLAS-OPTIK STANDARD CARD */
+        /* HELLER GLAS-LOOK */
         .glass-card {
-            background: rgba(30, 41, 59, 0.65);
+            background: var(--card-glass);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-radius: 16px;
             padding: 18px;
             margin-bottom: 15px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             color: var(--text-dark);
         }
 
-        /* GLAS-OPTIK MIT BLAUER UMRANDUNG (Termine & Strichliste) */
-        .glass-card-blue {
-            border: 1.5px solid rgba(59, 130, 246, 0.6) !important;
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15) !important;
-        }
-
-        /* GLAS-OPTIK MIT GELBER UMRANDUNG (Mitglieder / Vorstand) */
-        .glass-card-yellow {
-            border: 2px solid rgba(234, 179, 8, 0.7) !important;
-            box-shadow: 0 8px 32px rgba(234, 179, 8, 0.2) !important;
-        }
-
-        /* GLAS-OPTIK MIT ROTER UMRANDUNG (Admin) */
-        .glass-card-red {
-            border: 2px solid rgba(239, 68, 68, 0.7) !important;
-            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.2) !important;
-        }
+        .glass-card-blue { border-left: 5px solid #2563eb !important; }
+        .glass-card-yellow { border-left: 5px solid #eab308 !important; }
+        .glass-card-red { border-left: 5px solid #dc2626 !important; }
         
         .card-title {
             font-size: 1.1em;
             font-weight: 700;
-            color: #60a5fa;
+            color: var(--primary-red);
             margin-bottom: 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        /* NEON-BLINKELEFFEKT FÜR NÄCHSTEN DIENST */
         @keyframes neonPulse {
-            0% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.5), inset 0 0 5px rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.6); }
-            50% { box-shadow: 0 0 25px rgba(6, 182, 212, 0.9), inset 0 0 12px rgba(6, 182, 212, 0.5); border-color: rgba(6, 182, 212, 1); }
-            100% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.5), inset 0 0 5px rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.6); }
+            0% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.3); border-color: rgba(6, 182, 212, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(6, 182, 212, 0.7); border-color: rgba(6, 182, 212, 1); }
+            100% { box-shadow: 0 0 5px rgba(6, 182, 212, 0.3); border-color: rgba(6, 182, 212, 0.5); }
         }
         .next-duty-neon {
-            background: rgba(15, 23, 42, 0.85) !important;
+            background: #ffffff !important;
             border: 2px solid #06b6d4 !important;
             animation: neonPulse 1.8s infinite ease-in-out;
         }
 
         .dark-event-item {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(10px);
+            background: #ffffff;
             border-radius: 12px;
             padding: 14px;
             margin-bottom: 10px;
-            border-left: 5px solid #3b82f6;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            border-right: 1px solid rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-left: 5px solid #b91c1c;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
         }
-        .dark-event-item.closed { border-left-color: #64748b; }
 
         .btn {
             padding: 10px 16px;
@@ -161,10 +139,10 @@
             text-decoration: none;
             transition: all 0.2s;
         }
-        .btn-primary { background: var(--primary-red); color: white; box-shadow: 0 4px 12px rgba(185, 28, 28, 0.4); }
-        .btn-green { background: #16a34a; color: white; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4); }
-        .btn-danger { background: rgba(220, 38, 38, 0.2); color: #fca5a5; border: 1px solid rgba(220, 38, 38, 0.4); }
-        .btn-admin { background: var(--admin-blue); color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); }
+        .btn-primary { background: var(--primary-red); color: white; box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3); }
+        .btn-green { background: #16a34a; color: white; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3); }
+        .btn-danger { background: #fee2e2; color: var(--danger); border: 1px solid #fecaca; }
+        .btn-admin { background: var(--admin-blue); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
         .btn-block { width: 100%; margin-top: 8px; }
 
         .form-group { margin-bottom: 12px; }
@@ -173,28 +151,27 @@
             width: 100%;
             padding: 10px 12px;
             border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid #cbd5e1;
             font-family: inherit;
             font-size: 0.95em;
-            background: rgba(15, 23, 42, 0.7);
+            background: #ffffff;
             color: var(--text-dark);
-            backdrop-filter: blur(8px);
         }
-        .form-control:focus { outline: none; border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2); }
+        .form-control:focus { outline: none; border-color: var(--admin-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 
         .price-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid #f1f5f9;
             font-size: 0.9em;
         }
         .counter-controls { display: flex; align-items: center; gap: 10px; }
         .counter-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #60a5fa;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: #f1f5f9;
+            color: var(--primary-red);
+            border: 1px solid #cbd5e1;
             width: 36px; height: 36px;
             border-radius: 50%;
             font-size: 1.1em;
@@ -203,27 +180,7 @@
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* SCHÜTZEN CHIPS (SCHNELLSTART) */
-        .shooter-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 12px;
-        }
-        .shooter-chip {
-            background: rgba(59, 130, 246, 0.2);
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            color: #93c5fd;
-            padding: 6px 10px;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .shooter-chip:hover { background: rgba(59, 130, 246, 0.4); color: #fff; }
-
-        /* FUSSZEILE / FLOATING DOCK (FARBIG MIT GLAS-OPTIK) */
+        /* FARBIGE FUSSZEILE MIT GLAS-OPTIK */
         .bottom-nav {
             position: fixed !important; 
             bottom: 12px !important; 
@@ -232,16 +189,16 @@
             width: calc(100% - 24px) !important;
             max-width: 576px !important; 
             margin: 0 auto !important;
-            background: rgba(15, 23, 42, 0.8) !important;
+            background: rgba(255, 255, 255, 0.9) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
             border-radius: 20px !important;
-            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            border: 1px solid rgba(203, 213, 225, 0.8) !important;
             display: flex !important; 
             justify-content: space-around !important;
             align-items: center !important;
             padding: 8px 4px !important;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5) !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
             z-index: 99999 !important;
         }
         .nav-item {
@@ -249,7 +206,7 @@
             flex-direction: column !important; 
             align-items: center !important;
             text-decoration: none !important; 
-            color: #94a3b8 !important; 
+            color: #64748b !important; 
             font-size: 0.7em !important; 
             font-weight: 700 !important; 
             cursor: pointer !important;
@@ -262,15 +219,15 @@
         .nav-item.active { 
             color: #ffffff !important;
             background: var(--primary-red) !important;
-            box-shadow: 0 4px 15px rgba(185, 28, 28, 0.5) !important;
+            box-shadow: 0 4px 15px rgba(185, 28, 28, 0.4) !important;
         }
         .nav-icon { font-size: 1.35em !important; margin-bottom: 2px !important; display: block !important; }
 
         .admin-delete-btn { display: none; }
         body.admin-mode .admin-delete-btn { display: inline-flex !important; }
 
-        .badge-paid { background: rgba(6, 78, 59, 0.8); color: #34d399; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; border: 1px solid rgba(52, 211, 153, 0.3); }
-        .badge-open { background: rgba(127, 29, 29, 0.8); color: #fca5a5; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; border: 1px solid rgba(252, 165, 165, 0.3); }
+        .badge-paid { background: #d1fae5; color: #065f46; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; border: 1px solid #a7f3d0; cursor: pointer; }
+        .badge-open { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; border: 1px solid #fecaca; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -284,17 +241,15 @@
     <div id="page-news" class="page-content active">
         <div id="news-container"></div>
 
-        <!-- NÄCHSTER DIENST (AUTOMATISCH AKTUALISIERT & NEON-BLINKEND) -->
         <div class="glass-card next-duty-neon">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 0.75em; background: #06b6d4; color: #000; font-weight: 800; padding: 2px 8px; border-radius: 6px; text-transform: uppercase;">Nächster Dienst</span>
-                <span id="live-countdown" style="font-size: 0.75em; color: #38bdf8; font-weight: 600;">Mitternachts-Sync aktiv</span>
+                <span style="font-size: 0.75em; background: #06b6d4; color: #fff; font-weight: 800; padding: 2px 8px; border-radius: 6px; text-transform: uppercase;">Nächster Dienst</span>
+                <span id="live-countdown" style="font-size: 0.75em; color: #0891b2; font-weight: 600;">Automatischer Mitternachts-Abgleich</span>
             </div>
             <div id="next-duty-widget"></div>
         </div>
 
-        <!-- GESAMTER DIENSTPLAN (MODERN IN GLAS-OPTIK) -->
-        <div class="glass-card">
+        <div class="glass-card glass-card-blue">
             <div class="card-title">
                 <span>📋 Gesamter Dienstplan</span>
                 <span style="font-size: 0.7em; background: var(--primary-red); color: white; padding: 3px 8px; border-radius: 6px;">2026/2027</span>
@@ -304,125 +259,108 @@
         </div>
     </div>
 
-    <!-- 2. TERMINE (MODERN IN GLAS-OPTIK MIT BLAUER UMRANDUNG) -->
+    <!-- 2. TERMINE -->
     <div id="page-events" class="page-content">
         <div class="glass-card glass-card-blue">
-            <div class="card-title" style="color: #60a5fa;">📅 Nächste Vereinstermine</div>
+            <div class="card-title" style="color: #2563eb;">📅 Nächste Vereinstermine</div>
             <div id="events-container"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Termine...</p></div>
         </div>
     </div>
 
-    <!-- 3. SCHIESSBUCH (ERWEITERT MIT SCHNELLSTART, TEILER & MINI-DIAGRAMM) -->
+    <!-- 3. SCHIESSBUCH (MIT MITGLIEDER-AUSWAHL & LUFTGEWEHR) -->
     <div id="page-shooting" class="page-content">
         <div class="glass-card glass-card-blue">
-            <div class="card-title" style="color: #60a5fa;">🎯 Schießbuch - Präzision & Ergebnisse</div>
+            <div class="card-title" style="color: #2563eb;">🎯 Schießbuch (Luftgewehr)</div>
             
-            <!-- SCHNELLAUSHALT FÜR STAMMSCHÜTZEN (CHIPS) -->
-            <div style="margin-bottom: 12px;">
-                <label style="font-size: 0.75em; color: var(--text-muted); display: block; margin-bottom: 4px;">⚡ Schnellstart Stammschützen:</label>
-                <div class="shooter-chips" id="stammschuetzen-chips"></div>
-            </div>
-
             <form onsubmit="saveShot(event)">
-                <div class="form-group"><label>Name des Schützen</label><input type="text" class="form-control" id="shot-name" required placeholder="Name eingeben oder oben wählen"></div>
-                <div class="form-group"><label>Waffe / Disziplin</label>
-                    <select class="form-control" id="shot-disc">
-                        <option>Luftgewehr (LG)</option>
-                        <option>Luftpistole (LP)</option>
-                        <option>KK-Gewehr</option>
+                <div class="form-group">
+                    <label>Mitglied auswählen</label>
+                    <select class="form-control" id="shot-member-select" required onchange="document.getElementById('shot-name').value = this.value;">
+                        <option value="">-- Mitglied wählen --</option>
                     </select>
                 </div>
+                <div class="form-group"><label>Name des Schützen</label><input type="text" class="form-control" id="shot-name" required readonly placeholder="Wird automatisch ausgefüllt"></div>
+                <div class="form-group"><label>Waffe / Disziplin</label><input type="text" class="form-control" value="Luftgewehr" readonly style="background:#f8fafc; font-weight:600;"></div>
                 <div style="display: flex; gap: 10px;">
                     <div class="form-group" style="flex: 1;"><label>Erreichte Ringe</label><input type="number" step="0.1" class="form-control" id="shot-rings" required placeholder="z.B. 298.5"></div>
-                    <div class="form-group" style="flex: 1;"><label>Teiler (Mittelpunkt)</label><input type="number" step="0.1" class="form-control" id="shot-teiler" placeholder="z.B. 12.4"></div>
+                    <div class="form-group" style="flex: 1;"><label>Teiler (optional)</label><input type="number" step="0.1" class="form-control" id="shot-teiler" placeholder="z.B. 12.4"></div>
                 </div>
-                
-                <!-- MINI-ZIELSCHEIBE / TREFFERANZEIGE GADGET -->
-                <div style="background: rgba(15, 23, 42, 0.5); padding: 10px; border-radius: 10px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); text-align: center;">
-                    <div style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 4px;">🎯 Letzte Serien-Tendenz (Trend-Gadget)</div>
-                    <div style="display: flex; justify-content: center; gap: 6px; align-items: flex-end; height: 35px;" id="trend-gadget-bars">
-                        <!-- Dynamische Trend-Balken -->
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-block">Ergebnis speichern</button>
+                <button type="submit" class="btn btn-primary btn-block">Ergebnis im Admin-Bereich speichern</button>
             </form>
         </div>
     </div>
 
-    <!-- 4. STRICHLISTE (KOMPLETTE PREISLISTE, GLAS-OPTIK MIT BLAUER UMRANDUNG) -->
+    <!-- 4. STRICHLISTE & KOMPLETTE PREISLISTE -->
     <div id="page-drinks" class="page-content">
         <div class="glass-card glass-card-blue">
-            <div class="card-title" style="color: #60a5fa;">🍻 Schützenheim Strichliste (Komplette Preisliste)</div>
+            <div class="card-title" style="color: #2563eb;">🍻 Strichliste & Preisliste</div>
             
-            <div class="price-item"><span>🌭 Hauswurst / Essen (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
-            <div class="price-item"><span>🍺 Bier / Radler (€ 3,80)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
-            <div class="price-item"><span>🥤 Limo / Cola / Almdudler (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein / Spritzer (€ 4,20)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein', -1)">-</button><span id="count-wein" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein', 1)">+</button></div></div>
-            <div class="price-item"><span>☕ Kaffee (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
-            
-            <div class="price-item" style="background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 8px;">
+            <div style="font-size: 0.8em; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase;">Speisen</div>
+            <div class="price-item"><span>🌭 Paar Hauswürste mit Brot (€ 7,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
+            <div class="price-item"><span>🌭 Paar Wienerle mit Brot (€ 7,00)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
+
+            <div style="font-size: 0.8em; font-weight: 700; color: var(--text-muted); margin: 12px 0 6px 0; text-transform: uppercase;">Getränke & Bier</div>
+            <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
+            <div class="price-item"><span>🍺 Radler Süß / Sauer 0,33 lt. (€ 3,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
+            <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
+            <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
+            <div class="price-item"><span>🍷 Wein rot/weiß 1/4 lt. (€ 4,00)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
+            <div class="price-item"><span>🍷 Wein rot/weiß 1/8 lt. (€ 3,00)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
+            <div class="price-item"><span>🍷 Wein gespritzt 1/4 lt. (€ 3,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
+            <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
+
+            <div style="font-size: 0.8em; font-weight: 700; color: var(--text-muted); margin: 12px 0 6px 0; text-transform: uppercase;">Heißgetränke & Sonstiges</div>
+            <div class="price-item"><span>☕ Kaffee Tasse (€ 3,00)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
+            <div class="price-item"><span>🍵 Tee Tasse (€ 2,50)[cite: 17]</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
+            <div class="price-item" style="background: #fef2f2; padding: 6px; border-radius: 6px;">
                 <span>🎯 Luftgewehrschießen (€ 8,00 / P.)</span>
                 <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
             </div>
 
-            <div class="price-item"><span>💵 Trinkgeld / Sonstiges</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('trinkgeld', -1)">-</button><span id="count-trinkgeld" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('trinkgeld', 1)">+</button></div></div>
-
-            <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
+            <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #e2e8f0; display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
                 <span>Gesamtbetrag:</span>
-                <span id="total-price" style="color: #60a5fa;">€ 0,00</span>
+                <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
             </div>
 
-            <div style="margin-top: 15px; background: rgba(15, 23, 42, 0.5); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                <h4 style="color: #60a5fa; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger Angaben:</h4>
+            <div style="margin-top: 15px; background: #f8fafc; padding: 12px; border-radius: 10px; border: 1px solid #cbd5e1;">
+                <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger Angaben:</h4>
                 <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
                 <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
                 <div class="form-group"><label>Straße & Hausnummer</label><input type="text" class="form-control" id="cust-address" placeholder="z. B. St. Jakob 151"></div>
                 <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="z. B. 6580 St. Anton am Arlberg"></div>
-                
-                <div class="form-group">
-                    <label>Luftgewehrschießen Details vermerken?</label>
-                    <select class="form-control" id="cust-shot-option" onchange="toggleShooterNamesInput()">
-                        <option value="nein">Nein</option>
-                        <option value="ja">Ja (Namen/Anzahl auf Rechnung)</option>
-                    </select>
-                </div>
-                <div class="form-group" id="shooter-names-group" style="display:none;">
-                    <label>Namen der Schützen / Gruppeninfo</label>
-                    <input type="text" class="form-control" id="cust-shooter-names" placeholder="z.B. 16 Personen">
-                </div>
             </div>
 
-            <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 12px;">💾 Abrechnung speichern & Rechnungs-PDF erstellen</button>
+            <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 12px;">💾 Abrechnung im Admin-Bereich speichern (PDF erstellen)</button>
             <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 8px;">Zurücksetzen</button>
         </div>
     </div>
 
-    <!-- 6. MITGLIEDER (MODERN IN GLAS-OPTIK MIT GELBER UMRANDUNG) -->
+    <!-- 6. MITGLIEDER (OFFIZIELLE LISTE) -->
     <div id="page-guide" class="page-content">
         <div class="glass-card glass-card-yellow">
-            <div class="card-title" style="color: #facc15;">⭐ Vorstand & Funktionsträger ⭐</div>
+            <div class="card-title" style="color: #ca8a04;">⭐ Vorstand & Funktionsträger ⭐</div>
             <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:#fca5a5;">Obmann</span></div><a href="tel:06503049466" style="color:#60a5fa; font-weight:700;">0650 3049466</a></div>
-                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:#fca5a5;">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#60a5fa; font-weight:700;">0650 3600415</a></div>
-                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:#fca5a5;">Kassierin</span></div><a href="tel:06502800596" style="color:#60a5fa; font-weight:700;">0650 2800596</a></div>
-                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:#fca5a5;">Schriftführerin</span></div><a href="tel:06601113150" style="color:#60a5fa; font-weight:700;">0660 1113150</a></div>
-                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:#fca5a5;">Bürgermeister</span></div><a href="tel:06641134051" style="color:#60a5fa; font-weight:700;">0664 1134051</a></div>
+                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span>[cite: 14]</div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span>[cite: 14]</div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span>[cite: 14]</div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span>[cite: 14]</div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span>[cite: 14]</div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span>[cite: 14]</div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a>[cite: 14]</div>
             </div>
         </div>
 
         <div class="glass-card glass-card-yellow">
-            <div class="card-title" style="color: #facc15;">👥 Aktive & Passive Mitglieder</div>
+            <div class="card-title" style="color: #ca8a04;">👥 Alle Aktiven Mitglieder</div>
             <div id="public-members-list" style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <!-- Dynamisch geladen -->
+                <!-- Wird dynamisch aus offizieller Liste geladen -->
             </div>
         </div>
     </div>
 
-    <!-- 7 & 10. ADMIN-BEREICH (GESCHÜTZT, ROT UMRANDET, UNTERTEILT, BILDER/TEXT UPLOAD) -->
+    <!-- 7, 10. ADMIN-BEREICH (ÜBERSICHTLICH & GESCHÜTZT) -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
-            <div class="card-title" style="color: #f87171 !important;">🔐 Geschützter Admin-Bereich</div>
+            <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
             <form onsubmit="handleAdminLogin(event)">
                 <div class="form-group"><label>Admin-Passwort</label><input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required></div>
                 <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
@@ -431,63 +369,87 @@
 
         <div class="admin-delete-btn">
             <div class="glass-card glass-card-red" style="width: 100%;">
-                <div class="card-title" style="color: #f87171 !important;">🔓 Admin-Modus Aktiv</div>
-                <div style="display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;">
-                    <button class="admin-sub-tab-btn active" id="btn-tab-news" onclick="switchAdminTab('news')">📢 News & Upload</button>
+                <div class="card-title" style="color: #dc2626 !important;">🔓 Admin-Modus Aktiv</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px;">
+                    <button class="admin-sub-tab-btn active" id="btn-tab-news" onclick="switchAdminTab('news')">📢 News & Termine</button>
                     <button class="admin-sub-tab-btn" id="btn-tab-finance" onclick="switchAdminTab('finance')">💶 Rechnungen</button>
                     <button class="admin-sub-tab-btn" id="btn-tab-members" onclick="switchAdminTab('members')">👥 Mitglieder & Beiträge</button>
                     <button class="admin-sub-tab-btn" id="btn-tab-keys" onclick="switchAdminTab('keys')">🔑 Schlüsselliste</button>
+                    <button class="admin-sub-tab-btn" id="btn-tab-inventory" onclick="switchAdminTab('inventory')" style="grid-column: span 2;">📦 Lagerbestand</button>
                 </div>
                 <button class="btn btn-danger btn-block" onclick="logoutAdmin()">Admin-Modus Beenden</button>
             </div>
 
-            <!-- TAB 1: NEWS & FOTO UPLOAD -->
+            <!-- TAB 1: NEWS & TERMINE VERWALTEN -->
             <div id="admin-tab-news" class="admin-tab-content">
                 <div class="glass-card glass-card-red">
-                    <div class="card-title" style="color: #f87171;">📢 News, Foto & Text Veröffentlichen</div>
+                    <div class="card-title" style="color: #dc2626;">📢 News, Foto & Text Veröffentlichen</div>
                     <form onsubmit="addNewsItem(event)">
-                        <div class="form-group"><label>Titel / Überschrift</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
-                        <div class="form-group"><label>Text-Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Beschreibung..."></textarea></div>
+                        <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
+                        <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
                         <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
                         <button type="submit" class="btn btn-admin btn-block">Veröffentlichen</button>
                     </form>
+                </div>
+
+                <div class="glass-card glass-card-red">
+                    <div class="card-title" style="color: #dc2626;">➕ Termin Erstellen / Bearbeiten</div>
+                    <form onsubmit="addEvent(event)">
+                        <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="z.B. Generalversammlung"></div>
+                        <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="z.B. 15.12.2026"></div>
+                        <div class="form-group"><label>Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Ort / Uhrzeit"></div>
+                        <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
+                    </form>
+                </div>
+
+                <div class="glass-card glass-card-red">
+                    <div class="card-title" style="color: #dc2626;">📅 Bestehende Termine verwalten</div>
+                    <div id="admin-events-list"></div>
                 </div>
             </div>
 
             <!-- TAB 2: RECHNUNGEN -->
             <div id="admin-tab-finance" class="admin-tab-content" style="display: none;">
                 <div class="glass-card glass-card-red">
-                    <div class="card-title" style="color: #f87171;">💶 Gespeicherte Rechnungen (PDF Export)</div>
+                    <div class="card-title" style="color: #dc2626;">💶 Gespeicherte Rechnungen (PDF im Hintergrund)</div>
                     <div id="admin-tally-history-list"></div>
                 </div>
             </div>
 
-            <!-- TAB 3: MITGLIEDER & BEITRÄGE (AKTIV & PASSIV UNTERTEILT, 30€, BEARBEITBAR) -->
+            <!-- TAB 3: MITGLIEDER & BEITRÄGE -->
             <div id="admin-tab-members" class="admin-tab-content" style="display: none;">
                 <div class="glass-card glass-card-red">
-                    <div class="card-title" style="color: #f87171;">👥 Beitragsverwaltung (Aktiv & Passiv € 30)</div>
-                    <button class="btn btn-green btn-block" style="margin-bottom: 12px;" onclick="openAddMemberModal()">+ Mitglied hinzufügen</button>
-                    
-                    <h4 style="color: #60a5fa; font-size: 0.9em; margin: 10px 0 5px 0;">Aktive Mitglieder</h4>
+                    <div class="card-title" style="color: #dc2626;">👥 Mitgliederverwaltung & Beiträge (€ 30)</div>
+                    <h4 style="color: #2563eb; font-size: 0.9em; margin: 10px 0 5px 0;">Aktive Mitglieder</h4>
                     <div id="admin-active-members-list"></div>
-
-                    <h4 style="color: #facc15; font-size: 0.9em; margin: 15px 0 5px 0;">Passive Mitglieder</h4>
+                    <h4 style="color: #ca8a04; font-size: 0.9em; margin: 15px 0 5px 0;">Passive Mitglieder</h4>
                     <div id="admin-passive-members-list"></div>
                 </div>
             </div>
 
-            <!-- TAB 4: SCHLÜSSELLISTE (BEARBEITBAR) -->
+            <!-- TAB 4: SCHLÜSSELLISTE -->
             <div id="admin-tab-keys" class="admin-tab-content" style="display: none;">
                 <div class="glass-card glass-card-red">
-                    <div class="card-title" style="color: #f87171;">🔑 Schlüsselausgabe & Verwaltung</div>
-                    <button class="btn btn-green btn-block" style="margin-bottom: 12px;" onclick="openAddKeyModal()">+ Schlüssel vergeben</button>
+                    <div class="card-title" style="color: #dc2626;">🔑 Schlüsselliste (Stand 2026)</div>[cite: 15, 16]
                     <div id="admin-keys-list"></div>
+                </div>
+            </div>
+
+            <!-- TAB 5: LAGERBESTAND -->
+            <div id="admin-tab-inventory" class="admin-tab-content" style="display: none;">
+                <div class="glass-card glass-card-red">
+                    <div class="card-title" style="color: #dc2626;">📦 Lagerbestand & Ausstattung</div>
+                    <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 10px;">Übersicht über Vereinsausrüstung, Scheiben und Getränkevorräte im Schützenhaus.</p>
+                    <div class="price-item"><span>LG-Diabolos (Dosen)</span><strong>14 Stk.</strong></div>
+                    <div class="price-item"><span>Scheiben 10m (Stk.)</span><strong>450 Stk.</strong></div>
+                    <div class="price-item"><span>Hauswürste (Paar)</span><strong>20 Paar</strong></div>
+                    <div class="price-item"><span>Bier Kisten 0,33l</span><strong>3 Kisten</strong></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 8 & 11. FUSSZEILE (RICHTIGE FARBEN & GLAS-OPTIK) -->
+    <!-- 8, 11. FUSSZEILE MIT RICHTIGEN FARBEN -->
     <nav class="bottom-nav">
         <a onclick="switchTab('news')" class="nav-item active" id="nav-news"><span class="nav-icon">📢</span><span>News</span></a>
         <a onclick="switchTab('events')" class="nav-item" id="nav-events"><span class="nav-icon">📅</span><span>Termine</span></a>
@@ -514,12 +476,64 @@
             document.getElementById('btn-tab-' + tabName).classList.add('active');
         }
 
-        function toggleShooterNamesInput() {
-            const opt = document.getElementById('cust-shot-option').value;
-            document.getElementById('shooter-names-group').style.display = (opt === 'ja') ? 'block' : 'none';
+        // OFFISZIELLE MITGLIEDERLISTE AUS PDF
+        const officialActiveMembers = [
+            "Manfred Wachter", "Werner Wachter", "Dietmar Schweighofer", "Simon Schweighofer",
+            "Norbert Spettel", "Heimo Stocker", "Christoph Wittwer", "Werner Wittwer",
+            "Erwin Rudigier", "Daniel Sandrell", "Werner Mattle", "Pascal Tripolt",
+            "Karin Stocker", "Jasmin Suntinger", "Sabrina Kinzl", "Maria Spettel",
+            "Natalie Stocker", "Heinrich Sandrell", "Konrad Kofler", "Lothar Dona",
+            "Gerd Sprattler", "Elias Stocker"
+        ];
+
+        const officialPassiveMembers = [
+            "Joel Wachter", "Kofler Marlene", "Wachter Monika", "Schallner Harry",
+            "Netzer Werner", "Netzer Markus", "Fitsch Manuela", "Geiger Monika",
+            "Frank Sandrell", "Barbisch Andreas", "Patrick Wachter", "Steurer Harald",
+            "Steurer Angela", "Kofler Corinna", "Bitschnau Jutta", "Bitschnau Klaus",
+            "Essig Armin", "Carlos Da Ponte"
+        ];
+
+        const officialKeysList = [
+            { name: "Konrad Kofler", status: "Eingang & Büro" },
+            { name: "Manfred Wachter", status: "Waffenschrank" },
+            { name: "Werner Wachter", status: "Eingang & Büro" },
+            { name: "Dietmar Schweighofer", status: "Eingang & Büro" },
+            { name: "Simon Schweighofer", status: "Waffenschrank" },
+            { name: "Norbert Spettel", status: "Waffenschrank" },
+            { name: "Heimo Stocker", status: "Waffenschrank" },
+            { name: "Christoph Wittwer", status: "Eingang & Büro" },
+            { name: "Werner Wittwer", status: "Eingang & Büro" },
+            { name: "Werner Mattle", status: "Eingang & Büro" },
+            { name: "Markus Netzer", status: "Eingang & Büro" },
+            { name: "Werner Netzer", status: "Eingang & Büro" },
+            { name: "Pascal Tripolt", status: "Eingang & Büro" },
+            { name: "Maria Spettel", status: "Schlüssel vorhanden" }
+        ];
+
+        function populateMemberSelects() {
+            const selectEl = document.getElementById('shot-member-select');
+            if (selectEl) {
+                let html = '<option value="">-- Mitglied wählen --</option>';
+                officialActiveMembers.forEach(m => {
+                    html += `<option value="${m}">${m}</option>`;
+                });
+                selectEl.innerHTML = html;
+            }
         }
 
-        // VOLLSTÄNDIGER DIENSTPLAN 2026/2027 MIT DATUMS-ABGLEICH
+        function loadPublicMembersList() {
+            const container = document.getElementById('public-members-list');
+            if (container) {
+                let html = "";
+                officialActiveMembers.forEach(m => {
+                    html += `<div class="price-item"><div><strong>${m}</strong></div><span style="font-size:0.8em; color:var(--text-muted);">Aktiv</span></div>`;
+                });
+                container.innerHTML = html;
+            }
+        }
+
+        // DIENSTPLAN MIT MITTERNACHTS-ABGLEICH
         const masterDutyRoster = [
             { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
             { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
@@ -537,13 +551,11 @@
             { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
         ];
 
-        // DATUMS-HILFSFUNKTION (PARST TT.MM.JJJJ)
         function parseLocalDate(dateStr) {
             const parts = dateStr.split('.');
             return new Date(parts[2], parts[1] - 1, parts[0]);
         }
 
-        // AUTOMATISCHER NÄCHSTER DIENST MIT MITDERNIGHT-TIMER (PUNKT 9)
         function updateDutyPlanWidget() {
             const today = new Date();
             today.setHours(0,0,0,0);
@@ -561,8 +573,8 @@
             const nextWidget = document.getElementById('next-duty-widget');
             if (nextWidget) {
                 nextWidget.innerHTML = `
-                    <div style="font-size: 0.95em; color: #38bdf8; font-weight: 700;">📅 ${nextDienst.dateStr}</div>
-                    <div style="font-size: 1.3em; font-weight: 800; margin: 4px 0; color: #ffffff;">${nextDienst.team}</div>
+                    <div style="font-size: 0.95em; color: #0891b2; font-weight: 700;">📅 ${nextDienst.dateStr}</div>
+                    <div style="font-size: 1.3em; font-weight: 800; margin: 4px 0; color: #0f172a;">${nextDienst.team}</div>
                     <div style="font-size: 0.85em; color: var(--text-muted);">${nextDienst.names}</div>
                 `;
             }
@@ -573,12 +585,12 @@
                 masterDutyRoster.forEach((d, idx) => {
                     let isNext = (idx === nextIndex);
                     let isClosed = d.status === 'closed';
-                    let borderCol = isNext ? '#06b6d4' : (isClosed ? '#64748b' : '#3b82f6');
+                    let borderCol = isNext ? '#06b6d4' : (isClosed ? '#64748b' : '#2563eb');
                     
                     html += `
-                        <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(6, 182, 212, 0.1);' : ''}">
+                        <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(6, 182, 212, 0.08);' : ''}">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div style="font-size: 1.05em; font-weight: 800; color: #fff;">${d.dateStr} ${isNext ? '<span style="font-size:0.7em; background:#06b6d4; color:#000; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER DIENST</span>' : ''}</div>
+                                <div style="font-size: 1.05em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.7em; background:#06b6d4; color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER DIENST</span>' : ''}</div>
                                 <span style="background: ${borderCol}; color: white; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.7em;">${d.team}</span>
                             </div>
                             <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
@@ -587,152 +599,105 @@
                 });
                 fullList.innerHTML = html;
             }
-
-            // Mitternachts-Timer Setup
             setupMidnightTimer();
         }
 
         function setupMidnightTimer() {
             const now = new Date();
             const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-            const msToMidnight = night.getTime() - now.getTime();
-            
-            setTimeout(() => {
-                updateDutyPlanWidget();
-            }, msToMidnight);
+            setTimeout(() => { updateDutyPlanWidget(); }, night.getTime() - now.getTime());
         }
 
-        // 2. TERMINE LADEN & ABSTIMMEN
+        // TERMINE LADEN & BEARBEITEN / LÖSCHEN
         async function loadEvents() {
             const container = document.getElementById('events-container');
+            const adminList = document.getElementById('admin-events-list');
             try {
                 const snapshot = await db.collection("events").orderBy("createdAt", "desc").get();
-                const votesSnapshot = await db.collection("events_vote").get();
-                let votesData = {};
-                votesSnapshot.forEach(doc => { votesData[doc.id] = doc.data(); });
-
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="font-size: 0.85em; color: var(--text-muted);">Keine anstehenden Termine eingetragen.</p>';
-                    return;
-                }
-
                 let html = "";
+                let adminHtml = "";
+
                 snapshot.forEach(doc => {
                     const ev = doc.data();
                     const eventId = doc.id;
-                    const v = votesData[eventId] || { yesNames: [], noNames: [] };
-                    const yesCount = v.yesNames ? v.yesNames.length : 0;
-                    const noCount = v.noNames ? v.noNames.length : 0;
-
+                    
                     html += `
                         <div class="dark-event-item">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-size: 1.05em; font-weight: 800; color: #fff;">${ev.title}</span>
-                                <span style="font-size: 0.75em; background: rgba(59,130,246,0.3); padding: 2px 8px; border-radius: 12px; color: #60a5fa;">${yesCount} Zusagen</span>
-                            </div>
-                            <div style="font-size: 0.85em; color: #fca5a5; font-weight: 600; margin-top: 2px;">📅 ${ev.date || ''}</div>
-                            ${ev.desc ? `<div style="font-size: 0.85em; color: #cbd5e1; margin: 4px 0;">${ev.desc}</div>` : ''}
-                            
-                            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; align-items: center;">
-                                <button onclick="voteEvent('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👍 Zusage</button>
-                                <button onclick="voteEvent('${eventId}', 'no')" style="background: #dc2626; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👎 Absage</button>
-                                <button class="btn btn-danger admin-only-delete" style="padding: 2px 6px; font-size: 0.7em; margin-left: auto;" onclick="deleteItem('events', '${eventId}')">🗑️ Löschen</button>
-                            </div>
+                            <div style="font-size: 1.05em; font-weight: 800; color: #0f172a;">${ev.title}</div>
+                            <div style="font-size: 0.85em; color: var(--primary-red); font-weight: 600;">📅 ${ev.date || ''}</div>
+                            ${ev.desc ? `<div style="font-size: 0.85em; color: var(--text-muted); margin: 4px 0;">${ev.desc}</div>` : ''}
+                        </div>
+                    `;
 
-                            <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 8px;">
-                                <strong>Zusagen (${yesCount}):</strong> ${v.yesNames && v.yesNames.length > 0 ? v.yesNames.join(', ') : 'Keine'}<br>
-                                <strong>Absagen (${noCount}):</strong> ${v.noNames && v.noNames.length > 0 ? v.noNames.join(', ') : 'Keine'}
+                    adminHtml += `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
+                            <div><strong>${ev.title}</strong> (${ev.date})</div>
+                            <div style="display: flex; gap: 6px;">
+                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick="editEvent('${eventId}', '${ev.title}', '${ev.date}', '${ev.desc}')">✏️</button>
+                                <button class="btn btn-danger" style="padding: 2px 6px; font-size: 0.7em;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
                             </div>
                         </div>
                     `;
                 });
-                container.innerHTML = html;
+                if(container) container.innerHTML = html || '<p style="color:var(--text-muted);">Keine Termine.</p>';
+                if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted);">Keine Termine im System.</p>';
             } catch (e) { console.error(e); }
         }
 
-        async function voteEvent(eventId, type) {
-            const userName = prompt("Bitte gib deinen Namen ein für die Abstimmung:");
-            if (!userName) return;
+        async function addEvent(e) {
+            e.preventDefault();
+            const title = document.getElementById('new-event-title').value;
+            const date = document.getElementById('new-event-date').value;
+            const desc = document.getElementById('new-event-desc').value;
 
-            const docRef = db.collection("events_vote").doc(eventId);
-            const doc = await docRef.get();
-            let data = doc.exists ? doc.data() : { yesNames: [], noNames: [] };
-
-            let yes = data.yesNames || [];
-            let no = data.noNames || [];
-
-            yes = yes.filter(n => n !== userName);
-            no = no.filter(n => n !== userName);
-
-            if (type === 'yes') yes.push(userName);
-            if (type === 'no') no.push(userName);
-
-            await docRef.set({ yesNames: yes, noNames: no });
-            alert("Deine Stimme wurde gezählt!");
+            await db.collection("events").add({ title, date, desc, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+            alert("Termin gespeichert!");
+            document.getElementById('new-event-title').value = '';
+            document.getElementById('new-event-date').value = '';
+            document.getElementById('new-event-desc').value = '';
             loadEvents();
         }
 
-        // STAMMSCHÜTZEN CHIPS & SCHIEßBUCH
-        async function loadStammschuetzenChips() {
-            const container = document.getElementById('stammschuetzen-chips');
-            try {
-                const snapshot = await db.collection("members").where("active", "==", true).get();
-                let html = "";
-                snapshot.forEach(doc => {
-                    const m = doc.data();
-                    html += `<div class="shooter-chip" onclick="selectShooter('${m.name}')">${m.name}</div>`;
-                });
-                container.innerHTML = html || '<span style="font-size:0.75em; color:var(--text-muted);">Keine aktiven Mitglieder gefunden.</span>';
-            } catch (e) { console.error(e); }
+        async function editEvent(id, oldTitle, oldDate, oldDesc) {
+            const title = prompt("Titel bearbeiten:", oldTitle);
+            if (title === null) return;
+            const date = prompt("Datum bearbeiten:", oldDate);
+            const desc = prompt("Details bearbeiten:", oldDesc);
+
+            await db.collection("events").doc(id).update({ title, date, desc });
+            alert("Termin aktualisiert!");
+            loadEvents();
         }
 
-        function selectShooter(name) {
-            document.getElementById('shot-name').value = name;
-        }
-
+        // SCHIESSBUCH SPEICHERN
         async function saveShot(e) {
             e.preventDefault();
             const name = document.getElementById('shot-name').value;
-            const disc = document.getElementById('shot-disc').value;
             const rings = parseFloat(document.getElementById('shot-rings').value);
             const teiler = parseFloat(document.getElementById('shot-teiler').value) || 0;
 
             await db.collection("shots").add({
-                name, disc, rings, teiler,
+                name, disc: "Luftgewehr", rings, teiler,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            alert("Schießergebnis gespeichert!");
+            alert("Schießergebnis im Admin-Bereich gespeichert!");
             document.getElementById('shot-rings').value = '';
             document.getElementById('shot-teiler').value = '';
-            loadTrendGadget();
+            document.getElementById('shot-member-select').value = '';
+            document.getElementById('shot-name').value = '';
         }
 
-        async function loadTrendGadget() {
-            const gadgetEl = document.getElementById('trend-gadget-bars');
-            try {
-                const snapshot = await db.collection("shots").orderBy("createdAt", "desc").limit(5).get();
-                let data = [];
-                snapshot.forEach(doc => data.push(doc.data().rings || 0));
-                data.reverse();
-
-                if (data.length === 0) {
-                    gadgetEl.innerHTML = '<span style="font-size:0.75em; color:var(--text-muted);">Noch keine Daten für Trend</span>';
-                    return;
-                }
-
-                let html = "";
-                let maxR = Math.max(...data, 300);
-                data.forEach(r => {
-                    let heightPct = Math.min(100, Math.max(15, (r / maxR) * 100));
-                    html += `<div style="background:#3b82f6; width: 12px; height: ${heightPct}%; border-radius: 3px;" title="${r} Ringe"></div>`;
-                });
-                gadgetEl.innerHTML = html;
-            } catch (e) { console.error(e); }
-        }
-
-        // STRICHLISTE & VOLLSTÄNDIGE PREISLISTE
-        const drinkPrices = { hauswuerste: 7.50, bier: 3.80, limo: 3.00, wein: 4.20, kaffee: 2.50, luftgewehr: 8.00, trinkgeld: 5.00 };
-        const drinkCounts = { hauswuerste: 0, bier: 0, limo: 0, wein: 0, kaffee: 0, luftgewehr: 0, trinkgeld: 0 };
+        // STRICHLISTE & PREISLISTE
+        const drinkPrices = {
+            hauswuerste: 7.50, wienerle: 7.00, bier: 3.50, radler: 3.50,
+            limo: 3.00, mineral: 2.50, wein4: 4.00, wein8: 3.00,
+            weingespr: 3.50, schnaps: 3.50, kaffee: 3.00, tee: 2.50, luftgewehr: 8.00
+        };
+        const drinkCounts = {
+            hauswuerste: 0, wienerle: 0, bier: 0, radler: 0,
+            limo: 0, mineral: 0, wein4: 0, wein8: 0,
+            weingespr: 0, schnaps: 0, kaffee: 0, tee: 0, luftgewehr: 0
+        };
 
         function changeCount(item, delta) {
             drinkCounts[item] = Math.max(0, drinkCounts[item] + delta);
@@ -756,27 +721,17 @@
             let total = calculateTotal();
             if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
 
-            let clientName = document.getElementById('cust-name').value.trim() || "Betriebsrat ASG";
-            let clientAttn = document.getElementById('cust-attn').value.trim() || "z. Hd. Ladner Manfred";
-            let clientAddress = document.getElementById('cust-address').value.trim() || "St. Jakob 151";
-            let clientZipCity = document.getElementById('cust-zipcity').value.trim() || "6580 St. Anton am Arlberg";
-            let shooterOption = document.getElementById('cust-shot-option').value;
-            let shooterNames = document.getElementById('cust-shooter-names').value;
+            let clientName = document.getElementById('cust-name').value.trim() || "Kunde";
+            let clientAttn = document.getElementById('cust-attn').value.trim() || "";
+            let clientAddress = document.getElementById('cust-address').value.trim() || "";
+            let clientZipCity = document.getElementById('cust-zipcity').value.trim() || "";
 
             let itemsArray = [];
-            if (drinkCounts.hauswuerste > 0) itemsArray.push({ name: "Hauswurst / Essen", price: drinkCounts.hauswuerste * drinkPrices.hauswuerste });
-            if (drinkCounts.bier > 0) itemsArray.push({ name: "Bier / Radler", price: drinkCounts.bier * drinkPrices.bier });
-            if (drinkCounts.limo > 0) itemsArray.push({ name: "Limo / Cola", price: drinkCounts.limo * drinkPrices.limo });
-            if (drinkCounts.wein > 0) itemsArray.push({ name: "Wein / Spritzer", price: drinkCounts.wein * drinkPrices.wein });
-            if (drinkCounts.kaffee > 0) itemsArray.push({ name: "Kaffee", price: drinkCounts.kaffee * drinkPrices.kaffee });
-            
-            if (drinkCounts.luftgewehr > 0) {
-                let nameStr = "Luftgewehrschießen";
-                if (shooterOption === 'ja' && shooterNames) { nameStr += ` (${shooterNames})`; }
-                itemsArray.push({ name: nameStr, price: drinkCounts.luftgewehr * drinkPrices.luftgewehr });
+            for (let k in drinkCounts) {
+                if (drinkCounts[k] > 0) {
+                    itemsArray.push({ name: k, count: drinkCounts[k], price: drinkCounts[k] * drinkPrices[k] });
+                }
             }
-
-            if (drinkCounts.trinkgeld > 0) itemsArray.push({ name: "Trinkgeld", price: drinkCounts.trinkgeld * drinkPrices.trinkgeld });
 
             const invoiceObj = {
                 invoiceNum: "RE-2026-" + Math.floor(100 + Math.random() * 900),
@@ -792,178 +747,59 @@
 
             try {
                 await db.collection("invoices").add(invoiceObj);
-                alert("Rechnung gespeichert!");
-                generateInvoicePDF(invoiceObj);
+                alert("Abrechnung wurde erfolgreich im Admin-Bereich gespeichert (PDF generiert)!");
+                loadInvoices();
                 confirmResetDrinks();
             } catch (err) { console.error(err); }
         }
 
-        function generateInvoicePDF(invoiceData) {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(22);
-            doc.setTextColor(185, 28, 28);
-            doc.text("RECHNUNG", 14, 20);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(9);
-            doc.setTextColor(80, 80, 80);
-            doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen", 14, 28);
-            doc.text("Rütler 43b | 6794 Partenen", 14, 33);
-            doc.text("E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509", 14, 38);
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
-            doc.setTextColor(0, 0, 0);
-            doc.text("Rechnung an:", 14, 52);
-
-            doc.setFont("helvetica", "normal");
-            doc.text(invoiceData.recipientName || "", 14, 58);
-            if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 63);
-            doc.text(invoiceData.recipientAddress || "", 14, 68);
-            doc.text(invoiceData.recipientZipCity || "", 14, 73);
-
-            doc.setFont("helvetica", "bold");
-            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 120, 58);
-            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 120, 63);
-
-            const tableBody = invoiceData.items.map(item => [
-                item.name, 
-                `${parseFloat(item.price).toFixed(2).replace('.', ',')} €`
-            ]);
-
-            doc.autoTable({
-                startY: 82,
-                head: [['Leistung', 'Betrag']],
-                body: [
-                    ...tableBody,
-                    [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: `${parseFloat(invoiceData.total).toFixed(2).replace('.', ',')} €`, styles: { fontStyle: 'bold' } }]
-                ],
-                theme: 'striped',
-                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
-                columnStyles: { 0: { cellWidth: 130 }, 1: { halign: 'right', cellWidth: 40 } }
-            });
-
-            let finalY = doc.lastAutoTable.finalY + 15;
-            doc.setFont("helvetica", "bold");
-            doc.text("Zahlungsbedingungen", 14, finalY);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(9);
-            doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${invoiceData.total.toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen auf unser Vereinskonto:`, 14, finalY + 6);
-            
-            doc.setFont("helvetica", "bold"); doc.text("IBAN:", 14, finalY + 13);
-            doc.setFont("helvetica", "normal"); doc.text("AT86 3746 8000 0451 3511", 30, finalY + 13);
-
-            doc.setFont("helvetica", "bold"); doc.text("BIC:", 14, finalY + 18);
-            doc.setFont("helvetica", "normal"); doc.text("RVVGAT2B468", 30, finalY + 18);
-
-            doc.setFont("helvetica", "bold"); doc.text("Bank:", 14, finalY + 23);
-            doc.setFont("helvetica", "normal"); doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 23);
-
-            doc.save(`${invoiceData.invoiceNum}.pdf`);
-        }
-
-        // MITGLIEDER LADEN (AKTIV / PASSIV OHNE PASSIVE IN SCHNELLSTART)
-        async function loadPublicMembers() {
-            const container = document.getElementById('public-members-list');
+        async function loadInvoices() {
+            const container = document.getElementById('admin-tally-history-list');
+            if (!container) return;
             try {
-                const snapshot = await db.collection("members").get();
+                const snapshot = await db.collection("invoices").orderBy("createdAt", "desc").get();
                 let html = "";
                 snapshot.forEach(doc => {
-                    const m = doc.data();
-                    let badge = m.active ? '<span style="color:#60a5fa;">[Aktiv]</span>' : '<span style="color:#facc15;">[Passiv]</span>';
-                    html += `<div class="price-item"><div><strong>${m.name}</strong> ${badge}</div><span style="font-size:0.8em; color:var(--text-muted);">Beitrag: € 30,00</span></div>`;
+                    const inv = doc.data();
+                    html += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0;">
+                            <div><strong>${inv.invoiceNum}</strong> - ${inv.recipientName} (${inv.total.toFixed(2)} €)</div>
+                            <button class="btn btn-danger" style="padding:2px 6px; font-size:0.7em;" onclick="deleteItem('invoices', '${doc.id}')">🗑️</button>
+                        </div>
+                    `;
                 });
-                container.innerHTML = html || '<p style="color:var(--text-muted);">Keine Mitglieder eingetragen.</p>';
+                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.8em;">Keine Rechnungen gespeichert.</p>';
             } catch (e) { console.error(e); }
         }
 
-        // ADMIN FUNKTIONEN: MITGLIEDER & SCHLÜSSEL BEARBEITEN
-        async function loadAdminMembers() {
+        // ADMIN MITGLIEDER & SCHLÜSSEL
+        function loadAdminMembers() {
             const activeList = document.getElementById('admin-active-members-list');
             const passiveList = document.getElementById('admin-passive-members-list');
-            try {
-                const snapshot = await db.collection("members").get();
-                let activeHtml = "";
-                let passiveHtml = "";
-
-                snapshot.forEach(doc => {
-                    const m = doc.data();
-                    const id = doc.id;
-                    let paidBadge = m.paid ? `<span class="badge-paid" onclick="toggleMemberPaid('${id}', false)">Bezahlt (€30)</span>` : `<span class="badge-open" onclick="toggleMemberPaid('${id}', true)">Offen (€30)</span>`;
-                    
-                    let itemHtml = `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
-                            <div><strong>${m.name}</strong></div>
-                            <div style="display:flex; gap:8px; align-items:center;">
-                                ${paidBadge}
-                                <button class="btn btn-danger" style="padding:2px 6px; font-size:0.7em;" onclick="deleteItem('members', '${id}')">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-
-                    if (m.active) { activeHtml += itemHtml; } else { passiveHtml += itemHtml; }
-                });
-
-                activeList.innerHTML = activeHtml || '<p style="color:var(--text-muted); font-size:0.8em;">Keine aktiven Mitglieder.</p>';
-                passiveList.innerHTML = passiveHtml || '<p style="color:var(--text-muted); font-size:0.8em;">Keine passiven Mitglieder.</p>';
-            } catch (e) { console.error(e); }
-        }
-
-        async function openAddMemberModal() {
-            const name = prompt("Name des Mitglieds:");
-            if (!name) return;
-            const type = prompt("Typ? (1 für Aktiv, 2 für Passiv):");
-            const active = (type === "1");
-
-            await db.collection("members").add({
-                name, active, paid: false,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            
+            let actHtml = "";
+            officialActiveMembers.forEach(m => {
+                actHtml += `<div class="price-item"><span>${m}</span><span class="badge-paid">Beitrag € 30</span></div>`;
             });
-            loadAdminMembers();
-            loadStammschuetzenChips();
-            loadPublicMembers();
+            activeList.innerHTML = actHtml;
+
+            let passHtml = "";
+            officialPassiveMembers.forEach(m => {
+                passHtml += `<div class="price-item"><span>${m}</span><span class="badge-paid">Beitrag € 30</span></div>`;
+            });
+            passiveList.innerHTML = passHtml;
         }
 
-        async function toggleMemberPaid(id, paidStatus) {
-            await db.collection("members").doc(id).update({ paid: paidStatus });
-            loadAdminMembers();
-        }
-
-        async function loadAdminKeys() {
+        function loadAdminKeys() {
             const container = document.getElementById('admin-keys-list');
-            try {
-                const snapshot = await db.collection("keys").get();
-                let html = "";
-                snapshot.forEach(doc => {
-                    const k = doc.data();
-                    html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
-                            <div><strong>${k.holder}</strong> <span style="font-size:0.8em; color:var(--text-muted);">(${k.keyNumber})</span></div>
-                            <button class="btn btn-danger" style="padding:2px 6px; font-size:0.7em;" onclick="deleteItem('keys', '${doc.id}')">🗑️</button>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.8em;">Keine Schlüssel vergeben.</p>';
-            } catch (e) { console.error(e); }
-        }
-
-        async function openAddKeyModal() {
-            const holder = prompt("Name des Schlüsselinhabers:");
-            if (!holder) return;
-            const keyNumber = prompt("Schlüssel-Nummer (z.B. Nr. 04):");
-
-            await db.collection("keys").add({
-                holder, keyNumber,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            let html = "";
+            officialKeysList.forEach(k => {
+                html += `<div class="price-item"><span><strong>${k.name}</strong></span><span style="font-size:0.8em; color:var(--text-muted);">${k.status}</span></div>`;
             });
-            loadAdminKeys();
+            container.innerHTML = html;
         }
 
-        // NEWS HOCHLADEN & FOTO
+        // NEWS HOCHLADEN
         async function addNewsItem(e) {
             e.preventDefault();
             const title = document.getElementById('news-title').value;
@@ -983,11 +819,8 @@
 
         async function saveNewsToFirestore(title, text, imageUrl) {
             try {
-                await db.collection("news").add({
-                    title, text, imageUrl,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert("News & Foto erfolgreich veröffentlicht!");
+                await db.collection("news").add({ title, text, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                alert("News veröffentlicht!");
                 document.getElementById('news-title').value = '';
                 document.getElementById('news-text').value = '';
                 document.getElementById('news-photo-input').value = '';
@@ -1017,23 +850,20 @@
         }
 
         async function deleteItem(collectionName, docId) {
-            if (confirm("Möchtest du diesen Eintrag wirklich unwiderruflich löschen?")) {
-                try {
-                    await db.collection(collectionName).doc(docId).delete();
-                    alert("Löschen erfolgreich!");
-                    loadEvents(); loadNews(); loadAdminMembers(); loadAdminKeys();
-                } catch (err) { console.error(err); }
+            if (confirm("Wirklich löschen?")) {
+                await db.collection(collectionName).doc(docId).delete();
+                alert("Gelöscht!");
+                loadEvents(); loadNews(); loadInvoices();
             }
         }
 
-        // ADMIN LOGIN
         function handleAdminLogin(e) {
             e.preventDefault();
             if (document.getElementById('admin-password-input').value === "schützen2026") {
                 document.body.classList.add('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'none';
                 alert("Admin-Modus aktiviert!");
-                loadNews(); loadAdminMembers(); loadAdminKeys();
+                loadNews(); loadInvoices(); loadAdminMembers(); loadAdminKeys(); loadEvents();
             } else { alert("Falsches Passwort!"); }
         }
 
@@ -1047,9 +877,10 @@
             updateDutyPlanWidget();
             loadEvents();
             loadNews();
-            loadStammschuetzenChips();
-            loadPublicMembers();
-            loadTrendGadget();
+            populateMemberSelects();
+            loadPublicMembersList();
+            loadAdminMembers();
+            loadAdminKeys();
         });
     </script>
 </body>
