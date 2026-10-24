@@ -38,15 +38,15 @@
         :root {
             --primary-red: #b91c1c; /* Kräftiges, edles Rot */
             --primary-dark: #7f1d1d;
-            --bg-light: #f4f4f5; /* Hocker / Heller Hintergrund */
-            --card-bg: #ffffff; /* Weißer Karten-Hintergrund */
-            --text-dark: #1c1917; /* Dunkler Text für Lesbarkeit */
-            --text-muted: #57534e; /* Gedämpfter Text */
-            --accent-green: #16a34a; /* Giftgrün */
+            --bg-light: #f4f4f5; 
+            --card-bg: #ffffff; 
+            --text-dark: #1c1917; 
+            --text-muted: #57534e; 
+            --accent-green: #16a34a; 
             --accent-green-dark: #15803d;
             --danger: #dc2626;
             --admin-blue: #2563eb;
-            --admin-card-bg: #1e293b; /* Admin-Farbe bleibt dunkel wie gewünscht */
+            --admin-card-bg: #1e293b; 
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -109,7 +109,7 @@
             color: var(--accent-green-dark) !important;
         }
 
-        /* ADMIN BEREICH STYLING (BLEIBT DUNKEL) */
+        /* ADMIN BEREICH STYLING */
         .admin-card {
             background: var(--admin-card-bg) !important;
             border: 1px solid #334155 !important;
@@ -146,15 +146,25 @@
         }
 
         .event-item {
-            border-left: 4px solid var(--primary-red);
-            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
             background: #fdf2f2;
             border-radius: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
+            border-left: 4px solid var(--primary-red);
         }
-        .event-date { font-size: 0.8em; font-weight: 700; color: var(--primary-dark); text-transform: uppercase; }
-        .event-name { font-size: 0.95em; font-weight: 700; margin: 3px 0; color: var(--text-dark); }
-        .event-desc { font-size: 0.85em; color: var(--text-muted); }
+        .event-badge {
+            background: var(--primary-red);
+            color: white;
+            font-size: 0.8em;
+            font-weight: 800;
+            padding: 6px 10px;
+            border-radius: 6px;
+            text-align: center;
+            min-width: 36px;
+        }
 
         .btn {
             padding: 12px 18px;
@@ -302,7 +312,7 @@
     <!-- 2. TERMINE -->
     <div id="page-events" class="page-content">
         <div class="card">
-            <div class="card-title">📅 Anstehende Termine</div>
+            <div class="card-title">📅 Nächste Termine</div>
             <div id="events-container"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Termine...</p></div>
         </div>
     </div>
@@ -310,10 +320,13 @@
     <!-- 3. SCHIESSBUCH -->
     <div id="page-shooting" class="page-content">
         <div class="card">
-            <div class="card-title">🎯 Digitales Schießbuch</div>
+            <div class="card-title">🎯 Aktuelle Ergebnisse</div>
+            <div id="shooting-public-list" style="margin-bottom: 15px;"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Ergebnisse...</p></div>
+            <hr style="border: 0; border-top: 1px solid #e7e5e4; margin: 15px 0;">
+            <h4 style="font-size: 0.95em; color: var(--primary-red); margin-bottom: 10px;">Eigenes Ergebnis eintragen:</h4>
             <form onsubmit="saveShot(event)">
                 <div class="form-group"><label>Name des Schützen</label><input type="text" class="form-control" id="shot-name" required></div>
-                <div class="form-group"><label>Disziplin</label><select class="form-control" id="shot-disc"><option>Luftgewehr (10m)</option><option>Luftpistole (10m)</option></select></div>
+                <div class="form-group"><label>Disziplin</label><select class="form-control" id="shot-disc"><option>Luftgewehr (10m)</option><option>Luftpistole (10m)</option><option>KK-Gewehr</option></select></div>
                 <div class="form-group"><label>Erreichte Ringe</label><input type="number" step="0.1" class="form-control" id="shot-rings" required></div>
                 <button type="submit" class="btn btn-primary btn-block">Ergebnis speichern</button>
             </form>
@@ -390,7 +403,7 @@
         </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH (ÜBERSICHTLICH MIT UNTER-TABS & DUNKLEM ADMIN-LOOK) -->
+    <!-- 6. ADMIN-BEREICH -->
     <div id="page-card" class="page-content">
         <div class="card admin-card" id="admin-login-card">
             <div class="card-title" style="color: #60a5fa !important;">🔐 Admin-Login</div>
@@ -435,10 +448,10 @@
                 </div>
 
                 <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title" style="color: #60a5fa !important;">➕ Neuen Termin anlegen</div>
+                    <div class="card-title" style="color: #60a5fa !important;">➕ Nächste Termine verwalten</div>
                     <form onsubmit="addEvent(event)">
-                        <div class="form-group"><label>Titel des Termins</label><input type="text" class="form-control" id="new-event-title" placeholder="z.B. Jahreshauptversammlung" required></div>
-                        <div class="form-group"><label>Datum & Uhrzeit</label><input type="text" class="form-control" id="new-event-date" placeholder="z.B. 15. Dez 2026, 19:00 Uhr" required></div>
+                        <div class="form-group"><label>Titel des Termins</label><input type="text" class="form-control" id="new-event-title" placeholder="z.B. Vereinsschießen" required></div>
+                        <div class="form-group"><label>Datum & Uhrzeit (z.B. 10. Nov - Vereinsschießen)</label><input type="text" class="form-control" id="new-event-date" placeholder="z.B. 10. Nov" required></div>
                         <div class="form-group"><label>Beschreibung</label><input type="text" class="form-control" id="new-event-desc" placeholder="Treffpunkt etc."></div>
                         <button type="submit" class="btn btn-admin btn-block">Termin speichern</button>
                     </form>
@@ -464,8 +477,8 @@
             <!-- TAB 3: MITGLIEDER & SCHIESSBUCH -->
             <div id="admin-tab-members" class="admin-tab-content" style="display: none;">
                 <div class="card admin-card" style="width: 100%;">
-                    <div class="card-title" style="color: #60a5fa !important;">🎯 Schießbuch Ergebnisse</div>
-                    <ul id="admin-shot-list" style="list-style: none; font-size: 0.85em;"><li style="color: #9ca3af;">Lade Ergebnisse...</li></ul>
+                    <div class="card-title" style="color: #60a5fa !important;">🎯 Aktuelle Ergebnisse (Verwaltung)</div>
+                    <div id="admin-shot-list"><p style="color: #9ca3af; font-size: 0.85em;">Lade Ergebnisse...</p></div>
                 </div>
 
                 <!-- AKTIVE MITGLIEDERBEITRÄGE 2026 (€ 30) -->
@@ -952,10 +965,13 @@
                     const ev = doc.data();
                     html += `
                         <div class="event-item">
-                            <div class="event-date">${ev.date}</div>
-                            <div class="event-name">${ev.title}</div>
-                            <div class="event-desc">${ev.desc}</div>
-                            <button class="btn btn-danger admin-only-delete" style="margin-top: 8px; font-size: 0.8em; padding: 6px 12px;" onclick="deleteItem('events', '${doc.id}')">🗑️ Termin löschen</button>
+                            <div class="event-badge">📅</div>
+                            <div style="flex: 1;">
+                                <div class="event-date" style="font-size: 0.75em; color: var(--primary-dark); font-weight: 700;">${ev.date}</div>
+                                <div class="event-name" style="font-size: 0.95em; font-weight: 700; color: var(--text-dark);">${ev.title}</div>
+                                ${ev.desc ? `<div class="event-desc" style="font-size: 0.8em; color: var(--text-muted);">${ev.desc}</div>` : ''}
+                            </div>
+                            <button class="btn btn-danger admin-only-delete" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteItem('events', '${doc.id}')">🗑️</button>
                         </div>
                     `;
                 });
@@ -1005,25 +1021,44 @@
         }
 
         async function loadShots() {
-            const listEl = document.getElementById('admin-shot-list');
-            if(!listEl) return;
+            const publicListEl = document.getElementById('shooting-public-list');
+            const adminListEl = document.getElementById('admin-shot-list');
+            
             try {
-                const snapshot = await db.collection("shots").orderBy("createdAt", "desc").limit(10).get();
+                const snapshot = await db.collection("shots").orderBy("rings", "desc").limit(10).get();
                 if (snapshot.empty) {
-                    listEl.innerHTML = '<li style="color: #9ca3af;">Keine Ergebnisse vorhanden.</li>';
+                    if(publicListEl) publicListEl.innerHTML = '<p style="font-size: 0.85em; color: var(--text-muted);">Noch keine Ergebnisse vorhanden.</p>';
+                    if(adminListEl) adminListEl.innerHTML = '<p style="color: #9ca3af; font-size: 0.85em;">Keine Ergebnisse vorhanden.</p>';
                     return;
                 }
-                let html = "";
+
+                let publicHtml = "";
+                let adminHtml = "";
+                let index = 1;
+
                 snapshot.forEach(doc => {
                     const s = doc.data();
-                    html += `
-                        <li style="padding: 8px 0; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #f3f4f6;">
-                            <span><b>${s.name}</b> (${s.disc}): <b>${s.rings} Ringe</b> <span style="font-size:0.75em; color:#9ca3af;">[${s.date}]</span></span>
-                            <button class="btn btn-danger admin-only-delete" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteItem('shots', '${doc.id}')">🗑️</button>
-                        </li>
+                    
+                    // Öffentliche Ansicht (Foto-Stil: 1. Name (Disziplin) - X Ringe)
+                    publicHtml += `
+                        <div style="padding: 8px 0; border-bottom: 1px solid #e7e5e4; font-size: 0.9em; display: flex; justify-content: space-between; align-items: center;">
+                            <span><b>${index}. ${s.name}</b> (${s.disc})</span>
+                            <span style="color: var(--primary-red); font-weight: 700;">${s.rings} Ringe</span>
+                        </div>
                     `;
+
+                    // Admin Ansicht mit Lösch-Button
+                    adminHtml += `
+                        <div style="padding: 8px 0; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; color: #f3f4f6; font-size: 0.85em;">
+                            <span><b>${index}. ${s.name}</b> (${s.disc}): <b>${s.rings} Ringe</b> <span style="font-size:0.75em; color:#9ca3af;">[${s.date}]</span></span>
+                            <button class="btn btn-danger admin-only-delete" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteItem('shots', '${doc.id}')">🗑️</button>
+                        </div>
+                    `;
+                    index++;
                 });
-                listEl.innerHTML = html;
+
+                if(publicListEl) publicListEl.innerHTML = publicHtml;
+                if(adminListEl) adminListEl.innerHTML = adminHtml;
             } catch (e) { console.error(e); }
         }
 
