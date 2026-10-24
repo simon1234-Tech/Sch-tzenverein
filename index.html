@@ -278,6 +278,7 @@
 
     <!-- 1. NEWS & DIENSTPLAN -->
     <div id="page-news" class="page-content active">
+        <!-- Hier erscheinen die hochgeladenen News & Fotos -->
         <div id="news-container"></div>
 
         <div class="card next-duty-banner-green">
@@ -296,7 +297,7 @@
         </div>
     </div>
 
-    <!-- 2. TERMINE (VEREINSTERMINE MIT ZUSAGE/ABSAGE, OHNE DIENSTPLAN) -->
+    <!-- 2. TERMINE (VEREINSTERMINE MIT ZUSAGE/ABSAGE) -->
     <div id="page-events" class="page-content">
         <div class="dark-card-section">
             <div class="dark-card-title">📅 Nächste Vereinstermine</div>
@@ -420,20 +421,24 @@
 
             <!-- TAB 1: NEWS & TERMINE -->
             <div id="admin-tab-news" class="admin-tab-content">
+                <!-- NEUE NEWS & FOTO HOCHLADEN -->
                 <div class="card admin-card">
-                    <div class="card-title">📢 News Veröffentlichen</div>
+                    <div class="card-title">📢 News & Foto Veröffentlichen</div>
                     <form onsubmit="addNewsItem(event)">
-                        <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required></div>
-                        <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required></textarea></div>
-                        <button type="submit" class="btn btn-admin btn-block">Veröffentlichen</button>
+                        <div class="form-group"><label>Titel / Überschrift</label><input type="text" class="form-control" id="news-title" placeholder="z.B. Königsschießen" required></div>
+                        <div class="form-group"><label>Text-Inhalt</label><textarea class="form-control" id="news-text" rows="3" placeholder="Details..." required></textarea></div>
+                        <div class="form-group"><label>Foto hinzufügen (optional)</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
+                        <button type="submit" class="btn btn-admin btn-block">News veröffentlichen</button>
                     </form>
                 </div>
 
+                <!-- NÄCHSTEN VEREINSTERMIN ERSTELLEN (OHNE EINGETEILTE PERSONEN) -->
                 <div class="card admin-card">
                     <div class="card-title">➕ Nächsten Vereinstermin Erstellen</div>
                     <form onsubmit="addEvent(event)">
-                        <div class="form-group"><label>Datum & Titel (z.B. 05.12.2026 - Waldweihnacht)</label><input type="text" class="form-control" id="new-event-title" required></div>
-                        <div class="form-group"><label>Details / Treffpunkt</label><input type="text" class="form-control" id="new-event-desc" placeholder="z.B. Abenteuerspielplatz Gaschurn"></div>
+                        <div class="form-group"><label>Art der Veranstaltung</label><input type="text" class="form-control" id="new-event-title" placeholder="z.B. Vereinsabend / Königsschießen" required></div>
+                        <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" placeholder="z.B. 05.12.2026" required></div>
+                        <div class="form-group"><label>Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="z.B. Abenteuerspielplatz Gaschurn"></div>
                         <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
                     </form>
                 </div>
@@ -447,7 +452,7 @@
                 </div>
             </div>
 
-            <!-- TAB 3: AKTUELLE ERGEBNISSE IM ADMIN-BEREICH GEMÄSS BILD 2 -->
+            <!-- TAB 3: AKTUELLE ERGEBNISSE IM ADMIN-BEREICH -->
             <div id="admin-tab-members" class="admin-tab-content" style="display: none;">
                 <div class="dark-card-section" style="background: #0f172a; border: 1px solid #334155;">
                     <div class="dark-card-title" style="color: #60a5fa;">🎯 Aktuelle Ergebnisse (Schießbuch)</div>
@@ -538,7 +543,60 @@
             }
         }
 
-        // 2. VEREINSTERMINE MIT ZUSAGE/ABSAGE (OHNE DIENSTPLAN)
+        // NEWS HOCHLADEN & LADEN
+        async function addNewsItem(e) {
+            e.preventDefault();
+            const title = document.getElementById('news-title').value;
+            const text = document.getElementById('news-text').value;
+            const fileInput = document.getElementById('news-photo-input');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = async function(uploadEvent) {
+                    await saveNewsToFirestore(title, text, uploadEvent.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                await saveNewsToFirestore(title, text, "");
+            }
+        }
+
+        async function saveNewsToFirestore(title, text, imageUrl) {
+            try {
+                await db.collection("news").add({
+                    title, text, imageUrl,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("News veröffentlicht!");
+                document.getElementById('news-title').value = '';
+                document.getElementById('news-text').value = '';
+                document.getElementById('news-photo-input').value = '';
+                loadNews();
+            } catch (err) { console.error(err); }
+        }
+
+        async function loadNews() {
+            const container = document.getElementById('news-container');
+            try {
+                const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
+                if (snapshot.empty) { container.innerHTML = ''; return; }
+                let html = "";
+                snapshot.forEach(doc => {
+                    const n = doc.data();
+                    html += `
+                        <div class="card">
+                            ${n.imageUrl ? `<img src="${n.imageUrl}" style="width: 100%; max-height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">` : ''}
+                            <div class="card-title">${n.title}</div>
+                            <p style="font-size: 0.9em; color: var(--text-muted); white-space: pre-line; margin-bottom: 10px;">${n.text}</p>
+                            <button class="btn btn-danger admin-only-delete" onclick="deleteItem('news', '${doc.id}')">🗑️ News löschen</button>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (e) { console.error(e); }
+        }
+
+        // VEREINSTERMINE MIT ZUSAGE/ABSAGE & LÖSCHFUNKTION
         async function loadEvents() {
             const container = document.getElementById('events-container');
             try {
@@ -566,13 +624,14 @@
                                 <span style="font-size: 1.05em; font-weight: 800; color: #fff;">${ev.title}</span>
                                 <span style="font-size: 0.75em; background: #334155; padding: 2px 8px; border-radius: 12px; color: #60a5fa;">${yesCount} Zusagen</span>
                             </div>
+                            <div style="font-size: 0.85em; color: #fca5a5; font-weight: 600; margin-top: 2px;">📅 ${ev.date || ''}</div>
                             ${ev.desc ? `<div style="font-size: 0.85em; color: #cbd5e1; margin: 4px 0;">${ev.desc}</div>` : ''}
                             
                             <!-- ABSTIMMUNGS BUTTONS -->
                             <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #334155; display: flex; gap: 8px; align-items: center;">
                                 <button onclick="voteEvent('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👍 Zusage</button>
                                 <button onclick="voteEvent('${eventId}', 'no')" style="background: #dc2626; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👎 Absage</button>
-                                <button class="btn btn-danger admin-only-delete" style="padding: 2px 6px; font-size: 0.7em; margin-left: auto;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
+                                <button class="btn btn-danger admin-only-delete" style="padding: 2px 6px; font-size: 0.7em; margin-left: auto;" onclick="deleteItem('events', '${eventId}')">🗑️ Löschen</button>
                             </div>
 
                             <div style="font-size: 0.75em; color: #94a3b8; margin-top: 8px;">
@@ -611,15 +670,17 @@
         async function addEvent(e) {
             e.preventDefault();
             const title = document.getElementById('new-event-title').value;
+            const date = document.getElementById('new-event-date').value;
             const desc = document.getElementById('new-event-desc').value;
 
             try {
                 await db.collection("events").add({
-                    title, desc,
+                    title, date, desc,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 alert("Vereinstermin gespeichert!");
                 document.getElementById('new-event-title').value = '';
+                document.getElementById('new-event-date').value = '';
                 document.getElementById('new-event-desc').value = '';
                 loadEvents();
             } catch (err) { console.error(err); }
@@ -795,7 +856,7 @@
                 try {
                     await db.collection(collectionName).doc(docId).delete();
                     alert("Löschen erfolgreich!");
-                    loadEvents(); loadShots();
+                    loadEvents(); loadShots(); loadNews();
                 } catch (err) { console.error(err); }
             }
         }
@@ -806,14 +867,14 @@
                 document.body.classList.add('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'none';
                 alert("Admin-Modus aktiviert!");
-                loadShots(); loadEvents();
+                loadShots(); loadEvents(); loadNews();
             } else { alert("Falsches Passwort!"); }
         }
 
         function logoutAdmin() {
             document.body.classList.remove('admin-mode');
             document.getElementById('admin-login-card').style.display = 'block';
-            loadEvents();
+            loadEvents(); loadNews();
         }
 
         async function saveShot(e) {
@@ -831,6 +892,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             updateDutyPlanWidget();
             loadEvents();
+            loadNews();
             loadShots();
         });
     </script>
