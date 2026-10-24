@@ -113,13 +113,31 @@
             100% { border-color: #22c55e; }
         }
 
-        /* SPEZIELLES PARADIES-FARBSCHEMA FÜR BEREICH ADMIN */
+        /* ADMIN BEREICH STYLING */
         .admin-card {
             background: var(--admin-card-bg) !important;
             border: 1px solid #334155 !important;
         }
         .admin-card .card-title {
             color: #60a5fa !important;
+        }
+        .admin-sub-tab-btn {
+            background: #0f172a;
+            color: #94a3b8;
+            border: 1px solid #334155;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 0.75em;
+            font-weight: 700;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .admin-sub-tab-btn.active {
+            background: var(--admin-blue);
+            color: #fff;
+            border-color: #60a5fa;
         }
 
         .event-item {
@@ -236,7 +254,7 @@
         .nav-icon { font-size: 1.6em !important; margin-bottom: 2px !important; display: block !important; }
 
         .admin-delete-btn { display: none; }
-        body.admin-mode .admin-delete-btn { display: flex !important; flex-direction: column; width: 100%; }
+        body.admin-mode .admin-delete-btn { display: block !important; }
 
         .badge-paid { background: #064e3b; color: #34d399; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
         .badge-open { background: #7f1d1d; color: #fca5a5; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
@@ -350,7 +368,7 @@
         </div>
 
         <div class="card">
-            <div class="card-title">👥 Aktive Mitglieder & Kontakte</div>
+            <div class="card-title">👥 Aktive Mitglieder & Kontakte[cite: 8, 9]</div>
             <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
                 <div class="price-item"><div><strong>Christoph Wittwer</strong></div><a href="tel:067762326458" style="color:#38bdf8; font-weight:700;">0677 62326458</a></div>
                 <div class="price-item"><div><strong>Elias Stocker</strong></div><a href="tel:06767103446" style="color:#38bdf8; font-weight:700;">0676 7103446</a></div>
@@ -367,7 +385,7 @@
         </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH (MIT EIGENER FARBGEBUNG) -->
+    <!-- 6. ADMIN-BEREICH (ÜBERSICHTLICH MIT UNTER-TABS) -->
     <div id="page-card" class="page-content">
         <div class="card admin-card" id="admin-login-card">
             <div class="card-title">🔐 Admin-Login</div>
@@ -378,117 +396,129 @@
         </div>
 
         <div class="admin-delete-btn">
+            <!-- ADMIN STATUS & HAUPT-MENÜ -->
             <div class="card admin-card" style="width: 100%;">
                 <div class="card-title">🔓 Admin-Modus Aktiv</div>
-                <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Vorstands-Funktionen, Mitgliederbeiträge & Lösch-Optionen sind freigeschaltet.</p>
+                <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Wähle einen Bereich zur Bearbeitung aus:</p>
+                
+                <!-- UNTER-NAVIGATION FÜR DEN ADMIN-BEREICH -->
+                <div style="display: flex; gap: 6px; margin-bottom: 12px;">
+                    <button class="admin-sub-tab-btn active" id="btn-tab-news" onclick="switchAdminTab('news')">📢 News & Termine</button>
+                    <button class="admin-sub-tab-btn" id="btn-tab-finance" onclick="switchAdminTab('finance')">💶 Rechnungen & Lager</button>
+                    <button class="admin-sub-tab-btn" id="btn-tab-members" onclick="switchAdminTab('members')">👥 Mitglieder & Beiträge</button>
+                </div>
+
                 <button class="btn btn-danger btn-block" onclick="logoutAdmin()">Admin-Modus Beenden</button>
             </div>
 
-            <!-- GESPEICHERTE RECHNUNGEN (NUR IM ADMIN-BEREICH) -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">💶 Gespeicherte Strichlisten & Rechnungen</div>
-                <div id="admin-tally-history-list"><p style="color: var(--text-muted); font-size: 0.85em;">Lade Rechnungen...</p></div>
+            <!-- TAB 1: NEWS, TERMINE, PUSH -->
+            <div id="admin-tab-news" class="admin-tab-content">
+                <div class="card admin-card" style="width: 100%;">
+                    <div class="card-title">🔔 Push-Benachrichtigungen</div>
+                    <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 10px;">Aktiviere Push-Benachrichtigungen:</p>
+                    <button class="btn btn-admin btn-block" onclick="requestPushPermission()">Benachrichtigungen erlauben</button>
+                </div>
+
+                <div class="card admin-card" style="width: 100%;">
+                    <div class="card-title">📢 Neue Vereins-News / Foto posten</div>
+                    <form onsubmit="addNewsItem(event)">
+                        <div class="form-group"><label>Titel / Überschrift</label><input type="text" class="form-control" id="news-title" placeholder="z.B. Königsschießen" required></div>
+                        <div class="form-group"><label>Text-Inhalt</label><textarea class="form-control" id="news-text" rows="3" placeholder="Details..." required></textarea></div>
+                        <div class="form-group"><label>Foto hinzufügen (optional)</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
+                        <button type="submit" class="btn btn-admin btn-block">News veröffentlichen</button>
+                    </form>
+                </div>
+
+                <div class="card admin-card" style="width: 100%;">
+                    <div class="card-title">➕ Neuen Termin anlegen</div>
+                    <form onsubmit="addEvent(event)">
+                        <div class="form-group"><label>Titel des Termins</label><input type="text" class="form-control" id="new-event-title" placeholder="z.B. Jahreshauptversammlung" required></div>
+                        <div class="form-group"><label>Datum & Uhrzeit</label><input type="text" class="form-control" id="new-event-date" placeholder="z.B. 15. Dez 2026, 19:00 Uhr" required></div>
+                        <div class="form-group"><label>Beschreibung</label><input type="text" class="form-control" id="new-event-desc" placeholder="Treffpunkt etc."></div>
+                        <button type="submit" class="btn btn-admin btn-block">Termin speichern</button>
+                    </form>
+                </div>
             </div>
 
-            <!-- PUSH BENACHRICHTIGUNGEN -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">🔔 Push-Benachrichtigungen</div>
-                <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 10px;">Aktiviere Push-Benachrichtigungen für dieses Gerät:</p>
-                <button class="btn btn-admin btn-block" onclick="requestPushPermission()">Benachrichtigungen erlauben</button>
+            <!-- TAB 2: RECHNUNGEN & LAGER -->
+            <div id="admin-tab-finance" class="admin-tab-content" style="display: none;">
+                <div class="card admin-card" style="width: 100%;">
+                    <div class="card-title">💶 Gespeicherte Strichlisten & Rechnungen</div>
+                    <div id="admin-tally-history-list"><p style="color: var(--text-muted); font-size: 0.85em;">Lade Rechnungen...</p></div>
+                </div>
+
+                <div class="card admin-card" style="width: 100%;">
+                    <div class="card-title">📦 Lagerbestand (Schützenheim)</div>
+                    <div class="price-item"><span>🍺 Bier (Kisten)</span><input type="number" id="stock-bier" value="10" style="width:75px; text-align:center;" class="form-control"></div>
+                    <div class="price-item"><span>🍋 Limo (Kisten)</span><input type="number" id="stock-limo" value="10" style="width:75px; text-align:center;" class="form-control"></div>
+                    <div class="price-item"><span>🌭 Hauswürste (Paar)</span><input type="number" id="stock-wuerste" value="10" style="width:75px; text-align:center;" class="form-control"></div>
+                    <button class="btn btn-green btn-block" onclick="saveInventory()">Bestand speichern</button>
+                </div>
             </div>
 
-            <!-- NEWS BEITRAG ERSTELLEN -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">📢 Neue Vereins-News / Foto posten</div>
-                <form onsubmit="addNewsItem(event)">
-                    <div class="form-group"><label>Titel / Überschrift</label><input type="text" class="form-control" id="news-title" placeholder="z.B. Königsschießen" required></div>
-                    <div class="form-group"><label>Text-Inhalt</label><textarea class="form-control" id="news-text" rows="3" placeholder="Details..." required></textarea></div>
-                    <div class="form-group"><label>Foto hinzufügen (optional)</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
-                    <button type="submit" class="btn btn-admin btn-block">News veröffentlichen</button>
-                </form>
-            </div>
+            <!-- TAB 3: MITGLIEDER & SCHIESSBUCH -->
+            <div id="admin-tab-members" class="admin-tab-content" style="display: none;">
+                <div class="card admin-card" style="width: 100%;">
+                    <div class="card-title">🎯 Schießbuch Ergebnisse</div>
+                    <ul id="admin-shot-list" style="list-style: none; font-size: 0.85em;"><li style="color: var(--text-muted);">Lade Ergebnisse...</li></ul>
+                </div>
 
-            <!-- LAGERBESTAND -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">📦 Lagerbestand (Schützenheim)</div>
-                <div class="price-item"><span>🍺 Bier (Kisten)</span><input type="number" id="stock-bier" value="10" style="width:75px; text-align:center;" class="form-control"></div>
-                <div class="price-item"><span>🍋 Limo (Kisten)</span><input type="number" id="stock-limo" value="10" style="width:75px; text-align:center;" class="form-control"></div>
-                <div class="price-item"><span>🌭 Hauswürste (Paar)</span><input type="number" id="stock-wuerste" value="10" style="width:75px; text-align:center;" class="form-control"></div>
-                <button class="btn btn-green btn-block" onclick="saveInventory()">Bestand speichern</button>
-            </div>
+                <!-- AKTIVE MITGLIEDERBEITRÄGE 2026 (€ 30) -->
+                <div class="card admin-card" style="width: 100%;">
+                    <div class="card-title">👥 Aktive Mitgliederbeiträge 2026 (€ 30)[cite: 8, 9]</div>
+                    <p style="font-size:0.75em; color:var(--text-muted); margin-bottom:10px;">Klicke auf den Status zum Umschalten:</p>
+                    <div class="price-item"><div><strong>Wachter Manfred</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Wachter Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Schweighofer Dietmar</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Schweighofer Simon</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann / Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Spettel Norbert</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Stocker Heimo</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann-Stv. / Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Wittwer Christoph</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Wittwer Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Rudigier Erwin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Sandrell Daniel</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Mattle Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Pascal Tripolt</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Stocker Karin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Suntinger Jasmin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Kinzl Sabrina</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Schriftführerin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Maria Spettel</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Natalie Stocker</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Elias Stocker</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Jugendmitglied</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
+                    <div class="price-item"><div><strong>Sandrell Heinrich</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
+                    <div class="price-item"><div><strong>Kofler Konrad</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
+                    <div class="price-item"><div><strong>Dona Lothar</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
+                    <div class="price-item"><div><strong>Gerd Sprattler</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
+                </div>
 
-            <!-- NEUEN TERMIN ANLEGEN -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">➕ Neuen Termin anlegen</div>
-                <form onsubmit="addEvent(event)">
-                    <div class="form-group"><label>Titel des Termins</label><input type="text" class="form-control" id="new-event-title" placeholder="z.B. Jahreshauptversammlung" required></div>
-                    <div class="form-group"><label>Datum & Uhrzeit</label><input type="text" class="form-control" id="new-event-date" placeholder="z.B. 15. Dez 2026, 19:00 Uhr" required></div>
-                    <div class="form-group"><label>Beschreibung</label><input type="text" class="form-control" id="new-event-desc" placeholder="Treffpunkt etc."></div>
-                    <button type="submit" class="btn btn-admin btn-block">Termin speichern</button>
-                </form>
-            </div>
-
-            <!-- SCHIESSBUCH ERGEBNISSE -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">🎯 Schießbuch Ergebnisse</div>
-                <ul id="admin-shot-list" style="list-style: none; font-size: 0.85em;"><li style="color: var(--text-muted);">Lade Ergebnisse...</li></ul>
-            </div>
-
-            <!-- AKTIVE MITGLIEDERBEITRÄGE 2026 (€ 30) -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">👥 Aktive Mitgliederbeiträge 2026 (€ 30)</div>
-                <p style="font-size:0.75em; color:var(--text-muted); margin-bottom:10px;">Klicke auf den Status zum Umschalten:</p>
-                <div class="price-item"><div><strong>Wachter Manfred</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Wachter Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Schweighofer Dietmar</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Schweighofer Simon</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann / Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Spettel Norbert</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Stocker Heimo</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann-Stv. / Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Wittwer Christoph</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Wittwer Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Rudigier Erwin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>Sandrell Daniel</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>Mattle Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>Pascal Tripolt</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>Stocker Karin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Suntinger Jasmin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Kinzl Sabrina</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Schriftführerin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Maria Spettel</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Natalie Stocker</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Elias Stocker</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Jugendmitglied</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 30)</span></div>
-                <div class="price-item"><div><strong>Sandrell Heinrich</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
-                <div class="price-item"><div><strong>Kofler Konrad</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
-                <div class="price-item"><div><strong>Dona Lothar</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
-                <div class="price-item"><div><strong>Gerd Sprattler</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#0369a1; color:#e0f2fe;">Befreit</span></div>
-            </div>
-
-            <!-- PASSIVE MITGLIEDERBEITRÄGE 2026 (€ 30) -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">👥 Passive Mitgliederbeiträge 2026 (€ 30)</div>
-                <p style="font-size:0.75em; color:var(--text-muted); margin-bottom:10px;">Übersicht aller passiven Mitglieder:</p>
-                <div class="price-item"><div><strong>1. Joel Wachter</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>2. Kofler Marlene</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>3. Wachter Monika</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>4. Schallner Harry</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>5. Netzer Werner</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>6. Netzer Markus</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>7. Fitsch Manuela</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>8. Geiger Monika</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>9. Frank Sandrell</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>10. Barbisch Andreas</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>11. Patrick Wachter</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>12. Steurer Harald</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>13. Steurer Angela</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>14. Kofler Corinna</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>15. Bitschnau Jutta</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>16. Bitschnau Klaus</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>17. Essig Armin</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
-                <div class="price-item"><div><strong>18. Carlos Da Ponte</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                <!-- PASSIVE MITGLIEDERBEITRÄGE 2026 (€ 30) -->
+                <div class="card admin-card" style="width: 100%;">
+                    <div class="card-title">👥 Passive Mitgliederbeiträge 2026 (€ 30)[cite: 10]</div>
+                    <p style="font-size:0.75em; color:var(--text-muted); margin-bottom:10px;">Übersicht aller passiven Mitglieder:</p>
+                    <div class="price-item"><div><strong>1. Joel Wachter</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>2. Kofler Marlene</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>3. Wachter Monika</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>4. Schallner Harry</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>5. Netzer Werner</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>6. Netzer Markus</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>7. Fitsch Manuela</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>8. Geiger Monika</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>9. Frank Sandrell</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>10. Barbisch Andreas</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>11. Patrick Wachter</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>12. Steurer Harald</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>13. Steurer Angela</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>14. Kofler Corinna</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>15. Bitschnau Jutta</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>16. Bitschnau Klaus</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>17. Essig Armin</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                    <div class="price-item"><div><strong>18. Carlos Da Ponte</strong></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 30)</span></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- UNTERE NAVIGATION (MIT BUTTON "MITGLIEDER") -->
+    <!-- UNTERE NAVIGATION -->
     <nav class="bottom-nav">
         <a onclick="switchTab('news')" class="nav-item active" id="nav-news"><span class="nav-icon">📢</span><span>News</span></a>
         <a onclick="switchTab('events')" class="nav-item" id="nav-events"><span class="nav-icon">📅</span><span>Termine</span></a>
@@ -506,6 +536,15 @@
             document.getElementById('page-' + tabId).classList.add('active');
             document.getElementById('nav-' + tabId).classList.add('active');
             window.scrollTo(0, 0);
+        }
+
+        // ADMIN UNTER-TABS STEUERUNG
+        function switchAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.admin-sub-tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('admin-tab-' + tabName).style.display = 'block';
+            document.getElementById('btn-tab-' + tabName).classList.add('active');
         }
 
         // OFFIZIELLER DIENSTPLAN 2026/2027
@@ -675,6 +714,7 @@
                 confirmResetDrinks();
                 loadTallyHistory();
                 switchTab('card');
+                switchAdminTab('finance');
             } catch (err) { console.error(err); }
         }
 
