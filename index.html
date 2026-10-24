@@ -1,995 +1,369 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vereins-App - KB & SV Gaschurn-Partenen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kameradschaftsbund & Schützenverein Gaschurn-Partenen</title>
+  
+  <!-- Bibliotheken für den PDF-Export (jsPDF & AutoTable) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
-    <meta name="apple-mobile-web-app-title" content="KB & SV App">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="logo.png">
-    <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    /* Grundlegendes Design */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f5f0;
+      color: #333;
+    }
 
-    <!-- Firebase SDKs (v8.10.1) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+    /* Oberer Header / Banner */
+    .app-header {
+      background-color: #5c1d24;
+      color: #ffffff;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
 
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyDchsz_qOTMpvT48cKBYLqUmX30Lw39iGA",
-        authDomain: "kb-sv-vereinsapp.firebaseapp.com",
-        projectId: "kb-sv-vereinsapp",
-        storageBucket: "kb-sv-vereinsapp.appspot.com",
-        messagingSenderId: "1015802588615",
-        appId: "1:1015802588615:web:bcecb74526a2096d2ebde2"
-      };
-      firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
-      const messaging = firebase.messaging();
-    </script>
+    /* Inhaltsbereiche */
+    .content-section {
+      padding: 20px;
+      padding-bottom: 90px; /* Platz für die untere Leiste lassen */
+      display: none;
+    }
 
-    <style>
-        :root {
-            --primary-red: #7f1d1d;
-            --primary-dark: #450a0a;
-            --accent-green: #15803d;
-            --accent-green-dark: #166534;
-            --text-dark: #1c1917;
-            --text-muted: #57534e;
-            --card-bg: #ffffff;
-            --danger: #dc2626;
-            --admin-blue: #1e3a8a;
-            --admin-blue-light: #eff6ff;
-        }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--text-dark);
-            padding-bottom: 130px !important;
-            max-width: 600px;
-            margin: 0 auto;
-            min-height: 100vh;
-            background-color: #f5f5f4;
-            box-shadow: 0 0 25px rgba(0,0,0,0.1);
-        }
+    .content-section.active-section {
+      display: block;
+    }
 
-        .app-header {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary-red));
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .app-header h1 { font-size: 1.25em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
-        .app-header p { font-size: 0.8em; opacity: 0.9; margin-top: 4px; color: #fef08a; font-weight: 600; }
+    /* ==========================================
+       UNTERE NAVIGATIONSLEISTE IN DUNKELROT (Vorschlag 1)
+       ========================================== */
+    .bottom-nav {
+      background-color: #5c1d24 !important; /* Weinrot */
+      border-top: 2px solid #ffd700;       /* Goldene Trennlinie */
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 1000;
+    }
 
-        .page-content { padding: 15px; display: none; }
-        .page-content.active { display: block; }
+    .bottom-nav a, .bottom-nav button, .bottom-nav .nav-item {
+      color: #ffffff !important;           /* Weißer Text & Icons */
+      text-decoration: none;
+      font-size: 12px;
+      text-align: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: 1px solid #e7e5e4;
-        }
-        
-        .card-title {
-            font-size: 1.05em;
-            font-weight: 700;
-            color: var(--primary-red);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        body.admin-mode .admin-card {
-            border-color: #bfdbfe;
-            background: #f8fafc;
-        }
-        body.admin-mode .admin-card .card-title {
-            color: var(--admin-blue);
-        }
-
-        .event-item {
-            border-left: 4px solid var(--accent-green);
-            padding: 12px 15px;
-            background: #f0fdf4;
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
-        .event-date { font-size: 0.8em; font-weight: 700; color: var(--accent-green-dark); text-transform: uppercase; }
-        .event-name { font-size: 0.95em; font-weight: 700; margin: 3px 0; color: var(--text-dark); }
-        .event-desc { font-size: 0.85em; color: var(--text-muted); }
-        .event-actions { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
-
-        .attendance-summary {
-            font-size: 0.8em;
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px dashed #cbd5e1;
-            color: var(--text-dark);
-        }
-
-        .btn {
-            padding: 10px 16px;
-            border-radius: 20px;
-            border: none;
-            font-weight: 600;
-            font-size: 0.85em;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            text-decoration: none;
-        }
-        .btn-primary { background: var(--primary-red); color: white; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-green { background: var(--accent-green); color: white; }
-        .btn-green:hover { background: var(--accent-green-dark); }
-        .btn-success { background: #dcfce7; color: var(--accent-green-dark); }
-        .btn-danger { background: #fee2e2; color: var(--danger); }
-        .btn-admin { background: var(--admin-blue); color: white; }
-        .btn-admin:hover { background: #1e40af; }
-        .btn-block { width: 100%; margin-top: 8px; }
-
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 0.85em; font-weight: 600; margin-bottom: 5px; color: var(--text-muted); }
-        .form-control {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            font-family: inherit;
-            font-size: 0.95em;
-            background: white;
-        }
-
-        .price-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #e7e5e4;
-            font-size: 0.9em;
-        }
-        .counter-controls { display: flex; align-items: center; gap: 12px; }
-        .counter-btn {
-            background: #f5f5f4;
-            color: var(--primary-red);
-            border: 2px solid #d6d3d1;
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            font-size: 1.2em;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .counter-btn:hover { background: var(--primary-red); color: white; border-color: var(--primary-red); }
-
-        .bottom-nav {
-            position: fixed !important; 
-            bottom: 0 !important; 
-            left: 0 !important; 
-            right: 0 !important;
-            width: 100% !important;
-            max-width: 600px !important; 
-            margin: 0 auto !important;
-            background: #ffffff !important;
-            display: flex !important; 
-            justify-content: space-around !important;
-            padding: 12px 6px !important;
-            border-top: 2px solid #e7e5e4 !important;
-            box-shadow: 0 -6px 20px rgba(0,0,0,0.08) !important;
-            z-index: 99999 !important;
-        }
-        .nav-item {
-            display: flex !important; 
-            flex-direction: column !important; 
-            align-items: center !important;
-            text-decoration: none !important; 
-            color: var(--text-muted) !important;
-            font-size: 0.8em !important; 
-            font-weight: 700 !important; 
-            cursor: pointer !important;
-            transition: all 0.2s !important; 
-            flex: 1 !important;
-            text-align: center !important;
-            padding: 4px 0 !important;
-        }
-        .nav-item.active { color: var(--primary-red) !important; transform: scale(1.08); }
-        .nav-icon { font-size: 1.75em !important; margin-bottom: 3px !important; display: block !important; }
-        
-        .admin-delete-btn { display: none; }
-        body.admin-mode .admin-delete-btn { display: inline-flex !important; }
-
-        .badge-paid { background: #dcfce7; color: #166534; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
-        .badge-open { background: #fee2e2; color: #dc2626; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75em; cursor: pointer; }
-        
-        .news-img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-    </style>
+    .bottom-nav a.active, .bottom-nav .nav-item.active {
+      color: #ffd700 !important;           /* Aktiver Menüpunkt in Goldgelb */
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="app-header">
-        <h1>Kameradschaftsbund & Schützenverein</h1>
-        <p>Gaschurn-Partenen</p>
+  <!-- Oberer Bereich / Titel -->
+  <header class="app-header">
+    KAMERADSCHAFTSBUND & SCHÜTZENVEREIN<br>
+    <span style="font-size: 13px; font-weight: normal; color: #ffd700;">Gaschurn-Partenen</span>
+  </header>
+
+  <!-- ==========================================
+       1. NEWS-BEREICH (MIT AUTOMATISCHEM DIENSTPLAN)
+       ========================================== -->
+  <div id="section-news" class="content-section active-section">
+    <h2>News & Aktuelles</h2>
+    
+    <!-- Hier wird der nächste Dienst vollautomatisch eingefügt -->
+    <div id="duty-roster-widget"></div>
+  </div>
+
+  <!-- ==========================================
+       2. TERMINE-BEREICH
+       ========================================== -->
+  <div id="section-termine" class="content-section">
+    <h2>Termine</h2>
+    <p>Hier stehen die kommenden Vereins- und Schießtermine.</p>
+  </div>
+
+  <!-- ==========================================
+       3. SCHIESSBUCH-BEREICH
+       ========================================== -->
+  <div id="section-schiessbuch" class="content-section">
+    <h2>Schießbuch</h2>
+    <p>Schießstand-Einträge und Resultate.</p>
+  </div>
+
+  <!-- ==========================================
+       4. STRICHZETTEL-BEREICH
+       ========================================== -->
+  <div id="section-strichzettel" class="content-section">
+    <h2>Strichzettel</h2>
+    <p>Hier erfasst du die Konsumationen, die anschließend an die Rechnungen übergeben werden.</p>
+  </div>
+
+  <!-- ==========================================
+       5. RECHNUNGS-BEREICH (MIT PDF-DOWNLOAD)
+       ========================================== -->
+  <div id="section-rechnung" class="content-section">
+    <h2>Rechnungen</h2>
+    <p>Gespeicherte Strichzettel bereit zur Abrechnung:</p>
+    
+    <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 15px;">
+      <h4 style="margin: 0 0 10px 0;">Betriebsrat ASG (Rechnung RE-2026-001)</h4>
+      <p style="margin: 0 0 15px 0; font-size: 14px; color: #666;">Betrag: 703,00 € | Datum: 08.10.2026</p>
+      <button onclick="downloadSampleInvoice()" style="background: #5c1d24; color: white; padding: 10px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">
+        📄 PDF-Rechnung herunterladen
+      </button>
     </div>
+  </div>
 
-    <!-- 1. NEWS & DIENSTPLAN -->
-    <div id="page-news" class="page-content active">
-        <div id="news-container"></div>
+  <!-- ==========================================
+       6. ADMIN-BEREICH
+       ========================================== -->
+  <div id="section-admin" class="content-section">
+    <h2>Admin-Modus</h2>
+    <p>Vorstands-Funktionen & Bearbeitungs-Optionen.</p>
+  </div>
 
-        <div class="card">
-            <div class="card-title">🍻 Nächster Dienst im Schützenhaus</div>
-            <div class="event-item" style="border-left-color: var(--primary-red); background: #fef2f2;">
-                <div class="event-date" style="color: var(--primary-red);">Freitag, 23. Oktober 2026 (19:00 - 21:00 Uhr)</div>
-                <div class="event-name">Team 3</div>
-                <div class="event-desc"><strong>Diensthabende:</strong> Christoph Wittwer, Werner Wittwer</div>
-            </div>
-        </div>
 
-        <div class="card">
-            <div class="card-title">📋 Gesamter Dienstplan (2026/2027)</div>
-            <div style="font-size: 0.85em; margin-bottom: 12px; color: var(--text-muted);">
-                🕒 <strong>Dienstzeit:</strong> Freitags von 19:00 bis 21:00 Uhr
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #009a60;">
-                    <div><strong>09.10.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Norbert, Maria, Erwin</span></div>
-                    <span style="background: #009a60; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 4</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #df7800;">
-                    <div><strong>23.10.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Christoph, Werner Wittwer</span></div>
-                    <span style="background: #df7800; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 3</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fef2f2; border-radius: 8px; border-left: 4px solid #6c757d;">
-                    <div><strong>06.11.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Geschlossen (Interne Veranstaltung)</span></div>
-                    <span style="background: #6c757d; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Geschlossen</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #8a3ffc;">
-                    <div><strong>20.11.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Dietmar, Simon, Sabrina</span></div>
-                    <span style="background: #8a3ffc; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 2</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #e12d79;">
-                    <div><strong>04.12.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Heimo, Karin, Werner Wachter</span></div>
-                    <span style="background: #e12d79; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 5</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #fafaf9; border-radius: 8px; border-left: 4px solid #009a60;">
-                    <div><strong>18.12.2026</strong><br><span style="font-size: 0.85em; color: var(--text-muted);">Norbert, Maria, Erwin</span></div>
-                    <span style="background: #009a60; color: white; padding: 4px 10px; border-radius: 8px; font-weight: 700; font-size: 0.8em;">Team 4</span>
-                </div>
-            </div>
-        </div>
-    </div>
+  <!-- ==========================================
+       UNTERE NAVIGATION
+       ========================================== -->
+  <nav class="bottom-nav">
+    <a href="#news" onclick="switchSection('news', this)" class="active">📢<br>News</a>
+    <a href="#termine" onclick="switchSection('termine', this)">📅<br>Termine</a>
+    <a href="#schießbuch" onclick="switchSection('schiessbuch', this)">🎯<br>Schießbuch</a>
+    <a href="#strichzettel" onclick="switchSection('strichzettel', this)">🍻<br>Strichzettel</a>
+    <a href="#rechnung" onclick="switchSection('rechnung', this)">💶<br>Rechnung</a>
+    <a href="#admin" onclick="switchSection('admin', this)">🔒<br>Admin</a>
+  </nav>
 
-    <!-- 2. TERMINE -->
-    <div id="page-events" class="page-content">
-        <div class="card">
-            <div class="card-title">📅 Anstehende Termine</div>
-            <div id="events-container"></div>
-        </div>
-    </div>
 
-    <!-- 3. SCHIESSBUCH -->
-    <div id="page-shooting" class="page-content">
-        <div class="card">
-            <div class="card-title">🎯 Digitales Schießbuch</div>
-            <form onsubmit="saveShot(event)">
-                <div class="form-group">
-                    <label>Name des Schützen</label>
-                    <input type="text" class="form-control" id="shot-name" placeholder="Dein Name" required>
-                </div>
-                <div class="form-group">
-                    <label>Disziplin</label>
-                    <select class="form-control" id="shot-disc">
-                        <option>Luftgewehr (10m)</option>
-                        <option>Luftpistole (10m)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Erreichte Ringe</label>
-                    <input type="number" step="0.1" class="form-control" id="shot-rings" placeholder="z.B. 385.5" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Ergebnis speichern</button>
-            </form>
-        </div>
-    </div>
+  <!-- ==========================================
+       JAVASCRIPT LOGIK (Dienstplan & PDF-Export)
+       ========================================== -->
+  <script>
+    // Navigation umschalten
+    function switchSection(sectionId, element) {
+      document.querySelectorAll('.content-section').forEach(sec => {
+        sec.classList.remove('active-section');
+      });
+      document.getElementById('section-' + sectionId).classList.add('active-section');
 
-    <!-- 4. GETRÄNKE & SPEISEN STRICHZETTEL -->
-    <div id="page-drinks" class="page-content">
-        <div class="card">
-            <div class="card-title">🍻 Schützenheim Strichzettel</div>
-            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 12px;">Preise laut offizieller Preisliste Gaschurn/Partenen:</p>
-            
-            <div class="price-item">
-                <span>🍺 Bier (0,33 lt.) — <strong>€ 3,50</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('bier', -1)">-</button>
-                    <span id="count-bier" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('bier', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>🍋 Limo (0,3 lt.) — <strong>€ 3,00</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('limo', -1)">-</button>
-                    <span id="count-limo" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('limo', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>💧 Mineral (1/4 lt.) — <strong>€ 2,50</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('mineral', -1)">-</button>
-                    <span id="count-mineral" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('mineral', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>🍷 Wein rot/weiß (1/4 lt.) — <strong>€ 4,00</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('wein4', -1)">-</button>
-                    <span id="count-wein4" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('wein4', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>🍷 Wein gespritzt (1/4 lt.) — <strong>€ 3,50</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('gespritzt', -1)">-</button>
-                    <span id="count-gespritzt" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('gespritzt', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>🥃 Schnaps (2 cl.) — <strong>€ 3,50</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button>
-                    <span id="count-schnaps" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>☕ Kaffee (Tasse) — <strong>€ 3,00</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button>
-                    <span id="count-kaffee" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>🌭 1 Paar Hauswürste m. Brot — <strong>€ 7,50</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button>
-                    <span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button>
-                </div>
-            </div>
-            <div class="price-item">
-                <span>🌭 1 Paar Wienerle m. Brot — <strong>€ 7,00</strong></span>
-                <div class="counter-controls">
-                    <button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button>
-                    <span id="count-wienerle" style="font-weight: bold; width: 25px; text-align: center; font-size: 1.1em;">0</span>
-                    <button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button>
-                </div>
-            </div>
+      document.querySelectorAll('.bottom-nav a').forEach(nav => {
+        nav.classList.remove('active');
+      });
+      element.classList.add('active');
+    }
 
-            <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #cbd5e1; display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
-                <span>Gesamtbetrag:</span>
-                <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
-            </div>
+    // --- AUTOMATISCHER DIENSTPLAN ---
+    const dutyRoster = [
+      { date: "2026-10-23", team: "Team 3", names: "Christoph & Werner" },
+      { date: "2026-11-06", team: "Team 1", names: "Norbert, Maria & Erwin" },
+      { date: "2026-11-20", team: "Team 2", names: "Sabrina & Heimo" },
+      { date: "2026-12-04", team: "Team 4", names: "Daniel & Josef" }
+    ];
 
-            <div class="form-group" style="margin-top: 15px;">
-                <label>Name / Verein / Firma / Anlass</label>
-                <input type="text" class="form-control" id="tally-client-name" placeholder="z.B. Feuerwehr Gaschurn, Privatfest, Max Mustermann">
-            </div>
-            <button onclick="saveTallyBilling()" class="btn btn-green btn-block">💾 Abrechnung speichern</button>
-            <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 8px;">Zurücksetzen</button>
-        </div>
-    </div>
+    function updateDutyWidget() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-    <!-- 5. RECHNUNG -->
-    <div id="page-guide" class="page-content">
-        <div class="card">
-            <div class="card-title">📜 Gespeicherte Strichzettel & Rechnungen</div>
-            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 12px;">Hier sind alle gespeicherten Konsumationen zur Nachvollziehbarkeit aufgelistet:</p>
-            <div id="tally-history-list">
-                <p style="color: var(--text-muted); font-size: 0.85em;">Lade Rechnungen...</p>
-            </div>
-        </div>
-    </div>
+      // Filtert alle Dienste ab heute und in der Zukunft
+      const upcomingDuties = dutyRoster.filter(duty => {
+        const dutyDate = new Date(duty.date + "T00:00:00");
+        return dutyDate >= today;
+      });
 
-    <!-- 6. ADMIN-BEREICH -->
-    <div id="page-card" class="page-content">
+      const widgetContainer = document.getElementById('duty-roster-widget');
+      if (!widgetContainer) return;
 
-        <div class="card" id="admin-login-card">
-            <div class="card-title">🔐 Admin-Login</div>
-            <form onsubmit="handleAdminLogin(event)">
-                <div class="form-group">
-                    <label>Admin-Passwort</label>
-                    <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Anmelden</button>
-            </form>
-        </div>
+      if (upcomingDuties.length > 0) {
+        const nextDuty = upcomingDuties[0];
+        const formattedDate = new Date(nextDuty.date + "T00:00:00").toLocaleDateString('de-AT', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        });
 
-        <div class="admin-delete-btn" style="flex-direction: column; width: 100%;">
-            
-            <div class="card admin-card" style="width: 100%; border: 1px solid var(--admin-blue);">
-                <div class="card-title" style="color: var(--admin-blue);">🔓 Admin-Modus Aktiv</div>
-                <p style="font-size:0.8em; color:var(--text-muted); margin-bottom:10px;">Vorstands-Funktionen & Bearbeitungs-Optionen im exklusiven Admin-Design freigeschaltet.</p>
-                <button class="btn btn-danger btn-block" onclick="logoutAdmin()">Admin-Modus Beenden</button>
-            </div>
+        widgetContainer.innerHTML = `
+          <div style="background: #ffffff; border-left: 5px solid #5c1d24; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px;">
+            <span style="font-size: 11px; font-weight: bold; color: #5c1d24; text-transform: uppercase; letter-spacing: 1px;">Nächster Schießstand-Dienst</span>
+            <h4 style="margin: 5px 0 8px 0; color: #2c3e50; font-size: 16px;">${formattedDate}</h4>
+            <p style="margin: 0; font-size: 14px; color: #444;"><strong>Eingeteilt:</strong> ${nextDuty.team} (${nextDuty.names})</p>
+          </div>
+        `;
+      } else {
+        widgetContainer.innerHTML = `
+          <div style="padding: 10px; color: #777;">Keine anstehenden Dienste eingetragen.</div>
+        `;
+      }
+    }
 
-            <!-- PUSH BENACHRICHTIGUNGEN AKTIVIEREN -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">🔔 Push-Benachrichtigungen</div>
-                <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 10px;">Aktiviere Push-Benachrichtigungen für dieses Gerät (inkl. Admin-Status):</p>
-                <button class="btn btn-admin btn-block" onclick="requestPushPermission(true)">Benachrichtigungen erlauben</button>
-            </div>
+    // Beim Laden ausführen
+    document.addEventListener('DOMContentLoaded', updateDutyWidget);
 
-            <!-- NEWS BEITRAG ERSTELLEN -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">📢 Neue Vereins-News / Foto posten</div>
-                <form onsubmit="addNewsItem(event)">
-                    <div class="form-group">
-                        <label>Titel / Überschrift</label>
-                        <input type="text" class="form-control" id="news-title" placeholder="z.B. Erfolgreiches Königsschießen" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Text-Inhalt</label>
-                        <textarea class="form-control" id="news-text" rows="3" placeholder="Details zur Nachricht..." required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Foto hinzufügen (optional)</label>
-                        <input type="file" id="news-photo-input" accept="image/*" class="form-control">
-                    </div>
-                    <button type="submit" class="btn btn-admin btn-block">News veröffentlichen</button>
-                </form>
-            </div>
+    // Automatischer Mitternachts-Wechsel (prüft minütlich)
+    setInterval(() => {
+      const now = new Date();
+      if (now.getHours() === 0 && now.getMinutes() === 0) {
+        updateDutyWidget();
+      }
+    }, 60000);
 
-            <!-- ECHTZEIT-LAGERBESTAND -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">📦 Lagerbestand (Schützenheim)</div>
-                <div class="price-item">
-                    <span>🍺 Bier (Kisten)</span>
-                    <input type="number" id="stock-bier" value="10" style="width:65px; text-align:center;" class="form-control">
-                </div>
-                <div class="price-item">
-                    <span>🍋 Limo (Kisten)</span>
-                    <input type="number" id="stock-limo" value="10" style="width:65px; text-align:center;" class="form-control">
-                </div>
-                <div class="price-item">
-                    <span>🌭 Hauswürste (Paar)</span>
-                    <input type="number" id="stock-wuerste" value="10" style="width:65px; text-align:center;" class="form-control">
-                </div>
-                <button class="btn btn-green btn-block" onclick="saveInventory()">Bestand speichern</button>
-            </div>
 
-            <!-- NEUEN TERMIN ANLEGEN -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">➕ Neuen Termin anlegen</div>
-                <form onsubmit="addEvent(event)">
-                    <div class="form-group">
-                        <label>Titel des Termins</label>
-                        <input type="text" class="form-control" id="new-event-title" placeholder="z.B. Jahreshauptversammlung" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Datum & Uhrzeit</label>
-                        <input type="text" class="form-control" id="new-event-date" placeholder="z.B. 15. Dezember 2026, 19:00 Uhr" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Beschreibung</label>
-                        <input type="text" class="form-control" id="new-event-desc" placeholder="Treffpunkt, Dresscode, etc.">
-                    </div>
-                    <button type="submit" class="btn btn-admin btn-block">Termin in Cloud speichern</button>
-                </form>
-            </div>
+    // --- PDF-RECHNUNGSGENERATOR ---
+    function generateInvoicePDF(invoiceData) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
 
-            <!-- SCHIESSBUCH ERGEBNISSE -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">🎯 Schießbuch Ergebnisse</div>
-                <ul id="admin-shot-list" style="list-style: none; font-size: 0.85em;">
-                    <li style="color: var(--text-muted);">Ergebnisse werden geladen...</li>
-                </ul>
-            </div>
+      const clubInfo = [
+        "Kameradschaftsbund und Schützenverein Gaschurn-Partenen",
+        "Rütler 43b",
+        "6794 Partenen",
+        "E-Mail: Schutzenvereingaschurn@gmail.com",
+        "ZVR: 624291509"
+      ];
 
-            <!-- MITGLIEDERLISTE AUS EXCEL -->
-            <div class="card admin-card" style="width: 100%;">
-                <div class="card-title">👥 Mitgliederbeiträge 2026 (Aktive & Ehrenm.)</div>
-                <p style="font-size:0.75em; color:var(--text-muted); margin-bottom:10px;">Klicke auf den Status, um zwischen Bezahlt / Offen zu wechseln:</p>
+      // Titel "RECHNUNG"
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(22);
+      doc.setTextColor(180, 0, 0);
+      doc.text("RECHNUNG", 14, 20);
 
-                <div class="price-item"><div><strong>Wachter Manfred</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Wachter Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Schweighofer Dietmar</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Schweighofer Simon</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann / Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Spettel Norbert</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Stocker Heimo</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Obmann-Stellvertreter</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Wittwer Christoph</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Wittwer Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Rudigier Erwin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 25)</span></div>
-                <div class="price-item"><div><strong>Sandrell Daniel</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 25)</span></div>
-                <div class="price-item"><div><strong>Mattle Werner</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 25)</span></div>
-                <div class="price-item"><div><strong>Pascal Tripolt</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Aktiver Schütze</span></div><span class="badge-open" onclick="togglePayStatus(this)">Offen (€ 25)</span></div>
+      // Vereinsdaten
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(80, 80, 80);
+      let yPos = 28;
+      clubInfo.forEach(line => {
+        doc.text(line, 14, yPos);
+        yPos += 5;
+      });
 
-                <div class="price-item"><div><strong>Stocker Karin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Kassierin / Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Suntinger Jasmin</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Kinzl Sabrina</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Schriftführerin / Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Maria Spettel</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
-                <div class="price-item"><div><strong>Natalie Stocker</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Marketenderin</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+      // Logo (lädt logo.png im Hauptverzeichnis)
+      try {
+        const img = new Image();
+        img.src = 'logo.png';
+        doc.addImage(img, 'PNG', 150, 15, 35, 35);
+      } catch (e) {
+        console.log("Logo konnte nicht geladen werden:", e);
+      }
 
-                <div class="price-item"><div><strong>Elias Stocker</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Jugendmitglied</span></div><span class="badge-paid" onclick="togglePayStatus(this)">Bezahlt (€ 25)</span></div>
+      // Empfänger
+      doc.setFontSize(10);
+      doc.setTextColor(0, 0, 0);
+      doc.setFont("helvetica", "bold");
+      doc.text("Rechnung an:", 14, 60);
 
-                <div class="price-item"><div><strong>Sandrell Heinrich</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#e0f2fe; color:#0369a1;">Befreit</span></div>
-                <div class="price-item"><div><strong>Kofler Konrad</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#e0f2fe; color:#0369a1;">Befreit</span></div>
-                <div class="price-item"><div><strong>Dona Lothar</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#e0f2fe; color:#0369a1;">Befreit</span></div>
-                <div class="price-item"><div><strong>Gerd Sprattler</strong><br><span style="font-size:0.75em; color:var(--text-muted);">Ehrenmitglied</span></div><span class="badge-paid" style="background:#e0f2fe; color:#0369a1;">Befreit</span></div>
-            </div>
+      doc.setFont("helvetica", "normal");
+      doc.text(invoiceData.recipientName, 14, 66);
+      doc.text(invoiceData.recipientAttn, 14, 71);
+      doc.text(invoiceData.recipientAddress, 14, 76);
+      doc.text(invoiceData.recipientZipCity, 14, 81);
 
-        </div>
-    </div>
+      doc.setFont("helvetica", "bold");
+      doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 120, 66);
+      doc.text(`Rechnungsdatum: ${invoiceData.date}`, 120, 71);
 
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        <a class="nav-item active" onclick="switchPage('news', this)">
-            <span class="nav-icon">📢</span>News
-        </a>
-        <a class="nav-item" onclick="switchPage('events', this)">
-            <span class="nav-icon">📅</span>Termine
-        </a>
-        <a class="nav-item" onclick="switchPage('shooting', this)">
-            <span class="nav-icon">🎯</span>Schießbuch
-        </a>
-        <a class="nav-item" onclick="switchPage('drinks', this)">
-            <span class="nav-icon">🍻</span>Strichzettel
-        </a>
-        <a class="nav-item" onclick="switchPage('guide', this)">
-            <span class="nav-icon">📜</span>Rechnung
-        </a>
-        <a class="nav-item" onclick="switchPage('card', this)">
-            <span class="nav-icon">🔐</span>Admin
-        </a>
-    </div>
+      // Leistungstabelle
+      const tableBody = invoiceData.items.map(item => [
+        item.name, 
+        `${parseFloat(item.price).toFixed(2).replace('.', ',')} €`
+      ]);
 
-    <script>
-        function switchPage(pageId, element) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-' + pageId).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            element.classList.add('active');
-            window.scrollTo(0, 0);
+      const totalAmount = `${parseFloat(invoiceData.total).toFixed(2).replace('.', ',')} €`;
+
+      doc.autoTable({
+        startY: 90,
+        head: [['Leistung', 'Betrag']],
+        body: [
+          ...tableBody,
+          [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: totalAmount, styles: { fontStyle: 'bold' } }]
+        ],
+        theme: 'striped',
+        headStyles: { fillColor: [180, 0, 0], textColor: [255, 255, 255], fontStyle: 'bold' },
+        columnStyles: {
+          0: { cellWidth: 130 },
+          1: { halign: 'right', cellWidth: 50 }
         }
+      });
 
-        /* FCM Push Token registrieren mit expliziter Service-Worker-Bindung */
-        function requestPushPermission(isAdmin = false) {
-            Notification.requestPermission().then((permission) => {
-                if (permission === 'granted') {
-                    navigator.serviceWorker.register('firebase-messaging-sw.js')
-                    .then((registration) => {
-                        messaging.useServiceWorker(registration);
-                        return messaging.getToken({
-                            vapidKey: "BF2_KfUG_keimCkr0oKTA8BGXXOAv4QsmEsSUjjHwwgUG0H-vKJhWYm3rMqS-YfPJ6LlLrn2Ip-vAzT5hm2-2dg"
-                        });
-                    })
-                    .then((currentToken) => {
-                        if (currentToken) {
-                            db.collection("fcm_tokens").doc(currentToken).set({
-                                token: currentToken,
-                                isAdmin: isAdmin,
-                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                            }, { merge: true }).then(() => {
-                                alert("Push-Benachrichtigungen erfolgreich aktiviert!");
-                            });
-                        }
-                    }).catch((err) => {
-                        console.log("Fehler beim Abrufen des FCM-Tokens: ", err);
-                        alert("Fehler beim Token-Abruf: " + err.message);
-                    });
-                } else {
-                    alert("Benachrichtigungen wurden blockiert oder abgelehnt.");
-                }
-            });
-        }
+      // Zahlungsbedingungen
+      let finalY = doc.lastAutoTable.finalY + 15;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.text("Zahlungsbedingungen", 14, finalY);
 
-        function listenToNews() {
-            db.collection("news").onSnapshot((querySnapshot) => {
-                const newsContainer = document.getElementById('news-container');
-                if (!newsContainer) return;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${totalAmount} innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:`, 14, finalY + 6);
+      
+      doc.setFont("helvetica", "bold");
+      doc.text("IBAN:", 14, finalY + 13);
+      doc.setFont("helvetica", "normal");
+      doc.text("AT86 3746 8000 0451 3511", 30, finalY + 13);
 
-                let html = "";
-                querySnapshot.forEach((doc) => {
-                    const news = doc.data();
-                    const docId = doc.id;
+      doc.setFont("helvetica", "bold");
+      doc.text("BIC:", 14, finalY + 18);
+      doc.setFont("helvetica", "normal");
+      doc.text("RVVGAT2B468", 30, finalY + 18);
 
-                    html += `
-                        <div class="card">
-                            <div class="card-title">
-                                📢 ${news.title || 'Vereins-News'}
-                                <button class="btn btn-danger admin-delete-btn" onclick="deleteNews('${docId}')" style="padding: 3px 8px; font-size: 0.75em;">🗑️ Löschen</button>
-                            </div>
-                            ${news.photo ? `<img src="${news.photo}" class="news-img">` : ''}
-                            <p style="font-size: 0.9em; line-height: 1.5; color: #44403c;">${news.text || ''}</p>
-                        </div>
-                    `;
-                });
+      doc.setFont("helvetica", "bold");
+      doc.text("Bank:", 14, finalY + 23);
+      doc.setFont("helvetica", "normal");
+      doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 23);
 
-                if (html === "") {
-                    html = `
-                        <div class="card">
-                            <div class="card-title">📢 Willkommen beim KB & SV Gaschurn-Partenen</div>
-                            <p style="font-size: 0.9em; line-height: 1.5; color: #44403c;">
-                                Gute Stimmung. Gemeinschaft. Tradition. Willkommen in der offiziellen App unseres Vereins!
-                            </p>
-                        </div>
-                    `;
-                }
+      doc.setFont("helvetica", "bold");
+      doc.text("Verwendungszweck:", 14, finalY + 28);
+      doc.setFont("helvetica", "normal");
+      doc.text(`${invoiceData.invoiceNum} / ${invoiceData.purpose}`, 55, finalY + 28);
 
-                newsContainer.innerHTML = html;
-            });
-        }
+      // Fußzeile
+      doc.setFont("helvetica", "italic");
+      doc.text("Vielen Dank für die gute Zusammenarbeit!", 14, finalY + 38);
 
-        function addNewsItem(event) {
-            event.preventDefault();
-            const title = document.getElementById('news-title').value;
-            const text = document.getElementById('news-text').value;
-            const photoInput = document.getElementById('news-photo-input');
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(120, 120, 120);
+      doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen | Rütler 43b, 6794 Partenen | ZVR: 624291509", 105, 285, { align: "center" });
 
-            const createNewsDoc = (photoUrl = "") => {
-                db.collection("news").add({
-                    title: title,
-                    text: text,
-                    photo: photoUrl,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    event.target.reset();
-                    alert("News-Beitrag erfolgreich veröffentlicht!");
-                }).catch((err) => {
-                    alert("Fehler beim Veröffentlichen: " + err.message);
-                });
-            };
+      doc.save(`${invoiceData.invoiceNum}.pdf`);
+    }
 
-            if (photoInput.files && photoInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    createNewsDoc(e.target.result);
-                };
-                reader.readAsDataURL(photoInput.files[0]);
-            } else {
-                createNewsDoc();
-            }
-        }
-
-        function deleteNews(docId) {
-            if (confirm("Diesen News-Beitrag wirklich löschen?")) {
-                db.collection("news").doc(docId).delete();
-            }
-        }
-
-        function listenToEvents() {
-            db.collection("events").onSnapshot((querySnapshot) => {
-                const eventsContainer = document.getElementById('events-container');
-                if (!eventsContainer) return;
-
-                let eventsListHtml = "";
-                querySnapshot.forEach((doc) => {
-                    const event = doc.data();
-                    const docId = doc.id;
-
-                    const accepts = event.accepts || [];
-                    const declines = event.declines || [];
-
-                    eventsListHtml += `
-                        <div class="event-item" id="event-${docId}">
-                            <div class="event-date">${event.date || ''}</div>
-                            <div class="event-name">${event.title || ''}</div>
-                            <div class="event-desc">${event.desc || ''}</div>
-                            
-                            <div class="attendance-summary">
-                                <div><strong>👍 Zusagen (${accepts.length}):</strong> ${accepts.length > 0 ? accepts.join(', ') : 'Noch keine'}</div>
-                                <div style="margin-top:2px;"><strong>👎 Absagen (${declines.length}):</strong> ${declines.length > 0 ? declines.join(', ') : 'Keine'}</div>
-                            </div>
-
-                            <div class="event-actions">
-                                <button class="btn btn-success" onclick="registerAttendance('${docId}', 'accept')">👍 Zusage</button>
-                                <button class="btn btn-danger" onclick="registerAttendance('${docId}', 'decline')">👎 Absage</button>
-                                <button class="btn btn-danger admin-delete-btn" onclick="deleteEvent('${docId}')" style="margin-left:auto; padding: 4px 10px; font-size: 0.75em;">🗑️ Löschen</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                eventsContainer.innerHTML = eventsListHtml;
-            });
-        }
-
-        function registerAttendance(docId, type) {
-            const name = prompt("Bitte gib deinen Namen für die Rückmeldung ein:");
-            if (!name || name.trim() === "") return;
-
-            const cleanName = name.trim();
-            const docRef = db.collection("events").doc(docId);
-
-            docRef.get().then((doc) => {
-                if (!doc.exists) return;
-                const data = doc.data();
-                let accepts = data.accepts || [];
-                let declines = data.declines || [];
-
-                accepts = accepts.filter(n => n !== cleanName);
-                declines = declines.filter(n => n !== cleanName);
-
-                if (type === 'accept') {
-                    accepts.push(cleanName);
-                } else {
-                    declines.push(cleanName);
-                }
-
-                return docRef.update({ accepts: accepts, declines: declines });
-            }).then(() => {
-                alert("Deine Rückmeldung wurde gespeichert!");
-            }).catch((err) => {
-                alert("Fehler beim Speichern: " + err.message);
-            });
-        }
-
-        function addEvent(event) {
-            event.preventDefault();
-            const title = document.getElementById('new-event-title').value;
-            const date = document.getElementById('new-event-date').value;
-            const desc = document.getElementById('new-event-desc').value;
-
-            db.collection("events").add({
-                title: title,
-                date: date,
-                desc: desc,
-                accepts: [],
-                declines: [],
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                event.target.reset();
-                alert("Termin erfolgreich in der Cloud gespeichert!");
-            }).catch((err) => {
-                alert("Fehler beim Speichern: " + err.message);
-            });
-        }
-
-        function deleteEvent(docId) {
-            if (confirm("Möchtest du diesen Termin wirklich löschen?")) {
-                db.collection("events").doc(docId).delete();
-            }
-        }
-
-        function listenToInventory() {
-            db.collection("inventory").doc("main").onSnapshot((doc) => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    if (data.bier !== undefined) document.getElementById('stock-bier').value = data.bier;
-                    if (data.limo !== undefined) document.getElementById('stock-limo').value = data.limo;
-                    if (data.wuerste !== undefined) document.getElementById('stock-wuerste').value = data.wuerste;
-                }
-            });
-        }
-
-        function saveInventory() {
-            const bier = parseInt(document.getElementById('stock-bier').value) || 0;
-            const limo = parseInt(document.getElementById('stock-limo').value) || 0;
-            const wuerste = parseInt(document.getElementById('stock-wuerste').value) || 0;
-
-            db.collection("inventory").doc("main").set({
-                bier: bier,
-                limo: limo,
-                wuerste: wuerste,
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                alert("Lagerbestand erfolgreich gespeichert!");
-            });
-        }
-
-        function saveShot(event) {
-            event.preventDefault();
-            const name = document.getElementById('shot-name').value;
-            const disc = document.getElementById('shot-disc').value;
-            const rings = document.getElementById('shot-rings').value;
-
-            db.collection("shooting_results").add({
-                name: name,
-                disc: disc,
-                rings: rings,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                alert("Ergebnis erfolgreich gespeichert!");
-                event.target.reset();
-            });
-        }
-
-        function listenToShootingResults() {
-            db.collection("shooting_results").onSnapshot((querySnapshot) => {
-                const list = document.getElementById('admin-shot-list');
-                if (!list) return;
-
-                let html = "";
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    html += `<li style="padding: 6px 0; border-bottom: 1px solid #e7e5e4;"><strong>${data.name}</strong> (${data.disc}): <strong>${data.rings} Ringe</strong></li>`;
-                });
-
-                list.innerHTML = html || '<li style="color: var(--text-muted);">Noch keine Einträge vorhanden.</li>';
-            });
-        }
-
-        const prices = {
-            bier: 3.50, limo: 3.00, mineral: 2.50, wein4: 4.00,
-            gespritzt: 3.50, schnaps: 3.50, kaffee: 3.00, hauswuerste: 7.50, wienerle: 7.00
-        };
-
-        const itemNames = {
-            bier: "Bier", limo: "Limo", mineral: "Mineral", wein4: "Wein 1/4",
-            gespritzt: "Gespritzter", schnaps: "Schnaps", kaffee: "Kaffee",
-            hauswuerste: "Hauswürste", wienerle: "Wienerle"
-        };
-
-        const counts = {
-            bier: 0, limo: 0, mineral: 0, wein4: 0,
-            gespritzt: 0, schnaps: 0, kaffee: 0, hauswuerste: 0, wienerle: 0
-        };
-
-        function changeCount(item, delta) {
-            counts[item] = Math.max(0, counts[item] + delta);
-            const countEl = document.getElementById('count-' + item);
-            if (countEl) countEl.innerText = counts[item];
-            updateTotal();
-        }
-
-        function updateTotal() {
-            let total = 0;
-            for (let key in counts) {
-                total += counts[key] * prices[key];
-            }
-            document.getElementById('total-price').innerText = '€ ' + total.toFixed(2);
-            return total;
-        }
-
-        function confirmResetDrinks() {
-            if (confirm("Strichzettel wirklich zurücksetzen?")) {
-                for (let key in counts) {
-                    counts[key] = 0;
-                    const el = document.getElementById('count-' + key);
-                    if (el) el.innerText = 0;
-                }
-                document.getElementById('tally-client-name').value = '';
-                updateTotal();
-            }
-        }
-
-        function saveTallyBilling() {
-            const clientName = document.getElementById('tally-client-name').value.trim();
-            const total = updateTotal();
-
-            if (!clientName) {
-                alert("Bitte gib einen Namen / Verein / Firma / Anlass für die Rechnung ein!");
-                return;
-            }
-
-            if (total === 0) {
-                alert("Der Strichzettel ist leer! Bitte konsumierte Getränke/Speisen eintragen.");
-                return;
-            }
-
-            let itemsSummary = [];
-            for (let key in counts) {
-                if (counts[key] > 0) {
-                    itemsSummary.push(`${counts[key]}x ${itemNames[key]}`);
-                }
-            }
-
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('de-AT') + ' ' + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-
-            db.collection("tally_billings").add({
-                clientName: clientName,
-                total: total.toFixed(2),
-                items: itemsSummary.join(', '),
-                dateStr: dateStr,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                alert(`Rechnung für "${clientName}" (€ ${total.toFixed(2)}) erfolgreich gespeichert!`);
-                confirmResetDrinks();
-            }).catch((err) => {
-                alert("Fehler beim Speichern: " + err.message);
-            });
-        }
-
-        function listenToTallyBillings() {
-            db.collection("tally_billings").onSnapshot((querySnapshot) => {
-                const container = document.getElementById('tally-history-list');
-                if (!container) return;
-
-                let html = "";
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const docId = doc.id;
-
-                    html += `
-                        <div class="event-item" style="border-left-color: var(--admin-blue); background: #fafaf9;">
-                            <div class="event-date" style="color: var(--admin-blue);">${data.dateStr || ''}</div>
-                            <div class="event-name">${data.clientName || 'Unbenannt'}</div>
-                            <div class="event-desc"><strong>Konsumation:</strong> ${data.items || ''}</div>
-                            <div style="font-weight: 800; color: var(--accent-green-dark); margin-top: 5px; font-size: 1em;">
-                                Gesamtbetrag: € ${data.total || '0.00'}
-                            </div>
-                            <button class="btn btn-danger admin-delete-btn" onclick="deleteBilling('${docId}')" style="margin-top: 8px; padding: 4px 10px; font-size: 0.75em;">🗑️ Rechnung Löschen</button>
-                        </div>
-                    `;
-                });
-
-                container.innerHTML = html || '<p style="color: var(--text-muted); font-size: 0.85em;">Noch keine gespeicherten Rechnungen vorhanden.</p>';
-            });
-        }
-
-        function deleteBilling(docId) {
-            if (confirm("Diese Rechnung wirklich löschen?")) {
-                db.collection("tally_billings").doc(docId).delete();
-            }
-        }
-
-        /* Admin-Login mit Passwort: schützen2026 */
-        function handleAdminLogin(event) {
-            event.preventDefault();
-            const password = document.getElementById('admin-password-input').value;
-            if (password === "schützen2026") {
-                document.body.classList.add('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'none';
-                document.getElementById('admin-password-input').value = '';
-                alert("Admin-Modus aktiv!");
-            } else {
-                alert("Falsches Passwort!");
-                document.getElementById('admin-password-input').value = '';
-            }
-        }
-
-        function logoutAdmin() {
-            document.body.classList.remove('admin-mode');
-            document.getElementById('admin-login-card').style.display = 'block';
-            alert("Admin-Modus beendet.");
-        }
-
-        function togglePayStatus(badge) {
-            if (badge.classList.contains('badge-paid')) {
-                badge.classList.remove('badge-paid');
-                badge.classList.add('badge-open');
-                badge.innerText = 'Offen (€ 25)';
-            } else if (badge.classList.contains('badge-open')) {
-                badge.classList.remove('badge-open');
-                badge.classList.add('badge-paid');
-                badge.innerText = 'Bezahlt (€ 25)';
-            }
-        }
-
-        window.onload = function() {
-            listenToNews();
-            listenToEvents();
-            listenToInventory();
-            listenToShootingResults();
-            listenToTallyBillings();
-        }
-    </script>
+    // Muster-Rechnung auslösen
+    function downloadSampleInvoice() {
+      const sampleInvoice = {
+        invoiceNum: "RE-2026-001",
+        date: "08.10.2026",
+        recipientName: "Betriebsrat ASG",
+        recipientAttn: "z. Hd. Ladner Manfred",
+        recipientAddress: "St. Jakob 151",
+        recipientZipCity: "6580 St. Anton am Arlberg",
+        purpose: "BR ASG",
+        total: 703.00,
+        items: [
+          { name: "Hauswurst / Essen", price: 112.50 },
+          { name: "Getränke", price: 437.50 },
+          { name: "Luftgewehrschießen", price: 128.00 },
+          { name: "Trinkgeld", price: 25.00 }
+        ]
+      };
+      generateInvoicePDF(sampleInvoice);
+    }
+  </script>
 </body>
 </html>
