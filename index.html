@@ -103,7 +103,6 @@
             justify-content: space-between;
         }
 
-        /* GRÜN BLINKENDER NÄCHSTER DIENST */
         @keyframes greenNeonPulse {
             0% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.4); border-color: rgba(34, 197, 94, 0.6); }
             50% { box-shadow: 0 0 25px rgba(34, 197, 94, 0.9); border-color: rgba(34, 197, 94, 1); }
@@ -238,6 +237,16 @@
 
         .badge-paid { background: #d1fae5; color: #065f46; padding: 4px 10px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #a7f3d0; cursor: pointer; }
         .badge-open { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #fecaca; cursor: pointer; }
+
+        /* MODAL FÜR RECHNUNGS-ANSICHT */
+        #invoice-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 999999; justify-content: center; align-items: center; padding: 15px;
+        }
+        .invoice-preview-box {
+            background: #ffffff; width: 100%; max-width: 500px; border-radius: 12px; padding: 20px;
+            max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
@@ -269,10 +278,10 @@
         </div>
     </div>
 
-    <!-- 2. TERMINE -->
+    <!-- 2. TERMINE (MIT ORT, DATUM & ABSTIMMUNG) -->
     <div id="page-events" class="page-content">
         <div class="glass-card glass-card-blue">
-            <div class="card-title" style="color: #2563eb;">📅 Nächste Vereinstermine</div>
+            <div class="card-title" style="color: #2563eb;">📅 Nächste Vereinstermine & Abstimmung</div>
             <div id="events-container"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Termine...</p></div>
         </div>
     </div>
@@ -353,12 +362,12 @@
         <div class="glass-card glass-card-yellow">
             <div class="card-title" style="color: #ca8a04;">⭐ Vorstand & Funktionsträger ⭐</div>
             <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a></div>
-                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a></div>
-                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span></div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a></div>
-                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span></div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a></div>
-                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span></div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a></div>
-                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span></div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a></div>
+                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span>[cite: 14]</div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span>[cite: 14]</div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span>[cite: 14]</div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span>[cite: 14]</div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span>[cite: 14]</div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span>[cite: 14]</div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a>[cite: 14]</div>
             </div>
         </div>
 
@@ -368,7 +377,7 @@
         </div>
     </div>
 
-    <!-- 7, 10. ADMIN-BEREICH (ÜBERSICHTLICH UNTEREINANDER, LAGERBESTAND GANZ OBEN) -->
+    <!-- 7, 10. ADMIN-BEREICH (LAGERBESTAND OBEN MIT TIMESTAMP & WARNUNG) -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
             <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
@@ -380,9 +389,14 @@
 
         <div class="admin-delete-btn">
             
-            <!-- 1. LAGERBESTAND (GANZ OBEN & BEARBEITBAR) -->
+            <!-- 1. LAGERBESTAND (OBEN, BEARBEITBAR, TIMESTAMP & WARNUNG) -->
             <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">📦 Lagerbestand <button class="btn btn-admin" style="padding: 2px 8px; font-size: 0.75em;" onclick="editInventory()">✏️ Bearbeiten</button></div>
+                <div class="card-title" style="color: #dc2626;">
+                    <span>📦 Lagerbestand</span>
+                    <button class="btn btn-admin" style="padding: 2px 8px; font-size: 0.75em;" onclick="editInventory()">✏️ Bearbeiten</button>
+                </div>
+                <div id="inventory-timestamp" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 8px;">Noch nicht geändert</div>
+                <div id="inventory-warning-box"></div>
                 <div id="admin-inventory-display">
                     <div class="price-item"><span>Hauswürste (Paar)</span><strong id="inv-hauswuerste">20 Paar</strong></div>
                     <div class="price-item"><span>Wienerle (Paar)</span><strong id="inv-wienerle">15 Paar</strong></div>
@@ -408,7 +422,7 @@
                 <form onsubmit="addEvent(event)">
                     <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="z.B. Generalversammlung"></div>
                     <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="z.B. 15.12.2026"></div>
-                    <div class="form-group"><label>Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Ort / Uhrzeit"></div>
+                    <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="z.B. Schützenhaus Partenen"></div>
                     <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
                 </form>
                 <div style="margin-top: 15px; border-top: 1px solid #fecaca; padding-top: 10px;">
@@ -417,13 +431,13 @@
                 </div>
             </div>
 
-            <!-- 4. GESPEICHERTE RECHNUNGEN (ANSEHEN & HERUNTERLADEN) -->
+            <!-- 4. GESPEICHERTE RECHNUNGEN -->
             <div class="glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">💶 Gespeicherte Rechnungen (PDF)</div>
                 <div id="admin-tally-history-list"></div>
             </div>
 
-            <!-- 5. MITGLIEDER & BEITRÄGE (€ 30 MIT STATUS-TOGGLE & DATUM) -->
+            <!-- 5. MITGLIEDER & BEITRÄGE -->
             <div class="glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">👥 Mitglieder & Beiträge (€ 30)</div>
                 <h4 style="color: #2563eb; font-size: 0.9em; margin: 10px 0 5px 0;">Aktive Mitglieder</h4>
@@ -434,11 +448,23 @@
 
             <!-- 6. SCHLÜSSELLISTE (MITTIG ZENTRIERT & BEARBEITBAR) -->
             <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">🔑 Schlüsselliste (Stand 2026) <button class="btn btn-admin" style="padding: 2px 8px; font-size: 0.75em;" onclick="editKeyList()">✏️ Bearbeiten</button></div>
+                <div class="card-title" style="color: #dc2626;"><span>🔑 Schlüsselliste (Stand 2026)</span> <button class="btn btn-admin" style="padding: 2px 8px; font-size: 0.75em;" onclick="editKeyList()">✏️ Bearbeiten</button></div>[cite: 17]
                 <div id="admin-keys-list" style="text-align: center;"></div>
             </div>
 
             <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 20px;">Admin-Modus Beenden</button>
+        </div>
+    </div>
+
+    <!-- MODAL FÜR RECHNUNGSANZEIGE EXAKT WIE VORLAGE -->
+    <div id="invoice-modal">
+        <div class="invoice-preview-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="color: #b91c1c; font-size: 1.1em;">Rechnungs-Vorschau</h3>
+                <button class="btn btn-danger" style="padding: 4px 10px; font-size: 0.75em;" onclick="closeInvoiceModal()">Schließen</button>
+            </div>
+            <div id="invoice-modal-content" style="font-size: 0.85em; line-height: 1.4;"></div>
+            <button class="btn btn-green btn-block" style="margin-top: 15px;" onclick="downloadCurrentModalPDF()">📥 PDF Herunterladen</button>
         </div>
     </div>
 
@@ -462,7 +488,6 @@
             window.scrollTo(0, 0);
         }
 
-        // BEREINIGTE MITGLIEDERLISTE (OHNE GERD, KROHRAD, LOTHAR, HEINRICH)
         const officialActiveMembers = [
             "Manfred Wachter", "Werner Wachter", "Dietmar Schweighofer", "Simon Schweighofer",
             "Norbert Spettel", "Heimo Stocker", "Christoph Wittwer", "Werner Wittwer",
@@ -480,35 +505,61 @@
         ];
 
         let mutableKeysList = [
-            { name: "Konrad Kofler", status: "Eingang & Büro" },
-            { name: "Manfred Wachter", status: "Waffenschrank" },
-            { name: "Werner Wachter", status: "Eingang & Büro" },
-            { name: "Dietmar Schweighofer", status: "Eingang & Büro" },
-            { name: "Simon Schweighofer", status: "Waffenschrank" },
-            { name: "Norbert Spettel", status: "Waffenschrank" },
-            { name: "Heimo Stocker", status: "Waffenschrank" },
-            { name: "Christoph Wittwer", status: "Eingang & Büro" },
-            { name: "Werner Wittwer", status: "Eingang & Büro" },
-            { name: "Werner Mattle", status: "Eingang & Büro" },
-            { name: "Markus Netzer", status: "Eingang & Büro" },
-            { name: "Werner Netzer", status: "Eingang & Büro" },
-            { name: "Pascal Tripolt", status: "Eingang & Büro" },
+            { name: "Konrad Kofler", status: "Eingang & Büro" },[cite: 17]
+            { name: "Manfred Wachter", status: "Waffenschrank" },[cite: 17]
+            { name: "Werner Wachter", status: "Eingang & Büro" },[cite: 17]
+            { name: "Dietmar Schweighofer", status: "Eingang & Büro" },[cite: 17]
+            { name: "Simon Schweighofer", status: "Waffenschrank" },[cite: 17]
+            { name: "Norbert Spettel", status: "Waffenschrank" },[cite: 17]
+            { name: "Heimo Stocker", status: "Waffenschrank" },[cite: 17]
+            { name: "Christoph Wittwer", status: "Eingang & Büro" },[cite: 17]
+            { name: "Werner Wittwer", status: "Eingang & Büro" },[cite: 17]
+            { name: "Werner Mattle", status: "Eingang & Büro" },[cite: 17]
+            { name: "Markus Netzer", status: "Eingang & Büro" },[cite: 17]
+            { name: "Werner Netzer", status: "Eingang & Büro" },[cite: 17]
+            { name: "Pascal Tripolt", status: "Eingang & Büro" },[cite: 17]
             { name: "Maria Spettel", status: "Schlüssel vorhanden" }
         ];
 
-        let inventoryData = { hauswuerste: "20 Paar", wienerle: "15 Paar", bier: "3 Kisten", limo: "2 Kisten" };
+        let inventoryData = { hauswuerste: 20, wienerle: 15, bier: 3, limo: 2 };
+
+        function checkInventoryWarnings() {
+            const warningBox = document.getElementById('inventory-warning-box');
+            let warnings = [];
+            if (inventoryData.hauswuerste < 3) warnings.push("Hauswürste knapp!");
+            if (inventoryData.wienerle < 3) warnings.push("Wienerle knapp!");
+            if (inventoryData.bier < 2) warnings.push("Bierkisten knapp!");
+            if (inventoryData.limo < 2) warnings.push("Limokisten knapp!");
+
+            if (warnings.length > 0) {
+                warningBox.innerHTML = `<div style="background:#fee2e2; color:#991b1b; padding:8px; border-radius:8px; font-size:0.8em; font-weight:700; margin-bottom:8px;">⚠️ WARNUNG: ${warnings.join(' | ')}</div>`;
+            } else {
+                warningBox.innerHTML = '';
+            }
+        }
 
         function editInventory() {
-            inventoryData.hauswuerste = prompt("Hauswürste Bestand:", inventoryData.hauswuerste) || inventoryData.hauswuerste;
-            inventoryData.wienerle = prompt("Wienerle Bestand:", inventoryData.wienerle) || inventoryData.wienerle;
-            inventoryData.bier = prompt("Bier Kisten Bestand:", inventoryData.bier) || inventoryData.bier;
-            inventoryData.limo = prompt("Limo Kisten Bestand:", inventoryData.limo) || inventoryData.limo;
-            
-            document.getElementById('inv-hauswuerste').innerText = inventoryData.hauswuerste;
-            document.getElementById('inv-wienerle').innerText = inventoryData.wienerle;
-            document.getElementById('inv-bier').innerText = inventoryData.bier;
-            document.getElementById('inv-limo').innerText = inventoryData.limo;
-            alert("Lagerbestand aktualisiert!");
+            const h = prompt("Hauswürste Bestand (Paar):", inventoryData.hauswuerste);
+            const w = prompt("Wienerle Bestand (Paar):", inventoryData.wienerle);
+            const b = prompt("Bier Kisten Bestand:", inventoryData.bier);
+            const l = prompt("Limo Kisten Bestand:", inventoryData.limo);
+
+            if (h !== null) inventoryData.hauswuerste = parseInt(h) || 0;
+            if (w !== null) inventoryData.wienerle = parseInt(w) || 0;
+            if (b !== null) inventoryData.bier = parseInt(b) || 0;
+            if (l !== null) inventoryData.limo = parseInt(l) || 0;
+
+            document.getElementById('inv-hauswuerste').innerText = inventoryData.hauswuerste + " Paar";
+            document.getElementById('inv-wienerle').innerText = inventoryData.wienerle + " Paar";
+            document.getElementById('inv-bier').innerText = inventoryData.bier + " Kisten";
+            document.getElementById('inv-limo').innerText = inventoryData.limo + " Kisten";
+
+            const now = new Date();
+            const timeStr = now.toLocaleDateString('de-AT') + " um " + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('inventory-timestamp').innerText = "Lagerstand geändert am: " + timeStr;
+
+            checkInventoryWarnings();
+            alert("Lagerbestand erfolgreich aktualisiert!");
         }
 
         function editKeyList() {
@@ -529,7 +580,6 @@
             }
         }
 
-        // SCHIESSBUCH SUCHFUNKTION
         function populateMemberSelects(filter = "") {
             const selectEl = document.getElementById('shot-member-select');
             if (selectEl) {
@@ -564,7 +614,7 @@
             }
         }
 
-        // DIENSTPLAN MIT MITTERNACHTS-ABGLEICH
+        // DIENSTPLAN
         const masterDutyRoster = [
             { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
             { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
@@ -632,30 +682,47 @@
             }
         }
 
-        // TERMINE (VERGRÖßERT)
+        // TERMINE MIT ORT, DATUM & ABSTIMMUNG
         async function loadEvents() {
             const container = document.getElementById('events-container');
             const adminList = document.getElementById('admin-events-list');
             try {
                 const snapshot = await db.collection("events").orderBy("createdAt", "desc").get();
+                const votesSnapshot = await db.collection("events_vote").get();
+                let votesData = {};
+                votesSnapshot.forEach(doc => { votesData[doc.id] = doc.data(); });
+
                 let html = "";
                 let adminHtml = "";
 
                 snapshot.forEach(doc => {
                     const ev = doc.data();
                     const eventId = doc.id;
+                    const v = votesData[eventId] || { yesNames: [], noNames: [] };
+                    const yesCount = v.yesNames ? v.yesNames.length : 0;
+                    const noCount = v.noNames ? v.noNames.length : 0;
                     
                     html += `
                         <div class="dark-event-item" style="padding: 16px;">
                             <div style="font-size: 1.2em; font-weight: 900; color: #0f172a; margin-bottom: 4px;">📌 ${ev.title}</div>
                             <div style="font-size: 1em; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || 'Nicht angegeben'}</div>
-                            ${ev.desc ? `<div style="font-size: 0.95em; color: var(--text-dark); font-weight: 600;">📍 Ort / Details: ${ev.desc}</div>` : ''}
+                            <div style="font-size: 0.95em; color: var(--text-dark); font-weight: 600; margin-bottom: 10px;">📍 Ort / Details: ${ev.desc || 'Schützenhaus Partenen'}</div>
+                            
+                            <div style="padding-top: 8px; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; align-items: center;">
+                                <button onclick="voteEvent('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.8em; font-weight: 700; cursor: pointer;">👍 Ich komme (${yesCount})</button>
+                                <button onclick="voteEvent('${eventId}', 'no')" style="background: #dc2626; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.8em; font-weight: 700; cursor: pointer;">👎 Komme nicht (${noCount})</button>
+                            </div>
+
+                            <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 8px; background: #f8fafc; padding: 8px; border-radius: 6px;">
+                                <strong>Zusagen (${yesCount}):</strong> ${v.yesNames && v.yesNames.length > 0 ? v.yesNames.join(', ') : 'Keine'}<br>
+                                <strong>Absagen (${noCount}):</strong> ${v.noNames && v.noNames.length > 0 ? v.noNames.join(', ') : 'Keine'}
+                            </div>
                         </div>
                     `;
 
                     adminHtml += `
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
-                            <div><strong>${ev.title}</strong> (${ev.date})</div>
+                            <div><strong>${ev.title}</strong> (${ev.date} - ${ev.desc})</div>
                             <div style="display: flex; gap: 6px;">
                                 <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick="editEvent('${eventId}', '${ev.title}', '${ev.date}', '${ev.desc}')">✏️</button>
                                 <button class="btn btn-danger" style="padding: 2px 6px; font-size: 0.7em;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
@@ -666,6 +733,28 @@
                 if(container) container.innerHTML = html || '<p style="color:var(--text-muted);">Keine Termine eingetragen.</p>';
                 if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted);">Keine Termine im System.</p>';
             } catch (e) { console.error(e); }
+        }
+
+        async function voteEvent(eventId, type) {
+            const userName = prompt("Bitte gib deinen Namen ein für die Abstimmung:");
+            if (!userName) return;
+
+            const docRef = db.collection("events_vote").doc(eventId);
+            const doc = await docRef.get();
+            let data = doc.exists ? doc.data() : { yesNames: [], noNames: [] };
+
+            let yes = data.yesNames || [];
+            let no = data.noNames || [];
+
+            yes = yes.filter(n => n !== userName);
+            no = no.filter(n => n !== userName);
+
+            if (type === 'yes') yes.push(userName);
+            if (type === 'no') no.push(userName);
+
+            await docRef.set({ yesNames: yes, noNames: no });
+            alert("Deine Stimme wurde gespeichert!");
+            loadEvents();
         }
 
         async function addEvent(e) {
@@ -686,14 +775,14 @@
             const title = prompt("Titel bearbeiten:", oldTitle);
             if (title === null) return;
             const date = prompt("Datum bearbeiten:", oldDate);
-            const desc = prompt("Details bearbeiten:", oldDesc);
+            const desc = prompt("Ort / Details bearbeiten:", oldDesc);
 
             await db.collection("events").doc(id).update({ title, date, desc });
             alert("Termin aktualisiert!");
             loadEvents();
         }
 
-        // SCHIESSBUCH SPEICHERN
+        // SCHIESSBUCH
         async function saveShot(e) {
             e.preventDefault();
             const name = document.getElementById('shot-name').value;
@@ -759,8 +848,10 @@
                 }
             }
 
+            // Rechnungsnummer automatisch ans aktuelle Datum angepasst (z.B. RE-2026-1025-01)
+            const todayStr = new Date().toISOString().slice(0,10).replace(/-/g,'');
             const invoiceObj = {
-                invoiceNum: "RE-2026-" + Math.floor(100 + Math.random() * 900),
+                invoiceNum: "RE-" + new Date().getFullYear() + "-" + todayStr.slice(4) + "-" + Math.floor(10 + Math.random() * 90),
                 date: new Date().toLocaleDateString('de-AT'),
                 recipientName: clientName,
                 recipientAttn: clientAttn,
@@ -791,7 +882,7 @@
                         <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; gap: 6px;">
                             <div style="font-size: 0.85em;"><strong>${inv.invoiceNum}</strong> - ${inv.recipientName} (${inv.total.toFixed(2)} €)</div>
                             <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick='viewInvoice(${JSON.stringify(inv)})'>👁️ Ansehen</button>
+                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick='viewInvoiceModal(${JSON.stringify(inv)})'>👁️ Ansehen</button>
                                 <button class="btn btn-green" style="padding: 2px 6px; font-size: 0.7em;" onclick='generateInvoicePDF(${JSON.stringify(inv)})'>📥 Download</button>
                                 <button class="btn btn-danger" style="padding: 2px 6px; font-size: 0.7em;" onclick="deleteItem('invoices', '${doc.id}')">🗑️</button>
                             </div>
@@ -802,10 +893,55 @@
             } catch (e) { console.error(e); }
         }
 
-        function viewInvoice(inv) {
-            let details = `Rechnung: ${inv.invoiceNum}\nDatum: ${inv.date}\nEmpfänger: ${inv.recipientName}\nGesamt: ${inv.total.toFixed(2)} €\n\nPositionen:\n`;
-            inv.items.forEach(i => { details += `- ${i.name} (${i.count}x): ${i.price.toFixed(2)} €\n`; });
-            alert(details);
+        function viewInvoiceModal(inv) {
+            let itemsHtml = "";
+            inv.items.forEach(i => {
+                itemsHtml += `<div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;"><span>${i.name} (${i.count}x)</span><strong>${i.price.toFixed(2).replace('.', ',')} €</strong></div>`;
+            });
+
+            const content = `
+                <div style="text-align:center; margin-bottom:15px;">
+                    <h2 style="color:#b91c1c; font-size:1.3em;">RECHNUNG</h2>
+                    <p style="font-size:0.75em; color:#64748b;">Kameradschaftsbund und Schützenverein Gaschurn-Partenen<br>Rütler 43b | 6794 Partenen<br>E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509</p>
+                </div>
+                <div style="margin-bottom:12px; background:#f8fafc; padding:8px; border-radius:6px;">
+                    <strong>Rechnung an:</strong><br>
+                    ${inv.recipientName}<br>
+                    ${inv.recipientAttn ? inv.recipientAttn + '<br>' : ''}
+                    ${inv.recipientAddress}<br>
+                    ${inv.recipientZipCity}
+                </div>
+                <div style="margin-bottom:10px; display:flex; justify-content:space-between; font-size:0.85em;">
+                    <span><strong>Rechnungsnummer:</strong> ${inv.invoiceNum}</span>
+                    <span><strong>Datum:</strong> ${inv.date}</span>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <div style="background:#b91c1c; color:#white; padding:5px 8px; font-weight:bold; font-size:0.8em; display:flex; justify-content:space-between;"><span>Leistung</span><span>Betrag</span></div>
+                    ${itemsHtml}
+                    <div style="display:flex; justify-content:space-between; padding:6px 0; font-weight:bold; font-size:1em; margin-top:5px; border-top:2px solid #b91c1c;"><span>Gesamtbetrag</span><span style="color:#b91c1c;">${inv.total.toFixed(2).replace('.', ',')} €</span></div>
+                </div>
+                <div style="font-size:0.75em; color:#475569; background:#f1f5f9; padding:8px; border-radius:6px;">
+                    <strong>Zahlungsbedingungen:</strong><br>
+                    Bitte überweisen Sie den Rechnungsbetrag von ${inv.total.toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:<br>
+                    <strong>IBAN:</strong> AT86 3746 8000 0451 3511<br>
+                    <strong>BIC:</strong> RVVGAT2B468<br>
+                    <strong>Bank:</strong> Raiffeisenbank Bludenz-Montafon<br>
+                    <strong>Verwendungszweck:</strong> ${inv.invoiceNum}
+                </div>
+            `;
+            document.getElementById('invoice-modal-content').innerHTML = content;
+            document.getElementById('invoice-modal').style.display = 'flex';
+            window.currentPreviewInv = inv;
+        }
+
+        function closeInvoiceModal() {
+            document.getElementById('invoice-modal').style.display = 'none';
+        }
+
+        function downloadCurrentModalPDF() {
+            if (window.currentPreviewInv) {
+                generateInvoicePDF(window.currentPreviewInv);
+            }
         }
 
         function generateInvoicePDF(invoiceData) {
@@ -813,31 +949,31 @@
             const doc = new jsPDF();
 
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(22);
+            doc.setFontSize(20);
             doc.setTextColor(185, 28, 28);
             doc.text("RECHNUNG", 14, 20);
 
             doc.setFont("helvetica", "normal");
-            doc.setFontSize(9);
+            doc.setFontSize(8);
             doc.setTextColor(80, 80, 80);
-            doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen", 14, 28);
-            doc.text("Rütler 43b | 6794 Partenen", 14, 33);
-            doc.text("E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509", 14, 38);
+            doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen", 14, 26);
+            doc.text("Rütler 43b | 6794 Partenen", 14, 31);
+            doc.text("E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509", 14, 36);
 
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
+            doc.setFontSize(9);
             doc.setTextColor(0, 0, 0);
-            doc.text("Rechnung an:", 14, 52);
+            doc.text("Rechnung an:", 14, 48);
 
             doc.setFont("helvetica", "normal");
-            doc.text(invoiceData.recipientName || "", 14, 58);
-            if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 63);
-            doc.text(invoiceData.recipientAddress || "", 14, 68);
-            doc.text(invoiceData.recipientZipCity || "", 14, 73);
+            doc.text(invoiceData.recipientName || "", 14, 54);
+            if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 59);
+            doc.text(invoiceData.recipientAddress || "", 14, 64);
+            doc.text(invoiceData.recipientZipCity || "", 14, 69);
 
             doc.setFont("helvetica", "bold");
-            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 120, 58);
-            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 120, 63);
+            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 120, 54);
+            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 120, 59);
 
             const tableBody = invoiceData.items.map(item => [
                 `${item.name} (${item.count}x)`, 
@@ -845,7 +981,7 @@
             ]);
 
             doc.autoTable({
-                startY: 82,
+                startY: 76,
                 head: [['Leistung', 'Betrag']],
                 body: [
                     ...tableBody,
@@ -856,11 +992,31 @@
                 columnStyles: { 0: { cellWidth: 130 }, 1: { halign: 'right', cellWidth: 40 } }
             });
 
+            let finalY = doc.lastAutoTable.finalY + 10;
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(9);
+            doc.text("Zahlungsbedingungen", 14, finalY);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(8);
+            doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${invoiceData.total.toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:`, 14, finalY + 5);
+            
+            doc.setFont("helvetica", "bold"); doc.text("IBAN:", 14, finalY + 11);
+            doc.setFont("helvetica", "normal"); doc.text("AT86 3746 8000 0451 3511", 30, finalY + 11);
+
+            doc.setFont("helvetica", "bold"); doc.text("BIC:", 14, finalY + 16);
+            doc.setFont("helvetica", "normal"); doc.text("RVVGAT2B468", 30, finalY + 16);
+
+            doc.setFont("helvetica", "bold"); doc.text("Bank:", 14, finalY + 21);
+            doc.setFont("helvetica", "normal"); doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 21);
+
+            doc.setFont("helvetica", "bold"); doc.text("Verwendungszweck:", 14, finalY + 26);
+            doc.setFont("helvetica", "normal"); doc.text(`${invoiceData.invoiceNum} / ${invoiceData.recipientName}`, 44, finalY + 26);
+
             doc.save(`${invoiceData.invoiceNum}.pdf`);
         }
 
-        // TOGGLE BEZAHLT / NICHT BEZAHLT MIT DATUM
-        function togglePaidStatus(el, memberName) {
+        function togglePaidStatus(el) {
             if (el.classList.contains('badge-paid')) {
                 el.classList.remove('badge-paid');
                 el.classList.add('badge-open');
@@ -877,26 +1033,26 @@
             const passiveList = document.getElementById('admin-passive-members-list');
             
             let actHtml = "";
-            officialActiveMembers.forEach((m, idx) => {
+            officialActiveMembers.forEach((m) => {
                 actHtml += `
                     <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
                         <span><strong>${m}</strong></span>
                         <div style="display: flex; gap: 6px; align-items: center;">
                             <input type="text" class="form-control" style="width: 105px; padding: 4px; font-size: 0.75em;" placeholder="Bezahl-Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this, '${m}')">Bezahlt (€30)</span>
+                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
                         </div>
                     </div>`;
             });
             activeList.innerHTML = actHtml;
 
             let passHtml = "";
-            officialPassiveMembers.forEach((m, idx) => {
+            officialPassiveMembers.forEach((m) => {
                 passHtml += `
                     <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
                         <span><strong>${m}</strong></span>
                         <div style="display: flex; gap: 6px; align-items: center;">
                             <input type="text" class="form-control" style="width: 105px; padding: 4px; font-size: 0.75em;" placeholder="Bezahl-Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this, '${m}')">Bezahlt (€30)</span>
+                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
                         </div>
                     </div>`;
             });
