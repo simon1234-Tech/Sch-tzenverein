@@ -29,7 +29,10 @@
         messagingSenderId: "1015802588615",
         appId: "1:1015802588615:web:bcecb74526a2096d2ebde2"
       };
-      firebase.initializeApp(firebaseConfig);
+      try {
+          firebase.initializeApp(firebaseConfig);
+      } catch(e) { console.error("Firebase Init:", e); }
+      
       const db = firebase.firestore();
       const messaging = firebase.messaging();
     </script>
@@ -361,12 +364,12 @@
         <div class="glass-card glass-card-yellow">
             <div class="card-title" style="color: #ca8a04;">⭐ Vorstand & Funktionsträger ⭐</div>
             <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span>[cite: 14]</div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a>[cite: 14]</div>
-                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span>[cite: 14]</div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a>[cite: 14]</div>
-                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span>[cite: 14]</div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a>[cite: 14]</div>
-                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span>[cite: 14]</div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a>[cite: 14]</div>
-                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span>[cite: 14]</div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a>[cite: 14]</div>
-                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span>[cite: 14]</div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a>[cite: 14]</div>
+                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a></div>
+                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a></div>
+                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span></div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a></div>
+                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span></div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a></div>
+                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span></div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a></div>
+                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span></div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a></div>
             </div>
         </div>
 
@@ -388,7 +391,7 @@
 
         <div class="admin-delete-btn">
             
-            <!-- 1. LAGERBESTAND (OBEN MIT TIMESTAMP & WARNUNG) -->
+            <!-- 1. LAGERBESTAND -->
             <div class="glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
                     <span>📦 Lagerbestand</span>
@@ -447,7 +450,7 @@
 
             <!-- 6. SCHLÜSSELLISTE -->
             <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;"><span>🔑 Schlüsselliste (Stand 2026)</span> <button class="btn btn-admin" style="padding: 2px 8px; font-size: 0.75em;" onclick="editKeyList()">✏️ Bearbeiten</button></div>[cite: 17]
+                <div class="card-title" style="color: #dc2626;"><span>🔑 Schlüsselliste (Stand 2026)</span> <button class="btn btn-admin" style="padding: 2px 8px; font-size: 0.75em;" onclick="editKeyList()">✏️ Bearbeiten</button></div>
                 <div id="admin-keys-list" style="text-align: center;"></div>
             </div>
 
@@ -482,8 +485,10 @@
         function switchTab(tabId) {
             document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            document.getElementById('page-' + tabId).classList.add('active');
-            document.getElementById('nav-' + tabId).classList.add('active');
+            const targetPage = document.getElementById('page-' + tabId);
+            const targetNav = document.getElementById('nav-' + tabId);
+            if(targetPage) targetPage.classList.add('active');
+            if(targetNav) targetNav.classList.add('active');
             window.scrollTo(0, 0);
         }
 
@@ -504,19 +509,19 @@
         ];
 
         let mutableKeysList = [
-            { name: "Konrad Kofler", status: "Eingang & Büro" },[cite: 17]
-            { name: "Manfred Wachter", status: "Waffenschrank" },[cite: 17]
-            { name: "Werner Wachter", status: "Eingang & Büro" },[cite: 17]
-            { name: "Dietmar Schweighofer", status: "Eingang & Büro" },[cite: 17]
-            { name: "Simon Schweighofer", status: "Waffenschrank" },[cite: 17]
-            { name: "Norbert Spettel", status: "Waffenschrank" },[cite: 17]
-            { name: "Heimo Stocker", status: "Waffenschrank" },[cite: 17]
-            { name: "Christoph Wittwer", status: "Eingang & Büro" },[cite: 17]
-            { name: "Werner Wittwer", status: "Eingang & Büro" },[cite: 17]
-            { name: "Werner Mattle", status: "Eingang & Büro" },[cite: 17]
-            { name: "Markus Netzer", status: "Eingang & Büro" },[cite: 17]
-            { name: "Werner Netzer", status: "Eingang & Büro" },[cite: 17]
-            { name: "Pascal Tripolt", status: "Eingang & Büro" },[cite: 17]
+            { name: "Konrad Kofler", status: "Eingang & Büro" },
+            { name: "Manfred Wachter", status: "Waffenschrank" },
+            { name: "Werner Wachter", status: "Eingang & Büro" },
+            { name: "Dietmar Schweighofer", status: "Eingang & Büro" },
+            { name: "Simon Schweighofer", status: "Waffenschrank" },
+            { name: "Norbert Spettel", status: "Waffenschrank" },
+            { name: "Heimo Stocker", status: "Waffenschrank" },
+            { name: "Christoph Wittwer", status: "Eingang & Büro" },
+            { name: "Werner Wittwer", status: "Eingang & Büro" },
+            { name: "Werner Mattle", status: "Eingang & Büro" },
+            { name: "Markus Netzer", status: "Eingang & Büro" },
+            { name: "Werner Netzer", status: "Eingang & Büro" },
+            { name: "Pascal Tripolt", status: "Eingang & Büro" },
             { name: "Maria Spettel", status: "Schlüssel vorhanden" }
         ];
 
@@ -525,6 +530,7 @@
 
         function checkInventoryWarnings() {
             const warningBox = document.getElementById('inventory-warning-box');
+            if(!warningBox) return;
             let warnings = [];
             if (inventoryData.hauswuerste < 3) warnings.push("Hauswürste knapp!");
             if (inventoryData.wienerle < 3) warnings.push("Wienerle knapp!");
@@ -638,48 +644,50 @@
         }
 
         function updateDutyPlanWidget() {
-            const today = new Date();
-            today.setHours(0,0,0,0);
+            try {
+                const today = new Date();
+                today.setHours(0,0,0,0);
 
-            let nextIndex = 0;
-            for (let i = 0; i < masterDutyRoster.length; i++) {
-                const dDate = parseLocalDate(masterDutyRoster[i].dateStr);
-                if (dDate >= today) {
-                    nextIndex = i;
-                    break;
+                let nextIndex = 0;
+                for (let i = 0; i < masterDutyRoster.length; i++) {
+                    const dDate = parseLocalDate(masterDutyRoster[i].dateStr);
+                    if (dDate >= today) {
+                        nextIndex = i;
+                        break;
+                    }
                 }
-            }
 
-            const nextDienst = masterDutyRoster[nextIndex] || masterDutyRoster[0];
-            const nextWidget = document.getElementById('next-duty-widget');
-            if (nextWidget) {
-                nextWidget.innerHTML = `
-                    <div style="font-size: 1.05em; color: #15803d; font-weight: 800;">📅 ${nextDienst.dateStr}</div>
-                    <div style="font-size: 1.4em; font-weight: 900; margin: 4px 0; color: #0f172a;">${nextDienst.team}</div>
-                    <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600;">${nextDienst.names}</div>
-                `;
-            }
-
-            const fullList = document.getElementById('full-roster-list');
-            if (fullList) {
-                let html = "";
-                masterDutyRoster.forEach((d, idx) => {
-                    let isNext = (idx === nextIndex);
-                    let isClosed = d.status === 'closed';
-                    let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
-                    
-                    html += `
-                        <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div style="font-size: 1.05em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.7em; background:#22c55e; color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER DIENST</span>' : ''}</div>
-                                <span style="background: ${borderCol}; color: white; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.7em;">${d.team}</span>
-                            </div>
-                            <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
-                        </div>
+                const nextDienst = masterDutyRoster[nextIndex] || masterDutyRoster[0];
+                const nextWidget = document.getElementById('next-duty-widget');
+                if (nextWidget) {
+                    nextWidget.innerHTML = `
+                        <div style="font-size: 1.05em; color: #15803d; font-weight: 800;">📅 ${nextDienst.dateStr}</div>
+                        <div style="font-size: 1.4em; font-weight: 900; margin: 4px 0; color: #0f172a;">${nextDienst.team}</div>
+                        <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600;">${nextDienst.names}</div>
                     `;
-                });
-                fullList.innerHTML = html;
-            }
+                }
+
+                const fullList = document.getElementById('full-roster-list');
+                if (fullList) {
+                    let html = "";
+                    masterDutyRoster.forEach((d, idx) => {
+                        let isNext = (idx === nextIndex);
+                        let isClosed = d.status === 'closed';
+                        let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
+                        
+                        html += `
+                            <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 1.05em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.7em; background:#22c55e; color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER DIENST</span>' : ''}</div>
+                                    <span style="background: ${borderCol}; color: white; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.7em;">${d.team}</span>
+                                </div>
+                                <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
+                            </div>
+                        `;
+                    });
+                    fullList.innerHTML = html;
+                }
+            } catch(e) { console.error("DutyPlan Error:", e); }
         }
 
         // TERMINE MIT ORT, DATUM & ABSTIMMUNG
@@ -724,7 +732,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
                             <div><strong>${ev.title}</strong> (${ev.date} - ${ev.desc})</div>
                             <div style="display: flex; gap: 6px;">
-                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick="editEvent('${eventId}', '${ev.title.replace(/'/g, "\\'")}', '${ev.date}', '${(ev.desc||'').replace(/'/g, "\\'")}')">✏️</button>
+                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick="editEvent('${eventId}', '${(ev.title||'').replace(/'/g, "\\'")}', '${ev.date}', '${(ev.desc||'').replace(/'/g, "\\'")}')">✏️</button>
                                 <button class="btn btn-danger" style="padding: 2px 6px; font-size: 0.7em;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
                             </div>
                         </div>
@@ -732,7 +740,10 @@
                 });
                 if(container) container.innerHTML = html || '<p style="color:var(--text-muted);">Keine Termine eingetragen.</p>';
                 if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted);">Keine Termine im System.</p>';
-            } catch (e) { console.error(e); }
+            } catch (e) { 
+                console.error("loadEvents Error:", e);
+                if(container) container.innerHTML = '<p style="color:var(--text-muted);">Termine konnten geladen werden.</p>';
+            }
         }
 
         async function voteEvent(eventId, type) {
@@ -1049,7 +1060,7 @@
                         </div>
                     </div>`;
             });
-            activeList.innerHTML = actHtml;
+            if(activeList) activeList.innerHTML = actHtml;
 
             let passHtml = "";
             officialPassiveMembers.forEach((m) => {
@@ -1062,11 +1073,12 @@
                         </div>
                     </div>`;
             });
-            passiveList.innerHTML = passHtml;
+            if(passiveList) passiveList.innerHTML = passHtml;
         }
 
         function loadAdminKeys() {
             const container = document.getElementById('admin-keys-list');
+            if(!container) return;
             let html = "";
             mutableKeysList.forEach(k => {
                 html += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.9em;"><strong>${k.name}</strong> — <span style="color:var(--text-muted);">${k.status}</span></div>`;
@@ -1105,6 +1117,7 @@
 
         async function loadNews() {
             const container = document.getElementById('news-container');
+            if(!container) return;
             try {
                 const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
                 if (snapshot.empty) { container.innerHTML = ''; return; }
@@ -1149,13 +1162,13 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            updateDutyPlanWidget();
-            loadEvents();
-            loadNews();
-            populateMemberSelects();
-            loadPublicMembersList();
-            loadAdminMembers();
-            loadAdminKeys();
+            try { updateDutyPlanWidget(); } catch(e) { console.error(e); }
+            try { loadEvents(); } catch(e) { console.error(e); }
+            try { loadNews(); } catch(e) { console.error(e); }
+            try { populateMemberSelects(); } catch(e) { console.error(e); }
+            try { loadPublicMembersList(); } catch(e) { console.error(e); }
+            try { loadAdminMembers(); } catch(e) { console.error(e); }
+            try { loadAdminKeys(); } catch(e) { console.error(e); }
         });
     </script>
 </body>
