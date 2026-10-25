@@ -40,7 +40,7 @@
             --primary-red: #b91c1c; 
             --primary-dark: #7f1d1d;
             --bg-light: #f1f5f9; 
-            --card-glass: rgba(255, 255, 255, 0.95);
+            --card-glass: rgba(255, 255, 255, 0.98);
             --text-dark: #1e293b; 
             --text-muted: #64748b; 
             --accent-green: #10b981; 
@@ -56,103 +56,104 @@
             color: var(--text-dark);
             background: linear-gradient(135deg, #cbd5e1 0%, #f1f5f9 100%);
             background-attachment: fixed;
-            padding: 10px;
-            padding-bottom: 140px !important;
-            max-width: 500px;
+            padding: 12px;
+            padding-bottom: 160px !important;
+            max-width: 600px;
             margin: 0 auto;
             min-height: 100vh;
+            font-size: 1.05em;
         }
 
         .app-header {
             background: linear-gradient(135deg, #7f1d1d, #b91c1c);
             color: white;
-            padding: 18px 15px;
+            padding: 22px 18px;
             text-align: center;
-            border-radius: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            border-radius: 22px;
+            margin-bottom: 18px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
         
-        .app-header h1 { font-size: 1.1em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
-        .app-header p { font-size: 0.75em; opacity: 0.95; margin-top: 4px; color: #fca5a5; font-weight: 700; }
+        .app-header h1 { font-size: 1.35em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
+        .app-header p { font-size: 0.9em; opacity: 0.95; margin-top: 6px; color: #fca5a5; font-weight: 700; }
 
         .page-content { display: none; }
         .page-content.active { display: block; }
 
         .glass-card {
             background: var(--card-glass);
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.9);
             color: var(--text-dark);
         }
 
-        .glass-card-blue { border-left: 5px solid #2563eb !important; }
-        .glass-card-yellow { border-left: 5px solid #eab308 !important; }
-        .glass-card-red { border-left: 5px solid #dc2626 !important; }
+        .glass-card-blue { border-left: 6px solid #2563eb !important; }
+        .glass-card-yellow { border-left: 6px solid #eab308 !important; }
+        .glass-card-red { border-left: 6px solid #dc2626 !important; }
         
         .card-title {
-            font-size: 1.05em;
+            font-size: 1.2em;
             font-weight: 700;
             color: var(--primary-red);
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         @keyframes greenNeonPulse {
-            0% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.4); border-color: rgba(34, 197, 94, 0.6); }
-            50% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.9); border-color: rgba(34, 197, 94, 1); }
-            100% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.4); border-color: rgba(34, 197, 94, 0.6); }
+            0% { box-shadow: 0 0 8px rgba(34, 197, 94, 0.4); border-color: rgba(34, 197, 94, 0.6); }
+            50% { box-shadow: 0 0 25px rgba(34, 197, 94, 0.95); border-color: rgba(34, 197, 94, 1); }
+            100% { box-shadow: 0 0 8px rgba(34, 197, 94, 0.4); border-color: rgba(34, 197, 94, 0.6); }
         }
         .next-duty-neon {
             background: #ffffff !important;
-            border: 2.5px solid #22c55e !important;
+            border: 3px solid #22c55e !important;
             animation: greenNeonPulse 1.5s infinite ease-in-out;
         }
 
         .dark-event-item {
             background: #ffffff;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-left: 5px solid #b91c1c;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 6px solid #b91c1c;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
             border: 1px solid #e2e8f0;
         }
 
         .btn {
-            padding: 10px 14px;
-            border-radius: 12px;
+            padding: 14px 20px;
+            border-radius: 14px;
             border: none;
-            font-weight: 600;
-            font-size: 0.85em;
+            font-weight: 700;
+            font-size: 1em;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
             text-decoration: none;
             transition: all 0.2s;
         }
-        .btn-primary { background: var(--primary-red); color: white; box-shadow: 0 4px 10px rgba(185, 28, 28, 0.3); }
-        .btn-green { background: #16a34a; color: white; box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3); }
+        .btn-primary { background: var(--primary-red); color: white; box-shadow: 0 4px 15px rgba(185, 28, 28, 0.35); }
+        .btn-green { background: #16a34a; color: white; box-shadow: 0 4px 15px rgba(22, 163, 74, 0.35); }
         .btn-danger { background: #fee2e2; color: var(--danger); border: 1px solid #fecaca; }
-        .btn-admin { background: var(--admin-blue); color: white; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3); }
-        .btn-block { width: 100%; margin-top: 8px; }
+        .btn-admin { background: var(--admin-blue); color: white; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35); }
+        .btn-block { width: 100%; margin-top: 10px; }
 
-        .form-group { margin-bottom: 10px; }
-        .form-group label { display: block; font-size: 0.8em; font-weight: 600; margin-bottom: 4px; color: var(--text-muted); }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 0.9em; font-weight: 700; margin-bottom: 6px; color: var(--text-muted); }
         .form-control {
             width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #cbd5e1;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1.5px solid #cbd5e1;
             font-family: inherit;
-            font-size: 0.9em;
+            font-size: 1em;
             background: #ffffff;
             color: var(--text-dark);
         }
@@ -162,18 +163,18 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 0.85em;
+            font-size: 1em;
         }
-        .counter-controls { display: flex; align-items: center; gap: 8px; }
+        .counter-controls { display: flex; align-items: center; gap: 12px; }
         .counter-btn {
             background: #f1f5f9;
             color: var(--primary-red);
-            border: 1px solid #cbd5e1;
-            width: 32px; height: 32px;
+            border: 1.5px solid #cbd5e1;
+            width: 42px; height: 42px;
             border-radius: 50%;
-            font-size: 1.1em;
+            font-size: 1.3em;
             font-weight: bold;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
@@ -182,32 +183,33 @@
         .strich-category-header {
             background: var(--primary-red);
             color: #ffffff;
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-size: 0.8em;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.9em;
             font-weight: 800;
-            margin: 12px 0 4px 0;
+            margin: 16px 0 6px 0;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .bottom-nav {
             position: fixed !important; 
-            bottom: 10px !important; 
-            left: 10px !important; 
-            right: 10px !important;
-            width: calc(100% - 20px) !important;
-            max-width: 480px !important; 
+            bottom: 12px !important; 
+            left: 12px !important; 
+            right: 12px !important;
+            width: calc(100% - 24px) !important;
+            max-width: 576px !important; 
             margin: 0 auto !important;
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(15px) !important;
-            -webkit-backdrop-filter: blur(15px) !important;
-            border-radius: 18px !important;
-            border: 1px solid rgba(203, 213, 225, 0.8) !important;
+            background: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border-radius: 20px !important;
+            border: 1.5px solid rgba(203, 213, 225, 0.9) !important;
             display: flex !important; 
             justify-content: space-around !important;
             align-items: center !important;
-            padding: 6px 2px !important;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+            padding: 8px 4px !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
             z-index: 99999 !important;
         }
         .nav-item {
@@ -216,34 +218,34 @@
             align-items: center !important;
             text-decoration: none !important; 
             color: #64748b !important; 
-            font-size: 0.65em !important; 
+            font-size: 0.75em !important; 
             font-weight: 700 !important; 
             cursor: pointer !important;
             flex: 1 !important;
             text-align: center !important;
-            padding: 4px 2px !important;
-            border-radius: 12px !important;
+            padding: 6px 2px !important;
+            border-radius: 14px !important;
         }
         .nav-item.active { 
             color: #ffffff !important;
             background: var(--primary-red) !important;
-            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.4) !important;
+            box-shadow: 0 4px 15px rgba(185, 28, 28, 0.45) !important;
         }
-        .nav-icon { font-size: 1.25em !important; margin-bottom: 2px !important; display: block !important; }
+        .nav-icon { font-size: 1.5em !important; margin-bottom: 3px !important; display: block !important; }
 
         .admin-delete-btn { display: none; }
         body.admin-mode .admin-delete-btn { display: block !important; }
 
-        .badge-paid { background: #d1fae5; color: #065f46; padding: 3px 8px; border-radius: 8px; font-weight: 700; font-size: 0.7em; border: 1px solid #a7f3d0; cursor: pointer; }
-        .badge-open { background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 8px; font-weight: 700; font-size: 0.7em; border: 1px solid #fecaca; cursor: pointer; }
+        .badge-paid { background: #d1fae5; color: #065f46; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8em; border: 1px solid #a7f3d0; cursor: pointer; }
+        .badge-open { background: #fee2e2; color: #991b1b; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.8em; border: 1px solid #fecaca; cursor: pointer; }
 
         #invoice-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 999999; justify-content: center; align-items: center; padding: 10px;
+            background: rgba(0,0,0,0.65); z-index: 999999; justify-content: center; align-items: center; padding: 15px;
         }
         .invoice-preview-box {
-            background: #ffffff; width: 100%; max-width: 450px; border-radius: 14px; padding: 15px;
-            max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+            background: #ffffff; width: 100%; max-width: 520px; border-radius: 16px; padding: 22px;
+            max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 25px 35px -5px rgba(0,0,0,0.35);
         }
     </style>
 </head>
@@ -256,15 +258,13 @@
 
     <!-- 1. NEWS & DIENSTPLAN -->
     <div id="page-news" class="page-content active">
-        <!-- GLOBALER LAGERBESTANDS-WARNUNGSHINWEIS AUF DER NEWS-SEITE -->
         <div id="news-inventory-warning-box"></div>
-
         <div id="news-container"></div>
 
         <div class="glass-card next-duty-neon">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-size: 0.7em; background: #22c55e; color: #fff; font-weight: 800; padding: 2px 6px; border-radius: 6px; text-transform: uppercase;">Nächster Dienst</span>
-                <span style="font-size: 0.7em; color: #15803d; font-weight: 600;">Live</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.8em; background: #22c55e; color: #fff; font-weight: 800; padding: 4px 10px; border-radius: 6px; text-transform: uppercase;">Nächster Dienst</span>
+                <span style="font-size: 0.8em; color: #15803d; font-weight: 700;">Live</span>
             </div>
             <div id="next-duty-widget"></div>
         </div>
@@ -272,9 +272,9 @@
         <div class="glass-card glass-card-blue">
             <div class="card-title">
                 <span>📋 Gesamter Dienstplan</span>
-                <span style="font-size: 0.65em; background: var(--primary-red); color: white; padding: 2px 6px; border-radius: 6px;">2026/2027</span>
+                <span style="font-size: 0.7em; background: var(--primary-red); color: white; padding: 4px 10px; border-radius: 6px;">2026/2027</span>
             </div>
-            <p style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 10px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
+            <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 12px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
             <div id="full-roster-list"></div>
         </div>
     </div>
@@ -283,7 +283,7 @@
     <div id="page-events" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">📅 Nächste Vereinstermine & Abstimmung</div>
-            <div id="events-container"><p style="font-size: 0.8em; color: var(--text-muted);">Lade Termine...</p></div>
+            <div id="events-container"><p style="font-size: 0.9em; color: var(--text-muted);">Lade Termine...</p></div>
         </div>
     </div>
 
@@ -296,13 +296,13 @@
                 <div class="form-group">
                     <label>Mitglied suchen / auswählen</label>
                     <input type="text" id="shot-search-input" class="form-control" placeholder="🔍 Namen eintippen..." oninput="filterMemberDropdown(this.value)">
-                    <select class="form-control" id="shot-member-select" size="4" style="margin-top: 5px;">
+                    <select class="form-control" id="shot-member-select" size="5" style="margin-top: 8px;">
                         <!-- Dynamisch -->
                     </select>
                 </div>
                 <div class="form-group"><label>Gewählter Schütze</label><input type="text" class="form-control" id="shot-name" required readonly placeholder="Bitte oben auswählen"></div>
-                <div class="form-group"><label>Waffe / Disziplin</label><input type="text" class="form-control" value="Luftgewehr" readonly style="background:#f8fafc; font-weight:600;"></div>
-                <div style="display: flex; gap: 8px;">
+                <div class="form-group"><label>Waffe / Disziplin</label><input type="text" class="form-control" value="Luftgewehr" readonly style="background:#f8fafc; font-weight:700;"></div>
+                <div style="display: flex; gap: 12px;">
                     <div class="form-group" style="flex: 1;"><label>Erreichte Ringe</label><input type="number" step="0.1" class="form-control" id="shot-rings" required placeholder="z.B. 298.5"></div>
                     <div class="form-group" style="flex: 1;"><label>Teiler (optional)</label><input type="number" step="0.1" class="form-control" id="shot-teiler" placeholder="z.B. 12.4"></div>
                 </div>
@@ -317,44 +317,44 @@
             <div class="card-title" style="color: #2563eb;">🍻 Strichliste & Preisliste</div>
             
             <div class="strich-category-header">Speisen</div>
-            <div class="price-item"><span>🌭 Paar Hauswürste (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
-            <div class="price-item"><span>🌭 Paar Wienerle (€ 7,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
+            <div class="price-item"><span>🌭 Paar Hauswürste (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
+            <div class="price-item"><span>🌭 Paar Wienerle (€ 7,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
 
             <div class="strich-category-header">Getränke & Bier</div>
-            <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
-            <div class="price-item"><span>🍺 Radler 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
-            <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
-            <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein 1/4 lt. (€ 4,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein 1/8 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein gespritzt (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
-            <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
+            <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
+            <div class="price-item"><span>🍺 Radler 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
+            <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
+            <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
+            <div class="price-item"><span>🍷 Wein 1/4 lt. (€ 4,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
+            <div class="price-item"><span>🍷 Wein 1/8 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
+            <div class="price-item"><span>🍷 Wein gespritzt (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
+            <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
 
             <div class="strich-category-header">Heissgetränke & Sonstiges</div>
-            <div class="price-item"><span>☕ Kaffee (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
-            <div class="price-item"><span>🍵 Tee (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
+            <div class="price-item"><span>☕ Kaffee (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
+            <div class="price-item"><span>🍵 Tee (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
 
             <div class="strich-category-header">Luftgewehrschießen</div>
-            <div class="price-item" style="background: #fef2f2; padding: 6px; border-radius: 6px;">
+            <div class="price-item" style="background: #fef2f2; padding: 10px; border-radius: 8px;">
                 <span>🎯 Luftgewehrschießen (€ 8,00 / P.)</span>
-                <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 20px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
+                <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
             </div>
 
-            <div style="margin-top: 12px; padding-top: 8px; border-top: 2px solid #e2e8f0; display: flex; justify-content: space-between; font-weight: 700; font-size: 1em;">
+            <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #e2e8f0; display: flex; justify-content: space-between; font-weight: 800; font-size: 1.15em;">
                 <span>Gesamtbetrag:</span>
                 <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
             </div>
 
-            <div style="margin-top: 12px; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1;">
-                <h4 style="color: #2563eb; margin-bottom: 6px; font-size: 0.85em;">Rechnungsempfänger:</h4>
+            <div style="margin-top: 15px; background: #f8fafc; padding: 14px; border-radius: 12px; border: 1.5px solid #cbd5e1;">
+                <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.95em;">Rechnungsempfänger:</h4>
                 <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
                 <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
                 <div class="form-group"><label>Straße</label><input type="text" class="form-control" id="cust-address" placeholder="St. Jakob 151"></div>
                 <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="6580 St. Anton am Arlberg"></div>
             </div>
 
-            <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 10px;">💾 Abrechnung speichern</button>
-            <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 6px;">Zurücksetzen</button>
+            <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 14px;">💾 Abrechnung speichern</button>
+            <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 8px;">Zurücksetzen</button>
         </div>
     </div>
 
@@ -362,7 +362,7 @@
     <div id="page-guide" class="page-content">
         <div class="glass-card glass-card-yellow">
             <div class="card-title" style="color: #ca8a04;">⭐ Vorstand & Funktionsträger ⭐</div>
-            <div style="font-size: 0.8em; display: flex; flex-direction: column; gap: 6px;">
+            <div style="font-size: 0.9em; display: flex; flex-direction: column; gap: 8px;">
                 <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a></div>
                 <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a></div>
                 <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span></div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a></div>
@@ -374,7 +374,7 @@
 
         <div class="glass-card glass-card-yellow">
             <div class="card-title" style="color: #ca8a04;">👥 Alle Aktiven Mitglieder</div>
-            <div id="public-members-list" style="font-size: 0.8em; display: flex; flex-direction: column; gap: 6px;"></div>
+            <div id="public-members-list" style="font-size: 0.9em; display: flex; flex-direction: column; gap: 8px;"></div>
         </div>
     </div>
 
@@ -394,9 +394,9 @@
             <div class="glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
                     <span>📦 Lagerbestand</span>
-                    <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick="editInventory()">✏️ Bearbeiten</button>
+                    <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.8em;" onclick="editInventory()">✏️ Bearbeiten</button>
                 </div>
-                <div id="inventory-timestamp" style="font-size: 0.7em; color: var(--text-muted); margin-bottom: 6px;">Noch nicht geändert</div>
+                <div id="inventory-timestamp" style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 8px;">Noch nicht geändert</div>
                 <div id="inventory-warning-box"></div>
                 <div id="admin-inventory-display">
                     <div class="price-item"><span>Hauswürste (Paar)</span><strong id="inv-hauswuerste">20 Paar</strong></div>
@@ -426,8 +426,8 @@
                     <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
                     <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
                 </form>
-                <div style="margin-top: 12px; border-top: 1px solid #fecaca; padding-top: 8px;">
-                    <div style="font-size: 0.8em; font-weight: 700; margin-bottom: 6px;">Bestehende Termine:</div>
+                <div style="margin-top: 15px; border-top: 1px solid #fecaca; padding-top: 10px;">
+                    <div style="font-size: 0.9em; font-weight: 700; margin-bottom: 8px;">Bestehende Termine:</div>
                     <div id="admin-events-list"></div>
                 </div>
             </div>
@@ -438,34 +438,34 @@
                 <div id="admin-tally-history-list"></div>
             </div>
 
-            <!-- 5. MITGLIEDER & BEITRÄGE (PASSIVE MITGLIEDER ROT HINTERLEGT) -->
+            <!-- 5. MITGLIEDER & BEITRÄGE -->
             <div class="glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">👥 Mitglieder & Beiträge (€ 30)</div>
-                <h4 style="color: #2563eb; font-size: 0.85em; margin: 8px 0 4px 0;">Aktive Mitglieder</h4>
+                <h4 style="color: #2563eb; font-size: 0.95em; margin: 10px 0 6px 0;">Aktive Mitglieder</h4>
                 <div id="admin-active-members-list"></div>
-                <h4 style="color: #dc2626; font-size: 0.85em; margin: 12px 0 4px 0;">Passive Mitglieder (Hervorgehoben)</h4>
+                <h4 style="color: #dc2626; font-size: 0.95em; margin: 15px 0 6px 0;">Passive Mitglieder (Hervorgehoben)</h4>
                 <div id="admin-passive-members-list"></div>
             </div>
 
-            <!-- 6. SCHLÜSSELLISTE EXAKT WIE IM PDF -->
+            <!-- 6. SCHLÜSSELLISTE -->
             <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;"><span>🔑 Schlüsselliste (Stand 2026)</span> <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick="editKeyList()">✏️ Bearbeiten</button></div>
-                <div id="admin-keys-list" style="font-size: 0.8em;"></div>
+                <div class="card-title" style="color: #dc2626;"><span>🔑 Schlüsselliste (Stand 2026)</span> <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.8em;" onclick="editKeyList()">✏️ Bearbeiten</button></div>
+                <div id="admin-keys-list" style="font-size: 0.9em;"></div>
             </div>
 
-            <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 15px;">Admin-Modus Beenden</button>
+            <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 20px;">Admin-Modus Beenden</button>
         </div>
     </div>
 
     <!-- MODAL FÜR RECHNUNGSANZEIGE -->
     <div id="invoice-modal">
         <div class="invoice-preview-box">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h3 style="color: #b91c1c; font-size: 1em;">Rechnungs-Vorschau</h3>
-                <button class="btn btn-danger" style="padding: 3px 8px; font-size: 0.7em;" onclick="closeInvoiceModal()">Schließen</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="color: #b91c1c; font-size: 1.1em;">Rechnungs-Vorschau</h3>
+                <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8em;" onclick="closeInvoiceModal()">Schließen</button>
             </div>
-            <div id="invoice-modal-content" style="font-size: 0.8em; line-height: 1.3;"></div>
-            <button class="btn btn-green btn-block" style="margin-top: 12px;" onclick="downloadCurrentModalPDF()">📥 PDF Herunterladen</button>
+            <div id="invoice-modal-content" style="font-size: 0.9em; line-height: 1.4;"></div>
+            <button class="btn btn-green btn-block" style="margin-top: 15px;" onclick="downloadCurrentModalPDF()">📥 PDF Herunterladen</button>
         </div>
     </div>
 
@@ -507,7 +507,6 @@
             "Essig Armin", "Carlos Da Ponte"
         ];
 
-        // EXAKTE SCHLÜSSELLISTE NACH PDF (MIT KATEGORIEN)
         let exactPdfKeyList = [
             { header: "Mitglieder (Eingang & Büro)" },
             { name: "Kofler Konrad", dob: "27.02.1960", addr: "Gaschurn 164d", tel: "0664 4331385", role: "Eingang & Büro" },
@@ -544,19 +543,20 @@
         let inventoryData = { hauswuerste: 20, wienerle: 15, bier: 3, limo: 2 };
         window.invoicesMap = {};
 
+        // LAGERBESTANDS-WARNUNG MIT EXAKTEN SCHWELLENWERTEN: 3 Paar, 3 Paar, 4 Kisten, 3 Kisten
         function checkInventoryWarnings() {
             const warningBoxAdmin = document.getElementById('inventory-warning-box');
             const warningBoxNews = document.getElementById('news-inventory-warning-box');
             
             let warnings = [];
-            if (inventoryData.hauswuerste < 3) warnings.push("Hauswürste knapp!");
-            if (inventoryData.wienerle < 3) warnings.push("Wienerle knapp!");
-            if (inventoryData.bier < 2) warnings.push("Bierkisten knapp!");
-            if (inventoryData.limo < 2) warnings.push("Limokisten knapp!");
+            if (inventoryData.hauswuerste < 3) warnings.push("Hauswürste knapp (< 3 Paar)!");
+            if (inventoryData.wienerle < 3) warnings.push("Wienerle knapp (< 3 Paar)!");
+            if (inventoryData.bier < 4) warnings.push("Bier knapp (< 4 Kisten)!");
+            if (inventoryData.limo < 3) warnings.push("Limo knapp (< 3 Kisten)!");
 
             let html = "";
             if (warnings.length > 0) {
-                html = `<div style="background:#fee2e2; color:#991b1b; padding:10px; border-radius:10px; font-size:0.8em; font-weight:700; margin-bottom:12px; border:1px solid #fecaca; text-align:center;">⚠️ LAGERBESTAND-WARNUNG: ${warnings.join(' | ')}</div>`;
+                html = `<div style="background:#fee2e2; color:#991b1b; padding:14px; border-radius:12px; font-size:0.9em; font-weight:800; margin-bottom:15px; border:2px solid #fecaca; text-align:center;">⚠️ LAGERBESTAND-WARNUNG: ${warnings.join(' | ')}</div>`;
             }
 
             if (warningBoxAdmin) warningBoxAdmin.innerHTML = html;
@@ -645,7 +645,7 @@
             if (container) {
                 let html = "";
                 officialActiveMembers.forEach(m => {
-                    html += `<div class="price-item"><div><strong>${m}</strong></div><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div>`;
+                    html += `<div class="price-item"><div><strong>${m}</strong></div><span style="font-size:0.8em; color:var(--text-muted);">Aktiv</span></div>`;
                 });
                 container.innerHTML = html;
             }
@@ -692,9 +692,9 @@
                 const nextWidget = document.getElementById('next-duty-widget');
                 if (nextWidget) {
                     nextWidget.innerHTML = `
-                        <div style="font-size: 1em; color: #15803d; font-weight: 800;">📅 ${nextDienst.dateStr}</div>
-                        <div style="font-size: 1.3em; font-weight: 900; margin: 4px 0; color: #0f172a;">${nextDienst.team}</div>
-                        <div style="font-size: 0.85em; color: var(--text-dark); font-weight: 600;">${nextDienst.names}</div>
+                        <div style="font-size: 1.05em; color: #15803d; font-weight: 800;">📅 ${nextDienst.dateStr}</div>
+                        <div style="font-size: 1.4em; font-weight: 900; margin: 4px 0; color: #0f172a;">${nextDienst.team}</div>
+                        <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600;">${nextDienst.names}</div>
                     `;
                 }
 
@@ -709,10 +709,10 @@
                         html += `
                             <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="font-size: 0.95em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.65em; background:#22c55e; color:#fff; padding:2px 5px; border-radius:4px; margin-left:4px;">NÄCHSTER</span>' : ''}</div>
-                                    <span style="background: ${borderCol}; color: white; padding: 2px 6px; border-radius: 6px; font-weight: 700; font-size: 0.65em;">${d.team}</span>
+                                    <div style="font-size: 1em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.7em; background:#22c55e; color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
+                                    <span style="background: ${borderCol}; color: white; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.7em;">${d.team}</span>
                                 </div>
-                                <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
+                                <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 3px;">${d.names}</div>
                             </div>
                         `;
                     });
@@ -742,17 +742,17 @@
                     const noCount = v.noNames ? v.noNames.length : 0;
                     
                     html += `
-                        <div class="dark-event-item" style="padding: 14px;">
-                            <div style="font-size: 1.1em; font-weight: 900; color: #0f172a; margin-bottom: 4px;">📌 ${ev.title}</div>
-                            <div style="font-size: 0.9em; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || ''}</div>
-                            <div style="font-size: 0.85em; color: var(--text-dark); font-weight: 600; margin-bottom: 8px;">📍 Ort / Details: ${ev.desc || 'Schützenhaus Partenen'}</div>
+                        <div class="dark-event-item" style="padding: 16px;">
+                            <div style="font-size: 1.15em; font-weight: 900; color: #0f172a; margin-bottom: 6px;">📌 ${ev.title}</div>
+                            <div style="font-size: 0.95em; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || ''}</div>
+                            <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600; margin-bottom: 10px;">📍 Ort / Details: ${ev.desc || 'Schützenhaus Partenen'}</div>
                             
-                            <div style="padding-top: 6px; border-top: 1px solid #e2e8f0; display: flex; gap: 6px; align-items: center;">
-                                <button onclick="voteEvent('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👍 Ich komme (${yesCount})</button>
-                                <button onclick="voteEvent('${eventId}', 'no')" style="background: #dc2626; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👎 Komme nicht (${noCount})</button>
+                            <div style="padding-top: 8px; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; align-items: center;">
+                                <button onclick="voteEvent('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.8em; font-weight: 700; cursor: pointer;">👍 Ich komme (${yesCount})</button>
+                                <button onclick="voteEvent('${eventId}', 'no')" style="background: #dc2626; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.8em; font-weight: 700; cursor: pointer;">👎 Komme nicht (${noCount})</button>
                             </div>
 
-                            <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 6px; background: #f8fafc; padding: 6px; border-radius: 6px;">
+                            <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 8px; background: #f8fafc; padding: 8px; border-radius: 6px;">
                                 <strong>Zusagen:</strong> ${v.yesNames && v.yesNames.length > 0 ? v.yesNames.join(', ') : 'Keine'}<br>
                                 <strong>Absagen:</strong> ${v.noNames && v.noNames.length > 0 ? v.noNames.join(', ') : 'Keine'}
                             </div>
@@ -760,17 +760,17 @@
                     `;
 
                     adminHtml += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.8em;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.85em;">
                             <div><strong>${ev.title}</strong> (${ev.date})</div>
-                            <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 2px 5px; font-size: 0.65em;" onclick="editEvent('${eventId}', '${(ev.title||'').replace(/'/g, "\\'")}', '${ev.date}', '${(ev.desc||'').replace(/'/g, "\\'")}')">✏️</button>
-                                <button class="btn btn-danger" style="padding: 2px 5px; font-size: 0.65em;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
+                            <div style="display: flex; gap: 6px;">
+                                <button class="btn btn-admin" style="padding: 4px 8px; font-size: 0.7em;" onclick="editEvent('${eventId}', '${(ev.title||'').replace(/'/g, "\\'")}', '${ev.date}', '${(ev.desc||'').replace(/'/g, "\\'")}')">✏️</button>
+                                <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.7em;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
                             </div>
                         </div>
                     `;
                 });
-                if(container) container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.8em;">Keine Termine eingetragen.</p>';
-                if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted); font-size:0.8em;">Keine Termine im System.</p>';
+                if(container) container.innerHTML = html || '<p style="color:var(--text-muted);">Keine Termine eingetragen.</p>';
+                if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted);">Keine Termine im System.</p>';
             } catch (e) {}
         }
 
@@ -919,17 +919,17 @@
                     const inv = doc.data();
                     window.invoicesMap[doc.id] = inv;
                     html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #e2e8f0; gap: 4px; font-size: 0.8em;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; gap: 6px; font-size: 0.9em;">
                             <div><strong>${inv.invoiceNum}</strong> - ${inv.recipientName} (${inv.total.toFixed(2)} €)</div>
-                            <div style="display: flex; gap: 3px;">
-                                <button class="btn btn-admin" style="padding: 2px 5px; font-size: 0.65em;" onclick="viewInvoiceModal('${doc.id}')">👁️</button>
-                                <button class="btn btn-green" style="padding: 2px 5px; font-size: 0.65em;" onclick="generateInvoicePDF('${doc.id}')">📥</button>
-                                <button class="btn btn-danger" style="padding: 2px 5px; font-size: 0.65em;" onclick="deleteItem('invoices', '${doc.id}')">🗑️</button>
+                            <div style="display: flex; gap: 4px;">
+                                <button class="btn btn-admin" style="padding: 4px 8px; font-size: 0.75em;" onclick="viewInvoiceModal('${doc.id}')">👁️</button>
+                                <button class="btn btn-green" style="padding: 4px 8px; font-size: 0.75em;" onclick="generateInvoicePDF('${doc.id}')">📥</button>
+                                <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteItem('invoices', '${doc.id}')">🗑️</button>
                             </div>
                         </div>
                     `;
                 });
-                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.75em;">Keine Rechnungen.</p>';
+                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.85em;">Keine Rechnungen.</p>';
             } catch (e) {}
         }
 
@@ -938,27 +938,27 @@
             if (!inv) return;
             let itemsHtml = "";
             inv.items.forEach(i => {
-                itemsHtml += `<div style="display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px solid #f1f5f9;"><span>${i.name} (${i.count}x)</span><strong>${i.price.toFixed(2).replace('.', ',')} €</strong></div>`;
+                itemsHtml += `<div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;"><span>${i.name} (${i.count}x)</span><strong>${i.price.toFixed(2).replace('.', ',')} €</strong></div>`;
             });
 
             const content = `
-                <div style="text-align:center; margin-bottom:10px;">
-                    <h2 style="color:#b91c1c; font-size:1.1em;">RECHNUNG</h2>
-                    <p style="font-size:0.7em; color:#64748b;">Kameradschaftsbund und Schützenverein Gaschurn-Partenen<br>Rütler 43b | 6794 Partenen<br>E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509</p>
+                <div style="text-align:center; margin-bottom:12px;">
+                    <h2 style="color:#b91c1c; font-size:1.2em;">RECHNUNG</h2>
+                    <p style="font-size:0.75em; color:#64748b;">Kameradschaftsbund und Schützenverein Gaschurn-Partenen<br>Rütler 43b | 6794 Partenen<br>E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509</p>
                 </div>
-                <div style="margin-bottom:10px; background:#f8fafc; padding:6px; border-radius:6px; font-size:0.75em;">
+                <div style="margin-bottom:12px; background:#f8fafc; padding:8px; border-radius:6px; font-size:0.8em;">
                     <strong>Rechnung an:</strong><br>${inv.recipientName}<br>${inv.recipientAttn ? inv.recipientAttn + '<br>' : ''}${inv.recipientAddress}<br>${inv.recipientZipCity}
                 </div>
-                <div style="margin-bottom:8px; display:flex; justify-content:space-between; font-size:0.75em;">
+                <div style="margin-bottom:10px; display:flex; justify-content:space-between; font-size:0.8em;">
                     <span><strong>Nummer:</strong> ${inv.invoiceNum}</span>
                     <span><strong>Datum:</strong> ${inv.date}</span>
                 </div>
-                <div style="margin-bottom:10px;">
-                    <div style="background:#b91c1c; color:#white; padding:4px 6px; font-weight:bold; font-size:0.75em; display:flex; justify-content:space-between;"><span>Leistung</span><span>Betrag</span></div>
+                <div style="margin-bottom:12px;">
+                    <div style="background:#b91c1c; color:#white; padding:5px 8px; font-weight:bold; font-size:0.8em; display:flex; justify-content:space-between;"><span>Leistung</span><span>Betrag</span></div>
                     ${itemsHtml}
-                    <div style="display:flex; justify-content:space-between; padding:5px 0; font-weight:bold; font-size:0.9em; margin-top:4px; border-top:2px solid #b91c1c;"><span>Gesamtbetrag</span><span style="color:#b91c1c;">${inv.total.toFixed(2).replace('.', ',')} €</span></div>
+                    <div style="display:flex; justify-content:space-between; padding:6px 0; font-weight:bold; font-size:1em; margin-top:5px; border-top:2px solid #b91c1c;"><span>Gesamtbetrag</span><span style="color:#b91c1c;">${inv.total.toFixed(2).replace('.', ',')} €</span></div>
                 </div>
-                <div style="font-size:0.7em; color:#475569; background:#f1f5f9; padding:6px; border-radius:6px;">
+                <div style="font-size:0.75em; color:#475569; background:#f1f5f9; padding:8px; border-radius:6px;">
                     <strong>Zahlungsbedingungen:</strong><br>Bitte überweisen innerhalb von 14 Tagen ohne Abzug:<br><strong>IBAN:</strong> AT86 3746 8000 0451 3511<br><strong>BIC:</strong> RVVGAT2B468<br><strong>Bank:</strong> Raiffeisenbank Bludenz-Montafon<br><strong>Verwendungszweck:</strong> ${inv.invoiceNum}
                 </div>
             `;
@@ -985,27 +985,27 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Logo Einbindung oben rechts
-            const logoBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6e..."; // Placeholder, wird dynamisch als Wappen gesetzt
+            // Offizielles Vereinswappen oben rechts in die PDF-Rechnung eingefügt
             try {
-                // Falls Bild geladen werden kann
-                doc.addImage("logo.png", "PNG", 160, 10, 35, 35);
+                const logoImg = new Image();
+                logoImg.src = "logo.png";
+                doc.addImage(logoImg, "PNG", 155, 10, 40, 40);
             } catch(e) {}
 
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(20);
+            doc.setFontSize(22);
             doc.setTextColor(185, 28, 28);
             doc.text("RECHNUNG", 14, 20);
 
             doc.setFont("helvetica", "normal");
-            doc.setFontSize(8);
+            doc.setFontSize(8.5);
             doc.setTextColor(80, 80, 80);
             doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen", 14, 26);
             doc.text("Rütler 43b | 6794 Partenen", 14, 31);
             doc.text("E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509", 14, 36);
 
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(9);
+            doc.setFontSize(9.5);
             doc.setTextColor(0, 0, 0);
             doc.text("Rechnung an:", 14, 48);
 
@@ -1016,8 +1016,8 @@
             doc.text(invoiceData.recipientZipCity || "", 14, 69);
 
             doc.setFont("helvetica", "bold");
-            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 110, 54);
-            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 110, 59);
+            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 105, 54);
+            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 105, 59);
 
             const tableBody = invoiceData.items.map(item => [
                 `${item.name} (${item.count}x)`, 
@@ -1038,24 +1038,24 @@
 
             let finalY = doc.lastAutoTable.finalY + 10;
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(9);
+            doc.setFontSize(9.5);
             doc.text("Zahlungsbedingungen", 14, finalY);
 
             doc.setFont("helvetica", "normal");
-            doc.setFontSize(8);
+            doc.setFontSize(8.5);
             doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${invoiceData.total.toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:`, 14, finalY + 5);
             
-            doc.setFont("helvetica", "bold"); doc.text("IBAN:", 14, finalY + 11);
-            doc.setFont("helvetica", "normal"); doc.text("AT86 3746 8000 0451 3511", 30, finalY + 11);
+            doc.setFont("helvetica", "bold"); doc.text("IBAN:", 14, finalY + 12);
+            doc.setFont("helvetica", "normal"); doc.text("AT86 3746 8000 0451 3511", 30, finalY + 12);
 
-            doc.setFont("helvetica", "bold"); doc.text("BIC:", 14, finalY + 16);
-            doc.setFont("helvetica", "normal"); doc.text("RVVGAT2B468", 30, finalY + 16);
+            doc.setFont("helvetica", "bold"); doc.text("BIC:", 14, finalY + 17);
+            doc.setFont("helvetica", "normal"); doc.text("RVVGAT2B468", 30, finalY + 17);
 
-            doc.setFont("helvetica", "bold"); doc.text("Bank:", 14, finalY + 21);
-            doc.setFont("helvetica", "normal"); doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 21);
+            doc.setFont("helvetica", "bold"); doc.text("Bank:", 14, finalY + 22);
+            doc.setFont("helvetica", "normal"); doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 22);
 
-            doc.setFont("helvetica", "bold"); doc.text("Verwendungszweck:", 14, finalY + 26);
-            doc.setFont("helvetica", "normal"); doc.text(`${invoiceData.invoiceNum} / ${invoiceData.recipientName}`, 44, finalY + 26);
+            doc.setFont("helvetica", "bold"); doc.text("Verwendungszweck:", 14, finalY + 27);
+            doc.setFont("helvetica", "normal"); doc.text(`${invoiceData.invoiceNum} / ${invoiceData.recipientName}`, 46, finalY + 27);
 
             doc.save(`${invoiceData.invoiceNum}.pdf`);
         }
@@ -1079,10 +1079,10 @@
             let actHtml = "";
             officialActiveMembers.forEach((m) => {
                 actHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 4px;">
+                    <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
                         <span><strong>${m}</strong></span>
-                        <div style="display: flex; gap: 4px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 90px; padding: 3px; font-size: 0.7em;" placeholder="Datum">
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <input type="text" class="form-control" style="width: 100px; padding: 6px; font-size: 0.8em;" placeholder="Datum">
                             <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
                         </div>
                     </div>`;
@@ -1093,10 +1093,10 @@
             let passHtml = "";
             officialPassiveMembers.forEach((m) => {
                 passHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 4px; background: #fee2e2; padding: 6px; border-radius: 6px; margin-bottom: 4px; border: 1px solid #fecaca;">
-                        <span><strong style="color: #991b1b;">${m}</strong></span>
-                        <div style="display: flex; gap: 4px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 90px; padding: 3px; font-size: 0.7em; background: #fff;" placeholder="Datum">
+                    <div class="price-item" style="flex-wrap: wrap; gap: 6px; background: #fee2e2; padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; border: 1.5px solid #fecaca;">
+                        <span><strong style="color: #991b1b; font-size: 1.05em;">${m}</strong></span>
+                        <div style="display: flex; gap: 6px; align-items: center;">
+                            <input type="text" class="form-control" style="width: 100px; padding: 6px; font-size: 0.8em; background: #fff;" placeholder="Datum">
                             <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
                         </div>
                     </div>`;
@@ -1110,15 +1110,15 @@
             let html = "";
             exactPdfKeyList.forEach(item => {
                 if (item.header) {
-                    html += `<div style="background: var(--primary-red); color: white; padding: 5px 8px; font-weight: 800; font-size: 0.75em; border-radius: 6px; margin: 10px 0 4px 0; text-transform: uppercase;">${item.header}</div>`;
+                    html += `<div style="background: var(--primary-red); color: white; padding: 6px 10px; font-weight: 800; font-size: 0.8em; border-radius: 6px; margin: 12px 0 6px 0; text-transform: uppercase;">${item.header}</div>`;
                 } else {
                     html += `
-                        <div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="padding: 8px 0; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
                             <div>
-                                <strong>${item.name}</strong><br>
-                                <span style="color:var(--text-muted); font-size:0.75em;">geb. ${item.dob} | ${item.addr} | ${item.tel || 'Kein Tel'}</span>
+                                <strong style="font-size: 1.05em;">${item.name}</strong><br>
+                                <span style="color:var(--text-muted); font-size:0.8em;">geb. ${item.dob} | ${item.addr} | ${item.tel || 'Kein Tel'}</span>
                             </div>
-                            <span style="background: #e2e8f0; color: #1e293b; padding: 2px 6px; border-radius: 4px; font-size: 0.7em; font-weight: 700;">${item.role}</span>
+                            <span style="background: #e2e8f0; color: #1e293b; padding: 4px 8px; border-radius: 6px; font-size: 0.75em; font-weight: 700;">${item.role}</span>
                         </div>
                     `;
                 }
@@ -1166,10 +1166,10 @@
                     const n = doc.data();
                     html += `
                         <div class="glass-card">
-                            ${n.imageUrl ? `<img src="${n.imageUrl}" style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 8px;">` : ''}
+                            ${n.imageUrl ? `<img src="${n.imageUrl}" style="width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; margin-bottom: 10px;">` : ''}
                             <div class="card-title">${n.title}</div>
-                            <p style="font-size: 0.85em; color: var(--text-muted); white-space: pre-line; margin-bottom: 8px;">${n.text}</p>
-                            <button class="btn btn-danger admin-only-delete" style="padding: 4px 8px; font-size: 0.7em;" onclick="deleteItem('news', '${doc.id}')">🗑️ Löschen</button>
+                            <p style="font-size: 0.95em; color: var(--text-muted); white-space: pre-line; margin-bottom: 10px;">${n.text}</p>
+                            <button class="btn btn-danger admin-only-delete" style="padding: 6px 12px; font-size: 0.8em;" onclick="deleteItem('news', '${doc.id}')">🗑️ Löschen</button>
                         </div>
                     `;
                 });
