@@ -199,7 +199,7 @@
             width: calc(100% - 24px) !important;
             max-width: 576px !important; 
             margin: 0 auto !important;
-            background: rgba(255, 255, 255, 0.9) !important;
+            background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
             border-radius: 20px !important;
@@ -208,7 +208,7 @@
             justify-content: space-around !important;
             align-items: center !important;
             padding: 8px 4px !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
             z-index: 99999 !important;
         }
         .nav-item {
@@ -238,7 +238,6 @@
         .badge-paid { background: #d1fae5; color: #065f46; padding: 4px 10px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #a7f3d0; cursor: pointer; }
         .badge-open { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #fecaca; cursor: pointer; }
 
-        /* MODAL FÜR RECHNUNGS-ANSICHT */
         #invoice-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 999999; justify-content: center; align-items: center; padding: 15px;
@@ -278,7 +277,7 @@
         </div>
     </div>
 
-    <!-- 2. TERMINE (MIT ORT, DATUM & ABSTIMMUNG) -->
+    <!-- 2. TERMINE -->
     <div id="page-events" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">📅 Nächste Vereinstermine & Abstimmung</div>
@@ -377,7 +376,7 @@
         </div>
     </div>
 
-    <!-- 7, 10. ADMIN-BEREICH (LAGERBESTAND OBEN MIT TIMESTAMP & WARNUNG) -->
+    <!-- 7, 10. ADMIN-BEREICH -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
             <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
@@ -389,7 +388,7 @@
 
         <div class="admin-delete-btn">
             
-            <!-- 1. LAGERBESTAND (OBEN, BEARBEITBAR, TIMESTAMP & WARNUNG) -->
+            <!-- 1. LAGERBESTAND (OBEN MIT TIMESTAMP & WARNUNG) -->
             <div class="glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
                     <span>📦 Lagerbestand</span>
@@ -446,7 +445,7 @@
                 <div id="admin-passive-members-list"></div>
             </div>
 
-            <!-- 6. SCHLÜSSELLISTE (MITTIG ZENTRIERT & BEARBEITBAR) -->
+            <!-- 6. SCHLÜSSELLISTE -->
             <div class="glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;"><span>🔑 Schlüsselliste (Stand 2026)</span> <button class="btn btn-admin" style="padding: 2px 8px; font-size: 0.75em;" onclick="editKeyList()">✏️ Bearbeiten</button></div>[cite: 17]
                 <div id="admin-keys-list" style="text-align: center;"></div>
@@ -456,7 +455,7 @@
         </div>
     </div>
 
-    <!-- MODAL FÜR RECHNUNGSANZEIGE EXAKT WIE VORLAGE -->
+    <!-- MODAL FÜR RECHNUNGSANZEIGE -->
     <div id="invoice-modal">
         <div class="invoice-preview-box">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
@@ -522,6 +521,7 @@
         ];
 
         let inventoryData = { hauswuerste: 20, wienerle: 15, bier: 3, limo: 2 };
+        window.invoicesMap = {};
 
         function checkInventoryWarnings() {
             const warningBox = document.getElementById('inventory-warning-box');
@@ -724,7 +724,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
                             <div><strong>${ev.title}</strong> (${ev.date} - ${ev.desc})</div>
                             <div style="display: flex; gap: 6px;">
-                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick="editEvent('${eventId}', '${ev.title}', '${ev.date}', '${ev.desc}')">✏️</button>
+                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick="editEvent('${eventId}', '${ev.title.replace(/'/g, "\\'")}', '${ev.date}', '${(ev.desc||'').replace(/'/g, "\\'")}')">✏️</button>
                                 <button class="btn btn-danger" style="padding: 2px 6px; font-size: 0.7em;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
                             </div>
                         </div>
@@ -848,7 +848,6 @@
                 }
             }
 
-            // Rechnungsnummer automatisch ans aktuelle Datum angepasst (z.B. RE-2026-1025-01)
             const todayStr = new Date().toISOString().slice(0,10).replace(/-/g,'');
             const invoiceObj = {
                 invoiceNum: "RE-" + new Date().getFullYear() + "-" + todayStr.slice(4) + "-" + Math.floor(10 + Math.random() * 90),
@@ -876,14 +875,16 @@
             try {
                 const snapshot = await db.collection("invoices").orderBy("createdAt", "desc").get();
                 let html = "";
+                window.invoicesMap = {};
                 snapshot.forEach(doc => {
                     const inv = doc.data();
+                    window.invoicesMap[doc.id] = inv;
                     html += `
                         <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; gap: 6px;">
                             <div style="font-size: 0.85em;"><strong>${inv.invoiceNum}</strong> - ${inv.recipientName} (${inv.total.toFixed(2)} €)</div>
                             <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick='viewInvoiceModal(${JSON.stringify(inv)})'>👁️ Ansehen</button>
-                                <button class="btn btn-green" style="padding: 2px 6px; font-size: 0.7em;" onclick='generateInvoicePDF(${JSON.stringify(inv)})'>📥 Download</button>
+                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick="viewInvoiceModal('${doc.id}')">👁️ Ansehen</button>
+                                <button class="btn btn-green" style="padding: 2px 6px; font-size: 0.7em;" onclick="generateInvoicePDF('${doc.id}')">📥 Download</button>
                                 <button class="btn btn-danger" style="padding: 2px 6px; font-size: 0.7em;" onclick="deleteItem('invoices', '${doc.id}')">🗑️</button>
                             </div>
                         </div>
@@ -893,7 +894,9 @@
             } catch (e) { console.error(e); }
         }
 
-        function viewInvoiceModal(inv) {
+        function viewInvoiceModal(docId) {
+            const inv = window.invoicesMap[docId];
+            if (!inv) return;
             let itemsHtml = "";
             inv.items.forEach(i => {
                 itemsHtml += `<div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;"><span>${i.name} (${i.count}x)</span><strong>${i.price.toFixed(2).replace('.', ',')} €</strong></div>`;
@@ -931,7 +934,7 @@
             `;
             document.getElementById('invoice-modal-content').innerHTML = content;
             document.getElementById('invoice-modal').style.display = 'flex';
-            window.currentPreviewInv = inv;
+            window.currentModalDocId = docId;
         }
 
         function closeInvoiceModal() {
@@ -939,12 +942,15 @@
         }
 
         function downloadCurrentModalPDF() {
-            if (window.currentPreviewInv) {
-                generateInvoicePDF(window.currentPreviewInv);
+            if (window.currentModalDocId) {
+                generateInvoicePDF(window.currentModalDocId);
             }
         }
 
-        function generateInvoicePDF(invoiceData) {
+        function generateInvoicePDF(docId) {
+            const invoiceData = window.invoicesMap[docId];
+            if (!invoiceData) return;
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
