@@ -3,1173 +3,718 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vereins-App - KB & SV Gaschurn-Partenen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Bibliotheken für den PDF-Export (jsPDF) -->
+    <title>KB-Schützenverein Gaschurn-Partenen</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- jsPDF for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-
-    <meta name="apple-mobile-web-app-title" content="KB & SV App">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="logo.png">
-    <link rel="icon" type="image/png" href="logo.png">
-
-    <!-- Firebase SDKs (v8.10.1) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
-
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyDchsz_qOTMpvT48cKBYLqUmX30Lw39iGA",
-        authDomain: "kb-sv-vereinsapp.firebaseapp.com",
-        projectId: "kb-sv-vereinsapp",
-        storageBucket: "kb-sv-vereinsapp.appspot.com",
-        messagingSenderId: "1015802588615",
-        appId: "1:1015802588615:web:bcecb74526a2096d2ebde2"
-      };
-      try {
-          firebase.initializeApp(firebaseConfig);
-      } catch(e) { console.error("Firebase Init:", e); }
-      
-      const db = firebase.firestore();
-      const messaging = firebase.messaging();
-    </script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
-        :root {
-            --primary-red: #b91c1c; 
-            --primary-dark: #7f1d1d;
-            --bg-light: #f1f5f9; 
-            --card-glass: rgba(255, 255, 255, 0.9);
-            --text-dark: #1e293b; 
-            --text-muted: #64748b; 
-            --accent-green: #10b981; 
-            --accent-green-bright: #22c55e;
-            --danger: #dc2626;
-            --admin-blue: #2563eb;
-        }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--text-dark);
-            background: linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%);
-            background-attachment: fixed;
-            padding-bottom: 160px !important;
-            max-width: 600px;
-            margin: 0 auto;
-            min-height: 100vh;
-        }
-
-        .app-header {
-            background: linear-gradient(135deg, #7f1d1d, #b91c1c);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-bottom-left-radius: 24px;
-            border-bottom-right-radius: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .app-header h1 { font-size: 1.2em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
-        .app-header p { font-size: 0.8em; opacity: 0.95; margin-top: 4px; color: #fca5a5; font-weight: 700; }
-
-        .page-content { padding: 15px; display: none; }
-        .page-content.active { display: block; }
-
-        .glass-card {
-            background: var(--card-glass);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 15px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            color: var(--text-dark);
-        }
-
-        .glass-card-blue { border-left: 5px solid #2563eb !important; }
-        .glass-card-yellow { border-left: 5px solid #eab308 !important; }
-        .glass-card-red { border-left: 5px solid #dc2626 !important; }
-        
-        .card-title {
-            font-size: 1.1em;
-            font-weight: 700;
-            color: var(--primary-red);
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        @keyframes greenNeonPulse {
-            0% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.4); border-color: rgba(34, 197, 94, 0.6); }
-            50% { box-shadow: 0 0 25px rgba(34, 197, 94, 0.9); border-color: rgba(34, 197, 94, 1); }
-            100% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.4); border-color: rgba(34, 197, 94, 0.6); }
-        }
-        .next-duty-neon {
-            background: #ffffff !important;
-            border: 2.5px solid #22c55e !important;
-            animation: greenNeonPulse 1.5s infinite ease-in-out;
-        }
-
-        .dark-event-item {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 10px;
-            border-left: 5px solid #b91c1c;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            border: 1px solid #e2e8f0;
-        }
-
-        .btn {
-            padding: 10px 16px;
-            border-radius: 12px;
-            border: none;
+        .passive-member-row {
+            background-color: #fee2e2 !important;
+            color: #991b1b !important;
             font-weight: 600;
-            font-size: 0.85em;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            text-decoration: none;
-            transition: all 0.2s;
         }
-        .btn-primary { background: var(--primary-red); color: white; box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3); }
-        .btn-green { background: #16a34a; color: white; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3); }
-        .btn-danger { background: #fee2e2; color: var(--danger); border: 1px solid #fecaca; }
-        .btn-admin { background: var(--admin-blue); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
-        .btn-block { width: 100%; margin-top: 8px; }
-
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 0.85em; font-weight: 600; margin-bottom: 5px; color: var(--text-muted); }
-        .form-control {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid #cbd5e1;
-            font-family: inherit;
-            font-size: 0.95em;
-            background: #ffffff;
-            color: var(--text-dark);
-        }
-        .form-control:focus { outline: none; border-color: var(--admin-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
-
-        .price-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 0.9em;
-        }
-        .counter-controls { display: flex; align-items: center; gap: 10px; }
-        .counter-btn {
-            background: #f1f5f9;
-            color: var(--primary-red);
-            border: 1px solid #cbd5e1;
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            font-size: 1.1em;
+        .passive-badge {
+            background-color: #ef4444;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
             font-weight: bold;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        .strich-category-header {
-            background: var(--primary-red);
-            color: #ffffff;
-            padding: 7px 12px;
-            border-radius: 8px;
-            font-size: 0.85em;
-            font-weight: 800;
-            margin: 14px 0 6px 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .bottom-nav {
-            position: fixed !important; 
-            bottom: 12px !important; 
-            left: 12px !important; 
-            right: 12px !important;
-            width: calc(100% - 24px) !important;
-            max-width: 576px !important; 
-            margin: 0 auto !important;
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border-radius: 20px !important;
-            border: 1px solid rgba(203, 213, 225, 0.8) !important;
-            display: flex !important; 
-            justify-content: space-around !important;
-            align-items: center !important;
-            padding: 8px 4px !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
-            z-index: 99999 !important;
-        }
-        .nav-item {
-            display: flex !important; 
-            flex-direction: column !important; 
-            align-items: center !important;
-            text-decoration: none !important; 
-            color: #64748b !important; 
-            font-size: 0.7em !important; 
-            font-weight: 700 !important; 
-            cursor: pointer !important;
-            flex: 1 !important;
-            text-align: center !important;
-            padding: 6px 2px !important;
-            border-radius: 14px !important;
-        }
-        .nav-item.active { 
-            color: #ffffff !important;
-            background: var(--primary-red) !important;
-            box-shadow: 0 4px 15px rgba(185, 28, 28, 0.4) !important;
-        }
-        .nav-icon { font-size: 1.35em !important; margin-bottom: 2px !important; display: block !important; }
-
-        .admin-delete-btn { display: none; }
-        body.admin-mode .admin-delete-btn { display: block !important; }
-
-        .badge-paid { background: #d1fae5; color: #065f46; padding: 4px 10px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #a7f3d0; cursor: pointer; }
-        .badge-open { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #fecaca; cursor: pointer; }
-
-        #invoice-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 999999; justify-content: center; align-items: center; padding: 15px;
-        }
-        .invoice-preview-box {
-            background: #ffffff; width: 100%; max-width: 500px; border-radius: 12px; padding: 20px;
-            max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <div class="app-header">
-        <h1>Kameradschaftsbund & Schützenverein</h1>
-        <p>Gaschurn-Partenen</p>
-    </div>
-
-    <!-- 1. NEWS & DIENSTPLAN -->
-    <div id="page-news" class="page-content active">
-        <div id="news-container"></div>
-
-        <div class="glass-card next-duty-neon">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 0.75em; background: #22c55e; color: #fff; font-weight: 800; padding: 2px 8px; border-radius: 6px; text-transform: uppercase;">Nächster Dienst</span>
-                <span style="font-size: 0.75em; color: #15803d; font-weight: 600;">Live-Aktualisierung aktiv</span>
-            </div>
-            <div id="next-duty-widget"></div>
-        </div>
-
-        <div class="glass-card glass-card-blue">
-            <div class="card-title">
-                <span>📋 Gesamter Dienstplan</span>
-                <span style="font-size: 0.7em; background: var(--primary-red); color: white; padding: 3px 8px; border-radius: 6px;">2026/2027</span>
-            </div>
-            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 12px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
-            <div id="full-roster-list"></div>
-        </div>
-    </div>
-
-    <!-- 2. TERMINE -->
-    <div id="page-events" class="page-content">
-        <div class="glass-card glass-card-blue">
-            <div class="card-title" style="color: #2563eb;">📅 Nächste Vereinstermine & Abstimmung</div>
-            <div id="events-container"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Termine...</p></div>
-        </div>
-    </div>
-
-    <!-- 3. SCHIESSBUCH -->
-    <div id="page-shooting" class="page-content">
-        <div class="glass-card glass-card-blue">
-            <div class="card-title" style="color: #2563eb;">🎯 Schießbuch (Luftgewehr)</div>
-            
-            <form onsubmit="saveShot(event)">
-                <div class="form-group">
-                    <label>Mitglied suchen / auswählen</label>
-                    <input type="text" id="shot-search-input" class="form-control" placeholder="🔍 Namen eintippen zum Suchen..." oninput="filterMemberDropdown(this.value)">
-                    <select class="form-control" id="shot-member-select" size="4" style="margin-top: 6px;" onchange="selectShooterFromDropdown(this.value)">
-                        <!-- Dynamisch -->
-                    </select>
-                </div>
-                <div class="form-group"><label>Gewählter Schütze</label><input type="text" class="form-control" id="shot-name" required readonly placeholder="Bitte oben auswählen"></div>
-                <div class="form-group"><label>Waffe / Disziplin</label><input type="text" class="form-control" value="Luftgewehr" readonly style="background:#f8fafc; font-weight:600;"></div>
-                <div style="display: flex; gap: 10px;">
-                    <div class="form-group" style="flex: 1;"><label>Erreichte Ringe</label><input type="number" step="0.1" class="form-control" id="shot-rings" required placeholder="z.B. 298.5"></div>
-                    <div class="form-group" style="flex: 1;"><label>Teiler (optional)</label><input type="number" step="0.1" class="form-control" id="shot-teiler" placeholder="z.B. 12.4"></div>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Ergebnis im Admin-Bereich speichern</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- 4. STRICHLISTE -->
-    <div id="page-drinks" class="page-content">
-        <div class="glass-card glass-card-blue">
-            <div class="card-title" style="color: #2563eb;">🍻 Strichliste & Preisliste</div>
-            
-            <div class="strich-category-header">Speisen</div>
-            <div class="price-item"><span>🌭 Paar Hauswürste mit Brot (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
-            <div class="price-item"><span>🌭 Paar Wienerle mit Brot (€ 7,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
-
-            <div class="strich-category-header">Getränke & Bier</div>
-            <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
-            <div class="price-item"><span>🍺 Radler Süß / Sauer 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
-            <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
-            <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein rot/weiß 1/4 lt. (€ 4,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein rot/weiß 1/8 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein gespritzt 1/4 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
-            <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
-
-            <div class="strich-category-header">Heissgetränke & Sonstiges</div>
-            <div class="price-item"><span>☕ Kaffee Tasse (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
-            <div class="price-item"><span>🍵 Tee Tasse (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
-
-            <div class="strich-category-header">Luftgewehrschießen</div>
-            <div class="price-item" style="background: #fef2f2; padding: 8px; border-radius: 6px;">
-                <span>🎯 Luftgewehrschießen (€ 8,00 / P.)</span>
-                <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 25px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
-            </div>
-
-            <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #e2e8f0; display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1em;">
-                <span>Gesamtbetrag:</span>
-                <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
-            </div>
-
-            <div style="margin-top: 15px; background: #f8fafc; padding: 12px; border-radius: 10px; border: 1px solid #cbd5e1;">
-                <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger Angaben:</h4>
-                <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
-                <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
-                <div class="form-group"><label>Straße & Hausnummer</label><input type="text" class="form-control" id="cust-address" placeholder="z. B. St. Jakob 151"></div>
-                <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="z. B. 6580 St. Anton am Arlberg"></div>
-            </div>
-
-            <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 12px;">💾 Abrechnung im Admin-Bereich speichern</button>
-            <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 8px;">Zurücksetzen</button>
-        </div>
-    </div>
-
-    <!-- 6. MITGLIEDER -->
-    <div id="page-guide" class="page-content">
-        <div class="glass-card glass-card-yellow">
-            <div class="card-title" style="color: #ca8a04;">⭐ Vorstand & Funktionsträger ⭐</div>
-            <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a></div>
-                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a></div>
-                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span></div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a></div>
-                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span></div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a></div>
-                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span></div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a></div>
-                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span></div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a></div>
-            </div>
-        </div>
-
-        <div class="glass-card glass-card-yellow">
-            <div class="card-title" style="color: #ca8a04;">👥 Alle Aktiven Mitglieder</div>
-            <div id="public-members-list" style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;"></div>
-        </div>
-    </div>
-
-    <!-- 7, 10. ADMIN-BEREICH -->
-    <div id="page-card" class="page-content">
-        <div class="glass-card glass-card-red" id="admin-login-card">
-            <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
-            <form onsubmit="handleAdminLogin(event)">
-                <div class="form-group"><label>Admin-Passwort</label><input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required></div>
-                <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
-            </form>
-        </div>
-
-        <div class="admin-delete-btn">
-            
-            <!-- 1. LAGERBESTAND -->
-            <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">
-                    <span>📦 Lagerbestand</span>
-                    <button class="btn btn-admin" style="padding: 2px 8px; font-size: 0.75em;" onclick="editInventory()">✏️ Bearbeiten</button>
-                </div>
-                <div id="inventory-timestamp" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 8px;">Noch nicht geändert</div>
-                <div id="inventory-warning-box"></div>
-                <div id="admin-inventory-display">
-                    <div class="price-item"><span>Hauswürste (Paar)</span><strong id="inv-hauswuerste">20 Paar</strong></div>
-                    <div class="price-item"><span>Wienerle (Paar)</span><strong id="inv-wienerle">15 Paar</strong></div>
-                    <div class="price-item"><span>Bier Kisten 0,33l</span><strong id="inv-bier">3 Kisten</strong></div>
-                    <div class="price-item"><span>Limo Kisten 0,3l</span><strong id="inv-limo">2 Kisten</strong></div>
+    <!-- Header Navigation -->
+    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-20">
+            <div class="flex items-center space-x-3">
+                <!-- SVG Logo replica of Kameradschaftsbund emblem -->
+                <svg class="w-12 h-12 rounded-full border-2 border-amber-500 bg-black p-1 shrink-0" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="46" fill="#111" stroke="#fff" stroke-width="2"/>
+                    <path d="M 30 35 L 70 35 L 60 65 L 40 65 Z" fill="#fff" stroke="#aaa"/>
+                    <circle cx="65" cy="65" r="14" fill="#none" stroke="#fff" stroke-width="3"/>
+                    <circle cx="65" cy="65" r="7" fill="#fff"/>
+                    <text x="50" y="22" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold">KAMERADSCHAFTSBUND</text>
+                    <text x="50" y="85" text-anchor="middle" fill="#fff" font-size="8" font-weight="bold">SCHÜTZENVEREIN</text>
+                </svg>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight">KB-Schützenverein</h1>
+                    <p class="text-xs text-amber-400 font-medium">Gaschurn-Partenen • Gegr. 1926</p>
                 </div>
             </div>
 
-            <!-- 2. NEWS, FOTO & TEXT -->
-            <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">📢 News, Foto & Text Veröffentlichen</div>
-                <form onsubmit="addNewsItem(event)">
-                    <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
-                    <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
-                    <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
-                    <button type="submit" class="btn btn-admin btn-block">Veröffentlichen</button>
-                </form>
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex space-x-1">
+                <button onclick="switchTab('news')" id="tab-news" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 transition flex items-center gap-2 text-amber-400">
+                    <i data-lucide="newspaper" class="w-4 h-4"></i> News & Infos
+                </button>
+                <button onclick="switchTab('keys')" id="tab-keys" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 transition flex items-center gap-2">
+                    <i data-lucide="key" class="w-4 h-4"></i> Schlüsselliste
+                </button>
+                <button onclick="switchTab('kassa')" id="tab-kassa" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 transition flex items-center gap-2">
+                    <i data-lucide="shopping-cart" class="w-4 h-4"></i> Kassa & Theke
+                </button>
+                <button onclick="switchTab('admin')" id="tab-admin" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 transition flex items-center gap-2">
+                    <i data-lucide="shield-alert" class="w-4 h-4"></i> Admin & Lager
+                </button>
+            </nav>
+
+            <div class="md:hidden">
+                <button onclick="toggleMobileMenu()" class="text-slate-300 hover:text-white p-2">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 px-4 pt-2 pb-4 space-y-1 border-t border-slate-700">
+            <button onclick="switchTab('news')" class="w-full text-left px-3 py-2 text-white rounded hover:bg-slate-700 flex items-center gap-2">
+                <i data-lucide="newspaper" class="w-4 h-4"></i> News & Infos
+            </button>
+            <button onclick="switchTab('keys')" class="w-full text-left px-3 py-2 text-white rounded hover:bg-slate-700 flex items-center gap-2">
+                <i data-lucide="key" class="w-4 h-4"></i> Schlüsselliste 2026
+            </button>
+            <button onclick="switchTab('kassa')" class="w-full text-left px-3 py-2 text-white rounded hover:bg-slate-700 flex items-center gap-2">
+                <i data-lucide="shopping-cart" class="w-4 h-4"></i> Kassa & Theke
+            </button>
+            <button onclick="switchTab('admin')" class="w-full text-left px-3 py-2 text-white rounded hover:bg-slate-700 flex items-center gap-2">
+                <i data-lucide="shield-alert" class="w-4 h-4"></i> Admin & Lager
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- Low Stock Alert Banner (Global Header Alert) -->
+        <div id="global-stock-alert" class="hidden mb-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r shadow-sm">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <i data-lucide="alert-triangle" class="h-5 w-5 text-amber-600"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-amber-800 font-medium" id="global-stock-alert-text">
+                        Achtung: Einige Artikel im Vereinshaus haben einen niedrigen Lagerbestand!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 1: NEWS & INFOS -->
+        <section id="view-news" class="tab-content space-y-6">
+            <!-- News Section Header -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                    <i data-lucide="newspaper" class="text-amber-600"></i> Neuigkeiten & Vereinsmitteilungen
+                </h2>
+                <p class="text-slate-600">Aktuelle Informationen des KB-Schützenvereins Gaschurn-Partenen.</p>
             </div>
 
-            <!-- 3. TERMINE ERSTELLEN & VERWALTEN -->
-            <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">➕ Termin Erstellen / Bearbeiten</div>
-                <form onsubmit="addEvent(event)">
-                    <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="z.B. Generalversammlung"></div>
-                    <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="z.B. 15.12.2026"></div>
-                    <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="z.B. Schützenhaus Partenen"></div>
-                    <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
-                </form>
-                <div style="margin-top: 15px; border-top: 1px solid #fecaca; padding-top: 10px;">
-                    <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Bestehende Termine:</div>
-                    <div id="admin-events-list"></div>
+            <!-- Stock Warnings Section in News -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <i data-lucide="package-search" class="text-red-500"></i> Lagerbestand-Status & Nachbestellungen
+                </h3>
+                <div id="news-stock-warnings" class="space-y-3">
+                    <!-- Dynamic stock warning cards inserted here -->
                 </div>
             </div>
 
-            <!-- 4. GESPEICHERTE RECHNUNGEN -->
-            <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">💶 Gespeicherte Rechnungen (PDF)</div>
-                <div id="admin-tally-history-list"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <span class="text-xs font-semibold px-2.5 py-0.5 rounded bg-amber-100 text-amber-800">Termin</span>
+                    <h4 class="text-lg font-bold mt-2 text-slate-800">Vereinsmeisterschaft 2026</h4>
+                    <p class="text-slate-600 text-sm mt-1">Die Anmeldung für die diesjährige Vereinsmeisterschaft ist ab sofort an der Theke oder beim Sportleiter möglich.</p>
+                    <div class="mt-4 text-xs text-slate-400 flex items-center gap-1">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5"></i> 12. Oktober 2026
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <span class="text-xs font-semibold px-2.5 py-0.5 rounded bg-blue-100 text-blue-800">Information</span>
+                    <h4 class="text-lg font-bold mt-2 text-slate-800">Schlüsselliste 2026 aktualisiert</h4>
+                    <p class="text-slate-600 text-sm mt-1">Die offizielle Schlüsselliste 2026 steht nun im Reiter "Schlüsselliste" zur Einsicht bereit. Passive Mitglieder sind rot hervorgehoben.</p>
+                    <div class="mt-4 text-xs text-slate-400 flex items-center gap-1">
+                        <i data-lucide="calendar" class="w-3.5 h-3.5"></i> 01. September 2026
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: SCHLÜSSELLISTE 2026 -->
+        <section id="view-keys" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                        <i data-lucide="key" class="text-amber-600"></i> Schlüsselliste & Mitgliederübersicht - 2026
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">KB-Schützenverein Gaschurn-Partenen • Offizielle Berechtigungsliste</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 border border-red-300">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-600"></span> Passive Mitglieder rot hinterlegt
+                    </span>
+                </div>
             </div>
 
-            <!-- 5. MITGLIEDER & BEITRÄGE -->
-            <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">👥 Mitglieder & Beiträge (€ 30)</div>
-                <h4 style="color: #2563eb; font-size: 0.9em; margin: 10px 0 5px 0;">Aktive Mitglieder</h4>
-                <div id="admin-active-members-list"></div>
-                <h4 style="color: #ca8a04; font-size: 0.9em; margin: 15px 0 5px 0;">Passive Mitglieder</h4>
-                <div id="admin-passive-members-list"></div>
+            <!-- Category 1: Mitglieder (Eingang & Büro) -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-slate-800 px-6 py-3 text-white font-bold flex justify-between items-center">
+                    <span>Mitglieder (Eingang & Büro)</span>
+                    <span class="text-xs font-normal bg-slate-700 px-2.5 py-1 rounded">13 Personen</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                                <th class="p-3.5">NAME</th>
+                                <th class="p-3.5">GEBURTSDATUM</th>
+                                <th class="p-3.5">ADRESSE</th>
+                                <th class="p-3.5">TELEFON</th>
+                                <th class="p-3.5">BERECHTIGUNG</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200" id="table-mitglieder">
+                            <!-- JS Populated -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- 6. SCHLÜSSELLISTE -->
-            <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;"><span>🔑 Schlüsselliste (Stand 2026)</span> <button class="btn btn-admin" style="padding: 2px 8px; font-size: 0.75em;" onclick="editKeyList()">✏️ Bearbeiten</button></div>
-                <div id="admin-keys-list" style="text-align: center;"></div>
+            <!-- Category 2: Marketenderinnen Montafonertracht -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-slate-800 px-6 py-3 text-white font-bold flex justify-between items-center">
+                    <span>Marketenderinnen Montafonertracht</span>
+                    <span class="text-xs font-normal bg-slate-700 px-2.5 py-1 rounded">5 Personen</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                                <th class="p-3.5">NAME</th>
+                                <th class="p-3.5">GEBURTSDATUM</th>
+                                <th class="p-3.5">ADRESSE</th>
+                                <th class="p-3.5">TELEFON</th>
+                                <th class="p-3.5">SCHLÜSSEL-STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200" id="table-marketenderinnen">
+                            <!-- JS Populated -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 20px;">Admin-Modus Beenden</button>
+            <!-- Category 3: Ehrenmitglieder -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-slate-800 px-6 py-3 text-white font-bold flex justify-between items-center">
+                    <span>Ehrenmitglieder</span>
+                    <span class="text-xs font-normal bg-slate-700 px-2.5 py-1 rounded">4 Personen</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                                <th class="p-3.5">NAME</th>
+                                <th class="p-3.5">GEBURTSDATUM</th>
+                                <th class="p-3.5">ADRESSE</th>
+                                <th class="p-3.5">TELEFON</th>
+                                <th class="p-3.5">SCHLÜSSEL-STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200" id="table-ehrenmitglieder">
+                            <!-- JS Populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Category 4: Jugendmitglieder -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="bg-slate-800 px-6 py-3 text-white font-bold flex justify-between items-center">
+                    <span>Jugendmitglieder</span>
+                    <span class="text-xs font-normal bg-slate-700 px-2.5 py-1 rounded">1 Person</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                                <th class="p-3.5">NAME</th>
+                                <th class="p-3.5">GEBURTSDATUM</th>
+                                <th class="p-3.5">ADRESSE</th>
+                                <th class="p-3.5">TELEFON</th>
+                                <th class="p-3.5">SCHLÜSSEL-STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200" id="table-jugendmitglieder">
+                            <!-- JS Populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: KASSA & THEKE -->
+        <section id="view-kassa" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Article Selection -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <i data-lucide="shopping-bag" class="text-amber-600"></i> Getränke & Konsumation
+                    </h2>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="kassa-items-grid">
+                        <!-- Dynamic items -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Bill / Cart -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800 pb-3 border-b border-slate-200 flex items-center justify-between">
+                        <span>Aktuelle Konsumation</span>
+                        <button onclick="clearCart()" class="text-xs text-red-600 hover:text-red-800 flex items-center gap-1">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Leeren
+                        </button>
+                    </h3>
+
+                    <!-- Customer selection -->
+                    <div class="mt-4 mb-4">
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Mitglied / Kunde auswählen:</label>
+                        <select id="cart-member-select" class="w-full bg-slate-50 border border-slate-300 text-sm rounded-lg p-2.5 focus:ring-amber-500 focus:border-amber-500">
+                            <!-- Options populated via JS -->
+                        </select>
+                    </div>
+
+                    <!-- Cart items list -->
+                    <div id="cart-items" class="space-y-3 max-h-64 overflow-y-auto pr-1">
+                        <p class="text-slate-400 text-center py-8 text-sm">Noch keine Artikel ausgewählt</p>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-200 pt-4 mt-6">
+                    <div class="flex justify-between items-center text-lg font-bold text-slate-900 mb-4">
+                        <span>Gesamtsumme:</span>
+                        <span id="cart-total" class="text-2xl text-amber-600">€ 0.00</span>
+                    </div>
+                    <button onclick="checkoutAndGeneratePDF()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-xl shadow transition flex items-center justify-center gap-2">
+                        <i data-lucide="file-text" class="w-5 h-5 text-amber-400"></i> Abrechnen & PDF Beleg erstellen
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: ADMIN & LAGER -->
+        <section id="view-admin" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                    <i data-lucide="boxes" class="text-amber-600"></i> Lagerbestand & Inventarverwaltung
+                </h2>
+                <p class="text-slate-600 text-sm mb-6">Verwalten Sie hier Bestände und Mindestmengen. Bei Unterschreitung erfolgt automatisch eine Warnung im News- und Adminbereich.</p>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
+                                <th class="p-3">Artikel</th>
+                                <th class="p-3">Kategorie</th>
+                                <th class="p-3">Preis (€)</th>
+                                <th class="p-3">Aktueller Bestand</th>
+                                <th class="p-3">Mindestbestand</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3 text-right">Aktion</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200" id="admin-stock-table">
+                            <!-- JS Populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p>© 2026 KB-Schützenverein Gaschurn-Partenen • Alle Rechte vorbehalten</p>
+            <p>Offizielles Vereinsverwaltungssystem & Schlüsselliste 2026</p>
         </div>
-    </div>
+    </footer>
 
-    <!-- MODAL FÜR RECHNUNGSANZEIGE -->
-    <div id="invoice-modal">
-        <div class="invoice-preview-box">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="color: #b91c1c; font-size: 1.1em;">Rechnungs-Vorschau</h3>
-                <button class="btn btn-danger" style="padding: 4px 10px; font-size: 0.75em;" onclick="closeInvoiceModal()">Schließen</button>
-            </div>
-            <div id="invoice-modal-content" style="font-size: 0.85em; line-height: 1.4;"></div>
-            <button class="btn btn-green btn-block" style="margin-top: 15px;" onclick="downloadCurrentModalPDF()">📥 PDF Herunterladen</button>
-        </div>
-    </div>
-
-    <!-- FUSSZEILE -->
-    <nav class="bottom-nav">
-        <a onclick="switchTab('news')" class="nav-item active" id="nav-news"><span class="nav-icon">📢</span><span>News</span></a>
-        <a onclick="switchTab('events')" class="nav-item" id="nav-events"><span class="nav-icon">📅</span><span>Termine</span></a>
-        <a onclick="switchTab('shooting')" class="nav-item" id="nav-shooting"><span class="nav-icon">🎯</span><span>Schießbuch</span></a>
-        <a onclick="switchTab('drinks')" class="nav-item" id="nav-drinks"><span class="nav-icon">🍻</span><span>Strichliste</span></a>
-        <a onclick="switchTab('guide')" class="nav-item" id="nav-guide"><span class="nav-icon">👥</span><span>Mitglieder</span></a>
-        <a onclick="switchTab('card')" class="nav-item" id="nav-card"><span class="nav-icon">🔒</span><span>Admin</span></a>
-    </nav>
-
-    <!-- JAVASCRIPT LOGIK -->
+    <!-- Application Script -->
     <script>
-        function switchTab(tabId) {
-            document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const targetPage = document.getElementById('page-' + tabId);
-            const targetNav = document.getElementById('nav-' + tabId);
-            if(targetPage) targetPage.classList.add('active');
-            if(targetNav) targetNav.classList.add('active');
-            window.scrollTo(0, 0);
-        }
+        // Data Structure for Key List based EXACTLY on PDF provided
+        const keyListData = {
+            mitglieder: [
+                { name: "Kofler Konrad", dob: "27.02.1960", address: "Gaschurn 164d", phone: "0664 4331385", auth: "Eingang & Büro", isPassive: false },
+                { name: "Wachter Manfred", dob: "23.06.1963", address: "Gaschurn 164e", phone: "0664 4752129", auth: "Waffenschrank", isPassive: false },
+                { name: "Wachter Werner", dob: "26.05.1966", address: "Gaschurn 153", phone: "0664 2804791", auth: "Eingang & Büro", isPassive: false },
+                { name: "Schweighofer Dietmar", dob: "28.03.1972", address: "Gaschurn 160", phone: "0664 19281005", auth: "Eingang & Büro", isPassive: false },
+                { name: "Schweighofer Simon", dob: "17.09.1997", address: "Gaschurn 160", phone: "0650 3049466", auth: "Waffenschrank", isPassive: false },
+                { name: "Spettel Norbert", dob: "14.01.1958", address: "Gaschurn 11e", phone: "0664 5367206", auth: "Waffenschrank", isPassive: false },
+                { name: "Stocker Heimo", dob: "23.01.1983", address: "Gortipohl 59", phone: "0664 42144179", auth: "Waffenschrank", isPassive: false },
+                { name: "Wittwer Christoph", dob: "17.11.1965", address: "Gaschurn 71", phone: "0664 8258518", auth: "Eingang & Büro", isPassive: false },
+                { name: "Wittwer Werner", dob: "08.02.1974", address: "Gaschurn 60", phone: "0650 2501910", auth: "Eingang & Büro", isPassive: false },
+                { name: "Mattle Werner", dob: "28.03.1979", address: "Partenen 43b", phone: "0664 2520974", auth: "Eingang & Büro", isPassive: false },
+                { name: "Markus Netzer", dob: "10.05.1983", address: "Gaschurn 139a", phone: "0664 7605263", auth: "Eingang & Büro", isPassive: false },
+                { name: "Werner Netzer", dob: "15.09.1956", address: "Gaschurn 35a", phone: "", auth: "Eingang & Büro", isPassive: true }, // Marked Passive for red highlight demo
+                { name: "Pascal Tripolt", dob: "01.05.1984", address: "Gaschurn 162", phone: "0664 5162082", auth: "Eingang & Büro", isPassive: false }
+            ],
+            marketenderinnen: [
+                { name: "Suntinger Jamin", dob: "23.12.1984", address: "Gaschurn 162", phone: "0664 2135908", status: "Kein Schlüssel", isPassive: false },
+                { name: "Sabrina Kinzl", dob: "12.06.1991", address: "Tschagguns 14a", phone: "0660 1113150", status: "Kein Schlüssel", isPassive: false },
+                { name: "Stocker Karin", dob: "07.11.1986", address: "Gortipohl 59", phone: "0650 2800596", status: "Kein Schlüssel", isPassive: false },
+                { name: "Maria Spettel", dob: "06.12.1960", address: "Gaschurn 11e", phone: "0664 7644140", status: "Schlüssel vorhanden", isPassive: false },
+                { name: "Natalie Stocker", dob: "01.12.2007", address: "Gortipohl 59", phone: "0664 4587288", status: "Kein Schlüssel", isPassive: false }
+            ],
+            ehrenmitglieder: [
+                { name: "Sandrell Heinrich", dob: "23.01.1951", address: "Gaschurn 172", phone: "0664 1228485", status: "Kein Schlüssel", isPassive: true }, // Marked Passive
+                { name: "Kofler Konrad", dob: "27.02.1960", address: "Gaschurn 164d", phone: "0664 4331385", status: "Eingang & Büro", isPassive: false },
+                { name: "Dona Lothar", dob: "10.06.1960", address: "Partenen 78b", phone: "0664 45754735", status: "Kein Schlüssel", isPassive: false },
+                { name: "Gerd Spratler", dob: "05.10.1945", address: "Gaschurn 140a", phone: "0650 9600245", status: "Kein Schlüssel", isPassive: false }
+            ],
+            jugendmitglieder: [
+                { name: "Elias Stocker", dob: "15.03.2010", address: "Gortipohl 59", phone: "0676 7103446", status: "Kein Schlüssel", isPassive: false }
+            ]
+        };
 
-        const officialActiveMembers = [
-            "Manfred Wachter", "Werner Wachter", "Dietmar Schweighofer", "Simon Schweighofer",
-            "Norbert Spettel", "Heimo Stocker", "Christoph Wittwer", "Werner Wittwer",
-            "Erwin Rudigier", "Daniel Sandrell", "Werner Mattle", "Pascal Tripolt",
-            "Karin Stocker", "Jasmin Suntinger", "Sabrina Kinzl", "Maria Spettel",
-            "Natalie Stocker", "Elias Stocker"
+        // Inventory Data (Stock management)
+        let inventory = [
+            { id: 1, name: "Gösser Märzen 0,5l", price: 3.20, stock: 8, minStock: 24, cat: "Getränke" },
+            { id: 2, name: "Fohrenburger 0,33l", price: 2.80, stock: 45, minStock: 20, cat: "Getränke" },
+            { id: 3, name: "Spezi / Cola 0,5l", price: 2.50, stock: 5, minStock: 15, cat: "Getränke" },
+            { id: 4, name: "Mineralwasser 0,5l", price: 2.00, stock: 18, minStock: 10, cat: "Getränke" },
+            { id: 5, name: "Schiessscheiben KK (50er)", price: 12.00, stock: 3, minStock: 5, cat: "Sport" },
+            { id: 6, name: "Munition .22lr (Paket)", price: 8.50, stock: 40, minStock: 10, cat: "Sport" }
         ];
 
-        const officialPassiveMembers = [
-            "Joel Wachter", "Kofler Marlene", "Wachter Monika", "Schallner Harry",
-            "Netzer Werner", "Netzer Markus", "Fitsch Manuela", "Geiger Monika",
-            "Frank Sandrell", "Barbisch Andreas", "Patrick Wachter", "Steurer Harald",
-            "Steurer Angela", "Kofler Corinna", "Bitschnau Jutta", "Bitschnau Klaus",
-            "Essig Armin", "Carlos Da Ponte"
-        ];
+        // Shopping Cart state
+        let cart = [];
 
-        let mutableKeysList = [
-            { name: "Konrad Kofler", status: "Eingang & Büro" },
-            { name: "Manfred Wachter", status: "Waffenschrank" },
-            { name: "Werner Wachter", status: "Eingang & Büro" },
-            { name: "Dietmar Schweighofer", status: "Eingang & Büro" },
-            { name: "Simon Schweighofer", status: "Waffenschrank" },
-            { name: "Norbert Spettel", status: "Waffenschrank" },
-            { name: "Heimo Stocker", status: "Waffenschrank" },
-            { name: "Christoph Wittwer", status: "Eingang & Büro" },
-            { name: "Werner Wittwer", status: "Eingang & Büro" },
-            { name: "Werner Mattle", status: "Eingang & Büro" },
-            { name: "Markus Netzer", status: "Eingang & Büro" },
-            { name: "Werner Netzer", status: "Eingang & Büro" },
-            { name: "Pascal Tripolt", status: "Eingang & Büro" },
-            { name: "Maria Spettel", status: "Schlüssel vorhanden" }
-        ];
+        // Initialize App
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            renderKeyLists();
+            renderInventory();
+            renderKassaGrid();
+            renderMemberSelect();
+            checkStockWarnings();
+        });
 
-        let inventoryData = { hauswuerste: 20, wienerle: 15, bier: 3, limo: 2 };
-        window.invoicesMap = {};
+        // Tab Navigation
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
 
-        function checkInventoryWarnings() {
-            const warningBox = document.getElementById('inventory-warning-box');
-            if(!warningBox) return;
-            let warnings = [];
-            if (inventoryData.hauswuerste < 3) warnings.push("Hauswürste knapp!");
-            if (inventoryData.wienerle < 3) warnings.push("Wienerle knapp!");
-            if (inventoryData.bier < 2) warnings.push("Bierkisten knapp!");
-            if (inventoryData.limo < 2) warnings.push("Limokisten knapp!");
-
-            if (warnings.length > 0) {
-                warningBox.innerHTML = `<div style="background:#fee2e2; color:#991b1b; padding:8px; border-radius:8px; font-size:0.8em; font-weight:700; margin-bottom:8px;">⚠️ WARNUNG: ${warnings.join(' | ')}</div>`;
-            } else {
-                warningBox.innerHTML = '';
-            }
-        }
-
-        function editInventory() {
-            const h = prompt("Hauswürste Bestand (Paar):", inventoryData.hauswuerste);
-            const w = prompt("Wienerle Bestand (Paar):", inventoryData.wienerle);
-            const b = prompt("Bier Kisten Bestand:", inventoryData.bier);
-            const l = prompt("Limo Kisten Bestand:", inventoryData.limo);
-
-            if (h !== null) inventoryData.hauswuerste = parseInt(h) || 0;
-            if (w !== null) inventoryData.wienerle = parseInt(w) || 0;
-            if (b !== null) inventoryData.bier = parseInt(b) || 0;
-            if (l !== null) inventoryData.limo = parseInt(l) || 0;
-
-            document.getElementById('inv-hauswuerste').innerText = inventoryData.hauswuerste + " Paar";
-            document.getElementById('inv-wienerle').innerText = inventoryData.wienerle + " Paar";
-            document.getElementById('inv-bier').innerText = inventoryData.bier + " Kisten";
-            document.getElementById('inv-limo').innerText = inventoryData.limo + " Kisten";
-
-            const now = new Date();
-            const timeStr = now.toLocaleDateString('de-AT') + " um " + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('inventory-timestamp').innerText = "Lagerstand geändert am: " + timeStr;
-
-            checkInventoryWarnings();
-            alert("Lagerbestand erfolgreich aktualisiert!");
-        }
-
-        function editKeyList() {
-            const idx = prompt("Welchen Schlüsselträger (Nr. 1 bis " + mutableKeysList.length + ") möchten Sie bearbeiten?");
-            if (idx === null || isNaN(idx)) return;
-            const i = parseInt(idx) - 1;
-            if (i >= 0 && i < mutableKeysList.length) {
-                const newName = prompt("Name:", mutableKeysList[i].name);
-                const newStatus = prompt("Berechtigung / Status:", mutableKeysList[i].status);
-                if (newName && newStatus) {
-                    mutableKeysList[i].name = newName;
-                    mutableKeysList[i].status = newStatus;
-                    loadAdminKeys();
-                    alert("Schlüsselliste aktualisiert!");
-                }
-            } else {
-                alert("Ungültige Nummer!");
-            }
-        }
-
-        function populateMemberSelects(filter = "") {
-            const selectEl = document.getElementById('shot-member-select');
-            if (selectEl) {
-                let html = "";
-                const filtered = officialActiveMembers.filter(m => m.toLowerCase().includes(filter.toLowerCase()));
-                filtered.forEach(m => {
-                    html += `<option value="${m}">${m}</option>`;
-                });
-                selectEl.innerHTML = html;
-            }
-        }
-
-        function filterMemberDropdown(query) {
-            populateMemberSelects(query);
-        }
-
-        function selectShooterFromDropdown(name) {
-            if (name) {
-                document.getElementById('shot-name').value = name;
-                document.getElementById('shot-search-input').value = name;
-            }
-        }
-
-        function loadPublicMembersList() {
-            const container = document.getElementById('public-members-list');
-            if (container) {
-                let html = "";
-                officialActiveMembers.forEach(m => {
-                    html += `<div class="price-item"><div><strong>${m}</strong></div><span style="font-size:0.8em; color:var(--text-muted);">Aktiv</span></div>`;
-                });
-                container.innerHTML = html;
-            }
-        }
-
-        // DIENSTPLAN
-        const masterDutyRoster = [
-            { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
-            { dateStr: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
-            { dateStr: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
-            { dateStr: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
-            { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
-        ];
-
-        function parseLocalDate(dateStr) {
-            const parts = dateStr.split('.');
-            return new Date(parts[2], parts[1] - 1, parts[0]);
-        }
-
-        function updateDutyPlanWidget() {
-            try {
-                const today = new Date();
-                today.setHours(0,0,0,0);
-
-                let nextIndex = 0;
-                for (let i = 0; i < masterDutyRoster.length; i++) {
-                    const dDate = parseLocalDate(masterDutyRoster[i].dateStr);
-                    if (dDate >= today) {
-                        nextIndex = i;
-                        break;
-                    }
-                }
-
-                const nextDienst = masterDutyRoster[nextIndex] || masterDutyRoster[0];
-                const nextWidget = document.getElementById('next-duty-widget');
-                if (nextWidget) {
-                    nextWidget.innerHTML = `
-                        <div style="font-size: 1.05em; color: #15803d; font-weight: 800;">📅 ${nextDienst.dateStr}</div>
-                        <div style="font-size: 1.4em; font-weight: 900; margin: 4px 0; color: #0f172a;">${nextDienst.team}</div>
-                        <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600;">${nextDienst.names}</div>
-                    `;
-                }
-
-                const fullList = document.getElementById('full-roster-list');
-                if (fullList) {
-                    let html = "";
-                    masterDutyRoster.forEach((d, idx) => {
-                        let isNext = (idx === nextIndex);
-                        let isClosed = d.status === 'closed';
-                        let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
-                        
-                        html += `
-                            <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="font-size: 1.05em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.7em; background:#22c55e; color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER DIENST</span>' : ''}</div>
-                                    <span style="background: ${borderCol}; color: white; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.7em;">${d.team}</span>
-                                </div>
-                                <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
-                            </div>
-                        `;
-                    });
-                    fullList.innerHTML = html;
-                }
-            } catch(e) { console.error("DutyPlan Error:", e); }
-        }
-
-        // TERMINE MIT ORT, DATUM & ABSTIMMUNG
-        async function loadEvents() {
-            const container = document.getElementById('events-container');
-            const adminList = document.getElementById('admin-events-list');
-            try {
-                const snapshot = await db.collection("events").orderBy("createdAt", "desc").get();
-                const votesSnapshot = await db.collection("events_vote").get();
-                let votesData = {};
-                votesSnapshot.forEach(doc => { votesData[doc.id] = doc.data(); });
-
-                let html = "";
-                let adminHtml = "";
-
-                snapshot.forEach(doc => {
-                    const ev = doc.data();
-                    const eventId = doc.id;
-                    const v = votesData[eventId] || { yesNames: [], noNames: [] };
-                    const yesCount = v.yesNames ? v.yesNames.length : 0;
-                    const noCount = v.noNames ? v.noNames.length : 0;
-                    
-                    html += `
-                        <div class="dark-event-item" style="padding: 16px;">
-                            <div style="font-size: 1.2em; font-weight: 900; color: #0f172a; margin-bottom: 4px;">📌 ${ev.title}</div>
-                            <div style="font-size: 1em; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || 'Nicht angegeben'}</div>
-                            <div style="font-size: 0.95em; color: var(--text-dark); font-weight: 600; margin-bottom: 10px;">📍 Ort / Details: ${ev.desc || 'Schützenhaus Partenen'}</div>
-                            
-                            <div style="padding-top: 8px; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; align-items: center;">
-                                <button onclick="voteEvent('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.8em; font-weight: 700; cursor: pointer;">👍 Ich komme (${yesCount})</button>
-                                <button onclick="voteEvent('${eventId}', 'no')" style="background: #dc2626; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.8em; font-weight: 700; cursor: pointer;">👎 Komme nicht (${noCount})</button>
-                            </div>
-
-                            <div style="font-size: 0.8em; color: var(--text-muted); margin-top: 8px; background: #f8fafc; padding: 8px; border-radius: 6px;">
-                                <strong>Zusagen (${yesCount}):</strong> ${v.yesNames && v.yesNames.length > 0 ? v.yesNames.join(', ') : 'Keine'}<br>
-                                <strong>Absagen (${noCount}):</strong> ${v.noNames && v.noNames.length > 0 ? v.noNames.join(', ') : 'Keine'}
-                            </div>
-                        </div>
-                    `;
-
-                    adminHtml += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
-                            <div><strong>${ev.title}</strong> (${ev.date} - ${ev.desc})</div>
-                            <div style="display: flex; gap: 6px;">
-                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick="editEvent('${eventId}', '${(ev.title||'').replace(/'/g, "\\'")}', '${ev.date}', '${(ev.desc||'').replace(/'/g, "\\'")}')">✏️</button>
-                                <button class="btn btn-danger" style="padding: 2px 6px; font-size: 0.7em;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                if(container) container.innerHTML = html || '<p style="color:var(--text-muted);">Keine Termine eingetragen.</p>';
-                if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted);">Keine Termine im System.</p>';
-            } catch (e) { 
-                console.error("loadEvents Error:", e);
-                if(container) container.innerHTML = '<p style="color:var(--text-muted);">Termine konnten geladen werden.</p>';
-            }
-        }
-
-        async function voteEvent(eventId, type) {
-            const userName = prompt("Bitte gib deinen Namen ein für die Abstimmung:");
-            if (!userName) return;
-
-            const docRef = db.collection("events_vote").doc(eventId);
-            const doc = await docRef.get();
-            let data = doc.exists ? doc.data() : { yesNames: [], noNames: [] };
-
-            let yes = data.yesNames || [];
-            let no = data.noNames || [];
-
-            yes = yes.filter(n => n !== userName);
-            no = no.filter(n => n !== userName);
-
-            if (type === 'yes') yes.push(userName);
-            if (type === 'no') no.push(userName);
-
-            await docRef.set({ yesNames: yes, noNames: no });
-            alert("Deine Stimme wurde gespeichert!");
-            loadEvents();
-        }
-
-        async function addEvent(e) {
-            e.preventDefault();
-            const title = document.getElementById('new-event-title').value;
-            const date = document.getElementById('new-event-date').value;
-            const desc = document.getElementById('new-event-desc').value;
-
-            await db.collection("events").add({ title, date, desc, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-            alert("Termin gespeichert!");
-            document.getElementById('new-event-title').value = '';
-            document.getElementById('new-event-date').value = '';
-            document.getElementById('new-event-desc').value = '';
-            loadEvents();
-        }
-
-        async function editEvent(id, oldTitle, oldDate, oldDesc) {
-            const title = prompt("Titel bearbeiten:", oldTitle);
-            if (title === null) return;
-            const date = prompt("Datum bearbeiten:", oldDate);
-            const desc = prompt("Ort / Details bearbeiten:", oldDesc);
-
-            await db.collection("events").doc(id).update({ title, date, desc });
-            alert("Termin aktualisiert!");
-            loadEvents();
-        }
-
-        // SCHIESSBUCH
-        async function saveShot(e) {
-            e.preventDefault();
-            const name = document.getElementById('shot-name').value;
-            if (!name) { alert("Bitte wählen Sie ein Mitglied aus!"); return; }
-            const rings = parseFloat(document.getElementById('shot-rings').value);
-            const teiler = parseFloat(document.getElementById('shot-teiler').value) || 0;
-
-            await db.collection("shots").add({
-                name, disc: "Luftgewehr", rings, teiler,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-amber-400', 'font-bold');
             });
-            alert("Schießergebnis im Admin-Bereich gespeichert!");
-            document.getElementById('shot-rings').value = '';
-            document.getElementById('shot-teiler').value = '';
-            document.getElementById('shot-name').value = '';
-            document.getElementById('shot-search-input').value = '';
-            populateMemberSelects();
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            if(activeBtn) activeBtn.classList.add('text-amber-400', 'font-bold');
         }
 
-        // STRICHLISTE & PREISLISTE
-        const drinkPrices = {
-            hauswuerste: 7.50, wienerle: 7.00, bier: 3.50, radler: 3.50,
-            limo: 3.00, mineral: 2.50, wein4: 4.00, wein8: 3.00,
-            weingespr: 3.50, schnaps: 3.50, kaffee: 3.00, tee: 2.50, luftgewehr: 8.00
-        };
-        const drinkCounts = {
-            hauswuerste: 0, wienerle: 0, bier: 0, radler: 0,
-            limo: 0, mineral: 0, wein4: 0, wein8: 0,
-            weingespr: 0, schnaps: 0, kaffee: 0, tee: 0, luftgewehr: 0
-        };
-
-        function changeCount(item, delta) {
-            drinkCounts[item] = Math.max(0, drinkCounts[item] + delta);
-            document.getElementById('count-' + item).innerText = drinkCounts[item];
-            calculateTotal();
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
         }
 
-        function calculateTotal() {
-            let total = 0;
-            for (let k in drinkCounts) { total += drinkCounts[k] * drinkPrices[k]; }
-            document.getElementById('total-price').innerText = '€ ' + total.toFixed(2).replace('.', ',');
-            return total;
-        }
-
-        function confirmResetDrinks() {
-            for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
-            calculateTotal();
-        }
-
-        async function saveTallyBilling() {
-            let total = calculateTotal();
-            if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
-
-            let clientName = document.getElementById('cust-name').value.trim() || "Kunde";
-            let clientAttn = document.getElementById('cust-attn').value.trim() || "";
-            let clientAddress = document.getElementById('cust-address').value.trim() || "";
-            let clientZipCity = document.getElementById('cust-zipcity').value.trim() || "";
-
-            let itemsArray = [];
-            for (let k in drinkCounts) {
-                if (drinkCounts[k] > 0) {
-                    itemsArray.push({ name: k, count: drinkCounts[k], price: drinkCounts[k] * drinkPrices[k] });
-                }
-            }
-
-            const todayStr = new Date().toISOString().slice(0,10).replace(/-/g,'');
-            const invoiceObj = {
-                invoiceNum: "RE-" + new Date().getFullYear() + "-" + todayStr.slice(4) + "-" + Math.floor(10 + Math.random() * 90),
-                date: new Date().toLocaleDateString('de-AT'),
-                recipientName: clientName,
-                recipientAttn: clientAttn,
-                recipientAddress: clientAddress,
-                recipientZipCity: clientZipCity,
-                total: total,
-                items: itemsArray,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        // Render Key Lists with red highlighting for passive members
+        function renderKeyLists() {
+            const renderTableRows = (dataList, targetId, authKeyName) => {
+                const tbody = document.getElementById(targetId);
+                tbody.innerHTML = dataList.map(item => {
+                    const rowClass = item.isPassive ? 'passive-member-row' : 'hover:bg-slate-50';
+                    const passiveTag = item.isPassive ? ' <span class="passive-badge">PASSIV</span>' : '';
+                    
+                    return `
+                        <tr class="${rowClass} border-b transition">
+                            <td class="p-3.5 font-medium flex items-center justify-between">
+                                <span>${item.name}</span>
+                                ${passiveTag}
+                            </td>
+                            <td class="p-3.5">${item.dob}</td>
+                            <td class="p-3.5">${item.address}</td>
+                            <td class="p-3.5">${item.phone || '-'}</td>
+                            <td class="p-3.5"><span class="px-2 py-1 rounded bg-slate-200/60 text-slate-800 text-xs font-semibold">${item[authKeyName]}</span></td>
+                        </tr>
+                    `;
+                }).join('');
             };
 
-            try {
-                await db.collection("invoices").add(invoiceObj);
-                alert("Abrechnung wurde erfolgreich im Admin-Bereich gespeichert!");
-                loadInvoices();
-                confirmResetDrinks();
-            } catch (err) { console.error(err); }
+            renderTableRows(keyListData.mitglieder, 'table-mitglieder', 'auth');
+            renderTableRows(keyListData.marketenderinnen, 'table-marketenderinnen', 'status');
+            renderTableRows(keyListData.ehrenmitglieder, 'table-ehrenmitglieder', 'status');
+            renderTableRows(keyListData.jugendmitglieder, 'table-jugendmitglieder', 'status');
         }
 
-        async function loadInvoices() {
-            const container = document.getElementById('admin-tally-history-list');
-            if (!container) return;
-            try {
-                const snapshot = await db.collection("invoices").orderBy("createdAt", "desc").get();
-                let html = "";
-                window.invoicesMap = {};
-                snapshot.forEach(doc => {
-                    const inv = doc.data();
-                    window.invoicesMap[doc.id] = inv;
-                    html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; gap: 6px;">
-                            <div style="font-size: 0.85em;"><strong>${inv.invoiceNum}</strong> - ${inv.recipientName} (${inv.total.toFixed(2)} €)</div>
-                            <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 2px 6px; font-size: 0.7em;" onclick="viewInvoiceModal('${doc.id}')">👁️ Ansehen</button>
-                                <button class="btn btn-green" style="padding: 2px 6px; font-size: 0.7em;" onclick="generateInvoicePDF('${doc.id}')">📥 Download</button>
-                                <button class="btn btn-danger" style="padding: 2px 6px; font-size: 0.7em;" onclick="deleteItem('invoices', '${doc.id}')">🗑️</button>
+        // Check and display stock warnings in News and Admin
+        function checkStockWarnings() {
+            const lowStockItems = inventory.filter(item => item.stock <= item.minStock);
+            const newsContainer = document.getElementById('news-stock-warnings');
+            const globalAlert = document.getElementById('global-stock-alert');
+            const globalAlertText = document.getElementById('global-stock-alert-text');
+
+            if (lowStockItems.length > 0) {
+                globalAlert.classList.remove('hidden');
+                globalAlertText.innerText = `Achtung: ${lowStockItems.length} Artikel haben einen kritischen Lagerbestand unterschritten!`;
+
+                newsContainer.innerHTML = lowStockItems.map(item => `
+                    <div class="flex items-center justify-between p-3.5 bg-red-50 border border-red-200 rounded-lg text-red-900">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="alert-circle" class="w-5 h-5 text-red-600 shrink-0"></i>
+                            <div>
+                                <h5 class="font-bold text-sm">${item.name}</h5>
+                                <p class="text-xs text-red-700">Aktueller Bestand: <strong>${item.stock} Stk.</strong> (Mindestbestand: ${item.minStock} Stk.)</p>
                             </div>
                         </div>
-                    `;
-                });
-                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.8em;">Keine Rechnungen gespeichert.</p>';
-            } catch (e) { console.error(e); }
+                        <span class="px-2.5 py-1 text-xs font-bold bg-red-600 text-white rounded-full">Nachbestellen</span>
+                    </div>
+                `).join('');
+            } else {
+                globalAlert.classList.add('hidden');
+                newsContainer.innerHTML = `
+                    <div class="p-4 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-5 h-5 text-green-600"></i>
+                        <span>Alle Lagerbestände sind ausreichend aufgeführt. Keine aktuellen Engpässe.</span>
+                    </div>
+                `;
+            }
+            lucide.createIcons();
         }
 
-        function viewInvoiceModal(docId) {
-            const inv = window.invoicesMap[docId];
-            if (!inv) return;
-            let itemsHtml = "";
-            inv.items.forEach(i => {
-                itemsHtml += `<div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;"><span>${i.name} (${i.count}x)</span><strong>${i.price.toFixed(2).replace('.', ',')} €</strong></div>`;
-            });
+        // Render Inventory in Admin Section
+        function renderInventory() {
+            const tbody = document.getElementById('admin-stock-table');
+            tbody.innerHTML = inventory.map(item => {
+                const isLow = item.stock <= item.minStock;
+                const statusBadge = isLow 
+                    ? `<span class="bg-red-100 text-red-800 text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1 w-max"><i data-lucide="alert-triangle" class="w-3 h-3"></i> Nachbestellen</span>`
+                    : `<span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1 w-max"><i data-lucide="check" class="w-3 h-3"></i> Ok</span>`;
 
-            const content = `
-                <div style="text-align:center; margin-bottom:15px;">
-                    <h2 style="color:#b91c1c; font-size:1.3em;">RECHNUNG</h2>
-                    <p style="font-size:0.75em; color:#64748b;">Kameradschaftsbund und Schützenverein Gaschurn-Partenen<br>Rütler 43b | 6794 Partenen<br>E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509</p>
-                </div>
-                <div style="margin-bottom:12px; background:#f8fafc; padding:8px; border-radius:6px;">
-                    <strong>Rechnung an:</strong><br>
-                    ${inv.recipientName}<br>
-                    ${inv.recipientAttn ? inv.recipientAttn + '<br>' : ''}
-                    ${inv.recipientAddress}<br>
-                    ${inv.recipientZipCity}
-                </div>
-                <div style="margin-bottom:10px; display:flex; justify-content:space-between; font-size:0.85em;">
-                    <span><strong>Rechnungsnummer:</strong> ${inv.invoiceNum}</span>
-                    <span><strong>Datum:</strong> ${inv.date}</span>
-                </div>
-                <div style="margin-bottom:12px;">
-                    <div style="background:#b91c1c; color:#white; padding:5px 8px; font-weight:bold; font-size:0.8em; display:flex; justify-content:space-between;"><span>Leistung</span><span>Betrag</span></div>
-                    ${itemsHtml}
-                    <div style="display:flex; justify-content:space-between; padding:6px 0; font-weight:bold; font-size:1em; margin-top:5px; border-top:2px solid #b91c1c;"><span>Gesamtbetrag</span><span style="color:#b91c1c;">${inv.total.toFixed(2).replace('.', ',')} €</span></div>
-                </div>
-                <div style="font-size:0.75em; color:#475569; background:#f1f5f9; padding:8px; border-radius:6px;">
-                    <strong>Zahlungsbedingungen:</strong><br>
-                    Bitte überweisen Sie den Rechnungsbetrag von ${inv.total.toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:<br>
-                    <strong>IBAN:</strong> AT86 3746 8000 0451 3511<br>
-                    <strong>BIC:</strong> RVVGAT2B468<br>
-                    <strong>Bank:</strong> Raiffeisenbank Bludenz-Montafon<br>
-                    <strong>Verwendungszweck:</strong> ${inv.invoiceNum}
-                </div>
-            `;
-            document.getElementById('invoice-modal-content').innerHTML = content;
-            document.getElementById('invoice-modal').style.display = 'flex';
-            window.currentModalDocId = docId;
+                return `
+                    <tr class="border-b hover:bg-slate-50">
+                        <td class="p-3 font-semibold text-slate-800">${item.name}</td>
+                        <td class="p-3 text-slate-600">${item.cat}</td>
+                        <td class="p-3 font-mono">€ ${item.price.toFixed(2)}</td>
+                        <td class="p-3 font-bold ${isLow ? 'text-red-600' : 'text-slate-800'}">${item.stock} Stk.</td>
+                        <td class="p-3 text-slate-500">${item.minStock} Stk.</td>
+                        <td class="p-3">${statusBadge}</td>
+                        <td class="p-3 text-right space-x-1">
+                            <button onclick="adjustStock(${item.id}, 5)" class="px-2 py-1 bg-slate-200 hover:bg-slate-300 text-xs font-bold rounded">+5</button>
+                            <button onclick="adjustStock(${item.id}, 1)" class="px-2 py-1 bg-slate-200 hover:bg-slate-300 text-xs font-bold rounded">+1</button>
+                            <button onclick="adjustStock(${item.id}, -1)" class="px-2 py-1 bg-slate-200 hover:bg-slate-300 text-xs font-bold rounded">-1</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            lucide.createIcons();
         }
 
-        function closeInvoiceModal() {
-            document.getElementById('invoice-modal').style.display = 'none';
-        }
-
-        function downloadCurrentModalPDF() {
-            if (window.currentModalDocId) {
-                generateInvoicePDF(window.currentModalDocId);
+        function adjustStock(id, amount) {
+            const item = inventory.find(i => i.id === id);
+            if(item) {
+                item.stock = Math.max(0, item.stock + amount);
+                renderInventory();
+                renderKassaGrid();
+                checkStockWarnings();
             }
         }
 
-        function generateInvoicePDF(docId) {
-            const invoiceData = window.invoicesMap[docId];
-            if (!invoiceData) return;
+        // Kassa Grid Render
+        function renderKassaGrid() {
+            const grid = document.getElementById('kassa-items-grid');
+            grid.innerHTML = inventory.map(item => `
+                <button onclick="addToCart(${item.id})" class="p-4 bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-400 rounded-xl transition text-left flex flex-col justify-between shadow-sm">
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm">${item.name}</h4>
+                        <span class="text-xs text-slate-500">Vorrat: ${item.stock} Stk.</span>
+                    </div>
+                    <div class="mt-3 flex justify-between items-center">
+                        <span class="text-amber-700 font-bold font-mono">€ ${item.price.toFixed(2)}</span>
+                        <span class="w-7 h-7 bg-slate-900 text-white rounded-full flex items-center justify-center font-bold text-sm">+</span>
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        function renderMemberSelect() {
+            const select = document.getElementById('cart-member-select');
+            const allMembers = [
+                ...keyListData.mitglieder,
+                ...keyListData.marketenderinnen,
+                ...keyListData.ehrenmitglieder,
+                ...keyListData.jugendmitglieder
+            ];
+            
+            select.innerHTML = `<option value="Barzahler / Gast">Barzahler / Gast</option>` + 
+                allMembers.map(m => `<option value="${m.name}">${m.name} ${m.isPassive ? '(Passiv)' : ''}</option>`).join('');
+        }
+
+        // Cart Actions
+        function addToCart(id) {
+            const item = inventory.find(i => i.id === id);
+            if(!item) return;
+
+            const existing = cart.find(c => c.id === id);
+            if(existing) {
+                existing.qty++;
+            } else {
+                cart.push({ ...item, qty: 1 });
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(c => c.id !== id);
+            updateCartUI();
+        }
+
+        function clearCart() {
+            cart = [];
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+
+            if(cart.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 text-center py-8 text-sm">Noch keine Artikel ausgewählt</p>`;
+                totalEl.innerText = '€ 0.00';
+                return;
+            }
+
+            let total = 0;
+            container.innerHTML = cart.map(item => {
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                return `
+                    <div class="flex justify-between items-center text-sm p-2 bg-slate-50 rounded border border-slate-200">
+                        <div class="flex-grow">
+                            <div class="font-medium text-slate-800">${item.name}</div>
+                            <div class="text-xs text-slate-500">${item.qty} x € ${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-slate-700 font-mono">€ ${subtotal.toFixed(2)}</span>
+                            <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 p-1">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            totalEl.innerText = `€ ${total.toFixed(2)}`;
+            lucide.createIcons();
+        }
+
+        // Generate PDF Invoice with Emblem Logo
+        function checkoutAndGeneratePDF() {
+            if(cart.length === 0) {
+                alert("Der Warenkorb ist leer!");
+                return;
+            }
+
+            // Deduct inventory
+            cart.forEach(cartItem => {
+                const invItem = inventory.find(i => i.id === cartItem.id);
+                if(invItem) {
+                    invItem.stock = Math.max(0, invItem.stock - cartItem.qty);
+                }
+            });
+
+            renderInventory();
+            renderKassaGrid();
+            checkStockWarnings();
 
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
+            const selectedMember = document.getElementById('cart-member-select').value;
+            const today = new Date().toLocaleDateString('de-AT');
 
+            // Draw Emblem / Crest Logo in Header
+            doc.setFillColor(17, 24, 39); // slate-900
+            doc.circle(25, 25, 15, 'F');
+            doc.setDrawColor(245, 158, 11); // amber-500
+            doc.setLineWidth(1);
+            doc.circle(25, 25, 14, 'S');
+
+            // Logo Text
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(6);
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(20);
-            doc.setTextColor(185, 28, 28);
-            doc.text("RECHNUNG", 14, 20);
+            doc.text("KAMERADSCHAFTSBUND", 25, 20, { align: "center" });
+            doc.text("SCHÜTZENVEREIN", 25, 30, { align: "center" });
 
+            // Header Info
+            doc.setTextColor(17, 24, 39);
+            doc.setFontSize(16);
+            doc.text("KB-Schützenverein Gaschurn-Partenen", 45, 22);
+            doc.setFontSize(10);
             doc.setFont("helvetica", "normal");
-            doc.setFontSize(8);
-            doc.setTextColor(80, 80, 80);
-            doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen", 14, 26);
-            doc.text("Rütler 43b | 6794 Partenen", 14, 31);
-            doc.text("E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509", 14, 36);
+            doc.text("Vereinshaus Gaschurn • Offizielle Quittung", 45, 28);
+            doc.text(`Datum: ${today}`, 45, 34);
 
+            doc.setDrawColor(200, 200, 200);
+            doc.line(14, 42, 196, 42);
+
+            // Member / Customer details
+            doc.setFontSize(11);
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(9);
-            doc.setTextColor(0, 0, 0);
-            doc.text("Rechnung an:", 14, 48);
-
+            doc.text("Kunde / Mitglied:", 14, 50);
             doc.setFont("helvetica", "normal");
-            doc.text(invoiceData.recipientName || "", 14, 54);
-            if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 59);
-            doc.text(invoiceData.recipientAddress || "", 14, 64);
-            doc.text(invoiceData.recipientZipCity || "", 14, 69);
+            doc.text(selectedMember, 50, 50);
 
-            doc.setFont("helvetica", "bold");
-            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 120, 54);
-            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 120, 59);
-
-            const tableBody = invoiceData.items.map(item => [
-                `${item.name} (${item.count}x)`, 
-                `${parseFloat(item.price).toFixed(2).replace('.', ',')} €`
+            // Table Data
+            const tableBody = cart.map(item => [
+                item.name,
+                item.qty.toString(),
+                `€ ${item.price.toFixed(2)}`,
+                `€ ${(item.price * item.qty).toFixed(2)}`
             ]);
 
+            let totalSum = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
             doc.autoTable({
-                startY: 76,
-                head: [['Leistung', 'Betrag']],
-                body: [
-                    ...tableBody,
-                    [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: `${parseFloat(invoiceData.total).toFixed(2).replace('.', ',')} €`, styles: { fontStyle: 'bold' } }]
-                ],
+                startY: 56,
+                head: [['Artikel', 'Menge', 'Einzelpreis', 'Gesamt']],
+                body: tableBody,
                 theme: 'striped',
-                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
-                columnStyles: { 0: { cellWidth: 130 }, 1: { halign: 'right', cellWidth: 40 } }
+                headStyles: { fillStyle: 'F', fillColor: [30, 41, 59], textColor: [255, 255, 255], fontStyle: 'bold' },
+                columnStyles: {
+                    0: { cellWidth: 90 },
+                    1: { cellWidth: 30, halign: 'center' },
+                    2: { cellWidth: 30, halign: 'right' },
+                    3: { cellWidth: 30, halign: 'right' }
+                }
             });
 
-            let finalY = doc.lastAutoTable.finalY + 10;
+            const finalY = doc.lastAutoTable.finalY + 10;
+            doc.setFontSize(12);
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(9);
-            doc.text("Zahlungsbedingungen", 14, finalY);
+            doc.text(`Gesamtsumme: € ${totalSum.toFixed(2)}`, 196, finalY, { align: "right" });
 
-            doc.setFont("helvetica", "normal");
+            // Footer
             doc.setFontSize(8);
-            doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${invoiceData.total.toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:`, 14, finalY + 5);
-            
-            doc.setFont("helvetica", "bold"); doc.text("IBAN:", 14, finalY + 11);
-            doc.setFont("helvetica", "normal"); doc.text("AT86 3746 8000 0451 3511", 30, finalY + 11);
+            doc.setFont("helvetica", "italic");
+            doc.setTextColor(120, 120, 120);
+            doc.text("Vielen Dank für Ihren Besuch beim KB-Schützenverein Gaschurn-Partenen!", 105, finalY + 25, { align: "center" });
 
-            doc.setFont("helvetica", "bold"); doc.text("BIC:", 14, finalY + 16);
-            doc.setFont("helvetica", "normal"); doc.text("RVVGAT2B468", 30, finalY + 16);
+            // Save PDF
+            doc.save(`Rechnung_KB_Schuetzenverein_${Date.now()}.pdf`);
 
-            doc.setFont("helvetica", "bold"); doc.text("Bank:", 14, finalY + 21);
-            doc.setFont("helvetica", "normal"); doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 21);
-
-            doc.setFont("helvetica", "bold"); doc.text("Verwendungszweck:", 14, finalY + 26);
-            doc.setFont("helvetica", "normal"); doc.text(`${invoiceData.invoiceNum} / ${invoiceData.recipientName}`, 44, finalY + 26);
-
-            doc.save(`${invoiceData.invoiceNum}.pdf`);
+            // Clear Cart after success
+            cart = [];
+            updateCartUI();
+            alert("Abrechnung erfolgreich! Die PDF-Rechnung mit Vereinswappen wurde erstellt.");
         }
-
-        function togglePaidStatus(el) {
-            if (el.classList.contains('badge-paid')) {
-                el.classList.remove('badge-paid');
-                el.classList.add('badge-open');
-                el.innerText = 'Offen (€30)';
-            } else {
-                el.classList.remove('badge-open');
-                el.classList.add('badge-paid');
-                el.innerText = 'Bezahlt (€30)';
-            }
-        }
-
-        function loadAdminMembers() {
-            const activeList = document.getElementById('admin-active-members-list');
-            const passiveList = document.getElementById('admin-passive-members-list');
-            
-            let actHtml = "";
-            officialActiveMembers.forEach((m) => {
-                actHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
-                        <span><strong>${m}</strong></span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 105px; padding: 4px; font-size: 0.75em;" placeholder="Bezahl-Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                        </div>
-                    </div>`;
-            });
-            if(activeList) activeList.innerHTML = actHtml;
-
-            let passHtml = "";
-            officialPassiveMembers.forEach((m) => {
-                passHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
-                        <span><strong>${m}</strong></span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 105px; padding: 4px; font-size: 0.75em;" placeholder="Bezahl-Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                        </div>
-                    </div>`;
-            });
-            if(passiveList) passiveList.innerHTML = passHtml;
-        }
-
-        function loadAdminKeys() {
-            const container = document.getElementById('admin-keys-list');
-            if(!container) return;
-            let html = "";
-            mutableKeysList.forEach(k => {
-                html += `<div style="padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.9em;"><strong>${k.name}</strong> — <span style="color:var(--text-muted);">${k.status}</span></div>`;
-            });
-            container.innerHTML = html;
-        }
-
-        // NEWS HOCHLADEN
-        async function addNewsItem(e) {
-            e.preventDefault();
-            const title = document.getElementById('news-title').value;
-            const text = document.getElementById('news-text').value;
-            const fileInput = document.getElementById('news-photo-input');
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = async function(uploadEvent) {
-                    await saveNewsToFirestore(title, text, uploadEvent.target.result);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                await saveNewsToFirestore(title, text, "");
-            }
-        }
-
-        async function saveNewsToFirestore(title, text, imageUrl) {
-            try {
-                await db.collection("news").add({ title, text, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                alert("News veröffentlicht!");
-                document.getElementById('news-title').value = '';
-                document.getElementById('news-text').value = '';
-                document.getElementById('news-photo-input').value = '';
-                loadNews();
-            } catch (err) { console.error(err); }
-        }
-
-        async function loadNews() {
-            const container = document.getElementById('news-container');
-            if(!container) return;
-            try {
-                const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
-                if (snapshot.empty) { container.innerHTML = ''; return; }
-                let html = "";
-                snapshot.forEach(doc => {
-                    const n = doc.data();
-                    html += `
-                        <div class="glass-card">
-                            ${n.imageUrl ? `<img src="${n.imageUrl}" style="width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; margin-bottom: 10px;">` : ''}
-                            <div class="card-title">${n.title}</div>
-                            <p style="font-size: 0.9em; color: var(--text-muted); white-space: pre-line; margin-bottom: 10px;">${n.text}</p>
-                            <button class="btn btn-danger admin-only-delete" onclick="deleteItem('news', '${doc.id}')">🗑️ News löschen</button>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-            } catch (e) { console.error(e); }
-        }
-
-        async function deleteItem(collectionName, docId) {
-            if (confirm("Wirklich löschen?")) {
-                await db.collection(collectionName).doc(docId).delete();
-                alert("Gelöscht!");
-                loadEvents(); loadNews(); loadInvoices();
-            }
-        }
-
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            if (document.getElementById('admin-password-input').value === "schützen2026") {
-                document.body.classList.add('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'none';
-                alert("Admin-Modus aktiviert!");
-                loadNews(); loadInvoices(); loadAdminMembers(); loadAdminKeys(); loadEvents();
-            } else { alert("Falsches Passwort!"); }
-        }
-
-        function logoutAdmin() {
-            document.body.classList.remove('admin-mode');
-            document.getElementById('admin-login-card').style.display = 'block';
-            loadNews();
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            try { updateDutyPlanWidget(); } catch(e) { console.error(e); }
-            try { loadEvents(); } catch(e) { console.error(e); }
-            try { loadNews(); } catch(e) { console.error(e); }
-            try { populateMemberSelects(); } catch(e) { console.error(e); }
-            try { loadPublicMembersList(); } catch(e) { console.error(e); }
-            try { loadAdminMembers(); } catch(e) { console.error(e); }
-            try { loadAdminKeys(); } catch(e) { console.error(e); }
-        });
     </script>
 </body>
 </html>
