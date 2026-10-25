@@ -500,9 +500,12 @@
                 <div id="admin-passive-members-list"></div>
             </div>
 
-            <!-- TAB 5: SCHLÜSSELLISTE -->
+            <!-- TAB 5: SCHLÜSSELLISTE (DIREKT BEARBEITBAR) -->
             <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;"><span>🔑 5. Schlüsselliste (Stand 2026)</span></div>
+                <div class="card-title" style="color: #dc2626;">
+                    <span>🔑 5. Schlüsselliste</span> 
+                    <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.75em;" onclick="addKeyListItem()">➕ Person hinzufügen</button>
+                </div>
                 <div id="admin-keys-list" style="font-size: 0.85em;"></div>
             </div>
 
@@ -670,7 +673,98 @@
             alert("Lagerbestand erfolgreich gespeichert!");
         }
 
-        // NEWS LADEN (Bilder & Texte unter dem Dienstplan)
+        // SCHLÜSSELLISTE LADEN & BEARBEITEN
+        async function loadKeyList() {
+            try {
+                const doc = await db.collection("settings").doc("key_list").get();
+                if (doc.exists && doc.data().list) {
+                    exactPdfKeyList = doc.data().list;
+                } else {
+                    await db.collection("settings").doc("key_list").set({ list: exactPdfKeyList });
+                }
+            } catch(e) {}
+            loadAdminKeys();
+        }
+
+        async function saveAndReloadKeys() {
+            try {
+                await db.collection("settings").doc("key_list").set({ list: exactPdfKeyList });
+            } catch(e) {}
+            loadAdminKeys();
+            alert("Schlüsselliste erfolgreich gespeichert!");
+        }
+
+        async function editKeyListItem(index) {
+            const item = exactPdfKeyList[index];
+            if (item.header) {
+                const newHeader = prompt("Überschrift bearbeiten:", item.header);
+                if (newHeader !== null) {
+                    exactPdfKeyList[index].header = newHeader;
+                    await saveAndReloadKeys();
+                }
+            } else {
+                const name = prompt("Name:", item.name);
+                if (name === null) return;
+                const dob = prompt("Geburtsdatum:", item.dob);
+                const addr = prompt("Adresse:", item.addr);
+                const tel = prompt("Telefon:", item.tel);
+                const role = prompt("Rolle / Schlüssel:", item.role);
+
+                exactPdfKeyList[index] = { name, dob, addr, tel, role };
+                await saveAndReloadKeys();
+            }
+        }
+
+        async function addKeyListItem() {
+            const name = prompt("Name der neuen Person:");
+            if (!name) return;
+            const dob = prompt("Geburtsdatum (z.B. 01.01.1980):", "");
+            const addr = prompt("Adresse:", "");
+            const tel = prompt("Telefon:", "");
+            const role = prompt("Rolle / Schlüssel:", "Eingang & Büro");
+
+            exactPdfKeyList.push({ name, dob, addr, tel, role });
+            await saveAndReloadKeys();
+        }
+
+        async function deleteKeyListItem(index) {
+            if (confirm("Eintrag wirklich aus der Schlüsselliste löschen?")) {
+                exactPdfKeyList.splice(index, 1);
+                await saveAndReloadKeys();
+            }
+        }
+
+        function loadAdminKeys() {
+            const container = document.getElementById('admin-keys-list');
+            if(!container) return;
+            let html = "";
+            exactPdfKeyList.forEach((item, index) => {
+                if (item.header) {
+                    html += `
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--primary-red); color: white; padding: 6px 10px; font-weight: 800; font-size: 0.75em; border-radius: 6px; margin: 12px 0 6px 0; text-transform: uppercase;">
+                            <span>${item.header}</span>
+                            <button onclick="editKeyListItem(${index})" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">✏️</button>
+                        </div>`;
+                } else {
+                    html += `
+                        <div style="padding: 8px 0; border-bottom: 1px solid rgba(241,245,249,0.8); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="font-size: 0.95em;">${item.name}</strong><br>
+                                <span style="color:var(--text-muted); font-size:0.75em;">geb. ${item.dob} | ${item.addr} | ${item.tel || 'Kein Tel'}</span>
+                            </div>
+                            <div style="display: flex; gap: 6px; align-items: center;">
+                                <span style="background: #e2e8f0; color: #1e293b; padding: 4px 8px; border-radius: 6px; font-size: 0.7em; font-weight: 700;">${item.role}</span>
+                                <button class="btn btn-admin" style="padding: 3px 6px; font-size: 0.65em;" onclick="editKeyListItem(${index})">✏️</button>
+                                <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.65em;" onclick="deleteKeyListItem(${index})">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        // NEWS LADEN
         async function loadNews() {
             const container = document.getElementById('news-container');
             if(!container) return;
@@ -782,6 +876,7 @@
                 const today = new Date();
                 today.setHours(0,0,0,0);
                 
+                // Chronologische Sortierung (nächster Termin ganz oben)
                 eventsArray.sort((a, b) => {
                     let dA = parseLocalDate(a.date);
                     let dB = parseLocalDate(b.date);
@@ -798,14 +893,15 @@
                     const noCount = v.noNames ? v.noNames.length : 0;
                     const isNextTermin = (index === 0);
                     
+                    // Nächster Termin wird größer geschrieben, prominent platziert und blinkt grün
                     html += `
-                        <div class="dark-event-item" style="padding: 16px; ${isNextTermin ? 'border-left: 6px solid #22c55e; box-shadow: 0 6px 20px rgba(34, 197, 94, 0.2);' : ''}">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                <div style="font-size: 1.1em; font-weight: 900; color: #0f172a;">📌 ${ev.title}</div>
-                                ${isNextTermin ? '<span style="font-size: 0.7em; background: #22c55e; color: #fff; font-weight: 800; padding: 3px 8px; border-radius: 6px;">NÄCHSTER TERMIN</span>' : ''}
+                        <div class="dark-event-item ${isNextTermin ? 'next-duty-neon' : ''}" style="padding: 16px; ${isNextTermin ? 'margin-bottom: 16px;' : ''}">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <div style="font-size: ${isNextTermin ? '1.25em' : '1.1em'}; font-weight: 900; color: #0f172a;">📌 ${ev.title}</div>
+                                ${isNextTermin ? '<span style="font-size: 0.75em; background: #22c55e; color: #fff; font-weight: 800; padding: 4px 10px; border-radius: 8px;">NÄCHSTER TERMIN</span>' : ''}
                             </div>
-                            <div style="font-size: 0.9em; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || ''}</div>
-                            <div style="font-size: 0.85em; color: var(--text-dark); font-weight: 600; margin-bottom: 10px;">📍 Ort / Details: ${ev.desc || 'Schützenhaus Partenen'}</div>
+                            <div style="font-size: ${isNextTermin ? '1em' : '0.9em'}; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || ''}</div>
+                            <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600; margin-bottom: 10px;">📍 Ort / Details: ${ev.desc || 'Schützenhaus Partenen'}</div>
                             
                             <div style="padding-top: 8px; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; align-items: center;">
                                 <button onclick="voteEvent('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👍 Ich komme (${yesCount})</button>
@@ -1222,28 +1318,6 @@
             if(passiveList) passiveList.innerHTML = passHtml;
         }
 
-        function loadAdminKeys() {
-            const container = document.getElementById('admin-keys-list');
-            if(!container) return;
-            let html = "";
-            exactPdfKeyList.forEach(item => {
-                if (item.header) {
-                    html += `<div style="background: var(--primary-red); color: white; padding: 6px 10px; font-weight: 800; font-size: 0.75em; border-radius: 6px; margin: 12px 0 6px 0; text-transform: uppercase;">${item.header}</div>`;
-                } else {
-                    html += `
-                        <div style="padding: 8px 0; border-bottom: 1px solid rgba(241,245,249,0.8); display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <strong style="font-size: 0.95em;">${item.name}</strong><br>
-                                <span style="color:var(--text-muted); font-size:0.75em;">geb. ${item.dob} | ${item.addr} | ${item.tel || 'Kein Tel'}</span>
-                            </div>
-                            <span style="background: #e2e8f0; color: #1e293b; padding: 4px 8px; border-radius: 6px; font-size: 0.7em; font-weight: 700;">${item.role}</span>
-                        </div>
-                    `;
-                }
-            });
-            container.innerHTML = html;
-        }
-
         // NEWS HOCHLADEN
         async function addNewsItem(e) {
             e.preventDefault();
@@ -1314,7 +1388,7 @@
                 document.body.classList.add('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'none';
                 alert("Admin-Modus aktiviert!");
-                loadNews(); loadInvoices(); loadAdminMembers(); loadAdminKeys(); loadEvents(); loadInventory();
+                loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory();
             } else { alert("Falsches Passwort!"); }
         }
 
@@ -1332,7 +1406,7 @@
             try { populateMemberSelects(); } catch(e) {}
             try { loadPublicMembersList(); } catch(e) {}
             try { loadAdminMembers(); } catch(e) {}
-            try { loadAdminKeys(); } catch(e) {}
+            try { loadKeyList(); } catch(e) {}
             try { loadInventory(); } catch(e) {}
             scheduleMidnightRefresh();
         });
