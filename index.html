@@ -325,7 +325,7 @@
         </div>
     </div>
 
-    <!-- 3. SCHIESSBUCH -->
+    <!-- 3. SCHIESSBUCH (MIT DIREKTER MITGLIEDERAUSWAHL) -->
     <div id="page-shooting" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">🎯 Schießbuch (Luftgewehr)</div>
@@ -334,7 +334,7 @@
                 <div class="form-group">
                     <label>Mitglied suchen / auswählen</label>
                     <input type="text" id="shot-search-input" class="form-control" placeholder="🔍 Namen eintippen..." oninput="filterMemberDropdown(this.value)">
-                    <select class="form-control" id="shot-member-select" size="5" style="margin-top: 6px;">
+                    <select class="form-control" id="shot-member-select" size="5" style="margin-top: 6px;" onchange="document.getElementById('shot-name').value = this.value" onclick="if(this.value) document.getElementById('shot-name').value = this.value">
                         <!-- Dynamisch -->
                     </select>
                 </div>
@@ -424,7 +424,7 @@
         </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH MIT SEPARATEN TABS -->
+    <!-- 6. ADMIN-BEREICH MIT SEPARATEN TABS (INKL. SCHIESSERGEBNISSE) -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
             <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
@@ -441,7 +441,8 @@
                 <button onclick="switchAdminTab('tab-newstermins')" class="admin-tab-btn" id="btn-tab-newstermins">📢 2. News & Termine</button>
                 <button onclick="switchAdminTab('tab-invoices')" class="admin-tab-btn" id="btn-tab-invoices">💶 3. Rechnungen</button>
                 <button onclick="switchAdminTab('tab-members')" class="admin-tab-btn" id="btn-tab-members">👥 4. Mitglieder</button>
-                <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys" style="grid-column: span 2;">🔑 5. Schlüsselliste</button>
+                <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys">🔑 5. Schlüsselliste</button>
+                <button onclick="switchAdminTab('tab-shots')" class="admin-tab-btn" id="btn-tab-shots">🎯 6. Schießergebnisse</button>
             </div>
 
             <!-- TAB 1: LAGERBESTAND -->
@@ -500,13 +501,19 @@
                 <div id="admin-passive-members-list"></div>
             </div>
 
-            <!-- TAB 5: SCHLÜSSELLISTE (DIREKT BEARBEITBAR) -->
+            <!-- TAB 5: SCHLÜSSELLISTE -->
             <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
                     <span>🔑 5. Schlüsselliste</span> 
                     <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.75em;" onclick="addKeyListItem()">➕ Person hinzufügen</button>
                 </div>
                 <div id="admin-keys-list" style="font-size: 0.85em;"></div>
+            </div>
+
+            <!-- TAB 6: SCHIESSERGEBNISSE -->
+            <div id="tab-shots" class="admin-tab-content glass-card glass-card-red">
+                <div class="card-title" style="color: #dc2626;">🎯 6. Schießergebnisse</div>
+                <div id="admin-shots-history-list" style="font-size: 0.85em;"></div>
             </div>
 
             <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 15px;">Admin-Modus Beenden</button>
@@ -900,7 +907,6 @@
                     const noCount = v.noNames ? v.noNames.length : 0;
                     const isNextTermin = (index === 0);
                     
-                    // Nächster Termin wird größer geschrieben, prominent platziert und blinkt grün
                     html += `
                         <div class="dark-event-item ${isNextTermin ? 'next-duty-neon' : ''}" style="padding: 16px; ${isNextTermin ? 'margin-bottom: 16px;' : ''}">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
@@ -1007,13 +1013,34 @@
                 name, disc: "Luftgewehr", rings, teiler,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            alert("Schießergebnis im Admin-Bereich gespeichert!");
+            alert("Schießergebnis erfolgreich gespeichert!");
             document.getElementById('shot-rings').value = '';
             document.getElementById('shot-teiler').value = '';
             document.getElementById('shot-name').value = '';
             document.getElementById('shot-search-input').value = '';
             populateMemberSelects();
             loadShootingChart();
+            loadAdminShots();
+        }
+
+        async function loadAdminShots() {
+            const container = document.getElementById('admin-shots-history-list');
+            if (!container) return;
+            try {
+                const snapshot = await db.collection("shots").orderBy("createdAt", "desc").get();
+                let html = "";
+                snapshot.forEach(doc => {
+                    const s = doc.data();
+                    let dateStr = s.createdAt && s.createdAt.toDate ? s.createdAt.toDate().toLocaleDateString('de-AT') : 'Gerade eben';
+                    html += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; gap: 6px; font-size: 0.85em;">
+                            <div><strong>${s.name}</strong><br><span style="color:var(--text-muted); font-size:0.75em;">${s.disc} | Ringe: <strong>${s.rings}</strong> ${s.teiler ? '| Teiler: ' + s.teiler : ''} (${dateStr})</span></div>
+                            <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.7em;" onclick="deleteItem('shots', '${doc.id}'); setTimeout(loadAdminShots, 500);">🗑️</button>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.8em;">Keine Schießergebnisse vorhanden.</p>';
+            } catch(e) {}
         }
 
         async function loadShootingChart() {
@@ -1385,7 +1412,7 @@
             if (confirm("Wirklich löschen?")) {
                 await db.collection(collectionName).doc(docId).delete();
                 alert("Gelöscht!");
-                loadEvents(); loadNews(); loadInvoices();
+                loadEvents(); loadNews(); loadInvoices(); loadAdminShots(); loadShootingChart();
             }
         }
 
@@ -1395,7 +1422,7 @@
                 document.body.classList.add('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'none';
                 alert("Admin-Modus aktiviert!");
-                loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory();
+                loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadAdminShots();
             } else { alert("Falsches Passwort!"); }
         }
 
@@ -1415,6 +1442,7 @@
             try { loadAdminMembers(); } catch(e) {}
             try { loadKeyList(); } catch(e) {}
             try { loadInventory(); } catch(e) {}
+            try { loadAdminShots(); } catch(e) {}
             scheduleMidnightRefresh();
         });
     </script>
