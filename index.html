@@ -41,7 +41,7 @@
             --primary-red: #b91c1c; 
             --primary-dark: #7f1d1d;
             --bg-light: #f1f5f9; 
-            --card-glass: rgba(255, 255, 255, 0.85);
+            --card-glass: rgba(255, 255, 255, 0.88);
             --text-dark: #1e293b; 
             --text-muted: #64748b; 
             --accent-green: #10b981; 
@@ -91,7 +91,7 @@
             padding: 18px;
             margin-bottom: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.85);
             color: var(--text-dark);
         }
 
@@ -198,6 +198,34 @@
             letter-spacing: 0.5px;
         }
 
+        /* Admin Tab Navigation */
+        .admin-nav-tabs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .admin-tab-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1.5px solid #cbd5e1;
+            padding: 12px 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.8em;
+            color: var(--text-dark);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .admin-tab-btn.active {
+            background: var(--admin-blue);
+            color: white;
+            border-color: var(--admin-blue);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .admin-tab-content { display: none; }
+        .admin-tab-content.active { display: block; }
+
         .bottom-nav {
             position: fixed !important; 
             bottom: 12px !important; 
@@ -266,9 +294,6 @@
     <div id="page-news" class="page-content active">
         <div id="news-inventory-warning-box"></div>
 
-        <!-- DIENSTPLAN PDF GANZ OBEN (WENN HOCHGELADEN) -->
-        <div id="public-pdf-duty-container"></div>
-
         <!-- NÄCHSTER DIENST (VERGRÖßERT & KRÄFTIG PULSIEREND) -->
         <div class="glass-card next-duty-neon">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -278,7 +303,17 @@
             <div id="next-duty-widget"></div>
         </div>
 
-        <!-- NORMALE NEWS (ERSCHEINEN UNTERHALB DES DIENSTPLANS) -->
+        <!-- GESAMTER DIENSTPLAN (ANZEIGE DIREKT AUF DER STARTSEITE) -->
+        <div class="glass-card glass-card-blue">
+            <div class="card-title">
+                <span>📋 Gesamter Dienstplan</span>
+                <span style="font-size: 0.65em; background: var(--primary-red); color: white; padding: 3px 8px; border-radius: 6px;">2026/2027</span>
+            </div>
+            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
+            <div id="full-roster-list"></div>
+        </div>
+
+        <!-- NORMALE NEWS (ERSCHEINEN GANZ UNTEN UNTERHALB DES DIENSTPLANS) -->
         <div id="news-container"></div>
     </div>
 
@@ -389,7 +424,7 @@
         </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH -->
+    <!-- 6. ADMIN-BEREICH MIT SEPARATEN TABS -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
             <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
@@ -399,11 +434,18 @@
             </form>
         </div>
 
-        <!-- ÜBERSICHTLICHER STRUKTURIERTER ADMIN-BEREICH -->
         <div class="admin-delete-btn">
-            
-            <!-- 1. LAGERBESTAND -->
-            <div class="glass-card glass-card-red">
+            <!-- ADMIN UNTER-TABS -->
+            <div class="admin-nav-tabs">
+                <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">📦 1. Lagerbestand</button>
+                <button onclick="switchAdminTab('tab-newstermins')" class="admin-tab-btn" id="btn-tab-newstermins">📢 2. News & Termine</button>
+                <button onclick="switchAdminTab('tab-invoices')" class="admin-tab-btn" id="btn-tab-invoices">💶 3. Rechnungen</button>
+                <button onclick="switchAdminTab('tab-members')" class="admin-tab-btn" id="btn-tab-members">👥 4. Mitglieder</button>
+                <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys" style="grid-column: span 2;">🔑 5. Schlüsselliste</button>
+            </div>
+
+            <!-- TAB 1: LAGERBESTAND -->
+            <div id="tab-inventory" class="admin-tab-content active glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
                     <span>📦 1. Lagerbestand</span>
                     <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.75em;" onclick="editInventory()">✏️ Bearbeiten</button>
@@ -418,22 +460,10 @@
                 </div>
             </div>
 
-            <!-- 2. NEWS, FOTO, TEXTE & TERMINE (ZUSAMMENGEFASST) + DIENSTPLAN PDF -->
-            <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">📢 2. News, Dienstplan (PDF) & Termine</div>
+            <!-- TAB 2: NEWS, FOTO, TEXTE & TERMINE -->
+            <div id="tab-newstermins" class="admin-tab-content glass-card glass-card-red">
+                <div class="card-title" style="color: #dc2626;">📢 2. News, Foto & Texte / Termine</div>
                 
-                <!-- Dienstplan PDF Upload -->
-                <div style="background: rgba(248, 250, 252, 0.9); padding: 12px; border-radius: 12px; margin-bottom: 14px; border: 1.5px solid #cbd5e1;">
-                    <h4 style="color: #2563eb; font-size: 0.9em; margin-bottom: 6px;">📄 Dienstplan (PDF) hochladen</h4>
-                    <form onsubmit="uploadDutyPDF(event)">
-                        <div class="form-group"><input type="file" id="pdf-duty-file" accept="application/pdf" class="form-control" required></div>
-                        <button type="submit" class="btn btn-admin btn-block" style="padding: 8px;">PDF hochladen & anzeigen</button>
-                    </form>
-                    <div id="admin-pdf-status" style="font-size: 0.75em; color: var(--text-muted); margin-top: 6px;">Kein PDF hinterlegt</div>
-                    <button class="btn btn-danger btn-block" style="margin-top: 6px; padding: 6px; font-size: 0.75em;" onclick="deleteDutyPDF()">🗑️ PDF löschen</button>
-                </div>
-
-                <!-- News veröffentlichen -->
                 <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 6px;">Neuen News-Beitrag erstellen</h4>
                 <form onsubmit="addNewsItem(event)">
                     <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
@@ -442,7 +472,6 @@
                     <button type="submit" class="btn btn-admin btn-block">News Veröffentlichen</button>
                 </form>
 
-                <!-- Termine verwalten -->
                 <h4 style="color: #b91c1c; font-size: 0.9em; margin: 16px 0 6px 0;">Termin hinzufügen</h4>
                 <form onsubmit="addEvent(event)">
                     <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="Generalversammlung"></div>
@@ -456,14 +485,14 @@
                 </div>
             </div>
 
-            <!-- 3. RECHNUNGEN -->
-            <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">💶 3. Gespeicherte Rechnungen (PDF)</div>
+            <!-- TAB 3: RECHNUNGEN -->
+            <div id="tab-invoices" class="admin-tab-content glass-card glass-card-red">
+                <div class="card-title" style="color: #dc2626;">💶 3. Rechnungen (PDF History)</div>
                 <div id="admin-tally-history-list"></div>
             </div>
 
-            <!-- 4. AKTIVE UND PASSIVE MITGLIEDER -->
-            <div class="glass-card glass-card-red">
+            <!-- TAB 4: AKTIVE UND PASSIVE MITGLIEDER -->
+            <div id="tab-members" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">👥 4. Aktive und passive Mitglieder</div>
                 <h4 style="color: #2563eb; font-size: 0.9em; margin: 8px 0 4px 0;">Aktive Mitglieder</h4>
                 <div id="admin-active-members-list"></div>
@@ -471,9 +500,9 @@
                 <div id="admin-passive-members-list"></div>
             </div>
 
-            <!-- 5. SCHLÜSSELLISTE -->
-            <div class="glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;"><span>🔑 5. Schlüsselliste (Stand 2026)</span> <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.75em;" onclick="editKeyList()">✏️ Bearbeiten</button></div>
+            <!-- TAB 5: SCHLÜSSELLISTE -->
+            <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
+                <div class="card-title" style="color: #dc2626;"><span>🔑 5. Schlüsselliste (Stand 2026)</span></div>
                 <div id="admin-keys-list" style="font-size: 0.85em;"></div>
             </div>
 
@@ -513,6 +542,15 @@
             if(targetPage) targetPage.classList.add('active');
             if(targetNav) targetNav.classList.add('active');
             window.scrollTo(0, 0);
+        }
+
+        function switchAdminTab(tabContentId) {
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.admin-tab-btn').forEach(el => el.classList.remove('active'));
+            const targetTab = document.getElementById(tabContentId);
+            const targetBtn = document.getElementById('btn-' + tabContentId);
+            if(targetTab) targetTab.classList.add('active');
+            if(targetBtn) targetBtn.classList.add('active');
         }
 
         const officialActiveMembers = [
@@ -632,31 +670,12 @@
             alert("Lagerbestand erfolgreich gespeichert!");
         }
 
-        // DIENSTPLAN PDF HOCHLADEN & ANZEIGEN
+        // NEWS LADEN (Bilder & Texte unter dem Dienstplan)
         async function loadNews() {
             const container = document.getElementById('news-container');
-            const pdfContainer = document.getElementById('public-pdf-duty-container');
-            const adminStatus = document.getElementById('admin-pdf-status');
             if(!container) return;
 
             try {
-                let pdfHtml = "";
-                const pdfDoc = await db.collection("settings").doc("duty_pdf").get();
-                if (pdfDoc.exists && pdfDoc.data().pdfData) {
-                    const pdfData = pdfDoc.data();
-                    pdfHtml = `
-                        <div class="glass-card" style="background: linear-gradient(135deg, rgba(239,246,255,0.9), rgba(219,234,254,0.9)); border: 2.5px solid #2563eb;">
-                            <div class="card-title" style="color: #1e40af; margin-bottom: 6px;">📄 Offizieller Dienstplan (PDF)</div>
-                            <p style="font-size: 0.85em; color: #475569; margin-bottom: 10px;">Datei: ${pdfData.fileName || 'Dienstplan.pdf'}</p>
-                            <a href="${pdfData.pdfData}" download="${pdfData.fileName || 'Dienstplan.pdf'}" class="btn btn-admin btn-block" style="margin-top: 0;">📥 Dienstplan PDF herunterladen / ansehen</a>
-                        </div>
-                    `;
-                    if (adminStatus) adminStatus.innerText = "Hinterlegtes PDF: " + (pdfData.fileName || "Aktiv");
-                } else {
-                    if (adminStatus) adminStatus.innerText = "Kein PDF hinterlegt.";
-                }
-                if (pdfContainer) pdfContainer.innerHTML = pdfHtml;
-
                 const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
                 let newsHtml = "";
                 snapshot.forEach(doc => {
@@ -670,65 +689,82 @@
                         </div>
                     `;
                 });
-
                 container.innerHTML = newsHtml;
             } catch (e) {}
         }
 
-        async function uploadDutyPDF(e) {
-            e.preventDefault();
-            const fileInput = document.getElementById('pdf-duty-file');
-            if (!fileInput.files || !fileInput.files[0]) return;
+        // GESAMTER DIENSTPLAN & NÄCHSTER DIENST
+        const masterDutyRoster = [
+            { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { dateStr: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
+            { dateStr: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { dateStr: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { dateStr: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
+            { dateStr: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
+            { dateStr: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { dateStr: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { dateStr: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { dateStr: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
+            { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
+        ];
 
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = async function(uploadEvent) {
-                try {
-                    await db.collection("settings").doc("duty_pdf").set({
-                        fileName: file.name,
-                        pdfData: uploadEvent.target.result,
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    alert("Dienstplan PDF erfolgreich hochgeladen!");
-                    loadNews();
-                } catch(err) {
-                    alert("Fehler beim Hochladen.");
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-
-        async function deleteDutyPDF() {
-            if (confirm("Dienstplan-PDF wirklich löschen?")) {
-                try {
-                    await db.collection("settings").doc("duty_pdf").delete();
-                    alert("PDF entfernt.");
-                    loadNews();
-                } catch(e) {}
-            }
-        }
-
-        // NÄCHSTER DIENST WIDGET (STATISCH / LIVE)
-        function updateDutyPlanWidget() {
-            try {
-                const nextWidget = document.getElementById('next-duty-widget');
-                if (nextWidget) {
-                    nextWidget.innerHTML = `
-                        <div style="font-size: 1.05em; color: #15803d; font-weight: 800; margin-bottom: 2px;">📅 Nächster Termin</div>
-                        <div style="font-size: 1.5em; font-weight: 900; margin: 4px 0; color: #0f172a; letter-spacing: 0.5px;">Freitag, 19:00 Uhr</div>
-                        <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 700;">Schützenhaus Partenen</div>
-                    `;
-                }
-            } catch(e) {}
-        }
-
-        // TERMINE & AUTOMATISCHE TÄGLICHE AKTUALISIERUNG UM 00:00 Uhr
         function parseLocalDate(dateStr) {
             if (!dateStr) return new Date();
             const parts = dateStr.split('.');
             return new Date(parts[2], parts[1] - 1, parts[0]);
         }
 
+        function updateDutyPlanWidget() {
+            try {
+                const today = new Date();
+                today.setHours(0,0,0,0);
+
+                let nextIndex = 0;
+                for (let i = 0; i < masterDutyRoster.length; i++) {
+                    const dDate = parseLocalDate(masterDutyRoster[i].dateStr);
+                    if (dDate >= today) {
+                        nextIndex = i;
+                        break;
+                    }
+                }
+
+                const nextDienst = masterDutyRoster[nextIndex] || masterDutyRoster[0];
+                const nextWidget = document.getElementById('next-duty-widget');
+                if (nextWidget) {
+                    nextWidget.innerHTML = `
+                        <div style="font-size: 1.1em; color: #15803d; font-weight: 800; margin-bottom: 2px;">📅 ${nextDienst.dateStr}</div>
+                        <div style="font-size: 1.5em; font-weight: 900; margin: 4px 0; color: #0f172a; letter-spacing: 0.5px;">${nextDienst.team}</div>
+                        <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 700;">${nextDienst.names}</div>
+                    `;
+                }
+
+                const fullList = document.getElementById('full-roster-list');
+                if (fullList) {
+                    let html = "";
+                    masterDutyRoster.forEach((d, idx) => {
+                        let isNext = (idx === nextIndex);
+                        let isClosed = d.status === 'closed';
+                        let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
+                        
+                        html += `
+                            <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 0.9em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.65em; background:#22c55e; color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
+                                    <span style="background: ${borderCol}; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.65em;">${d.team}</span>
+                                </div>
+                                <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
+                            </div>
+                        `;
+                    });
+                    fullList.innerHTML = html;
+                }
+            } catch(e) {}
+        }
+
+        // TERMINE & AUTOMATISCHE TÄGLICHE AKTUALISIERUNG UM 00:00 Uhr
         async function loadEvents() {
             const container = document.getElementById('events-container');
             const adminList = document.getElementById('admin-events-list');
@@ -743,7 +779,6 @@
                     eventsArray.push({ id: doc.id, ...doc.data() });
                 });
 
-                // Automatische Sortierung nach Datum (nächster Termin zuerst)
                 const today = new Date();
                 today.setHours(0,0,0,0);
                 
@@ -799,13 +834,13 @@
             } catch (e) {}
         }
 
-        // Tägliche Mitternachts-Aktualisierung einrichten (00:00 Uhr Trigger)
         function scheduleMidnightRefresh() {
             const now = new Date();
             const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
             const msToMidnight = night.getTime() - now.getTime();
             setTimeout(() => {
                 loadEvents();
+                updateDutyPlanWidget();
                 scheduleMidnightRefresh();
             }, msToMidnight);
         }
