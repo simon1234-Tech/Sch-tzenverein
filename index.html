@@ -858,7 +858,7 @@
             } catch(e) {}
         }
 
-        // TERMINE & AUTOMATISCHE TÄGLICHE AKTUALISIERUNG UM 00:00 Uhr
+        // TERMINE: CHRONOLOGISCH SORTIERT, VERGANGENE AUSGEBLENDET & MITTERNACHTS-AKTUALISIERUNG
         async function loadEvents() {
             const container = document.getElementById('events-container');
             const adminList = document.getElementById('admin-events-list');
@@ -876,7 +876,14 @@
                 const today = new Date();
                 today.setHours(0,0,0,0);
                 
-                // Chronologische Sortierung (nächster Termin ganz oben)
+                // Vergangene Termine automatisch ausblenden
+                eventsArray = eventsArray.filter(ev => {
+                    let evDate = parseLocalDate(ev.date);
+                    evDate.setHours(0,0,0,0);
+                    return evDate >= today;
+                });
+
+                // Echte chronologische Sortierung nach Kalenderdatum (nächster Termin oben)
                 eventsArray.sort((a, b) => {
                     let dA = parseLocalDate(a.date);
                     let dB = parseLocalDate(b.date);
@@ -925,7 +932,7 @@
                         </div>
                     `;
                 });
-                if(container) container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.85em;">Keine Termine eingetragen.</p>';
+                if(container) container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.85em;">Keine kommenden Termine eingetragen.</p>';
                 if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted); font-size:0.85em;">Keine Termine im System.</p>';
             } catch (e) {}
         }
@@ -970,7 +977,7 @@
             const desc = document.getElementById('new-event-desc').value;
 
             await db.collection("events").add({ title, date, desc, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-            alert("Termin gespeichert!");
+            alert("Termin gespeichert und automatisch einsortiert!");
             document.getElementById('new-event-title').value = '';
             document.getElementById('new-event-date').value = '';
             document.getElementById('new-event-desc').value = '';
