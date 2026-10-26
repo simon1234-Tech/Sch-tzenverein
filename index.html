@@ -296,7 +296,7 @@
     <div id="page-news" class="page-content active">
         <div id="news-inventory-warning-box"></div>
 
-        <!-- NÄCHSTER DIENST (VERGRÖßERT & KRÄFTIG PULSIEREND) -->
+        <!-- NÄCHSTER DIENST -->
         <div class="glass-card next-duty-neon">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 0.8em; background: #22c55e; color: #fff; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase;">Nächster Dienst</span>
@@ -327,7 +327,7 @@
         </div>
     </div>
 
-    <!-- 3. SCHIESSBUCH (MIT DIREKTER MITGLIEDERAUSWAHL) -->
+    <!-- 3. SCHIESSBUCH -->
     <div id="page-shooting" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">🎯 Schießbuch (Luftgewehr)</div>
@@ -426,7 +426,7 @@
         </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH MIT NAMENSAUSWAHL FOR INDIVIDUELLE PASSWÖRTER -->
+    <!-- 6. ADMIN-BEREICH -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
             <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
@@ -515,7 +515,7 @@
                 <div id="admin-passive-members-list"></div>
             </div>
 
-            <!-- TAB 5: SCHLÜSSELLISTE (VERGRÖßERTE ANSICHT) -->
+            <!-- TAB 5: SCHLÜSSELLISTE -->
             <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
                     <span>🔑 5. Schlüsselliste</span> 
@@ -524,7 +524,7 @@
                 <div id="admin-keys-list"></div>
             </div>
 
-            <!-- TAB 6: SCHIESSERGEBNISSE (VERGRÖßERTE ANSICHT) -->
+            <!-- TAB 6: SCHIESSERGEBNISSE -->
             <div id="tab-shots" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">🎯 6. Schießergebnisse</div>
                 <div id="admin-shots-history-list"></div>
@@ -694,7 +694,7 @@
             alert("Lagerbestand erfolgreich gespeichert!");
         }
 
-        // SCHLÜSSELLISTE LADEN & BEARBEITEN (VERGRÖßERTE ANSICHT)
+        // SCHLÜSSELLISTE LADEN & BEARBEITEN
         async function loadKeyList() {
             try {
                 const doc = await db.collection("settings").doc("key_list").get();
@@ -1016,7 +1016,7 @@
             loadEvents();
         }
 
-        // SCHIESSBUCH (MIT DIREKTER MITGLIEDERAUSWAHL)
+        // SCHIESSBUCH
         async function saveShot(e) {
             e.preventDefault();
             const name = document.getElementById('shot-name').value;
@@ -1038,7 +1038,6 @@
             loadAdminShots();
         }
 
-        // SCHIESSERGEBNISSE LADEN (VERGRÖßERTE ANSICHT)
         async function loadAdminShots() {
             const container = document.getElementById('admin-shots-history-list');
             if (!container) return;
@@ -1141,7 +1140,7 @@
             calculateTotal();
         }
 
-        // STRICHLISTE SPEICHERN (Öffentlich freigegeben via 'tally_billings')
+        // STRICHLISTE SPEICHERN IN 'tally_billings'
         async function saveTallyBilling() {
             let total = calculateTotal();
             if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
@@ -1182,7 +1181,7 @@
             }
         }
 
-        // RECHNUNGEN LADEN (Aus 'tally_billings')
+        // RECHNUNGEN LADEN & IM ADMIN-BEREICH ANZEIGEN
         async function loadInvoices() {
             const container = document.getElementById('admin-tally-history-list');
             if (!container) return;
@@ -1190,30 +1189,43 @@
                 const snapshot = await db.collection("tally_billings").orderBy("createdAt", "desc").get();
                 let html = "";
                 window.invoicesMap = {};
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85em; text-align:center; padding:10px;">Keine Rechnungen in der Datenbank gefunden.</p>';
+                    return;
+                }
+
                 snapshot.forEach(doc => {
                     const inv = doc.data();
                     window.invoicesMap[doc.id] = inv;
+                    let amountStr = (inv.total || 0).toFixed(2).replace('.', ',');
                     html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; gap: 6px; font-size: 0.85em;">
-                            <div><strong>${inv.invoiceNum}</strong> - ${inv.recipientName} (${inv.total.toFixed(2)} €)</div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #e2e8f0; gap: 6px; font-size: 0.85em;">
+                            <div>
+                                <strong style="color:var(--text-dark);">${inv.invoiceNum || 'RE'}</strong> - ${inv.recipientName || 'Kunde'}<br>
+                                <span style="color:var(--primary-red); font-weight:700;">€ ${amountStr}</span> <span style="color:var(--text-muted); font-size:0.8em;">(${inv.date || ''})</span>
+                            </div>
                             <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 4px 8px; font-size: 0.7em;" onclick="viewInvoiceModal('${doc.id}')">👁️</button>
-                                <button class="btn btn-green" style="padding: 4px 8px; font-size: 0.7em;" onclick="generateInvoicePDF('${doc.id}')">📥</button>
-                                <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.7em;" onclick="deleteItem('tally_billings', '${doc.id}')">🗑️</button>
+                                <button class="btn btn-admin" style="padding: 6px 10px; font-size: 0.75em;" onclick="viewInvoiceModal('${doc.id}')" title="Rechnung Ansehen">👁️</button>
+                                <button class="btn btn-green" style="padding: 6px 10px; font-size: 0.75em;" onclick="generateInvoicePDF('${doc.id}')" title="PDF Herunterladen">📥</button>
+                                <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75em;" onclick="deleteItem('tally_billings', '${doc.id}')" title="Löschen">🗑️</button>
                             </div>
                         </div>
                     `;
                 });
-                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.8em;">Keine Rechnungen.</p>';
-            } catch (e) {}
+                container.innerHTML = html;
+            } catch (e) {
+                console.error("Fehler beim Laden der Rechnungen:", e);
+                container.innerHTML = `<p style="color:red; font-size:0.8em; padding:8px; background:#fee2e2; border-radius:8px;">⚠️ Fehler beim Laden: ${e.message}</p>`;
+            }
         }
 
         function viewInvoiceModal(docId) {
             const inv = window.invoicesMap[docId];
             if (!inv) return;
             let itemsHtml = "";
-            inv.items.forEach(i => {
-                itemsHtml += `<div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;"><span>${i.name} (${i.count}x)</span><strong>${i.price.toFixed(2).replace('.', ',')} €</strong></div>`;
+            (inv.items || []).forEach(i => {
+                itemsHtml += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f1f5f9;"><span>${i.name} (${i.count}x)</span><strong>${(i.price || 0).toFixed(2).replace('.', ',')} €</strong></div>`;
             });
 
             const content = `
@@ -1221,19 +1233,19 @@
                     <h2 style="color:#b91c1c; font-size:1.1em;">RECHNUNG</h2>
                     <p style="font-size:0.75em; color:#64748b;">Kameradschaftsbund und Schützenverein Gaschurn-Partenen<br>Rütler 43b | 6794 Partenen<br>E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509</p>
                 </div>
-                <div style="margin-bottom:12px; background:#f8fafc; padding:8px; border-radius:8px; font-size:0.8em;">
-                    <strong>Rechnung an:</strong><br>${inv.recipientName}<br>${inv.recipientAttn ? inv.recipientAttn + '<br>' : ''}${inv.recipientAddress}<br>${inv.recipientZipCity}
+                <div style="margin-bottom:12px; background:#f8fafc; padding:10px; border-radius:10px; font-size:0.8em; border:1px solid #e2e8f0;">
+                    <strong>Rechnung an:</strong><br>${inv.recipientName || 'Kunde'}<br>${inv.recipientAttn ? inv.recipientAttn + '<br>' : ''}${inv.recipientAddress || ''}<br>${inv.recipientZipCity || ''}
                 </div>
                 <div style="margin-bottom:10px; display:flex; justify-content:space-between; font-size:0.8em;">
                     <span><strong>Nummer:</strong> ${inv.invoiceNum}</span>
                     <span><strong>Datum:</strong> ${inv.date}</span>
                 </div>
                 <div style="margin-bottom:12px;">
-                    <div style="background:#b91c1c; color:#white; padding:6px 8px; font-weight:bold; font-size:0.75em; display:flex; justify-content:space-between;"><span>Leistung</span><span>Betrag</span></div>
+                    <div style="background:#b91c1c; color:white; padding:6px 8px; font-weight:bold; font-size:0.75em; display:flex; justify-content:space-between; border-radius:6px 6px 0 0;"><span>Leistung</span><span>Betrag</span></div>
                     ${itemsHtml}
-                    <div style="display:flex; justify-content:space-between; padding:6px 0; font-weight:bold; font-size:0.95em; margin-top:6px; border-top:2px solid #b91c1c;"><span>Gesamtbetrag</span><span style="color:#b91c1c;">${inv.total.toFixed(2).replace('.', ',')} €</span></div>
+                    <div style="display:flex; justify-content:space-between; padding:8px 0; font-weight:bold; font-size:1em; margin-top:6px; border-top:2px solid #b91c1c;"><span>Gesamtbetrag</span><span style="color:#b91c1c;">${(inv.total || 0).toFixed(2).replace('.', ',')} €</span></div>
                 </div>
-                <div style="font-size:0.75em; color:#475569; background:#f1f5f9; padding:8px; border-radius:8px;">
+                <div style="font-size:0.75em; color:#475569; background:#f1f5f9; padding:10px; border-radius:8px;">
                     <strong>Zahlungsbedingungen:</strong><br>Bitte überweisen innerhalb von 14 Tagen ohne Abzug:<br><strong>IBAN:</strong> AT86 3746 8000 0451 3511<br><strong>BIC:</strong> RVVGAT2B468<br><strong>Bank:</strong> Raiffeisenbank Bludenz-Montafon<br><strong>Verwendungszweck:</strong> ${inv.invoiceNum}
                 </div>
             `;
@@ -1252,7 +1264,7 @@
             }
         }
 
-        // PDF GENERIEREN
+        // PDF GENERIEREN UND HERUNTERLADEN
         function generateInvoicePDF(docId) {
             const invoiceData = window.invoicesMap[docId];
             if (!invoiceData) return;
@@ -1284,7 +1296,7 @@
             doc.text("Rechnung an:", 14, 48);
 
             doc.setFont("helvetica", "normal");
-            doc.text(invoiceData.recipientName || "", 14, 54);
+            doc.text(invoiceData.recipientName || "Kunde", 14, 54);
             if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 59);
             doc.text(invoiceData.recipientAddress || "", 14, 64);
             doc.text(invoiceData.recipientZipCity || "", 14, 69);
@@ -1293,7 +1305,7 @@
             doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 105, 54);
             doc.text(`Rechnungsdatum: ${invoiceData.date}`, 105, 59);
 
-            const tableBody = invoiceData.items.map(item => [
+            const tableBody = (invoiceData.items || []).map(item => [
                 `${item.name} (${item.count}x)`, 
                 `${parseFloat(item.price).toFixed(2).replace('.', ',')} €`
             ]);
@@ -1303,7 +1315,7 @@
                 head: [['Leistung', 'Betrag']],
                 body: [
                     ...tableBody,
-                    [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: `${parseFloat(invoiceData.total).toFixed(2).replace('.', ',')} €`, styles: { fontStyle: 'bold' } }]
+                    [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: `${parseFloat(invoiceData.total || 0).toFixed(2).replace('.', ',')} €`, styles: { fontStyle: 'bold' } }]
                 ],
                 theme: 'striped',
                 headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
@@ -1317,7 +1329,7 @@
 
             doc.setFont("helvetica", "normal");
             doc.setFontSize(8.5);
-            doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${invoiceData.total.toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:`, 14, finalY + 5);
+            doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${(invoiceData.total || 0).toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:`, 14, finalY + 5);
             
             doc.setFont("helvetica", "bold"); doc.text("IBAN:", 14, finalY + 12);
             doc.setFont("helvetica", "normal"); doc.text("AT86 3746 8000 0451 3511", 30, finalY + 12);
@@ -1329,7 +1341,7 @@
             doc.setFont("helvetica", "normal"); doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 22);
 
             doc.setFont("helvetica", "bold"); doc.text("Verwendungszweck:", 14, finalY + 27);
-            doc.setFont("helvetica", "normal"); doc.text(`${invoiceData.invoiceNum} / ${invoiceData.recipientName}`, 46, finalY + 27);
+            doc.setFont("helvetica", "normal"); doc.text(`${invoiceData.invoiceNum} / ${invoiceData.recipientName || 'Kunde'}`, 46, finalY + 27);
 
             doc.save(`${invoiceData.invoiceNum}.pdf`);
         }
@@ -1441,7 +1453,7 @@
             }
         }
 
-        // DYNAMISCHE ADMIN LOGIN-FUNKTION (SUB-ADDRESSING)
+        // DYNAMISCHE ADMIN LOGIN-FUNKTION
         function handleAdminLogin(e) {
             e.preventDefault();
             const selectedUser = document.getElementById('admin-user-select').value;
@@ -1453,8 +1465,6 @@
                 .then((userCredential) => {
                     document.body.classList.add('admin-mode');
                     document.getElementById('admin-login-card').style.display = 'none';
-                    
-                    // Passwortfeld direkt nach erfolgreichem Login leeren
                     document.getElementById('admin-password-input').value = '';
                     
                     alert("Admin-Modus erfolgreich aktiviert!");
