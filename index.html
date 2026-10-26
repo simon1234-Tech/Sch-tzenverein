@@ -1,696 +1,1055 @@
 <!DOCTYPE html>
+
 <html lang="de">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <title>Vereins-App - KB & SV Gaschurn-Partenen</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+
+
     <!-- Bibliotheken für PDF-Export & Diagramme -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+
     <meta name="apple-mobile-web-app-capable" content="yes">
+
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <meta name="apple-mobile-web-app-title" content="KB & SV App">
+
     <link rel="apple-touch-icon" href="logo.png">
+
     <link rel="icon" type="image/png" href="logo.png">
 
+
+
     <!-- Firebase SDKs (v8.10.1) -->
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 
+
+
     <script>
+
       const firebaseConfig = {
+
         apiKey: "AIzaSyDchsz_qOTMpvT48cKBYLqUmX30Lw39iGA",
+
         authDomain: "kb-sv-vereinsapp.firebaseapp.com",
+
         projectId: "kb-sv-vereinsapp",
+
         storageBucket: "kb-sv-vereinsapp.appspot.com",
+
         messagingSenderId: "1015802588615",
+
         appId: "1:1015802588615:web:bcecb74526a2096d2ebde2"
+
       };
+
       try { firebase.initializeApp(firebaseConfig); } catch(e) {}
+
       const db = firebase.firestore();
+
       const auth = firebase.auth();
+
       const messaging = firebase.messaging();
+
     </script>
+
+
 
     <style>
+
         :root {
+
             --primary-red: #b91c1c; 
+
             --primary-dark: #7f1d1d;
+
             --bg-light: #f1f5f9; 
+
             --card-glass: rgba(255, 255, 255, 0.88);
+
             --text-dark: #1e293b; 
+
             --text-muted: #64748b; 
+
             --accent-green: #10b981; 
+
             --accent-green-bright: #22c55e;
+
             --danger: #dc2626;
+
             --admin-blue: #2563eb;
+
         }
+
         
+
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
         
+
         body {
+
             font-family: 'Montserrat', sans-serif;
+
             color: var(--text-dark);
+
             background: linear-gradient(135deg, #e2e8f0 100%, #cbd5e1 0%);
+
             background-attachment: fixed;
+
             padding: 12px;
+
             padding-bottom: 150px !important;
+
             max-width: 580px;
+
             margin: 0 auto;
+
             min-height: 100vh;
+
             font-size: 0.95em;
+
         }
+
+
 
         .app-header {
+
             background: linear-gradient(135deg, #7f1d1d, #b91c1c);
+
             color: white;
+
             padding: 20px 16px;
+
             text-align: center;
+
             border-radius: 20px;
+
             margin-bottom: 16px;
+
             box-shadow: 0 10px 25px rgba(185, 28, 28, 0.25);
+
             backdrop-filter: blur(10px);
+
             border: 1px solid rgba(255, 255, 255, 0.2);
+
         }
+
         
+
         .app-header h1 { font-size: 1.25em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
+
         .app-header p { font-size: 0.85em; opacity: 0.95; margin-top: 4px; color: #fca5a5; font-weight: 700; }
 
+
+
         .page-content { display: none; }
+
         .page-content.active { display: block; }
 
+
+
         .glass-card {
+
             background: var(--card-glass);
+
             backdrop-filter: blur(16px);
+
             -webkit-backdrop-filter: blur(16px);
+
             border-radius: 18px;
+
             padding: 18px;
+
             margin-bottom: 16px;
+
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
             border: 1px solid rgba(255, 255, 255, 0.85);
+
             color: var(--text-dark);
+
         }
+
+
 
         .glass-card-blue { border-left: 6px solid #2563eb !important; }
+
         .glass-card-yellow { border-left: 6px solid #eab308 !important; }
+
         .glass-card-red { border-left: 6px solid #dc2626 !important; }
+
         
+
         .card-title {
+
             font-size: 1.1em;
+
             font-weight: 700;
+
             color: var(--primary-red);
+
             margin-bottom: 14px;
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
+
         }
+
+
 
         @keyframes intenseNeonPulse {
+
             0% { box-shadow: 0 0 8px rgba(34, 197, 94, 0.5); border-color: rgba(34, 197, 94, 0.7); }
+
             50% { box-shadow: 0 0 25px rgba(34, 197, 94, 1); border-color: rgba(34, 197, 94, 1); transform: scale(1.01); }
+
             100% { box-shadow: 0 0 8px rgba(34, 197, 94, 0.5); border-color: rgba(34, 197, 94, 0.7); }
+
         }
+
         .next-duty-neon {
+
             background: rgba(255, 255, 255, 0.95) !important;
+
             border: 3px solid #22c55e !important;
+
             animation: intenseNeonPulse 1.4s infinite ease-in-out;
+
         }
+
+
 
         .dark-event-item {
+
             background: rgba(255, 255, 255, 0.9);
+
             border-radius: 14px;
+
             padding: 14px;
+
             margin-bottom: 12px;
+
             border-left: 5px solid #b91c1c;
+
             box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+
             border: 1px solid rgba(255, 255, 255, 0.9);
+
         }
+
+
 
         .btn {
+
             padding: 12px 18px;
+
             border-radius: 14px;
+
             border: none;
+
             font-weight: 700;
+
             font-size: 0.9em;
+
             cursor: pointer;
+
             display: inline-flex;
+
             align-items: center;
+
             justify-content: center;
+
             gap: 6px;
+
             text-decoration: none;
+
             transition: all 0.2s;
+
         }
+
         .btn-primary { background: var(--primary-red); color: white; box-shadow: 0 4px 15px rgba(185, 28, 28, 0.35); }
+
         .btn-green { background: #16a34a; color: white; box-shadow: 0 4px 15px rgba(22, 163, 74, 0.35); }
+
         .btn-danger { background: #fee2e2; color: var(--danger); border: 1px solid #fecaca; }
+
         .btn-admin { background: var(--admin-blue); color: white; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35); }
+
         .btn-block { width: 100%; margin-top: 10px; }
 
+
+
         .form-group { margin-bottom: 14px; }
+
         .form-group label { display: block; font-size: 0.85em; font-weight: 700; margin-bottom: 6px; color: var(--text-muted); }
+
         .form-control {
+
             width: 100%;
+
             padding: 12px 14px;
+
             border-radius: 12px;
+
             border: 1.5px solid #cbd5e1;
+
             font-family: inherit;
+
             font-size: 0.95em;
+
             background: rgba(255, 255, 255, 0.9);
+
             color: var(--text-dark);
+
         }
+
         .form-control:focus { outline: none; border-color: var(--admin-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 
+
+
         .price-item {
+
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
             padding: 12px 0;
+
             border-bottom: 1px solid rgba(203, 213, 225, 0.5);
+
             font-size: 0.95em;
+
         }
+
         .counter-controls { display: flex; align-items: center; gap: 12px; }
+
         .counter-btn {
+
             background: rgba(255, 255, 255, 0.9);
+
             color: var(--primary-red);
+
             border: 1.5px solid #cbd5e1;
+
             width: 38px; height: 38px;
+
             border-radius: 50%;
+
             font-size: 1.2em;
+
             font-weight: bold;
+
             cursor: pointer;
+
             display: flex; align-items: center; justify-content: center;
+
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+
         }
+
+
 
         .strich-category-header {
+
             background: var(--primary-red);
+
             color: #ffffff;
+
             padding: 8px 12px;
+
             border-radius: 10px;
+
             font-size: 0.85em;
+
             font-weight: 800;
+
             margin: 16px 0 8px 0;
+
             text-transform: uppercase;
+
             letter-spacing: 0.5px;
+
         }
+
+
 
         /* Admin Tab Navigation */
+
         .admin-nav-tabs {
+
             display: grid;
+
             grid-template-columns: repeat(2, 1fr);
+
             gap: 8px;
+
             margin-bottom: 16px;
+
         }
+
         .admin-tab-btn {
+
             background: rgba(255, 255, 255, 0.9);
+
             border: 1.5px solid #cbd5e1;
+
             padding: 12px 10px;
+
             border-radius: 12px;
+
             font-weight: 700;
+
             font-size: 0.8em;
+
             color: var(--text-dark);
+
             cursor: pointer;
+
             text-align: center;
+
             transition: all 0.2s;
+
         }
+
         .admin-tab-btn.active {
+
             background: var(--admin-blue);
+
             color: white;
+
             border-color: var(--admin-blue);
+
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+
         }
+
         .admin-tab-content { display: none; }
+
         .admin-tab-content.active { display: block; }
 
+
+
         .bottom-nav {
+
             position: fixed !important; 
+
             bottom: 12px !important; 
+
             left: 12px !important; 
+
             right: 12px !important;
+
             width: calc(100% - 24px) !important;
+
             max-width: 556px !important; 
+
             margin: 0 auto !important;
+
             background: rgba(255, 255, 255, 0.95) !important;
+
             backdrop-filter: blur(20px) !important;
+
             -webkit-backdrop-filter: blur(20px) !important;
+
             border-radius: 18px !important;
+
             border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+
             display: flex !important; 
+
             justify-content: space-around !important;
+
             align-items: center !important;
+
             padding: 8px 6px !important;
+
             box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+
             z-index: 99999 !important;
+
         }
+
         .nav-item {
+
             display: flex !important; 
+
             flex-direction: column !important; 
+
             align-items: center !important;
+
             text-decoration: none !important; 
+
             color: #64748b !important; 
+
             font-size: 0.7em !important; 
+
             font-weight: 700 !important; 
+
             cursor: pointer !important;
+
             flex: 1 !important;
+
             text-align: center !important;
+
             padding: 6px 2px !important;
+
             border-radius: 14px !important;
+
         }
+
         .nav-item.active { 
+
             color: #ffffff !important;
+
             background: var(--primary-red) !important;
+
             box-shadow: 0 4px 15px rgba(185, 28, 28, 0.4) !important;
+
         }
+
         .nav-icon { font-size: 1.4em !important; margin-bottom: 3px !important; display: block !important; }
 
+
+
         .admin-delete-btn { display: none; }
+
         body.admin-mode .admin-delete-btn { display: block !important; }
 
+
+
         .badge-paid { background: #d1fae5; color: #065f46; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #a7f3d0; cursor: pointer; }
+
         .badge-open { background: #fee2e2; color: #991b1b; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #fecaca; cursor: pointer; }
 
+
+
         #invoice-modal {
+
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+
             background: rgba(0,0,0,0.65); z-index: 999999; justify-content: center; align-items: center; padding: 12px;
+
         }
+
         .invoice-preview-box {
+
             background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); width: 100%; max-width: 500px; border-radius: 18px; padding: 20px;
+
             max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 25px 35px -5px rgba(0,0,0,0.3);
+
         }
+
     </style>
+
 </head>
+
 <body>
 
+
+
     <div class="app-header">
+
         <h1>Kameradschaftsbund & Schützenverein</h1>
+
         <p>Gaschurn-Partenen</p>
+
     </div>
+
+
 
     <!-- 1. NEWS & STARTSEITE -->
+
     <div id="page-news" class="page-content active">
+
         <div id="news-inventory-warning-box"></div>
 
-        <!-- NÄCHSTER DIENST -->
+
+
+        <!-- NÄCHSTER DIENST (VERGRÖßERT & KRÄFTIG PULSIEREND) -->
+
         <div class="glass-card next-duty-neon">
+
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+
                 <span style="font-size: 0.8em; background: #22c55e; color: #fff; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase;">Nächster Dienst</span>
+
                 <span style="font-size: 0.8em; color: #15803d; font-weight: 700;">Live</span>
+
             </div>
+
             <div id="next-duty-widget"></div>
+
         </div>
+
+
 
         <!-- GESAMTER DIENSTPLAN -->
+
         <div class="glass-card glass-card-blue">
+
             <div class="card-title">
+
                 <span>📋 Gesamter Dienstplan</span>
+
                 <span style="font-size: 0.65em; background: var(--primary-red); color: white; padding: 3px 8px; border-radius: 6px;">2026/2027</span>
+
             </div>
+
             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
+
             <div id="full-roster-list"></div>
+
         </div>
+
+
 
         <!-- NORMALE NEWS -->
+
         <div id="news-container"></div>
+
     </div>
+
+
 
     <!-- 2. TERMINE -->
+
     <div id="page-events" class="page-content">
+
         <div class="glass-card glass-card-blue">
+
             <div class="card-title" style="color: #2563eb;">📅 Nächste Vereinstermine & Abstimmung</div>
+
             <div id="events-container"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Termine...</p></div>
+
         </div>
+
     </div>
 
-    <!-- 3. SCHIESSBUCH -->
+
+
+    <!-- 3. SCHIESSBUCH (MIT DIREKTER MITGLIEDERAUSWAHL) -->
+
     <div id="page-shooting" class="page-content">
+
         <div class="glass-card glass-card-blue">
+
             <div class="card-title" style="color: #2563eb;">🎯 Schießbuch (Luftgewehr)</div>
+
             
+
             <form onsubmit="saveShot(event)">
+
                 <div class="form-group">
+
                     <label>Mitglied suchen / auswählen</label>
+
                     <input type="text" id="shot-search-input" class="form-control" placeholder="🔍 Namen eintippen..." oninput="filterMemberDropdown(this.value)">
+
                     <select class="form-control" id="shot-member-select" size="5" style="margin-top: 6px;" onchange="document.getElementById('shot-name').value = this.value" onclick="if(this.value) document.getElementById('shot-name').value = this.value">
+
                         <!-- Dynamisch -->
+
                     </select>
+
                 </div>
+
                 <div class="form-group"><label>Gewählter Schütze</label><input type="text" class="form-control" id="shot-name" required readonly placeholder="Bitte oben auswählen"></div>
+
                 <div class="form-group"><label>Waffe / Disziplin</label><input type="text" class="form-control" value="Luftgewehr" readonly style="background:rgba(248,250,252,0.9); font-weight:700;"></div>
+
                 <div style="display: flex; gap: 12px;">
+
                     <div class="form-group" style="flex: 1;"><label>Erreichte Ringe</label><input type="number" step="0.1" class="form-control" id="shot-rings" required placeholder="z.B. 298.5"></div>
+
                     <div class="form-group" style="flex: 1;"><label>Teiler (optional)</label><input type="number" step="0.1" class="form-control" id="shot-teiler" placeholder="z.B. 12.4"></div>
+
                 </div>
+
                 <button type="submit" class="btn btn-primary btn-block">Ergebnis speichern</button>
+
             </form>
+
         </div>
+
+
 
         <!-- DIAGRAMM -->
+
         <div class="glass-card glass-card-blue">
+
             <div class="card-title" style="color: #2563eb;">📈 Persönlicher Fortschritt</div>
+
             <div style="position: relative; height: 220px; width: 100%;">
+
                 <canvas id="shootingChart"></canvas>
+
             </div>
+
         </div>
+
     </div>
+
+
 
     <!-- 4. STRICHLISTE -->
+
     <div id="page-drinks" class="page-content">
+
         <div class="glass-card glass-card-blue">
+
             <div class="card-title" style="color: #2563eb;">🍻 Strichliste & Preisliste</div>
+
             
+
             <div class="strich-category-header">Speisen</div>
+
             <div class="price-item"><span>🌭 Paar Hauswürste (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
+
             <div class="price-item"><span>🌭 Paar Wienerle (€ 7,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
 
+
+
             <div class="strich-category-header">Getränke & Bier</div>
+
             <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
+
             <div class="price-item"><span>🍺 Radler 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
+
             <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
+
             <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
+
             <div class="price-item"><span>🍷 Wein 1/4 lt. (€ 4,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
+
             <div class="price-item"><span>🍷 Wein 1/8 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
+
             <div class="price-item"><span>🍷 Wein gespritzt (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
+
             <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
 
+
+
             <div class="strich-category-header">Heissgetränke & Sonstiges</div>
+
             <div class="price-item"><span>☕ Kaffee (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
+
             <div class="price-item"><span>🍵 Tee (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
 
+
+
             <div class="strich-category-header">Luftgewehrschießen</div>
+
             <div class="price-item" style="background: rgba(254, 242, 242, 0.9); padding: 10px 12px; border-radius: 10px;">
+
                 <span>🎯 Luftgewehrschießen (€ 8,00 / P.)</span>
+
                 <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
+
             </div>
+
+
 
             <div style="margin-top: 14px; padding-top: 10px; border-top: 2px solid #cbd5e1; display: flex; justify-content: space-between; font-weight: 800; font-size: 1.15em;">
+
                 <span>Gesamtbetrag:</span>
+
                 <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
+
             </div>
+
+
 
             <div style="margin-top: 14px; background: rgba(248, 250, 252, 0.9); padding: 14px; border-radius: 12px; border: 1.5px solid #cbd5e1;">
-                <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger / Mitglied:</h4>
-                <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Max Mustermann"></div>
+
+                <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger:</h4>
+
+                <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
+
                 <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
+
                 <div class="form-group"><label>Straße</label><input type="text" class="form-control" id="cust-address" placeholder="St. Jakob 151"></div>
-                <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="6764 Gaschurn"></div>
+
+                <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="6580 St. Anton am Arlberg"></div>
+
             </div>
+
+
 
             <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 14px;">💾 Abrechnung speichern</button>
+
             <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 8px;">Zurücksetzen</button>
+
         </div>
+
     </div>
+
+
 
     <!-- 5. MITGLIEDER -->
+
     <div id="page-guide" class="page-content">
-        <div class="glass-card glass-card-yellow">
-            <div class="card-title" style="color: #ca8a04;">⭐ Vorstand & Funktionsträger ⭐</div>
-            <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a></div>
-                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a></div>
-                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span></div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a></div>
-                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span></div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a></div>
-                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span></div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a></div>
-                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span></div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a></div>
-            </div>
-        </div>
 
         <div class="glass-card glass-card-yellow">
-            <div class="card-title" style="color: #ca8a04;">👥 Alle Aktiven Mitglieder</div>
-            <div id="public-members-list" style="font-size: 0.85em; display: flex; flex-direction: column; gap: 6px;"></div>
+
+            <div class="card-title" style="color: #ca8a04;">⭐ Vorstand & Funktionsträger ⭐</div>
+
+            <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
+
+                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a></div>
+
+                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a></div>
+
+                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span></div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a></div>
+
+                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span></div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a></div>
+
+                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span></div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a></div>
+
+                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span></div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a></div>
+
+            </div>
+
         </div>
+
+
+
+        <div class="glass-card glass-card-yellow">
+
+            <div class="card-title" style="color: #ca8a04;">👥 Alle Aktiven Mitglieder</div>
+
+            <div id="public-members-list" style="font-size: 0.85em; display: flex; flex-direction: column; gap: 6px;"></div>
+
+        </div>
+
     </div>
 
-    <!-- 6. ADMIN-BEREICH -->
+
+
+    <!-- 6. ADMIN-BEREICH MIT NAMENSAUSWAHL FOR INDIVIDUELLE PASSWÖRTER -->
+
     <div id="page-card" class="page-content">
+
         <div class="glass-card glass-card-red" id="admin-login-card">
+
             <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
+
             <form onsubmit="handleAdminLogin(event)">
+
                 <div class="form-group">
+
                     <label>Admin-Name</label>
+
                     <select class="form-control" id="admin-user-select" required>
+
                         <option value="simon">Simon</option>
+
                         <option value="heimo">Heimo</option>
+
                         <option value="karin">Karin</option>
+
                         <option value="sabrina">Sabrina</option>
+
                     </select>
+
                 </div>
+
                 <div class="form-group">
+
                     <label>Dein persönliches Passwort</label>
+
                     <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required>
+
                 </div>
+
                 <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
+
             </form>
+
         </div>
+
+
 
         <div class="admin-delete-btn">
+
             <!-- ADMIN UNTER-TABS -->
+
             <div class="admin-nav-tabs">
+
                 <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">📦 1. Lagerbestand</button>
+
                 <button onclick="switchAdminTab('tab-newstermins')" class="admin-tab-btn" id="btn-tab-newstermins">📢 2. News & Termine</button>
+
                 <button onclick="switchAdminTab('tab-invoices')" class="admin-tab-btn" id="btn-tab-invoices">💶 3. Rechnungen</button>
+
                 <button onclick="switchAdminTab('tab-members')" class="admin-tab-btn" id="btn-tab-members">👥 4. Mitglieder</button>
+
                 <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys">🔑 5. Schlüsselliste</button>
+
                 <button onclick="switchAdminTab('tab-shots')" class="admin-tab-btn" id="btn-tab-shots">🎯 6. Schießergebnisse</button>
+
             </div>
+
+
 
             <!-- TAB 1: LAGERBESTAND -->
+
             <div id="tab-inventory" class="admin-tab-content active glass-card glass-card-red">
+
                 <div class="card-title" style="color: #dc2626;">
+
                     <span>📦 1. Lagerbestand</span>
+
                     <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.75em;" onclick="editInventory()">✏️ Bearbeiten</button>
+
                 </div>
+
                 <div id="inventory-timestamp" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 6px;">Noch nicht geändert</div>
+
                 <div id="inventory-warning-box"></div>
+
                 <div id="admin-inventory-display">
+
                     <div class="price-item"><span>Hauswürste (Paar)</span><strong id="inv-hauswuerste">20 Paar</strong></div>
+
                     <div class="price-item"><span>Wienerle (Paar)</span><strong id="inv-wienerle">15 Paar</strong></div>
+
                     <div class="price-item"><span>Bier Kisten 0,33l</span><strong id="inv-bier">3 Kisten</strong></div>
+
                     <div class="price-item"><span>Limo Kisten 0,3l</span><strong id="inv-limo">2 Kisten</strong></div>
+
                 </div>
+
             </div>
+
+
 
             <!-- TAB 2: NEWS & TERMINE -->
+
             <div id="tab-newstermins" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">📢 2. News & Termine</div>
+
+                <div class="card-title" style="color: #dc2626;">📢 2. News, Foto & Texte / Termine</div>
+
                 
+
                 <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 6px;">Neuen News-Beitrag erstellen</h4>
+
                 <form onsubmit="addNewsItem(event)">
+
                     <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
+
                     <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
+
                     <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
+
                     <button type="submit" class="btn btn-admin btn-block">News Veröffentlichen</button>
+
                 </form>
+
+
 
                 <h4 style="color: #b91c1c; font-size: 0.9em; margin: 16px 0 6px 0;">Termin hinzufügen</h4>
+
                 <form onsubmit="addEvent(event)">
+
                     <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="Generalversammlung"></div>
+
                     <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="15.12.2026"></div>
+
                     <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
+
                     <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
+
                 </form>
+
                 <div style="margin-top: 10px; border-top: 1px solid #fecaca; padding-top: 8px;">
+
                     <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Bestehende Termine:</div>
+
                     <div id="admin-events-list"></div>
+
                 </div>
+
             </div>
+
+
 
             <!-- TAB 3: RECHNUNGEN -->
+
             <div id="tab-invoices" class="admin-tab-content glass-card glass-card-red">
+
                 <div class="card-title" style="color: #dc2626;">💶 3. Rechnungen (PDF History)</div>
+
                 <div id="admin-tally-history-list"></div>
+
             </div>
+
+
 
             <!-- TAB 4: MITGLIEDER -->
+
             <div id="tab-members" class="admin-tab-content glass-card glass-card-red">
+
                 <div class="card-title" style="color: #dc2626;">👥 4. Aktive und passive Mitglieder</div>
+
                 <h4 style="color: #2563eb; font-size: 0.9em; margin: 8px 0 4px 0;">Aktive Mitglieder</h4>
+
                 <div id="admin-active-members-list"></div>
+
                 <h4 style="color: #dc2626; font-size: 0.9em; margin: 14px 0 4px 0;">Passive Mitglieder (Hervorgehoben)</h4>
+
                 <div id="admin-passive-members-list"></div>
+
             </div>
 
-            <!-- TAB 5: SCHLÜSSELLISTE -->
+
+
+            <!-- TAB 5: SCHLÜSSELLISTE (VERGRÖßERTE ANSICHT) -->
+
             <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
+
                 <div class="card-title" style="color: #dc2626;">
+
                     <span>🔑 5. Schlüsselliste</span> 
+
                     <button class="btn btn-admin" style="padding: 8px 14px; font-size: 0.85em;" onclick="addKeyListItem()">➕ Person hinzufügen</button>
+
                 </div>
+
                 <div id="admin-keys-list"></div>
+
             </div>
 
-            <!-- TAB 6: SCHIESSERGEBNISSE -->
-            <div id="tab-shots" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">🎯 6. Schießergebnisse (Verwaltung)</div>
-                <div id="admin-shots-list"></div>
-            </div>
-            
-            <button onclick="handleAdminLogout()" class="btn btn-danger btn-block" style="margin-top: 20px;">Abmelden</button>
-        </div>
-    </div>
 
-    <!-- UNTERE NAVIGATION -->
-    <div class="bottom-nav">
-        <a class="nav-item active" onclick="switchPage('page-news', this)"><span class="nav-icon">📰</span>News</a>
-        <a class="nav-item" onclick="switchPage('page-events', this)"><span class="nav-icon">📅</span>Termine</a>
-        <a class="nav-item" onclick="switchPage('page-shooting', this)"><span class="nav-icon">🎯</span>Schießen</a>
-        <a class="nav-item" onclick="switchPage('page-drinks', this)"><span class="nav-icon">🍺</span>Strichliste</a>
-        <a class="nav-item" onclick="switchPage('page-guide', this)"><span class="nav-icon">👥</span>Mitglieder</a>
-        <a class="nav-item" onclick="switchPage('page-card', this)"><span class="nav-icon">🔐</span>Admin</a>
-    </div>
 
-    <!-- JAVASCRIPT LOGIK -->
-    <script>
-        // Preistabelle
-        const prices = {
-            hauswuerste: 7.50, wienerle: 7.00, bier: 3.50, radler: 3.50,
-            limo: 3.00, mineral: 2.50, wein4: 4.00, wein8: 3.00,
-            weingespr: 3.50, schnaps: 3.50, kaffee: 3.00, tee: 2.50, luftgewehr: 8.00
-        };
-        let counts = {};
+            <!-- TAB 6: SCHIESSERGEBNISSE (VERGRÖßERTE ANSICHT) -->
 
-        // Zähler anpassen
-        function changeCount(item, delta) {
-            if (!counts[item]) counts[item] = 0;
-            counts[item] = Math.max(0, counts[item] + delta);
-            document.getElementById(`count-${item}`).innerText = counts[item];
-            calculateTotal();
-        }
-
-        // Gesamtpreis berechnen
-        function calculateTotal() {
-            let total = 0;
-            for (let item in counts) {
-                total += (counts[item] || 0) * (prices[item] || 0);
-            }
-            document.getElementById('total-price').innerText = `€ ${total.toFixed(2).replace('.', ',')}`;
-        }
-
-        // Strichliste zurücksetzen
-        function confirmResetDrinks() {
-            counts = {};
-            for (let item in prices) {
-                const el = document.getElementById(`count-${item}`);
-                if (el) el.innerText = '0';
-            }
-            document.getElementById('cust-name').value = '';
-            document.getElementById('cust-attn').value = '';
-            document.getElementById('cust-address').value = '';
-            document.getElementById('cust-zipcity').value = '';
-            calculateTotal();
-        }
-
-        // STRICHLISTE SPEICHERN (FREIGEGEBEN FÜR ALLE MITGLIEDER)
-        async function saveTallyBilling() {
-            const custName = document.getElementById('cust-name').value;
-            const custAttn = document.getElementById('cust-attn').value;
-            const custAddress = document.getElementById('cust-address').value;
-            const custZipCity = document.getElementById('cust-zipcity').value;
-
-            const items = [
-                { name: "Hauswürste (Paar)", count: counts.hauswuerste || 0, price: 7.50 },
-                { name: "Wienerle (Paar)", count: counts.wienerle || 0, price: 7.00 },
-                { name: "Bier 0,33 lt.", count: counts.bier || 0, price: 3.50 },
-                { name: "Radler 0,33 lt.", count: counts.radler || 0, price: 3.50 },
-                { name: "Limo 0,3 lt.", count: counts.limo || 0, price: 3.00 },
-                { name: "Mineral 1/4 lt.", count: counts.mineral || 0, price: 2.50 },
-                { name: "Wein 1/4 lt.", count: counts.wein4 || 0, price: 4.00 },
-                { name: "Wein 1/8 lt.", count: counts.wein8 || 0, price: 3.00 },
-                { name: "Wein gespritzt", count: counts.weingespr || 0, price: 3.50 },
-                { name: "Schnaps 2 cl.", count: counts.schnaps || 0, price: 3.50 },
-                { name: "Kaffee", count: counts.kaffee || 0, price: 3.00 },
-                { name: "Tee", count: counts.tee || 0, price: 2.50 },
-                { name: "Luftgewehrschießen", count: counts.luftgewehr || 0, price: 8.00 }
-            ].filter(item => item.count > 0);
-
-            if (items.length === 0) {
-                alert("Bitte wähle mindestens ein Produkt aus!");
-                return;
-            }
-
-            const total = items.reduce((sum, item) => sum + (item.count * item.price), 0);
-
-            try {
-                // Direkt in Firestore 'tally_billings' speichern
-                await db.collection("tally_billings").add({
-                    customer: {
-                        name: custName,
-                        attn: custAttn,
-                        address: custAddress,
-                        zipCity: custZipCity
-                    },
-                    items: items,
-                    total: total,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                alert("Strichliste erfolgreich gespeichert!");
-                confirmResetDrinks();
-
-            } catch (error) {
-                console.error("Fehler beim Speichern der Strichliste:", error);
-                alert("Fehler beim Speichern: " + error.message);
-            }
-        }
-
-        // Navigation zwischen den Hauptseiten
-        function switchPage(pageId, navEl) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            if (navEl) navEl.classList.add('active');
-        }
-
-        // Navigation im Admin-Bereich (Unter-Tabs)
-        function switchAdminTab(tabId) {
-            document.querySelectorAll('.admin-tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            document.getElementById(`btn-${tabId}`).classList.add('active');
-        }
-
-        // Admin-Login Abwicklung
-        async function handleAdminLogin(e) {
-            e.preventDefault();
-            const selectedUser = document.getElementById('admin-user-select').value.toLowerCase().trim();
-            const password = document.getElementById('admin-password-input').value;
-            const email = `admin+${selectedUser}@kb-sv-gaschurn.at`;
-
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-                document.body.classList.add('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'none';
-                alert("Erfolgreich als Vorstand angemeldet!");
-            } catch (err) {
-                alert("Anmeldung fehlgeschlagen! Bitte Passwort prüfen.");
-            }
-        }
-
-        // Admin Logout
-        function handleAdminLogout() {
-            auth.signOut().then(() => {
-                document.body.classList.remove('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'block';
-                document.getElementById('admin-password-input').value = '';
-                alert("Erfolgreich abgemeldet.");
-            });
-        }
-
-        // Auth Status Überwachung
-        auth.onAuthStateChanged(user => {
-            if (user && user.email.endsWith('@kb-sv-gaschurn.at')) {
-                document.body.classList.add('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'none';
-            } else {
-                document.body.classList.remove('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'block';
-            }
-        });
-    </script>
-</body>
-</html>
+            <div id="tab-shots" class="admin 
