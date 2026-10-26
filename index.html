@@ -442,7 +442,7 @@
                 </div>
                 <div class="form-group">
                     <label>Dein persönliches Passwort</label>
-                    <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required autocomplete="off">
+                    <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required>
                 </div>
                 <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
             </form>
@@ -616,7 +616,7 @@
             const total = items.reduce((sum, item) => sum + (item.count * item.price), 0);
 
             try {
-                // Speichern in 'tally_billings' ohne Auth-Zwang
+                // Direkt in Firestore 'tally_billings' speichern
                 await db.collection("tally_billings").add({
                     customer: {
                         name: custName,
@@ -638,7 +638,7 @@
             }
         }
 
-        // Navigation zwischen Hauptseiten
+        // Navigation zwischen den Hauptseiten
         function switchPage(pageId, navEl) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -646,7 +646,7 @@
             if (navEl) navEl.classList.add('active');
         }
 
-        // Navigation im Admin-Bereich (Tabs)
+        // Navigation im Admin-Bereich (Unter-Tabs)
         function switchAdminTab(tabId) {
             document.querySelectorAll('.admin-tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
@@ -665,9 +665,6 @@
                 await auth.signInWithEmailAndPassword(email, password);
                 document.body.classList.add('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'none';
-                
-                // Passwort-Feld direkt nach erfolgreichem Login leeren
-                document.getElementById('admin-password-input').value = '';
                 alert("Erfolgreich als Vorstand angemeldet!");
             } catch (err) {
                 alert("Anmeldung fehlgeschlagen! Bitte Passwort prüfen.");
@@ -677,24 +674,19 @@
         // Admin Logout
         function handleAdminLogout() {
             auth.signOut().then(() => {
-                const pwdInput = document.getElementById('admin-password-input');
-                if (pwdInput) pwdInput.value = '';
-                
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
+                document.getElementById('admin-password-input').value = '';
                 alert("Erfolgreich abgemeldet.");
             });
         }
 
-        // Auth Status Überwachung (Löscht Passwort automatisch beim Logout & Aufruf)
+        // Auth Status Überwachung
         auth.onAuthStateChanged(user => {
             if (user && user.email.endsWith('@kb-sv-gaschurn.at')) {
                 document.body.classList.add('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'none';
             } else {
-                const pwdInput = document.getElementById('admin-password-input');
-                if (pwdInput) pwdInput.value = '';
-
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
             }
