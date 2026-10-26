@@ -296,7 +296,7 @@
     <div id="page-news" class="page-content active">
         <div id="news-inventory-warning-box"></div>
 
-        <!-- NÄCHSTER DIENST (VERGRÖßERT & KRÄFTIG PULSIEREND) -->
+        <!-- NÄCHSTER DIENST -->
         <div class="glass-card next-duty-neon">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 0.8em; background: #22c55e; color: #fff; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase;">Nächster Dienst</span>
@@ -327,7 +327,7 @@
         </div>
     </div>
 
-    <!-- 3. SCHIESSBUCH (MIT DIREKTER MITGLIEDERAUSWAHL) -->
+    <!-- 3. SCHIESSBUCH -->
     <div id="page-shooting" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">🎯 Schießbuch (Luftgewehr)</div>
@@ -394,11 +394,11 @@
             </div>
 
             <div style="margin-top: 14px; background: rgba(248, 250, 252, 0.9); padding: 14px; border-radius: 12px; border: 1.5px solid #cbd5e1;">
-                <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger:</h4>
-                <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
+                <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger / Mitglied:</h4>
+                <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Max Mustermann"></div>
                 <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
                 <div class="form-group"><label>Straße</label><input type="text" class="form-control" id="cust-address" placeholder="St. Jakob 151"></div>
-                <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="6580 St. Anton am Arlberg"></div>
+                <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="6764 Gaschurn"></div>
             </div>
 
             <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 14px;">💾 Abrechnung speichern</button>
@@ -426,7 +426,7 @@
         </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH MIT NAMENSAUSWAHL FOR INDIVIDUELLE PASSWÖRTER -->
+    <!-- 6. ADMIN-BEREICH -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
             <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
@@ -442,7 +442,7 @@
                 </div>
                 <div class="form-group">
                     <label>Dein persönliches Passwort</label>
-                    <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required>
+                    <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required autocomplete="off">
                 </div>
                 <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
             </form>
@@ -477,7 +477,7 @@
 
             <!-- TAB 2: NEWS & TERMINE -->
             <div id="tab-newstermins" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">📢 2. News, Foto & Texte / Termine</div>
+                <div class="card-title" style="color: #dc2626;">📢 2. News & Termine</div>
                 
                 <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 6px;">Neuen News-Beitrag erstellen</h4>
                 <form onsubmit="addNewsItem(event)">
@@ -515,7 +515,7 @@
                 <div id="admin-passive-members-list"></div>
             </div>
 
-            <!-- TAB 5: SCHLÜSSELLISTE (VERGRÖßERTE ANSICHT) -->
+            <!-- TAB 5: SCHLÜSSELLISTE -->
             <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
                     <span>🔑 5. Schlüsselliste</span> 
@@ -524,970 +524,180 @@
                 <div id="admin-keys-list"></div>
             </div>
 
-            <!-- TAB 6: SCHIESSERGEBNISSE (VERGRÖßERTE ANSICHT) -->
+            <!-- TAB 6: SCHIESSERGEBNISSE -->
             <div id="tab-shots" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">🎯 6. Schießergebnisse</div>
-                <div id="admin-shots-history-list"></div>
+                <div class="card-title" style="color: #dc2626;">🎯 6. Schießergebnisse (Verwaltung)</div>
+                <div id="admin-shots-list"></div>
             </div>
-
-            <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 15px;">Admin-Modus Beenden</button>
+            
+            <button onclick="handleAdminLogout()" class="btn btn-danger btn-block" style="margin-top: 20px;">Abmelden</button>
         </div>
     </div>
 
-    <!-- MODAL FÜR RECHNUNGSANZEIGE -->
-    <div id="invoice-modal">
-        <div class="invoice-preview-box">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h3 style="color: #b91c1c; font-size: 1.05em;">Rechnungs-Vorschau</h3>
-                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.75em;" onclick="closeInvoiceModal()">Schließen</button>
-            </div>
-            <div id="invoice-modal-content" style="font-size: 0.85em; line-height: 1.4;"></div>
-            <button class="btn btn-green btn-block" style="margin-top: 12px;" onclick="downloadCurrentModalPDF()">📥 PDF Herunterladen</button>
-        </div>
+    <!-- UNTERE NAVIGATION -->
+    <div class="bottom-nav">
+        <a class="nav-item active" onclick="switchPage('page-news', this)"><span class="nav-icon">📰</span>News</a>
+        <a class="nav-item" onclick="switchPage('page-events', this)"><span class="nav-icon">📅</span>Termine</a>
+        <a class="nav-item" onclick="switchPage('page-shooting', this)"><span class="nav-icon">🎯</span>Schießen</a>
+        <a class="nav-item" onclick="switchPage('page-drinks', this)"><span class="nav-icon">🍺</span>Strichliste</a>
+        <a class="nav-item" onclick="switchPage('page-guide', this)"><span class="nav-icon">👥</span>Mitglieder</a>
+        <a class="nav-item" onclick="switchPage('page-card', this)"><span class="nav-icon">🔐</span>Admin</a>
     </div>
-
-    <!-- FUSSZEILE -->
-    <nav class="bottom-nav">
-        <a onclick="switchTab('news')" class="nav-item active" id="nav-news"><span class="nav-icon">📢</span><span>News</span></a>
-        <a onclick="switchTab('events')" class="nav-item" id="nav-events"><span class="nav-icon">📅</span><span>Termine</span></a>
-        <a onclick="switchTab('shooting')" class="nav-item" id="nav-shooting"><span class="nav-icon">🎯</span><span>Schießbuch</span></a>
-        <a onclick="switchTab('drinks')" class="nav-item" id="nav-drinks"><span class="nav-icon">🍻</span><span>Strichliste</span></a>
-        <a onclick="switchTab('guide')" class="nav-item" id="nav-guide"><span class="nav-icon">👥</span><span>Mitglieder</span></a>
-        <a onclick="switchTab('card')" class="nav-item" id="nav-card"><span class="nav-icon">🔒</span><span>Admin</span></a>
-    </nav>
 
     <!-- JAVASCRIPT LOGIK -->
     <script>
-        function switchTab(tabId) {
-            document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const targetPage = document.getElementById('page-' + tabId);
-            const targetNav = document.getElementById('nav-' + tabId);
-            if(targetPage) targetPage.classList.add('active');
-            if(targetNav) targetNav.classList.add('active');
-            window.scrollTo(0, 0);
-        }
-
-        function switchAdminTab(tabContentId) {
-            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.admin-tab-btn').forEach(el => el.classList.remove('active'));
-            const targetTab = document.getElementById(tabContentId);
-            const targetBtn = document.getElementById('btn-' + tabContentId);
-            if(targetTab) targetTab.classList.add('active');
-            if(targetBtn) targetBtn.classList.add('active');
-        }
-
-        const officialActiveMembers = [
-            "Manfred Wachter", "Werner Wachter", "Dietmar Schweighofer", "Simon Schweighofer",
-            "Norbert Spettel", "Heimo Stocker", "Christoph Wittwer", "Werner Wittwer",
-            "Erwin Rudigier", "Daniel Sandrell", "Werner Mattle", "Pascal Tripolt",
-            "Karin Stocker", "Jasmin Suntinger", "Sabrina Kinzl", "Maria Spettel",
-            "Natalie Stocker", "Elias Stocker"
-        ];
-
-        const officialPassiveMembers = [
-            "Joel Wachter", "Kofler Marlene", "Wachter Monika", "Schallner Harry",
-            "Netzer Werner", "Netzer Markus", "Fitsch Manuela", "Geiger Monika",
-            "Frank Sandrell", "Barbisch Andreas", "Patrick Wachter", "Steurer Harald",
-            "Steurer Angela", "Kofler Corinna", "Bitschnau Jutta", "Bitschnau Klaus",
-            "Essig Armin", "Carlos Da Ponte"
-        ];
-
-        let exactPdfKeyList = [
-            { header: "Mitglieder (Eingang & Büro)" },
-            { name: "Kofler Konrad", dob: "27.02.1960", addr: "Gaschurn 164d", tel: "0664 4331385", role: "Eingang & Büro" },
-            { name: "Wachter Manfred", dob: "23.06.1963", addr: "Gaschurn 164e", tel: "0664 4752129", role: "Waffenschrank" },
-            { name: "Wachter Werner", dob: "26.05.1966", addr: "Gaschurn 153", tel: "0664 2804791", role: "Eingang & Büro" },
-            { name: "Schweighofer Dietmar", dob: "28.03.1972", addr: "Gaschurn 160", tel: "0664 19281005", role: "Eingang & Büro" },
-            { name: "Schweighofer Simon", dob: "17.09.1997", addr: "Gaschurn 160", tel: "0650 3049466", role: "Waffenschrank" },
-            { name: "Spettel Norbert", dob: "14.01.1958", addr: "Gaschurn 11e", tel: "0664 5367206", role: "Waffenschrank" },
-            { name: "Stocker Heimo", dob: "23.01.1983", addr: "Gortipohl 59", tel: "0664 42144179", role: "Waffenschrank" },
-            { name: "Wittwer Christoph", dob: "17.11.1965", addr: "Gaschurn 71", tel: "0664 8258518", role: "Eingang & Büro" },
-            { name: "Wittwer Werner", dob: "08.02.1974", addr: "Gaschurn 60", tel: "0650 2501910", role: "Eingang & Büro" },
-            { name: "Mattle Werner", dob: "28.03.1979", addr: "Partenen 43b", tel: "0664 2520974", role: "Eingang & Büro" },
-            { name: "Markus Netzer", dob: "10.05.1983", addr: "Gaschurn 139a", tel: "0664 7605263", role: "Eingang & Büro" },
-            { name: "Werner Netzer", dob: "15.09.1956", addr: "Gaschurn 35a", tel: "", role: "Eingang & Büro" },
-            { name: "Pascal Tripolt", dob: "01.05.1984", addr: "Gaschurn 162", tel: "0664 5162082", role: "Eingang & Büro" },
-            
-            { header: "Marketenderinnen Montafonertracht" },
-            { name: "Suntinger Jamin", dob: "23.12.1984", addr: "Gaschurn 162", tel: "0664 2135908", role: "Kein Schlüssel" },
-            { name: "Sabrina Kinzl", dob: "12.06.1991", addr: "Tschagguns 14a", tel: "0660 1113150", role: "Kein Schlüssel" },
-            { name: "Stocker Karin", dob: "07.11.1986", addr: "Gortipohl 59", tel: "0650 2800596", role: "Kein Schlüssel" },
-            { name: "Maria Spettel", dob: "06.12.1960", addr: "Gaschurn 11e", tel: "0664 7644140", role: "Schlüssel vorhanden" },
-            { name: "Natalie Stocker", dob: "01.12.2007", addr: "Gortipohl 59", tel: "0664 4587288", role: "Kein Schlüssel" },
-
-            { header: "Ehrenmitglieder" },
-            { name: "Sandrell Heinrich", dob: "23.01.1951", addr: "Gaschurn 172", tel: "0664 1228485", role: "Kein Schlüssel" },
-            { name: "Kofler Konrad", dob: "27.02.1960", addr: "Gaschurn 164d", tel: "0664 4331385", role: "Eingang & Büro" },
-            { name: "Dona Lothar", dob: "10.06.1960", addr: "Partenen 78b", tel: "0664 45754735", role: "Kein Schlüssel" },
-            { name: "Gerd Spratler", dob: "05.10.1945", addr: "Gaschurn 140a", tel: "0650 9600245", role: "Kein Schlüssel" },
-
-            { header: "Jugendmitglieder" },
-            { name: "Elias Stocker", dob: "15.03.2010", addr: "Gortipohl 59", tel: "0676 7103446", role: "Kein Schlüssel" }
-        ];
-
-        let inventoryData = { hauswuerste: 20, wienerle: 15, bier: 3, limo: 2 };
-        let shootingChartInstance = null;
-        window.invoicesMap = {};
-
-        // LAGERBESTAND LADEN
-        async function loadInventory() {
-            try {
-                const doc = await db.collection("settings").doc("inventory").get();
-                if (doc.exists) {
-                    inventoryData = doc.data();
-                } else {
-                    await db.collection("settings").doc("inventory").set(inventoryData);
-                }
-                document.getElementById('inv-hauswuerste').innerText = inventoryData.hauswuerste + " Paar";
-                document.getElementById('inv-wienerle').innerText = inventoryData.wienerle + " Paar";
-                document.getElementById('inv-bier').innerText = inventoryData.bier + " Kisten";
-                document.getElementById('inv-limo').innerText = inventoryData.limo + " Kisten";
-                checkInventoryWarnings();
-            } catch(e) {}
-        }
-
-        function checkInventoryWarnings() {
-            const warningBoxAdmin = document.getElementById('inventory-warning-box');
-            const warningBoxNews = document.getElementById('news-inventory-warning-box');
-            
-            let warnings = [];
-            if (inventoryData.hauswuerste < 3) warnings.push("Hauswürste knapp (< 3 Paar)!");
-            if (inventoryData.wienerle < 3) warnings.push("Wienerle knapp (< 3 Paar)!");
-            if (inventoryData.bier < 4) warnings.push("Bier knapp (< 4 Kisten)!");
-            if (inventoryData.limo < 3) warnings.push("Limo knapp (< 3 Kisten)!");
-
-            let html = "";
-            if (warnings.length > 0) {
-                html = `<div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:12px; font-size:0.85em; font-weight:800; margin-bottom:14px; border:2px solid #fecaca; text-align:center;">⚠️ LAGERBESTAND-WARNUNG: ${warnings.join(' | ')}</div>`;
-            }
-
-            if (warningBoxAdmin) warningBoxAdmin.innerHTML = html;
-            if (warningBoxNews) warningBoxNews.innerHTML = html;
-        }
-
-        async function editInventory() {
-            const h = prompt("Hauswürste Bestand (Paar):", inventoryData.hauswuerste);
-            const w = prompt("Wienerle Bestand (Paar):", inventoryData.wienerle);
-            const b = prompt("Bier Kisten Bestand:", inventoryData.bier);
-            const l = prompt("Limo Kisten Bestand:", inventoryData.limo);
-
-            if (h !== null) inventoryData.hauswuerste = parseInt(h) || 0;
-            if (w !== null) inventoryData.wienerle = parseInt(w) || 0;
-            if (b !== null) inventoryData.bier = parseInt(b) || 0;
-            if (l !== null) inventoryData.limo = parseInt(l) || 0;
-
-            try {
-                await db.collection("settings").doc("inventory").set(inventoryData);
-            } catch(e) {}
-
-            document.getElementById('inv-hauswuerste').innerText = inventoryData.hauswuerste + " Paar";
-            document.getElementById('inv-wienerle').innerText = inventoryData.wienerle + " Paar";
-            document.getElementById('inv-bier').innerText = inventoryData.bier + " Kisten";
-            document.getElementById('inv-limo').innerText = inventoryData.limo + " Kisten";
-
-            const now = new Date();
-            const timeStr = now.toLocaleDateString('de-AT') + " um " + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('inventory-timestamp').innerText = "Lagerstand geändert am: " + timeStr;
-
-            checkInventoryWarnings();
-            alert("Lagerbestand erfolgreich gespeichert!");
-        }
-
-        // SCHLÜSSELLISTE LADEN & BEARBEITEN (VERGRÖßERTE ANSICHT)
-        async function loadKeyList() {
-            try {
-                const doc = await db.collection("settings").doc("key_list").get();
-                if (doc.exists && doc.data().list) {
-                    exactPdfKeyList = doc.data().list;
-                } else {
-                    await db.collection("settings").doc("key_list").set({ list: exactPdfKeyList });
-                }
-            } catch(e) {}
-            loadAdminKeys();
-        }
-
-        async function saveAndReloadKeys() {
-            try {
-                await db.collection("settings").doc("key_list").set({ list: exactPdfKeyList });
-            } catch(e) {}
-            loadAdminKeys();
-            alert("Schlüsselliste erfolgreich gespeichert!");
-        }
-
-        async function editKeyListItem(index) {
-            const item = exactPdfKeyList[index];
-            if (item.header) {
-                const newHeader = prompt("Überschrift bearbeiten:", item.header);
-                if (newHeader !== null) {
-                    exactPdfKeyList[index].header = newHeader;
-                    await saveAndReloadKeys();
-                }
-            } else {
-                const name = prompt("Name:", item.name);
-                if (name === null) return;
-                const dob = prompt("Geburtsdatum:", item.dob);
-                const addr = prompt("Adresse:", item.addr);
-                const tel = prompt("Telefon:", item.tel);
-                const role = prompt("Rolle / Schlüssel:", item.role);
-
-                exactPdfKeyList[index] = { name, dob, addr, tel, role };
-                await saveAndReloadKeys();
-            }
-        }
-
-        async function addKeyListItem() {
-            const name = prompt("Name der neuen Person:");
-            if (!name) return;
-            const dob = prompt("Geburtsdatum (z.B. 01.01.1980):", "");
-            const addr = prompt("Adresse:", "");
-            const tel = prompt("Telefon:", "");
-            const role = prompt("Rolle / Schlüssel:", "Eingang & Büro");
-
-            exactPdfKeyList.push({ name, dob, addr, tel, role });
-            await saveAndReloadKeys();
-        }
-
-        async function deleteKeyListItem(index) {
-            if (confirm("Eintrag wirklich aus der Schlüsselliste löschen?")) {
-                exactPdfKeyList.splice(index, 1);
-                await saveAndReloadKeys();
-            }
-        }
-
-        function loadAdminKeys() {
-            const container = document.getElementById('admin-keys-list');
-            if(!container) return;
-            let html = "";
-            exactPdfKeyList.forEach((item, index) => {
-                if (item.header) {
-                    html += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--primary-red); color: white; padding: 10px 14px; font-weight: 800; font-size: 0.9em; border-radius: 10px; margin: 16px 0 10px 0; text-transform: uppercase; box-shadow: 0 4px 10px rgba(185, 28, 28, 0.2);">
-                            <span>${item.header}</span>
-                            <button onclick="editKeyListItem(${index})" style="background: rgba(255,255,255,0.25); border: none; color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.9em;">✏️ Bearbeiten</button>
-                        </div>`;
-                } else {
-                    html += `
-                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; border: 1.5px solid #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-                            <div>
-                                <strong style="font-size: 1.1em; color: var(--text-dark);">${item.name}</strong><br>
-                                <span style="color:var(--text-muted); font-size:0.9em; display:inline-block; margin-top:4px;">geb. ${item.dob} | ${item.addr}</span><br>
-                                <span style="color:var(--primary-red); font-size:0.9em; font-weight:700;">📞 ${item.tel || 'Keine Telefonnummer'}</span>
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
-                                <span style="background: #e2e8f0; color: #1e293b; padding: 6px 10px; border-radius: 8px; font-size: 0.8em; font-weight: 700; text-align: center;">${item.role}</span>
-                                <div style="display: flex; gap: 6px;">
-                                    <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.8em;" onclick="editKeyListItem(${index})">✏️</button>
-                                    <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8em;" onclick="deleteKeyListItem(${index})">🗑️</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            container.innerHTML = html;
-        }
-
-        // NEWS LADEN
-        async function loadNews() {
-            const container = document.getElementById('news-container');
-            if(!container) return;
-
-            try {
-                const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
-                let newsHtml = "";
-                snapshot.forEach(doc => {
-                    const n = doc.data();
-                    newsHtml += `
-                        <div class="glass-card">
-                            ${n.imageUrl ? `<img src="${n.imageUrl}" style="width: 100%; max-height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 10px;">` : ''}
-                            <div class="card-title">${n.title}</div>
-                            <p style="font-size: 0.9em; color: var(--text-muted); white-space: pre-line; margin-bottom: 10px;">${n.text}</p>
-                            <button class="btn btn-danger admin-only-delete" style="padding: 6px 12px; font-size: 0.75em;" onclick="deleteItem('news', '${doc.id}')">🗑️ Löschen</button>
-                        </div>
-                    `;
-                });
-                container.innerHTML = newsHtml;
-            } catch (e) {}
-        }
-
-        // GESAMTER DIENSTPLAN & NÄCHSTER DIENST
-        const masterDutyRoster = [
-            { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
-            { dateStr: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
-            { dateStr: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
-            { dateStr: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
-            { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
-        ];
-
-        function parseLocalDate(dateStr) {
-            if (!dateStr) return new Date();
-            const parts = dateStr.split('.');
-            return new Date(parts[2], parts[1] - 1, parts[0]);
-        }
-
-        function updateDutyPlanWidget() {
-            try {
-                const today = new Date();
-                today.setHours(0,0,0,0);
-
-                let nextIndex = 0;
-                for (let i = 0; i < masterDutyRoster.length; i++) {
-                    const dDate = parseLocalDate(masterDutyRoster[i].dateStr);
-                    if (dDate >= today) {
-                        nextIndex = i;
-                        break;
-                    }
-                }
-
-                const nextDienst = masterDutyRoster[nextIndex] || masterDutyRoster[0];
-                const nextWidget = document.getElementById('next-duty-widget');
-                if (nextWidget) {
-                    nextWidget.innerHTML = `
-                        <div style="font-size: 1.1em; color: #15803d; font-weight: 800; margin-bottom: 2px;">📅 ${nextDienst.dateStr}</div>
-                        <div style="font-size: 1.5em; font-weight: 900; margin: 4px 0; color: #0f172a; letter-spacing: 0.5px;">${nextDienst.team}</div>
-                        <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 700;">${nextDienst.names}</div>
-                    `;
-                }
-
-                const fullList = document.getElementById('full-roster-list');
-                if (fullList) {
-                    let html = "";
-                    masterDutyRoster.forEach((d, idx) => {
-                        let isNext = (idx === nextIndex);
-                        let isClosed = d.status === 'closed';
-                        let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
-                        
-                        html += `
-                            <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="font-size: 0.9em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.65em; background:#22c55e; color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
-                                    <span style="background: ${borderCol}; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.65em;">${d.team}</span>
-                                </div>
-                                <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
-                            </div>
-                        `;
-                    });
-                    fullList.innerHTML = html;
-                }
-            } catch(e) {}
-        }
-
-        // TERMINE LADEN
-        async function loadEvents() {
-            const container = document.getElementById('events-container');
-            const adminList = document.getElementById('admin-events-list');
-            try {
-                const snapshot = await db.collection("events").orderBy("createdAt", "desc").get();
-                const votesSnapshot = await db.collection("events_vote").get();
-                let votesData = {};
-                votesSnapshot.forEach(doc => { votesData[doc.id] = doc.data(); });
-
-                let eventsArray = [];
-                snapshot.forEach(doc => {
-                    eventsArray.push({ id: doc.id, ...doc.data() });
-                });
-
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                
-                eventsArray = eventsArray.filter(ev => {
-                    let evDate = parseLocalDate(ev.date);
-                    evDate.setHours(0,0,0,0);
-                    return evDate >= today;
-                });
-
-                eventsArray.sort((a, b) => {
-                    let dA = parseLocalDate(a.date);
-                    let dB = parseLocalDate(b.date);
-                    return dA - dB;
-                });
-
-                let html = "";
-                let adminHtml = "";
-
-                eventsArray.forEach((ev, index) => {
-                    const eventId = ev.id;
-                    const v = votesData[eventId] || { yesNames: [], noNames: [] };
-                    const yesCount = v.yesNames ? v.yesNames.length : 0;
-                    const noCount = v.noNames ? v.noNames.length : 0;
-                    const isNextTermin = (index === 0);
-                    
-                    html += `
-                        <div class="dark-event-item ${isNextTermin ? 'next-duty-neon' : ''}" style="padding: 16px; ${isNextTermin ? 'margin-bottom: 16px;' : ''}">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <div style="font-size: ${isNextTermin ? '1.25em' : '1.1em'}; font-weight: 900; color: #0f172a;">📌 ${ev.title}</div>
-                                ${isNextTermin ? '<span style="font-size: 0.75em; background: #22c55e; color: #fff; font-weight: 800; padding: 4px 10px; border-radius: 8px;">NÄCHSTER TERMIN</span>' : ''}
-                            </div>
-                            <div style="font-size: ${isNextTermin ? '1em' : '0.9em'}; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || ''}</div>
-                            <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600; margin-bottom: 10px;">📍 Ort / Details: ${ev.desc || 'Schützenhaus Partenen'}</div>
-                            
-                            <div style="padding-top: 8px; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; align-items: center;">
-                                <button onclick="voteEvent('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👍 Ich komme (${yesCount})</button>
-                                <button onclick="voteEvent('${eventId}', 'no')" style="background: #dc2626; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👎 Komme nicht (${noCount})</button>
-                            </div>
-
-                            <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 8px; background: rgba(248, 250, 252, 0.9); padding: 8px; border-radius: 8px;">
-                                <strong>Zusagen:</strong> ${v.yesNames && v.yesNames.length > 0 ? v.yesNames.join(', ') : 'Keine'}<br>
-                                <strong>Absagen:</strong> ${v.noNames && v.noNames.length > 0 ? v.noNames.join(', ') : 'Keine'}
-                            </div>
-                        </div>
-                    `;
-
-                    adminHtml += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.8em;">
-                            <div><strong>${ev.title}</strong> (${ev.date})</div>
-                            <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 3px 6px; font-size: 0.65em;" onclick="editEvent('${eventId}', '${(ev.title||'').replace(/'/g, "\\'")}', '${ev.date}', '${(ev.desc||'').replace(/'/g, "\\'")}')">✏️</button>
-                                <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.65em;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                if(container) container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.85em;">Keine kommenden Termine eingetragen.</p>';
-                if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted); font-size:0.85em;">Keine Termine im System.</p>';
-            } catch (e) {}
-        }
-
-        function scheduleMidnightRefresh() {
-            const now = new Date();
-            const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-            const msToMidnight = night.getTime() - now.getTime();
-            setTimeout(() => {
-                loadEvents();
-                updateDutyPlanWidget();
-                scheduleMidnightRefresh();
-            }, msToMidnight);
-        }
-
-        async function voteEvent(eventId, type) {
-            const userName = prompt("Bitte gib deinen Namen ein für die Abstimmung:");
-            if (!userName) return;
-
-            const docRef = db.collection("events_vote").doc(eventId);
-            const doc = await docRef.get();
-            let data = doc.exists ? doc.data() : { yesNames: [], noNames: [] };
-
-            let yes = data.yesNames || [];
-            let no = data.noNames || [];
-
-            yes = yes.filter(n => n !== userName);
-            no = no.filter(n => n !== userName);
-
-            if (type === 'yes') yes.push(userName);
-            if (type === 'no') no.push(userName);
-
-            await docRef.set({ yesNames: yes, noNames: no });
-            alert("Deine Stimme wurde gespeichert!");
-            loadEvents();
-        }
-
-        async function addEvent(e) {
-            e.preventDefault();
-            const title = document.getElementById('new-event-title').value;
-            const date = document.getElementById('new-event-date').value;
-            const desc = document.getElementById('new-event-desc').value;
-
-            await db.collection("events").add({ title, date, desc, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-            alert("Termin gespeichert!");
-            document.getElementById('new-event-title').value = '';
-            document.getElementById('new-event-date').value = '';
-            document.getElementById('new-event-desc').value = '';
-            loadEvents();
-        }
-
-        async function editEvent(id, oldTitle, oldDate, oldDesc) {
-            const title = prompt("Titel bearbeiten:", oldTitle);
-            if (title === null) return;
-            const date = prompt("Datum bearbeiten:", oldDate);
-            const desc = prompt("Ort / Details bearbeiten:", oldDesc);
-
-            await db.collection("events").doc(id).update({ title, date, desc });
-            alert("Termin aktualisiert!");
-            loadEvents();
-        }
-
-        // SCHIESSBUCH (MIT DIREKTER MITGLIEDERAUSWAHL)
-        async function saveShot(e) {
-            e.preventDefault();
-            const name = document.getElementById('shot-name').value;
-            if (!name) { alert("Bitte wählen Sie ein Mitglied aus!"); return; }
-            const rings = parseFloat(document.getElementById('shot-rings').value);
-            const teiler = parseFloat(document.getElementById('shot-teiler').value) || 0;
-
-            await db.collection("shots").add({
-                name, disc: "Luftgewehr", rings, teiler,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            alert("Schießergebnis gespeichert!");
-            document.getElementById('shot-rings').value = '';
-            document.getElementById('shot-teiler').value = '';
-            document.getElementById('shot-name').value = '';
-            document.getElementById('shot-search-input').value = '';
-            populateMemberSelects();
-            loadShootingChart();
-            loadAdminShots();
-        }
-
-        // SCHIESSERGEBNISSE LADEN (VERGRÖßERTE ANSICHT)
-        async function loadAdminShots() {
-            const container = document.getElementById('admin-shots-history-list');
-            if (!container) return;
-            try {
-                const snapshot = await db.collection("shots").orderBy("createdAt", "desc").get();
-                let html = "";
-                snapshot.forEach(doc => {
-                    const s = doc.data();
-                    let dateStr = s.createdAt && s.createdAt.toDate ? s.createdAt.toDate().toLocaleDateString('de-AT') : 'Gerade eben';
-                    html += `
-                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; border: 1.5px solid #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-                            <div>
-                                <strong style="font-size: 1.1em; color: var(--text-dark);">${s.name}</strong><br>
-                                <span style="color:var(--text-muted); font-size:0.9em; display:inline-block; margin-top:4px;">🎯 ${s.disc} | Ringe: <strong style="color:var(--primary-red); font-size:1.05em;">${s.rings}</strong> ${s.teiler ? '| Teiler: ' + s.teiler : ''}</span><br>
-                                <span style="color:var(--text-muted); font-size:0.8em;">📅 Erfasst am: ${dateStr}</span>
-                            </div>
-                            <button class="btn btn-danger" style="padding: 8px 14px; font-size: 0.85em;" onclick="deleteItem('shots', '${doc.id}'); setTimeout(loadAdminShots, 500);">🗑️ Löschen</button>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.9em; text-align:center; padding: 10px;">Keine Schießergebnisse vorhanden.</p>';
-            } catch(e) {}
-        }
-
-        async function loadShootingChart() {
-            try {
-                const snapshot = await db.collection("shots").orderBy("createdAt", "asc").get();
-                let labels = [];
-                let dataRings = [];
-                let count = 1;
-
-                snapshot.forEach(doc => {
-                    const s = doc.data();
-                    labels.push(s.name ? `${s.name.split(' ')[0]} (#${count})` : `Schuss ${count}`);
-                    dataRings.push(s.rings);
-                    count++;
-                });
-
-                const ctx = document.getElementById('shootingChart').getContext('2d');
-                if (shootingChartInstance) {
-                    shootingChartInstance.destroy();
-                }
-
-                shootingChartInstance = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels.length > 0 ? labels : ['Start'],
-                        datasets: [{
-                            label: 'Erreichte Ringe',
-                            data: dataRings.length > 0 ? dataRings : [0],
-                            borderColor: '#b91c1c',
-                            backgroundColor: 'rgba(185, 28, 28, 0.1)',
-                            borderWidth: 3,
-                            fill: true,
-                            tension: 0.35,
-                            pointRadius: 5,
-                            pointBackgroundColor: '#2563eb'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.05)' } },
-                            x: { grid: { display: false } }
-                        },
-                        plugins: { legend: { display: false } }
-                    }
-                });
-            } catch(e) {}
-        }
-
-        // STRICHLISTE & PREISLISTE
-        const drinkPrices = {
+        // Preistabelle
+        const prices = {
             hauswuerste: 7.50, wienerle: 7.00, bier: 3.50, radler: 3.50,
             limo: 3.00, mineral: 2.50, wein4: 4.00, wein8: 3.00,
             weingespr: 3.50, schnaps: 3.50, kaffee: 3.00, tee: 2.50, luftgewehr: 8.00
         };
-        const drinkCounts = {
-            hauswuerste: 0, wienerle: 0, bier: 0, radler: 0,
-            limo: 0, mineral: 0, wein4: 0, wein8: 0,
-            weingespr: 0, schnaps: 0, kaffee: 0, tee: 0, luftgewehr: 0
-        };
+        let counts = {};
 
+        // Zähler anpassen
         function changeCount(item, delta) {
-            drinkCounts[item] = Math.max(0, drinkCounts[item] + delta);
-            document.getElementById('count-' + item).innerText = drinkCounts[item];
+            if (!counts[item]) counts[item] = 0;
+            counts[item] = Math.max(0, counts[item] + delta);
+            document.getElementById(`count-${item}`).innerText = counts[item];
             calculateTotal();
         }
 
+        // Gesamtpreis berechnen
         function calculateTotal() {
             let total = 0;
-            for (let k in drinkCounts) { total += drinkCounts[k] * drinkPrices[k]; }
-            document.getElementById('total-price').innerText = '€ ' + total.toFixed(2).replace('.', ',');
-            return total;
+            for (let item in counts) {
+                total += (counts[item] || 0) * (prices[item] || 0);
+            }
+            document.getElementById('total-price').innerText = `€ ${total.toFixed(2).replace('.', ',')}`;
         }
 
+        // Strichliste zurücksetzen
         function confirmResetDrinks() {
-            for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
+            counts = {};
+            for (let item in prices) {
+                const el = document.getElementById(`count-${item}`);
+                if (el) el.innerText = '0';
+            }
+            document.getElementById('cust-name').value = '';
+            document.getElementById('cust-attn').value = '';
+            document.getElementById('cust-address').value = '';
+            document.getElementById('cust-zipcity').value = '';
             calculateTotal();
         }
 
+        // STRICHLISTE SPEICHERN (FREIGEGEBEN FÜR ALLE MITGLIEDER)
         async function saveTallyBilling() {
-            let total = calculateTotal();
-            if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
+            const custName = document.getElementById('cust-name').value;
+            const custAttn = document.getElementById('cust-attn').value;
+            const custAddress = document.getElementById('cust-address').value;
+            const custZipCity = document.getElementById('cust-zipcity').value;
 
-            let clientName = document.getElementById('cust-name').value.trim() || "Kunde";
-            let clientAttn = document.getElementById('cust-attn').value.trim() || "";
-            let clientAddress = document.getElementById('cust-address').value.trim() || "";
-            let clientZipCity = document.getElementById('cust-zipcity').value.trim() || "";
+            const items = [
+                { name: "Hauswürste (Paar)", count: counts.hauswuerste || 0, price: 7.50 },
+                { name: "Wienerle (Paar)", count: counts.wienerle || 0, price: 7.00 },
+                { name: "Bier 0,33 lt.", count: counts.bier || 0, price: 3.50 },
+                { name: "Radler 0,33 lt.", count: counts.radler || 0, price: 3.50 },
+                { name: "Limo 0,3 lt.", count: counts.limo || 0, price: 3.00 },
+                { name: "Mineral 1/4 lt.", count: counts.mineral || 0, price: 2.50 },
+                { name: "Wein 1/4 lt.", count: counts.wein4 || 0, price: 4.00 },
+                { name: "Wein 1/8 lt.", count: counts.wein8 || 0, price: 3.00 },
+                { name: "Wein gespritzt", count: counts.weingespr || 0, price: 3.50 },
+                { name: "Schnaps 2 cl.", count: counts.schnaps || 0, price: 3.50 },
+                { name: "Kaffee", count: counts.kaffee || 0, price: 3.00 },
+                { name: "Tee", count: counts.tee || 0, price: 2.50 },
+                { name: "Luftgewehrschießen", count: counts.luftgewehr || 0, price: 8.00 }
+            ].filter(item => item.count > 0);
 
-            let itemsArray = [];
-            for (let k in drinkCounts) {
-                if (drinkCounts[k] > 0) {
-                    itemsArray.push({ name: k, count: drinkCounts[k], price: drinkCounts[k] * drinkPrices[k] });
-                }
+            if (items.length === 0) {
+                alert("Bitte wähle mindestens ein Produkt aus!");
+                return;
             }
 
-            const todayStr = new Date().toISOString().slice(0,10).replace(/-/g,'');
-            const invoiceObj = {
-                invoiceNum: "RE-" + new Date().getFullYear() + "-" + todayStr.slice(4) + "-" + Math.floor(10 + Math.random() * 90),
-                date: new Date().toLocaleDateString('de-AT'),
-                recipientName: clientName,
-                recipientAttn: clientAttn,
-                recipientAddress: clientAddress,
-                recipientZipCity: clientZipCity,
-                total: total,
-                items: itemsArray,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
+            const total = items.reduce((sum, item) => sum + (item.count * item.price), 0);
 
             try {
-                await db.collection("invoices").add(invoiceObj);
-                alert("Abrechnung gespeichert!");
-                loadInvoices();
+                // Speichern in 'tally_billings' ohne Auth-Zwang
+                await db.collection("tally_billings").add({
+                    customer: {
+                        name: custName,
+                        attn: custAttn,
+                        address: custAddress,
+                        zipCity: custZipCity
+                    },
+                    items: items,
+                    total: total,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                alert("Strichliste erfolgreich gespeichert!");
                 confirmResetDrinks();
-            } catch (err) {}
-        }
 
-        async function loadInvoices() {
-            const container = document.getElementById('admin-tally-history-list');
-            if (!container) return;
-            try {
-                const snapshot = await db.collection("invoices").orderBy("createdAt", "desc").get();
-                let html = "";
-                window.invoicesMap = {};
-                snapshot.forEach(doc => {
-                    const inv = doc.data();
-                    window.invoicesMap[doc.id] = inv;
-                    html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; gap: 6px; font-size: 0.85em;">
-                            <div><strong>${inv.invoiceNum}</strong> - ${inv.recipientName} (${inv.total.toFixed(2)} €)</div>
-                            <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 4px 8px; font-size: 0.7em;" onclick="viewInvoiceModal('${doc.id}')">👁️</button>
-                                <button class="btn btn-green" style="padding: 4px 8px; font-size: 0.7em;" onclick="generateInvoicePDF('${doc.id}')">📥</button>
-                                <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.7em;" onclick="deleteItem('invoices', '${doc.id}')">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.8em;">Keine Rechnungen.</p>';
-            } catch (e) {}
-        }
-
-        function viewInvoiceModal(docId) {
-            const inv = window.invoicesMap[docId];
-            if (!inv) return;
-            let itemsHtml = "";
-            inv.items.forEach(i => {
-                itemsHtml += `<div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f1f5f9;"><span>${i.name} (${i.count}x)</span><strong>${i.price.toFixed(2).replace('.', ',')} €</strong></div>`;
-            });
-
-            const content = `
-                <div style="text-align:center; margin-bottom:12px;">
-                    <h2 style="color:#b91c1c; font-size:1.1em;">RECHNUNG</h2>
-                    <p style="font-size:0.75em; color:#64748b;">Kameradschaftsbund und Schützenverein Gaschurn-Partenen<br>Rütler 43b | 6794 Partenen<br>E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509</p>
-                </div>
-                <div style="margin-bottom:12px; background:#f8fafc; padding:8px; border-radius:8px; font-size:0.8em;">
-                    <strong>Rechnung an:</strong><br>${inv.recipientName}<br>${inv.recipientAttn ? inv.recipientAttn + '<br>' : ''}${inv.recipientAddress}<br>${inv.recipientZipCity}
-                </div>
-                <div style="margin-bottom:10px; display:flex; justify-content:space-between; font-size:0.8em;">
-                    <span><strong>Nummer:</strong> ${inv.invoiceNum}</span>
-                    <span><strong>Datum:</strong> ${inv.date}</span>
-                </div>
-                <div style="margin-bottom:12px;">
-                    <div style="background:#b91c1c; color:#white; padding:6px 8px; font-weight:bold; font-size:0.75em; display:flex; justify-content:space-between;"><span>Leistung</span><span>Betrag</span></div>
-                    ${itemsHtml}
-                    <div style="display:flex; justify-content:space-between; padding:6px 0; font-weight:bold; font-size:0.95em; margin-top:6px; border-top:2px solid #b91c1c;"><span>Gesamtbetrag</span><span style="color:#b91c1c;">${inv.total.toFixed(2).replace('.', ',')} €</span></div>
-                </div>
-                <div style="font-size:0.75em; color:#475569; background:#f1f5f9; padding:8px; border-radius:8px;">
-                    <strong>Zahlungsbedingungen:</strong><br>Bitte überweisen innerhalb von 14 Tagen ohne Abzug:<br><strong>IBAN:</strong> AT86 3746 8000 0451 3511<br><strong>BIC:</strong> RVVGAT2B468<br><strong>Bank:</strong> Raiffeisenbank Bludenz-Montafon<br><strong>Verwendungszweck:</strong> ${inv.invoiceNum}
-                </div>
-            `;
-            document.getElementById('invoice-modal-content').innerHTML = content;
-            document.getElementById('invoice-modal').style.display = 'flex';
-            window.currentModalDocId = docId;
-        }
-
-        function closeInvoiceModal() {
-            document.getElementById('invoice-modal').style.display = 'none';
-        }
-
-        function downloadCurrentModalPDF() {
-            if (window.currentModalDocId) {
-                generateInvoicePDF(window.currentModalDocId);
+            } catch (error) {
+                console.error("Fehler beim Speichern der Strichliste:", error);
+                alert("Fehler beim Speichern: " + error.message);
             }
         }
 
-        // PDF GENERIEREN
-        function generateInvoicePDF(docId) {
-            const invoiceData = window.invoicesMap[docId];
-            if (!invoiceData) return;
-
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            try {
-                const logoImg = new Image();
-                logoImg.src = "logo.png";
-                doc.addImage(logoImg, "PNG", 155, 10, 40, 40);
-            } catch(e) {}
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(22);
-            doc.setTextColor(185, 28, 28);
-            doc.text("RECHNUNG", 14, 20);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(8.5);
-            doc.setTextColor(80, 80, 80);
-            doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen", 14, 26);
-            doc.text("Rütler 43b | 6794 Partenen", 14, 31);
-            doc.text("E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509", 14, 36);
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(9.5);
-            doc.setTextColor(0, 0, 0);
-            doc.text("Rechnung an:", 14, 48);
-
-            doc.setFont("helvetica", "normal");
-            doc.text(invoiceData.recipientName || "", 14, 54);
-            if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 59);
-            doc.text(invoiceData.recipientAddress || "", 14, 64);
-            doc.text(invoiceData.recipientZipCity || "", 14, 69);
-
-            doc.setFont("helvetica", "bold");
-            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 105, 54);
-            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 105, 59);
-
-            const tableBody = invoiceData.items.map(item => [
-                `${item.name} (${item.count}x)`, 
-                `${parseFloat(item.price).toFixed(2).replace('.', ',')} €`
-            ]);
-
-            doc.autoTable({
-                startY: 76,
-                head: [['Leistung', 'Betrag']],
-                body: [
-                    ...tableBody,
-                    [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: `${parseFloat(invoiceData.total).toFixed(2).replace('.', ',')} €`, styles: { fontStyle: 'bold' } }]
-                ],
-                theme: 'striped',
-                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
-                columnStyles: { 0: { cellWidth: 130 }, 1: { halign: 'right', cellWidth: 40 } }
-            });
-
-            let finalY = doc.lastAutoTable.finalY + 10;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(9.5);
-            doc.text("Zahlungsbedingungen", 14, finalY);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(8.5);
-            doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${invoiceData.total.toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:`, 14, finalY + 5);
-            
-            doc.setFont("helvetica", "bold"); doc.text("IBAN:", 14, finalY + 12);
-            doc.setFont("helvetica", "normal"); doc.text("AT86 3746 8000 0451 3511", 30, finalY + 12);
-
-            doc.setFont("helvetica", "bold"); doc.text("BIC:", 14, finalY + 17);
-            doc.setFont("helvetica", "normal"); doc.text("RVVGAT2B468", 30, finalY + 17);
-
-            doc.setFont("helvetica", "bold"); doc.text("Bank:", 14, finalY + 22);
-            doc.setFont("helvetica", "normal"); doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 22);
-
-            doc.setFont("helvetica", "bold"); doc.text("Verwendungszweck:", 14, finalY + 27);
-            doc.setFont("helvetica", "normal"); doc.text(`${invoiceData.invoiceNum} / ${invoiceData.recipientName}`, 46, finalY + 27);
-
-            doc.save(`${invoiceData.invoiceNum}.pdf`);
+        // Navigation zwischen Hauptseiten
+        function switchPage(pageId, navEl) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if (navEl) navEl.classList.add('active');
         }
 
-        function togglePaidStatus(el) {
-            if (el.classList.contains('badge-paid')) {
-                el.classList.remove('badge-paid');
-                el.classList.add('badge-open');
-                el.innerText = 'Offen (€30)';
-            } else {
-                el.classList.remove('badge-open');
-                el.classList.add('badge-paid');
-                el.innerText = 'Bezahlt (€30)';
-            }
+        // Navigation im Admin-Bereich (Tabs)
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('.admin-tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById(`btn-${tabId}`).classList.add('active');
         }
 
-        function loadAdminMembers() {
-            const activeList = document.getElementById('admin-active-members-list');
-            const passiveList = document.getElementById('admin-passive-members-list');
-            
-            let actHtml = "";
-            officialActiveMembers.forEach((m) => {
-                actHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
-                        <span><strong>${m}</strong></span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em;" placeholder="Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                        </div>
-                    </div>`;
-            });
-            if(activeList) activeList.innerHTML = actHtml;
-
-            let passHtml = "";
-            officialPassiveMembers.forEach((m) => {
-                passHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 6px; background: rgba(254, 226, 226, 0.7); padding: 8px 10px; border-radius: 10px; margin-bottom: 6px; border: 1.5px solid #fecaca;">
-                        <span><strong style="color: #991b1b; font-size: 0.95em;">${m}</strong></span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em; background: #fff;" placeholder="Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                        </div>
-                    </div>`;
-            });
-            if(passiveList) passiveList.innerHTML = passHtml;
-        }
-
-        // NEWS HOCHLADEN
-        async function addNewsItem(e) {
+        // Admin-Login Abwicklung
+        async function handleAdminLogin(e) {
             e.preventDefault();
-            const title = document.getElementById('news-title').value;
-            const text = document.getElementById('news-text').value;
-            const fileInput = document.getElementById('news-photo-input');
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = async function(uploadEvent) {
-                    await saveNewsToFirestore(title, text, uploadEvent.target.result);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                await saveNewsToFirestore(title, text, "");
-            }
-        }
-
-        async function saveNewsToFirestore(title, text, imageUrl) {
-            try {
-                await db.collection("news").add({ title, text, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                alert("News veröffentlicht!");
-                document.getElementById('news-title').value = '';
-                document.getElementById('news-text').value = '';
-                document.getElementById('news-photo-input').value = '';
-                loadNews();
-            } catch (err) {}
-        }
-
-        function populateMemberSelects(filter = "") {
-            const selectEl = document.getElementById('shot-member-select');
-            if (selectEl) {
-                let html = "";
-                const filtered = officialActiveMembers.filter(m => m.toLowerCase().includes(filter.toLowerCase()));
-                filtered.forEach(m => {
-                    html += `<option value="${m}">${m}</option>`;
-                });
-                selectEl.innerHTML = html;
-            }
-        }
-
-        function filterMemberDropdown(query) {
-            populateMemberSelects(query);
-        }
-
-        function loadPublicMembersList() {
-            const container = document.getElementById('public-members-list');
-            if (container) {
-                let html = "";
-                officialActiveMembers.forEach(m => {
-                    html += `<div class="price-item"><div><strong>${m}</strong></div><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div>`;
-                });
-                container.innerHTML = html;
-            }
-        }
-
-        async function deleteItem(collectionName, docId) {
-            if (confirm("Wirklich löschen?")) {
-                await db.collection(collectionName).doc(docId).delete();
-                alert("Gelöscht!");
-                loadEvents(); loadNews(); loadInvoices(); loadAdminShots(); loadShootingChart();
-            }
-        }
-
-        // DYNAMISCHE ADMIN LOGIN-FUNKTION (SUB-ADDRESSING)
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            const selectedUser = document.getElementById('admin-user-select').value;
+            const selectedUser = document.getElementById('admin-user-select').value.toLowerCase().trim();
             const password = document.getElementById('admin-password-input').value;
-            
-            // Baut dynamic E-Mail zusammen (z.B. admin+simon@kb-sv-gaschurn.at)
-            const adminEmail = `admin+${selectedUser}@kb-sv-gaschurn.at`; 
+            const email = `admin+${selectedUser}@kb-sv-gaschurn.at`;
 
-            auth.signInWithEmailAndPassword(adminEmail, password)
-                .then((userCredential) => {
-                    document.body.classList.add('admin-mode');
-                    document.getElementById('admin-login-card').style.display = 'none';
-                    alert("Admin-Modus erfolgreich aktiviert!");
-                    loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadAdminShots();
-                })
-                .catch((error) => {
-                    alert("Falsches Passwort oder unberechtigter Zugriff!");
-                });
-        }
-
-        function logoutAdmin() {
-            auth.signOut().then(() => {
-                document.body.classList.remove('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'block';
-                loadNews();
-                alert("Admin-Modus beendet.");
-            });
-        }
-
-        // PRÜFEN, OB BEREITS EIN ADMIN EINGELOGGT IST
-        auth.onAuthStateChanged((user) => {
-            if (user) {
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
                 document.body.classList.add('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'none';
-                loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadAdminShots();
+                
+                // Passwort-Feld direkt nach erfolgreichem Login leeren
+                document.getElementById('admin-password-input').value = '';
+                alert("Erfolgreich als Vorstand angemeldet!");
+            } catch (err) {
+                alert("Anmeldung fehlgeschlagen! Bitte Passwort prüfen.");
+            }
+        }
+
+        // Admin Logout
+        function handleAdminLogout() {
+            auth.signOut().then(() => {
+                const pwdInput = document.getElementById('admin-password-input');
+                if (pwdInput) pwdInput.value = '';
+                
+                document.body.classList.remove('admin-mode');
+                document.getElementById('admin-login-card').style.display = 'block';
+                alert("Erfolgreich abgemeldet.");
+            });
+        }
+
+        // Auth Status Überwachung (Löscht Passwort automatisch beim Logout & Aufruf)
+        auth.onAuthStateChanged(user => {
+            if (user && user.email.endsWith('@kb-sv-gaschurn.at')) {
+                document.body.classList.add('admin-mode');
+                document.getElementById('admin-login-card').style.display = 'none';
             } else {
+                const pwdInput = document.getElementById('admin-password-input');
+                if (pwdInput) pwdInput.value = '';
+
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
             }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            try { updateDutyPlanWidget(); } catch(e) {}
-            try { loadNews(); } catch(e) {}
-            try { loadEvents(); } catch(e) {}
-            try { loadShootingChart(); } catch(e) {}
-            try { populateMemberSelects(); } catch(e) {}
-            try { loadPublicMembersList(); } catch(e) {}
-            try { loadKeyList(); } catch(e) {}
-            try { loadInventory(); } catch(e) {}
-            scheduleMidnightRefresh();
         });
     </script>
 </body>
