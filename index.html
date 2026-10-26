@@ -20,6 +20,7 @@
     <!-- Firebase SDKs (v8.10.1) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 
     <script>
@@ -33,6 +34,7 @@
       };
       try { firebase.initializeApp(firebaseConfig); } catch(e) {}
       const db = firebase.firestore();
+      const auth = firebase.auth();
       const messaging = firebase.messaging();
     </script>
 
@@ -303,7 +305,7 @@
             <div id="next-duty-widget"></div>
         </div>
 
-        <!-- GESAMTER DIENSTPLAN (ANZEIGE DIREKT AUF DER STARTSEITE) -->
+        <!-- GESAMTER DIENSTPLAN -->
         <div class="glass-card glass-card-blue">
             <div class="card-title">
                 <span>📋 Gesamter Dienstplan</span>
@@ -313,7 +315,7 @@
             <div id="full-roster-list"></div>
         </div>
 
-        <!-- NORMALE NEWS (ERSCHEINEN GANZ UNTEN UNTERHALB DES DIENSTPLANS) -->
+        <!-- NORMALE NEWS -->
         <div id="news-container"></div>
     </div>
 
@@ -348,7 +350,7 @@
             </form>
         </div>
 
-        <!-- DIAGRAMM FÜR PERSÖNLICHEN FORTSCHRITT -->
+        <!-- DIAGRAMM -->
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">📈 Persönlicher Fortschritt</div>
             <div style="position: relative; height: 220px; width: 100%;">
@@ -424,12 +426,24 @@
         </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH MIT SEPARATEN TABS (INKL. SCHIESSERGEBNISSE) -->
+    <!-- 6. ADMIN-BEREICH MIT NAMENSAUSWAHL FOR INDIVIDUELLE PASSWÖRTER -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
             <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
             <form onsubmit="handleAdminLogin(event)">
-                <div class="form-group"><label>Admin-Passwort</label><input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required></div>
+                <div class="form-group">
+                    <label>Admin-Name</label>
+                    <select class="form-control" id="admin-user-select" required>
+                        <option value="simon">Simon</option>
+                        <option value="heimo">Heimo</option>
+                        <option value="karin">Karin</option>
+                        <option value="sabrina">Sabrina</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Dein persönliches Passwort</label>
+                    <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required>
+                </div>
                 <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
             </form>
         </div>
@@ -461,7 +475,7 @@
                 </div>
             </div>
 
-            <!-- TAB 2: NEWS, FOTO, TEXTE & TERMINE -->
+            <!-- TAB 2: NEWS & TERMINE -->
             <div id="tab-newstermins" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">📢 2. News, Foto & Texte / Termine</div>
                 
@@ -492,7 +506,7 @@
                 <div id="admin-tally-history-list"></div>
             </div>
 
-            <!-- TAB 4: AKTIVE UND PASSIVE MITGLIEDER -->
+            <!-- TAB 4: MITGLIEDER -->
             <div id="tab-members" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">👥 4. Aktive und passive Mitglieder</div>
                 <h4 style="color: #2563eb; font-size: 0.9em; margin: 8px 0 4px 0;">Aktive Mitglieder</h4>
@@ -501,19 +515,19 @@
                 <div id="admin-passive-members-list"></div>
             </div>
 
-            <!-- TAB 5: SCHLÜSSELLISTE -->
+            <!-- TAB 5: SCHLÜSSELLISTE (VERGRÖßERTE ANSICHT) -->
             <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
                     <span>🔑 5. Schlüsselliste</span> 
-                    <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.75em;" onclick="addKeyListItem()">➕ Person hinzufügen</button>
+                    <button class="btn btn-admin" style="padding: 8px 14px; font-size: 0.85em;" onclick="addKeyListItem()">➕ Person hinzufügen</button>
                 </div>
-                <div id="admin-keys-list" style="font-size: 0.85em;"></div>
+                <div id="admin-keys-list"></div>
             </div>
 
-            <!-- TAB 6: SCHIESSERGEBNISSE -->
+            <!-- TAB 6: SCHIESSERGEBNISSE (VERGRÖßERTE ANSICHT) -->
             <div id="tab-shots" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">🎯 6. Schießergebnisse</div>
-                <div id="admin-shots-history-list" style="font-size: 0.85em;"></div>
+                <div id="admin-shots-history-list"></div>
             </div>
 
             <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 15px;">Admin-Modus Beenden</button>
@@ -680,7 +694,7 @@
             alert("Lagerbestand erfolgreich gespeichert!");
         }
 
-        // SCHLÜSSELLISTE LADEN & BEARBEITEN
+        // SCHLÜSSELLISTE LADEN & BEARBEITEN (VERGRÖßERTE ANSICHT)
         async function loadKeyList() {
             try {
                 const doc = await db.collection("settings").doc("key_list").get();
@@ -748,21 +762,24 @@
             exactPdfKeyList.forEach((item, index) => {
                 if (item.header) {
                     html += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--primary-red); color: white; padding: 6px 10px; font-weight: 800; font-size: 0.75em; border-radius: 6px; margin: 12px 0 6px 0; text-transform: uppercase;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--primary-red); color: white; padding: 10px 14px; font-weight: 800; font-size: 0.9em; border-radius: 10px; margin: 16px 0 10px 0; text-transform: uppercase; box-shadow: 0 4px 10px rgba(185, 28, 28, 0.2);">
                             <span>${item.header}</span>
-                            <button onclick="editKeyListItem(${index})" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">✏️</button>
+                            <button onclick="editKeyListItem(${index})" style="background: rgba(255,255,255,0.25); border: none; color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.9em;">✏️ Bearbeiten</button>
                         </div>`;
                 } else {
                     html += `
-                        <div style="padding: 8px 0; border-bottom: 1px solid rgba(241,245,249,0.8); display: flex; justify-content: space-between; align-items: center;">
+                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; border: 1.5px solid #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; gap: 10px;">
                             <div>
-                                <strong style="font-size: 0.95em;">${item.name}</strong><br>
-                                <span style="color:var(--text-muted); font-size:0.75em;">geb. ${item.dob} | ${item.addr} | ${item.tel || 'Kein Tel'}</span>
+                                <strong style="font-size: 1.1em; color: var(--text-dark);">${item.name}</strong><br>
+                                <span style="color:var(--text-muted); font-size:0.9em; display:inline-block; margin-top:4px;">geb. ${item.dob} | ${item.addr}</span><br>
+                                <span style="color:var(--primary-red); font-size:0.9em; font-weight:700;">📞 ${item.tel || 'Keine Telefonnummer'}</span>
                             </div>
-                            <div style="display: flex; gap: 6px; align-items: center;">
-                                <span style="background: #e2e8f0; color: #1e293b; padding: 4px 8px; border-radius: 6px; font-size: 0.7em; font-weight: 700;">${item.role}</span>
-                                <button class="btn btn-admin" style="padding: 3px 6px; font-size: 0.65em;" onclick="editKeyListItem(${index})">✏️</button>
-                                <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.65em;" onclick="deleteKeyListItem(${index})">🗑️</button>
+                            <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+                                <span style="background: #e2e8f0; color: #1e293b; padding: 6px 10px; border-radius: 8px; font-size: 0.8em; font-weight: 700; text-align: center;">${item.role}</span>
+                                <div style="display: flex; gap: 6px;">
+                                    <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.8em;" onclick="editKeyListItem(${index})">✏️</button>
+                                    <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8em;" onclick="deleteKeyListItem(${index})">🗑️</button>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -865,7 +882,7 @@
             } catch(e) {}
         }
 
-        // TERMINE: CHRONOLOGISCH SORTIERT, VERGANGENE AUSGEBLENDET & MITTERNACHTS-AKTUALISIERUNG
+        // TERMINE LADEN
         async function loadEvents() {
             const container = document.getElementById('events-container');
             const adminList = document.getElementById('admin-events-list');
@@ -883,14 +900,12 @@
                 const today = new Date();
                 today.setHours(0,0,0,0);
                 
-                // Vergangene Termine automatisch ausblenden
                 eventsArray = eventsArray.filter(ev => {
                     let evDate = parseLocalDate(ev.date);
                     evDate.setHours(0,0,0,0);
                     return evDate >= today;
                 });
 
-                // Echte chronologische Sortierung nach Kalenderdatum (nächster Termin oben)
                 eventsArray.sort((a, b) => {
                     let dA = parseLocalDate(a.date);
                     let dB = parseLocalDate(b.date);
@@ -983,7 +998,7 @@
             const desc = document.getElementById('new-event-desc').value;
 
             await db.collection("events").add({ title, date, desc, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-            alert("Termin gespeichert und automatisch einsortiert!");
+            alert("Termin gespeichert!");
             document.getElementById('new-event-title').value = '';
             document.getElementById('new-event-date').value = '';
             document.getElementById('new-event-desc').value = '';
@@ -1001,7 +1016,7 @@
             loadEvents();
         }
 
-        // SCHIESSBUCH & DIAGRAMM (CHART.JS)
+        // SCHIESSBUCH (MIT DIREKTER MITGLIEDERAUSWAHL)
         async function saveShot(e) {
             e.preventDefault();
             const name = document.getElementById('shot-name').value;
@@ -1013,7 +1028,7 @@
                 name, disc: "Luftgewehr", rings, teiler,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            alert("Schießergebnis erfolgreich gespeichert!");
+            alert("Schießergebnis gespeichert!");
             document.getElementById('shot-rings').value = '';
             document.getElementById('shot-teiler').value = '';
             document.getElementById('shot-name').value = '';
@@ -1023,6 +1038,7 @@
             loadAdminShots();
         }
 
+        // SCHIESSERGEBNISSE LADEN (VERGRÖßERTE ANSICHT)
         async function loadAdminShots() {
             const container = document.getElementById('admin-shots-history-list');
             if (!container) return;
@@ -1033,13 +1049,17 @@
                     const s = doc.data();
                     let dateStr = s.createdAt && s.createdAt.toDate ? s.createdAt.toDate().toLocaleDateString('de-AT') : 'Gerade eben';
                     html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; gap: 6px; font-size: 0.85em;">
-                            <div><strong>${s.name}</strong><br><span style="color:var(--text-muted); font-size:0.75em;">${s.disc} | Ringe: <strong>${s.rings}</strong> ${s.teiler ? '| Teiler: ' + s.teiler : ''} (${dateStr})</span></div>
-                            <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.7em;" onclick="deleteItem('shots', '${doc.id}'); setTimeout(loadAdminShots, 500);">🗑️</button>
+                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; border: 1.5px solid #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                            <div>
+                                <strong style="font-size: 1.1em; color: var(--text-dark);">${s.name}</strong><br>
+                                <span style="color:var(--text-muted); font-size:0.9em; display:inline-block; margin-top:4px;">🎯 ${s.disc} | Ringe: <strong style="color:var(--primary-red); font-size:1.05em;">${s.rings}</strong> ${s.teiler ? '| Teiler: ' + s.teiler : ''}</span><br>
+                                <span style="color:var(--text-muted); font-size:0.8em;">📅 Erfasst am: ${dateStr}</span>
+                            </div>
+                            <button class="btn btn-danger" style="padding: 8px 14px; font-size: 0.85em;" onclick="deleteItem('shots', '${doc.id}'); setTimeout(loadAdminShots, 500);">🗑️ Löschen</button>
                         </div>
                     `;
                 });
-                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.8em;">Keine Schießergebnisse vorhanden.</p>';
+                container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.9em; text-align:center; padding: 10px;">Keine Schießergebnisse vorhanden.</p>';
             } catch(e) {}
         }
 
@@ -1227,7 +1247,7 @@
             }
         }
 
-        // PDF MIT VEREINSLOGO (LOGO.PNG)
+        // PDF GENERIEREN
         function generateInvoicePDF(docId) {
             const invoiceData = window.invoicesMap[docId];
             if (!invoiceData) return;
@@ -1416,21 +1436,47 @@
             }
         }
 
+        // DYNAMISCHE ADMIN LOGIN-FUNKTION (SUB-ADDRESSING)
         function handleAdminLogin(e) {
             e.preventDefault();
-            if (document.getElementById('admin-password-input').value === "schützen2026") {
-                document.body.classList.add('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'none';
-                alert("Admin-Modus aktiviert!");
-                loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadAdminShots();
-            } else { alert("Falsches Passwort!"); }
+            const selectedUser = document.getElementById('admin-user-select').value;
+            const password = document.getElementById('admin-password-input').value;
+            
+            // Baut dynamic E-Mail zusammen (z.B. admin+simon@kb-sv-gaschurn.at)
+            const adminEmail = `admin+${selectedUser}@kb-sv-gaschurn.at`; 
+
+            auth.signInWithEmailAndPassword(adminEmail, password)
+                .then((userCredential) => {
+                    document.body.classList.add('admin-mode');
+                    document.getElementById('admin-login-card').style.display = 'none';
+                    alert("Admin-Modus erfolgreich aktiviert!");
+                    loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadAdminShots();
+                })
+                .catch((error) => {
+                    alert("Falsches Passwort oder unberechtigter Zugriff!");
+                });
         }
 
         function logoutAdmin() {
-            document.body.classList.remove('admin-mode');
-            document.getElementById('admin-login-card').style.display = 'block';
-            loadNews();
+            auth.signOut().then(() => {
+                document.body.classList.remove('admin-mode');
+                document.getElementById('admin-login-card').style.display = 'block';
+                loadNews();
+                alert("Admin-Modus beendet.");
+            });
         }
+
+        // PRÜFEN, OB BEREITS EIN ADMIN EINGELOGGT IST
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                document.body.classList.add('admin-mode');
+                document.getElementById('admin-login-card').style.display = 'none';
+                loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadAdminShots();
+            } else {
+                document.body.classList.remove('admin-mode');
+                document.getElementById('admin-login-card').style.display = 'block';
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             try { updateDutyPlanWidget(); } catch(e) {}
@@ -1439,10 +1485,8 @@
             try { loadShootingChart(); } catch(e) {}
             try { populateMemberSelects(); } catch(e) {}
             try { loadPublicMembersList(); } catch(e) {}
-            try { loadAdminMembers(); } catch(e) {}
             try { loadKeyList(); } catch(e) {}
             try { loadInventory(); } catch(e) {}
-            try { loadAdminShots(); } catch(e) {}
             scheduleMidnightRefresh();
         });
     </script>
