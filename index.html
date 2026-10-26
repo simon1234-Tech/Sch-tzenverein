@@ -1136,8 +1136,11 @@
         }
 
         function confirmResetDrinks() {
-            for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
-            calculateTotal();
+            // Rotes Warnkästchen / Sicherheitsabfrage vor dem Zurücksetzen
+            if (confirm("⚠️ ACHTUNG: Möchtest du die Strichliste wirklich zurücksetzen?\n\nAlle nicht gespeicherten Eingaben und Striche gehen dabei verloren!")) {
+                for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
+                calculateTotal();
+            }
         }
 
         // STRICHLISTE SPEICHERN IN 'tally_billings' MIT ABFRAGE ZUM ZURÜCKSETZEN
@@ -1176,7 +1179,8 @@
 
                 // Bestätigungsabfrage zum Zurücksetzen nach erfolgreichem Speichern
                 if (confirm("Abrechnung erfolgreich unter Rechnungen gespeichert!\n\nSoll die Strichliste jetzt zurückgesetzt werden?")) {
-                    confirmResetDrinks();
+                    for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
+                    calculateTotal();
                     document.getElementById('cust-name').value = '';
                     document.getElementById('cust-attn').value = '';
                     document.getElementById('cust-address').value = '';
