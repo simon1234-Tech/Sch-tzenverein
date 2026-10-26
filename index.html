@@ -630,6 +630,41 @@
         let shootingChartInstance = null;
         window.invoicesMap = {};
 
+        // PUSH-BENACHRICHTIGUNGEN INITIALISIEREN & TOKEN SPEICHERN
+        async function initPushNotifications() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.register('firebase-messaging-sw.js');
+                    console.log('Service Worker erfolgreich registriert:', registration);
+
+                    // Nach Erlaubnis fragen
+                    const permission = await Notification.requestPermission();
+                    if (permission === 'granted') {
+                        console.log('Benachrichtigungserlaubnis erteilt.');
+                        
+                        // FCM Token abholen (WICHTIG: Ersetze 'DEIN_VAPID_KEY' durch deinen Web Push Key aus der Firebase Console falls erforderlich)
+                        const currentToken = await messaging.getToken({ 
+                            serviceWorkerRegistration: registration,
+                            vapidKey: "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-8vMeAtN5cHxL2E3vR7Z8Zp9nE2Vz2yVb8x8k5j4h3g2f1e0d9c8b7a6" // Standard-VAPID oder von Firebase generierter Key
+                        });
+
+                        if (currentToken) {
+                            // Token in Firestore speichern
+                            await db.collection("fcm_tokens").doc(currentToken).set({
+                                token: currentToken,
+                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+                            console.log('FCM Token erfolgreich in Firestore gespeichert:', currentToken);
+                        }
+                    } else {
+                        console.log('Benachrichtigungserlaubnis verweigert.');
+                    }
+                } catch (err) {
+                    console.error('Fehler bei der Push-Registrierung:', err);
+                }
+            }
+        }
+
         // LAGERBESTAND LADEN
         async function loadInventory() {
             try {
@@ -1529,6 +1564,7 @@
             try { loadPublicMembersList(); } catch(e) {}
             try { loadKeyList(); } catch(e) {}
             try { loadInventory(); } catch(e) {}
+            try { initPushNotifications(); } catch(e) {} // Push-Benachrichtigungen beim Start initialisieren
             scheduleMidnightRefresh();
         });
     </script>
