@@ -1140,7 +1140,7 @@
             calculateTotal();
         }
 
-        // STRICHLISTE SPEICHERN IN 'tally_billings'
+        // STRICHLISTE SPEICHERN IN 'tally_billings' MIT ABFRAGE ZUM ZURÜCKSETZEN
         async function saveTallyBilling() {
             let total = calculateTotal();
             if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
@@ -1172,9 +1172,16 @@
 
             try {
                 await db.collection("tally_billings").add(invoiceObj);
-                alert("Abrechnung erfolgreich gespeichert!");
                 loadInvoices();
-                confirmResetDrinks();
+
+                // Bestätigungsabfrage zum Zurücksetzen nach erfolgreichem Speichern
+                if (confirm("Abrechnung erfolgreich unter Rechnungen gespeichert!\n\nSoll die Strichliste jetzt zurückgesetzt werden?")) {
+                    confirmResetDrinks();
+                    document.getElementById('cust-name').value = '';
+                    document.getElementById('cust-attn').value = '';
+                    document.getElementById('cust-address').value = '';
+                    document.getElementById('cust-zipcity').value = '';
+                }
             } catch (err) {
                 console.error("Fehler beim Speichern:", err);
                 alert("Fehler beim Speichern: " + err.message);
@@ -1189,7 +1196,7 @@
                 const snapshot = await db.collection("tally_billings").orderBy("createdAt", "desc").get();
                 let html = "";
                 window.invoicesMap = {};
-
+                
                 if (snapshot.empty) {
                     container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85em; text-align:center; padding:10px;">Keine Rechnungen in der Datenbank gefunden.</p>';
                     return;
@@ -1198,7 +1205,14 @@
                 snapshot.forEach(doc => {
                     const inv = doc.data();
                     window.invoicesMap[doc.id] = inv;
-                    let amountStr = (inv.total || 0).toFixed(2).replace('.', ',');
+                    
+                    let rawTotal = inv.total;
+                    if (typeof rawTotal === 'string') {
+                        rawTotal = parseFloat(rawTotal.replace('€', '').replace(',', '.').trim());
+                    }
+                    const totalNum = isNaN(rawTotal) ? 0 : rawTotal;
+                    const amountStr = totalNum.toFixed(2).replace('.', ',');
+
                     html += `
                         <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #e2e8f0; gap: 6px; font-size: 0.85em;">
                             <div>
