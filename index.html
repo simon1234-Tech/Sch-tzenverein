@@ -584,7 +584,7 @@
             <!-- TAB 5: SCHLÜSSELLISTE -->
             <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
-                    <span>🔑 5. Schlüsselliste</span> 
+                    <span>🔑 5. Schlüsseliste</span> 
                     <button class="btn btn-admin" style="padding: 8px 14px; font-size: 0.85em;" onclick="addKeyListItem()">➕ Person hinzufügen</button>
                 </div>
                 <div id="admin-keys-list"></div>
@@ -641,7 +641,7 @@
     <div id="admin-error-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.65); backdrop-filter:blur(6px); z-index:99999999; justify-content:center; align-items:center; padding:16px;">
         <div style="background:#ffffff; padding:55px 24px 24px 24px; border-radius:24px; max-width:400px; width:100%; text-align:center; box-shadow:0 25px 50px -12px rgba(0,0,0,0.35); border:3px solid #b91c1c; position:relative;" class="modal-anim">
             
-            <!-- Extra großes, böses Maskottchen mit Sprechblase im Fehler-Modal -->
+            <!-- Extra großes, böses Maskottchen mit Sprechblase im Fehler-Modal (auf .jpg aktualisiert) -->
             <div style="position:absolute; top:-120px; left:50%; transform:translateX(-50%); display:flex; align-items:flex-end; gap:8px;">
                 <!-- Sprechblase -->
                 <div style="background: white; border: 2px solid #b91c1c; padding: 12px 16px; border-radius: 16px; width: 230px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-family: sans-serif; font-size: 13px; font-weight: bold; color: #1e293b; position: relative; text-align: left; line-height: 1.3;">
@@ -650,7 +650,7 @@
                 </div>
                 <!-- Maximal großes böses Maskottchen Bild (160px) -->
                 <div style="width: 160px; height: 160px; border-radius: 50%; border: 4px solid #ffffff; box-shadow: 0 14px 30px -4px rgba(0,0,0,0.45); overflow: hidden; background: #222; flex-shrink: 0;">
-                    <img src="maskottchen-boese.png" alt="Maskottchen böse" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\'><circle cx=\'80\' cy=\'80\' r=\'80\' fill=\'%237f1d1d\'/><text x=\'80\' y=\'85\' font-size=\'14\' fill=\'white\' text-anchor=\'middle\' font-weight=\'bold\'>Böse</text></svg>';">
+                    <img src="maskottchen-boese.jpg" alt="Maskottchen böse" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\'><circle cx=\'80\' cy=\'80\' r=\'80\' fill=\'%237f1d1d\'/><text x=\'80\' y=\'85\' font-size=\'14\' fill=\'white\' text-anchor=\'middle\' font-weight=\'bold\'>Böse</text></svg>';">
                 </div>
             </div>
 
@@ -686,9 +686,9 @@
             <div style="position: absolute; right: -8px; bottom: 12px; width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-left: 8px solid #b91c1c;"></div>
         </div>
         
-        <!-- Freundliches Maskottchen im Kreis (Maximal groß: 150px) -->
+        <!-- Freundliches Maskottchen im Kreis (Maximal groß: 150px, auf .jpg aktualisiert) -->
         <div style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #b91c1c; background: #222; box-shadow: 0 6px 20px rgba(0,0,0,0.35); overflow: hidden; flex-shrink: 0;" id="news-mascot-wrapper">
-            <img id="news-mascot-img" src="maskottchen.png" alt="Maskottchen freundlich" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.1s ease;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'150\'><circle cx=\'75\' cy=\'75\' r=\'75\' fill=\'%232c3e50\'/><text x=\'75\' y=\'80\' font-size=\'14\' fill=\'white\' text-anchor=\'middle\'>Freundlich</text></svg>';">
+            <img id="news-mascot-img" src="maskottchen.jpg" alt="Maskottchen freundlich" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.1s ease;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'150\'><circle cx=\'75\' cy=\'75\' r=\'75\' fill=\'%232c3e50\'/><text x=\'75\' y=\'80\' font-size=\'14\' fill=\'white\' text-anchor=\'middle\'>Freundlich</text></svg>';">
         </div>
     </div>
 
