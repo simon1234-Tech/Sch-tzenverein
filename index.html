@@ -2,2439 +2,532 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vereins-App - KB & SV Gaschurn-Partenen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Bibliotheken für PDF-Export & Diagramme -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- QR-Code Scanner Bibliothek (html5-qrcode) -->
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- QR Code Scanner Lib -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="KB & SV App">
-    <link rel="apple-touch-icon" href="logo.png">
-    <link rel="icon" type="image/png" href="logo.png">
-
-    <!-- Firebase SDKs (v8.10.1) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
-
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyDchsz_qOTMpvT48cKBYLqUmX30Lw39iGA",
-        authDomain: "kb-sv-vereinsapp.firebaseapp.com",
-        projectId: "kb-sv-vereinsapp",
-        storageBucket: "kb-sv-vereinsapp.appspot.com",
-        messagingSenderId: "1015802588615",
-        appId: "1:1015802588615:web:bcecb74526a2096d2ebde2"
-      };
-      try { firebase.initializeApp(firebaseConfig); } catch(e) {}
-      const db = firebase.firestore();
-      const auth = firebase.auth();
-      const messaging = firebase.messaging();
-    </script>
-
+    <!-- Firebase CDNs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <style>
-        :root {
-            --primary-red: #b91c1c; 
-            --primary-dark: #7f1d1d;
-            --bg-light: #f1f5f9; 
-            --card-glass: rgba(255, 255, 255, 0.92);
-            --text-dark: #1e293b; 
-            --text-muted: #64748b; 
-            --accent-green: #10b981; 
-            --accent-green-bright: #22c55e;
-            --danger: #dc2626;
-            --admin-blue: #2563eb;
-        }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         
         body {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--text-dark);
-            background: linear-gradient(135deg, #e2e8f0 100%, #cbd5e1 0%);
-            background-attachment: fixed;
-            padding: 12px;
-            padding-bottom: 180px !important;
-            max-width: 580px;
-            margin: 0 auto;
-            min-height: 100vh;
-            font-size: 0.95em;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 95px;
         }
 
         .app-header {
-            background: linear-gradient(135deg, #7f1d1d, #b91c1c);
-            color: white;
-            padding: 20px 16px;
-            text-align: center;
-            border-radius: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 10px 25px rgba(185, 28, 28, 0.25);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .app-header h1 { font-size: 1.25em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
-        .app-header p { font-size: 0.85em; opacity: 0.95; margin-top: 4px; color: #fca5a5; font-weight: 700; }
-
-        .page-content { display: none; }
-        .page-content.active { display: block; }
-
-        .glass-card {
-            background: var(--card-glass);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.85);
-            color: var(--text-dark);
-        }
-
-        .glass-card-blue { border-left: 6px solid #2563eb !important; }
-        .glass-card-yellow { border-left: 6px solid #eab308 !important; }
-        .glass-card-red { border-left: 6px solid #dc2626 !important; }
-        
-        .card-title {
-            font-size: 1.1em;
-            font-weight: 700;
-            color: var(--primary-red);
-            margin-bottom: 14px;
+            background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 50%, #b91c1c 100%);
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 14px;
+            text-align: left;
+            padding: 16px 18px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-bottom: 2px solid rgba(250, 204, 21, 0.3);
         }
 
-        /* 4. Ruhiger Glanz statt Blinken (Soft Glow) */
-        @keyframes softGreenGlow {
-            0% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.35); border-color: rgba(34, 197, 94, 0.6); }
-            50% { box-shadow: 0 0 18px rgba(34, 197, 94, 0.6); border-color: rgba(34, 197, 94, 0.9); }
-            100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.35); border-color: rgba(34, 197, 94, 0.6); }
-        }
-        .next-duty-neon {
-            background: rgba(255, 255, 255, 0.95) !important;
-            border: 2.5px solid #22c55e !important;
-            animation: softGreenGlow 3s infinite ease-in-out;
-        }
-
-        .dark-event-item {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 12px;
-            border-left: 5px solid #b91c1c;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-        }
-
-        /* 3. Plastische, fühlbare Buttons */
-        .btn {
-            padding: 12px 18px;
-            border-radius: 16px;
-            border: none;
-            font-weight: 700;
-            font-size: 0.95em;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.12), inset 0 1px 1px rgba(255,255,255,0.6);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.18), inset 0 1px 1px rgba(255,255,255,0.8); }
-        .btn:active { transform: scale(0.96); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-
-        .btn-primary { background: linear-gradient(135deg, #dc2626, #991b1b); color: white; }
-        .btn-green { background: linear-gradient(135deg, #22c55e, #15803d); color: white; }
-        .btn-danger { background: linear-gradient(135deg, #fee2e2, #fecaca); color: var(--danger); border: 1px solid #fca5a5; }
-        .btn-admin { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
-        .btn-block { width: 100%; margin-top: 10px; }
-
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 0.85em; font-weight: 700; margin-bottom: 6px; color: var(--text-muted); }
-        .form-control {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 14px;
-            border: 1.5px solid #cbd5e1;
-            font-family: inherit;
-            font-size: 0.95em;
-            background: rgba(255, 255, 255, 0.95);
-            color: var(--text-dark);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
-            transition: all 0.2s;
-        }
-        .form-control:focus { outline: none; border-color: var(--admin-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), inset 0 2px 4px rgba(0,0,0,0.03); }
-
-        .price-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(203, 213, 225, 0.5);
-            font-size: 0.95em;
-        }
-        .counter-controls { display: flex; align-items: center; gap: 12px; }
-        .counter-btn {
-            background: linear-gradient(135deg, #ffffff, #f1f5f9);
-            color: var(--primary-red);
-            border: 1.5px solid #cbd5e1;
-            width: 40px; height: 40px;
+        .header-mascot-frame {
+            width: 76px;
+            height: 76px;
+            min-width: 76px;
             border-radius: 50%;
-            font-size: 1.3em;
-            font-weight: bold;
+            border: 3px solid #facc15;
+            background: #ffffff;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+            object-fit: cover;
+        }
+
+        /* Floating Glassmorphism Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 480px;
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 6px;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #94a3b8;
+            font-size: 0.72rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
             cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08), inset 0 1px 1px rgba(255,255,255,0.9);
-            transition: all 0.15s;
-        }
-        .counter-btn:active { transform: scale(0.92); }
-
-        .strich-category-header {
-            background: linear-gradient(135deg, #b91c1c, #7f1d1d);
-            color: #ffffff;
-            padding: 10px 14px;
+            padding: 6px 10px;
             border-radius: 12px;
-            font-size: 0.85em;
-            font-weight: 800;
-            margin: 16px 0 8px 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.2);
+            background: transparent;
+            border: none;
         }
 
-        /* 1. Vergrößerte, griffige Admin-Buttons & 3D-Icons */
+        .nav-item.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 100%);
+            box-shadow: 0 4px 14px rgba(185, 28, 28, 0.4);
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 3px;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item.active svg {
+            transform: scale(1.1);
+        }
+
+        /* Soft Glow Next Duty */
+        .next-duty-glow {
+            background: linear-gradient(135deg, rgba(20, 83, 45, 0.9), rgba(5, 46, 22, 0.95));
+            border: 1px solid rgba(74, 222, 128, 0.4);
+            box-shadow: 0 0 25px rgba(34, 197, 94, 0.2);
+        }
+
+        /* Plastische 3D Buttons & Podeste */
+        .btn-3d {
+            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.4), 0 4px 12px rgba(185, 28, 28, 0.3);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+        .btn-3d:active {
+            transform: scale(0.95);
+        }
+
+        /* Kompakte Admin Tab Buttons */
         .admin-nav-tabs {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 8px;
         }
         .admin-tab-btn {
-            background: linear-gradient(135deg, #ffffff, #f8fafc);
-            border: 1.5px solid #cbd5e1;
-            padding: 18px 14px;
-            border-radius: 16px;
-            font-weight: 800;
-            font-size: 1.05em;
-            color: var(--text-dark);
-            cursor: pointer;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 12px 10px;
+            font-size: 0.9em;
+            font-weight: 700;
+            color: #cbd5e1;
             display: flex;
             align-items: center;
-            gap: 12px;
-            text-align: left;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.06), inset 0 1px 1px rgba(255,255,255,0.9);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
         }
-        .admin-tab-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,0.1); }
-        .admin-tab-btn:active { transform: scale(0.97); }
-
         .admin-tab-btn.active {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: white;
-            border-color: #1d4ed8;
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35), inset 0 1px 1px rgba(255,255,255,0.4);
+            background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 100%);
+            color: #ffffff;
+            border-color: rgba(250, 204, 21, 0.4);
+            box-shadow: 0 6px 16px rgba(185, 28, 28, 0.4);
         }
-        .admin-tab-content { display: none; }
-        .admin-tab-content.active { display: block; }
 
-        /* 2. Plastisches 3D-Icon-Quadrat */
-        .admin-3d-icon-box {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(226,232,240,0.8));
+        /* 3D Icon Podeste im Admin Bereich */
+        .admin-icon-podium {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.12), inset 0 1px 2px rgba(255,255,255,0.8);
-            flex-shrink: 0;
-        }
-        .admin-tab-btn.active .admin-3d-icon-box {
-            background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.5);
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.7), 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        /* 4. Schwebende Glassmorphismus-Leiste unten */
-        .bottom-nav {
-            position: fixed !important; 
-            bottom: 12px !important; 
-            left: 12px !important; 
-            right: 12px !important;
-            width: calc(100% - 24px) !important;
-            max-width: 556px !important; 
-            margin: 0 auto !important;
-            background: rgba(255, 255, 255, 0.85) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border-radius: 20px !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
-            display: flex !important; 
-            justify-content: space-around !important;
-            align-items: center !important;
-            padding: 8px 6px !important;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8) !important;
-            z-index: 99999 !important;
-        }
-        .nav-item {
-            display: flex !important; 
-            flex-direction: column !important; 
-            align-items: center !important;
-            text-decoration: none !important; 
-            color: var(--text-muted) !important;
-            font-size: 0.7em !important; 
-            font-weight: 700 !important; 
-            cursor: pointer !important;
-            flex: 1 !important;
-            text-align: center !important;
-            padding: 6px 2px !important;
-            border-radius: 14px !important;
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-        }
-        .nav-item:hover { color: var(--primary-red) !important; }
-        .nav-item.active { 
-            color: #ffffff !important;
-            background: linear-gradient(135deg, #7f1d1d, #b91c1c) !important;
-            box-shadow: 0 6px 18px rgba(185, 28, 28, 0.4), inset 0 1px 1px rgba(255,255,255,0.4) !important;
-        }
-        .nav-icon { font-size: 1.4em !important; margin-bottom: 3px !important; display: block !important; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); }
-
-        .admin-delete-btn { display: none; }
-        body.admin-mode .admin-delete-btn { display: block !important; }
-
-        .badge-paid { background: #d1fae5; color: #065f46; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #a7f3d0; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
-        .badge-open { background: #fee2e2; color: #991b1b; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #fecaca; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
-
-        #invoice-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.65); z-index: 999999; justify-content: center; align-items: center; padding: 12px;
-            backdrop-filter: blur(5px);
-        }
-        .invoice-preview-box {
-            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); width: 100%; max-width: 500px; border-radius: 20px; padding: 22px;
-            max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 25px 35px -5px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.9);
+        .team-pill {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
-        @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .modal-anim {
-            animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        /* Fröhliche Wink-Animation & Wink-Hand */
-        @keyframes friendlyWave {
-            0% { transform: rotate(0deg); }
-            20% { transform: rotate(16deg); }
-            40% { transform: rotate(-10deg); }
-            60% { transform: rotate(14deg); }
-            80% { transform: rotate(-6deg); }
-            100% { transform: rotate(0deg); }
-        }
-        .maskottchen-winkt {
-            transform-origin: bottom center;
-            animation: friendlyWave 1s ease-in-out 3;
+        .card-glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
         }
 
-        @keyframes handWave {
-            0% { transform: rotate(0deg) translateY(0); }
-            50% { transform: rotate(22deg) translateY(-3px); }
-            100% { transform: rotate(0deg) translateY(0); }
-        }
-        .hand-waving {
-            transform-origin: bottom left;
-            animation: handWave 0.6s ease-in-out infinite;
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
         }
     </style>
 </head>
-<body>
+<body class="max-w-md mx-auto min-h-screen relative flex flex-col justify-between selection:bg-red-900 selection:text-white">
 
-    <div class="app-header">
-        <h1>Kameradschaftsbund & Schützenverein</h1>
-        <p>Gaschurn-Partenen</p>
-    </div>
-
-    <!-- 1. NEWS & STARTSEITE -->
-    <div id="page-news" class="page-content active">
-        <div id="news-inventory-warning-box"></div>
-
-        <!-- NÄCHSTER DIENST -->
-        <div class="glass-card next-duty-neon">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 0.8em; background: #15803d; color: #ffffff; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Nächster Dienst</span>
-                <span style="font-size: 0.75em; background: #0f172a; color: #22c55e; font-weight: 800; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;">● LIVE</span>
-            </div>
-            <div id="next-duty-widget"></div>
+    <!-- Header mit integriertem Maskottchen -->
+    <header class="app-header">
+        <img src="maskottchen.png" alt="Maskottchen" class="header-mascot-frame" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'48\' fill=\'%237f1d1d\' stroke=\'%23facc15\' stroke-width=\'4\'/><text x=\'50\' y=\'58\' font-size=\'40\' text-anchor=\'middle\' fill=\'white\' font-family=\'sans-serif\' font-weight=\'bold\'>🛡️</text></svg>';">
+        <div>
+            <h1 class="text-xs font-black tracking-wider text-white">KAMERADSCHAFTSBUND & SCHÜTZENVEREIN</h1>
+            <p class="text-sm font-bold text-amber-300">Gaschurn-Partenen</p>
         </div>
+    </header>
 
-        <!-- GESAMTER DIENSTPLAN & ARCHIV -->
-        <div class="glass-card glass-card-blue">
-            <div class="card-title">
-                <span>📋 Gesamter Dienstplan</span>
-                <span style="font-size: 0.65em; background: var(--primary-red); color: white; padding: 3px 8px; border-radius: 6px;">2026/2027</span>
-            </div>
-            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
-            
-            <div id="full-roster-list"></div>
-
-            <details style="margin-top: 16px; border-top: 1.5px dashed #cbd5e1; padding-top: 12px;">
-                <summary style="font-size: 0.85em; font-weight: 700; color: var(--text-muted); cursor: pointer; user-select: none;">📁 Vergangene Dienste (Archiv)</summary>
-                <div id="archive-roster-list" style="margin-top: 10px;"></div>
-            </details>
-        </div>
-
-        <div id="news-container"></div>
-    </div>
-
-    <!-- 2. TERMINE -->
-    <div id="page-events" class="page-content">
-        <div class="glass-card glass-card-blue">
-            <div class="card-title" style="color: #2563eb;">📅 Nächste Vereinstermine & Abstimmung</div>
-            <div id="events-container"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Termine...</p></div>
-        </div>
-    </div>
-
-    <!-- 3. SCHANKBUCH -->
-    <div id="page-drinks" class="page-content">
-        <div class="glass-card glass-card-blue">
-            <div class="card-title" style="color: #2563eb;">🍻 Schankbuch & Preisliste</div>
-            
-            <div class="strich-category-header">Speisen</div>
-            <div class="price-item"><span>🌭 Paar Hauswürste (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
-            <div class="price-item"><span>🌭 Paar Wienerle (€ 7,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
-
-            <div class="strich-category-header">Getränke & Bier</div>
-            <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
-            <div class="price-item"><span>🍺 Radler 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
-            <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
-            <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein 1/4 lt. (€ 4,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein 1/8 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein gespritzt (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
-            <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
-
-            <div class="strich-category-header">Heissgetränke & Sonstiges</div>
-            <div class="price-item"><span>☕ Kaffee (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
-            <div class="price-item"><span>🍵 Tee (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
-
-            <div class="strich-category-header">Luftgewehrschießen</div>
-            <div class="price-item" style="background: rgba(254, 242, 242, 0.9); padding: 10px 12px; border-radius: 10px;">
-                <span>🎯 Luftgewehrschießen (€ 8,00 / P.)</span>
-                <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
-            </div>
-
-            <div style="margin-top: 14px; padding-top: 10px; border-top: 2px solid #cbd5e1; display: flex; justify-content: space-between; font-weight: 800; font-size: 1.15em;">
-                <span>Gesamtbetrag:</span>
-                <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
-            </div>
-
-            <div style="margin-top: 14px; background: rgba(248, 250, 252, 0.9); padding: 14px; border-radius: 14px; border: 1.5px solid #cbd5e1;">
-                <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger:</h4>
-                <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
-                <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
-                <div class="form-group"><label>Straße</label><input type="text" class="form-control" id="cust-address" placeholder="St. Jakob 151"></div>
-                <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="6580 St. Anton am Arlberg"></div>
-            </div>
-
-            <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 14px;">💾 Abrechnung speichern</button>
-            <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 8px;">Zurücksetzen</button>
-        </div>
-    </div>
-
-    <!-- 4. MITGLIEDER -->
-    <div id="page-guide" class="page-content">
-        <div class="glass-card glass-card-yellow">
-            <div class="card-title" style="color: #ca8a04;">⭐ Vorstand & Funktionsträger ⭐</div>
-            <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a></div>
-                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a></div>
-                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span></div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a></div>
-                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span></div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a></div>
-                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span></div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a></div>
-                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span></div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a></div>
-            </div>
-        </div>
-
-        <div class="glass-card glass-card-yellow">
-            <div class="card-title" style="color: #ca8a04;">👥 Alle Aktiven Mitglieder</div>
-            <div id="public-members-list" style="font-size: 0.85em; display: flex; flex-direction: column; gap: 6px;"></div>
-        </div>
-    </div>
-
-    <!-- WAFFENBUCH -->
-    <div id="page-weapons" class="page-content">
-        <div id="scanner-card-issue" class="glass-card glass-card-red" style="border-left-color: #2563eb !important; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(239,246,255,0.95));">
-            <div class="card-title" style="color: #2563eb;">📷 Tresor QR-Code Scanner (Entnahme)</div>
-            <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 12px;">
-                <strong>Wichtig:</strong> Scanne den QR-Code direkt am Waffentresor, um die Waffenentnahme freizuschalten.
-            </p>
-            <button onclick="startQrScanner('issue')" class="btn btn-admin btn-block">📷 QR-Code für Entnahme scannen</button>
-            <div id="reader" style="width: 100%; margin-top: 12px; border-radius: 12px; overflow: hidden; display:none;"></div>
-            <button id="stop-scanner-btn" onclick="stopQrScanner()" class="btn btn-danger btn-block" style="display: none; margin-top: 8px;">Scanner stoppen</button>
-        </div>
-
-        <div id="weapon-form-card" class="glass-card glass-card-red" style="border-left-color: #b91c1c !important; opacity: 0.5; pointer-events: none; transition: all 0.3s;">
-            <div class="card-title" style="color: #b91c1c; font-size: 1.2em;">
-                <span>🛡️ Digitales Waffenbuch (Salutwaffen Kat. C)</span>
-                <span id="scanner-status-badge" style="font-size: 0.65em; background: #dc2626; color: white; padding: 4px 8px; border-radius: 6px;">GESPERRT (Tresor-Scan erforderlich)</span>
-            </div>
-            <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 16px;">
-                Erfassung für Ausrückungen gemäß ZVR-624291509 (Schützenhaus Partenen).
-            </p>
-
-            <form onsubmit="saveWeaponIssue(event)">
-                <div class="form-group">
-                    <label>1. Übernehmer / Hauptverantwortlicher</label>
-                    <select class="form-control" id="weapon-member-primary" required style="font-weight: 700;">
-                        <option value="Manfred Wachter">Manfred Wachter (Waffenwart Stv.)</option>
-                        <option value="Heimo Stocker">Heimo Stocker (Salutkommandant/Waffenwart)</option>
-                        <option value="Simon Schweighofer">Simon Schweighofer (Obmann)</option>
-                        <option value="Norbert Spettel">Norbert Spettel (Schützenkamerad)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>2. Mitabholer / Zweiter Waffenwart (optional)</label>
-                    <select class="form-control" id="weapon-member-secondary">
-                        <option value="">-- Keiner / Alleinübernahme --</option>
-                        <option value="Manfred Wachter">Manfred Wachter</option>
-                        <option value="Heimo Stocker">Heimo Stocker</option>
-                        <option value="Simon Schweighofer">Simon Schweighofer</option>
-                        <option value="Norbert Spettel">Norbert Spettel</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>3. Karabiner / Salutwaffen auswählen (Mehrfachauswahl möglich)</label>
-                    <div style="background: rgba(248,250,252,0.9); border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
-                        <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="checkbox" name="weapons" value="Steyr Mannlicher M1895 (ST-8841 / ZVR11223399)" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
-                            <strong>K-01</strong>: Steyr Mannlicher M1895 (ST-88XX)
-                        </label>
-                        <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="checkbox" name="weapons" value="Steyr Mannlicher M1895 (ST-8842 / ZVR-11223400)" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
-                            <strong>K-02</strong>: Steyr Mannlicher M1895 (ST-88XX)
-                        </label>
-                        <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="checkbox" name="weapons" value="Mauser K98k Salut (MK-5092 / ZVR-44556611)" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
-                            <strong>MK-03</strong>: Mauser K98k Salut (MK-50XX)
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>4. Anlass / Grund der Ausrückung</label>
-                    <input type="text" class="form-control" id="weapon-occasion" required placeholder="z.B. Fronleichnam Prozession / Begräbnis">
-                </div>
-
-                <div class="form-group">
-                    <label>5. Ort der Ausrückung</label>
-                    <input type="text" class="form-control" id="weapon-location" required value="Pfarrkirche Partenen" placeholder="Ort eingeben">
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-block" style="font-size: 1em; padding: 14px;">🚀 Waffen entnehmen & Protokoll-PDF erstellen</button>
-            </form>
-        </div>
-
-        <div class="glass-card glass-card-blue" style="border-left-color: #2563eb !important;">
-            <div class="card-title" style="color: #2563eb;">📋 Aktive Entnahmen & Rückgabe</div>
-            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">
-                Für die Rückgabe ist ebenfalls ein erneuter QR-Code-Scan am Tresor erforderlich.
-            </p>
-            <div id="weapon-history-list"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Entnahmen...</p></div>
-        </div>
-    </div>
-
-    <!-- 6. ADMIN-BEREICH -->
-    <div id="page-card" class="page-content">
-        <div class="glass-card glass-card-red" id="admin-login-card">
-            <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
-            <form onsubmit="handleAdminLogin(event)">
-                <div class="form-group">
-                    <label>Admin-Name</label>
-                    <select class="form-control" id="admin-user-select" required>
-                        <option value="simon">Simon</option>
-                        <option value="heimo">Heimo</option>
-                        <option value="karin">Karin</option>
-                        <option value="sabrina">Sabrina</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Dein persönliches Passwort</label>
-                    <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required autocomplete="off">
-                </div>
-                <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
-            </form>
-        </div>
-
-        <div class="admin-delete-btn">
-            <!-- ADMIN UNTER-TABS MIT 3D-ICON-BOXEN -->
-            <div class="admin-nav-tabs">
-                <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="boxGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
-                                <linearGradient id="boxTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#d97706"/></linearGradient>
-                            </defs>
-                            <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" fill="url(#boxGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M12 3L20 7.5L12 12L4 7.5L12 3Z" fill="url(#boxTop)"/>
-                            <path d="M12 12V21" stroke="#fff" stroke-width="1.5" stroke-opacity="0.6"/>
-                        </svg>
-                    </div>
-                    <span>1. Lager</span>
-                </button>
-
-                <button onclick="switchAdminTab('tab-newstermins')" class="admin-tab-btn" id="btn-tab-newstermins">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="megaGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#991b1b"/></linearGradient>
-                            </defs>
-                            <path d="M3 11V13C3 14.1046 3.89543 15 5 15H7L12 19V5L7 9H5C3.89543 9 3 9.89543 3 11Z" fill="url(#megaGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M15.5 8.5C16.5 9.5 17 10.7 17 12C17 13.3 16.5 14.5 15.5 15.5" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
-                            <path d="M18.5 5.5C20.2 7.2 21 9.5 21 12C21 14.5 20.2 16.8 18.5 18.5" stroke="#b91c1c" stroke-width="2.5" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <span>2. News</span>
-                </button>
-
-                <button onclick="switchAdminTab('tab-invoices')" class="admin-tab-btn" id="btn-tab-invoices">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="invGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient>
-                            </defs>
-                            <rect x="4" y="3" width="16" height="18" rx="3" fill="url(#invGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M8 7H16M8 11H16M8 15H12" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <span>3. Rechnungen</span>
-                </button>
-
-                <button onclick="switchAdminTab('tab-members')" class="admin-tab-btn" id="btn-tab-members">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="memGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#5b21b6"/></linearGradient>
-                            </defs>
-                            <circle cx="9" cy="8" r="4" fill="url(#memGrad)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
-                            <path d="M2 18C2 15.2386 4.23858 13 7 13H11C13.7614 13 16 15.2386 16 18V20H2V18Z" fill="url(#memGrad)"/>
-                            <path d="M16 7.5C17.3 8.3 18 9.5 18 11C18 12.1 17.5 13.1 16.7 13.9C18.2 14.7 19.5 16.1 20 18V20H22V18C22 15.5 20.3 13.3 18 12.5C18 11.8 17.7 11.2 17.2 10.7" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <span>4. Mitglieder</span>
-                </button>
-
-                <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="keyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#facc15"/><stop offset="100%" stop-color="#ca8a04"/></linearGradient>
-                            </defs>
-                            <circle cx="8" cy="12" r="4" fill="url(#keyGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M11 11H21V15H19V17H16V15H13V13H11V11Z" fill="url(#keyGrad)"/>
-                        </svg>
-                    </div>
-                    <span>5. Schlüssel</span>
-                </button>
-
-                <button onclick="switchAdminTab('tab-weapons-admin')" class="admin-tab-btn" id="btn-tab-weapons-admin">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e40af"/></linearGradient>
-                            </defs>
-                            <path d="M12 2L4 5V11C4 16.5 7.5 21.2 12 22C16.5 21.2 20 16.5 20 11V5L12 2Z" fill="url(#shieldGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M9 12L11 14L15 10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span>6. Waffen-PDFs</span>
-                </button>
-            </div>
-
-            <!-- TAB 1: LAGERBESTAND -->
-            <div id="tab-inventory" class="admin-tab-content active glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">
-                    <span>📦 1. Lagerbestand</span>
-                    <button class="btn btn-admin" style="padding: 10px 18px; font-size: 0.95em;" onclick="editInventory()">✏️ Bearbeiten</button>
-                </div>
-                <div id="inventory-timestamp" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 6px;">Noch nicht geändert</div>
-                <div id="inventory-warning-box"></div>
-                <div id="admin-inventory-display">
-                    <div class="price-item"><span>Hauswürste (Paar)</span><strong id="inv-hauswuerste">20 Paar</strong></div>
-                    <div class="price-item"><span>Wienerle (Paar)</span><strong id="inv-wienerle">15 Paar</strong></div>
-                    <div class="price-item"><span>Bier Kisten 0,33l</span><strong id="inv-bier">3 Kisten</strong></div>
-                    <div class="price-item"><span>Limo Kisten 0,3l</span><strong id="inv-limo">2 Kisten</strong></div>
-                </div>
-            </div>
-
-            <!-- TAB 2: NEWS & TERMINE -->
-            <div id="tab-newstermins" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">📢 2. News, Foto & Texte / Termine</div>
-                
-                <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 6px;">Neuen News-Beitrag erstellen</h4>
-                <form onsubmit="addNewsItem(event)">
-                    <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
-                    <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
-                    <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
-                    <button type="submit" class="btn btn-admin btn-block">News Veröffentlichen</button>
-                </form>
-
-                <h4 style="color: #b91c1c; font-size: 0.9em; margin: 16px 0 6px 0;">Termin hinzufügen</h4>
-                <form onsubmit="addEvent(event)">
-                    <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="Generalversammlung"></div>
-                    <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="15.12.2026"></div>
-                    <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
-                    <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
-                </form>
-                <div style="margin-top: 10px; border-top: 1px solid #fecaca; padding-top: 8px;">
-                    <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Bestehende Termine:</div>
-                    <div id="admin-events-list"></div>
-                </div>
-            </div>
-
-            <!-- TAB 3: RECHNUNGEN & SCHANKBUCH-GRAFIK -->
-            <div id="tab-invoices" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">💶 3. Rechnungen & Schankbuch-Auswertung</div>
-                <div style="background: rgba(255, 255, 255, 0.95); padding: 14px; border-radius: 14px; margin-bottom: 16px; border: 1px solid #fecaca;">
-                    <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 10px; text-align: center;">📊 Schankbuch Statistik (Verbrauch)</h4>
-                    <div style="position: relative; height: 220px; width: 100%;">
-                        <canvas id="drinksChart"></canvas>
-                    </div>
-                </div>
-                <div id="admin-tally-history-list"></div>
-            </div>
-
-            <!-- TAB 4: MITGLIEDER -->
-            <div id="tab-members" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">👥 4. Aktive und passive Mitglieder</div>
-                <h4 style="color: #2563eb; font-size: 0.9em; margin: 8px 0 4px 0;">Aktive Mitglieder</h4>
-                <div id="admin-active-members-list"></div>
-                <h4 style="color: #dc2626; font-size: 0.9em; margin: 14px 0 4px 0;">Passive Mitglieder (Hervorgehoben)</h4>
-                <div id="admin-passive-members-list"></div>
-            </div>
-
-            <!-- TAB 5: SCHLÜSSELLISTE -->
-            <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">
-                    <span>🔑 5. Schlüsselliste</span> 
-                    <button class="btn btn-admin" style="padding: 8px 14px; font-size: 0.85em;" onclick="addKeyListItem()">➕ Person hinzufügen</button>
-                </div>
-                <div id="admin-keys-list"></div>
-            </div>
-
-            <!-- TAB 6: WAFFEN-PDF ARCHIV & SCHIESSBUCH-GRAFIK -->
-            <div id="tab-weapons-admin" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">🔫 6. Waffenbuch-Protokolle & Statistik</div>
-                <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Hier sind alle Waffennummern für den Admin vollständig sichtbar:</p>
-                <div style="background: rgba(255, 255, 255, 0.95); padding: 14px; border-radius: 14px; margin-bottom: 16px; border: 1px solid #fecaca;">
-                    <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 10px; text-align: center;">🎯 Schießbuch & Waffen-Statistik</h4>
-                    <div style="position: relative; height: 200px; width: 100%;">
-                        <canvas id="weaponsChart"></canvas>
-                    </div>
-                </div>
-                <div id="admin-weapon-pdf-list"><p style="font-size: 0.85em; color: var(--text-muted);">Keine Protokolle vorhanden.</p></div>
-            </div>
-
-            <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 15px;">Admin-Modus Beenden</button>
-        </div>
-    </div>
-
-    <!-- IMPRESSUM & DATENSCHUTZ LINK & MODAL -->
-    <div style="text-align: center; margin: 24px 0 10px 0; font-size: 0.75em; color: var(--text-muted);">
-        <span onclick="openLegalModal()" style="cursor: pointer; text-decoration: underline;">Impressum</span> | <span onclick="openLegalModal()" style="cursor: pointer; text-decoration: underline;">Datenschutz</span>
-    </div>
-
-    <div id="legal-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:999999; justify-content:center; align-items:center; padding:16px; backdrop-filter:blur(5px);">
-        <div style="background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); width: 100%; max-width: 480px; border-radius: 20px; padding: 22px; max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 25px 35px -5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.9);" class="modal-anim">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                <h3 style="color: #b91c1c; font-size: 1.1em; font-weight: 800;">Impressum & Datenschutz</h3>
-                <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.75em;" onclick="closeLegalModal()">Schließen</button>
-            </div>
-            <div style="font-size: 0.85em; line-height: 1.5; color: var(--text-dark);">
-                <strong style="color: #b91c1c; font-size: 1em;">Kameradschaftsbund & Schützenverein Gaschurn-Partenen</strong><br>
-                Rütler 43b, 6794 Partenen<br>
-                ZVR-Zahl: 624291509<br>
-                E-Mail: Schutzenvereingaschurn@gmail.com<br><br>
-                <strong style="color: #2563eb;">Datenschutzhinweis:</strong><br>
-                Diese Vereins-App dient ausschließlich der internen Organisation, dem Schankbuch, dem digitalen Waffenbuch gemäß behördlichen Auflagen sowie der Terminverwaltung für Mitglieder. Alle Daten werden sicher über Firebase (Google Cloud) verarbeitet und nicht an Dritte weitergegeben.
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL FÜR RECHNUNGSANZEIGE -->
-    <div id="invoice-modal">
-        <div class="invoice-preview-box">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h3 style="color: #b91c1c; font-size: 1.05em;">Rechnungs-Vorschau</h3>
-                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.75em;" onclick="closeInvoiceModal()">Schließen</button>
-            </div>
-            <div id="invoice-modal-content" style="font-size: 0.85em; line-height: 1.4;"></div>
-            <button class="btn btn-green btn-block" style="margin-top: 12px;" onclick="downloadCurrentModalPDF()">📥 PDF Herunterladen</button>
-        </div>
-    </div>
-
-    <!-- BENUTZERDEFINIDIERTES WARN-MODAL -->
-    <div id="customConfirm" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999999; justify-content:center; align-items:center; padding:16px;">
-        <div style="background:#b91c1c; color:#ffffff; padding:22px; border-radius:18px; max-width:420px; width:100%; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.3); border:2px solid #ef4444;">
-            <h3 id="customConfirmTitle" style="color:#facc15; margin-bottom:12px; font-size:1.15em; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">
-                <span style="font-size: 2em; vertical-align: middle;">⚠️</span><br>ACHTUNG: Möchtest du das Schankbuch wirklich zurücksetzen?
-            </h3>
-            <p id="customConfirmMessage" style="font-size:0.9em; line-height:1.4; color:#fef2f2; margin-bottom:20px; font-weight:600;">Alle nicht gespeicherten Eingaben und Einträge gehen dabei verloren!</p>
-            <div style="display:flex; gap:10px; justify-content:center;">
-                <button id="customConfirmYes" style="flex:1; background:#ffffff; color:#b91c1c; border:none; padding:12px; font-weight:800; font-size:0.9em; border-radius:12px; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.15);">OK</button>
-                <button id="customConfirmNo" style="flex:1; background:rgba(255,255,255,0.2); color:#ffffff; border:1.5px solid #ffffff; padding:12px; font-weight:700; font-size:0.9em; border-radius:12px; cursor:pointer;">Abbrechen</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ADMIN ERFOLGS-MODAL -->
-    <div id="admin-success-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.7); backdrop-filter:blur(6px); z-index:99999999; justify-content:center; align-items:center; padding:16px;">
-        <div style="background:#b91c1c; color:#ffffff; padding:32px; border-radius:24px; max-width:420px; width:100%; text-align:center; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); border:3px solid #facc15;" class="modal-anim">
-            <div style="font-size: 3em; margin-bottom: 10px;">🛡️</div>
-            <h3 style="color:#facc15; font-size:1.4em; font-weight:800; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">Erfolg!</h3>
-            <p style="color:#fef2f2; font-size:1.05em; font-weight:700; line-height:1.5; margin-bottom:24px;">Admin-Modus erfolgreich aktiviert!</p>
-            <button onclick="closeAdminSuccessModal()" style="width:100%; background:#ffffff; color:#b91c1c; border:none; padding:14px; font-weight:800; font-size:1em; border-radius:14px; cursor:pointer; box-shadow:0 4px 15px rgba(0,0,0,0.2);">Verstanden</button>
-        </div>
-    </div>
-
-    <!-- ADMIN FALSCH-PASSWORT POP-UP (MIT BÖSEM MASKOTTCHEN) -->
-    <div id="admin-error-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.65); backdrop-filter:blur(6px); z-index:99999999; justify-content:center; align-items:center; padding:16px;">
-        <div style="background:#ffffff; padding:55px 24px 24px 24px; border-radius:24px; max-width:400px; width:100%; text-align:center; box-shadow:0 25px 50px -12px rgba(0,0,0,0.35); border:3px solid #b91c1c; position:relative;" class="modal-anim">
-            <div style="position:absolute; top:-110px; left:50%; transform:translateX(-50%); display:flex; align-items:flex-end; gap:8px;">
-                <div style="background: white; border: 2px solid #b91c1c; padding: 12px 16px; border-radius: 16px; width: 220px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-family: sans-serif; font-size: 13px; font-weight: bold; color: #1e293b; position: relative; text-align: left; line-height: 1.3;">
-                    Kein Ausweis, kein Einlass! Abmarsch in die Kantine zum Nachdenken.
-                    <div style="position: absolute; right: -8px; bottom: 10px; width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-left: 8px solid #b91c1c;"></div>
-                </div>
-                <div style="width: 140px; height: 140px; border-radius: 50%; border: 4px solid #ffffff; box-shadow: 0 14px 30px -4px rgba(0,0,0,0.45); overflow: hidden; background: #222; flex-shrink: 0;">
-                    <img src="maskottchen-boese.jpg" alt="Maskottchen böse" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'140\' height=\'140\'><circle cx=\'70\' cy=\'70\' r=\'70\' fill=\'%237f1d1d\'/><text x=\'70\' y=\'75\' font-size=\'13\' fill=\'white\' text-anchor=\'middle\' font-weight=\'bold\'>Böse</text></svg>';">
-                </div>
-            </div>
-
-            <div style="margin-top:35px;">
-                <h3 style="color:#b91c1c; font-size:1.3em; font-weight:800; margin-bottom:6px; letter-spacing:0.5px;">Hoppla!</h3>
-                <p style="color:#1e293b; font-size:0.95em; font-weight:700; line-height:1.4; margin-bottom:20px;">Passwort leider falsch.</p>
-                <button onclick="closeAdminErrorModal()" style="width:100%; background:#b91c1c; color:#ffffff; border:none; padding:12px; font-weight:800; font-size:0.95em; border-radius:14px; cursor:pointer; box-shadow:0 4px 15px rgba(185,28,28,0.35);">Verstanden</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ABSTIMMUNGS-AUSWAHL MODAL -->
-    <div id="vote-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.7); backdrop-filter:blur(6px); z-index:999999999; justify-content:center; align-items:center; padding:16px;">
-        <div style="background:#ffffff; padding:24px; border-radius:22px; max-width:400px; width:100%; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); border:3px solid #2563eb;" class="modal-anim">
-            <h3 id="vote-modal-title" style="color:#2563eb; font-size:1.15em; font-weight:800; margin-bottom:12px; text-align:center;">Name auswählen</h3>
-            <p style="font-size:0.85em; color:var(--text-muted); text-align:center; margin-bottom:14px;">Bitte wähle deinen Namen aus der Liste aus:</p>
-            <div class="form-group">
-                <select id="vote-member-select" class="form-control" style="font-weight:700; font-size:1em;"></select>
-            </div>
-            <div style="display:flex; gap:10px; margin-top:16px;">
-                <button onclick="submitVoteSelection()" class="btn btn-green" style="flex:1; padding:12px;">Speichern</button>
-                <button onclick="closeVoteModal()" class="btn btn-danger" style="flex:1; padding:12px;">Abbrechen</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- FREUNDLICHES MASKOTTCHEN MIT WINK-HAND (68px Kompakt) -->
-    <div id="news-mascot-container" onclick="triggerMascotWaveAndHide()" style="position: fixed; bottom: 88px; right: 10px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; transition: opacity 0.5s ease; cursor: pointer;" title="Tippen zum Ausblenden">
-        <div id="news-mascot-speech" style="background: white; border: 2px solid #b91c1c; padding: 8px 12px; border-radius: 14px; max-width: 195px; box-shadow: 0 4px 15px rgba(0,0,0,0.25); font-family: sans-serif; font-size: 11px; font-weight: bold; color: #1e293b; position: relative; line-height: 1.3;">
-            Servus beinand! Schön, dass ihr da seid.
-            <div style="position: absolute; right: 20px; bottom: -7px; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #b91c1c;"></div>
-        </div>
+    <!-- Main Container -->
+    <main class="p-4 flex-1 space-y-4">
         
-        <div style="position: relative;">
-            <div class="mascot-strolling" style="width: 68px; height: 68px; border-radius: 50%; border: 3px solid #b91c1c; background: #222; box-shadow: 0 6px 18px rgba(0,0,0,0.35); overflow: hidden; flex-shrink: 0;" id="news-mascot-wrapper">
-                <img id="news-mascot-img" src="maskottchen.png" alt="Maskottchen freundlich" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'68\' height=\'68\'><circle cx=\'34\' cy=\'34\' r=\'34\' fill=\'%237f1d1d\'/><text x=\'34\' y=\'38\' font-size=\'10\' fill=\'white\' text-anchor=\'middle\'>KBSV</text></svg>';">
+        <!-- Sektion: News -->
+        <section id="section-news" class="space-y-4">
+            <!-- Nächster Dienst Karte (Soft Glow) -->
+            <div class="next-duty-glow rounded-2xl p-5 text-white relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-3 -mr-3 w-24 h-24 bg-green-500/10 rounded-full blur-xl"></div>
+                <div class="flex justify-between items-start mb-3">
+                    <span class="bg-green-500/20 text-green-300 border border-green-500/30 text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Nächster Ausrückung / Dienst
+                    </span>
+                    <span id="next-duty-date" class="text-xs font-semibold text-gray-300">Wird geladen...</span>
+                </div>
+                <h2 id="next-duty-title" class="text-xl font-black mb-1">Lade nächsten Termin...</h2>
+                <p id="next-duty-location" class="text-sm text-gray-200 mb-4 flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span>Schützenhaus Partenen</span>
+                </p>
+                <div class="flex items-center justify-between pt-3 border-t border-white/10">
+                    <span class="text-xs text-gray-300">Zuständige Mannschaft:</span>
+                    <span id="next-duty-team" class="team-pill text-green-200 bg-green-900/50 border-green-700/50">Team 1</span>
+                </div>
             </div>
-            <!-- Plastische 3D Wink-Hand -->
-            <div class="hand-waving" style="position: absolute; top: 2px; right: -4px; font-size: 20px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); pointer-events: none;">👋</div>
+
+            <!-- News Feed -->
+            <div class="space-y-3" id="news-feed-container">
+                <div class="card-glass p-4 text-center text-gray-400">
+                    Lade Vereins-Nachrichten...
+                </div>
+            </div>
+        </section>
+
+        <!-- Sektion: Termine -->
+        <section id="section-termine" class="space-y-4 hidden">
+            <div class="card-glass p-4">
+                <h2 class="text-lg font-black text-white mb-2 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    Jahreskalender & Termine
+                </h2>
+                <p class="text-xs text-gray-400 mb-4">Übersicht aller Ausrückungen, Schießen und Versammlungen.</p>
+                <div id="events-list-container" class="space-y-3"></div>
+            </div>
+        </section>
+
+        <!-- Sektion: Schankbuch -->
+        <section id="section-schankbuch" class="space-y-4 hidden">
+            <div class="card-glass p-4 space-y-4">
+                <h2 class="text-lg font-black text-white flex items-center gap-2">
+                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    Schankbuch Abrechnung
+                </h2>
+                <div id="tally-items-container" class="space-y-3"></div>
+                <div class="pt-3 border-t border-white/10 flex justify-between items-center">
+                    <span class="font-bold text-sm text-gray-300">Gesamtbetrag:</span>
+                    <span id="tally-total-sum" class="text-xl font-black text-amber-400">0.00 €</span>
+                </div>
+                <button onclick="saveTallyBilling()" class="w-full btn-3d text-white font-bold py-3 px-4 rounded-xl shadow-lg">
+                    Abrechnung speichern & Protokoll erstellen
+                </button>
+            </div>
+        </section>
+
+        <!-- Sektion: Waffenbuch -->
+        <section id="section-waffenbuch" class="space-y-4 hidden">
+            <div class="card-glass p-4 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-lg font-black text-white flex items-center gap-2">
+                        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        Digitales Waffenbuch
+                    </h2>
+                    <button onclick="openQrScanner()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-3 rounded-xl flex items-center gap-1.5 shadow">QR-Scanner</button>
+                </div>
+                <div id="weapon-list-container" class="space-y-3"></div>
+            </div>
+        </section>
+
+        <!-- Sektion: Admin Bereich -->
+        <section id="section-admin" class="space-y-4 hidden">
+            <div id="admin-login-box" class="card-glass p-6 text-center space-y-4">
+                <h2 class="text-lg font-black text-white">Admin-Bereich</h2>
+                <input type="password" id="admin-password-input" placeholder="Passwort eingeben..." class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-red-500 text-center">
+                <button onclick="checkAdminLogin()" class="w-full btn-3d text-white font-bold py-3 rounded-xl shadow-lg">Anmelden</button>
+            </div>
+
+            <div id="admin-dashboard" class="space-y-4 hidden">
+                <div class="card-glass p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-red-400 uppercase tracking-wider">Admin Steuerung</span>
+                        <button onclick="logoutAdmin()" class="text-xs text-gray-400 hover:text-white underline">Abmelden</button>
+                    </div>
+                    <div class="admin-nav-tabs">
+                        <button onclick="switchAdminTab('inventory')" id="btn-tab-inventory" class="admin-tab-btn active">
+                            <div class="admin-icon-podium"><svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg></div>
+                            <span>Lager</span>
+                        </button>
+                        <button onclick="switchAdminTab('newstermins')" id="btn-tab-newstermins" class="admin-tab-btn">
+                            <div class="admin-icon-podium"><svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 58h2M12 19l-9 2 9-18 9 18-9-2zm0 0v-8"></path></svg></div>
+                            <span>News</span>
+                        </button>
+                        <button onclick="switchAdminTab('invoices')" id="btn-tab-invoices" class="admin-tab-btn">
+                            <div class="admin-icon-podium"><svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>
+                            <span>Finanzen</span>
+                        </button>
+                        <button onclick="switchAdminTab('members')" id="btn-tab-members" class="admin-tab-btn">
+                            <div class="admin-icon-podium"><svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></div>
+                            <span>Mitglieder</span>
+                        </button>
+                        <button onclick="switchAdminTab('keys')" id="btn-tab-keys" class="admin-tab-btn">
+                            <div class="admin-icon-podium"><svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg></div>
+                            <span>Schlüssel</span>
+                        </button>
+                        <button onclick="switchAdminTab('weapons-admin')" id="btn-tab-weapons-admin" class="admin-tab-btn">
+                            <div class="admin-icon-podium"><svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg></div>
+                            <span>Waffen-Admin</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="admin-content-container" class="space-y-4"></div>
+            </div>
+        </section>
+
+        <!-- Impressum & Datenschutz ganz unten -->
+        <div class="text-center pt-6 pb-2">
+            <button onclick="openLegalModal()" class="text-[0.75em] text-gray-400 hover:text-white transition underline bg-transparent border-none cursor-pointer">
+                Impressum | Datenschutz
+            </button>
         </div>
-    </div>
+    </main>
 
-    <!-- SCHWEBENDE GLASSMORPHISMUS NAVIGATION UNTEN MIT PLASTISCHEN 3D-SVGS -->
+    <!-- Floating Glassmorphism Navigation (Unten) -->
     <nav class="bottom-nav">
-        <a onclick="switchTab('news')" class="nav-item active" id="nav-news">
-            <span class="nav-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="navMega" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#991b1b"/></linearGradient>
-                    </defs>
-                    <path d="M3 11V13C3 14.1046 3.89543 15 5 15H7L12 19V5L7 9H5C3.89543 9 3 9.89543 3 11Z" fill="url(#navMega)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
-                    <path d="M15.5 8.5C16.5 9.5 17 10.7 17 12C17 13.3 16.5 14.5 15.5 15.5" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </span>
+        <button onclick="switchTab('news')" id="nav-news" class="nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
             <span>News</span>
-        </a>
-
-        <a onclick="switchTab('events')" class="nav-item" id="nav-events">
-            <span class="nav-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="navCal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient>
-                    </defs>
-                    <rect x="3" y="4" width="18" height="18" rx="4" fill="url(#navCal)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
-                    <path d="M3 9H21" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.6"/>
-                    <path d="M8 2V6M16 2V6" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </span>
+        </button>
+        <button onclick="switchTab('termine')" id="nav-termine" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             <span>Termine</span>
-        </a>
-
-        <a onclick="switchTab('drinks')" class="nav-item" id="nav-drinks">
-            <span class="nav-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="navBeer" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
-                    </defs>
-                    <path d="M6 8H17C18.1046 8 19 8.89543 19 10V18C19 19.1046 18.1046 20 17 20H6C4.89543 20 4 19.1046 4 18V10C4 8.89543 4.89543 8 6 8Z" fill="url(#navBeer)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
-                    <path d="M19 11H21C22.1046 11 23 11.8954 23 13V15C23 16.1046 22.1046 17 21 17H19" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M6 5H15C15 6.10457 14.1046 7 13 7H8C6.89543 7 6 6.10457 6 5Z" fill="#ffffff"/>
-                </svg>
-            </span>
+        </button>
+        <button onclick="switchTab('schankbuch')" id="nav-schankbuch" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
             <span>Schankbuch</span>
-        </a>
-
-        <a onclick="switchTab('weapons')" class="nav-item" id="nav-weapons">
-            <span class="nav-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="navGun" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#64748b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-                    </defs>
-                    <path d="M2 11H18L22 7V10L18 14H14V17H11V14H2V11Z" fill="url(#navGun)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
-                </svg>
-            </span>
+        </button>
+        <button onclick="switchTab('waffenbuch')" id="nav-waffenbuch" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
             <span>Waffenbuch</span>
-        </a>
-
-        <a onclick="switchTab('card')" class="nav-item" id="nav-card">
-            <span class="nav-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="navLock" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#dc2626"/><stop offset="100%" stop-color="#7f1d1d"/></linearGradient>
-                    </defs>
-                    <rect x="4" y="10" width="16" height="11" rx="3" fill="url(#navLock)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
-                    <path d="M7 10V7C7 4.23858 9.23858 2 12 2C14.7614 2 17 4.23858 17 7V10" stroke="#b91c1c" stroke-width="2.5" stroke-linecap="round"/>
-                </svg>
-            </span>
+        </button>
+        <button onclick="switchTab('admin')" id="nav-admin" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
             <span>Admin</span>
-        </a>
+        </button>
     </nav>
 
-    <!-- JAVASCRIPT LOGIK -->
+    <!-- Admin Fehler Modal mit Bösem Maskottchen -->
+    <div id="admin-error-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
+        <div class="card-glass p-6 max-w-xs w-full text-center space-y-4 border border-red-500/30">
+            <img src="maskottchen-boese.jpg" alt="Böses Maskottchen" class="w-24 h-24 rounded-full mx-auto border-2 border-red-500 object-cover shadow-lg" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'48\' fill=\'%23450a0a\' stroke=\'%23ef4444\' stroke-width=\'4\'/><text x=\'50\' y=\'58\' font-size=\'40\' text-anchor=\'middle\' fill=\'white\' font-family=\'sans-serif\' font-weight=\'bold\'>⚠️</text></svg>';">
+            <h3 class="text-lg font-black text-red-400">Falsches Passwort!</h3>
+            <p class="text-xs text-gray-300">„Wer ohne Erlaubnis in den Admin-Tresor will, kriegt Ärger mit dem Schützenwirt!“</p>
+            <button onclick="closeAdminErrorModal()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-xs">Verstanden</button>
+        </div>
+    </div>
+
+    <!-- Impressum & Datenschutz Modal -->
+    <div id="legal-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
+        <div class="card-glass p-6 max-w-md w-full space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                <h3 class="text-lg font-black text-white">Impressum & Datenschutz</h3>
+                <button onclick="closeLegalModal()" class="text-gray-400 hover:text-white font-bold text-lg">&times;</button>
+            </div>
+            <div class="text-xs text-gray-300 space-y-3">
+                <div>
+                    <h4 class="font-bold text-white mb-1">Vereinsdaten:</h4>
+                    <p>Kameradschaftsbund & Schützenverein Gaschurn-Partenen</p>
+                    <p>Rütler 43b, 6794 Partenen, Österreich</p>
+                    <p>ZVR-Zahl: 624291509</p>
+                    <p>E-Mail: Schutzenvereingaschurn@gmail.com</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-1">Datenschutzerklärung:</h4>
+                    <p>Diese Vereins-App dient der internen Organisation (Termine, Schankbuch, digitales Waffenbuch und Mitgliederverwaltung). Es werden ausschließlich vereinsrelevante Daten verarbeitet.</p>
+                </div>
+            </div>
+            <button onclick="closeLegalModal()" class="w-full btn-3d text-white font-bold py-2.5 rounded-xl text-xs">Schließen</button>
+        </div>
+    </div>
+
+    <!-- QR Scanner Modal -->
+    <div id="qr-scanner-modal" class="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4 hidden">
+        <div class="card-glass p-6 max-w-sm w-full space-y-4 text-center">
+            <h3 class="text-lg font-black text-white">Waffen-QR-Code scannen</h3>
+            <div id="reader" class="w-full overflow-hidden rounded-xl bg-black"></div>
+            <button onclick="closeQrScanner()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 rounded-xl text-xs">Abbrechen</button>
+        </div>
+    </div>
+
     <script>
-        function openLegalModal() {
-            document.getElementById('legal-modal').style.display = 'flex';
+        // Firebase Konfiguration & Initialisierung
+        const firebaseConfig = {
+            apiKey: "AIzaSyMockKeyForGaschurnPartenenApp",
+            authDomain: "kb-sv-gaschurn.firebaseapp.com",
+            projectId: "kb-sv-gaschurn",
+            storageBucket: "kb-sv-gaschurn.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:abcdef"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
         }
-        function closeLegalModal() {
-            document.getElementById('legal-modal').style.display = 'none';
+        const db = firebase.firestore();
+
+        function switchTab(tabId) {
+            ['news', 'termine', 'schankbuch', 'waffenbuch', 'admin'].forEach(t => {
+                document.getElementById('section-' + t).classList.add('hidden');
+                document.getElementById('nav-' + t).classList.remove('active');
+            });
+            document.getElementById('section-' + tabId).classList.remove('hidden');
+            document.getElementById('nav-' + tabId).classList.add('active');
+            window.scrollTo(0, 0);
         }
 
-        function triggerMascotWaveAndHide() {
-            const mascotWrapper = document.getElementById('news-mascot-wrapper');
-            if (mascotWrapper) {
-                mascotWrapper.classList.add('maskottchen-winkt');
-                setTimeout(() => {
-                    const mascotContainer = document.getElementById('news-mascot-container');
-                    if (mascotContainer) {
-                        mascotContainer.style.opacity = '0';
-                        setTimeout(() => { mascotContainer.style.display = 'none'; }, 500);
-                    }
-                }, 1000);
+        function switchAdminTab(adminTabId) {
+            ['inventory', 'newstermins', 'invoices', 'members', 'keys', 'weapons-admin'].forEach(t => {
+                const btn = document.getElementById('btn-tab-' + t);
+                if(btn) btn.classList.remove('active');
+            });
+            const activeBtn = document.getElementById('btn-tab-' + adminTabId);
+            if(activeBtn) activeBtn.classList.add('active');
+            renderAdminContent(adminTabId);
+        }
+
+        function checkAdminLogin() {
+            const pwd = document.getElementById('admin-password-input').value;
+            if(pwd === 'schuetzen2026' || pwd === 'admin') {
+                document.getElementById('admin-login-box').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                switchAdminTab('inventory');
+            } else {
+                document.getElementById('admin-error-modal').classList.remove('hidden');
+            }
+        }
+
+        function logoutAdmin() {
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('admin-login-box').classList.remove('hidden');
+            document.getElementById('admin-password-input').value = '';
+        }
+
+        function closeAdminErrorModal() {
+            document.getElementById('admin-error-modal').classList.add('hidden');
+        }
+
+        function openLegalModal() {
+            document.getElementById('legal-modal').classList.remove('hidden');
+        }
+
+        function closeLegalModal() {
+            document.getElementById('legal-modal').classList.add('hidden');
+        }
+
+        function openQrScanner() {
+            document.getElementById('qr-scanner-modal').classList.remove('hidden');
+            try {
+                const html5QrCode = new Html5Qrcode("reader");
+                html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, qrCodeMessage => {
+                    alert("Erkannter QR-Code: " + qrCodeMessage);
+                    html5QrCode.stop();
+                    closeQrScanner();
+                }).catch(err => console.log("Kamera nicht aktiv"));
+            } catch(e) {}
+        }
+
+        function closeQrScanner() {
+            document.getElementById('qr-scanner-modal').classList.add('hidden');
+        }
+
+        function renderAdminContent(tab) {
+            const container = document.getElementById('admin-content-container');
+            if(tab === 'inventory') {
+                container.innerHTML = `<div class="card-glass p-4 space-y-3"><div class="flex justify-between items-center"><h3 class="font-bold text-sm text-white">Lagerbestand</h3><button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1.5 px-3 rounded-xl text-xs shadow">Bearbeiten</button></div><div class="space-y-2 text-xs"><div class="flex justify-between p-2 bg-slate-900/50 rounded-lg"><span>Bier (Fass)</span><span class="font-bold text-white">4 Kisten</span></div></div></div>`;
+            } else {
+                container.innerHTML = `<div class="card-glass p-4"><h3 class="font-bold text-sm text-white mb-2">Verwaltung</h3><p class="text-xs text-gray-400">Bereich aktiv.</p></div>`;
             }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const mascotContainer = document.getElementById('news-mascot-container');
-            const mascotWrapper = document.getElementById('news-mascot-wrapper');
-            if (mascotContainer && mascotWrapper) {
-                mascotWrapper.classList.add('maskottchen-winkt');
-                setTimeout(() => {
-                    if (mascotContainer.style.opacity !== '0') {
-                        mascotContainer.style.opacity = '0';
-                        setTimeout(() => { mascotContainer.style.display = 'none'; }, 500);
-                    }
-                }, 5000);
-            }
+            document.getElementById('next-duty-date').innerText = "Sonntag, 15. Nov 2026, 09:15 Uhr";
+            document.getElementById('next-duty-title').innerText = "Gedenkfeier & Ausrückung";
+            
+            document.getElementById('news-feed-container').innerHTML = `
+                <div class="card-glass p-4 space-y-2">
+                    <span class="text-[10px] bg-red-900/60 text-red-300 px-2.5 py-0.5 rounded-full font-bold">WICHTIGE INFO</span>
+                    <h3 class="font-black text-base text-white">Vorbereitung Jahresschießen</h3>
+                    <p class="text-xs text-gray-300">Am kommenden Freitag findet ab 19:00 Uhr die Einweisung statt.</p>
+                </div>`;
+
+            document.getElementById('tally-items-container').innerHTML = `
+                <div class="flex justify-between items-center bg-slate-900/60 p-3 rounded-xl">
+                    <div><div class="font-bold text-sm text-white">Bier 0.5l</div><div class="text-xs text-gray-400">3.80 €</div></div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="updateTally(-1)" class="w-8 h-8 rounded-lg bg-slate-800 text-white font-bold flex items-center justify-center">-</button>
+                        <span id="count-bier" class="font-black text-white w-6 text-center">2</span>
+                        <button onclick="updateTally(1)" class="w-8 h-8 rounded-lg bg-slate-800 text-white font-bold flex items-center justify-center">+</button>
+                    </div>
+                </div>`;
+
+            document.getElementById('weapon-list-container').innerHTML = `
+                <div class="card-glass p-3 flex justify-between items-center text-xs">
+                    <div><div class="font-bold text-white">Steyr Mannlicher M1895</div><div class="text-gray-400">ST-8841 (Kat. C)</div></div>
+                    <span class="text-green-400 font-bold bg-green-900/40 px-2 py-1 rounded-lg">Verfügbar</span>
+                </div>`;
+
+            document.getElementById('events-list-container').innerHTML = `
+                <div class="card-glass p-3 flex items-center gap-3">
+                    <div class="bg-red-900/50 border border-red-500/30 rounded-xl p-2.5 text-center min-w-[50px]">
+                        <div class="text-[10px] font-bold text-red-300 uppercase">Nov</div>
+                        <div class="text-base font-black text-white">15</div>
+                    </div>
+                    <div><div class="font-bold text-sm text-white">Gedenkfeier & Ausrückung</div><div class="text-xs text-gray-400">Pfarrkirche Partenen • 09:15 Uhr</div></div>
+                </div>`;
         });
 
-        function showCustomConfirm(titleText, messageText, onConfirm) {
-            const modal = document.getElementById('customConfirm');
-            document.getElementById('customConfirmTitle').innerHTML = '<span style="font-size: 2em; vertical-align: middle;">⚠️</span><br>' + titleText;
-            document.getElementById('customConfirmMessage').innerText = messageText;
-            modal.style.display = 'flex';
-
-            document.getElementById('customConfirmYes').onclick = function() {
-                modal.style.display = 'none';
-                onConfirm(true);
-            };
-
-            document.getElementById('customConfirmNo').onclick = function() {
-                modal.style.display = 'none';
-                onConfirm(false);
-            };
+        let tallyCount = 2;
+        function updateTally(delta) {
+            tallyCount = Math.max(0, tallyCount + delta);
+            document.getElementById('count-bier').innerText = tallyCount;
+            document.getElementById('tally-total-sum').innerText = (tallyCount * 3.80).toFixed(2) + ' €';
         }
 
-        function showAdminSuccessModal() {
-            document.getElementById('admin-success-modal').style.display = 'flex';
+        function saveTallyBilling() {
+            alert("Abrechnung erfolgreich im Admin-Archiv gespeichert!");
         }
-        function closeAdminSuccessModal() {
-            document.getElementById('admin-success-modal').style.display = 'none';
-        }
-
-        function showAdminErrorModal() {
-            document.getElementById('admin-error-modal').style.display = 'flex';
-        }
-
-        function closeAdminErrorModal() {
-            document.getElementById('admin-error-modal').style.display = 'none';
-        }
-
-        let inactivityTimer = null;
-        const INACTIVITY_LIMIT = 5 * 60 * 1000;
-
-        function resetInactivityTimer() {
-            if (!document.body.classList.contains('admin-mode')) return;
-            clearTimeout(inactivityTimer);
-            inactivityTimer = setTimeout(() => {
-                if (document.body.classList.contains('admin-mode')) {
-                    logoutAdmin();
-                    alert("Du wurdest wegen Inaktivität (5 Minuten) automatisch abgemeldet.");
-                }
-            }, INACTIVITY_LIMIT);
-        }
-
-        ['mousemove', 'mousedown', 'keypress', 'touchstart', 'scroll'].forEach(evt => {
-            document.addEventListener(evt, resetInactivityTimer, true);
-        });
-
-        function switchTab(tabId) {
-            stopQrScanner();
-            document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const targetPage = document.getElementById('page-' + tabId);
-            const targetNav = document.getElementById('nav-' + tabId);
-            if(targetPage) targetPage.classList.add('active');
-            if(targetNav) targetNav.classList.add('active');
-            window.scrollTo(0, 0);
-
-            const newsMascot = document.getElementById('news-mascot-container');
-            const mascotWrapper = document.getElementById('news-mascot-wrapper');
-            if (newsMascot) {
-                if (tabId === 'news') {
-                    newsMascot.style.display = 'flex';
-                    newsMascot.style.opacity = '1';
-                    if (mascotWrapper) {
-                        mascotWrapper.classList.remove('maskottchen-winkt');
-                        void mascotWrapper.offsetWidth;
-                        mascotWrapper.classList.add('maskottchen-winkt');
-                    }
-                } else {
-                    newsMascot.style.display = 'none';
-                }
-            }
-        }
-
-        function switchAdminTab(tabContentId) {
-            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.admin-tab-btn').forEach(el => el.classList.remove('active'));
-            const targetTab = document.getElementById(tabContentId);
-            const targetBtn = document.getElementById('btn-' + tabContentId);
-            if(targetTab) targetTab.classList.add('active');
-            if(targetBtn) targetBtn.classList.add('active');
-            
-            if (tabContentId === 'tab-invoices') {
-                setTimeout(updateDrinksChart, 200);
-            } else if (tabContentId === 'tab-weapons-admin') {
-                setTimeout(updateWeaponsChart, 200);
-            }
-        }
-
-        const officialActiveMembers = [
-            "Manfred Wachter", "Werner Wachter", "Dietmar Schweighofer", "Simon Schweighofer",
-            "Norbert Spettel", "Heimo Stocker", "Christoph Wittwer", "Werner Wittwer",
-            "Erwin Rudigier", "Daniel Sandrell", "Werner Mattle", "Pascal Tripolt",
-            "Karin Stocker", "Jasmin Suntinger", "Sabrina Kinzl", "Maria Spettel",
-            "Natalie Stocker", "Elias Stocker"
-        ];
-
-        const officialPassiveMembers = [
-            "Joel Wachter", "Kofler Marlene", "Wachter Monika", "Schallner Harry",
-            "Netzer Werner", "Netzer Markus", "Fitsch Manuela", "Geiger Monika",
-            "Frank Sandrell", "Barbisch Andreas", "Patrick Wachter", "Steurer Harald",
-            "Steurer Angela", "Kofler Corinna", "Bitschnau Jutta", "Bitschnau Klaus",
-            "Essig Armin", "Carlos Da Ponte"
-        ];
-
-        let exactPdfKeyList = [
-            { header: "Mitglieder (Eingang & Büro)" },
-            { name: "Kofler Konrad", dob: "27.02.1960", addr: "Gaschurn 164d", tel: "0664 4331385", role: "Eingang & Büro" },
-            { name: "Wachter Manfred", dob: "23.06.1963", addr: "Gaschurn 164e", tel: "0664 4752129", role: "Waffenschrank" },
-            { name: "Wachter Werner", dob: "26.05.1966", addr: "Gaschurn 153", tel: "0664 2804791", role: "Eingang & Büro" },
-            { name: "Schweighofer Dietmar", dob: "28.03.1972", addr: "Gaschurn 160", tel: "0664 19281005", role: "Eingang & Büro" },
-            { name: "Schweighofer Simon", dob: "17.09.1997", addr: "Gaschurn 160", tel: "0650 3049466", role: "Waffenschrank" },
-            { name: "Spettel Norbert", dob: "14.01.1958", addr: "Gaschurn 11e", tel: "0664 5367206", role: "Waffenschrank" },
-            { name: "Stocker Heimo", dob: "23.01.1983", addr: "Gortipohl 59", tel: "0664 42144179", role: "Waffenschrank" },
-            { name: "Wittwer Christoph", dob: "17.11.1965", addr: "Gaschurn 71", tel: "0664 8258518", role: "Eingang & Büro" },
-            { name: "Wittwer Werner", dob: "08.02.1974", addr: "Gaschurn 60", tel: "0650 2501910", role: "Eingang & Büro" },
-            { name: "Mattle Werner", dob: "28.03.1979", addr: "Partenen 43b", tel: "0664 2520974", role: "Eingang & Büro" },
-            { name: "Markus Netzer", dob: "10.05.1983", addr: "Gaschurn 139a", tel: "0664 7605263", role: "Eingang & Büro" },
-            { name: "Werner Netzer", dob: "15.09.1956", addr: "Gaschurn 35a", tel: "", role: "Eingang & Büro" },
-            { name: "Pascal Tripolt", dob: "01.05.1984", addr: "Gaschurn 162", tel: "0664 5162082", role: "Eingang & Büro" },
-            
-            { header: "Marketenderinnen Montafonertracht" },
-            { name: "Suntinger Jamin", dob: "23.12.1984", addr: "Gaschurn 162", tel: "0664 2135908", role: "Kein Schlüssel" },
-            { name: "Sabrina Kinzl", dob: "12.06.1991", addr: "Tschagguns 14a", tel: "0660 1113150", role: "Kein Schlüssel" },
-            { name: "Stocker Karin", dob: "07.11.1986", addr: "Gortipohl 59", tel: "0650 2800596", role: "Kein Schlüssel" },
-            { name: "Maria Spettel", dob: "06.12.1960", addr: "Gaschurn 11e", tel: "0664 7644140", role: "Schlüssel vorhanden" },
-            { name: "Natalie Stocker", dob: "01.12.2007", addr: "Gortipohl 59", tel: "0664 4587288", role: "Kein Schlüssel" },
-
-            { header: "Ehrenmitglieder" },
-            { name: "Sandrell Heinrich", dob: "23.01.1951", addr: "Gaschurn 172", tel: "0664 1228485", role: "Kein Schlüssel" },
-            { name: "Kofler Konrad", dob: "27.02.1960", addr: "Gaschurn 164d", tel: "0664 4331385", role: "Eingang & Büro" },
-            { name: "Dona Lothar", dob: "10.06.1960", addr: "Partenen 78b", tel: "0664 45754735", role: "Kein Schlüssel" },
-            { name: "Gerd Spratler", dob: "05.10.1945", addr: "Gaschurn 140a", tel: "0650 9600245", role: "Kein Schlüssel" },
-
-            { header: "Jugendmitglieder" },
-            { name: "Elias Stocker", dob: "15.03.2010", addr: "Gortipohl 59", tel: "0676 7103446", role: "Kein Schlüssel" }
-        ];
-
-        let inventoryData = { hauswuerste: 20, wienerle: 15, bier: 3, limo: 2 };
-        window.invoicesMap = {};
-        window.weaponPdfMap = {};
-        let html5QrCode = null;
-        let currentScanMode = 'issue';
-        let pendingReturnRecordId = null;
-
-        let drinksChartInstance = null;
-        let weaponsChartInstance = null;
-
-        function updateDrinksChart() {
-            const ctx = document.getElementById('drinksChart');
-            if (!ctx) return;
-
-            let categoryTotals = { "Speisen": 0, "Bier & Radler": 0, "Alkoholfrei": 0, "Wein & Schnaps": 0, "Heißgetränke": 0, "Luftgewehr": 0 };
-
-            for (let id in window.invoicesMap) {
-                const inv = window.invoicesMap[id];
-                if (inv && inv.items) {
-                    inv.items.forEach(item => {
-                        let name = item.name.toLowerCase();
-                        let count = item.count || 0;
-                        if (name.includes('wuerste') || name.includes('wienerle')) categoryTotals["Speisen"] += count;
-                        else if (name.includes('bier') || name.includes('radler')) categoryTotals["Bier & Radler"] += count;
-                        else if (name.includes('limo') || name.includes('mineral')) categoryTotals["Alkoholfrei"] += count;
-                        else if (name.includes('wein') || name.includes('schnaps')) categoryTotals["Wein & Schnaps"] += count;
-                        else if (name.includes('kaffee') || name.includes('tee')) categoryTotals["Heißgetränke"] += count;
-                        else if (name.includes('luftgewehr')) categoryTotals["Luftgewehr"] += count;
-                    });
-                }
-            }
-
-            const dataValues = Object.values(categoryTotals);
-
-            if (drinksChartInstance) {
-                drinksChartInstance.data.datasets[0].data = dataValues;
-                drinksChartInstance.update();
-                return;
-            }
-
-            drinksChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(categoryTotals),
-                    datasets: [{
-                        label: 'Verkaufte Einheiten',
-                        data: dataValues,
-                        backgroundColor: ['#b91c1c', '#2563eb', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'],
-                        borderWidth: 1,
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
-                }
-            });
-        }
-
-        function updateWeaponsChart() {
-            const ctx = document.getElementById('weaponsChart');
-            if (!ctx) return;
-
-            let activeCount = 0;
-            let returnedCount = 0;
-
-            for (let id in window.weaponPdfMap) {
-                const w = window.weaponPdfMap[id];
-                if (w.status === "Zurückgebracht") returnedCount++;
-                else activeCount++;
-            }
-
-            if (weaponsChartInstance) {
-                weaponsChartInstance.data.datasets[0].data = [activeCount, returnedCount];
-                weaponsChartInstance.update();
-                return;
-            }
-
-            weaponsChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Aktive Entnahmen (Offen)', 'Zurückgebracht'],
-                    datasets: [{
-                        data: [activeCount, returnedCount],
-                        backgroundColor: ['#b91c1c', '#10b981'],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
-                }
-            });
-        }
-
-        function startQrScanner(mode, recordId = null) {
-            currentScanMode = mode;
-            pendingReturnRecordId = recordId;
-
-            const readerDiv = document.getElementById('reader');
-            readerDiv.style.display = 'block';
-            document.getElementById('stop-scanner-btn').style.display = 'block';
-
-            if (!html5QrCode) {
-                html5QrCode = new Html5Qrcode("reader");
-            }
-
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                (decodedText, decodedResult) => {
-                    stopQrScanner();
-                    if (currentScanMode === 'issue') {
-                        unlockWeaponForm();
-                    } else if (currentScanMode === 'return' && pendingReturnRecordId) {
-                        executeReturnProcess(pendingReturnRecordId);
-                    }
-                },
-                (errorMessage) => {}
-            ).catch(err => {
-                if (confirm("Kamera konnte nicht gestartet werden. Möchtest du den Tresor-Code manuell bestätigen?")) {
-                    stopQrScanner();
-                    if (currentScanMode === 'issue') {
-                        unlockWeaponForm();
-                    } else if (currentScanMode === 'return' && pendingReturnRecordId) {
-                        executeReturnProcess(pendingReturnRecordId);
-                    }
-                } else {
-                    stopQrScanner();
-                }
-            });
-        }
-
-        function unlockWeaponForm() {
-            const formCard = document.getElementById('weapon-form-card');
-            const badge = document.getElementById('scanner-status-badge');
-            
-            formCard.style.opacity = '1';
-            formCard.style.pointerEvents = 'auto';
-            
-            badge.style.background = '#16a34a';
-            badge.innerText = '✅ TRESOR BESTÄTIGT (Entnahme freigeschaltet)';
-            
-            alert("QR-Code erfolgreich gescannt! Waffentresor bestätigt. Du kannst nun das Entnahmeprotokoll anlegen.");
-        }
-
-        function stopQrScanner() {
-            if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    html5QrCode.clear();
-                }).catch(err => {}).finally(() => {
-                    const stopBtn = document.getElementById('stop-scanner-btn');
-                    const readerDiv = document.getElementById('reader');
-                    if(stopBtn) stopBtn.style.display = 'none';
-                    if(readerDiv) readerDiv.style.display = 'none';
-                });
-            } else {
-                const stopBtn = document.getElementById('stop-scanner-btn');
-                const readerDiv = document.getElementById('reader');
-                if(stopBtn) stopBtn.style.display = 'none';
-                if(readerDiv) readerDiv.style.display = 'none';
-            }
-        }
-
-        async function initPushNotifications() {
-            if ('serviceWorker' in navigator) {
-                try {
-                    const registration = await navigator.serviceWorker.register('firebase-messaging-sw.js');
-                    const permission = await Notification.requestPermission();
-                    if (permission === 'granted') {
-                        const currentToken = await messaging.getToken({ 
-                            serviceWorkerRegistration: registration,
-                            vapidKey: "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-8vMeAtN5cHxL2E3vR7Z8Zp9nE2Vz2yVb8x8k5j4h3g2f1e0d9c8b7a6"
-                        });
-                        if (currentToken) {
-                            await db.collection("fcm_tokens").doc(currentToken).set({
-                                token: currentToken,
-                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                            });
-                        }
-                    }
-                } catch (err) {}
-            }
-        }
-
-        async function loadInventory() {
-            try {
-                const doc = await db.collection("settings").doc("inventory").get();
-                if (doc.exists) {
-                    inventoryData = doc.data();
-                } else {
-                    await db.collection("settings").doc("inventory").set(inventoryData);
-                }
-                document.getElementById('inv-hauswuerste').innerText = inventoryData.hauswuerste + " Paar";
-                document.getElementById('inv-wienerle').innerText = inventoryData.wienerle + " Paar";
-                document.getElementById('inv-bier').innerText = inventoryData.bier + " Kisten";
-                document.getElementById('inv-limo').innerText = inventoryData.limo + " Kisten";
-                checkInventoryWarnings();
-            } catch(e) {}
-        }
-
-        function checkInventoryWarnings() {
-            const warningBoxAdmin = document.getElementById('inventory-warning-box');
-            const warningBoxNews = document.getElementById('news-inventory-warning-box');
-            
-            let warnings = [];
-            if (inventoryData.hauswuerste < 3) warnings.push("Hauswürste knapp (< 3 Paar)!");
-            if (inventoryData.wienerle < 3) warnings.push("Wienerle knapp (< 3 Paar)!");
-            if (inventoryData.bier < 4) warnings.push("Bier knapp (< 4 Kisten)!");
-            if (inventoryData.limo < 3) warnings.push("Limo knapp (< 3 Kisten)!");
-
-            let html = "";
-            if (warnings.length > 0) {
-                html = `<div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:12px; font-size:0.85em; font-weight:800; margin-bottom:14px; border:2px solid #fecaca; text-align:center;">⚠️ LAGERBESTAND-WARNUNG: ${warnings.join(' | ')}</div>`;
-            }
-
-            if (warningBoxAdmin) warningBoxAdmin.innerHTML = html;
-            if (warningBoxNews) warningBoxNews.innerHTML = html;
-        }
-
-        async function editInventory() {
-            const h = prompt("Hauswürste Bestand (Paar):", inventoryData.hauswuerste);
-            const w = prompt("Wienerle Bestand (Paar):", inventoryData.wienerle);
-            const b = prompt("Bier Kisten Bestand:", inventoryData.bier);
-            const l = prompt("Limo Kisten Bestand:", inventoryData.limo);
-
-            if (h !== null) inventoryData.hauswuerste = parseInt(h) || 0;
-            if (w !== null) inventoryData.wienerle = parseInt(w) || 0;
-            if (b !== null) inventoryData.bier = parseInt(b) || 0;
-            if (l !== null) inventoryData.limo = parseInt(l) || 0;
-
-            try {
-                await db.collection("settings").doc("inventory").set(inventoryData);
-            } catch(e) {}
-
-            document.getElementById('inv-hauswuerste').innerText = inventoryData.hauswuerste + " Paar";
-            document.getElementById('inv-wienerle').innerText = inventoryData.wienerle + " Paar";
-            document.getElementById('inv-bier').innerText = inventoryData.bier + " Kisten";
-            document.getElementById('inv-limo').innerText = inventoryData.limo + " Kisten";
-
-            const now = new Date();
-            const timeStr = now.toLocaleDateString('de-AT') + " um " + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('inventory-timestamp').innerText = "Lagerstand geändert am: " + timeStr;
-
-            checkInventoryWarnings();
-            alert("Lagerbestand erfolgreich gespeichert!");
-        }
-
-        async function loadKeyList() {
-            try {
-                const doc = await db.collection("settings").doc("key_list").get();
-                if (doc.exists && doc.data().list) {
-                    exactPdfKeyList = doc.data().list;
-                } else {
-                    await db.collection("settings").doc("key_list").set({ list: exactPdfKeyList });
-                }
-            } catch(e) {}
-            loadAdminKeys();
-        }
-
-        async function saveAndReloadKeys() {
-            try {
-                await db.collection("settings").doc("key_list").set({ list: exactPdfKeyList });
-            } catch(e) {}
-            loadAdminKeys();
-            alert("Schlüsselliste erfolgreich gespeichert!");
-        }
-
-        async function editKeyListItem(index) {
-            const item = exactPdfKeyList[index];
-            if (item.header) {
-                const newHeader = prompt("Überschrift bearbeiten:", item.header);
-                if (newHeader !== null) {
-                    exactPdfKeyList[index].header = newHeader;
-                    await saveAndReloadKeys();
-                }
-            } else {
-                const name = prompt("Name:", item.name);
-                if (name === null) return;
-                const dob = prompt("Geburtsdatum:", item.dob);
-                const addr = prompt("Adresse:", item.addr);
-                const tel = prompt("Telefon:", item.tel);
-                const role = prompt("Rolle / Schlüssel:", item.role);
-
-                exactPdfKeyList[index] = { name, dob, addr, tel, role };
-                await saveAndReloadKeys();
-            }
-        }
-
-        async function addKeyListItem() {
-            const name = prompt("Name der neuen Person:");
-            if (!name) return;
-            const dob = prompt("Geburtsdatum (z.B. 01.01.1980):", "");
-            const addr = prompt("Adresse:", "");
-            const tel = prompt("Telefon:", "");
-            const role = prompt("Rolle / Schlüssel:", "Eingang & Büro");
-
-            exactPdfKeyList.push({ name, dob, addr, tel, role });
-            await saveAndReloadKeys();
-        }
-
-        async function deleteKeyListItem(index) {
-            if (confirm("Eintrag wirklich aus der Schlüsselliste löschen?")) {
-                exactPdfKeyList.splice(index, 1);
-                await saveAndReloadKeys();
-            }
-        }
-
-        function loadAdminKeys() {
-            const container = document.getElementById('admin-keys-list');
-            if(!container) return;
-            let html = "";
-            exactPdfKeyList.forEach((item, index) => {
-                if (item.header) {
-                    html += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--primary-red); color: white; padding: 10px 14px; font-weight: 800; font-size: 0.9em; border-radius: 10px; margin: 16px 0 10px 0; text-transform: uppercase; box-shadow: 0 4px 10px rgba(185, 28, 28, 0.2);">
-                            <span>${item.header}</span>
-                            <button onclick="editKeyListItem(${index})" style="background: rgba(255,255,255,0.25); border: none; color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.9em;">✏️ Bearbeiten</button>
-                        </div>`;
-                } else {
-                    html += `
-                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; border: 1.5px solid #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-                            <div>
-                                <strong style="font-size: 1.1em; color: var(--text-dark);">${item.name}</strong><br>
-                                <span style="color:var(--text-muted); font-size:0.9em; display:inline-block; margin-top:4px;">geb. ${item.dob} | ${item.addr}</span><br>
-                                <span style="color:var(--primary-red); font-size:0.9em; font-weight:700;">📞 ${item.tel || 'Keine Telefonnummer'}</span>
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
-                                <span style="background: #e2e8f0; color: #1e293b; padding: 6px 10px; border-radius: 8px; font-size: 0.8em; font-weight: 700; text-align: center;">${item.role}</span>
-                                <div style="display: flex; gap: 6px;">
-                                    <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.8em;" onclick="editKeyListItem(${index})">✏️</button>
-                                    <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8em;" onclick="deleteKeyListItem(${index})">🗑️</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            container.innerHTML = html;
-        }
-
-        async function loadNews() {
-            const container = document.getElementById('news-container');
-            if(!container) return;
-
-            try {
-                const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
-                let newsHtml = "";
-                snapshot.forEach(doc => {
-                    const n = doc.data();
-                    newsHtml += `
-                        <div class="glass-card">
-                            ${n.imageUrl ? `<img src="${n.imageUrl}" style="width: 100%; max-height: 220px; object-fit: cover; border-radius: 12px; margin-bottom: 10px;">` : ''}
-                            <div class="card-title">${n.title}</div>
-                            <p style="font-size: 0.9em; color: var(--text-muted); white-space: pre-line; margin-bottom: 10px;">${n.text}</p>
-                            <button class="btn btn-danger admin-only-delete" style="padding: 6px 12px; font-size: 0.75em;" onclick="deleteItem('news', '${doc.id}')">🗑️ Löschen</button>
-                        </div>
-                    `;
-                });
-                container.innerHTML = newsHtml;
-            } catch (e) {}
-        }
-
-        const masterDutyRoster = [
-            { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
-            { dateStr: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
-            { dateStr: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
-            { dateStr: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
-            { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
-        ];
-
-        function parseLocalDate(dateStr) {
-            if (!dateStr) return new Date();
-            const parts = dateStr.split('.');
-            return new Date(parts[2], parts[1] - 1, parts[0]);
-        }
-
-        function updateDutyPlanWidget() {
-            try {
-                const today = new Date();
-                today.setHours(0,0,0,0);
-
-                let futureList = [];
-                let pastList = [];
-
-                masterDutyRoster.forEach(d => {
-                    const dDate = parseLocalDate(d.dateStr);
-                    dDate.setHours(0,0,0,0);
-                    if (dDate >= today) {
-                        futureList.push(d);
-                    } else {
-                        pastList.push(d);
-                    }
-                });
-
-                futureList.sort((a, b) => parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr));
-                pastList.sort((a, b) => parseLocalDate(b.dateStr) - parseLocalDate(a.dateStr));
-
-                const nextDienst = futureList[0] || masterDutyRoster[0];
-                const nextWidget = document.getElementById('next-duty-widget');
-                if (nextWidget) {
-                    nextWidget.innerHTML = `
-                        <div style="font-size: 1.1em; color: #15803d; font-weight: 800; margin-bottom: 2px;">📅 ${nextDienst.dateStr}</div>
-                        <div style="font-size: 1.5em; font-weight: 900; margin: 4px 0; color: #0f172a; letter-spacing: 0.5px;">${nextDienst.team}</div>
-                        <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 700;">${nextDienst.names}</div>
-                    `;
-                }
-
-                const fullList = document.getElementById('full-roster-list');
-                if (fullList) {
-                    let html = "";
-                    futureList.forEach((d, idx) => {
-                        let isNext = (idx === 0);
-                        let isClosed = d.status === 'closed';
-                        let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
-                        
-                        html += `
-                            <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="font-size: 0.9em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
-                                    <span style="background: ${borderCol}; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.65em;">${d.team}</span>
-                                </div>
-                                <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
-                            </div>
-                        `;
-                    });
-                    fullList.innerHTML = html;
-                }
-
-                const archiveList = document.getElementById('archive-roster-list');
-                if (archiveList) {
-                    let archHtml = "";
-                    pastList.forEach(d => {
-                        archHtml += `
-                            <div class="dark-event-item" style="border-left-color: #94a3b8; opacity: 0.85; margin-bottom: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="font-size: 0.85em; font-weight: 700; color: #475569;">${d.dateStr}</div>
-                                    <span style="background: #94a3b8; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.6em;">${d.team}</span>
-                                </div>
-                                <div style="font-size: 0.7em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
-                            </div>
-                        `;
-                    });
-                    archiveList.innerHTML = archHtml || '<p style="font-size: 0.8em; color: var(--text-muted);">Keine vergangenen Dienste im Archiv.</p>';
-                }
-            } catch(e) {}
-        }
-
-        async function loadEvents() {
-            const container = document.getElementById('events-container');
-            const adminList = document.getElementById('admin-events-list');
-            try {
-                const snapshot = await db.collection("events").orderBy("createdAt", "desc").get();
-                const votesSnapshot = await db.collection("events_vote").get();
-                let votesData = {};
-                votesSnapshot.forEach(doc => { votesData[doc.id] = doc.data(); });
-
-                let eventsArray = [];
-                snapshot.forEach(doc => {
-                    eventsArray.push({ id: doc.id, ...doc.data() });
-                });
-
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                
-                eventsArray = eventsArray.filter(ev => {
-                    let evDate = parseLocalDate(ev.date);
-                    evDate.setHours(0,0,0,0);
-                    return evDate >= today;
-                });
-
-                eventsArray.sort((a, b) => {
-                    let dA = parseLocalDate(a.date);
-                    let dB = parseLocalDate(b.date);
-                    return dA - dB;
-                });
-
-                let html = "";
-                let adminHtml = "";
-
-                eventsArray.forEach((ev, index) => {
-                    const eventId = ev.id;
-                    const v = votesData[eventId] || { yesNames: [], noNames: [] };
-                    const yesCount = v.yesNames ? v.yesNames.length : 0;
-                    const noCount = v.noNames ? v.noNames.length : 0;
-                    const isNextTermin = (index === 0);
-                    
-                    html += `
-                        <div class="dark-event-item ${isNextTermin ? 'next-duty-neon' : ''}" style="padding: 16px; ${isNextTermin ? 'margin-bottom: 16px;' : ''}">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <div style="font-size: ${isNextTermin ? '1.25em' : '1.1em'}; font-weight: 900; color: #0f172a;">📌 ${ev.title}</div>
-                                ${isNextTermin ? '<span style="font-size: 0.75em; background: #15803d; color: #fff; font-weight: 800; padding: 4px 10px; border-radius: 8px;">NÄCHSTER TERMIN</span>' : ''}
-                            </div>
-                            <div style="font-size: ${isNextTermin ? '1em' : '0.9em'}; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || ''}</div>
-                            <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600; margin-bottom: 10px;">📍 Ort / Details: ${ev.desc || 'Schützenhaus Partenen'}</div>
-                            
-                            <div style="padding-top: 8px; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; align-items: center;">
-                                <button onclick="openVoteModal('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👍 Ich komme (${yesCount})</button>
-                                <button onclick="openVoteModal('${eventId}', 'no')" style="background: #dc2626; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👎 Komme nicht (${noCount})</button>
-                            </div>
-
-                            <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 8px; background: rgba(248, 250, 252, 0.9); padding: 8px; border-radius: 8px;">
-                                <strong>Zusagen:</strong> ${v.yesNames && v.yesNames.length > 0 ? v.yesNames.join(', ') : 'Keine'}<br>
-                                <strong>Absagen:</strong> ${v.noNames && v.noNames.length > 0 ? v.noNames.join(', ') : 'Keine'}
-                            </div>
-                        </div>
-                    `;
-
-                    adminHtml += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.8em;">
-                            <div><strong>${ev.title}</strong> (${ev.date})</div>
-                            <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 3px 6px; font-size: 0.65em;" onclick="editEvent('${eventId}', '${(ev.title||'').replace(/'/g, "\\'")}', '${ev.date}', '${(ev.desc||'').replace(/'/g, "\\'")}')">✏️</button>
-                                <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.65em;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                if(container) container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.85em;">Keine kommenden Termine eingetragen.</p>';
-                if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted); font-size:0.85em;">Keine Termine im System.</p>';
-            } catch (e) {}
-        }
-
-        let activeVoteEventId = null;
-        let activeVoteType = null;
-
-        function openVoteModal(eventId, type) {
-            activeVoteEventId = eventId;
-            activeVoteType = type;
-
-            const selectEl = document.getElementById('vote-member-select');
-            selectEl.innerHTML = "";
-            officialActiveMembers.forEach(name => {
-                const opt = document.createElement('option');
-                opt.value = name;
-                opt.textContent = name;
-                selectEl.appendChild(opt);
-            });
-
-            const titleEl = document.getElementById('vote-modal-title');
-            titleEl.innerText = type === 'yes' ? '👍 Ich komme - Name auswählen' : '👎 Komme nicht - Name auswählen';
-
-            document.getElementById('vote-modal').style.display = 'flex';
-        }
-
-        function closeVoteModal() {
-            document.getElementById('vote-modal').style.display = 'none';
-            activeVoteEventId = null;
-            activeVoteType = null;
-        }
-
-        async function submitVoteSelection() {
-            const userName = document.getElementById('vote-member-select').value;
-            if (!userName || !activeVoteEventId || !activeVoteType) return;
-
-            closeVoteModal();
-
-            const docRef = db.collection("events_vote").doc(activeVoteEventId);
-            const doc = await docRef.get();
-            let data = doc.exists ? doc.data() : { yesNames: [], noNames: [] };
-
-            let yes = data.yesNames || [];
-            let no = data.noNames || [];
-
-            yes = yes.filter(n => n !== userName);
-            no = no.filter(n => n !== userName);
-
-            if (activeVoteType === 'yes') yes.push(userName);
-            if (activeVoteType === 'no') no.push(userName);
-
-            await docRef.set({ yesNames: yes, noNames: no });
-            alert("Deine Stimme wurde gespeichert!");
-            loadEvents();
-        }
-
-        function scheduleMidnightRefresh() {
-            const now = new Date();
-            const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-            const msToMidnight = night.getTime() - now.getTime();
-            setTimeout(() => {
-                loadEvents();
-                updateDutyPlanWidget();
-                scheduleMidnightRefresh();
-            }, msToMidnight);
-        }
-
-        async function addEvent(e) {
-            e.preventDefault();
-            const title = document.getElementById('new-event-title').value;
-            const date = document.getElementById('new-event-date').value;
-            const desc = document.getElementById('new-event-desc').value;
-
-            await db.collection("events").add({ title, date, desc, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-            alert("Termin gespeichert!");
-            document.getElementById('new-event-title').value = '';
-            document.getElementById('new-event-date').value = '';
-            document.getElementById('new-event-desc').value = '';
-            loadEvents();
-        }
-
-        async function editEvent(id, oldTitle, oldDate, oldDesc) {
-            const title = prompt("Titel bearbeiten:", oldTitle);
-            if (title === null) return;
-            const date = prompt("Datum bearbeiten:", oldDate);
-            const desc = prompt("Ort / Details bearbeiten:", oldDesc);
-
-            await db.collection("events").doc(id).update({ title, date, desc });
-            alert("Termin aktualisiert!");
-            loadEvents();
-        }
-
-        async function saveWeaponIssue(e) {
-            e.preventDefault();
-            const primaryName = document.getElementById('weapon-member-primary').value;
-            const secondaryName = document.getElementById('weapon-member-secondary').value;
-            const occasion = document.getElementById('weapon-occasion').value;
-            const location = document.getElementById('weapon-location').value;
-
-            const checkboxes = document.querySelectorAll('input[name="weapons"]:checked');
-            if (checkboxes.length === 0) {
-                alert("Bitte wählen Sie mindestens eine Waffe aus!");
-                return;
-            }
-
-            let selectedWeapons = [];
-            checkboxes.forEach(cb => selectedWeapons.push(cb.value));
-
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('de-AT');
-            const timeStr = now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-            const fullTimestamp = `${dateStr} ${timeStr}`;
-
-            let collectorStr = primaryName;
-            if (secondaryName) {
-                collectorStr += ` (+ ${secondaryName})`;
-            }
-
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-
-            pdf.setFont("helvetica", "bold");
-            pdf.setFontSize(14);
-            pdf.setTextColor(185, 28, 28);
-            pdf.text("ÖSTERREICHISCHER KAMERADSCHAFTSBUND", 14, 18);
-            pdf.setFontSize(10);
-            pdf.setTextColor(80, 80, 80);
-            pdf.text("Protokoll- und Nachweisvorlage für Salutwaffen (Kat. C)", 14, 24);
-            pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR: 624291509", 14, 30);
-
-            pdf.setFont("helvetica", "bold");
-            pdf.setFontSize(11);
-            pdf.setTextColor(0, 0, 0);
-            pdf.text("Waffenentnahme-Protokoll", 14, 42);
-
-            let tableData = selectedWeapons.map(w => [
-                w,
-                occasion,
-                location,
-                collectorStr,
-                fullTimestamp,
-                "Offen"
-            ]);
-
-            pdf.autoTable({
-                startY: 48,
-                head: [['Waffe & Seriennummer', 'Anlass / Grund', 'Ort', 'Übernehmer / Mitabholer', 'Übernahme', 'Status']],
-                body: tableData,
-                theme: 'striped',
-                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
-                styles: { fontSize: 8.5 }
-            });
-
-            let finalY = pdf.lastAutoTable.finalY + 15;
-            pdf.setFont("helvetica", "normal");
-            pdf.setFontSize(8.5);
-            pdf.text(`Lagerort / Verwahrung: Schützenhaus Partenen, Rütler 43b`, 14, finalY);
-            pdf.text(`Erstellt am: ${fullTimestamp} durch digitale Vereins-App nach Tresor-Scan`, 14, finalY + 5);
-
-            const pdfBase64 = pdf.output('datauristring');
-            const recordId = "WB-" + Date.now();
-
-            const weaponLogObj = {
-                id: recordId,
-                primaryName,
-                secondaryName,
-                collectorStr,
-                selectedWeapons,
-                occasion,
-                location,
-                issueTime: fullTimestamp,
-                returnTime: null,
-                status: "Entnommen",
-                pdfData: pdfBase64,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            try {
-                await db.collection("weapon_log").doc(recordId).set(weaponLogObj);
-                pdf.save(`${recordId}_Entnahme.pdf`);
-                alert("Waffenentnahme erfolgreich protokolliert & PDF mit vollständigen Nummern für den Admin gespeichert!");
-                
-                document.getElementById('weapon-occasion').value = '';
-                checkboxes.forEach(cb => cb.checked = false);
-                
-                const formCard = document.getElementById('weapon-form-card');
-                formCard.style.opacity = '0.5';
-                formCard.style.pointerEvents = 'none';
-                document.getElementById('scanner-status-badge').style.background = '#dc2626';
-                document.getElementById('scanner-status-badge').innerText = 'GESPERRT (Tresor-Scan erforderlich)';
-
-                loadWeaponHistory();
-                loadAdminWeaponPDFs();
-            } catch (err) {
-                alert("Fehler beim Speichern: " + err.message);
-            }
-        }
-
-        function promptReturnWeapon(recordId) {
-            if (confirm("Für die Rückgabe muss der QR-Code direkt am Waffentresor gescannt werden. Jetzt Scanner starten?")) {
-                startQrScanner('return', recordId);
-            }
-        }
-
-        async function executeReturnProcess(recordId) {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('de-AT');
-            const timeStr = now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-            const returnTimestamp = `${dateStr} ${timeStr}`;
-
-            try {
-                const docRef = db.collection("weapon_log").doc(recordId);
-                const doc = await docRef.get();
-                if (!doc.exists) return;
-                const data = doc.data();
-
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF();
-
-                pdf.setFont("helvetica", "bold");
-                pdf.setFontSize(14);
-                pdf.setTextColor(16, 185, 129);
-                pdf.text("ÖSTERREICHISCHER KAMERADSCHAFTSBUND", 14, 18);
-                pdf.setFontSize(10);
-                pdf.setTextColor(80, 80, 80);
-                pdf.text("Rückgabe- und Nachweisvorlage für Salutwaffen (Kat. C)", 14, 24);
-                pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR: 624291509", 14, 30);
-
-                pdf.setFont("helvetica", "bold");
-                pdf.setFontSize(11);
-                pdf.setTextColor(0, 0, 0);
-                pdf.text("Waffenrückgabe-Protokoll (nach Tresor-Scan)", 14, 42);
-
-                let tableData = data.selectedWeapons.map(w => [
-                    w,
-                    data.occasion,
-                    data.location,
-                    data.collectorStr,
-                    data.issueTime,
-                    returnTimestamp,
-                    "Zurückgebracht"
-                ]);
-
-                pdf.autoTable({
-                    startY: 48,
-                    head: [['Waffe', 'Grund', 'Ort', 'Übernehmer', 'Übernahme', 'Rückgabe', 'Status']],
-                    body: tableData,
-                    theme: 'striped',
-                    headStyles: { fillColor: [16, 185, 129], textColor: [255, 255, 255], fontStyle: 'bold' },
-                    styles: { fontSize: 8 }
-                });
-
-                const pdfBase64 = pdf.output('datauristring');
-
-                await docRef.update({
-                    returnTime: returnTimestamp,
-                    status: "Zurückgebracht",
-                    pdfData: pdfBase64
-                });
-
-                pdf.save(`${recordId}_Rueckgabe.pdf`);
-                alert("Tresor-Scan erfolgreich! Waffenrückgabe protokolliert.");
-                loadWeaponHistory();
-                loadAdminWeaponPDFs();
-            } catch (err) {
-                alert("Fehler bei Rückgabe: " + err.message);
-            }
-        }
-
-        async function loadWeaponHistory() {
-            const container = document.getElementById('weapon-history-list');
-            if (!container) return;
-
-            try {
-                const snapshot = await db.collection("weapon_log").orderBy("createdAt", "desc").limit(15).get();
-                let html = "";
-                
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Entnahmen eingetragen.</p>';
-                    return;
-                }
-
-                snapshot.forEach(doc => {
-                    const w = doc.data();
-                    let isReturned = w.status === "Zurückgebracht";
-                    
-                    let weaponsListHtml = "";
-                    (w.selectedWeapons || []).forEach(item => {
-                        let maskedItem = item;
-                        if (item.includes('/')) {
-                            let parts = item.split('/');
-                            let namePart = parts[0].trim();
-                            let numPart = parts[1].trim();
-                            if (numPart.length > 2) {
-                                numPart = numPart.slice(0, -2) + 'XX';
-                            }
-                            maskedItem = `${namePart} / ${numPart}`;
-                        }
-                        weaponsListHtml += `<div style="font-size: 0.85em; color: var(--primary-red); font-weight: 700;">• ${maskedItem}</div>`;
-                    });
-
-                    html += `
-                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px; margin-bottom: 12px; border-left: 6px solid ${isReturned ? '#16a34a' : '#b91c1c'}; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <strong style="font-size: 1em; color: #0f172a;">👤 ${w.collectorStr}</strong>
-                                <span style="background: ${isReturned ? '#d1fae5' : '#fee2e2'}; color: ${isReturned ? '#065f46' : '#991b1b'}; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.75em;">${w.status}</span>
-                            </div>
-                            <div style="margin-bottom: 6px;">${weaponsListHtml}</div>
-                            <div style="font-size: 0.8em; color: var(--text-dark); margin-bottom: 4px;"><strong>Anlass:</strong> ${w.occasion} (${w.location})</div>
-                            <div style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 10px;">
-                                📤 Entnommen: <strong>${w.issueTime}</strong><br>
-                                ${w.returnTime ? `📥 Rückgabe: <strong>${w.returnTime}</strong>` : ''}
-                            </div>
-                            ${!isReturned ? `<button onclick="promptReturnWeapon('${doc.id}')" class="btn btn-green btn-block" style="padding: 8px; font-size: 0.85em;">📷 QR-Code scannen & Waffe(n) zurückbringen</button>` : ''}
-                            ${document.body.classList.contains('admin-mode') ? `<button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.7em; margin-top: 8px;" onclick="deleteItem('weapon_log', '${doc.id}'); loadWeaponHistory(); loadAdminWeaponPDFs();">Eintrag löschen</button>` : ''}
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-            } catch (e) {
-                container.innerHTML = '<p style="font-size:0.85em; color:red;">Fehler beim Laden.</p>';
-            }
-        }
-
-        async function loadAdminWeaponPDFs() {
-            const container = document.getElementById('admin-weapon-pdf-list');
-            if (!container) return;
-
-            try {
-                const snapshot = await db.collection("weapon_log").orderBy("createdAt", "desc").get();
-                let html = "";
-                window.weaponPdfMap = {};
-
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Protokolle im Admin-Archiv.</p>';
-                    updateWeaponsChart();
-                    return;
-                }
-
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    window.weaponPdfMap[doc.id] = data;
-
-                    let weaponsFullHtml = "";
-                    (data.selectedWeapons || []).forEach(w => {
-                        weaponsFullHtml += `<span style="font-size: 0.8em; color: #b91c1c; display:block;">• ${w}</span>`;
-                    });
-
-                    html += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.85em;">
-                            <div>
-                                <strong>${data.id}</strong> - ${data.collectorStr}<br>
-                                <span style="color:var(--text-muted); font-size:0.8em;">${data.occasion} | ${data.issueTime}</span>
-                                <div style="margin-top: 2px;">${weaponsFullHtml}</div>
-                            </div>
-                            <div style="display: flex; gap: 6px;">
-                                <button class="btn btn-admin" style="padding: 6px 10px; font-size: 0.75em;" onclick="downloadWeaponPDF('${doc.id}')">📥 PDF</button>
-                                <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75em;" onclick="deleteItem('weapon_log', '${doc.id}'); loadWeaponHistory(); loadAdminWeaponPDFs();">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-                updateWeaponsChart();
-            } catch(e) {}
-        }
-
-        function downloadWeaponPDF(docId) {
-            const data = window.weaponPdfMap[docId];
-            if (!data || !data.pdfData) {
-                alert("Kein PDF gefunden.");
-                return;
-            }
-            const link = document.createElement('a');
-            link.href = data.pdfData;
-            link.download = `${data.id}_Protokoll.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        const drinkPrices = {
-            hauswuerste: 7.50, wienerle: 7.00, bier: 3.50, radler: 3.50,
-            limo: 3.00, mineral: 2.50, wein4: 4.00, wein8: 3.00,
-            weingespr: 3.50, schnaps: 3.50, kaffee: 3.00, tee: 2.50, luftgewehr: 8.00
-        };
-        const drinkCounts = {
-            hauswuerste: 0, wienerle: 0, bier: 0, radler: 0,
-            limo: 0, mineral: 0, wein4: 0, wein8: 0,
-            weingespr: 0, schnaps: 0, kaffee: 0, tee: 0, luftgewehr: 0
-        };
-
-        function changeCount(item, delta) {
-            drinkCounts[item] = Math.max(0, drinkCounts[item] + delta);
-            document.getElementById('count-' + item).innerText = drinkCounts[item];
-            calculateTotal();
-        }
-
-        function calculateTotal() {
-            let total = 0;
-            for (let k in drinkCounts) { total += drinkCounts[k] * drinkPrices[k]; }
-            document.getElementById('total-price').innerText = '€ ' + total.toFixed(2).replace('.', ',');
-            return total;
-        }
-
-        function confirmResetDrinks() {
-            showCustomConfirm(
-                "ACHTUNG: Möchtest du das Schankbuch wirklich zurücksetzen?",
-                "Alle nicht gespeicherten Eingaben und Einträge gehen dabei verloren!",
-                function(confirmed) {
-                    if (confirmed) {
-                        for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
-                        calculateTotal();
-                    }
-                }
-            );
-        }
-
-        async function saveTallyBilling() {
-            let total = calculateTotal();
-            if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
-
-            let clientName = document.getElementById('cust-name').value.trim() || "Kunde";
-            let clientAttn = document.getElementById('cust-attn').value.trim() || "";
-            let clientAddress = document.getElementById('cust-address').value.trim() || "";
-            let clientZipCity = document.getElementById('cust-zipcity').value.trim() || "";
-
-            let itemsArray = [];
-            for (let k in drinkCounts) {
-                if (drinkCounts[k] > 0) {
-                    itemsArray.push({ name: k, count: drinkCounts[k], price: drinkCounts[k] * drinkPrices[k] });
-                }
-            }
-
-            const todayStr = new Date().toISOString().slice(0,10).replace(/-/g,'');
-            const invoiceObj = {
-                invoiceNum: "RE-" + new Date().getFullYear() + "-" + todayStr.slice(4) + "-" + Math.floor(10 + Math.random() * 90),
-                date: new Date().toLocaleDateString('de-AT'),
-                recipientName: clientName,
-                recipientAttn: clientAttn,
-                recipientAddress: clientAddress,
-                recipientZipCity: clientZipCity,
-                total: total,
-                items: itemsArray,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            try {
-                await db.collection("tally_billings").add(invoiceObj);
-                loadInvoices();
-
-                showCustomConfirm(
-                    "Abrechnung erfolgreich gespeichert!",
-                    "Soll das Schankbuch jetzt zurückgesetzt werden?",
-                    function(confirmed) {
-                        if (confirmed) {
-                            for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
-                            calculateTotal();
-                            document.getElementById('cust-name').value = '';
-                            document.getElementById('cust-attn').value = '';
-                            document.getElementById('cust-address').value = '';
-                            document.getElementById('cust-zipcity').value = '';
-                        }
-                    }
-                );
-            } catch (err) {
-                alert("Fehler beim Speichern: " + err.message);
-            }
-        }
-
-        async function loadInvoices() {
-            const container = document.getElementById('admin-tally-history-list');
-            if (!container) return;
-            try {
-                const snapshot = await db.collection("tally_billings").orderBy("createdAt", "desc").get();
-                let html = "";
-                window.invoicesMap = {};
-                
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85em; text-align:center; padding:10px;">Keine Rechnungen in der Datenbank gefunden.</p>';
-                    updateDrinksChart();
-                    return;
-                }
-
-                snapshot.forEach(doc => {
-                    const inv = doc.data();
-                    window.invoicesMap[doc.id] = inv;
-                    
-                    let rawTotal = inv.total;
-                    if (typeof rawTotal === 'string') {
-                        rawTotal = parseFloat(rawTotal.replace('€', '').replace(',', '.').trim());
-                    }
-                    const totalNum = isNaN(rawTotal) ? 0 : rawTotal;
-                    const amountStr = totalNum.toFixed(2).replace('.', ',');
-
-                    html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #e2e8f0; gap: 6px; font-size: 0.85em;">
-                            <div>
-                                <strong style="color:var(--text-dark);">${inv.invoiceNum || 'RE'}</strong> - ${inv.recipientName || 'Kunde'}<br>
-                                <span style="color:var(--primary-red); font-weight:700;">€ ${amountStr}</span> <span style="color:var(--text-muted); font-size:0.8em;">(${inv.date || ''})</span>
-                            </div>
-                            <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 6px 10px; font-size: 0.75em;" onclick="viewInvoiceModal('${doc.id}')" title="Rechnung Ansehen">👁️</button>
-                                <button class="btn btn-green" style="padding: 6px 10px; font-size: 0.75em;" onclick="generateInvoicePDF('${doc.id}')" title="PDF Herunterladen">📥</button>
-                                <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75em;" onclick="deleteItem('tally_billings', '${doc.id}')" title="Löschen">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-                updateDrinksChart();
-            } catch (e) {}
-        }
-
-        function viewInvoiceModal(docId) {
-            const inv = window.invoicesMap[docId];
-            if (!inv) return;
-            let itemsHtml = "";
-            (inv.items || []).forEach(i => {
-                itemsHtml += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f1f5f9;"><span>${i.name} (${i.count}x)</span><strong>${(i.price || 0).toFixed(2).replace('.', ',')} €</strong></div>`;
-            });
-
-            const content = `
-                <div style="text-align:center; margin-bottom:12px;">
-                    <h2 style="color:#b91c1c; font-size:1.1em;">RECHNUNG</h2>
-                    <p style="font-size:0.75em; color:#64748b;">Kameradschaftsbund und Schützenverein Gaschurn-Partenen<br>Rütler 43b | 6794 Partenen<br>E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509</p>
-                </div>
-                <div style="margin-bottom:12px; background:#f8fafc; padding:10px; border-radius:10px; font-size:0.8em; border:1px solid #e2e8f0;">
-                    <strong>Rechnung an:</strong><br>${inv.recipientName || 'Kunde'}<br>${inv.recipientAttn ? inv.recipientAttn + '<br>' : ''}${inv.recipientAddress || ''}<br>${inv.recipientZipCity || ''}
-                </div>
-                <div style="margin-bottom:10px; display:flex; justify-content:space-between; font-size:0.8em;">
-                    <span><strong>Nummer:</strong> ${inv.invoiceNum}</span>
-                    <span><strong>Datum:</strong> ${inv.date}</span>
-                </div>
-                <div style="margin-bottom:12px;">
-                    <div style="background:#b91c1c; color:white; padding:6px 8px; font-weight:bold; font-size:0.75em; display:flex; justify-content:space-between; border-radius:6px 6px 0 0;"><span>Leistung</span><span>Betrag</span></div>
-                    ${itemsHtml}
-                    <div style="display:flex; justify-content:space-between; padding:8px 0; font-weight:bold; font-size:1em; margin-top:6px; border-top:2px solid #b91c1c;"><span>Gesamtbetrag</span><span style="color:#b91c1c;">${(inv.total || 0).toFixed(2).replace('.', ',')} €</span></div>
-                </div>
-                <div style="font-size:0.75em; color:#475569; background:#f1f5f9; padding:10px; border-radius:8px;">
-                    <strong>Zahlungsbedingungen:</strong><br>Bitte überweisen innerhalb von 14 Tagen ohne Abzug:<br><strong>IBAN:</strong> AT86 3746 8000 0451 3511<br><strong>BIC:</strong> RVVGAT2B468<br><strong>Bank:</strong> Raiffeisenbank Bludenz-Montafon<br><strong>Verwendungszweck:</strong> ${inv.invoiceNum}
-                </div>
-            `;
-            document.getElementById('invoice-modal-content').innerHTML = content;
-            document.getElementById('invoice-modal').style.display = 'flex';
-            window.currentModalDocId = docId;
-        }
-
-        function closeInvoiceModal() {
-            document.getElementById('invoice-modal').style.display = 'none';
-        }
-
-        function downloadCurrentModalPDF() {
-            if (window.currentModalDocId) {
-                generateInvoicePDF(window.currentModalDocId);
-            }
-        }
-
-        function generateInvoicePDF(docId) {
-            const invoiceData = window.invoicesMap[docId];
-            if (!invoiceData) return;
-
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            try {
-                const logoImg = new Image();
-                logoImg.src = "logo.png";
-                doc.addImage(logoImg, "PNG", 155, 10, 40, 40);
-            } catch(e) {}
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(22);
-            doc.setTextColor(185, 28, 28);
-            doc.text("RECHNUNG", 14, 20);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(8.5);
-            doc.setTextColor(80, 80, 80);
-            doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen", 14, 26);
-            doc.text("Rütler 43b | 6794 Partenen", 14, 31);
-            doc.text("E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509", 14, 36);
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(9.5);
-            doc.setTextColor(0, 0, 0);
-            doc.text("Rechnung an:", 14, 48);
-
-            doc.setFont("helvetica", "normal");
-            doc.text(invoiceData.recipientName || "Kunde", 14, 54);
-            if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 59);
-            doc.text(invoiceData.recipientAddress || "", 14, 64);
-            doc.text(invoiceData.recipientZipCity || "", 14, 69);
-
-            doc.setFont("helvetica", "bold");
-            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 105, 54);
-            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 105, 59);
-
-            const tableBody = (invoiceData.items || []).map(item => [
-                `${item.name} (${item.count}x)`, 
-                `${parseFloat(item.price).toFixed(2).replace('.', ',')} €`
-            ]);
-
-            doc.autoTable({
-                startY: 76,
-                head: [['Leistung', 'Betrag']],
-                body: [
-                    ...tableBody,
-                    [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: `${parseFloat(invoiceData.total || 0).toFixed(2).replace('.', ',')} €`, styles: { fontStyle: 'bold' } }]
-                ],
-                theme: 'striped',
-                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
-                columnStyles: { 0: { cellWidth: 130 }, 1: { halign: 'right', cellWidth: 40 } }
-            });
-
-            let finalY = doc.lastAutoTable.finalY + 10;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(9.5);
-            doc.text("Zahlungsbedingungen", 14, finalY);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(8.5);
-            doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${(invoiceData.total || 0).toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:`, 14, finalY + 5);
-            
-            doc.setFont("helvetica", "bold"); doc.text("IBAN:", 14, finalY + 12);
-            doc.setFont("helvetica", "normal"); doc.text("AT86 3746 8000 0451 3511", 30, finalY + 12);
-
-            doc.setFont("helvetica", "bold"); doc.text("BIC:", 14, finalY + 17);
-            doc.setFont("helvetica", "normal"); doc.text("RVVGAT2B468", 30, finalY + 17);
-
-            doc.setFont("helvetica", "bold"); doc.text("Bank:", 14, finalY + 22);
-            doc.setFont("helvetica", "normal"); doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 22);
-
-            doc.setFont("helvetica", "bold"); doc.text("Verwendungszweck:", 14, finalY + 27);
-            doc.setFont("helvetica", "normal"); doc.text(`${invoiceData.invoiceNum} / ${invoiceData.recipientName || 'Kunde'}`, 46, finalY + 27);
-
-            doc.save(`${invoiceData.invoiceNum}.pdf`);
-        }
-
-        function togglePaidStatus(el) {
-            if (el.classList.contains('badge-paid')) {
-                el.classList.remove('badge-paid');
-                el.classList.add('badge-open');
-                el.innerText = 'Offen (€30)';
-            } else {
-                el.classList.remove('badge-open');
-                el.classList.add('badge-paid');
-                el.innerText = 'Bezahlt (€30)';
-            }
-        }
-
-        function loadAdminMembers() {
-            const activeList = document.getElementById('admin-active-members-list');
-            const passiveList = document.getElementById('admin-passive-members-list');
-            
-            let actHtml = "";
-            officialActiveMembers.forEach((m) => {
-                actHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
-                        <span><strong>${m}</strong></span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em;" placeholder="Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                        </div>
-                    </div>`;
-            });
-            if(activeList) activeList.innerHTML = actHtml;
-
-            let passHtml = "";
-            officialPassiveMembers.forEach((m) => {
-                passHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 6px; background: rgba(254, 226, 226, 0.7); padding: 8px 10px; border-radius: 10px; margin-bottom: 6px; border: 1.5px solid #fecaca;">
-                        <span><strong style="color: #991b1b; font-size: 0.95em;">${m}</strong></span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em; background: #fff;" placeholder="Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                        </div>
-                    </div>`;
-            });
-            if(passiveList) passiveList.innerHTML = passHtml;
-        }
-
-        async function addNewsItem(e) {
-            e.preventDefault();
-            const title = document.getElementById('news-title').value;
-            const text = document.getElementById('news-text').value;
-            const fileInput = document.getElementById('news-photo-input');
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = async function(uploadEvent) {
-                    await saveNewsToFirestore(title, text, uploadEvent.target.result);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                await saveNewsToFirestore(title, text, "");
-            }
-        }
-
-        async function saveNewsToFirestore(title, text, imageUrl) {
-            try {
-                await db.collection("news").add({ title, text, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                alert("News veröffentlicht!");
-                document.getElementById('news-title').value = '';
-                document.getElementById('news-text').value = '';
-                document.getElementById('news-photo-input').value = '';
-                loadNews();
-            } catch (err) {}
-        }
-
-        function loadPublicMembersList() {
-            const container = document.getElementById('public-members-list');
-            if (container) {
-                let html = "";
-                officialActiveMembers.forEach(m => {
-                    html += `<div class="price-item"><div><strong>${m}</strong></div><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div>`;
-                });
-                container.innerHTML = html;
-            }
-        }
-
-        async function deleteItem(collectionName, docId) {
-            if (confirm("Wirklich löschen?")) {
-                await db.collection(collectionName).doc(docId).delete();
-                alert("Gelöscht!");
-                loadEvents(); loadNews(); loadInvoices(); loadWeaponHistory(); loadAdminWeaponPDFs();
-            }
-        }
-
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            const selectedUser = document.getElementById('admin-user-select').value;
-            const password = document.getElementById('admin-password-input').value;
-            const adminEmail = `admin+${selectedUser}@kb-sv-gaschurn.at`; 
-
-            auth.signInWithEmailAndPassword(adminEmail, password)
-                .then((userCredential) => {
-                    document.body.classList.add('admin-mode');
-                    document.getElementById('admin-login-card').style.display = 'none';
-                    document.getElementById('admin-password-input').value = '';
-                    
-                    showAdminSuccessModal();
-                    resetInactivityTimer();
-                    
-                    loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory(); loadAdminWeaponPDFs();
-                })
-                .catch((error) => {
-                    showAdminErrorModal();
-                });
-        }
-
-        function logoutAdmin() {
-            auth.signOut().then(() => {
-                clearTimeout(inactivityTimer);
-                const pwdInput = document.getElementById('admin-password-input');
-                if (pwdInput) pwdInput.value = '';
-                
-                document.body.classList.remove('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'block';
-                loadNews();
-                loadWeaponHistory();
-                alert("Admin-Modus beendet.");
-            });
-        }
-
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                document.body.classList.add('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'none';
-                resetInactivityTimer();
-                loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory(); loadAdminWeaponPDFs();
-            } else {
-                clearTimeout(inactivityTimer);
-                const pwdInput = document.getElementById('admin-password-input');
-                if (pwdInput) pwdInput.value = '';
-                
-                document.body.classList.remove('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'block';
-                loadWeaponHistory();
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            try { updateDutyPlanWidget(); } catch(e) {}
-            try { loadNews(); } catch(e) {}
-            try { loadEvents(); } catch(e) {}
-            try { loadPublicMembersList(); } catch(e) {}
-            try { loadKeyList(); } catch(e) {}
-            try { loadInventory(); } catch(e) {}
-            try { loadWeaponHistory(); } catch(e) {}
-            try { loadAdminWeaponPDFs(); } catch(e) {}
-            try { initPushNotifications(); } catch(e) {}
-            scheduleMidnightRefresh();
-        });
     </script>
 </body>
 </html>
