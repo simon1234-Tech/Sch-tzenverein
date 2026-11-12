@@ -45,7 +45,7 @@
             --primary-red: #b91c1c; 
             --primary-dark: #7f1d1d;
             --bg-light: #f1f5f9; 
-            --card-glass: rgba(255, 255, 255, 0.9);
+            --card-glass: rgba(255, 255, 255, 0.92);
             --text-dark: #1e293b; 
             --text-muted: #64748b; 
             --accent-green: #10b981; 
@@ -62,7 +62,7 @@
             background: linear-gradient(135deg, #e2e8f0 100%, #cbd5e1 0%);
             background-attachment: fixed;
             padding: 12px;
-            padding-bottom: 160px !important;
+            padding-bottom: 180px !important;
             max-width: 580px;
             margin: 0 auto;
             min-height: 100vh;
@@ -113,14 +113,14 @@
             justify-content: space-between;
         }
 
-        /* Ruhiger Glanz statt Blinken (Soft Glow) */
+        /* 4. Ruhiger Glanz statt Blinken (Soft Glow) */
         @keyframes softGreenGlow {
             0% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.35); border-color: rgba(34, 197, 94, 0.6); }
-            50% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.6); border-color: rgba(34, 197, 94, 0.9); }
+            50% { box-shadow: 0 0 18px rgba(34, 197, 94, 0.6); border-color: rgba(34, 197, 94, 0.9); }
             100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.35); border-color: rgba(34, 197, 94, 0.6); }
         }
         .next-duty-neon {
-            background: rgba(255, 255, 255, 0.96) !important;
+            background: rgba(255, 255, 255, 0.95) !important;
             border: 2.5px solid #22c55e !important;
             animation: softGreenGlow 3s infinite ease-in-out;
         }
@@ -135,27 +135,29 @@
             border: 1px solid rgba(255, 255, 255, 0.9);
         }
 
-        /* Plastische, fühlbare Buttons */
+        /* 3. Plastische, fühlbare Buttons */
         .btn {
             padding: 12px 18px;
-            border-radius: 14px;
+            border-radius: 16px;
             border: none;
             font-weight: 700;
-            font-size: 0.9em;
+            font-size: 0.95em;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             text-decoration: none;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12), inset 0 1px 1px rgba(255,255,255,0.6);
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.4);
         }
-        .btn:active { transform: scale(0.95); }
-        .btn-primary { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; box-shadow: 0 4px 15px rgba(185, 28, 28, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.4); }
-        .btn-green { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; box-shadow: 0 4px 15px rgba(22, 163, 74, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.4); }
-        .btn-danger { background: linear-gradient(135deg, #fef2f2, #fee2e2); color: var(--danger); border: 1px solid #fecaca; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.15); }
-        .btn-admin { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.4); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.18), inset 0 1px 1px rgba(255,255,255,0.8); }
+        .btn:active { transform: scale(0.96); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+
+        .btn-primary { background: linear-gradient(135deg, #dc2626, #991b1b); color: white; }
+        .btn-green { background: linear-gradient(135deg, #22c55e, #15803d); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #fee2e2, #fecaca); color: var(--danger); border: 1px solid #fca5a5; }
+        .btn-admin { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
         .btn-block { width: 100%; margin-top: 10px; }
 
         .form-group { margin-bottom: 14px; }
@@ -163,15 +165,16 @@
         .form-control {
             width: 100%;
             padding: 12px 14px;
-            border-radius: 12px;
+            border-radius: 14px;
             border: 1.5px solid #cbd5e1;
             font-family: inherit;
             font-size: 0.95em;
             background: rgba(255, 255, 255, 0.95);
             color: var(--text-dark);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+            transition: all 0.2s;
         }
-        .form-control:focus { outline: none; border-color: var(--admin-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), inset 0 2px 4px rgba(0,0,0,0.02); }
+        .form-control:focus { outline: none; border-color: var(--admin-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15), inset 0 2px 4px rgba(0,0,0,0.03); }
 
         .price-item {
             display: flex;
@@ -186,22 +189,22 @@
             background: linear-gradient(135deg, #ffffff, #f1f5f9);
             color: var(--primary-red);
             border: 1.5px solid #cbd5e1;
-            width: 38px; height: 38px;
+            width: 40px; height: 40px;
             border-radius: 50%;
-            font-size: 1.2em;
+            font-size: 1.3em;
             font-weight: bold;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.08), inset 0 1px 1px rgba(255,255,255,0.8);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08), inset 0 1px 1px rgba(255,255,255,0.9);
             transition: all 0.15s;
         }
-        .counter-btn:active { transform: scale(0.9); }
+        .counter-btn:active { transform: scale(0.92); }
 
         .strich-category-header {
-            background: linear-gradient(135deg, #7f1d1d, #b91c1c);
+            background: linear-gradient(135deg, #b91c1c, #7f1d1d);
             color: #ffffff;
-            padding: 8px 12px;
-            border-radius: 10px;
+            padding: 10px 14px;
+            border-radius: 12px;
             font-size: 0.85em;
             font-weight: 800;
             margin: 16px 0 8px 0;
@@ -210,36 +213,59 @@
             box-shadow: 0 4px 12px rgba(185, 28, 28, 0.2);
         }
 
-        /* Admin Tab Navigation */
+        /* 1. Vergrößerte, griffige Admin-Buttons & 3D-Icons */
         .admin-nav-tabs {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
+            gap: 12px;
             margin-bottom: 16px;
         }
         .admin-tab-btn {
-            background: rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
             border: 1.5px solid #cbd5e1;
-            padding: 12px 10px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.8em;
+            padding: 18px 14px;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 1.05em;
             color: var(--text-dark);
             cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06), inset 0 1px 1px rgba(255,255,255,0.9);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .admin-tab-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,0.1); }
+        .admin-tab-btn:active { transform: scale(0.97); }
+
         .admin-tab-btn.active {
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: white;
             border-color: #1d4ed8;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35), inset 0 1px 1px rgba(255,255,255,0.4);
         }
         .admin-tab-content { display: none; }
         .admin-tab-content.active { display: block; }
 
-        /* SCHWEBENDE GLASSMORPHISMUS NAVIGATIONSLEISTE (UNTEN) */
+        /* 2. Plastisches 3D-Icon-Quadrat */
+        .admin-3d-icon-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(226,232,240,0.8));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12), inset 0 1px 2px rgba(255,255,255,0.8);
+            flex-shrink: 0;
+        }
+        .admin-tab-btn.active .admin-3d-icon-box {
+            background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.5);
+        }
+
+        /* 4. Schwebende Glassmorphismus-Leiste unten */
         .bottom-nav {
             position: fixed !important; 
             bottom: 12px !important; 
@@ -248,16 +274,16 @@
             width: calc(100% - 24px) !important;
             max-width: 556px !important; 
             margin: 0 auto !important;
-            background: rgba(255, 255, 255, 0.82) !important;
+            background: rgba(255, 255, 255, 0.85) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
             border-radius: 20px !important;
-            border: 1px solid rgba(255, 255, 255, 0.9) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
             display: flex !important; 
             justify-content: space-around !important;
             align-items: center !important;
             padding: 8px 6px !important;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.05) !important;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8) !important;
             z-index: 99999 !important;
         }
         .nav-item {
@@ -265,66 +291,71 @@
             flex-direction: column !important; 
             align-items: center !important;
             text-decoration: none !important; 
-            color: #475569 !important;
-            font-size: 0.68em !important; 
+            color: var(--text-muted) !important;
+            font-size: 0.7em !important; 
             font-weight: 700 !important; 
             cursor: pointer !important;
             flex: 1 !important;
             text-align: center !important;
             padding: 6px 2px !important;
             border-radius: 14px !important;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
+        .nav-item:hover { color: var(--primary-red) !important; }
         .nav-item.active { 
             color: #ffffff !important;
             background: linear-gradient(135deg, #7f1d1d, #b91c1c) !important;
-            box-shadow: 0 6px 18px rgba(185, 28, 28, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+            box-shadow: 0 6px 18px rgba(185, 28, 28, 0.4), inset 0 1px 1px rgba(255,255,255,0.4) !important;
         }
-        .nav-icon { width: 24px; height: 24px; margin-bottom: 3px; display: inline-flex; align-items: center; justify-content: center; }
+        .nav-icon { font-size: 1.4em !important; margin-bottom: 3px !important; display: block !important; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); }
 
         .admin-delete-btn { display: none; }
         body.admin-mode .admin-delete-btn { display: block !important; }
 
-        .badge-paid { background: #d1fae5; color: #065f46; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #a7f3d0; cursor: pointer; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.1); }
-        .badge-open { background: #fee2e2; color: #991b1b; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #fecaca; cursor: pointer; box-shadow: 0 2px 6px rgba(220, 38, 38, 0.1); }
+        .badge-paid { background: #d1fae5; color: #065f46; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #a7f3d0; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
+        .badge-open { background: #fee2e2; color: #991b1b; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #fecaca; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
 
         #invoice-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.65); z-index: 999999; justify-content: center; align-items: center; padding: 12px;
+            backdrop-filter: blur(5px);
         }
         .invoice-preview-box {
-            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); width: 100%; max-width: 500px; border-radius: 18px; padding: 20px;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); width: 100%; max-width: 500px; border-radius: 20px; padding: 22px;
             max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 25px 35px -5px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.9);
         }
 
         @keyframes popIn {
             0% { transform: scale(0.8); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
-        .modal-anim { animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .modal-anim {
+            animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
-        /* Fröhliche Wink-Animation für das Maskottchen */
-        @keyframes happyWave {
+        /* Fröhliche Wink-Animation & Wink-Hand */
+        @keyframes friendlyWave {
             0% { transform: rotate(0deg); }
-            20% { transform: rotate(18deg); }
-            40% { transform: rotate(-12deg); }
-            60% { transform: rotate(16deg); }
-            80% { transform: rotate(-8deg); }
+            20% { transform: rotate(16deg); }
+            40% { transform: rotate(-10deg); }
+            60% { transform: rotate(14deg); }
+            80% { transform: rotate(-6deg); }
             100% { transform: rotate(0deg); }
         }
         .maskottchen-winkt {
             transform-origin: bottom center;
-            animation: happyWave 0.9s ease-in-out 3;
+            animation: friendlyWave 1s ease-in-out 3;
         }
 
         @keyframes handWave {
             0% { transform: rotate(0deg) translateY(0); }
-            50% { transform: rotate(25deg) translateY(-3px); }
+            50% { transform: rotate(22deg) translateY(-3px); }
             100% { transform: rotate(0deg) translateY(0); }
         }
-        .wink-hand {
-            animation: handWave 0.8s ease-in-out infinite;
-            transform-origin: bottom right;
+        .hand-waving {
+            transform-origin: bottom left;
+            animation: handWave 0.6s ease-in-out infinite;
         }
     </style>
 </head>
@@ -348,13 +379,14 @@
             <div id="next-duty-widget"></div>
         </div>
 
-        <!-- GESAMTER DIENSTPLAN -->
+        <!-- GESAMTER DIENSTPLAN & ARCHIV -->
         <div class="glass-card glass-card-blue">
             <div class="card-title">
                 <span>📋 Gesamter Dienstplan</span>
                 <span style="font-size: 0.65em; background: var(--primary-red); color: white; padding: 3px 8px; border-radius: 6px;">2026/2027</span>
             </div>
             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
+            
             <div id="full-roster-list"></div>
 
             <details style="margin-top: 16px; border-top: 1.5px dashed #cbd5e1; padding-top: 12px;">
@@ -363,7 +395,6 @@
             </details>
         </div>
 
-        <!-- NORMALE NEWS -->
         <div id="news-container"></div>
     </div>
 
@@ -409,7 +440,7 @@
                 <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
             </div>
 
-            <div style="margin-top: 14px; background: rgba(248, 250, 252, 0.9); padding: 14px; border-radius: 12px; border: 1.5px solid #cbd5e1;">
+            <div style="margin-top: 14px; background: rgba(248, 250, 252, 0.9); padding: 14px; border-radius: 14px; border: 1.5px solid #cbd5e1;">
                 <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger:</h4>
                 <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
                 <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
@@ -442,9 +473,8 @@
         </div>
     </div>
 
-    <!-- MODERNISIERTES WAFFENBUCH & DOPPELTE QR-CODE ABSICHERUNG -->
+    <!-- WAFFENBUCH -->
     <div id="page-weapons" class="page-content">
-        <!-- QR-Scanner Karte (Entnahme) -->
         <div id="scanner-card-issue" class="glass-card glass-card-red" style="border-left-color: #2563eb !important; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(239,246,255,0.95));">
             <div class="card-title" style="color: #2563eb;">📷 Tresor QR-Code Scanner (Entnahme)</div>
             <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 12px;">
@@ -455,7 +485,6 @@
             <button id="stop-scanner-btn" onclick="stopQrScanner()" class="btn btn-danger btn-block" style="display: none; margin-top: 8px;">Scanner stoppen</button>
         </div>
 
-        <!-- Modernes Entnahmeformular (Zunächst gesperrt) -->
         <div id="weapon-form-card" class="glass-card glass-card-red" style="border-left-color: #b91c1c !important; opacity: 0.5; pointer-events: none; transition: all 0.3s;">
             <div class="card-title" style="color: #b91c1c; font-size: 1.2em;">
                 <span>🛡️ Digitales Waffenbuch (Salutwaffen Kat. C)</span>
@@ -489,7 +518,7 @@
 
                 <div class="form-group">
                     <label>3. Karabiner / Salutwaffen auswählen (Mehrfachauswahl möglich)</label>
-                    <div style="background: rgba(248,250,252,0.9); border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="background: rgba(248,250,252,0.9); border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
                         <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
                             <input type="checkbox" name="weapons" value="Steyr Mannlicher M1895 (ST-8841 / ZVR11223399)" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
                             <strong>K-01</strong>: Steyr Mannlicher M1895 (ST-88XX)
@@ -519,7 +548,6 @@
             </form>
         </div>
 
-        <!-- Aktive Entnahmen & Rückgabe -->
         <div class="glass-card glass-card-blue" style="border-left-color: #2563eb !important;">
             <div class="card-title" style="color: #2563eb;">📋 Aktive Entnahmen & Rückgabe</div>
             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">
@@ -552,21 +580,96 @@
         </div>
 
         <div class="admin-delete-btn">
-            <!-- ADMIN UNTER-TABS -->
+            <!-- ADMIN UNTER-TABS MIT 3D-ICON-BOXEN -->
             <div class="admin-nav-tabs">
-                <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">📦 1. Lager</button>
-                <button onclick="switchAdminTab('tab-newstermins')" class="admin-tab-btn" id="btn-tab-newstermins">📢 2. News</button>
-                <button onclick="switchAdminTab('tab-invoices')" class="admin-tab-btn" id="btn-tab-invoices">💶 3. Rechnungen</button>
-                <button onclick="switchAdminTab('tab-members')" class="admin-tab-btn" id="btn-tab-members">👥 4. Mitglieder</button>
-                <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys">🔑 5. Schlüssel</button>
-                <button onclick="switchAdminTab('tab-weapons-admin')" class="admin-tab-btn" id="btn-tab-weapons-admin">🔫 6. Waffen-PDFs</button>
+                <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">
+                    <div class="admin-3d-icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="boxGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
+                                <linearGradient id="boxTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#d97706"/></linearGradient>
+                            </defs>
+                            <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" fill="url(#boxGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
+                            <path d="M12 3L20 7.5L12 12L4 7.5L12 3Z" fill="url(#boxTop)"/>
+                            <path d="M12 12V21" stroke="#fff" stroke-width="1.5" stroke-opacity="0.6"/>
+                        </svg>
+                    </div>
+                    <span>1. Lager</span>
+                </button>
+
+                <button onclick="switchAdminTab('tab-newstermins')" class="admin-tab-btn" id="btn-tab-newstermins">
+                    <div class="admin-3d-icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="megaGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#991b1b"/></linearGradient>
+                            </defs>
+                            <path d="M3 11V13C3 14.1046 3.89543 15 5 15H7L12 19V5L7 9H5C3.89543 9 3 9.89543 3 11Z" fill="url(#megaGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
+                            <path d="M15.5 8.5C16.5 9.5 17 10.7 17 12C17 13.3 16.5 14.5 15.5 15.5" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M18.5 5.5C20.2 7.2 21 9.5 21 12C21 14.5 20.2 16.8 18.5 18.5" stroke="#b91c1c" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>2. News</span>
+                </button>
+
+                <button onclick="switchAdminTab('tab-invoices')" class="admin-tab-btn" id="btn-tab-invoices">
+                    <div class="admin-3d-icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="invGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient>
+                            </defs>
+                            <rect x="4" y="3" width="16" height="18" rx="3" fill="url(#invGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
+                            <path d="M8 7H16M8 11H16M8 15H12" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>3. Rechnungen</span>
+                </button>
+
+                <button onclick="switchAdminTab('tab-members')" class="admin-tab-btn" id="btn-tab-members">
+                    <div class="admin-3d-icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="memGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#5b21b6"/></linearGradient>
+                            </defs>
+                            <circle cx="9" cy="8" r="4" fill="url(#memGrad)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
+                            <path d="M2 18C2 15.2386 4.23858 13 7 13H11C13.7614 13 16 15.2386 16 18V20H2V18Z" fill="url(#memGrad)"/>
+                            <path d="M16 7.5C17.3 8.3 18 9.5 18 11C18 12.1 17.5 13.1 16.7 13.9C18.2 14.7 19.5 16.1 20 18V20H22V18C22 15.5 20.3 13.3 18 12.5C18 11.8 17.7 11.2 17.2 10.7" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>4. Mitglieder</span>
+                </button>
+
+                <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys">
+                    <div class="admin-3d-icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="keyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#facc15"/><stop offset="100%" stop-color="#ca8a04"/></linearGradient>
+                            </defs>
+                            <circle cx="8" cy="12" r="4" fill="url(#keyGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
+                            <path d="M11 11H21V15H19V17H16V15H13V13H11V11Z" fill="url(#keyGrad)"/>
+                        </svg>
+                    </div>
+                    <span>5. Schlüssel</span>
+                </button>
+
+                <button onclick="switchAdminTab('tab-weapons-admin')" class="admin-tab-btn" id="btn-tab-weapons-admin">
+                    <div class="admin-3d-icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e40af"/></linearGradient>
+                            </defs>
+                            <path d="M12 2L4 5V11C4 16.5 7.5 21.2 12 22C16.5 21.2 20 16.5 20 11V5L12 2Z" fill="url(#shieldGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
+                            <path d="M9 12L11 14L15 10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <span>6. Waffen-PDFs</span>
+                </button>
             </div>
 
             <!-- TAB 1: LAGERBESTAND -->
             <div id="tab-inventory" class="admin-tab-content active glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
                     <span>📦 1. Lagerbestand</span>
-                    <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.75em;" onclick="editInventory()">✏️ Bearbeiten</button>
+                    <button class="btn btn-admin" style="padding: 10px 18px; font-size: 0.95em;" onclick="editInventory()">✏️ Bearbeiten</button>
                 </div>
                 <div id="inventory-timestamp" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 6px;">Noch nicht geändert</div>
                 <div id="inventory-warning-box"></div>
@@ -650,9 +753,26 @@
         </div>
     </div>
 
-    <!-- IMPRESSUM & DATENSCHUTZ LINK GANZ UNTEN -->
-    <div style="text-align: center; margin: 24px 0 10px 0;">
-        <span onclick="openLegalModal()" style="font-size: 0.75em; color: #64748b; cursor: pointer; text-decoration: underline; font-weight: 600;">Impressum | Datenschutz</span>
+    <!-- IMPRESSUM & DATENSCHUTZ LINK & MODAL -->
+    <div style="text-align: center; margin: 24px 0 10px 0; font-size: 0.75em; color: var(--text-muted);">
+        <span onclick="openLegalModal()" style="cursor: pointer; text-decoration: underline;">Impressum</span> | <span onclick="openLegalModal()" style="cursor: pointer; text-decoration: underline;">Datenschutz</span>
+    </div>
+
+    <div id="legal-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:999999; justify-content:center; align-items:center; padding:16px; backdrop-filter:blur(5px);">
+        <div style="background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); width: 100%; max-width: 480px; border-radius: 20px; padding: 22px; max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 25px 35px -5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.9);" class="modal-anim">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3 style="color: #b91c1c; font-size: 1.1em; font-weight: 800;">Impressum & Datenschutz</h3>
+                <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.75em;" onclick="closeLegalModal()">Schließen</button>
+            </div>
+            <div style="font-size: 0.85em; line-height: 1.5; color: var(--text-dark);">
+                <strong style="color: #b91c1c; font-size: 1em;">Kameradschaftsbund & Schützenverein Gaschurn-Partenen</strong><br>
+                Rütler 43b, 6794 Partenen<br>
+                ZVR-Zahl: 624291509<br>
+                E-Mail: Schutzenvereingaschurn@gmail.com<br><br>
+                <strong style="color: #2563eb;">Datenschutzhinweis:</strong><br>
+                Diese Vereins-App dient ausschließlich der internen Organisation, dem Schankbuch, dem digitalen Waffenbuch gemäß behördlichen Auflagen sowie der Terminverwaltung für Mitglieder. Alle Daten werden sicher über Firebase (Google Cloud) verarbeitet und nicht an Dritte weitergegeben.
+            </div>
+        </div>
     </div>
 
     <!-- MODAL FÜR RECHNUNGSANZEIGE -->
@@ -664,30 +784,6 @@
             </div>
             <div id="invoice-modal-content" style="font-size: 0.85em; line-height: 1.4;"></div>
             <button class="btn btn-green btn-block" style="margin-top: 12px;" onclick="downloadCurrentModalPDF()">📥 PDF Herunterladen</button>
-        </div>
-    </div>
-
-    <!-- IMPRESSUM & DATENSCHUTZ MODAL -->
-    <div id="legal-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:9999999; justify-content:center; align-items:center; padding:16px;">
-        <div style="background: #ffffff; color: #1e293b; padding: 24px; border-radius: 20px; max-width: 460px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 25px 40px rgba(0,0,0,0.3); border: 2px solid #b91c1c;" class="modal-anim">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 2px solid #f1f5f9; padding-bottom: 8px;">
-                <h3 style="color: #b91c1c; font-size: 1.1em; font-weight: 800;">Impressum & Datenschutz</h3>
-                <button class="btn btn-danger" style="padding: 4px 10px; font-size: 0.75em;" onclick="closeLegalModal()">Schließen</button>
-            </div>
-            <div style="font-size: 0.85em; line-height: 1.5; color: #334155;">
-                <h4 style="color: #7f1d1d; margin-bottom: 4px; font-size: 0.95em;">Impressum</h4>
-                <p style="margin-bottom: 12px;">
-                    <strong>Kameradschaftsbund & Schützenverein Gaschurn-Partenen</strong><br>
-                    Rütler 43b, 6794 Partenen, Österreich<br>
-                    ZVR-Zahl: 624291509<br>
-                    E-Mail: Schutzenvereingaschurn@gmail.com
-                </p>
-                <h4 style="color: #7f1d1d; margin-bottom: 4px; font-size: 0.95em;">Datenschutzerklärung</h4>
-                <p>
-                    Diese Vereins-App dient der internen Organisation (Dienstplan, Schankbuch, digitales Waffenbuch für Salutwaffen Kat. C und Vereinsnews). Personendaten (wie Namen bei Entnahmen oder Umfragen) werden ausschließlich im Rahmen der Vereinstätigkeit und gesetzlicher Aufbewahrungspflichten verarbeitet und sicher über Firebase (Google Cloud) gespeichert. Es erfolgt keine Weitergabe an Dritte.
-                </p>
-            </div>
-            <button class="btn btn-primary btn-block" style="margin-top: 16px;" onclick="closeLegalModal()">Verstanden</button>
         </div>
     </div>
 
@@ -715,16 +811,16 @@
         </div>
     </div>
 
-    <!-- ADMIN FALSCH-PASSWORT POP-UP -->
+    <!-- ADMIN FALSCH-PASSWORT POP-UP (MIT BÖSEM MASKOTTCHEN) -->
     <div id="admin-error-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.65); backdrop-filter:blur(6px); z-index:99999999; justify-content:center; align-items:center; padding:16px;">
         <div style="background:#ffffff; padding:55px 24px 24px 24px; border-radius:24px; max-width:400px; width:100%; text-align:center; box-shadow:0 25px 50px -12px rgba(0,0,0,0.35); border:3px solid #b91c1c; position:relative;" class="modal-anim">
-            <div style="position:absolute; top:-120px; left:50%; transform:translateX(-50%); display:flex; align-items:flex-end; gap:8px;">
-                <div style="background: white; border: 2px solid #b91c1c; padding: 12px 16px; border-radius: 16px; width: 230px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-family: sans-serif; font-size: 13px; font-weight: bold; color: #1e293b; position: relative; text-align: left; line-height: 1.3;">
+            <div style="position:absolute; top:-110px; left:50%; transform:translateX(-50%); display:flex; align-items:flex-end; gap:8px;">
+                <div style="background: white; border: 2px solid #b91c1c; padding: 12px 16px; border-radius: 16px; width: 220px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-family: sans-serif; font-size: 13px; font-weight: bold; color: #1e293b; position: relative; text-align: left; line-height: 1.3;">
                     Kein Ausweis, kein Einlass! Abmarsch in die Kantine zum Nachdenken.
                     <div style="position: absolute; right: -8px; bottom: 10px; width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-left: 8px solid #b91c1c;"></div>
                 </div>
-                <div style="width: 160px; height: 160px; border-radius: 50%; border: 4px solid #ffffff; box-shadow: 0 14px 30px -4px rgba(0,0,0,0.45); overflow: hidden; background: #222; flex-shrink: 0;">
-                    <img src="maskottchen-boese.jpg" alt="Maskottchen böse" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\'><circle cx=\'80\' cy=\'80\' r=\'80\' fill=\'%237f1d1d\'/><text x=\'80\' y=\'85\' font-size=\'14\' fill=\'white\' text-anchor=\'middle\' font-weight=\'bold\'>Böse</text></svg>';">
+                <div style="width: 140px; height: 140px; border-radius: 50%; border: 4px solid #ffffff; box-shadow: 0 14px 30px -4px rgba(0,0,0,0.45); overflow: hidden; background: #222; flex-shrink: 0;">
+                    <img src="maskottchen-boese.jpg" alt="Maskottchen böse" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'140\' height=\'140\'><circle cx=\'70\' cy=\'70\' r=\'70\' fill=\'%237f1d1d\'/><text x=\'70\' y=\'75\' font-size=\'13\' fill=\'white\' text-anchor=\'middle\' font-weight=\'bold\'>Böse</text></svg>';">
                 </div>
             </div>
 
@@ -751,84 +847,85 @@
         </div>
     </div>
 
-    <!-- ================= KOMPAKTES MASKOTTCHEN MIT WINK-HAND (UNTEN RECHTS) ================= -->
+    <!-- FREUNDLICHES MASKOTTCHEN MIT WINK-HAND (68px Kompakt) -->
     <div id="news-mascot-container" onclick="triggerMascotWaveAndHide()" style="position: fixed; bottom: 88px; right: 10px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; transition: opacity 0.5s ease; cursor: pointer;" title="Tippen zum Ausblenden">
-        <!-- Sprechblase -->
-        <div id="news-mascot-speech" style="background: white; border: 2px solid #b91c1c; padding: 8px 12px; border-radius: 14px; max-width: 195px; box-shadow: 0 4px 15px rgba(0,0,0,0.25); font-family: sans-serif; font-size: 11px; font-weight: bold; color: #1e293b; position: relative; line-height: 1.35;">
-            Servus beinand! Schön, dass ihr als Mitglieder vorbeischaut.
+        <div id="news-mascot-speech" style="background: white; border: 2px solid #b91c1c; padding: 8px 12px; border-radius: 14px; max-width: 195px; box-shadow: 0 4px 15px rgba(0,0,0,0.25); font-family: sans-serif; font-size: 11px; font-weight: bold; color: #1e293b; position: relative; line-height: 1.3;">
+            Servus beinand! Schön, dass ihr da seid.
             <div style="position: absolute; right: 20px; bottom: -7px; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #b91c1c;"></div>
         </div>
         
-        <!-- Maskottchen-Kreis (68px) mit überlappender 3D-Wink-Hand -->
         <div style="position: relative;">
-            <div class="mascot-strolling" style="width: 68px; height: 68px; border-radius: 50%; border: 3px solid #b91c1c; background: #222; box-shadow: 0 4px 15px rgba(0,0,0,0.35); overflow: hidden; flex-shrink: 0;" id="news-mascot-wrapper">
-                <img id="news-mascot-img" src="maskottchen.png" alt="Maskottchen freundlich" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'68\' height=\'68\'><circle cx=\'34\' cy=\'34\' r=\'34\' fill=\'%237f1d1d\'/><text x=\'34\' y=\'38\' font-size=\'10\' fill=\'white\' text-anchor=\'middle\' font-weight=\'bold\'>Verein</text></svg>';">
+            <div class="mascot-strolling" style="width: 68px; height: 68px; border-radius: 50%; border: 3px solid #b91c1c; background: #222; box-shadow: 0 6px 18px rgba(0,0,0,0.35); overflow: hidden; flex-shrink: 0;" id="news-mascot-wrapper">
+                <img id="news-mascot-img" src="maskottchen.png" alt="Maskottchen freundlich" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'68\' height=\'68\'><circle cx=\'34\' cy=\'34\' r=\'34\' fill=\'%237f1d1d\'/><text x=\'34\' y=\'38\' font-size=\'10\' fill=\'white\' text-anchor=\'middle\'>KBSV</text></svg>';">
             </div>
-            <!-- Plastische 3D Wink-Hand SVG -->
-            <div class="wink-hand" style="position: absolute; bottom: -2px; right: -6px; width: 26px; height: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); pointer-events: none;">
-                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="skinGrad" x1="0" y1="0" x2="1" y2="1">
-                            <stop offset="0%" stop-color="#fde047"/>
-                            <stop offset="100%" stop-color="#eab308"/>
-                        </linearGradient>
-                    </defs>
-                    <path d="M12 18 C10 18 8 16 8 13 C8 10 10 9 12 11 Z" fill="url(#skinGrad)" stroke="#b45309" stroke-width="1.5"/>
-                    <path d="M16 16 C14 16 13 14 13 11 C13 8 15 7 17 9 Z" fill="url(#skinGrad)" stroke="#b45309" stroke-width="1.5"/>
-                    <path d="M20 17 C18 17 17 15 17 12 C17 9 19 8 21 10 Z" fill="url(#skinGrad)" stroke="#b45309" stroke-width="1.5"/>
-                    <path d="M24 20 C22 20 20 18 20 15 C20 12 22 11 24 13 Z" fill="url(#skinGrad)" stroke="#b45309" stroke-width="1.5"/>
-                    <path d="M10 18 Q 16 26 22 20 C 26 16 28 20 25 24 C 20 30 12 28 8 22 Z" fill="url(#skinGrad)" stroke="#b45309" stroke-width="1.5"/>
-                </svg>
-            </div>
+            <!-- Plastische 3D Wink-Hand -->
+            <div class="hand-waving" style="position: absolute; top: 2px; right: -4px; font-size: 20px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); pointer-events: none;">👋</div>
         </div>
     </div>
 
-    <!-- FUSSZEILE (PLASTISCHE GLASSMORPHISMUS NAVIGATIONSLEISTE) -->
+    <!-- SCHWEBENDE GLASSMORPHISMUS NAVIGATION UNTEN MIT PLASTISCHEN 3D-SVGS -->
     <nav class="bottom-nav">
         <a onclick="switchTab('news')" class="nav-item active" id="nav-news">
             <span class="nav-icon">
-                <svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-                    <defs><linearGradient id="iconMeg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f87171"/><stop offset="100%" stop-color="#b91c1c"/></linearGradient></defs>
-                    <path d="M3 11v2h2l4 3V8L5 11H3zm13.5-3.5c1 1.2 1.5 2.8 1.5 4.5s-.5 3.3-1.5 4.5l1.5 1.5c1.4-1.8 2.2-4 2.2-6.5s-.8-4.7-2.2-6.5l-1.5 1.5z" fill="url(#iconMeg)" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.2))"/>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="navMega" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#991b1b"/></linearGradient>
+                    </defs>
+                    <path d="M3 11V13C3 14.1046 3.89543 15 5 15H7L12 19V5L7 9H5C3.89543 9 3 9.89543 3 11Z" fill="url(#navMega)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
+                    <path d="M15.5 8.5C16.5 9.5 17 10.7 17 12C17 13.3 16.5 14.5 15.5 15.5" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </span>
             <span>News</span>
         </a>
+
         <a onclick="switchTab('events')" class="nav-item" id="nav-events">
             <span class="nav-icon">
-                <svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-                    <defs><linearGradient id="iconCal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#2563eb"/></linearGradient></defs>
-                    <rect x="3" y="4" width="18" height="18" rx="3" fill="url(#iconCal)" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.2))"/>
-                    <path d="M3 9h18M8 2v4M16 2v4" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="navCal" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient>
+                    </defs>
+                    <rect x="3" y="4" width="18" height="18" rx="4" fill="url(#navCal)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
+                    <path d="M3 9H21" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.6"/>
+                    <path d="M8 2V6M16 2V6" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </span>
             <span>Termine</span>
         </a>
+
         <a onclick="switchTab('drinks')" class="nav-item" id="nav-drinks">
             <span class="nav-icon">
-                <svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-                    <defs><linearGradient id="iconBeer" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#d97706"/></linearGradient></defs>
-                    <path d="M6 3h10v3H6zM4 6h14l-2 14H6L4 6z" fill="url(#iconBeer)" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.2))"/>
-                    <path d="M8 9h6v8H8z" fill="#fef3c7" opacity="0.8"/>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="navBeer" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
+                    </defs>
+                    <path d="M6 8H17C18.1046 8 19 8.89543 19 10V18C19 19.1046 18.1046 20 17 20H6C4.89543 20 4 19.1046 4 18V10C4 8.89543 4.89543 8 6 8Z" fill="url(#navBeer)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
+                    <path d="M19 11H21C22.1046 11 23 11.8954 23 13V15C23 16.1046 22.1046 17 21 17H19" stroke="#d97706" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M6 5H15C15 6.10457 14.1046 7 13 7H8C6.89543 7 6 6.10457 6 5Z" fill="#ffffff"/>
                 </svg>
             </span>
             <span>Schankbuch</span>
         </a>
+
         <a onclick="switchTab('weapons')" class="nav-item" id="nav-weapons">
             <span class="nav-icon">
-                <svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-                    <defs><linearGradient id="iconGun" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#94a3b8"/><stop offset="100%" stop-color="#475569"/></linearGradient></defs>
-                    <path d="M2 11h14l2-2h4v3h-3l-2 2H2v-3z" fill="url(#iconGun)" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.2))"/>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="navGun" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#64748b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+                    </defs>
+                    <path d="M2 11H18L22 7V10L18 14H14V17H11V14H2V11Z" fill="url(#navGun)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
                 </svg>
             </span>
             <span>Waffenbuch</span>
         </a>
+
         <a onclick="switchTab('card')" class="nav-item" id="nav-card">
             <span class="nav-icon">
-                <svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
-                    <defs><linearGradient id="iconLock" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fb7185"/><stop offset="100%" stop-color="#e11d48"/></linearGradient></defs>
-                    <rect x="5" y="11" width="14" height="11" rx="2" fill="url(#iconLock)" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.2))"/>
-                    <path d="M8 11V7a4 4 0 018 0v4" stroke="url(#iconLock)" stroke-width="2.5" fill="none"/>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="navLock" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#dc2626"/><stop offset="100%" stop-color="#7f1d1d"/></linearGradient>
+                    </defs>
+                    <rect x="4" y="10" width="16" height="11" rx="3" fill="url(#navLock)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
+                    <path d="M7 10V7C7 4.23858 9.23858 2 12 2C14.7614 2 17 4.23858 17 7V10" stroke="#b91c1c" stroke-width="2.5" stroke-linecap="round"/>
                 </svg>
             </span>
             <span>Admin</span>
@@ -882,6 +979,7 @@
                 modal.style.display = 'none';
                 onConfirm(true);
             };
+
             document.getElementById('customConfirmNo').onclick = function() {
                 modal.style.display = 'none';
                 onConfirm(false);
@@ -898,6 +996,7 @@
         function showAdminErrorModal() {
             document.getElementById('admin-error-modal').style.display = 'flex';
         }
+
         function closeAdminErrorModal() {
             document.getElementById('admin-error-modal').style.display = 'none';
         }
