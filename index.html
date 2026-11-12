@@ -6,14 +6,12 @@
     <title>Vereins-App - KB & SV Gaschurn-Partenen</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Bibliotheken für PDF-Export & Diagramme & PDF.js -->
+    <!-- Bibliotheken für PDF-Export & Diagramme -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- QR-Code Scanner Bibliothek (html5-qrcode) -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <!-- PDF.js für das Auslesen von PDF-Dateien -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -21,18 +19,13 @@
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
-    <!-- Firebase SDKs (v9.22.1 compat) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
+    <!-- Firebase SDKs (v8.10.1) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 
     <script>
-      // PDF.js Worker konfigurieren
-      if (typeof pdfjsLib !== 'undefined') {
-          pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-      }
-
       const firebaseConfig = {
         apiKey: "AIzaSyDchsz_qOTMpvT48cKBYLqUmX30Lw39iGA",
         authDomain: "kb-sv-vereinsapp.firebaseapp.com",
@@ -120,6 +113,7 @@
             justify-content: space-between;
         }
 
+        /* 4. Ruhiger Glanz statt Blinken (Soft Glow) */
         @keyframes softGreenGlow {
             0% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.35); border-color: rgba(34, 197, 94, 0.6); }
             50% { box-shadow: 0 0 18px rgba(34, 197, 94, 0.6); border-color: rgba(34, 197, 94, 0.9); }
@@ -141,6 +135,7 @@
             border: 1px solid rgba(255, 255, 255, 0.9);
         }
 
+        /* 3. Plastische, fühlbare Buttons */
         .btn {
             padding: 12px 18px;
             border-radius: 16px;
@@ -218,6 +213,7 @@
             box-shadow: 0 4px 12px rgba(185, 28, 28, 0.2);
         }
 
+        /* 1. Vergrößerte, griffige Admin-Buttons & 3D-Icons */
         .admin-nav-tabs {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -252,6 +248,7 @@
         .admin-tab-content { display: none; }
         .admin-tab-content.active { display: block; }
 
+        /* 2. Plastisches 3D-Icon-Quadrat */
         .admin-3d-icon-box {
             width: 36px;
             height: 36px;
@@ -268,6 +265,7 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.5);
         }
 
+        /* 4. Schwebende Glassmorphismus-Leiste unten */
         .bottom-nav {
             position: fixed !important; 
             bottom: 12px !important; 
@@ -336,6 +334,7 @@
             animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
+        /* Fröhliche Wink-Animation & Wink-Hand */
         @keyframes friendlyWave {
             0% { transform: rotate(0deg); }
             20% { transform: rotate(16deg); }
@@ -347,6 +346,16 @@
         .maskottchen-winkt {
             transform-origin: bottom center;
             animation: friendlyWave 1s ease-in-out 3;
+        }
+
+        @keyframes handWave {
+            0% { transform: rotate(0deg) translateY(0); }
+            50% { transform: rotate(22deg) translateY(-3px); }
+            100% { transform: rotate(0deg) translateY(0); }
+        }
+        .hand-waving {
+            transform-origin: bottom left;
+            animation: handWave 0.6s ease-in-out infinite;
         }
     </style>
 </head>
@@ -367,7 +376,7 @@
                 <span style="font-size: 0.8em; background: #15803d; color: #ffffff; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Nächster Dienst</span>
                 <span style="font-size: 0.75em; background: #0f172a; color: #22c55e; font-weight: 800; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;">● LIVE</span>
             </div>
-            <div id="next-duty-widget">Lade nächsten Dienst...</div>
+            <div id="next-duty-widget"></div>
         </div>
 
         <!-- GESAMTER DIENSTPLAN & ARCHIV -->
@@ -378,11 +387,11 @@
             </div>
             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
             
-            <div id="full-roster-list">Lade Dienstplan...</div>
+            <div id="full-roster-list"></div>
 
             <details style="margin-top: 16px; border-top: 1.5px dashed #cbd5e1; padding-top: 12px;">
                 <summary style="font-size: 0.85em; font-weight: 700; color: var(--text-muted); cursor: pointer; user-select: none;">📁 Vergangene Dienste (Archiv)</summary>
-                <div id="archive-roster-list" style="margin-top: 10px;">Lade Archiv...</div>
+                <div id="archive-roster-list" style="margin-top: 10px;"></div>
             </details>
         </div>
 
@@ -571,7 +580,7 @@
         </div>
 
         <div class="admin-delete-btn">
-            <!-- ADMIN UNTER-TABS -->
+            <!-- ADMIN UNTER-TABS MIT 3D-ICON-BOXEN -->
             <div class="admin-nav-tabs">
                 <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">
                     <div class="admin-3d-icon-box">
@@ -614,6 +623,8 @@
                     </div>
                     <span>3. Rechnungen</span>
                 </button>
+
+               
 
                 <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys">
                     <div class="admin-3d-icon-box">
@@ -658,34 +669,10 @@
                 </div>
             </div>
 
-            <!-- TAB 2: NEWS & DIENSTPLAN-PDF HOCHLADEN -->
+            <!-- TAB 2: NEWS & TERMINE -->
             <div id="tab-newstermins" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">📢 2. News & Dienstplan-PDF</div>
+                <div class="card-title" style="color: #dc2626;">📢 2. News, Foto & Texte / Termine</div>
                 
-                <!-- NEUE KARTE: DIENSTPLAN-PDF HOCHLADEN -->
-                <div style="background: rgba(248, 250, 252, 0.95); border: 1.5px solid #fecaca; border-radius: 14px; padding: 14px; margin-bottom: 20px;">
-                    <h4 style="color: #b91c1c; font-size: 0.95em; margin-bottom: 8px;">📄 Dienstplan-PDF hochladen & veröffentlichen</h4>
-                    <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 12px;">Wähle eine PDF-Datei aus. Die App liest automatisch die Termine aus und generiert eine Vorschau.</p>
-                    
-                    <div class="form-group">
-                        <label style="border: 2px dashed #cbd5e1; padding: 16px; text-align: center; border-radius: 12px; cursor: pointer; display: block; background: #fff;">
-                            📂 PDF-Datei auswählen<br>
-                            <input type="file" id="duty-pdf-upload" accept="application/pdf,.pdf" style="display: none;" onchange="handlePdfUpload(event)">
-                        </label>
-                    </div>
-
-                    <div id="pdf-preview-wrapper" style="display: none; margin-top: 14px;">
-                        <label>Erkannte Termine (Vorschau & Korrektur):</label>
-                        <textarea id="duty-pdf-preview" class="form-control" rows="6" style="font-family: monospace; font-size: 0.85em;"></textarea>
-                        <button onclick="publishPdfDutyPlan()" class="btn btn-primary btn-block" style="margin-top: 10px;">Dienstplan auf News veröffentlichen</button>
-                    </div>
-
-                    <div style="margin-top: 14px; border-top: 1px solid #cbd5e1; padding-top: 10px;">
-                        <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Aktive Dienste in Firebase:</div>
-                        <div id="admin-duty-list"><p style="font-size: 0.8em; color: var(--text-muted);">Lade Dienste...</p></div>
-                    </div>
-                </div>
-
                 <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 6px;">Neuen News-Beitrag erstellen</h4>
                 <form onsubmit="addNewsItem(event)">
                     <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
@@ -848,7 +835,11 @@
         </div>
     </div>
 
-    <!-- SCHWEBENDE NAVIGATION UNTEN -->
+    <!-- FREUNDLICHES MASKOTTCHEN MIT WINK-HAND (68px Kompakt) -->
+   </div>
+    </div>
+
+    <!-- SCHWEBENDE GLASSMORPHISMUS NAVIGATION UNTEN MIT PLASTISCHEN 3D-SVGS -->
     <nav class="bottom-nav">
         <a onclick="switchTab('news')" class="nav-item active" id="nav-news">
             <span class="nav-icon">
@@ -926,6 +917,34 @@
             document.getElementById('legal-modal').style.display = 'none';
         }
 
+        function triggerMascotWaveAndHide() {
+            const mascotWrapper = document.getElementById('news-mascot-wrapper');
+            if (mascotWrapper) {
+                mascotWrapper.classList.add('maskottchen-winkt');
+                setTimeout(() => {
+                    const mascotContainer = document.getElementById('news-mascot-container');
+                    if (mascotContainer) {
+                        mascotContainer.style.opacity = '0';
+                        setTimeout(() => { mascotContainer.style.display = 'none'; }, 500);
+                    }
+                }, 1000);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const mascotContainer = document.getElementById('news-mascot-container');
+            const mascotWrapper = document.getElementById('news-mascot-wrapper');
+            if (mascotContainer && mascotWrapper) {
+                mascotWrapper.classList.add('maskottchen-winkt');
+                setTimeout(() => {
+                    if (mascotContainer.style.opacity !== '0') {
+                        mascotContainer.style.opacity = '0';
+                        setTimeout(() => { mascotContainer.style.display = 'none'; }, 500);
+                    }
+                }, 5000);
+            }
+        });
+
         function showCustomConfirm(titleText, messageText, onConfirm) {
             const modal = document.getElementById('customConfirm');
             document.getElementById('customConfirmTitle').innerHTML = '<span style="font-size: 2em; vertical-align: middle;">⚠️</span><br>' + titleText;
@@ -953,6 +972,7 @@
         function showAdminErrorModal() {
             document.getElementById('admin-error-modal').style.display = 'flex';
         }
+
         function closeAdminErrorModal() {
             document.getElementById('admin-error-modal').style.display = 'none';
         }
@@ -984,6 +1004,22 @@
             if(targetPage) targetPage.classList.add('active');
             if(targetNav) targetNav.classList.add('active');
             window.scrollTo(0, 0);
+
+            const newsMascot = document.getElementById('news-mascot-container');
+            const mascotWrapper = document.getElementById('news-mascot-wrapper');
+            if (newsMascot) {
+                if (tabId === 'news') {
+                    newsMascot.style.display = 'flex';
+                    newsMascot.style.opacity = '1';
+                    if (mascotWrapper) {
+                        mascotWrapper.classList.remove('maskottchen-winkt');
+                        void mascotWrapper.offsetWidth;
+                        mascotWrapper.classList.add('maskottchen-winkt');
+                    }
+                } else {
+                    newsMascot.style.display = 'none';
+                }
+            }
         }
 
         function switchAdminTab(tabContentId) {
@@ -1059,24 +1095,6 @@
 
         let drinksChartInstance = null;
         let weaponsChartInstance = null;
-
-        // --- STANDARD DIENSTPLAN (DEFAULT) ---
-        const defaultDutyPlan = [
-            { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
-            { dateStr: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
-            { dateStr: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
-            { dateStr: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
-            { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
-        ];
 
         function updateDrinksChart() {
             const ctx = document.getElementById('drinksChart');
@@ -1166,264 +1184,6 @@
             });
         }
 
-        // --- PDF-UPLOAD & PARSING LOGIK ---
-        async function handlePdfUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
-                const pdfDoc = await loadingTask.promise;
-                
-                let extractedTextLines = [];
-
-                for (let i = 1; i <= pdfDoc.numPages; i++) {
-                    const page = await pdfDoc.getPage(i);
-                    const textContent = await page.getTextContent();
-                    textContent.items.forEach(item => {
-                        extractedTextLines.push(item.str);
-                    });
-                }
-
-                // Intelligente Texterkennung (Datum, Team, Namen extrahieren)
-                let parsedEntries = [];
-                let fullTextCombined = extractedTextLines.join("\n");
-
-                // Regex für Datum (TT.MM.JJJJ oder TT.MM.)
-                const dateRegex = /\b(\d{1,2}\.\d{1,2}\.(?:\d{4})?)\b/g;
-                let match;
-                
-                // Versuche strukturierte Zeilen zu bilden
-                let lines = fullTextCombined.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-                
-                lines.forEach(line => {
-                    let teamMatch = line.match(/(Team\s*\d+|Geschlossen)/i);
-                    let foundDate = line.match(/\d{1,2}\.\d{1,2}\.(?:\d{2,4})?/);
-                    
-                    if (foundDate || teamMatch) {
-                        parsedEntries.push(line);
-                    }
-                });
-
-                // Falls wenig gefunden wurde, nimm einfach alle Zeilen
-                if (parsedEntries.length === 0) {
-                    parsedEntries = lines;
-                }
-
-                document.getElementById('duty-pdf-preview').value = parsedEntries.join("\n");
-                document.getElementById('pdf-preview-wrapper').style.display = 'block';
-                alert("PDF erfolgreich ausgelesen! Bitte überprüfe die Termine in der Vorschau.");
-
-            } catch (err) {
-                alert("Fehler beim Lesen der PDF-Datei: " + err.message);
-            }
-        }
-
-        async function publishPdfDutyPlan() {
-            const textContent = document.getElementById('duty-pdf-preview').value.trim();
-            if (!textContent) {
-                alert("Keine Termine zum Veröffentlichen vorhanden!");
-                return;
-            }
-
-            const lines = textContent.split('\n');
-            
-            try {
-                // Vorherige Einträge in duty_plan löschen (ersetzen)
-                const snapshot = await db.collection("duty_plan").get();
-                const batch = db.batch();
-                snapshot.docs.forEach(doc => {
-                    batch.delete(doc.ref);
-                });
-                await batch.commit();
-
-                // Neue Einträge speichern
-                for (let line of lines) {
-                    let parts = line.split(/[;,|\t]/).map(p => p.trim());
-                    let dateStr = parts[0] || "01.01.2027";
-                    let teamStr = parts[1] || "Team 1";
-                    let namesStr = parts[2] || line;
-
-                    // Normalisiere Datum auf YYYY-MM-DD für Sortierung
-                    let sortDate = dateStr;
-                    if (dateStr.includes('.')) {
-                        let dParts = dateStr.split('.');
-                        let day = dParts[0].padStart(2, '0');
-                        let month = dParts[1].padStart(2, '0');
-                        let year = dParts[2] || new Date().getFullYear();
-                        if (year.length === 2) year = "20" + year;
-                        sortDate = `${year}-${month}-${day}`;
-                    }
-
-                    await db.collection("duty_plan").add({
-                        date: sortDate,
-                        displayDate: dateStr,
-                        team: teamStr,
-                        names: namesStr,
-                        status: teamStr.toLowerCase().includes('geschlossen') ? 'closed' : 'open',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-
-                alert("Neuer Dienstplan erfolgreich auf News veröffentlicht!");
-                document.getElementById('pdf-preview-wrapper').style.display = 'none';
-                document.getElementById('duty-pdf-upload').value = '';
-            } catch (err) {
-                alert("Fehler beim Veröffentlichen: " + err.message);
-            }
-        }
-
-        async function deleteDutyEntry(id) {
-            if (confirm("Diesen Dienst wirklich löschen?")) {
-                try {
-                    await db.collection("duty_plan").doc(id).delete();
-                    alert("Dienst gelöscht!");
-                } catch (err) {
-                    alert("Fehler beim Löschen: " + err.message);
-                }
-            }
-        }
-
-        function parseLocalDate(dateStr) {
-            if (!dateStr) return new Date();
-            if (dateStr.includes('-')) {
-                const parts = dateStr.split('-');
-                return new Date(parts[0], parts[1] - 1, parts[2]);
-            }
-            const parts = dateStr.split('.');
-            return new Date(parts[2], parts[1] - 1, parts[0]);
-        }
-
-        function initDutyPlanRealtimeListener() {
-            db.collection("duty_plan").orderBy("date", "asc").onSnapshot((snapshot) => {
-                let dutyList = [];
-                snapshot.forEach(doc => {
-                    dutyList.push({ id: doc.id, ...doc.data() });
-                });
-
-                // WICHTIG: Wenn Firestore leer ist, nutze defaultDutyPlan!
-                let activeDutyPlan = dutyList;
-                if (dutyList.length === 0) {
-                    activeDutyPlan = defaultDutyPlan.map(d => {
-                        let p = parseLocalDate(d.dateStr);
-                        let y = p.getFullYear();
-                        let m = String(p.getMonth() + 1).padStart(2, '0');
-                        let day = String(p.getDate()).padStart(2, '0');
-                        return {
-                            id: 'default-' + Math.random(),
-                            date: `${y}-${m}-${day}`,
-                            displayDate: d.dateStr,
-                            team: d.team,
-                            names: d.names,
-                            status: d.status
-                        };
-                    });
-                }
-
-                const todayObj = new Date();
-                todayObj.setHours(0,0,0,0);
-                const todayStr = todayObj.toISOString().slice(0, 10);
-
-                let futureList = [];
-                let pastList = [];
-                let adminHtml = "";
-
-                activeDutyPlan.forEach(d => {
-                    let formattedDate = d.displayDate || d.date;
-                    if (d.date && d.date.includes('-') && !d.displayDate) {
-                        const parts = d.date.split('-');
-                        formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
-                    }
-
-                    let dDate = parseLocalDate(d.date);
-                    dDate.setHours(0,0,0,0);
-
-                    if (dDate >= todayObj) {
-                        futureList.push({ ...d, displayDate: formattedDate });
-                    } else {
-                        pastList.push({ ...d, displayDate: formattedDate });
-                    }
-
-                    if (!d.id.startsWith('default-')) {
-                        adminHtml += `
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #fff; border-radius: 8px; margin-bottom: 6px; border: 1px solid #cbd5e1; font-size: 0.85em;">
-                                <div>
-                                    <strong>${formattedDate}</strong> - <span style="color:var(--primary-red);">${d.team}</span><br>
-                                    <span style="color:var(--text-muted); font-size:0.8em;">${d.names}</span>
-                                </div>
-                                <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteDutyEntry('${d.id}')">🗑️</button>
-                            </div>
-                        `;
-                    }
-                });
-
-                if (dutyList.length === 0) {
-                    adminHtml = '<p style="font-size: 0.8em; color: var(--text-muted);">Standard-Dienstplan aktiv (noch kein PDF hochgeladen).</p>';
-                }
-
-                const adminDutyListContainer = document.getElementById('admin-duty-list');
-                if (adminDutyListContainer) {
-                    adminDutyListContainer.innerHTML = adminHtml;
-                }
-
-                // Startseite: Nächster Dienst (allererster anstehender Termin ab heute)
-                const nextWidget = document.getElementById('next-duty-widget');
-                if (nextWidget) {
-                    if (futureList.length > 0) {
-                        const nextDienst = futureList[0];
-                        nextWidget.innerHTML = `
-                            <div style="font-size: 1.1em; color: #15803d; font-weight: 800; margin-bottom: 2px;">📅 ${nextDienst.displayDate}</div>
-                            <div style="font-size: 1.5em; font-weight: 900; margin: 4px 0; color: #0f172a; letter-spacing: 0.5px;">${nextDienst.team}</div>
-                            <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 700;">${nextDienst.names}</div>
-                        `;
-                    } else {
-                        nextWidget.innerHTML = `<div style="font-size: 0.95em; color: var(--text-muted);">Kein anstehender Dienst eingetragen.</div>`;
-                    }
-                }
-
-                // Startseite: Gesamter Dienstplan & Archiv
-                const fullList = document.getElementById('full-roster-list');
-                if (fullList) {
-                    let html = "";
-                    futureList.forEach((d, idx) => {
-                        let isNext = (idx === 0);
-                        let isClosed = d.status === 'closed';
-                        let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
-
-                        html += `
-                            <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="font-size: 0.9em; font-weight: 800; color: #0f172a;">${d.displayDate} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
-                                    <span style="background: ${borderCol}; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.65em;">${d.team}</span>
-                                </div>
-                                <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
-                            </div>
-                        `;
-                    });
-                    fullList.innerHTML = html || '<p style="font-size: 0.8em; color: var(--text-muted);">Keine kommenden Dienste.</p>';
-                }
-
-                const archiveList = document.getElementById('archive-roster-list');
-                if (archiveList) {
-                    let archHtml = "";
-                    pastList.reverse().forEach(d => {
-                        archHtml += `
-                            <div class="dark-event-item" style="border-left-color: #94a3b8; opacity: 0.85; margin-bottom: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="font-size: 0.85em; font-weight: 700; color: #475569;">${d.displayDate}</div>
-                                    <span style="background: #94a3b8; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.6em;">${d.team}</span>
-                                </div>
-                                <div style="font-size: 0.7em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
-                            </div>
-                        `;
-                    });
-                    archiveList.innerHTML = archHtml || '<p style="font-size: 0.8em; color: var(--text-muted);">Keine vergangenen Dienste im Archiv.</p>';
-                }
-            });
-        }
-
-        // --- SCANNER LOGIK ---
         function startQrScanner(mode, recordId = null) {
             currentScanMode = mode;
             pendingReturnRecordId = recordId;
@@ -1490,6 +1250,27 @@
                 const readerDiv = document.getElementById('reader');
                 if(stopBtn) stopBtn.style.display = 'none';
                 if(readerDiv) readerDiv.style.display = 'none';
+            }
+        }
+
+        async function initPushNotifications() {
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registration = await navigator.serviceWorker.register('firebase-messaging-sw.js');
+                    const permission = await Notification.requestPermission();
+                    if (permission === 'granted') {
+                        const currentToken = await messaging.getToken({ 
+                            serviceWorkerRegistration: registration,
+                            vapidKey: "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-8vMeAtN5cHxL2E3vR7Z8Zp9nE2Vz2yVb8x8k5j4h3g2f1e0d9c8b7a6"
+                        });
+                        if (currentToken) {
+                            await db.collection("fcm_tokens").doc(currentToken).set({
+                                token: currentToken,
+                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                            });
+                        }
+                    }
+                } catch (err) {}
             }
         }
 
@@ -1671,6 +1452,100 @@
             } catch (e) {}
         }
 
+        const masterDutyRoster = [
+            { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { dateStr: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
+            { dateStr: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { dateStr: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { dateStr: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
+            { dateStr: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
+            { dateStr: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { dateStr: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { dateStr: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { dateStr: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
+            { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
+        ];
+
+        function parseLocalDate(dateStr) {
+            if (!dateStr) return new Date();
+            const parts = dateStr.split('.');
+            return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+
+        function updateDutyPlanWidget() {
+            try {
+                const today = new Date();
+                today.setHours(0,0,0,0);
+
+                let futureList = [];
+                let pastList = [];
+
+                masterDutyRoster.forEach(d => {
+                    const dDate = parseLocalDate(d.dateStr);
+                    dDate.setHours(0,0,0,0);
+                    if (dDate >= today) {
+                        futureList.push(d);
+                    } else {
+                        pastList.push(d);
+                    }
+                });
+
+                futureList.sort((a, b) => parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr));
+                pastList.sort((a, b) => parseLocalDate(b.dateStr) - parseLocalDate(a.dateStr));
+
+                const nextDienst = futureList[0] || masterDutyRoster[0];
+                const nextWidget = document.getElementById('next-duty-widget');
+                if (nextWidget) {
+                    nextWidget.innerHTML = `
+                        <div style="font-size: 1.1em; color: #15803d; font-weight: 800; margin-bottom: 2px;">📅 ${nextDienst.dateStr}</div>
+                        <div style="font-size: 1.5em; font-weight: 900; margin: 4px 0; color: #0f172a; letter-spacing: 0.5px;">${nextDienst.team}</div>
+                        <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 700;">${nextDienst.names}</div>
+                    `;
+                }
+
+                const fullList = document.getElementById('full-roster-list');
+                if (fullList) {
+                    let html = "";
+                    futureList.forEach((d, idx) => {
+                        let isNext = (idx === 0);
+                        let isClosed = d.status === 'closed';
+                        let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
+                        
+                        html += `
+                            <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 0.9em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
+                                    <span style="background: ${borderCol}; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.65em;">${d.team}</span>
+                                </div>
+                                <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
+                            </div>
+                        `;
+                    });
+                    fullList.innerHTML = html;
+                }
+
+                const archiveList = document.getElementById('archive-roster-list');
+                if (archiveList) {
+                    let archHtml = "";
+                    pastList.forEach(d => {
+                        archHtml += `
+                            <div class="dark-event-item" style="border-left-color: #94a3b8; opacity: 0.85; margin-bottom: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 0.85em; font-weight: 700; color: #475569;">${d.dateStr}</div>
+                                    <span style="background: #94a3b8; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.6em;">${d.team}</span>
+                                </div>
+                                <div style="font-size: 0.7em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
+                            </div>
+                        `;
+                    });
+                    archiveList.innerHTML = archHtml || '<p style="font-size: 0.8em; color: var(--text-muted);">Keine vergangenen Dienste im Archiv.</p>';
+                }
+            } catch(e) {}
+        }
+
         async function loadEvents() {
             const container = document.getElementById('events-container');
             const adminList = document.getElementById('admin-events-list');
@@ -1796,6 +1671,17 @@
             await docRef.set({ yesNames: yes, noNames: no });
             alert("Deine Stimme wurde gespeichert!");
             loadEvents();
+        }
+
+        function scheduleMidnightRefresh() {
+            const now = new Date();
+            const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+            const msToMidnight = night.getTime() - now.getTime();
+            setTimeout(() => {
+                loadEvents();
+                updateDutyPlanWidget();
+                scheduleMidnightRefresh();
+            }, msToMidnight);
         }
 
         async function addEvent(e) {
@@ -2514,7 +2400,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            try { initDutyPlanRealtimeListener(); } catch(e) {}
+            try { updateDutyPlanWidget(); } catch(e) {}
             try { loadNews(); } catch(e) {}
             try { loadEvents(); } catch(e) {}
             try { loadPublicMembersList(); } catch(e) {}
@@ -2522,6 +2408,8 @@
             try { loadInventory(); } catch(e) {}
             try { loadWeaponHistory(); } catch(e) {}
             try { loadAdminWeaponPDFs(); } catch(e) {}
+            try { initPushNotifications(); } catch(e) {}
+            scheduleMidnightRefresh();
         });
     </script>
 </body>
