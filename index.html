@@ -45,7 +45,7 @@
             --primary-red: #b91c1c; 
             --primary-dark: #7f1d1d;
             --bg-light: #f1f5f9; 
-            --card-glass: rgba(255, 255, 255, 0.88);
+            --card-glass: rgba(255, 255, 255, 0.9);
             --text-dark: #1e293b; 
             --text-muted: #64748b; 
             --accent-green: #10b981; 
@@ -62,7 +62,7 @@
             background: linear-gradient(135deg, #e2e8f0 100%, #cbd5e1 0%);
             background-attachment: fixed;
             padding: 12px;
-            padding-bottom: 150px !important;
+            padding-bottom: 180px !important;
             max-width: 580px;
             margin: 0 auto;
             min-height: 100vh;
@@ -72,16 +72,16 @@
         .app-header {
             background: linear-gradient(135deg, #7f1d1d, #b91c1c);
             color: white;
-            padding: 20px 16px;
+            padding: 22px 16px;
             text-align: center;
-            border-radius: 20px;
+            border-radius: 22px;
             margin-bottom: 16px;
-            box-shadow: 0 10px 25px rgba(185, 28, 28, 0.25);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 30px rgba(127, 29, 29, 0.3);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
         
-        .app-header h1 { font-size: 1.25em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
+        .app-header h1 { font-size: 1.3em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
         .app-header p { font-size: 0.85em; opacity: 0.95; margin-top: 4px; color: #fca5a5; font-weight: 700; }
 
         .page-content { display: none; }
@@ -91,11 +91,11 @@
             background: var(--card-glass);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-radius: 18px;
+            border-radius: 20px;
             padding: 18px;
             margin-bottom: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.9);
             color: var(--text-dark);
         }
 
@@ -113,45 +113,48 @@
             justify-content: space-between;
         }
 
-        @keyframes intenseNeonPulse {
-            0% { box-shadow: 0 0 8px rgba(34, 197, 94, 0.5); border-color: rgba(34, 197, 94, 0.7); }
-            50% { box-shadow: 0 0 25px rgba(34, 197, 94, 1); border-color: rgba(34, 197, 94, 1); transform: scale(1.01); }
-            100% { box-shadow: 0 0 8px rgba(34, 197, 94, 0.5); border-color: rgba(34, 197, 94, 0.7); }
+        /* Ruhiger, edler grüner Glanz-Effekt statt hartem Blinken */
+        @keyframes softGreenGlow {
+            0% { box-shadow: 0 0 15px rgba(34, 197, 94, 0.25), 0 10px 30px rgba(0,0,0,0.08); border-color: rgba(34, 197, 94, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.45), 0 15px 35px rgba(0,0,0,0.1); border-color: rgba(34, 197, 94, 0.9); }
+            100% { box-shadow: 0 0 15px rgba(34, 197, 94, 0.25), 0 10px 30px rgba(0,0,0,0.08); border-color: rgba(34, 197, 94, 0.5); }
         }
         .next-duty-neon {
-            background: rgba(255, 255, 255, 0.95) !important;
-            border: 3px solid #22c55e !important;
-            animation: intenseNeonPulse 1.4s infinite ease-in-out;
+            background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(240,253,244,0.98)) !important;
+            border: 2px solid #22c55e !important;
+            animation: softGreenGlow 3s infinite ease-in-out;
         }
 
         .dark-event-item {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 14px;
-            padding: 14px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 16px;
             margin-bottom: 12px;
             border-left: 5px solid #b91c1c;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.04);
             border: 1px solid rgba(255, 255, 255, 0.9);
         }
 
         .btn {
             padding: 12px 18px;
-            border-radius: 14px;
-            border: none;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
             font-weight: 700;
             font-size: 0.9em;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
             text-decoration: none;
-            transition: all 0.2s;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.4);
         }
-        .btn-primary { background: var(--primary-red); color: white; box-shadow: 0 4px 15px rgba(185, 28, 28, 0.35); }
-        .btn-green { background: #16a34a; color: white; box-shadow: 0 4px 15px rgba(22, 163, 74, 0.35); }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+        .btn-primary { background: linear-gradient(135deg, #b91c1c, #7f1d1d); color: white; box-shadow: 0 6px 20px rgba(185, 28, 28, 0.35), inset 0 1px 0 rgba(255,255,255,0.3); }
+        .btn-green { background: linear-gradient(135deg, #16a34a, #15803d); color: white; box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35), inset 0 1px 0 rgba(255,255,255,0.3); }
         .btn-danger { background: #fee2e2; color: var(--danger); border: 1px solid #fecaca; }
-        .btn-admin { background: var(--admin-blue); color: white; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35); }
+        .btn-admin { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35), inset 0 1px 0 rgba(255,255,255,0.3); }
         .btn-block { width: 100%; margin-top: 10px; }
 
         .form-group { margin-bottom: 14px; }
@@ -159,12 +162,13 @@
         .form-control {
             width: 100%;
             padding: 12px 14px;
-            border-radius: 12px;
+            border-radius: 14px;
             border: 1.5px solid #cbd5e1;
             font-family: inherit;
             font-size: 0.95em;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             color: var(--text-dark);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
         .form-control:focus { outline: none; border-color: var(--admin-blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 
@@ -178,28 +182,31 @@
         }
         .counter-controls { display: flex; align-items: center; gap: 12px; }
         .counter-btn {
-            background: rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg, #ffffff, #f1f5f9);
             color: var(--primary-red);
             border: 1.5px solid #cbd5e1;
-            width: 38px; height: 38px;
+            width: 40px; height: 40px;
             border-radius: 50%;
-            font-size: 1.2em;
+            font-size: 1.25em;
             font-weight: bold;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            transition: all 0.2s;
         }
+        .counter-btn:hover { transform: scale(1.05); border-color: var(--primary-red); }
 
         .strich-category-header {
-            background: var(--primary-red);
+            background: linear-gradient(135deg, #b91c1c, #7f1d1d);
             color: #ffffff;
-            padding: 8px 12px;
-            border-radius: 10px;
+            padding: 10px 14px;
+            border-radius: 12px;
             font-size: 0.85em;
             font-weight: 800;
-            margin: 16px 0 8px 0;
+            margin: 18px 0 8px 0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.2);
         }
 
         /* Admin Tab Navigation */
@@ -210,45 +217,46 @@
             margin-bottom: 16px;
         }
         .admin-tab-btn {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border: 1.5px solid #cbd5e1;
             padding: 12px 10px;
-            border-radius: 12px;
+            border-radius: 14px;
             font-weight: 700;
             font-size: 0.8em;
             color: var(--text-dark);
             cursor: pointer;
             text-align: center;
             transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
         .admin-tab-btn.active {
-            background: var(--admin-blue);
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: white;
-            border-color: var(--admin-blue);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            border-color: #2563eb;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
         }
         .admin-tab-content { display: none; }
         .admin-tab-content.active { display: block; }
 
-        /* FUSSZEILE (VIOLETT) */
+        /* Moderne schwebende Glassmorphismus-Leiste unten */
         .bottom-nav {
             position: fixed !important; 
-            bottom: 12px !important; 
-            left: 12px !important; 
-            right: 12px !important;
-            width: calc(100% - 24px) !important;
-            max-width: 556px !important; 
+            bottom: 14px !important; 
+            left: 14px !important; 
+            right: 14px !important;
+            width: calc(100% - 28px) !important;
+            max-width: 552px !important; 
             margin: 0 auto !important;
-            background: rgba(147, 51, 234, 0.95) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border-radius: 18px !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.88) !important;
+            backdrop-filter: blur(25px) !important;
+            -webkit-backdrop-filter: blur(25px) !important;
+            border-radius: 22px !important;
+            border: 1px solid rgba(255, 255, 255, 0.8) !important;
             display: flex !important; 
             justify-content: space-around !important;
             align-items: center !important;
             padding: 8px 6px !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
             z-index: 99999 !important;
         }
         .nav-item {
@@ -256,21 +264,23 @@
             flex-direction: column !important; 
             align-items: center !important;
             text-decoration: none !important; 
-            color: #f3e8ff !important;
+            color: #64748b !important;
             font-size: 0.7em !important; 
             font-weight: 700 !important; 
             cursor: pointer !important;
             flex: 1 !important;
             text-align: center !important;
             padding: 6px 2px !important;
-            border-radius: 14px !important;
+            border-radius: 16px !important;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .nav-item:hover { color: #1e293b !important; transform: translateY(-2px); }
         .nav-item.active { 
             color: #ffffff !important;
-            background: var(--primary-red) !important;
-            box-shadow: 0 4px 15px rgba(185, 28, 28, 0.4) !important;
+            background: linear-gradient(135deg, #b91c1c, #7f1d1d) !important;
+            box-shadow: 0 6px 20px rgba(185, 28, 28, 0.4), inset 0 1px 0 rgba(255,255,255,0.3) !important;
         }
-        .nav-icon { font-size: 1.4em !important; margin-bottom: 3px !important; display: block !important; }
+        .nav-icon { width: 24px; height: 24px; margin-bottom: 3px; display: inline-flex; align-items: center; justify-content: center; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)); }
 
         .admin-delete-btn { display: none; }
         body.admin-mode .admin-delete-btn { display: block !important; }
@@ -283,7 +293,7 @@
             background: rgba(0,0,0,0.65); z-index: 999999; justify-content: center; align-items: center; padding: 12px;
         }
         .invoice-preview-box {
-            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); width: 100%; max-width: 500px; border-radius: 18px; padding: 20px;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); width: 100%; max-width: 500px; border-radius: 20px; padding: 20px;
             max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 25px 35px -5px rgba(0,0,0,0.3);
         }
 
@@ -293,6 +303,30 @@
         }
         .modal-anim {
             animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes friendlyWave {
+            0% { transform: rotate(0deg); }
+            20% { transform: rotate(14deg); }
+            40% { transform: rotate(-10deg); }
+            60% { transform: rotate(12deg); }
+            80% { transform: rotate(-6deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .maskottchen-winkt {
+            transform-origin: bottom center;
+            animation: friendlyWave 1s ease-in-out 3;
+        }
+
+        @keyframes mascotStroll {
+            0% { transform: translateX(0px) rotate(0deg); }
+            25% { transform: translateX(-8px) rotate(-1deg); }
+            50% { transform: translateX(0px) rotate(0deg); }
+            75% { transform: translateX(8px) rotate(1deg); }
+            100% { transform: translateX(0px) rotate(0deg); }
+        }
+        .mascot-strolling {
+            animation: mascotStroll 3.5s ease-in-out infinite;
         }
     </style>
 </head>
@@ -310,23 +344,28 @@
         <!-- NÄCHSTER DIENST -->
         <div class="glass-card next-duty-neon">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-size: 0.8em; background: #22c55e; color: #fff; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase;">Nächster Dienst</span>
-                <span style="font-size: 0.8em; color: #15803d; font-weight: 700;">Live</span>
+                <span style="font-size: 0.8em; background: #15803d; color: #ffffff; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Nächster Dienst</span>
+                <span style="font-size: 0.75em; background: #0f172a; color: #22c55e; font-weight: 800; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;">● LIVE</span>
             </div>
             <div id="next-duty-widget"></div>
         </div>
 
-        <!-- GESAMTER DIENSTPLAN -->
+        <!-- GESAMTER DIENSTPLAN & ARCHIV -->
         <div class="glass-card glass-card-blue">
             <div class="card-title">
                 <span>📋 Gesamter Dienstplan</span>
                 <span style="font-size: 0.65em; background: var(--primary-red); color: white; padding: 3px 8px; border-radius: 6px;">2026/2027</span>
             </div>
             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
+            
             <div id="full-roster-list"></div>
+
+            <details style="margin-top: 16px; border-top: 1.5px dashed #cbd5e1; padding-top: 12px;">
+                <summary style="font-size: 0.85em; font-weight: 700; color: var(--text-muted); cursor: pointer; user-select: none;">📁 Vergangene Dienste (Archiv)</summary>
+                <div id="archive-roster-list" style="margin-top: 10px;"></div>
+            </details>
         </div>
 
-        <!-- NORMALE NEWS -->
         <div id="news-container"></div>
     </div>
 
@@ -372,7 +411,7 @@
                 <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
             </div>
 
-            <div style="margin-top: 14px; background: rgba(248, 250, 252, 0.9); padding: 14px; border-radius: 12px; border: 1.5px solid #cbd5e1;">
+            <div style="margin-top: 14px; background: rgba(248, 250, 252, 0.9); padding: 14px; border-radius: 14px; border: 1.5px solid #cbd5e1;">
                 <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger:</h4>
                 <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
                 <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
@@ -405,9 +444,8 @@
         </div>
     </div>
 
-    <!-- MODERNISIERTES WAFFENBUCH & DOPPELTE QR-CODE ABSICHERUNG -->
+    <!-- WAFFENBUCH -->
     <div id="page-weapons" class="page-content">
-        <!-- QR-Scanner Karte (Entnahme) -->
         <div id="scanner-card-issue" class="glass-card glass-card-red" style="border-left-color: #2563eb !important; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(239,246,255,0.95));">
             <div class="card-title" style="color: #2563eb;">📷 Tresor QR-Code Scanner (Entnahme)</div>
             <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 12px;">
@@ -418,7 +456,6 @@
             <button id="stop-scanner-btn" onclick="stopQrScanner()" class="btn btn-danger btn-block" style="display: none; margin-top: 8px;">Scanner stoppen</button>
         </div>
 
-        <!-- Modernes Entnahmeformular (Zunächst gesperrt) -->
         <div id="weapon-form-card" class="glass-card glass-card-red" style="border-left-color: #b91c1c !important; opacity: 0.5; pointer-events: none; transition: all 0.3s;">
             <div class="card-title" style="color: #b91c1c; font-size: 1.2em;">
                 <span>🛡️ Digitales Waffenbuch (Salutwaffen Kat. C)</span>
@@ -482,7 +519,6 @@
             </form>
         </div>
 
-        <!-- Aktive Entnahmen & Rückgabe -->
         <div class="glass-card glass-card-blue" style="border-left-color: #2563eb !important;">
             <div class="card-title" style="color: #2563eb;">📋 Aktive Entnahmen & Rückgabe</div>
             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">
@@ -492,7 +528,7 @@
         </div>
     </div>
 
-    <!-- 6. ADMIN-BEREICH -->
+    <!-- ADMIN-BEREICH -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
             <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
@@ -515,7 +551,6 @@
         </div>
 
         <div class="admin-delete-btn">
-            <!-- ADMIN UNTER-TABS -->
             <div class="admin-nav-tabs">
                 <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">📦 1. Lager</button>
                 <button onclick="switchAdminTab('tab-newstermins')" class="admin-tab-btn" id="btn-tab-newstermins">📢 2. News</button>
@@ -525,7 +560,6 @@
                 <button onclick="switchAdminTab('tab-weapons-admin')" class="admin-tab-btn" id="btn-tab-weapons-admin">🔫 6. Waffen-PDFs</button>
             </div>
 
-            <!-- TAB 1: LAGERBESTAND -->
             <div id="tab-inventory" class="admin-tab-content active glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
                     <span>📦 1. Lagerbestand</span>
@@ -541,7 +575,6 @@
                 </div>
             </div>
 
-            <!-- TAB 2: NEWS & TERMINE -->
             <div id="tab-newstermins" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">📢 2. News, Foto & Texte / Termine</div>
                 
@@ -566,13 +599,17 @@
                 </div>
             </div>
 
-            <!-- TAB 3: RECHNUNGEN -->
             <div id="tab-invoices" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">💶 3. Rechnungen (PDF History)</div>
+                <div class="card-title" style="color: #dc2626;">💶 3. Rechnungen & Schankbuch-Auswertung</div>
+                <div style="background: rgba(255, 255, 255, 0.95); padding: 14px; border-radius: 14px; margin-bottom: 16px; border: 1px solid #fecaca;">
+                    <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 10px; text-align: center;">📊 Schankbuch Statistik (Verbrauch)</h4>
+                    <div style="position: relative; height: 220px; width: 100%;">
+                        <canvas id="drinksChart"></canvas>
+                    </div>
+                </div>
                 <div id="admin-tally-history-list"></div>
             </div>
 
-            <!-- TAB 4: MITGLIEDER -->
             <div id="tab-members" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">👥 4. Aktive und passive Mitglieder</div>
                 <h4 style="color: #2563eb; font-size: 0.9em; margin: 8px 0 4px 0;">Aktive Mitglieder</h4>
@@ -581,19 +618,23 @@
                 <div id="admin-passive-members-list"></div>
             </div>
 
-            <!-- TAB 5: SCHLÜSSELLISTE -->
             <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
-                    <span>🔑 5. Schlüsseliste</span> 
+                    <span>🔑 5. Schlüsselliste</span> 
                     <button class="btn btn-admin" style="padding: 8px 14px; font-size: 0.85em;" onclick="addKeyListItem()">➕ Person hinzufügen</button>
                 </div>
                 <div id="admin-keys-list"></div>
             </div>
 
-            <!-- TAB 6: WAFFEN-PDF ARCHIV -->
             <div id="tab-weapons-admin" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">🔫 6. Waffenbuch-Protokolle (PDF - Vollständig)</div>
+                <div class="card-title" style="color: #dc2626;">🔫 6. Waffenbuch-Protokolle & Statistik</div>
                 <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Hier sind alle Waffennummern für den Admin vollständig sichtbar:</p>
+                <div style="background: rgba(255, 255, 255, 0.95); padding: 14px; border-radius: 14px; margin-bottom: 16px; border: 1px solid #fecaca;">
+                    <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 10px; text-align: center;">🎯 Schießbuch & Waffen-Statistik</h4>
+                    <div style="position: relative; height: 200px; width: 100%;">
+                        <canvas id="weaponsChart"></canvas>
+                    </div>
+                </div>
                 <div id="admin-weapon-pdf-list"><p style="font-size: 0.85em; color: var(--text-muted);">Keine Protokolle vorhanden.</p></div>
             </div>
 
@@ -637,18 +678,14 @@
         </div>
     </div>
 
-    <!-- ADMIN FALSCH-PASSWORT POP-UP (MAXIMAL GROSSES, BÖSES MASKOTTCHEN) -->
+    <!-- ADMIN FALSCH-PASSWORT POP-UP -->
     <div id="admin-error-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.65); backdrop-filter:blur(6px); z-index:99999999; justify-content:center; align-items:center; padding:16px;">
         <div style="background:#ffffff; padding:55px 24px 24px 24px; border-radius:24px; max-width:400px; width:100%; text-align:center; box-shadow:0 25px 50px -12px rgba(0,0,0,0.35); border:3px solid #b91c1c; position:relative;" class="modal-anim">
-            
-            <!-- Extra großes, böses Maskottchen mit Sprechblase im Fehler-Modal (auf .jpg aktualisiert) -->
             <div style="position:absolute; top:-120px; left:50%; transform:translateX(-50%); display:flex; align-items:flex-end; gap:8px;">
-                <!-- Sprechblase -->
                 <div style="background: white; border: 2px solid #b91c1c; padding: 12px 16px; border-radius: 16px; width: 230px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-family: sans-serif; font-size: 13px; font-weight: bold; color: #1e293b; position: relative; text-align: left; line-height: 1.3;">
                     Kein Ausweis, kein Einlass! Abmarsch in die Kantine zum Nachdenken.
                     <div style="position: absolute; right: -8px; bottom: 10px; width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-left: 8px solid #b91c1c;"></div>
                 </div>
-                <!-- Maximal großes böses Maskottchen Bild (160px) -->
                 <div style="width: 160px; height: 160px; border-radius: 50%; border: 4px solid #ffffff; box-shadow: 0 14px 30px -4px rgba(0,0,0,0.45); overflow: hidden; background: #222; flex-shrink: 0;">
                     <img src="maskottchen-boese.jpg" alt="Maskottchen böse" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'160\'><circle cx=\'80\' cy=\'80\' r=\'80\' fill=\'%237f1d1d\'/><text x=\'80\' y=\'85\' font-size=\'14\' fill=\'white\' text-anchor=\'middle\' font-weight=\'bold\'>Böse</text></svg>';">
                 </div>
@@ -677,89 +714,135 @@
         </div>
     </div>
 
-    <!-- ================= MASKOTTCHEN FÜR NEWS (IM KREIS, FREUNDLICH, MAXIMAL GROSS) ================= -->
-    <div id="news-mascot-container" style="position: fixed; bottom: 25px; right: 20px; z-index: 9999; display: flex; align-items: flex-end; gap: 10px; cursor: pointer; transition: transform 0.2s ease;">
-        <!-- Sprechblase mit Begrüßung -->
-        <div id="news-mascot-speech" style="background: white; border: 2px solid #b91c1c; padding: 14px 18px; border-radius: 16px; max-width: 270px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-family: sans-serif; font-size: 14px; font-weight: bold; color: #1e293b; position: relative; display: none; line-height: 1.4;">
+    <!-- MASKOTTCHEN FÜR NEWS (MIT KORRIGIERTEM DATEIPFAD maskottchen.png) -->
+    <div id="news-mascot-container" onclick="triggerMascotWaveAndHide()" style="position: fixed; bottom: 90px; right: 15px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; transition: opacity 0.5s ease; cursor: pointer;" title="Tippen zum Ausblenden">
+        <div id="news-mascot-speech" style="background: white; border: 2px solid #b91c1c; padding: 12px 16px; border-radius: 16px; max-width: 260px; box-shadow: 0 4px 15px rgba(0,0,0,0.25); font-family: sans-serif; font-size: 13px; font-weight: bold; color: #1e293b; position: relative; line-height: 1.4;">
             Servus beinand! Schön, dass ihr als Mitglieder in unserer Vereins-App vorbeischaut.
-            <!-- Sprechblasen-Zipfel -->
-            <div style="position: absolute; right: -8px; bottom: 12px; width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-left: 8px solid #b91c1c;"></div>
+            <div style="position: absolute; right: 25px; bottom: -8px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #b91c1c;"></div>
         </div>
         
-        <!-- Freundliches Maskottchen im Kreis (Maximal groß: 150px, auf .jpg aktualisiert) -->
-        <div style="width: 150px; height: 150px; border-radius: 50%; border: 4px solid #b91c1c; background: #222; box-shadow: 0 6px 20px rgba(0,0,0,0.35); overflow: hidden; flex-shrink: 0;" id="news-mascot-wrapper">
-            <img id="news-mascot-img" src="maskottchen.jpg" alt="Maskottchen freundlich" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.1s ease;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'150\'><circle cx=\'75\' cy=\'75\' r=\'75\' fill=\'%232c3e50\'/><text x=\'75\' y=\'80\' font-size=\'14\' fill=\'white\' text-anchor=\'middle\'>Freundlich</text></svg>';">
+        <div class="mascot-strolling" style="width: 130px; height: 130px; border-radius: 50%; border: 4px solid #b91c1c; background: #7f1d1d; box-shadow: 0 6px 20px rgba(0,0,0,0.35); overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center;" id="news-mascot-wrapper">
+            <!-- Korrigierter Dateipfad maskottchen.png mit edlem SVG-Fallback -->
+            <img id="news-mascot-img" src="maskottchen.png" alt="Maskottchen" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'48\' fill=\'%237f1d1d\' stroke=\'%23facc15\' stroke-width=\'3\'/><path d=\'M50 20 L75 45 L65 75 L35 75 L25 45 Z\' fill=\'%23b91c1c\' stroke=\'%23facc15\' stroke-width=\'2\'/><text x=\'50\' y=\'55\' fill=\'%23ffffff\' font-size=\'14\' font-weight=\'bold\' text-anchor=\'middle\'>KB & SV</text></svg>';">
         </div>
     </div>
 
-    <!-- FUSSZEILE (VIOLETT) -->
+    <!-- FUSSZEILE MIT PLASTISCHEN 3D-SVG-ICONS -->
     <nav class="bottom-nav">
-        <a onclick="switchTab('news')" class="nav-item active" id="nav-news"><span class="nav-icon">📢</span><span>News</span></a>
-        <a onclick="switchTab('events')" class="nav-item" id="nav-events"><span class="nav-icon">📅</span><span>Termine</span></a>
-        <a onclick="switchTab('drinks')" class="nav-item" id="nav-drinks"><span class="nav-icon">🍻</span><span>Schankbuch</span></a>
-        <a onclick="switchTab('weapons')" class="nav-item" id="nav-weapons"><span class="nav-icon">🔫</span><span>Waffenbuch</span></a>
-        <a onclick="switchTab('card')" class="nav-item" id="nav-card"><span class="nav-icon">🔒</span><span>Admin</span></a>
+        <a onclick="switchTab('news')" class="nav-item active" id="nav-news">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="grad-news" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#f87171" />
+                            <stop offset="100%" stop-color="#b91c1c" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="url(#grad-news)" opacity="0.25"/>
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    <line x1="9" y1="9" x2="15" y2="9"></line>
+                    <line x1="9" y1="13" x2="13" y2="13"></line>
+                </svg>
+            </span>
+            <span>News</span>
+        </a>
+        <a onclick="switchTab('events')" class="nav-item" id="nav-events">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="grad-events" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#60a5fa" />
+                            <stop offset="100%" stop-color="#2563eb" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" fill="url(#grad-events)" opacity="0.25"></rect>
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+            </span>
+            <span>Termine</span>
+        </a>
+        <a onclick="switchTab('drinks')" class="nav-item" id="nav-drinks">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="grad-drinks" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#d97706" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M17 11h1a3 3 0 0 1 0 6h-1" fill="url(#grad-drinks)" opacity="0.25"></path>
+                    <path d="M17 11h1a3 3 0 0 1 0 6h-1"></path><path d="M9 12v6"></path><path d="M13 12v6"></path>
+                    <path d="M14 7.5c0-1.5 1-2.5 2.5-2.5s2.5 1 2.5 2.5V19H5V7.5C5 6 6 5 7.5 5S10 6 11 7.5" fill="url(#grad-drinks)" opacity="0.25"></path>
+                    <path d="M14 7.5c0-1.5 1-2.5 2.5-2.5s2.5 1 2.5 2.5V19H5V7.5C5 6 6 5 7.5 5S10 6 11 7.5"></path>
+                </svg>
+            </span>
+            <span>Schankbuch</span>
+        </a>
+        <a onclick="switchTab('weapons')" class="nav-item" id="nav-weapons">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="grad-weapons" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#f87171" />
+                            <stop offset="100%" stop-color="#991b1b" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M6 11h12M6 15h12M4 9l16-3M4 17l16 3" fill="url(#grad-weapons)" opacity="0.25"></path>
+                    <path d="M6 11h12M6 15h12M4 9l16-3M4 17l16 3"></path>
+                </svg>
+            </span>
+            <span>Waffenbuch</span>
+        </a>
+        <a onclick="switchTab('card')" class="nav-item" id="nav-card">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="grad-card" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a78bfa" />
+                            <stop offset="100%" stop-color="#6d28d9" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" fill="url(#grad-card)" opacity="0.25"></rect>
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+            </span>
+            <span>Admin</span>
+        </a>
     </nav>
 
     <!-- JAVASCRIPT LOGIK -->
     <script>
-        // News-Maskottchen Interaktion & Animationen
-        const newsMascotContainer = document.getElementById('news-mascot-container');
-        const newsMascotSpeech = document.getElementById('news-mascot-speech');
-        const newsMascotWrapper = document.getElementById('news-mascot-wrapper');
-
-        // Begrüßungsblase nach 1 Sekunde kurz anzeigen, wenn man auf News ist
-        setTimeout(() => {
-            const activePage = document.getElementById('page-news');
-            if (activePage && activePage.classList.contains('active')) {
-                newsMascotSpeech.style.display = 'block';
-                setTimeout(() => { newsMascotSpeech.style.display = 'none'; }, 5000);
+        function triggerMascotWaveAndHide() {
+            const mascotWrapper = document.getElementById('news-mascot-wrapper');
+            if (mascotWrapper) {
+                mascotWrapper.classList.add('maskottchen-winkt');
+                setTimeout(() => {
+                    const mascotContainer = document.getElementById('news-mascot-container');
+                    if (mascotContainer) {
+                        mascotContainer.style.opacity = '0';
+                        setTimeout(() => { mascotContainer.style.display = 'none'; }, 500);
+                    }
+                }, 1000);
             }
-        }, 1000);
+        }
 
-        newsMascotContainer.addEventListener('click', () => {
-            newsMascotWrapper.style.transform = 'scale(0.85) rotate(-15deg)';
-            setTimeout(() => {
-                newsMascotWrapper.style.transform = 'scale(1) rotate(0deg)';
-            }, 150);
-
-            if (newsMascotSpeech.style.display === 'none') {
-                newsMascotSpeech.style.display = 'block';
-            } else {
-                newsMascotSpeech.style.display = 'none';
+        window.addEventListener('DOMContentLoaded', () => {
+            const mascotContainer = document.getElementById('news-mascot-container');
+            const mascotWrapper = document.getElementById('news-mascot-wrapper');
+            if (mascotContainer && mascotWrapper) {
+                mascotWrapper.classList.add('maskottchen-winkt');
+                setTimeout(() => {
+                    if (mascotContainer.style.opacity !== '0') {
+                        mascotContainer.style.opacity = '0';
+                        setTimeout(() => { mascotContainer.style.display = 'none'; }, 500);
+                    }
+                }, 5000);
             }
         });
-
-        // CSS für Marschier-Animation dynamisch einfügen
-        const styleSheet = document.createElement("style");
-        styleSheet.type = "text/css";
-        styleSheet.innerHTML = `
-        @keyframes marchAcross {
-            0% { transform: translateX(100vw) scaleX(-1); }
-            30% { transform: translateX(0) scaleX(-1); }
-            70% { transform: translateX(0) scaleX(-1); }
-            100% { transform: translateX(100vw) scaleX(-1); }
-        }
-        .marschiert {
-            animation: marchAcross 8s ease-in-out forwards;
-        }
-        `;
-        document.head.appendChild(styleSheet);
-
-        // Regelmäßiger Streifendienst / Marschieren durchs Bild bei News
-        setInterval(() => {
-            const activePage = document.getElementById('page-news');
-            if (activePage && activePage.classList.contains('active')) {
-                newsMascotContainer.classList.add('marschiert');
-                newsMascotSpeech.style.display = 'block';
-                newsMascotSpeech.innerText = "Servus! Streifendienst aktiv – alles bestens im Schützenhaus!";
-                setTimeout(() => {
-                    newsMascotContainer.classList.remove('marschiert');
-                    newsMascotSpeech.style.display = 'none';
-                    newsMascotSpeech.innerText = "Servus beinand! Schön, dass ihr als Mitglieder in unserer Vereins-App vorbeischaut.";
-                }, 8000);
-            }
-        }, 45000);
 
         function showCustomConfirm(titleText, messageText, onConfirm) {
             const modal = document.getElementById('customConfirm');
@@ -793,7 +876,6 @@
             document.getElementById('admin-error-modal').style.display = 'none';
         }
 
-        // --- AUTOMATISCHE ABMELDUNG BEI INAKTIVITÄT (5 MINUTEN) ---
         let inactivityTimer = null;
         const INACTIVITY_LIMIT = 5 * 60 * 1000;
 
@@ -822,10 +904,20 @@
             if(targetNav) targetNav.classList.add('active');
             window.scrollTo(0, 0);
 
-            // Maskottchen auf News-Seite einblenden, auf anderen Seiten ausblenden
             const newsMascot = document.getElementById('news-mascot-container');
+            const mascotWrapper = document.getElementById('news-mascot-wrapper');
             if (newsMascot) {
-                newsMascot.style.display = (tabId === 'news') ? 'flex' : 'none';
+                if (tabId === 'news') {
+                    newsMascot.style.display = 'flex';
+                    newsMascot.style.opacity = '1';
+                    if (mascotWrapper) {
+                        mascotWrapper.classList.remove('maskottchen-winkt');
+                        void mascotWrapper.offsetWidth;
+                        mascotWrapper.classList.add('maskottchen-winkt');
+                    }
+                } else {
+                    newsMascot.style.display = 'none';
+                }
             }
         }
 
@@ -836,6 +928,12 @@
             const targetBtn = document.getElementById('btn-' + tabContentId);
             if(targetTab) targetTab.classList.add('active');
             if(targetBtn) targetBtn.classList.add('active');
+            
+            if (tabContentId === 'tab-invoices') {
+                setTimeout(updateDrinksChart, 200);
+            } else if (tabContentId === 'tab-weapons-admin') {
+                setTimeout(updateWeaponsChart, 200);
+            }
         }
 
         const officialActiveMembers = [
@@ -893,6 +991,97 @@
         let html5QrCode = null;
         let currentScanMode = 'issue';
         let pendingReturnRecordId = null;
+
+        let drinksChartInstance = null;
+        let weaponsChartInstance = null;
+
+        function updateDrinksChart() {
+            const ctx = document.getElementById('drinksChart');
+            if (!ctx) return;
+
+            let categoryTotals = { "Speisen": 0, "Bier & Radler": 0, "Alkoholfrei": 0, "Wein & Schnaps": 0, "Heißgetränke": 0, "Luftgewehr": 0 };
+
+            for (let id in window.invoicesMap) {
+                const inv = window.invoicesMap[id];
+                if (inv && inv.items) {
+                    inv.items.forEach(item => {
+                        let name = item.name.toLowerCase();
+                        let count = item.count || 0;
+                        if (name.includes('wuerste') || name.includes('wienerle')) categoryTotals["Speisen"] += count;
+                        else if (name.includes('bier') || name.includes('radler')) categoryTotals["Bier & Radler"] += count;
+                        else if (name.includes('limo') || name.includes('mineral')) categoryTotals["Alkoholfrei"] += count;
+                        else if (name.includes('wein') || name.includes('schnaps')) categoryTotals["Wein & Schnaps"] += count;
+                        else if (name.includes('kaffee') || name.includes('tee')) categoryTotals["Heißgetränke"] += count;
+                        else if (name.includes('luftgewehr')) categoryTotals["Luftgewehr"] += count;
+                    });
+                }
+            }
+
+            const dataValues = Object.values(categoryTotals);
+
+            if (drinksChartInstance) {
+                drinksChartInstance.data.datasets[0].data = dataValues;
+                drinksChartInstance.update();
+                return;
+            }
+
+            drinksChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(categoryTotals),
+                    datasets: [{
+                        label: 'Verkaufte Einheiten',
+                        data: dataValues,
+                        backgroundColor: ['#b91c1c', '#2563eb', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'],
+                        borderWidth: 1,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                }
+            });
+        }
+
+        function updateWeaponsChart() {
+            const ctx = document.getElementById('weaponsChart');
+            if (!ctx) return;
+
+            let activeCount = 0;
+            let returnedCount = 0;
+
+            for (let id in window.weaponPdfMap) {
+                const w = window.weaponPdfMap[id];
+                if (w.status === "Zurückgebracht") returnedCount++;
+                else activeCount++;
+            }
+
+            if (weaponsChartInstance) {
+                weaponsChartInstance.data.datasets[0].data = [activeCount, returnedCount];
+                weaponsChartInstance.update();
+                return;
+            }
+
+            weaponsChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Aktive Entnahmen (Offen)', 'Zurückgebracht'],
+                    datasets: [{
+                        data: [activeCount, returnedCount],
+                        backgroundColor: ['#b91c1c', '#10b981'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
+                }
+            });
+        }
 
         function startQrScanner(mode, recordId = null) {
             currentScanMode = mode;
@@ -1190,16 +1379,23 @@
                 const today = new Date();
                 today.setHours(0,0,0,0);
 
-                let nextIndex = 0;
-                for (let i = 0; i < masterDutyRoster.length; i++) {
-                    const dDate = parseLocalDate(masterDutyRoster[i].dateStr);
-                    if (dDate >= today) {
-                        nextIndex = i;
-                        break;
-                    }
-                }
+                let futureList = [];
+                let pastList = [];
 
-                const nextDienst = masterDutyRoster[nextIndex] || masterDutyRoster[0];
+                masterDutyRoster.forEach(d => {
+                    const dDate = parseLocalDate(d.dateStr);
+                    dDate.setHours(0,0,0,0);
+                    if (dDate >= today) {
+                        futureList.push(d);
+                    } else {
+                        pastList.push(d);
+                    }
+                });
+
+                futureList.sort((a, b) => parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr));
+                pastList.sort((a, b) => parseLocalDate(b.dateStr) - parseLocalDate(a.dateStr));
+
+                const nextDienst = futureList[0] || masterDutyRoster[0];
                 const nextWidget = document.getElementById('next-duty-widget');
                 if (nextWidget) {
                     nextWidget.innerHTML = `
@@ -1212,22 +1408,40 @@
                 const fullList = document.getElementById('full-roster-list');
                 if (fullList) {
                     let html = "";
-                    masterDutyRoster.forEach((d, idx) => {
-                        let isNext = (idx === nextIndex);
+                    futureList.forEach((d, idx) => {
+                        let isNext = (idx === 0);
                         let isClosed = d.status === 'closed';
                         let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
+                        let pillBg = isNext ? 'linear-gradient(135deg, #22c55e, #15803d)' : (isClosed ? 'linear-gradient(135deg, #64748b, #475569)' : 'linear-gradient(135deg, #3b82f6, #1d4ed8)');
                         
                         html += `
                             <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="font-size: 0.9em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.65em; background:#22c55e; color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
-                                    <span style="background: ${borderCol}; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.65em;">${d.team}</span>
+                                    <div style="font-size: 0.9em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:6px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
+                                    <span style="background: ${pillBg}; color: white; padding: 4px 10px; border-radius: 999px; font-weight: 700; font-size: 0.65em; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">${d.team}</span>
                                 </div>
                                 <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
                             </div>
                         `;
                     });
                     fullList.innerHTML = html;
+                }
+
+                const archiveList = document.getElementById('archive-roster-list');
+                if (archiveList) {
+                    let archHtml = "";
+                    pastList.forEach(d => {
+                        archHtml += `
+                            <div class="dark-event-item" style="border-left-color: #94a3b8; opacity: 0.85; margin-bottom: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 0.85em; font-weight: 700; color: #475569;">${d.dateStr}</div>
+                                    <span style="background: linear-gradient(135deg, #94a3b8, #64748b); color: white; padding: 4px 10px; border-radius: 999px; font-weight: 700; font-size: 0.6em;">${d.team}</span>
+                                </div>
+                                <div style="font-size: 0.7em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
+                            </div>
+                        `;
+                    });
+                    archiveList.innerHTML = archHtml || '<p style="font-size: 0.8em; color: var(--text-muted);">Keine vergangenen Dienste im Archiv.</p>';
                 }
             } catch(e) {}
         }
@@ -1275,7 +1489,7 @@
                         <div class="dark-event-item ${isNextTermin ? 'next-duty-neon' : ''}" style="padding: 16px; ${isNextTermin ? 'margin-bottom: 16px;' : ''}">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                 <div style="font-size: ${isNextTermin ? '1.25em' : '1.1em'}; font-weight: 900; color: #0f172a;">📌 ${ev.title}</div>
-                                ${isNextTermin ? '<span style="font-size: 0.75em; background: #22c55e; color: #fff; font-weight: 800; padding: 4px 10px; border-radius: 8px;">NÄCHSTER TERMIN</span>' : ''}
+                                ${isNextTermin ? '<span style="font-size: 0.75em; background: #15803d; color: #fff; font-weight: 800; padding: 4px 10px; border-radius: 8px;">NÄCHSTER TERMIN</span>' : ''}
                             </div>
                             <div style="font-size: ${isNextTermin ? '1em' : '0.9em'}; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || ''}</div>
                             <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600; margin-bottom: 10px;">📍 Ort / Details: ${ev.desc || 'Schützenhaus Partenen'}</div>
@@ -1638,6 +1852,7 @@
 
                 if (snapshot.empty) {
                     container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Protokolle im Admin-Archiv.</p>';
+                    updateWeaponsChart();
                     return;
                 }
 
@@ -1665,6 +1880,7 @@
                     `;
                 });
                 container.innerHTML = html;
+                updateWeaponsChart();
             } catch(e) {}
         }
 
@@ -1781,6 +1997,7 @@
                 
                 if (snapshot.empty) {
                     container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85em; text-align:center; padding:10px;">Keine Rechnungen in der Datenbank gefunden.</p>';
+                    updateDrinksChart();
                     return;
                 }
 
@@ -1810,6 +2027,7 @@
                     `;
                 });
                 container.innerHTML = html;
+                updateDrinksChart();
             } catch (e) {}
         }
 
