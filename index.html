@@ -1100,21 +1100,21 @@
             pdf.save(`Vollstaendiges_Waffenverzeichnis_${dateStr.replace(/\./g, '-')}.pdf`);
         }
 
-        // --- STANDARD DIENSTPLAN (DEFAULT) ---
+        // --- EXAKTER DIENSTPLAN AUS PDF (SAISON 2026/2027) ---
         const defaultDutyRoster = [
             { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
             { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
+            { dateStr: "06.11.2026", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
             { dateStr: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
             { dateStr: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
             { dateStr: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
+            { dateStr: "01.01.2027", team: "Geschlossen", names: "Geschlossen (Neujahr)", status: "closed" },
             { dateStr: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
             { dateStr: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
             { dateStr: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
             { dateStr: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
             { dateStr: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
+            { dateStr: "26.03.2027", team: "Geschlossen", names: "Geschlossen (Karfreitag)", status: "closed" },
             { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
         ];
 
@@ -1189,6 +1189,9 @@
 
                 globalDutyList = (dutyList.length > 0) ? dutyList : defaultDutyPlanWithIds();
                 renderDutyPlanViews(globalDutyList, dutyList.length > 0);
+            }, (error) => {
+                globalDutyList = defaultDutyPlanWithIds();
+                renderDutyPlanViews(globalDutyList, false);
             });
         }
 
@@ -1312,6 +1315,10 @@
         function defaultDutyPlanWithIds() {
             return defaultDutyRoster.map((item, index) => ({ id: "default-" + index, ...item }));
         }
+
+        let html5QrCode = null;
+        let currentScanMode = 'issue';
+        let pendingReturnRecordId = null;
 
         // --- WAFFENBUCH / QR SCANNER ---
         function startQrScanner(mode, recordId = null) {
@@ -1997,6 +2004,122 @@
                 loadNews();
             } catch (err) {}
         }
+
+        async function loadNews() {
+            const container = document.getElementById('news-container');
+            if (!container) return;
+            try {
+                const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
+                let html = "";
+                if (snapshot.empty) {
+                    container.innerHTML = "";
+                    return;
+                }
+                snapshot.forEach(doc => {
+                    const n = doc.data();
+                    html += `
+                        <div class="glass-card">
+                            <div class="card-title"><span>📢 ${n.title}</span></div>
+                            <p style="font-size: 0.9em; line-height: 1.4; margin-bottom: 8px;">${n.text}</p>
+                            ${n.imageUrl ? `<img src="${n.imageUrl}" style="width:100%; border-radius:12px; margin-top:8px;" alt="News Bild">` : ''}
+                            ${document.body.classList.contains('admin-mode') ? `<button class="btn btn-danger" style="margin-top:10px; padding:6px 12px; font-size:0.8em;" onclick="deleteItem('news', '${doc.id}')">Löschen</button>` : ''}
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch(e) {}
+        }
+
+        async function addEvent(e) {
+            e.preventDefault();
+            const title = document.getElementById('new-event-title').value;
+            const date = document.getElementById('new-event-date').value;
+            const desc = document.getElementById('new-event-desc').value;
+            try {
+                await db.collection("events").add({ title, date, desc, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                alert("Termin gespeichert!");
+                document.getElementById('new-event-title').value = '';
+                document.getElementById('new-event-date').value = '';
+                document.getElementById('new-event-desc').value = '';
+                loadEvents();
+            } catch(e){}
+        }
+
+        async function loadEvents() {
+            const container = document.getElementById('events-container');
+            const adminContainer = document.getElementById('admin-events-list');
+            if (!container) return;
+            try {
+                const snapshot = await db.collection("events").orderBy("createdAt", "desc").get();
+                let html = "";
+                let adminHtml = "";
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="font-size: 0.85em; color: var(--text-muted);">Keine Termine eingetragen.</p>';
+                    if(adminContainer) adminContainer.innerHTML = '';
+                    return;
+                }
+                snapshot.forEach(doc => {
+                    const ev = doc.data();
+                    html += `
+                        <div class="dark-event-item">
+                            <div style="font-size: 0.9em; font-weight: 800; color: #2563eb;">📅 ${ev.date}</div>
+                            <div style="font-size: 1.1em; font-weight: 800; margin: 4px 0;">${ev.title}</div>
+                            <div style="font-size: 0.85em; color: var(--text-muted);">${ev.desc || ''}</div>
+                        </div>
+                    `;
+                    adminHtml += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #fee2e2; font-size:0.85em;">
+                            <span><strong>${ev.date}</strong> - ${ev.title}</span>
+                            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75em;" onclick="deleteItem('events', '${doc.id}')">🗑️</button>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                if(adminContainer) adminContainer.innerHTML = adminHtml;
+            } catch(e) {}
+        }
+
+        function loadKeyList() {
+            const container = document.getElementById('admin-keys-list');
+            if (!container) return;
+            let html = "";
+            exactPdfKeyList.forEach((k, idx) => {
+                if (k.header) {
+                    html += `<div style="font-weight:800; color:#b91c1c; font-size:0.9em; margin:12px 0 6px 0; border-bottom:1.5px solid #fecaca; padding-bottom:4px;">${k.header}</div>`;
+                } else {
+                    html += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; font-size:0.85em;">
+                            <div>
+                                <strong>${k.name}</strong><br>
+                                <span style="color:var(--text-muted); font-size:0.8em;">${k.addr} | Tel: ${k.tel || 'Keine'} | <em>${k.role}</em></span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        function addKeyListItem() {
+            alert("Schlüsselliste entspricht dem offiziellen PDF-Verzeichnis.");
+        }
+
+        let exactPdfKeyList = [
+            { header: "Mitglieder (Eingang & Büro)" },
+            { name: "Kofler Konrad", dob: "27.02.1960", addr: "Gaschurn 164d", tel: "0664 4331385", role: "Eingang & Büro" },
+            { name: "Wachter Manfred", dob: "23.06.1963", addr: "Gaschurn 164e", tel: "0664 4752129", role: "Waffenschrank" },
+            { name: "Wachter Werner", dob: "26.05.1966", addr: "Gaschurn 153", tel: "0664 2804791", role: "Eingang & Büro" },
+            { name: "Schweighofer Dietmar", dob: "28.03.1972", addr: "Gaschurn 160", tel: "0664 19281005", role: "Eingang & Büro" },
+            { name: "Schweighofer Simon", dob: "17.09.1997", addr: "Gaschurn 160", tel: "0650 3049466", role: "Waffenschrank" },
+            { name: "Spettel Norbert", dob: "14.01.1958", addr: "Gaschurn 11e", tel: "0664 5367206", role: "Waffenschrank" },
+            { name: "Stocker Heimo", dob: "23.01.1983", addr: "Gortipohl 59", tel: "0664 42144179", role: "Waffenschrank" },
+            { name: "Wittwer Christoph", dob: "17.11.1965", addr: "Gaschurn 71", tel: "0664 8258518", role: "Eingang & Büro" },
+            { name: "Wittwer Werner", dob: "08.02.1974", addr: "Gaschurn 60", tel: "0650 2501910", role: "Eingang & Büro" },
+            { name: "Mattle Werner", dob: "28.03.1979", addr: "Partenen 43b", tel: "0664 2520974", role: "Eingang & Büro" },
+            { name: "Markus Netzer", dob: "10.05.1983", addr: "Gaschurn 139a", tel: "0664 7605263", role: "Eingang & Büro" },
+            { name: "Werner Netzer", dob: "15.09.1956", addr: "Gaschurn 35a", tel: "", role: "Eingang & Büro" },
+            { name: "Pascal Tripolt", dob: "01.05.1984", addr: "Gaschurn 162", tel: "0664 5162082", role: "Eingang & Büro" }
+        ];
 
         function loadPublicMembersList() {
             const container = document.getElementById('public-members-list');
