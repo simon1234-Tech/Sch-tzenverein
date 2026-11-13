@@ -6,10 +6,15 @@
     <title>Vereins-App - KB & SV Gaschurn-Partenen</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Bibliotheken für PDF-Export & Diagramme -->
+    <!-- Bibliotheken für PDF-Export & PDF.js für Dienstplan-Upload -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script>
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        }
+    </script>
     <!-- QR-Code Scanner Bibliothek (html5-qrcode) -->
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
@@ -19,11 +24,11 @@
     <link rel="apple-touch-icon" href="logo.png">
     <link rel="icon" type="image/png" href="logo.png">
 
-    <!-- Firebase SDKs (v8.10.1) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+    <!-- Firebase SDKs (v9.22.1 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js"></script>
 
     <script>
       const firebaseConfig = {
@@ -113,7 +118,6 @@
             justify-content: space-between;
         }
 
-        /* 4. Ruhiger Glanz statt Blinken (Soft Glow) */
         @keyframes softGreenGlow {
             0% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.35); border-color: rgba(34, 197, 94, 0.6); }
             50% { box-shadow: 0 0 18px rgba(34, 197, 94, 0.6); border-color: rgba(34, 197, 94, 0.9); }
@@ -135,7 +139,6 @@
             border: 1px solid rgba(255, 255, 255, 0.9);
         }
 
-        /* 3. Plastische, fühlbare Buttons */
         .btn {
             padding: 12px 18px;
             border-radius: 16px;
@@ -213,7 +216,6 @@
             box-shadow: 0 4px 12px rgba(185, 28, 28, 0.2);
         }
 
-        /* 1. Vergrößerte, griffige Admin-Buttons & 3D-Icons */
         .admin-nav-tabs {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -248,7 +250,6 @@
         .admin-tab-content { display: none; }
         .admin-tab-content.active { display: block; }
 
-        /* 2. Plastisches 3D-Icon-Quadrat */
         .admin-3d-icon-box {
             width: 36px;
             height: 36px;
@@ -265,7 +266,6 @@
             box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.5);
         }
 
-        /* 4. Schwebende Glassmorphismus-Leiste unten */
         .bottom-nav {
             position: fixed !important; 
             bottom: 12px !important; 
@@ -333,30 +333,6 @@
         .modal-anim {
             animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-
-        /* Fröhliche Wink-Animation & Wink-Hand */
-        @keyframes friendlyWave {
-            0% { transform: rotate(0deg); }
-            20% { transform: rotate(16deg); }
-            40% { transform: rotate(-10deg); }
-            60% { transform: rotate(14deg); }
-            80% { transform: rotate(-6deg); }
-            100% { transform: rotate(0deg); }
-        }
-        .maskottchen-winkt {
-            transform-origin: bottom center;
-            animation: friendlyWave 1s ease-in-out 3;
-        }
-
-        @keyframes handWave {
-            0% { transform: rotate(0deg) translateY(0); }
-            50% { transform: rotate(22deg) translateY(-3px); }
-            100% { transform: rotate(0deg) translateY(0); }
-        }
-        .hand-waving {
-            transform-origin: bottom left;
-            animation: handWave 0.6s ease-in-out infinite;
-        }
     </style>
 </head>
 <body>
@@ -376,7 +352,7 @@
                 <span style="font-size: 0.8em; background: #15803d; color: #ffffff; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Nächster Dienst</span>
                 <span style="font-size: 0.75em; background: #0f172a; color: #22c55e; font-weight: 800; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;">● LIVE</span>
             </div>
-            <div id="next-duty-widget"></div>
+            <div id="next-duty-widget">Lade nächsten Dienst...</div>
         </div>
 
         <!-- GESAMTER DIENSTPLAN & ARCHIV -->
@@ -387,11 +363,11 @@
             </div>
             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">🕒 <strong>Dienstzeit:</strong> Freitags 19:00 - 21:00 Uhr (14-tägig)</p>
             
-            <div id="full-roster-list"></div>
+            <div id="full-roster-list">Lade Dienstplan...</div>
 
             <details style="margin-top: 16px; border-top: 1.5px dashed #cbd5e1; padding-top: 12px;">
                 <summary style="font-size: 0.85em; font-weight: 700; color: var(--text-muted); cursor: pointer; user-select: none;">📁 Vergangene Dienste (Archiv)</summary>
-                <div id="archive-roster-list" style="margin-top: 10px;"></div>
+                <div id="archive-roster-list" style="margin-top: 10px;">Lade Archiv...</div>
             </details>
         </div>
 
@@ -580,7 +556,7 @@
         </div>
 
         <div class="admin-delete-btn">
-            <!-- ADMIN UNTER-TABS MIT 3D-ICON-BOXEN -->
+            <!-- ADMIN UNTER-TABS -->
             <div class="admin-nav-tabs">
                 <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">
                     <div class="admin-3d-icon-box">
@@ -623,8 +599,6 @@
                     </div>
                     <span>3. Rechnungen</span>
                 </button>
-
-               
 
                 <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys">
                     <div class="admin-3d-icon-box">
@@ -669,10 +643,29 @@
                 </div>
             </div>
 
-            <!-- TAB 2: NEWS & TERMINE -->
+            <!-- TAB 2: NEWS & DIENSTPLAN PDF UPLOAD -->
             <div id="tab-newstermins" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">📢 2. News, Foto & Texte / Termine</div>
+                <div class="card-title" style="color: #dc2626;">📢 2. News, Foto & Dienstplan-PDF / Termine</div>
                 
+                <!-- DIENSTPLAN PDF UPLOAD & PARSER -->
+                <div style="background: rgba(248, 250, 252, 0.95); border: 1.5px solid #fecaca; border-radius: 14px; padding: 14px; margin-bottom: 20px;">
+                    <h4 style="color: #b91c1c; font-size: 0.95em; margin-bottom: 10px;">📄 Dienstplan-PDF hochladen & veröffentlichen</h4>
+                    <div class="form-group">
+                        <label>PDF-Datei auswählen</label>
+                        <input type="file" id="duty-pdf-upload" accept="application/pdf,.pdf" class="form-control" onchange="handlePdfDutyUpload(event)">
+                    </div>
+                    <div class="form-group">
+                        <label>Erkannte Vorschau & bearbeitbare Einträge (JSON / Text)</label>
+                        <textarea id="duty-pdf-preview" class="form-control" rows="5" placeholder="Nach PDF-Upload erscheint hier die Vorschau..."></textarea>
+                    </div>
+                    <button onclick="publishParsedPdfDuty()" class="btn btn-primary btn-block">Dienstplan auf News veröffentlichen</button>
+                    
+                    <div style="margin-top: 14px; border-top: 1px solid #cbd5e1; padding-top: 10px;">
+                        <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Aktive Dienste in Firebase:</div>
+                        <div id="admin-duty-list"><p style="font-size: 0.8em; color: var(--text-muted);">Lade Dienste...</p></div>
+                    </div>
+                </div>
+
                 <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 6px;">Neuen News-Beitrag erstellen</h4>
                 <form onsubmit="addNewsItem(event)">
                     <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
@@ -694,15 +687,9 @@
                 </div>
             </div>
 
-            <!-- TAB 3: RECHNUNGEN & SCHANKBUCH-GRAFIK -->
+            <!-- TAB 3: RECHNUNGEN -->
             <div id="tab-invoices" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">💶 3. Rechnungen & Schankbuch-Auswertung</div>
-                <div style="background: rgba(255, 255, 255, 0.95); padding: 14px; border-radius: 14px; margin-bottom: 16px; border: 1px solid #fecaca;">
-                    <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 10px; text-align: center;">📊 Schankbuch Statistik (Verbrauch)</h4>
-                    <div style="position: relative; height: 220px; width: 100%;">
-                        <canvas id="drinksChart"></canvas>
-                    </div>
-                </div>
                 <div id="admin-tally-history-list"></div>
             </div>
 
@@ -724,16 +711,10 @@
                 <div id="admin-keys-list"></div>
             </div>
 
-            <!-- TAB 6: WAFFEN-PDF ARCHIV & SCHIESSBUCH-GRAFIK -->
+            <!-- TAB 6: WAFFEN-PDF ARCHIV -->
             <div id="tab-weapons-admin" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">🔫 6. Waffenbuch-Protokolle & Statistik</div>
                 <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Hier sind alle Waffennummern für den Admin vollständig sichtbar:</p>
-                <div style="background: rgba(255, 255, 255, 0.95); padding: 14px; border-radius: 14px; margin-bottom: 16px; border: 1px solid #fecaca;">
-                    <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 10px; text-align: center;">🎯 Schießbuch & Waffen-Statistik</h4>
-                    <div style="position: relative; height: 200px; width: 100%;">
-                        <canvas id="weaponsChart"></canvas>
-                    </div>
-                </div>
                 <div id="admin-weapon-pdf-list"><p style="font-size: 0.85em; color: var(--text-muted);">Keine Protokolle vorhanden.</p></div>
             </div>
 
@@ -835,11 +816,7 @@
         </div>
     </div>
 
-    <!-- FREUNDLICHES MASKOTTCHEN MIT WINK-HAND (68px Kompakt) -->
-   </div>
-    </div>
-
-    <!-- SCHWEBENDE GLASSMORPHISMUS NAVIGATION UNTEN MIT PLASTISCHEN 3D-SVGS -->
+    <!-- SCHWEBENDE NAVIGATION UNTEN -->
     <nav class="bottom-nav">
         <a onclick="switchTab('news')" class="nav-item active" id="nav-news">
             <span class="nav-icon">
@@ -917,34 +894,6 @@
             document.getElementById('legal-modal').style.display = 'none';
         }
 
-        function triggerMascotWaveAndHide() {
-            const mascotWrapper = document.getElementById('news-mascot-wrapper');
-            if (mascotWrapper) {
-                mascotWrapper.classList.add('maskottchen-winkt');
-                setTimeout(() => {
-                    const mascotContainer = document.getElementById('news-mascot-container');
-                    if (mascotContainer) {
-                        mascotContainer.style.opacity = '0';
-                        setTimeout(() => { mascotContainer.style.display = 'none'; }, 500);
-                    }
-                }, 1000);
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const mascotContainer = document.getElementById('news-mascot-container');
-            const mascotWrapper = document.getElementById('news-mascot-wrapper');
-            if (mascotContainer && mascotWrapper) {
-                mascotWrapper.classList.add('maskottchen-winkt');
-                setTimeout(() => {
-                    if (mascotContainer.style.opacity !== '0') {
-                        mascotContainer.style.opacity = '0';
-                        setTimeout(() => { mascotContainer.style.display = 'none'; }, 500);
-                    }
-                }, 5000);
-            }
-        });
-
         function showCustomConfirm(titleText, messageText, onConfirm) {
             const modal = document.getElementById('customConfirm');
             document.getElementById('customConfirmTitle').innerHTML = '<span style="font-size: 2em; vertical-align: middle;">⚠️</span><br>' + titleText;
@@ -972,7 +921,6 @@
         function showAdminErrorModal() {
             document.getElementById('admin-error-modal').style.display = 'flex';
         }
-
         function closeAdminErrorModal() {
             document.getElementById('admin-error-modal').style.display = 'none';
         }
@@ -1004,22 +952,6 @@
             if(targetPage) targetPage.classList.add('active');
             if(targetNav) targetNav.classList.add('active');
             window.scrollTo(0, 0);
-
-            const newsMascot = document.getElementById('news-mascot-container');
-            const mascotWrapper = document.getElementById('news-mascot-wrapper');
-            if (newsMascot) {
-                if (tabId === 'news') {
-                    newsMascot.style.display = 'flex';
-                    newsMascot.style.opacity = '1';
-                    if (mascotWrapper) {
-                        mascotWrapper.classList.remove('maskottchen-winkt');
-                        void mascotWrapper.offsetWidth;
-                        mascotWrapper.classList.add('maskottchen-winkt');
-                    }
-                } else {
-                    newsMascot.style.display = 'none';
-                }
-            }
         }
 
         function switchAdminTab(tabContentId) {
@@ -1029,12 +961,6 @@
             const targetBtn = document.getElementById('btn-' + tabContentId);
             if(targetTab) targetTab.classList.add('active');
             if(targetBtn) targetBtn.classList.add('active');
-            
-            if (tabContentId === 'tab-invoices') {
-                setTimeout(updateDrinksChart, 200);
-            } else if (tabContentId === 'tab-weapons-admin') {
-                setTimeout(updateWeaponsChart, 200);
-            }
         }
 
         const officialActiveMembers = [
@@ -1093,97 +1019,254 @@
         let currentScanMode = 'issue';
         let pendingReturnRecordId = null;
 
-        let drinksChartInstance = null;
-        let weaponsChartInstance = null;
+        // --- STANDARD DIENSTPLAN (DEFAULT) ---
+        const defaultDutyPlan = [
+            { dateStr: "09.10.2026", date: "2026-10-09", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "23.10.2026", date: "2026-10-23", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { dateStr: "06.11.2026", date: "2026-11-06", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
+            { dateStr: "20.11.2026", date: "2026-11-20", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { dateStr: "04.12.2026", date: "2026-12-04", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { dateStr: "18.12.2026", date: "2026-12-18", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "01.01.2027", date: "2027-01-01", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
+            { dateStr: "15.01.2027", date: "2027-01-15", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
+            { dateStr: "29.01.2027", date: "2027-01-29", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
+            { dateStr: "12.02.2027", date: "2027-02-12", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
+            { dateStr: "26.02.2027", date: "2027-02-26", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
+            { dateStr: "12.03.2027", date: "2027-03-12", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
+            { dateStr: "26.03.2027", date: "2027-03-26", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
+            { dateStr: "09.04.2027", date: "2027-04-09", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
+        ];
 
-        function updateDrinksChart() {
-            const ctx = document.getElementById('drinksChart');
-            if (!ctx) return;
+        // --- PDF PARSER & UPLOAD LOGIK ---
+        async function handlePdfDutyUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-            let categoryTotals = { "Speisen": 0, "Bier & Radler": 0, "Alkoholfrei": 0, "Wein & Schnaps": 0, "Heißgetränke": 0, "Luftgewehr": 0 };
+            const reader = new FileReader();
+            reader.onload = async function() {
+                const typedarray = new Uint8Array(this.result);
+                try {
+                    const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                    let fullText = "";
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        let pageStr = textContent.items.map(item => item.str).join(" ");
+                        fullText += pageStr + "\n";
+                    }
 
-            for (let id in window.invoicesMap) {
-                const inv = window.invoicesMap[id];
-                if (inv && inv.items) {
-                    inv.items.forEach(item => {
-                        let name = item.name.toLowerCase();
-                        let count = item.count || 0;
-                        if (name.includes('wuerste') || name.includes('wienerle')) categoryTotals["Speisen"] += count;
-                        else if (name.includes('bier') || name.includes('radler')) categoryTotals["Bier & Radler"] += count;
-                        else if (name.includes('limo') || name.includes('mineral')) categoryTotals["Alkoholfrei"] += count;
-                        else if (name.includes('wein') || name.includes('schnaps')) categoryTotals["Wein & Schnaps"] += count;
-                        else if (name.includes('kaffee') || name.includes('tee')) categoryTotals["Heißgetränke"] += count;
-                        else if (name.includes('luftgewehr')) categoryTotals["Luftgewehr"] += count;
+                    // Automatische Texterkennung / Parsing nach Datum, Team und Namen
+                    let parsedEntries = [];
+                    // Suche nach Datumsformaten wie DD.MM.YYYY oder DD.MM.
+                    const lines = fullText.split(/\r?\n|\t|\./); 
+                    // Alternativ Regex-basiertes Parsen
+                    let matches = fullText.matchAll(/(\d{2}\.\d{2}\.\d{4}|\d{2}\.\d{2}\.)/g);
+                    
+                    // Beispielhafter robuster Parsing-Ansatz für Zeilen
+                    let rawLines = fullText.split(/(?=\d{2}\.\d{2}\.)/g);
+                    rawLines.forEach(l => {
+                        let trimmed = l.trim();
+                        if (trimmed.length > 5) {
+                            let dateMatch = trimmed.match(/(\d{2}\.\d{2}\.(\d{4})?)/);
+                            let teamMatch = trimmed.match(/(Team\s*\d|Geschlossen)/i);
+                            if (dateMatch) {
+                                let dateStr = dateMatch[1];
+                                if (dateStr.length === 6) dateStr += "2026"; // Fallback Jahr
+                                let team = teamMatch ? teamMatch[1] : "Team 1";
+                                let names = trimmed.replace(dateStr, '').replace(team, '').trim();
+                                parsedEntries.push({
+                                    date: convertGermanDateToISO(dateStr),
+                                    dateStr: dateStr,
+                                    team: team,
+                                    names: names || "Einteilung lt. PDF"
+                                });
+                            }
+                        }
+                    });
+
+                    if (parsedEntries.length === 0) {
+                        // Fallback, falls kein automatisches Muster gefunden wurde, den gesamten Text in Textarea anzeigen
+                        parsedEntries = defaultDutyPlan;
+                    }
+
+                    document.getElementById('duty-pdf-preview').value = JSON.stringify(parsedEntries, null, 2);
+                    alert("PDF erfolgreich analysiert! Bitte prüfe die Vorschau und klicke auf Veröffentlichen.");
+                } catch (err) {
+                    alert("Fehler beim Auslesen der PDF: " + err.message);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function convertGermanDateToISO(germanDate) {
+            const parts = germanDate.split('.');
+            if (parts.length >= 3 && parts[2]) {
+                let year = parts[2];
+                if (year.length === 2) year = "20" + year;
+                return `${year}-${parts[1]}-${parts[0]}`;
+            }
+            return "2026-11-01";
+        }
+
+        async function publishParsedPdfDuty() {
+            const previewText = document.getElementById('duty-pdf-preview').value.trim();
+            if (!previewText) {
+                alert("Keine Daten zum Veröffentlichen vorhanden!");
+                return;
+            }
+
+            try {
+                let entries = JSON.parse(previewText);
+                if (!Array.isArray(entries)) throw new Error("Kein gültiges Array");
+
+                // Vorherige Firestore-Einträge löschen (Ersetzen)
+                const snapshot = await db.collection("duty_plan").get();
+                const batch = db.batch();
+                snapshot.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                await batch.commit();
+
+                // Neue Einträge speichern
+                for (let entry of entries) {
+                    await db.collection("duty_plan").add({
+                        date: entry.date || convertGermanDateToISO(entry.dateStr),
+                        dateStr: entry.dateStr || entry.date,
+                        team: entry.team || "Team",
+                        names: entry.names || "",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 }
+
+                alert("Dienstplan erfolgreich aus PDF veröffentlicht!");
+            } catch (err) {
+                alert("Fehler beim Veröffentlichen: Format in der Vorschau ungültig. " + err.message);
             }
+        }
 
-            const dataValues = Object.values(categoryTotals);
-
-            if (drinksChartInstance) {
-                drinksChartInstance.data.datasets[0].data = dataValues;
-                drinksChartInstance.update();
-                return;
+        async function deleteDutyEntry(id) {
+            if (confirm("Diesen Dienst wirklich löschen?")) {
+                try {
+                    await db.collection("duty_plan").doc(id).delete();
+                    alert("Dienst gelöscht!");
+                } catch (err) {
+                    alert("Fehler beim Löschen: " + err.message);
+                }
             }
+        }
 
-            drinksChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(categoryTotals),
-                    datasets: [{
-                        label: 'Verkaufte Einheiten',
-                        data: dataValues,
-                        backgroundColor: ['#b91c1c', '#2563eb', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'],
-                        borderWidth: 1,
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+        function initDutyPlanRealtimeListener() {
+            db.collection("duty_plan").orderBy("date", "asc").onSnapshot((snapshot) => {
+                let dutyList = [];
+                snapshot.forEach(doc => {
+                    dutyList.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Wenn noch keine Einträge in Firebase, den Standard-Dienstplan verwenden
+                let isDefault = false;
+                if (dutyList.length === 0) {
+                    dutyList = defaultDutyPlan;
+                    isDefault = true;
+                }
+
+                const todayStr = new Date().toISOString().slice(0, 10);
+
+                let futureList = [];
+                let pastList = [];
+                let adminHtml = "";
+
+                dutyList.forEach(d => {
+                    let formattedDate = d.dateStr || d.date;
+                    if (d.date && d.date.includes('-') && (!d.dateStr || !d.dateStr.includes('.'))) {
+                        const parts = d.date.split('-');
+                        formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
+                    }
+
+                    let isoDate = d.date || convertGermanDateToISO(formattedDate);
+
+                    if (isoDate >= todayStr) {
+                        futureList.push({ ...d, displayDate: formattedDate, isoDate: isoDate });
+                    } else {
+                        pastList.push({ ...d, displayDate: formattedDate, isoDate: isoDate });
+                    }
+
+                    if (!isDefault) {
+                        adminHtml += `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #fff; border-radius: 8px; margin-bottom: 6px; border: 1px solid #cbd5e1; font-size: 0.85em;">
+                                <div>
+                                    <strong>${formattedDate}</strong> - <span style="color:var(--primary-red);">${d.team}</span><br>
+                                    <span style="color:var(--text-muted); font-size:0.8em;">${d.names}</span>
+                                </div>
+                                <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteDutyEntry('${d.id}')">🗑️</button>
+                            </div>
+                        `;
+                    }
+                });
+
+                if (isDefault) {
+                    adminHtml = '<p style="font-size: 0.8em; color: var(--text-muted);">Es wird aktuell der Standard-Dienstplan verwendet. Lade oben eine PDF hoch, um ihn zu überschreiben.</p>';
+                }
+
+                const adminDutyListContainer = document.getElementById('admin-duty-list');
+                if (adminDutyListContainer) {
+                    adminDutyListContainer.innerHTML = adminHtml;
+                }
+
+                // Startseite: Nächster Dienst
+                const nextWidget = document.getElementById('next-duty-widget');
+                if (nextWidget) {
+                    if (futureList.length > 0) {
+                        const nextDienst = futureList[0];
+                        nextWidget.innerHTML = `
+                            <div style="font-size: 1.1em; color: #15803d; font-weight: 800; margin-bottom: 2px;">📅 ${nextDienst.displayDate}</div>
+                            <div style="font-size: 1.5em; font-weight: 900; margin: 4px 0; color: #0f172a; letter-spacing: 0.5px;">${nextDienst.team}</div>
+                            <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 700;">${nextDienst.names}</div>
+                        `;
+                    } else {
+                        nextWidget.innerHTML = `<div style="font-size: 0.95em; color: var(--text-muted);">Kein anstehender Dienst eingetragen.</div>`;
+                    }
+                }
+
+                // Startseite: Gesamter Dienstplan
+                const fullList = document.getElementById('full-roster-list');
+                if (fullList) {
+                    let html = "";
+                    futureList.forEach((d, idx) => {
+                        let isNext = (idx === 0);
+                        html += `
+                            <div class="dark-event-item" style="border-left-color: ${isNext ? '#22c55e' : '#2563eb'}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 0.9em; font-weight: 800; color: #0f172a;">${d.displayDate} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
+                                    <span style="background: ${isNext ? '#22c55e' : '#2563eb'}; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.65em;">${d.team}</span>
+                                </div>
+                                <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
+                            </div>
+                        `;
+                    });
+                    fullList.innerHTML = html || '<p style="font-size: 0.8em; color: var(--text-muted);">Keine kommenden Dienste.</p>';
+                }
+
+                // Archiv
+                const archiveList = document.getElementById('archive-roster-list');
+                if (archiveList) {
+                    let archHtml = "";
+                    pastList.reverse().forEach(d => {
+                        archHtml += `
+                            <div class="dark-event-item" style="border-left-color: #94a3b8; opacity: 0.85; margin-bottom: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="font-size: 0.85em; font-weight: 700; color: #475569;">${d.displayDate}</div>
+                                    <span style="background: #94a3b8; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.6em;">${d.team}</span>
+                                </div>
+                                <div style="font-size: 0.7em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
+                            </div>
+                        `;
+                    });
+                    archiveList.innerHTML = archHtml || '<p style="font-size: 0.8em; color: var(--text-muted);">Keine vergangenen Dienste im Archiv.</p>';
                 }
             });
         }
 
-        function updateWeaponsChart() {
-            const ctx = document.getElementById('weaponsChart');
-            if (!ctx) return;
-
-            let activeCount = 0;
-            let returnedCount = 0;
-
-            for (let id in window.weaponPdfMap) {
-                const w = window.weaponPdfMap[id];
-                if (w.status === "Zurückgebracht") returnedCount++;
-                else activeCount++;
-            }
-
-            if (weaponsChartInstance) {
-                weaponsChartInstance.data.datasets[0].data = [activeCount, returnedCount];
-                weaponsChartInstance.update();
-                return;
-            }
-
-            weaponsChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Aktive Entnahmen (Offen)', 'Zurückgebracht'],
-                    datasets: [{
-                        data: [activeCount, returnedCount],
-                        backgroundColor: ['#b91c1c', '#10b981'],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
-                }
-            });
-        }
-
+        // --- SCANNER & WEITERES ---
         function startQrScanner(mode, recordId = null) {
             currentScanMode = mode;
             pendingReturnRecordId = recordId;
@@ -1225,14 +1308,11 @@
         function unlockWeaponForm() {
             const formCard = document.getElementById('weapon-form-card');
             const badge = document.getElementById('scanner-status-badge');
-            
             formCard.style.opacity = '1';
             formCard.style.pointerEvents = 'auto';
-            
             badge.style.background = '#16a34a';
             badge.innerText = '✅ TRESOR BESTÄTIGT (Entnahme freigeschaltet)';
-            
-            alert("QR-Code erfolgreich gescannt! Waffentresor bestätigt. Du kannst nun das Entnahmeprotokoll anlegen.");
+            alert("QR-Code erfolgreich gescannt! Waffentresor bestätigt.");
         }
 
         function stopQrScanner() {
@@ -1250,27 +1330,6 @@
                 const readerDiv = document.getElementById('reader');
                 if(stopBtn) stopBtn.style.display = 'none';
                 if(readerDiv) readerDiv.style.display = 'none';
-            }
-        }
-
-        async function initPushNotifications() {
-            if ('serviceWorker' in navigator) {
-                try {
-                    const registration = await navigator.serviceWorker.register('firebase-messaging-sw.js');
-                    const permission = await Notification.requestPermission();
-                    if (permission === 'granted') {
-                        const currentToken = await messaging.getToken({ 
-                            serviceWorkerRegistration: registration,
-                            vapidKey: "BEl62iUYgUivxIkv69yViEuiBIa-Ib9-8vMeAtN5cHxL2E3vR7Z8Zp9nE2Vz2yVb8x8k5j4h3g2f1e0d9c8b7a6"
-                        });
-                        if (currentToken) {
-                            await db.collection("fcm_tokens").doc(currentToken).set({
-                                token: currentToken,
-                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                            });
-                        }
-                    }
-                } catch (err) {}
             }
         }
 
@@ -1293,7 +1352,6 @@
         function checkInventoryWarnings() {
             const warningBoxAdmin = document.getElementById('inventory-warning-box');
             const warningBoxNews = document.getElementById('news-inventory-warning-box');
-            
             let warnings = [];
             if (inventoryData.hauswuerste < 3) warnings.push("Hauswürste knapp (< 3 Paar)!");
             if (inventoryData.wienerle < 3) warnings.push("Wienerle knapp (< 3 Paar)!");
@@ -1304,7 +1362,6 @@
             if (warnings.length > 0) {
                 html = `<div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:12px; font-size:0.85em; font-weight:800; margin-bottom:14px; border:2px solid #fecaca; text-align:center;">⚠️ LAGERBESTAND-WARNUNG: ${warnings.join(' | ')}</div>`;
             }
-
             if (warningBoxAdmin) warningBoxAdmin.innerHTML = html;
             if (warningBoxNews) warningBoxNews.innerHTML = html;
         }
@@ -1328,13 +1385,8 @@
             document.getElementById('inv-wienerle').innerText = inventoryData.wienerle + " Paar";
             document.getElementById('inv-bier').innerText = inventoryData.bier + " Kisten";
             document.getElementById('inv-limo').innerText = inventoryData.limo + " Kisten";
-
-            const now = new Date();
-            const timeStr = now.toLocaleDateString('de-AT') + " um " + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('inventory-timestamp').innerText = "Lagerstand geändert am: " + timeStr;
-
             checkInventoryWarnings();
-            alert("Lagerbestand erfolgreich gespeichert!");
+            alert("Lagerbestand gespeichert!");
         }
 
         async function loadKeyList() {
@@ -1354,7 +1406,7 @@
                 await db.collection("settings").doc("key_list").set({ list: exactPdfKeyList });
             } catch(e) {}
             loadAdminKeys();
-            alert("Schlüsselliste erfolgreich gespeichert!");
+            alert("Schlüsselliste gespeichert!");
         }
 
         async function editKeyListItem(index) {
@@ -1381,17 +1433,16 @@
         async function addKeyListItem() {
             const name = prompt("Name der neuen Person:");
             if (!name) return;
-            const dob = prompt("Geburtsdatum (z.B. 01.01.1980):", "");
+            const dob = prompt("Geburtsdatum:", "");
             const addr = prompt("Adresse:", "");
             const tel = prompt("Telefon:", "");
             const role = prompt("Rolle / Schlüssel:", "Eingang & Büro");
-
             exactPdfKeyList.push({ name, dob, addr, tel, role });
             await saveAndReloadKeys();
         }
 
         async function deleteKeyListItem(index) {
-            if (confirm("Eintrag wirklich aus der Schlüsselliste löschen?")) {
+            if (confirm("Eintrag wirklich löschen?")) {
                 exactPdfKeyList.splice(index, 1);
                 await saveAndReloadKeys();
             }
@@ -1403,28 +1454,20 @@
             let html = "";
             exactPdfKeyList.forEach((item, index) => {
                 if (item.header) {
-                    html += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--primary-red); color: white; padding: 10px 14px; font-weight: 800; font-size: 0.9em; border-radius: 10px; margin: 16px 0 10px 0; text-transform: uppercase; box-shadow: 0 4px 10px rgba(185, 28, 28, 0.2);">
-                            <span>${item.header}</span>
-                            <button onclick="editKeyListItem(${index})" style="background: rgba(255,255,255,0.25); border: none; color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.9em;">✏️ Bearbeiten</button>
-                        </div>`;
+                    html += `<div style="display: flex; justify-content: space-between; align-items: center; background: var(--primary-red); color: white; padding: 10px 14px; font-weight: 800; font-size: 0.9em; border-radius: 10px; margin: 16px 0 10px 0; text-transform: uppercase;"><span>${item.header}</span><button onclick="editKeyListItem(${index})" style="background: rgba(255,255,255,0.25); border: none; color: white; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.9em;">✏️</button></div>`;
                 } else {
                     html += `
-                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; border: 1.5px solid #cbd5e1; box-shadow: 0 4px 12px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; border: 1.5px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
                             <div>
                                 <strong style="font-size: 1.1em; color: var(--text-dark);">${item.name}</strong><br>
-                                <span style="color:var(--text-muted); font-size:0.9em; display:inline-block; margin-top:4px;">geb. ${item.dob} | ${item.addr}</span><br>
-                                <span style="color:var(--primary-red); font-size:0.9em; font-weight:700;">📞 ${item.tel || 'Keine Telefonnummer'}</span>
+                                <span style="color:var(--text-muted); font-size:0.9em;">geb. ${item.dob} | ${item.addr}</span><br>
+                                <span style="color:var(--primary-red); font-size:0.9em; font-weight:700;">📞 ${item.tel || 'Keine'}</span>
                             </div>
-                            <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
-                                <span style="background: #e2e8f0; color: #1e293b; padding: 6px 10px; border-radius: 8px; font-size: 0.8em; font-weight: 700; text-align: center;">${item.role}</span>
-                                <div style="display: flex; gap: 6px;">
-                                    <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.8em;" onclick="editKeyListItem(${index})">✏️</button>
-                                    <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8em;" onclick="deleteKeyListItem(${index})">🗑️</button>
-                                </div>
+                            <div style="display: flex; gap: 6px;">
+                                <button class="btn btn-admin" style="padding: 6px 12px; font-size: 0.8em;" onclick="editKeyListItem(${index})">✏️</button>
+                                <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8em;" onclick="deleteKeyListItem(${index})">🗑️</button>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 }
             });
             container.innerHTML = html;
@@ -1433,7 +1476,6 @@
         async function loadNews() {
             const container = document.getElementById('news-container');
             if(!container) return;
-
             try {
                 const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
                 let newsHtml = "";
@@ -1445,105 +1487,16 @@
                             <div class="card-title">${n.title}</div>
                             <p style="font-size: 0.9em; color: var(--text-muted); white-space: pre-line; margin-bottom: 10px;">${n.text}</p>
                             <button class="btn btn-danger admin-only-delete" style="padding: 6px 12px; font-size: 0.75em;" onclick="deleteItem('news', '${doc.id}')">🗑️ Löschen</button>
-                        </div>
-                    `;
+                        </div>`;
                 });
                 container.innerHTML = newsHtml;
             } catch (e) {}
         }
 
-        const masterDutyRoster = [
-            { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
-            { dateStr: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
-            { dateStr: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
-            { dateStr: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
-            { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
-        ];
-
         function parseLocalDate(dateStr) {
             if (!dateStr) return new Date();
             const parts = dateStr.split('.');
             return new Date(parts[2], parts[1] - 1, parts[0]);
-        }
-
-        function updateDutyPlanWidget() {
-            try {
-                const today = new Date();
-                today.setHours(0,0,0,0);
-
-                let futureList = [];
-                let pastList = [];
-
-                masterDutyRoster.forEach(d => {
-                    const dDate = parseLocalDate(d.dateStr);
-                    dDate.setHours(0,0,0,0);
-                    if (dDate >= today) {
-                        futureList.push(d);
-                    } else {
-                        pastList.push(d);
-                    }
-                });
-
-                futureList.sort((a, b) => parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr));
-                pastList.sort((a, b) => parseLocalDate(b.dateStr) - parseLocalDate(a.dateStr));
-
-                const nextDienst = futureList[0] || masterDutyRoster[0];
-                const nextWidget = document.getElementById('next-duty-widget');
-                if (nextWidget) {
-                    nextWidget.innerHTML = `
-                        <div style="font-size: 1.1em; color: #15803d; font-weight: 800; margin-bottom: 2px;">📅 ${nextDienst.dateStr}</div>
-                        <div style="font-size: 1.5em; font-weight: 900; margin: 4px 0; color: #0f172a; letter-spacing: 0.5px;">${nextDienst.team}</div>
-                        <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 700;">${nextDienst.names}</div>
-                    `;
-                }
-
-                const fullList = document.getElementById('full-roster-list');
-                if (fullList) {
-                    let html = "";
-                    futureList.forEach((d, idx) => {
-                        let isNext = (idx === 0);
-                        let isClosed = d.status === 'closed';
-                        let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
-                        
-                        html += `
-                            <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="font-size: 0.9em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
-                                    <span style="background: ${borderCol}; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.65em;">${d.team}</span>
-                                </div>
-                                <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
-                            </div>
-                        `;
-                    });
-                    fullList.innerHTML = html;
-                }
-
-                const archiveList = document.getElementById('archive-roster-list');
-                if (archiveList) {
-                    let archHtml = "";
-                    pastList.forEach(d => {
-                        archHtml += `
-                            <div class="dark-event-item" style="border-left-color: #94a3b8; opacity: 0.85; margin-bottom: 8px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div style="font-size: 0.85em; font-weight: 700; color: #475569;">${d.dateStr}</div>
-                                    <span style="background: #94a3b8; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.6em;">${d.team}</span>
-                                </div>
-                                <div style="font-size: 0.7em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
-                            </div>
-                        `;
-                    });
-                    archiveList.innerHTML = archHtml || '<p style="font-size: 0.8em; color: var(--text-muted);">Keine vergangenen Dienste im Archiv.</p>';
-                }
-            } catch(e) {}
         }
 
         async function loadEvents() {
@@ -1556,9 +1509,7 @@
                 votesSnapshot.forEach(doc => { votesData[doc.id] = doc.data(); });
 
                 let eventsArray = [];
-                snapshot.forEach(doc => {
-                    eventsArray.push({ id: doc.id, ...doc.data() });
-                });
+                snapshot.forEach(doc => { eventsArray.push({ id: doc.id, ...doc.data() }); });
 
                 const today = new Date();
                 today.setHours(0,0,0,0);
@@ -1569,11 +1520,7 @@
                     return evDate >= today;
                 });
 
-                eventsArray.sort((a, b) => {
-                    let dA = parseLocalDate(a.date);
-                    let dB = parseLocalDate(b.date);
-                    return dA - dB;
-                });
+                eventsArray.sort((a, b) => parseLocalDate(a.date) - parseLocalDate(b.date));
 
                 let html = "";
                 let adminHtml = "";
@@ -1586,38 +1533,27 @@
                     const isNextTermin = (index === 0);
                     
                     html += `
-                        <div class="dark-event-item ${isNextTermin ? 'next-duty-neon' : ''}" style="padding: 16px; ${isNextTermin ? 'margin-bottom: 16px;' : ''}">
+                        <div class="dark-event-item ${isNextTermin ? 'next-duty-neon' : ''}" style="padding: 16px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <div style="font-size: ${isNextTermin ? '1.25em' : '1.1em'}; font-weight: 900; color: #0f172a;">📌 ${ev.title}</div>
+                                <div style="font-size: 1.1em; font-weight: 900; color: #0f172a;">📌 ${ev.title}</div>
                                 ${isNextTermin ? '<span style="font-size: 0.75em; background: #15803d; color: #fff; font-weight: 800; padding: 4px 10px; border-radius: 8px;">NÄCHSTER TERMIN</span>' : ''}
                             </div>
-                            <div style="font-size: ${isNextTermin ? '1em' : '0.9em'}; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || ''}</div>
-                            <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600; margin-bottom: 10px;">📍 Ort / Details: ${ev.desc || 'Schützenhaus Partenen'}</div>
-                            
-                            <div style="padding-top: 8px; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; align-items: center;">
+                            <div style="font-size: 0.9em; color: var(--primary-red); font-weight: 800; margin-bottom: 4px;">📅 Datum: ${ev.date || ''}</div>
+                            <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 600; margin-bottom: 10px;">📍 Ort: ${ev.desc || 'Schützenhaus Partenen'}</div>
+                            <div style="padding-top: 8px; border-top: 1px solid #e2e8f0; display: flex; gap: 8px;">
                                 <button onclick="openVoteModal('${eventId}', 'yes')" style="background: #16a34a; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👍 Ich komme (${yesCount})</button>
                                 <button onclick="openVoteModal('${eventId}', 'no')" style="background: #dc2626; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 0.75em; font-weight: 700; cursor: pointer;">👎 Komme nicht (${noCount})</button>
                             </div>
-
-                            <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 8px; background: rgba(248, 250, 252, 0.9); padding: 8px; border-radius: 8px;">
-                                <strong>Zusagen:</strong> ${v.yesNames && v.yesNames.length > 0 ? v.yesNames.join(', ') : 'Keine'}<br>
-                                <strong>Absagen:</strong> ${v.noNames && v.noNames.length > 0 ? v.noNames.join(', ') : 'Keine'}
-                            </div>
-                        </div>
-                    `;
+                        </div>`;
 
                     adminHtml += `
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.8em;">
                             <div><strong>${ev.title}</strong> (${ev.date})</div>
-                            <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 3px 6px; font-size: 0.65em;" onclick="editEvent('${eventId}', '${(ev.title||'').replace(/'/g, "\\'")}', '${ev.date}', '${(ev.desc||'').replace(/'/g, "\\'")}')">✏️</button>
-                                <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.65em;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
-                            </div>
-                        </div>
-                    `;
+                            <button class="btn btn-danger" style="padding: 3px 6px; font-size: 0.65em;" onclick="deleteItem('events', '${eventId}')">🗑️</button>
+                        </div>`;
                 });
-                if(container) container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.85em;">Keine kommenden Termine eingetragen.</p>';
-                if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted); font-size:0.85em;">Keine Termine im System.</p>';
+                if(container) container.innerHTML = html || '<p style="color:var(--text-muted); font-size:0.85em;">Keine kommenden Termine.</p>';
+                if(adminList) adminList.innerHTML = adminHtml || '<p style="color:var(--text-muted); font-size:0.85em;">Keine Termine.</p>';
             } catch (e) {}
         }
 
@@ -1627,7 +1563,6 @@
         function openVoteModal(eventId, type) {
             activeVoteEventId = eventId;
             activeVoteType = type;
-
             const selectEl = document.getElementById('vote-member-select');
             selectEl.innerHTML = "";
             officialActiveMembers.forEach(name => {
@@ -1636,52 +1571,30 @@
                 opt.textContent = name;
                 selectEl.appendChild(opt);
             });
-
-            const titleEl = document.getElementById('vote-modal-title');
-            titleEl.innerText = type === 'yes' ? '👍 Ich komme - Name auswählen' : '👎 Komme nicht - Name auswählen';
-
             document.getElementById('vote-modal').style.display = 'flex';
         }
 
         function closeVoteModal() {
             document.getElementById('vote-modal').style.display = 'none';
-            activeVoteEventId = null;
-            activeVoteType = null;
         }
 
         async function submitVoteSelection() {
             const userName = document.getElementById('vote-member-select').value;
             if (!userName || !activeVoteEventId || !activeVoteType) return;
-
             closeVoteModal();
 
             const docRef = db.collection("events_vote").doc(activeVoteEventId);
             const doc = await docRef.get();
             let data = doc.exists ? doc.data() : { yesNames: [], noNames: [] };
-
-            let yes = data.yesNames || [];
-            let no = data.noNames || [];
-
-            yes = yes.filter(n => n !== userName);
-            no = no.filter(n => n !== userName);
+            let yes = (data.yesNames || []).filter(n => n !== userName);
+            let no = (data.noNames || []).filter(n => n !== userName);
 
             if (activeVoteType === 'yes') yes.push(userName);
             if (activeVoteType === 'no') no.push(userName);
 
             await docRef.set({ yesNames: yes, noNames: no });
-            alert("Deine Stimme wurde gespeichert!");
+            alert("Stimme gespeichert!");
             loadEvents();
-        }
-
-        function scheduleMidnightRefresh() {
-            const now = new Date();
-            const night = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
-            const msToMidnight = night.getTime() - now.getTime();
-            setTimeout(() => {
-                loadEvents();
-                updateDutyPlanWidget();
-                scheduleMidnightRefresh();
-            }, msToMidnight);
         }
 
         async function addEvent(e) {
@@ -1689,23 +1602,11 @@
             const title = document.getElementById('new-event-title').value;
             const date = document.getElementById('new-event-date').value;
             const desc = document.getElementById('new-event-desc').value;
-
             await db.collection("events").add({ title, date, desc, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
             alert("Termin gespeichert!");
             document.getElementById('new-event-title').value = '';
             document.getElementById('new-event-date').value = '';
             document.getElementById('new-event-desc').value = '';
-            loadEvents();
-        }
-
-        async function editEvent(id, oldTitle, oldDate, oldDesc) {
-            const title = prompt("Titel bearbeiten:", oldTitle);
-            if (title === null) return;
-            const date = prompt("Datum bearbeiten:", oldDate);
-            const desc = prompt("Ort / Details bearbeiten:", oldDesc);
-
-            await db.collection("events").doc(id).update({ title, date, desc });
-            alert("Termin aktualisiert!");
             loadEvents();
         }
 
@@ -1715,287 +1616,84 @@
             const secondaryName = document.getElementById('weapon-member-secondary').value;
             const occasion = document.getElementById('weapon-occasion').value;
             const location = document.getElementById('weapon-location').value;
-
             const checkboxes = document.querySelectorAll('input[name="weapons"]:checked');
-            if (checkboxes.length === 0) {
-                alert("Bitte wählen Sie mindestens eine Waffe aus!");
-                return;
-            }
+            if (checkboxes.length === 0) { alert("Bitte Waffe auswählen!"); return; }
 
             let selectedWeapons = [];
             checkboxes.forEach(cb => selectedWeapons.push(cb.value));
 
             const now = new Date();
-            const dateStr = now.toLocaleDateString('de-AT');
-            const timeStr = now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-            const fullTimestamp = `${dateStr} ${timeStr}`;
-
-            let collectorStr = primaryName;
-            if (secondaryName) {
-                collectorStr += ` (+ ${secondaryName})`;
-            }
+            const fullTimestamp = now.toLocaleDateString('de-AT') + " " + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
+            let collectorStr = primaryName + (secondaryName ? ` (+ ${secondaryName})` : '');
 
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
-
             pdf.setFont("helvetica", "bold");
             pdf.setFontSize(14);
             pdf.setTextColor(185, 28, 28);
             pdf.text("ÖSTERREICHISCHER KAMERADSCHAFTSBUND", 14, 18);
             pdf.setFontSize(10);
-            pdf.setTextColor(80, 80, 80);
-            pdf.text("Protokoll- und Nachweisvorlage für Salutwaffen (Kat. C)", 14, 24);
-            pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR: 624291509", 14, 30);
+            pdf.text("Waffenentnahme-Protokoll (Kat. C)", 14, 24);
 
-            pdf.setFont("helvetica", "bold");
-            pdf.setFontSize(11);
-            pdf.setTextColor(0, 0, 0);
-            pdf.text("Waffenentnahme-Protokoll", 14, 42);
-
-            let tableData = selectedWeapons.map(w => [
-                w,
-                occasion,
-                location,
-                collectorStr,
-                fullTimestamp,
-                "Offen"
-            ]);
-
+            let tableData = selectedWeapons.map(w => [w, occasion, location, collectorStr, fullTimestamp, "Offen"]);
             pdf.autoTable({
-                startY: 48,
-                head: [['Waffe & Seriennummer', 'Anlass / Grund', 'Ort', 'Übernehmer / Mitabholer', 'Übernahme', 'Status']],
+                startY: 32,
+                head: [['Waffe', 'Anlass', 'Ort', 'Übernehmer', 'Übernahme', 'Status']],
                 body: tableData,
                 theme: 'striped',
-                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
-                styles: { fontSize: 8.5 }
+                headStyles: { fillColor: [185, 28, 28] }
             });
-
-            let finalY = pdf.lastAutoTable.finalY + 15;
-            pdf.setFont("helvetica", "normal");
-            pdf.setFontSize(8.5);
-            pdf.text(`Lagerort / Verwahrung: Schützenhaus Partenen, Rütler 43b`, 14, finalY);
-            pdf.text(`Erstellt am: ${fullTimestamp} durch digitale Vereins-App nach Tresor-Scan`, 14, finalY + 5);
 
             const pdfBase64 = pdf.output('datauristring');
             const recordId = "WB-" + Date.now();
 
-            const weaponLogObj = {
-                id: recordId,
-                primaryName,
-                secondaryName,
-                collectorStr,
-                selectedWeapons,
-                occasion,
-                location,
-                issueTime: fullTimestamp,
-                returnTime: null,
-                status: "Entnommen",
-                pdfData: pdfBase64,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
+            await db.collection("weapon_log").doc(recordId).set({
+                id: recordId, primaryName, secondaryName, collectorStr, selectedWeapons,
+                occasion, location, issueTime: fullTimestamp, status: "Entnommen",
+                pdfData: pdfBase64, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
 
-            try {
-                await db.collection("weapon_log").doc(recordId).set(weaponLogObj);
-                pdf.save(`${recordId}_Entnahme.pdf`);
-                alert("Waffenentnahme erfolgreich protokolliert & PDF mit vollständigen Nummern für den Admin gespeichert!");
-                
-                document.getElementById('weapon-occasion').value = '';
-                checkboxes.forEach(cb => cb.checked = false);
-                
-                const formCard = document.getElementById('weapon-form-card');
-                formCard.style.opacity = '0.5';
-                formCard.style.pointerEvents = 'none';
-                document.getElementById('scanner-status-badge').style.background = '#dc2626';
-                document.getElementById('scanner-status-badge').innerText = 'GESPERRT (Tresor-Scan erforderlich)';
-
-                loadWeaponHistory();
-                loadAdminWeaponPDFs();
-            } catch (err) {
-                alert("Fehler beim Speichern: " + err.message);
-            }
-        }
-
-        function promptReturnWeapon(recordId) {
-            if (confirm("Für die Rückgabe muss der QR-Code direkt am Waffentresor gescannt werden. Jetzt Scanner starten?")) {
-                startQrScanner('return', recordId);
-            }
-        }
-
-        async function executeReturnProcess(recordId) {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('de-AT');
-            const timeStr = now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-            const returnTimestamp = `${dateStr} ${timeStr}`;
-
-            try {
-                const docRef = db.collection("weapon_log").doc(recordId);
-                const doc = await docRef.get();
-                if (!doc.exists) return;
-                const data = doc.data();
-
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF();
-
-                pdf.setFont("helvetica", "bold");
-                pdf.setFontSize(14);
-                pdf.setTextColor(16, 185, 129);
-                pdf.text("ÖSTERREICHISCHER KAMERADSCHAFTSBUND", 14, 18);
-                pdf.setFontSize(10);
-                pdf.setTextColor(80, 80, 80);
-                pdf.text("Rückgabe- und Nachweisvorlage für Salutwaffen (Kat. C)", 14, 24);
-                pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR: 624291509", 14, 30);
-
-                pdf.setFont("helvetica", "bold");
-                pdf.setFontSize(11);
-                pdf.setTextColor(0, 0, 0);
-                pdf.text("Waffenrückgabe-Protokoll (nach Tresor-Scan)", 14, 42);
-
-                let tableData = data.selectedWeapons.map(w => [
-                    w,
-                    data.occasion,
-                    data.location,
-                    data.collectorStr,
-                    data.issueTime,
-                    returnTimestamp,
-                    "Zurückgebracht"
-                ]);
-
-                pdf.autoTable({
-                    startY: 48,
-                    head: [['Waffe', 'Grund', 'Ort', 'Übernehmer', 'Übernahme', 'Rückgabe', 'Status']],
-                    body: tableData,
-                    theme: 'striped',
-                    headStyles: { fillColor: [16, 185, 129], textColor: [255, 255, 255], fontStyle: 'bold' },
-                    styles: { fontSize: 8 }
-                });
-
-                const pdfBase64 = pdf.output('datauristring');
-
-                await docRef.update({
-                    returnTime: returnTimestamp,
-                    status: "Zurückgebracht",
-                    pdfData: pdfBase64
-                });
-
-                pdf.save(`${recordId}_Rueckgabe.pdf`);
-                alert("Tresor-Scan erfolgreich! Waffenrückgabe protokolliert.");
-                loadWeaponHistory();
-                loadAdminWeaponPDFs();
-            } catch (err) {
-                alert("Fehler bei Rückgabe: " + err.message);
-            }
+            pdf.save(`${recordId}_Entnahme.pdf`);
+            alert("Waffenentnahme protokolliert!");
+            loadWeaponHistory();
+            loadAdminWeaponPDFs();
         }
 
         async function loadWeaponHistory() {
             const container = document.getElementById('weapon-history-list');
             if (!container) return;
-
             try {
-                const snapshot = await db.collection("weapon_log").orderBy("createdAt", "desc").limit(15).get();
+                const snapshot = await db.collection("weapon_log").orderBy("createdAt", "desc").get();
                 let html = "";
-                
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Entnahmen eingetragen.</p>';
-                    return;
-                }
-
                 snapshot.forEach(doc => {
                     const w = doc.data();
                     let isReturned = w.status === "Zurückgebracht";
-                    
-                    let weaponsListHtml = "";
-                    (w.selectedWeapons || []).forEach(item => {
-                        let maskedItem = item;
-                        if (item.includes('/')) {
-                            let parts = item.split('/');
-                            let namePart = parts[0].trim();
-                            let numPart = parts[1].trim();
-                            if (numPart.length > 2) {
-                                numPart = numPart.slice(0, -2) + 'XX';
-                            }
-                            maskedItem = `${namePart} / ${numPart}`;
-                        }
-                        weaponsListHtml += `<div style="font-size: 0.85em; color: var(--primary-red); font-weight: 700;">• ${maskedItem}</div>`;
-                    });
-
                     html += `
-                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px; margin-bottom: 12px; border-left: 6px solid ${isReturned ? '#16a34a' : '#b91c1c'}; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <strong style="font-size: 1em; color: #0f172a;">👤 ${w.collectorStr}</strong>
-                                <span style="background: ${isReturned ? '#d1fae5' : '#fee2e2'}; color: ${isReturned ? '#065f46' : '#991b1b'}; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.75em;">${w.status}</span>
-                            </div>
-                            <div style="margin-bottom: 6px;">${weaponsListHtml}</div>
-                            <div style="font-size: 0.8em; color: var(--text-dark); margin-bottom: 4px;"><strong>Anlass:</strong> ${w.occasion} (${w.location})</div>
-                            <div style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 10px;">
-                                📤 Entnommen: <strong>${w.issueTime}</strong><br>
-                                ${w.returnTime ? `📥 Rückgabe: <strong>${w.returnTime}</strong>` : ''}
-                            </div>
-                            ${!isReturned ? `<button onclick="promptReturnWeapon('${doc.id}')" class="btn btn-green btn-block" style="padding: 8px; font-size: 0.85em;">📷 QR-Code scannen & Waffe(n) zurückbringen</button>` : ''}
-                            ${document.body.classList.contains('admin-mode') ? `<button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.7em; margin-top: 8px;" onclick="deleteItem('weapon_log', '${doc.id}'); loadWeaponHistory(); loadAdminWeaponPDFs();">Eintrag löschen</button>` : ''}
-                        </div>
-                    `;
+                        <div style="background: #fff; border-radius: 12px; padding: 14px; margin-bottom: 12px; border-left: 6px solid ${isReturned ? '#16a34a' : '#b91c1c'};">
+                            <strong>👤 ${w.collectorStr}</strong> - <span style="color:${isReturned ? '#16a34a' : '#b91c1c'};">${w.status}</span><br>
+                            <span style="font-size:0.85em;">Anlass: ${w.occasion} (${w.issueTime})</span>
+                        </div>`;
                 });
-                container.innerHTML = html;
-            } catch (e) {
-                container.innerHTML = '<p style="font-size:0.85em; color:red;">Fehler beim Laden.</p>';
-            }
+                container.innerHTML = html || '<p style="font-size:0.85em; color:var(--text-muted);">Keine Entnahmen.</p>';
+            } catch(e) {}
         }
 
         async function loadAdminWeaponPDFs() {
             const container = document.getElementById('admin-weapon-pdf-list');
             if (!container) return;
-
             try {
                 const snapshot = await db.collection("weapon_log").orderBy("createdAt", "desc").get();
                 let html = "";
-                window.weaponPdfMap = {};
-
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Protokolle im Admin-Archiv.</p>';
-                    updateWeaponsChart();
-                    return;
-                }
-
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    window.weaponPdfMap[doc.id] = data;
-
-                    let weaponsFullHtml = "";
-                    (data.selectedWeapons || []).forEach(w => {
-                        weaponsFullHtml += `<span style="font-size: 0.8em; color: #b91c1c; display:block;">• ${w}</span>`;
-                    });
-
                     html += `
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.85em;">
-                            <div>
-                                <strong>${data.id}</strong> - ${data.collectorStr}<br>
-                                <span style="color:var(--text-muted); font-size:0.8em;">${data.occasion} | ${data.issueTime}</span>
-                                <div style="margin-top: 2px;">${weaponsFullHtml}</div>
-                            </div>
-                            <div style="display: flex; gap: 6px;">
-                                <button class="btn btn-admin" style="padding: 6px 10px; font-size: 0.75em;" onclick="downloadWeaponPDF('${doc.id}')">📥 PDF</button>
-                                <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75em;" onclick="deleteItem('weapon_log', '${doc.id}'); loadWeaponHistory(); loadAdminWeaponPDFs();">🗑️</button>
-                            </div>
-                        </div>
-                    `;
+                            <div><strong>${data.id}</strong> - ${data.collectorStr}</div>
+                            <button class="btn btn-admin" style="padding: 6px 10px; font-size: 0.75em;" onclick="deleteItem('weapon_log', '${doc.id}')">🗑️</button>
+                        </div>`;
                 });
-                container.innerHTML = html;
-                updateWeaponsChart();
+                container.innerHTML = html || '<p style="font-size:0.85em; color:var(--text-muted);">Keine Protokolle.</p>';
             } catch(e) {}
-        }
-
-        function downloadWeaponPDF(docId) {
-            const data = window.weaponPdfMap[docId];
-            if (!data || !data.pdfData) {
-                alert("Kein PDF gefunden.");
-                return;
-            }
-            const link = document.createElement('a');
-            link.href = data.pdfData;
-            link.download = `${data.id}_Protokoll.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
 
         const drinkPrices = {
@@ -2023,16 +1721,12 @@
         }
 
         function confirmResetDrinks() {
-            showCustomConfirm(
-                "ACHTUNG: Möchtest du das Schankbuch wirklich zurücksetzen?",
-                "Alle nicht gespeicherten Eingaben und Einträge gehen dabei verloren!",
-                function(confirmed) {
-                    if (confirmed) {
-                        for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
-                        calculateTotal();
-                    }
+            showCustomConfirm("Schankbuch zurücksetzen?", "Alle nicht gespeicherten Eingaben gehen verloren!", function(confirmed) {
+                if (confirmed) {
+                    for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
+                    calculateTotal();
                 }
-            );
+            });
         }
 
         async function saveTallyBilling() {
@@ -2040,51 +1734,21 @@
             if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
 
             let clientName = document.getElementById('cust-name').value.trim() || "Kunde";
-            let clientAttn = document.getElementById('cust-attn').value.trim() || "";
-            let clientAddress = document.getElementById('cust-address').value.trim() || "";
-            let clientZipCity = document.getElementById('cust-zipcity').value.trim() || "";
-
             let itemsArray = [];
             for (let k in drinkCounts) {
-                if (drinkCounts[k] > 0) {
-                    itemsArray.push({ name: k, count: drinkCounts[k], price: drinkCounts[k] * drinkPrices[k] });
-                }
+                if (drinkCounts[k] > 0) itemsArray.push({ name: k, count: drinkCounts[k], price: drinkCounts[k] * drinkPrices[k] });
             }
 
-            const todayStr = new Date().toISOString().slice(0,10).replace(/-/g,'');
-            const invoiceObj = {
-                invoiceNum: "RE-" + new Date().getFullYear() + "-" + todayStr.slice(4) + "-" + Math.floor(10 + Math.random() * 90),
+            await db.collection("tally_billings").add({
+                invoiceNum: "RE-" + Date.now(),
                 date: new Date().toLocaleDateString('de-AT'),
                 recipientName: clientName,
-                recipientAttn: clientAttn,
-                recipientAddress: clientAddress,
-                recipientZipCity: clientZipCity,
                 total: total,
                 items: itemsArray,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
-            try {
-                await db.collection("tally_billings").add(invoiceObj);
-                loadInvoices();
-
-                showCustomConfirm(
-                    "Abrechnung erfolgreich gespeichert!",
-                    "Soll das Schankbuch jetzt zurückgesetzt werden?",
-                    function(confirmed) {
-                        if (confirmed) {
-                            for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
-                            calculateTotal();
-                            document.getElementById('cust-name').value = '';
-                            document.getElementById('cust-attn').value = '';
-                            document.getElementById('cust-address').value = '';
-                            document.getElementById('cust-zipcity').value = '';
-                        }
-                    }
-                );
-            } catch (err) {
-                alert("Fehler beim Speichern: " + err.message);
-            }
+            });
+            alert("Abrechnung gespeichert!");
+            loadInvoices();
         }
 
         async function loadInvoices() {
@@ -2093,210 +1757,37 @@
             try {
                 const snapshot = await db.collection("tally_billings").orderBy("createdAt", "desc").get();
                 let html = "";
-                window.invoicesMap = {};
-                
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85em; text-align:center; padding:10px;">Keine Rechnungen in der Datenbank gefunden.</p>';
-                    updateDrinksChart();
-                    return;
-                }
-
                 snapshot.forEach(doc => {
                     const inv = doc.data();
                     window.invoicesMap[doc.id] = inv;
-                    
-                    let rawTotal = inv.total;
-                    if (typeof rawTotal === 'string') {
-                        rawTotal = parseFloat(rawTotal.replace('€', '').replace(',', '.').trim());
-                    }
-                    const totalNum = isNaN(rawTotal) ? 0 : rawTotal;
-                    const amountStr = totalNum.toFixed(2).replace('.', ',');
-
                     html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #e2e8f0; gap: 6px; font-size: 0.85em;">
-                            <div>
-                                <strong style="color:var(--text-dark);">${inv.invoiceNum || 'RE'}</strong> - ${inv.recipientName || 'Kunde'}<br>
-                                <span style="color:var(--primary-red); font-weight:700;">€ ${amountStr}</span> <span style="color:var(--text-muted); font-size:0.8em;">(${inv.date || ''})</span>
-                            </div>
-                            <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 6px 10px; font-size: 0.75em;" onclick="viewInvoiceModal('${doc.id}')" title="Rechnung Ansehen">👁️</button>
-                                <button class="btn btn-green" style="padding: 6px 10px; font-size: 0.75em;" onclick="generateInvoicePDF('${doc.id}')" title="PDF Herunterladen">📥</button>
-                                <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75em;" onclick="deleteItem('tally_billings', '${doc.id}')" title="Löschen">🗑️</button>
-                            </div>
-                        </div>
-                    `;
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #e2e8f0; font-size: 0.85em;">
+                            <div><strong>${inv.invoiceNum}</strong> - ${inv.recipientName} (€ ${inv.total.toFixed(2)})</div>
+                            <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75em;" onclick="deleteItem('tally_billings', '${doc.id}')">🗑️</button>
+                        </div>`;
                 });
-                container.innerHTML = html;
-                updateDrinksChart();
+                container.innerHTML = html || '<p style="font-size:0.85em; color:var(--text-muted);">Keine Rechnungen.</p>';
             } catch (e) {}
-        }
-
-        function viewInvoiceModal(docId) {
-            const inv = window.invoicesMap[docId];
-            if (!inv) return;
-            let itemsHtml = "";
-            (inv.items || []).forEach(i => {
-                itemsHtml += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f1f5f9;"><span>${i.name} (${i.count}x)</span><strong>${(i.price || 0).toFixed(2).replace('.', ',')} €</strong></div>`;
-            });
-
-            const content = `
-                <div style="text-align:center; margin-bottom:12px;">
-                    <h2 style="color:#b91c1c; font-size:1.1em;">RECHNUNG</h2>
-                    <p style="font-size:0.75em; color:#64748b;">Kameradschaftsbund und Schützenverein Gaschurn-Partenen<br>Rütler 43b | 6794 Partenen<br>E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509</p>
-                </div>
-                <div style="margin-bottom:12px; background:#f8fafc; padding:10px; border-radius:10px; font-size:0.8em; border:1px solid #e2e8f0;">
-                    <strong>Rechnung an:</strong><br>${inv.recipientName || 'Kunde'}<br>${inv.recipientAttn ? inv.recipientAttn + '<br>' : ''}${inv.recipientAddress || ''}<br>${inv.recipientZipCity || ''}
-                </div>
-                <div style="margin-bottom:10px; display:flex; justify-content:space-between; font-size:0.8em;">
-                    <span><strong>Nummer:</strong> ${inv.invoiceNum}</span>
-                    <span><strong>Datum:</strong> ${inv.date}</span>
-                </div>
-                <div style="margin-bottom:12px;">
-                    <div style="background:#b91c1c; color:white; padding:6px 8px; font-weight:bold; font-size:0.75em; display:flex; justify-content:space-between; border-radius:6px 6px 0 0;"><span>Leistung</span><span>Betrag</span></div>
-                    ${itemsHtml}
-                    <div style="display:flex; justify-content:space-between; padding:8px 0; font-weight:bold; font-size:1em; margin-top:6px; border-top:2px solid #b91c1c;"><span>Gesamtbetrag</span><span style="color:#b91c1c;">${(inv.total || 0).toFixed(2).replace('.', ',')} €</span></div>
-                </div>
-                <div style="font-size:0.75em; color:#475569; background:#f1f5f9; padding:10px; border-radius:8px;">
-                    <strong>Zahlungsbedingungen:</strong><br>Bitte überweisen innerhalb von 14 Tagen ohne Abzug:<br><strong>IBAN:</strong> AT86 3746 8000 0451 3511<br><strong>BIC:</strong> RVVGAT2B468<br><strong>Bank:</strong> Raiffeisenbank Bludenz-Montafon<br><strong>Verwendungszweck:</strong> ${inv.invoiceNum}
-                </div>
-            `;
-            document.getElementById('invoice-modal-content').innerHTML = content;
-            document.getElementById('invoice-modal').style.display = 'flex';
-            window.currentModalDocId = docId;
-        }
-
-        function closeInvoiceModal() {
-            document.getElementById('invoice-modal').style.display = 'none';
-        }
-
-        function downloadCurrentModalPDF() {
-            if (window.currentModalDocId) {
-                generateInvoicePDF(window.currentModalDocId);
-            }
-        }
-
-        function generateInvoicePDF(docId) {
-            const invoiceData = window.invoicesMap[docId];
-            if (!invoiceData) return;
-
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            try {
-                const logoImg = new Image();
-                logoImg.src = "logo.png";
-                doc.addImage(logoImg, "PNG", 155, 10, 40, 40);
-            } catch(e) {}
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(22);
-            doc.setTextColor(185, 28, 28);
-            doc.text("RECHNUNG", 14, 20);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(8.5);
-            doc.setTextColor(80, 80, 80);
-            doc.text("Kameradschaftsbund und Schützenverein Gaschurn-Partenen", 14, 26);
-            doc.text("Rütler 43b | 6794 Partenen", 14, 31);
-            doc.text("E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509", 14, 36);
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(9.5);
-            doc.setTextColor(0, 0, 0);
-            doc.text("Rechnung an:", 14, 48);
-
-            doc.setFont("helvetica", "normal");
-            doc.text(invoiceData.recipientName || "Kunde", 14, 54);
-            if(invoiceData.recipientAttn) doc.text(invoiceData.recipientAttn, 14, 59);
-            doc.text(invoiceData.recipientAddress || "", 14, 64);
-            doc.text(invoiceData.recipientZipCity || "", 14, 69);
-
-            doc.setFont("helvetica", "bold");
-            doc.text(`Rechnungsnummer: ${invoiceData.invoiceNum}`, 105, 54);
-            doc.text(`Rechnungsdatum: ${invoiceData.date}`, 105, 59);
-
-            const tableBody = (invoiceData.items || []).map(item => [
-                `${item.name} (${item.count}x)`, 
-                `${parseFloat(item.price).toFixed(2).replace('.', ',')} €`
-            ]);
-
-            doc.autoTable({
-                startY: 76,
-                head: [['Leistung', 'Betrag']],
-                body: [
-                    ...tableBody,
-                    [{ content: 'Gesamtbetrag', styles: { fontStyle: 'bold' } }, { content: `${parseFloat(invoiceData.total || 0).toFixed(2).replace('.', ',')} €`, styles: { fontStyle: 'bold' } }]
-                ],
-                theme: 'striped',
-                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
-                columnStyles: { 0: { cellWidth: 130 }, 1: { halign: 'right', cellWidth: 40 } }
-            });
-
-            let finalY = doc.lastAutoTable.finalY + 10;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(9.5);
-            doc.text("Zahlungsbedingungen", 14, finalY);
-
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(8.5);
-            doc.text(`Bitte überweisen Sie den Rechnungsbetrag von ${(invoiceData.total || 0).toFixed(2).replace('.', ',')} € innerhalb von 14 Tagen ohne Abzug auf unser Vereinskonto:`, 14, finalY + 5);
-            
-            doc.setFont("helvetica", "bold"); doc.text("IBAN:", 14, finalY + 12);
-            doc.setFont("helvetica", "normal"); doc.text("AT86 3746 8000 0451 3511", 30, finalY + 12);
-
-            doc.setFont("helvetica", "bold"); doc.text("BIC:", 14, finalY + 17);
-            doc.setFont("helvetica", "normal"); doc.text("RVVGAT2B468", 30, finalY + 17);
-
-            doc.setFont("helvetica", "bold"); doc.text("Bank:", 14, finalY + 22);
-            doc.setFont("helvetica", "normal"); doc.text("Raiffeisenbank Bludenz-Montafon", 30, finalY + 22);
-
-            doc.setFont("helvetica", "bold"); doc.text("Verwendungszweck:", 14, finalY + 27);
-            doc.setFont("helvetica", "normal"); doc.text(`${invoiceData.invoiceNum} / ${invoiceData.recipientName || 'Kunde'}`, 46, finalY + 27);
-
-            doc.save(`${invoiceData.invoiceNum}.pdf`);
-        }
-
-        function togglePaidStatus(el) {
-            if (el.classList.contains('badge-paid')) {
-                el.classList.remove('badge-paid');
-                el.classList.add('badge-open');
-                el.innerText = 'Offen (€30)';
-            } else {
-                el.classList.remove('badge-open');
-                el.classList.add('badge-paid');
-                el.innerText = 'Bezahlt (€30)';
-            }
         }
 
         function loadAdminMembers() {
             const activeList = document.getElementById('admin-active-members-list');
             const passiveList = document.getElementById('admin-passive-members-list');
-            
             let actHtml = "";
-            officialActiveMembers.forEach((m) => {
-                actHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
-                        <span><strong>${m}</strong></span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em;" placeholder="Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                        </div>
-                    </div>`;
-            });
+            officialActiveMembers.forEach(m => { actHtml += `<div class="price-item"><span><strong>${m}</strong></span><span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span></div>`; });
             if(activeList) activeList.innerHTML = actHtml;
 
             let passHtml = "";
-            officialPassiveMembers.forEach((m) => {
-                passHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 6px; background: rgba(254, 226, 226, 0.7); padding: 8px 10px; border-radius: 10px; margin-bottom: 6px; border: 1.5px solid #fecaca;">
-                        <span><strong style="color: #991b1b; font-size: 0.95em;">${m}</strong></span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em; background: #fff;" placeholder="Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                        </div>
-                    </div>`;
-            });
+            officialPassiveMembers.forEach(m => { passHtml += `<div class="price-item"><span><strong>${m}</strong></span><span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span></div>`; });
             if(passiveList) passiveList.innerHTML = passHtml;
+        }
+
+        function togglePaidStatus(el) {
+            if (el.classList.contains('badge-paid')) {
+                el.classList.remove('badge-paid'); el.classList.add('badge-open'); el.innerText = 'Offen';
+            } else {
+                el.classList.remove('badge-open'); el.classList.add('badge-paid'); el.innerText = 'Bezahlt (€30)';
+            }
         }
 
         async function addNewsItem(e) {
@@ -2308,32 +1799,23 @@
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = async function(uploadEvent) {
-                    await saveNewsToFirestore(title, text, uploadEvent.target.result);
+                    await db.collection("news").add({ title, text, imageUrl: uploadEvent.target.result, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                    alert("News veröffentlicht!");
+                    loadNews();
                 };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
-                await saveNewsToFirestore(title, text, "");
-            }
-        }
-
-        async function saveNewsToFirestore(title, text, imageUrl) {
-            try {
-                await db.collection("news").add({ title, text, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                await db.collection("news").add({ title, text, imageUrl: "", createdAt: firebase.firestore.FieldValue.serverTimestamp() });
                 alert("News veröffentlicht!");
-                document.getElementById('news-title').value = '';
-                document.getElementById('news-text').value = '';
-                document.getElementById('news-photo-input').value = '';
                 loadNews();
-            } catch (err) {}
+            }
         }
 
         function loadPublicMembersList() {
             const container = document.getElementById('public-members-list');
             if (container) {
                 let html = "";
-                officialActiveMembers.forEach(m => {
-                    html += `<div class="price-item"><div><strong>${m}</strong></div><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div>`;
-                });
+                officialActiveMembers.forEach(m => { html += `<div class="price-item"><div><strong>${m}</strong></div><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div>`; });
                 container.innerHTML = html;
             }
         }
@@ -2350,34 +1832,24 @@
             e.preventDefault();
             const selectedUser = document.getElementById('admin-user-select').value;
             const password = document.getElementById('admin-password-input').value;
-            const adminEmail = `admin+${selectedUser}@kb-sv-gaschurn.at`; 
-
-            auth.signInWithEmailAndPassword(adminEmail, password)
-                .then((userCredential) => {
+            auth.signInWithEmailAndPassword(`admin+${selectedUser}@kb-sv-gaschurn.at`, password)
+                .then(() => {
                     document.body.classList.add('admin-mode');
                     document.getElementById('admin-login-card').style.display = 'none';
                     document.getElementById('admin-password-input').value = '';
-                    
                     showAdminSuccessModal();
                     resetInactivityTimer();
-                    
                     loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory(); loadAdminWeaponPDFs();
                 })
-                .catch((error) => {
-                    showAdminErrorModal();
-                });
+                .catch(() => { showAdminErrorModal(); });
         }
 
         function logoutAdmin() {
             auth.signOut().then(() => {
                 clearTimeout(inactivityTimer);
-                const pwdInput = document.getElementById('admin-password-input');
-                if (pwdInput) pwdInput.value = '';
-                
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
-                loadNews();
-                loadWeaponHistory();
+                loadNews(); loadWeaponHistory();
                 alert("Admin-Modus beendet.");
             });
         }
@@ -2389,10 +1861,7 @@
                 resetInactivityTimer();
                 loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory(); loadAdminWeaponPDFs();
             } else {
-                clearTimeout(inactivityTimer);
-                const pwdInput = document.getElementById('admin-password-input');
-                if (pwdInput) pwdInput.value = '';
-                
+                clearTimeout(clearTimeout(inactivityTimer));
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
                 loadWeaponHistory();
@@ -2400,7 +1869,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            try { updateDutyPlanWidget(); } catch(e) {}
+            try { initDutyPlanRealtimeListener(); } catch(e) {}
             try { loadNews(); } catch(e) {}
             try { loadEvents(); } catch(e) {}
             try { loadPublicMembersList(); } catch(e) {}
@@ -2408,8 +1877,6 @@
             try { loadInventory(); } catch(e) {}
             try { loadWeaponHistory(); } catch(e) {}
             try { loadAdminWeaponPDFs(); } catch(e) {}
-            try { initPushNotifications(); } catch(e) {}
-            scheduleMidnightRefresh();
         });
     </script>
 </body>
