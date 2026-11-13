@@ -480,7 +480,7 @@
                 <div class="form-group">
                     <label>3. Karabiner / Salutwaffen auswählen (Mehrfachauswahl möglich)</label>
                     <div id="weapon-checkboxes-container" style="background: rgba(248,250,252,0.9); border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
-                        <!-- Dynamisch generierte Waffenliste (mit Maskierung XX) -->
+                        <!-- Dynamisch generierte Waffenliste -->
                     </div>
                 </div>
 
@@ -501,7 +501,7 @@
         <div class="glass-card glass-card-blue" style="border-left-color: #2563eb !important;">
             <div class="card-title" style="color: #2563eb;">📋 Aktive Entnahmen & Rückgabe (Read-Only)</div>
             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">
-                Aktive Entnahmen sind schreibgeschützt (keine Bearbeitung/Löschung möglich). Nach Abschluss wird das Waffenbuch automatisch gesperrt.
+                Aktive Entnahmen sind schreibgeschützt. Nach Abschluss wird das Waffenbuch automatisch gesperrt.
             </p>
             <div id="weapon-history-list"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Entnahmen...</p></div>
         </div>
@@ -1215,7 +1215,6 @@
                 globalDutyList = (dutyList.length > 0) ? dutyList : defaultDutyPlanWithIds();
                 renderDutyPlanViews(globalDutyList, dutyList.length > 0);
             }, (error) => {
-                // Fallback bei fehlender Collection oder Sicherheitsregeln
                 globalDutyList = defaultDutyPlanWithIds();
                 renderDutyPlanViews(globalDutyList, false);
             });
@@ -1580,177 +1579,195 @@
             }
         }
 
-        // --- WAFFENBUCH QR SCANNER & LOGIK ---
+        // --- WAFFENBUCH QR SCANNER & LOGIK (GESICHERT MIT SCAN-SPERRE) ---
         let html5QrCode = null;
         let currentScanMode = 'issue';
         let pendingReturnRecordId = null;
+        let isProcessingScan = false;
 
         function startQrScanner(mode, recordId = null) {
             currentScanMode = mode;
             pendingReturnRecordId = recordId;
+            isProcessingScan = false;
 
             const readerDiv = document.getElementById('reader');
-            readerDiv.style.display = 'block';
-            document.getElementById('stop-scanner-btn').style.display = 'block';
+            if (readerDiv) readerDiv.style.display = 'block';
+            const stopBtn = document.getElementById('stop-scanner-btn');
+            if (stopBtn) stopBtn.style.display = 'block';
 
             if (!html5QrCode) {
-                html5QrCode = new Html5Qrcode("reader");
+                try {
+                    html5QrCode = new Html5Qrcode("reader");
+                } catch(e) {}
             }
 
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                (decodedText, decodedResult) => {
-                    stopQrScanner();
-                    if (currentScanMode === 'issue') {
-                        unlockWeaponForm();
-                    } else if (currentScanMode === 'return' && pendingReturnRecordId) {
-                        executeReturnProcess(pendingReturnRecordId);
+            if (html5QrCode) {
+                html5QrCode.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    (decodedText, decodedResult) => {
+                        if (isProcessingScan) return;
+                        isProcessingScan = true;
+
+                        stopQrScanner().then(() => {
+                            if (currentScanMode === 'issue') {
+                                unlockWeaponForm();
+                            } else if (currentScanMode === 'return' && pendingReturnRecordId) {
+                                executeReturnProcess(pendingReturnRecordId);
+                            }
+                        });
+                    },
+                    (errorMessage) => {}
+                ).catch(err => {
+                    if (confirm("Kamera konnte nicht gestartet werden. Möchtest du den Tresor-Code manuell bestätigen?")) {
+                        stopQrScanner();
+                        if (currentScanMode === 'issue') {
+                            unlockWeaponForm();
+                        } else if (currentScanMode === 'return' && pendingReturnRecordId) {
+                            executeReturnProcess(pendingReturnRecordId);
+                        }
+                    } else {
+                        stopQrScanner();
                     }
-                },
-                (errorMessage) => {}
-            ).catch(err => {
-                if (confirm("Kamera konnte nicht gestartet werden. Möchtest du den Tresor-Code manuell bestätigen?")) {
-                    stopQrScanner();
-                    if (currentScanMode === 'issue') {
-                        unlockWeaponForm();
-                    } else if (currentScanMode === 'return' && pendingReturnRecordId) {
-                        executeReturnProcess(pendingReturnRecordId);
-                    }
-                } else {
-                    stopQrScanner();
-                }
-            });
+                });
+            }
         }
 
         function unlockWeaponForm() {
-            const formCard = document.getElementById('weapon-form-card');
-            const badge = document.getElementById('scanner-status-badge');
-            
-            formCard.style.opacity = '1';
-            formCard.style.pointerEvents = 'auto';
-            
-            badge.style.background = '#16a34a';
-            badge.innerText = '✅ TRESOR BESTÄTIGT (Entnahme freigeschaltet)';
-            
-            alert("QR-Code erfolgreich gescannt! Waffentresor bestätigt. Du kannst nun das Entnahmeprotokoll ausfüllen.");
+            try {
+                const formCard = document.getElementById('weapon-form-card');
+                const badge = document.getElementById('scanner-status-badge');
+                
+                if (formCard) {
+                    formCard.style.opacity = '1';
+                    formCard.style.pointerEvents = 'auto';
+                }
+                if (badge) {
+                    badge.style.background = '#16a34a';
+                    badge.innerText = '✅ TRESOR BESTÄTIGT (Entnahme freigeschaltet)';
+                }
+                alert("QR-Code erfolgreich gescannt! Waffentresor bestätigt. Du kannst nun das Entnahmeprotokoll ausfüllen.");
+            } catch(e) {}
         }
 
-        function stopQrScanner() {
+        async function stopQrScanner() {
             if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    html5QrCode.clear();
-                }).catch(err => {}).finally(() => {
-                    const stopBtn = document.getElementById('stop-scanner-btn');
-                    const readerDiv = document.getElementById('reader');
-                    if(stopBtn) stopBtn.style.display = 'none';
-                    if(readerDiv) readerDiv.style.display = 'none';
-                });
-            } else {
+                try {
+                    await html5QrCode.stop();
+                    await html5QrCode.clear();
+                } catch(e) {}
+            }
+            try {
                 const stopBtn = document.getElementById('stop-scanner-btn');
                 const readerDiv = document.getElementById('reader');
                 if(stopBtn) stopBtn.style.display = 'none';
                 if(readerDiv) readerDiv.style.display = 'none';
-            }
+            } catch(e) {}
         }
 
         async function saveWeaponIssue(e) {
             e.preventDefault();
-            const primaryName = document.getElementById('weapon-member-primary').value;
-            const secondaryName = document.getElementById('weapon-member-secondary').value;
-            const occasion = document.getElementById('weapon-occasion').value;
-            const location = document.getElementById('weapon-location').value;
-
-            const checkboxes = document.querySelectorAll('input[name="weapons"]:checked');
-            if (checkboxes.length === 0) {
-                alert("Bitte wählen Sie mindestens eine Waffe aus!");
-                return;
-            }
-
-            let selectedWeaponsData = [];
-            checkboxes.forEach(cb => {
-                selectedWeaponsData.push(cb.value);
-            });
-
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('de-AT');
-            const timeStr = now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-            const fullTimestamp = `${dateStr} ${timeStr}`;
-
-            let collectorStr = primaryName;
-            if (secondaryName) {
-                collectorStr += ` (+ ${secondaryName})`;
-            }
-
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-
-            pdf.setFont("helvetica", "bold");
-            pdf.setFontSize(14);
-            pdf.setTextColor(185, 28, 28);
-            pdf.text("ÖSTERREICHISCHER KAMERADSCHAFTSBUND", 14, 18);
-            pdf.setFontSize(10);
-            pdf.setTextColor(80, 80, 80);
-            pdf.text("Waffenentnahme-Protokoll gemäß Kat. C", 14, 24);
-            pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR-Zahl: 624291509", 14, 30);
-
-            let tableRows = [];
-            selectedWeaponsData.forEach(item => {
-                let parts = item.split(' / Nr. ');
-                let weaponDesc = parts[0];
-                let serialNum = parts[1] ? parts[1].split(' /')[0] : "k.A.";
-
-                tableRows.push([
-                    weaponDesc,
-                    serialNum,
-                    "ZVR-624291509",
-                    occasion,
-                    location,
-                    collectorStr,
-                    fullTimestamp,
-                    "Entnommen (Offen)"
-                ]);
-            });
-
-            pdf.autoTable({
-                startY: 38,
-                head: [['Waffe / Modell', 'ZWR (Seriennummer)', 'ZVR (Vereins-Nr.)', 'Anlass', 'Ort', 'Übernehmer', 'Zeitstempel', 'Status']],
-                body: tableRows,
-                theme: 'striped',
-                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
-                styles: { fontSize: 7.5 }
-            });
-
-            const pdfBase64 = pdf.output('datauristring');
-            const recordId = "WB-" + Date.now();
-
-            const weaponLogObj = {
-                id: recordId,
-                primaryName,
-                secondaryName,
-                collectorStr,
-                selectedWeapons: selectedWeaponsData,
-                occasion,
-                location,
-                issueTime: fullTimestamp,
-                returnTime: null,
-                status: "Entnommen",
-                pdfData: pdfBase64,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-
             try {
+                const primaryName = document.getElementById('weapon-member-primary').value;
+                const secondaryName = document.getElementById('weapon-member-secondary').value;
+                const occasion = document.getElementById('weapon-occasion').value;
+                const location = document.getElementById('weapon-location').value;
+
+                const checkboxes = document.querySelectorAll('input[name="weapons"]:checked');
+                if (!checkboxes || checkboxes.length === 0) {
+                    alert("Bitte wählen Sie mindestens eine Waffe aus!");
+                    return;
+                }
+
+                let selectedWeaponsData = [];
+                checkboxes.forEach(cb => {
+                    selectedWeaponsData.push(cb.value);
+                });
+
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('de-AT');
+                const timeStr = now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
+                const fullTimestamp = `${dateStr} ${timeStr}`;
+
+                let collectorStr = primaryName || "";
+                if (secondaryName) {
+                    collectorStr += ` (+ ${secondaryName})`;
+                }
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+
+                pdf.setFont("helvetica", "bold");
+                pdf.setFontSize(14);
+                pdf.setTextColor(185, 28, 28);
+                pdf.text("ÖSTERREICHISCHER KAMERADSCHAFTSBUND", 14, 18);
+                pdf.setFontSize(10);
+                pdf.setTextColor(80, 80, 80);
+                pdf.text("Waffenentnahme-Protokoll gemäß Kat. C", 14, 24);
+                pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR-Zahl: 624291509", 14, 30);
+
+                let tableRows = [];
+                selectedWeaponsData.forEach(item => {
+                    let parts = item.split(' / Nr. ');
+                    let weaponDesc = parts[0] || item;
+                    let serialNum = parts[1] ? parts[1].split(' /')[0] : "k.A.";
+
+                    tableRows.push([
+                        weaponDesc,
+                        serialNum,
+                        "ZVR-624291509",
+                        occasion || "",
+                        location || "",
+                        collectorStr,
+                        fullTimestamp,
+                        "Entnommen (Offen)"
+                    ]);
+                });
+
+                pdf.autoTable({
+                    startY: 38,
+                    head: [['Waffe / Modell', 'ZWR (Seriennummer)', 'ZVR (Vereins-Nr.)', 'Anlass', 'Ort', 'Übernehmer', 'Zeitstempel', 'Status']],
+                    body: tableRows,
+                    theme: 'striped',
+                    headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
+                    styles: { fontSize: 7.5 }
+                });
+
+                const pdfBase64 = pdf.output('datauristring');
+                const recordId = "WB-" + Date.now();
+
+                const weaponLogObj = {
+                    id: recordId,
+                    primaryName: primaryName || "",
+                    secondaryName: secondaryName || "",
+                    collectorStr: collectorStr,
+                    selectedWeapons: selectedWeaponsData,
+                    occasion: occasion || "",
+                    location: location || "",
+                    issueTime: fullTimestamp,
+                    returnTime: null,
+                    status: "Entnommen",
+                    pdfData: pdfBase64,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
                 await db.collection("weapon_log").doc(recordId).set(weaponLogObj);
                 alert("Waffenentnahme erfolgreich erfasst und im Admin-Bereich hinterlegt. Das Waffenbuch wird gesperrt.");
                 
-                document.getElementById('weapon-occasion').value = '';
+                const occInput = document.getElementById('weapon-occasion');
+                if (occInput) occInput.value = '';
                 checkboxes.forEach(cb => cb.checked = false);
                 
                 const formCard = document.getElementById('weapon-form-card');
-                formCard.style.opacity = '0.5';
-                formCard.style.pointerEvents = 'none';
-                document.getElementById('scanner-status-badge').style.background = '#dc2626';
-                document.getElementById('scanner-status-badge').innerText = 'GESPERRT (Tresor-Scan erforderlich)';
+                if (formCard) {
+                    formCard.style.opacity = '0.5';
+                    formCard.style.pointerEvents = 'none';
+                }
+                const badge = document.getElementById('scanner-status-badge');
+                if (badge) {
+                    badge.style.background = '#dc2626';
+                    badge.innerText = 'GESPERRT (Tresor-Scan erforderlich)';
+                }
 
                 loadWeaponHistory();
                 loadAdminWeaponPDFs();
@@ -1766,16 +1783,16 @@
         }
 
         async function executeReturnProcess(recordId) {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('de-AT');
-            const timeStr = now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-            const returnTimestamp = `${dateStr} ${timeStr}`;
-
             try {
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('de-AT');
+                const timeStr = now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
+                const returnTimestamp = `${dateStr} ${timeStr}`;
+
                 const docRef = db.collection("weapon_log").doc(recordId);
                 const doc = await docRef.get();
                 if (!doc.exists) return;
-                const data = doc.data();
+                const data = doc.data() || {};
 
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF();
@@ -1792,17 +1809,17 @@
                 let tableRows = [];
                 (data.selectedWeapons || []).forEach(item => {
                     let parts = item.split(' / Nr. ');
-                    let weaponDesc = parts[0];
+                    let weaponDesc = parts[0] || item;
                     let serialNum = parts[1] ? parts[1].split(' /')[0] : "k.A.";
 
                     tableRows.push([
                         weaponDesc,
                         serialNum,
                         "ZVR-624291509",
-                        data.occasion,
-                        data.location,
-                        data.collectorStr,
-                        data.issueTime,
+                        data.occasion || "",
+                        data.location || "",
+                        data.collectorStr || "",
+                        data.issueTime || "",
                         returnTimestamp,
                         "Zurückgebracht"
                     ]);
@@ -1847,7 +1864,7 @@
                 }
 
                 snapshot.forEach(doc => {
-                    const w = doc.data();
+                    const w = doc.data() || {};
                     let weaponsListHtml = "";
                     (w.selectedWeapons || []).forEach(item => {
                         let maskedItem = item;
@@ -1867,13 +1884,13 @@
                     html += `
                         <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px; margin-bottom: 12px; border-left: 6px solid #b91c1c; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <strong style="font-size: 1em; color: #0f172a;">👤 ${w.collectorStr}</strong>
-                                <span style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.75em;">${w.status} (Schreibgeschützt)</span>
+                                <strong style="font-size: 1em; color: #0f172a;">👤 ${w.collectorStr || 'Unbekannt'}</strong>
+                                <span style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.75em;">${w.status || 'Entnommen'} (Read-Only)</span>
                             </div>
                             <div style="margin-bottom: 6px;">${weaponsListHtml}</div>
-                            <div style="font-size: 0.8em; color: var(--text-dark); margin-bottom: 4px;"><strong>Anlass:</strong> ${w.occasion} (${w.location})</div>
+                            <div style="font-size: 0.8em; color: var(--text-dark); margin-bottom: 4px;"><strong>Anlass:</strong> ${w.occasion || ''} (${w.location || ''})</div>
                             <div style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px;">
-                                📤 Entnommen: <strong>${w.issueTime}</strong> | ZVR: 624291509
+                                📤 Entnommen: <strong>${w.issueTime || ''}</strong> | ZVR: 624291509
                             </div>
                             <button onclick="promptReturnWeapon('${doc.id}')" class="btn btn-green btn-block" style="padding: 14px 20px; font-size: 1.05em; font-weight: 800; background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35);">📷 QR-Code scannen & Waffe(n) zurückbringen</button>
                         </div>
@@ -1900,7 +1917,7 @@
                 }
 
                 snapshot.forEach(doc => {
-                    const data = doc.data();
+                    const data = doc.data() || {};
                     window.weaponPdfMap[doc.id] = data;
 
                     let weaponsSummary = "";
@@ -1911,8 +1928,8 @@
                     html += `
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.85em; gap: 10px;">
                             <div style="flex: 1;">
-                                <strong>ID: ${data.id}</strong> | 👤 ${data.collectorStr}<br>
-                                <span style="color:var(--text-muted); font-size:0.8em;">Anlass: ${data.occasion} (${data.issueTime}) | Status: ${data.status}</span>
+                                <strong>ID: ${data.id || doc.id}</strong> | 👤 ${data.collectorStr || ''}<br>
+                                <span style="color:var(--text-muted); font-size:0.8em;">Anlass: ${data.occasion || ''} (${data.issueTime || ''}) | Status: ${data.status || ''}</span>
                                 <div style="margin-top: 4px;">${weaponsSummary}</div>
                             </div>
                             <div style="display: flex; gap: 6px; flex-shrink: 0;">
@@ -1935,15 +1952,17 @@
                 return;
             }
             const win = window.open('', '_blank');
-            win.document.write(`
-                <html>
-                <head><title>Protokoll ${data.id}</title></head>
-                <body style="margin:0; background:#333; display:flex; justify-content:center; align-items:center; height:100vh;">
-                    <iframe src="${data.pdfData}" style="width:100%; height:100%; border:none;"></iframe>
-                </body>
-                </html>
-            `);
-            win.document.close();
+            if (win) {
+                win.document.write(`
+                    <html>
+                    <head><title>Protokoll ${data.id || docId}</title></head>
+                    <body style="margin:0; background:#333; display:flex; justify-content:center; align-items:center; height:100vh;">
+                        <iframe src="${data.pdfData}" style="width:100%; height:100%; border:none;"></iframe>
+                    </body>
+                    </html>
+                `);
+                win.document.close();
+            }
         }
 
         function downloadWeaponPDF(docId) {
@@ -1954,7 +1973,7 @@
             }
             const link = document.createElement('a');
             link.href = data.pdfData;
-            link.download = `${data.id}_Protokoll.pdf`;
+            link.download = `${data.id || docId}_Protokoll.pdf`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
