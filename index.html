@@ -1127,8 +1127,19 @@
 
         function parseLocalDate(dateStr) {
             if (!dateStr) return new Date();
-            const parts = dateStr.split('.');
-            return new Date(parts[2], parts[1] - 1, parts[0]);
+            if (typeof dateStr !== 'string') dateStr = String(dateStr);
+            if (dateStr.includes('-')) {
+                const parts = dateStr.split('-');
+                if (parts[0].length === 4) {
+                    return new Date(parts[0], parts[1] - 1, parts[2]);
+                } else {
+                    return new Date(parts[2], parts[1] - 1, parts[0]);
+                }
+            } else if (dateStr.includes('.')) {
+                const parts = dateStr.split('.');
+                return new Date(parts[2], parts[1] - 1, parts[0]);
+            }
+            return new Date(dateStr);
         }
 
         function getViennaToday() {
@@ -1191,11 +1202,22 @@
             db.collection("duty_plan").orderBy("createdAt", "asc").onSnapshot((snapshot) => {
                 let dutyList = [];
                 snapshot.forEach(doc => {
-                    dutyList.push({ id: doc.id, ...doc.data() });
+                    let d = doc.data();
+                    dutyList.push({
+                        id: doc.id,
+                        dateStr: d.dateStr || d.datum || d.date || "09.10.2026",
+                        team: d.team || d.gruppe || "Team",
+                        names: d.names || d.mitglieder || d.diensthabende || "",
+                        status: d.status || 'open'
+                    });
                 });
 
                 globalDutyList = (dutyList.length > 0) ? dutyList : defaultDutyPlanWithIds();
                 renderDutyPlanViews(globalDutyList, dutyList.length > 0);
+            }, (error) => {
+                // Fallback bei fehlender Collection oder Sicherheitsregeln
+                globalDutyList = defaultDutyPlanWithIds();
+                renderDutyPlanViews(globalDutyList, false);
             });
         }
 
@@ -1210,7 +1232,7 @@
                 const dDate = parseLocalDate(d.dateStr);
                 dDate.setHours(0,0,0,0);
 
-                if (dDate >= today) {
+                if (isNaN(dDate.getTime()) || dDate >= today) {
                     futureList.push(d);
                 } else {
                     pastList.push(d);
@@ -1229,13 +1251,13 @@
                 }
             });
 
-            if (!isFromFirebase) {
-                adminHtml = `<p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 8px;">Es werden aktuell die Standard-Dienste angezeigt (Noch keine eigenen Dienste in Firebase).</p>`;
+            if (futureList.length === 0 && dutyList.length > 0) {
+                futureList = [...dutyList];
             }
 
             const adminDutyListContainer = document.getElementById('admin-duty-list');
             if (adminDutyListContainer) {
-                adminDutyListContainer.innerHTML = adminHtml;
+                adminDutyListContainer.innerHTML = adminHtml || '<p style="font-size: 0.8em; color: var(--text-muted);">Keine eigenen Dienste in Firebase.</p>';
             }
 
             futureList.sort((a, b) => parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr));
@@ -1274,7 +1296,7 @@
                 let html = "";
                 futureList.forEach((d, idx) => {
                     let isNext = (idx === 0);
-                    let isClosed = d.status === 'closed';
+                    let isClosed = d.status === 'closed' || d.team.toLowerCase().includes('geschlossen');
                     let borderCol = isNext ? '#22c55e' : (isClosed ? '#64748b' : '#2563eb');
                     
                     html += `
@@ -1414,8 +1436,8 @@
                     ev.parsedDate.setHours(0,0,0,0);
                 });
 
-                let futureEvents = eventsList.filter(ev => ev.parsedDate >= today);
-                let pastEvents = eventsList.filter(ev => ev.parsedDate < today);
+                let futureEvents = eventsList.filter(ev => isNaN(ev.parsedDate.getTime()) || ev.parsedDate >= today);
+                let pastEvents = eventsList.filter(ev => !isNaN(ev.parsedDate.getTime()) && ev.parsedDate < today);
 
                 futureEvents.sort((a, b) => a.parsedDate - b.parsedDate);
                 pastEvents.sort((a, b) => b.parsedDate - a.parsedDate);
@@ -1432,7 +1454,7 @@
                 }
 
                 sortedEvents.forEach((ev, idx) => {
-                    const isNext = (idx === 0 && ev.parsedDate >= today);
+                    const isNext = (idx === 0 && (isNaN(ev.parsedDate.getTime()) || ev.parsedDate >= today));
                     const votes = ev.votes || {};
                     const voteNames = Object.keys(votes);
 
