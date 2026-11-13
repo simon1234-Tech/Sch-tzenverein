@@ -123,6 +123,12 @@
             50% { opacity: 1; transform: scale(1.02); }
             100% { opacity: 0.5; transform: scale(0.98); }
         }
+        @keyframes blinkRedLight {
+            0% { background-color: #ef4444; box-shadow: 0 0 4px #ef4444, 0 0 10px #dc2626; opacity: 0.4; }
+            50% { background-color: #dc2626; box-shadow: 0 0 12px #ef4444, 0 0 22px #b91c1c; opacity: 1; }
+            100% { background-color: #ef4444; box-shadow: 0 0 4px #ef4444, 0 0 10px #dc2626; opacity: 0.4; }
+        }
+
         .next-duty-neon {
             background: rgba(255, 255, 255, 0.95) !important;
             border: 2.5px solid #22c55e !important;
@@ -130,6 +136,13 @@
         }
         .live-pulse-badge {
             animation: pulseBadge 2s infinite ease-in-out;
+        }
+        .red-blink-light {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+            animation: blinkRedLight 1s infinite ease-in-out;
         }
 
         .dark-event-item {
@@ -506,7 +519,7 @@
                     <div class="form-group" id="field-weapon-select-container">
                         <label>3. Waffe auswählen</label>
                         <select class="form-control" id="weapon-select-dropdown" required style="font-weight: 700;">
-                            <!-- Wird dynamisch mit modell & maskierter Nummer gefüllt -->
+                            <!-- Wird dynamisch gefüllt -->
                         </select>
                     </div>
 
@@ -640,19 +653,65 @@
                 </button>
             </div>
 
-            <!-- TAB 1: LAGERBESTAND -->
-            <div id="tab-inventory" class="admin-tab-content active glass-card glass-card-red">
+            <!-- TAB 1: MODERNES LAGERBESTAND-DESIGN MIT +/- BUTTONS & BLINKLICHT -->
+            <div id="tab-inventory" class="admin-tab-content active glass-card glass-card-red" style="border-left: 6px solid #b91c1c !important;">
                 <div class="card-title" style="color: #dc2626;">
-                    <span>📦 1. Lagerbestand</span>
-                    <button class="btn btn-admin" style="padding: 10px 18px; font-size: 0.95em;" onclick="editInventory()">✏️ Bearbeiten</button>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span>📦 1. Lagerbestand</span>
+                        <div id="inventory-blink-light" style="display: none;" title="Achtung: Bestand kritisch!"></div>
+                    </div>
+                    <button class="btn btn-admin" style="padding: 8px 14px; font-size: 0.85em;" onclick="editInventory()">✏️ Bearbeiten</button>
                 </div>
-                <div id="inventory-timestamp" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 6px;">Noch nicht geändert</div>
+                <div id="inventory-timestamp" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px;">Zuletzt geändert: Noch nicht bearbeitet</div>
                 <div id="inventory-warning-box"></div>
-                <div id="admin-inventory-display">
-                    <div class="price-item"><span>Hauswürste (Paar)</span><strong id="inv-hauswuerste">20 Paar</strong></div>
-                    <div class="price-item"><span>Wienerle (Paar)</span><strong id="inv-wienerle">15 Paar</strong></div>
-                    <div class="price-item"><span>Bier Kisten 0,33l</span><strong id="inv-bier">3 Kisten</strong></div>
-                    <div class="price-item"><span>Limo Kisten 0,3l</span><strong id="inv-limo">2 Kisten</strong></div>
+
+                <!-- Interaktive Zeilen mit +/- Buttons -->
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <!-- Hauswürste -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.95); padding: 10px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1;">
+                        <span style="font-weight: 700; font-size: 0.9em;">Hauswürste (Paar)</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <button class="counter-btn" style="width: 32px; height: 32px; font-size: 1.1em;" onclick="adjustInventoryItem('hauswuerste', -1)">-</button>
+                            <span id="inv-count-hauswuerste" style="font-weight: 900; font-size: 1.05em; width: 30px; text-align: center; color: var(--primary-red);">20</span>
+                            <button class="counter-btn" style="width: 32px; height: 32px; font-size: 1.1em;" onclick="adjustInventoryItem('hauswuerste', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Wienerle -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.95); padding: 10px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1;">
+                        <span style="font-weight: 700; font-size: 0.9em;">Wienerle (Paar)</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <button class="counter-btn" style="width: 32px; height: 32px; font-size: 1.1em;" onclick="adjustInventoryItem('wienerle', -1)">-</button>
+                            <span id="inv-count-wienerle" style="font-weight: 900; font-size: 1.05em; width: 30px; text-align: center; color: var(--primary-red);">15</span>
+                            <button class="counter-btn" style="width: 32px; height: 32px; font-size: 1.1em;" onclick="adjustInventoryItem('wienerle', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Bier Kisten -->
+                    <div id="row-container-bier" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.95); padding: 10px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1; transition: background 0.3s;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span id="row-blink-bier" style="display: none;" class="red-blink-light"></span>
+                            <span style="font-weight: 700; font-size: 0.9em;">Bier Kisten 0,33l</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <button class="counter-btn" style="width: 32px; height: 32px; font-size: 1.1em;" onclick="adjustInventoryItem('bier', -1)">-</button>
+                            <span id="inv-count-bier" style="font-weight: 900; font-size: 1.05em; width: 30px; text-align: center; color: var(--primary-red);">3</span>
+                            <button class="counter-btn" style="width: 32px; height: 32px; font-size: 1.1em;" onclick="adjustInventoryItem('bier', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Limo Kisten -->
+                    <div id="row-container-limo" style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.95); padding: 10px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1; transition: background 0.3s;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span id="row-blink-limo" style="display: none;" class="red-blink-light"></span>
+                            <span style="font-weight: 700; font-size: 0.9em;">Limo Kisten 0,3l</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <button class="counter-btn" style="width: 32px; height: 32px; font-size: 1.1em;" onclick="adjustInventoryItem('limo', -1)">-</button>
+                            <span id="inv-count-limo" style="font-weight: 900; font-size: 1.05em; width: 30px; text-align: center; color: var(--primary-red);">2</span>
+                            <button class="counter-btn" style="width: 32px; height: 32px; font-size: 1.1em;" onclick="adjustInventoryItem('limo', 1)">+</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -865,7 +924,6 @@
                     <defs>
                         <linearGradient id="navRifleGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#475569"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
                     </defs>
-                    <!-- Detailiertes Gewehr-SVG-Icon -->
                     <path d="M2 17L4 15H8L10 13H15L17 15H22V17H17L15 15H10L8 17H2Z" fill="url(#navRifleGrad)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
                     <path d="M7 15L9 11H13L15 15" stroke="url(#navRifleGrad)" stroke-width="1.5" stroke-linecap="round"/>
                     <circle cx="19" cy="16" r="1.5" fill="#b91c1c"/>
@@ -875,7 +933,6 @@
         </a>
 
         <a onclick="switchTab('card')" class="nav-item" id="nav-card" style="position: relative;">
-            <!-- AUSRUFEZEICHEN-BADGE FÜR LAGERBESTAND-ALARM -->
             <div id="admin-tab-alert-badge" class="admin-alert-badge">!</div>
             <span class="nav-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1027,7 +1084,6 @@
         let html5QrCode = null;
         let isWeaponBookUnlocked = false;
 
-        // Vereins-Waffenbestand mit vollständigen Waffennummern
         const clubWeaponsInventory = [
             { id: "K-01", name: "Steyr Mannlicher M1895", number: "ST-8841", zvr: "ZVR-11223399" },
             { id: "K-02", name: "Steyr Mannlicher M1895", number: "ST-8842", zvr: "ZVR-11223400" },
@@ -1131,7 +1187,6 @@
             const timestamp = `${dateStr} ${timeStr}`;
 
             if (window.pendingReturnId) {
-                // RÜCKGABE BESTÄTIGEN
                 try {
                     const docRef = db.collection("weapon_log").doc(window.pendingReturnId);
                     const doc = await docRef.get();
@@ -1191,7 +1246,6 @@
                     alert("Fehler bei Rückgabe: " + err.message);
                 }
             } else {
-                // ENTNAHME SPEICHERN
                 const primaryName = document.getElementById('weapon-member-primary').value;
                 const secondaryName = document.getElementById('weapon-member-secondary').value.trim();
                 const weaponVal = document.getElementById('weapon-select-dropdown').value;
@@ -1273,7 +1327,6 @@
             }
         }
 
-        // VOLLSTÄNDIGE WAFFENLISTE ALS PDF EXPORTIEREN (IM ADMIN-BEREICH)
         function downloadWeaponBookPDF() {
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
@@ -1294,7 +1347,7 @@
             let tableData = clubWeaponsInventory.map(w => [
                 w.id,
                 w.name,
-                w.number, // Ungekürzt!
+                w.number,
                 w.zvr,
                 "Verfügbar"
             ]);
@@ -1316,28 +1369,81 @@
             pdf.save(`Vereins_Waffenbestand_Vollstaendig_${dateStr.replace(/\./g, '-')}.pdf`);
         }
 
-        // --- LAGERBESTAND-ALARM & WHATSAPP BESTELLUNG ---
+        // --- INTERAKTIVE LAGERBESTAND-STEUERUNG (+/-) & BLINKLICHT ---
+        async function adjustInventoryItem(itemKey, delta) {
+            inventoryData[itemKey] = Math.max(0, (inventoryData[itemKey] || 0) + delta);
+            
+            // Sofort in Firebase speichern
+            try {
+                await db.collection("settings").doc("inventory").set(inventoryData);
+            } catch(e) {}
+
+            updateInventoryUI();
+        }
+
+        function updateInventoryUI() {
+            document.getElementById('inv-count-hauswuerste').innerText = inventoryData.hauswuerste;
+            document.getElementById('inv-count-wienerle').innerText = inventoryData.wienerle;
+            document.getElementById('inv-count-bier').innerText = inventoryData.bier;
+            document.getElementById('inv-count-limo').innerText = inventoryData.limo;
+
+            const now = new Date();
+            const timeStr = now.toLocaleDateString('de-AT') + ", " + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'}) + " Uhr";
+            document.getElementById('inventory-timestamp').innerText = "Zuletzt geändert: " + timeStr;
+
+            checkInventoryWarnings();
+            checkAdminInventoryAlerts();
+        }
+
         function checkAdminInventoryAlerts() {
             const banner = document.getElementById('admin-inventory-alert-banner');
             const alertText = document.getElementById('admin-alert-text');
             const tabBadge = document.getElementById('admin-tab-alert-badge');
+            const blinkLight = document.getElementById('inventory-blink-light');
+            
+            const rowBier = document.getElementById('row-container-bier');
+            const blinkBier = document.getElementById('row-blink-bier');
+            const rowLimo = document.getElementById('row-container-limo');
+            const blinkLimo = document.getElementById('row-blink-limo');
+
             if (!banner || !alertText || !tabBadge) return;
 
             let lowStockItems = [];
-            if (inventoryData.bier <= 2) {
+            let isBierCritical = inventoryData.bier <= 2;
+            let isLimoCritical = inventoryData.limo <= 2;
+
+            if (isBierCritical) {
                 lowStockItems.push(`Bier Kisten 0,33l – nur noch ${inventoryData.bier} Kisten`);
+                rowBier.style.background = "rgba(254, 242, 242, 0.95)";
+                rowBier.style.borderColor = "#fca5a5";
+                blinkBier.style.display = "inline-block";
+            } else {
+                rowBier.style.background = "rgba(255, 255, 255, 0.95)";
+                rowBier.style.borderColor = "#cbd5e1";
+                blinkBier.style.display = "none";
             }
-            if (inventoryData.limo <= 2) {
+
+            if (isLimoCritical) {
                 lowStockItems.push(`Limo Kisten 0,3l – nur noch ${inventoryData.limo} Kisten`);
+                rowLimo.style.background = "rgba(254, 242, 242, 0.95)";
+                rowLimo.style.borderColor = "#fca5a5";
+                blinkLimo.style.display = "inline-block";
+            } else {
+                rowLimo.style.background = "rgba(255, 255, 255, 0.95)";
+                rowLimo.style.borderColor = "#cbd5e1";
+                blinkLimo.style.display = "none";
             }
 
             if (lowStockItems.length > 0) {
                 alertText.innerText = `Nachbestellung nötig: ${lowStockItems.join(' | ')} auf Lager!`;
                 banner.style.display = 'block';
                 tabBadge.style.display = 'flex';
+                blinkLight.style.display = 'inline-block';
+                blinkLight.className = 'red-blink-light';
             } else {
                 banner.style.display = 'none';
                 tabBadge.style.display = 'none';
+                blinkLight.style.display = 'none';
             }
         }
 
@@ -1565,8 +1671,6 @@
             return defaultDutyRoster.map((item, index) => ({ id: "default-" + index, ...item }));
         }
 
-        async function loadвен() {}
-
         async function loadInventory() {
             try {
                 const doc = await db.collection("settings").doc("inventory").get();
@@ -1575,12 +1679,7 @@
                 } else {
                     await db.collection("settings").doc("inventory").set(inventoryData);
                 }
-                document.getElementById('inv-hauswuerste').innerText = inventoryData.hauswuerste + " Paar";
-                document.getElementById('inv-wienerle').innerText = inventoryData.wienerle + " Paar";
-                document.getElementById('inv-bier').innerText = inventoryData.bier + " Kisten";
-                document.getElementById('inv-limo').innerText = inventoryData.limo + " Kisten";
-                checkInventoryWarnings();
-                checkAdminInventoryAlerts();
+                updateInventoryUI();
             } catch(e) {}
         }
 
@@ -1618,17 +1717,7 @@
                 await db.collection("settings").doc("inventory").set(inventoryData);
             } catch(e) {}
 
-            document.getElementById('inv-hauswuerste').innerText = inventoryData.hauswuerste + " Paar";
-            document.getElementById('inv-wienerle').innerText = inventoryData.wienerle + " Paar";
-            document.getElementById('inv-bier').innerText = inventoryData.bier + " Kisten";
-            document.getElementById('inv-limo').innerText = inventoryData.limo + " Kisten";
-
-            const now = new Date();
-            const timeStr = now.toLocaleDateString('de-AT') + " um " + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('inventory-timestamp').innerText = "Lagerstand geändert am: " + timeStr;
-
-            checkInventoryWarnings();
-            checkAdminInventoryAlerts();
+            updateInventoryUI();
             alert("Lagerbestand erfolgreich gespeichert!");
         }
 
