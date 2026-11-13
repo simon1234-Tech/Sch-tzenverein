@@ -1098,7 +1098,7 @@
         let globalDutyList = [];
 
         function initDutyPlanRealtimeListener() {
-            db.collection("duty_plan").orderBy("createdAt", "asc").onSnapshot((snapshot) => {
+            db.collection("duty_plan").onSnapshot((snapshot) => {
                 let dutyList = [];
                 snapshot.forEach(doc => {
                     dutyList.push({ id: doc.id, ...doc.data() });
@@ -1106,6 +1106,10 @@
 
                 globalDutyList = (dutyList.length > 0) ? dutyList : defaultDutyPlanWithIds();
                 renderDutyPlanViews(globalDutyList, dutyList.length > 0);
+            }, (error) => {
+                // Fallback bei Offline / Fehlern
+                globalDutyList = defaultDutyPlanWithIds();
+                renderDutyPlanViews(globalDutyList, false);
             });
         }
 
