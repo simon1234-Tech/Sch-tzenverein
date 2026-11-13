@@ -344,7 +344,7 @@
         <p>Gaschurn-Partenen</p>
     </div>
 
-    <!-- 1. NEWS & STARTSEITE -->
+    <!-- 1. NEWS & STARTSEITE (DIENSTPLAN) -->
     <div id="page-news" class="page-content active">
         <!-- NÄCHSTER DIENST -->
         <div class="glass-card next-duty-neon">
@@ -370,8 +370,6 @@
                 <div id="archive-roster-list" style="margin-top: 10px;">Lade Archiv...</div>
             </details>
         </div>
-
-        <div id="news-container"></div>
     </div>
 
     <!-- 2. TERMINE -->
@@ -589,19 +587,6 @@
                     </div>
                     <span>5. Schlüssel</span>
                 </button>
-
-                <button onclick="switchAdminTab('tab-weapons-admin')" class="admin-tab-btn" id="btn-tab-weapons-admin">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e40af"/></linearGradient>
-                            </defs>
-                            <path d="M12 2L4 5V11C4 16.5 7.5 21.2 12 22C16.5 21.2 20 16.5 20 11V5L12 2Z" fill="url(#shieldGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M9 12L11 14L15 10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span>6. Waffen-PDFs</span>
-                </button>
             </div>
 
             <!-- TAB 1: LAGERBESTAND -->
@@ -674,16 +659,6 @@
                     <button class="btn btn-admin" style="padding: 8px 14px; font-size: 0.85em;" onclick="addKeyListItem()">➕ Person hinzufügen</button>
                 </div>
                 <div id="admin-keys-list"></div>
-            </div>
-
-            <!-- TAB 6: WAFFEN-PDF ARCHIV -->
-            <div id="tab-weapons-admin" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">🔫 6. Waffenbuch-Protokolle</div>
-                <div style="margin-bottom: 14px;">
-                    <button class="btn btn-admin btn-block" onclick="exportFullWeaponListPDF()">📥 Vollständige Waffenliste als PDF exportieren</button>
-                </div>
-                <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Hier sind alle Waffennummern für den Admin vollständig sichtbar:</p>
-                <div id="admin-weapon-pdf-list"><p style="font-size: 0.85em; color: var(--text-muted);">Keine Protokolle vorhanden.</p></div>
             </div>
 
             <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 15px;">Admin-Modus Beenden</button>
@@ -765,6 +740,21 @@
                 <h3 style="color:#b91c1c; font-size:1.3em; font-weight:800; margin-bottom:6px; letter-spacing:0.5px;">Hoppla!</h3>
                 <p style="color:#1e293b; font-size:0.95em; font-weight:700; line-height:1.4; margin-bottom:20px;">Passwort leider falsch.</p>
                 <button onclick="closeAdminErrorModal()" style="width:100%; background:#b91c1c; color:#ffffff; border:none; padding:12px; font-weight:800; font-size:0.95em; border-radius:14px; cursor:pointer; box-shadow:0 4px 15px rgba(185,28,28,0.35);">Verstanden</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ABSTIMMUNGS-AUSWAHL MODAL -->
+    <div id="vote-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.7); backdrop-filter:blur(6px); z-index:999999999; justify-content:center; align-items:center; padding:16px;">
+        <div style="background:#ffffff; padding:24px; border-radius:22px; max-width:400px; width:100%; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); border:3px solid #2563eb;" class="modal-anim">
+            <h3 id="vote-modal-title" style="color:#2563eb; font-size:1.15em; font-weight:800; margin-bottom:12px; text-align:center;">Name auswählen</h3>
+            <p style="font-size:0.85em; color:var(--text-muted); text-align:center; margin-bottom:14px;">Bitte wähle deinen Namen aus der Liste aus:</p>
+            <div class="form-group">
+                <select id="vote-member-select" class="form-control" style="font-weight:700; font-size:1em;"></select>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:16px;">
+                <button onclick="submitVoteSelection()" class="btn btn-green" style="flex:1; padding:12px;">Speichern</button>
+                <button onclick="closeVoteModal()" class="btn btn-danger" style="flex:1; padding:12px;">Abbrechen</button>
             </div>
         </div>
     </div>
@@ -936,7 +926,6 @@
 
         // --- EXAKT DIE 17 WAFFEN (ZUGEWIESENE OBEN, RESERVE UNTEN) ---
         const officialWeaponList = [
-            // Zuweisungen (oben)
             { id: "W1", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Heimo", nummer: "V8640" },
             { id: "W2", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Werner.Wa", nummer: "A2605" },
             { id: "W3", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Simon.Schw", nummer: "N1657" },
@@ -946,7 +935,6 @@
             { id: "W7", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Spettel Norbert", nummer: "R713" },
             { id: "W8", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 IS", kat: "C", zuweisung: "Wittwer.Christoph", nummer: "K83466" },
             { id: "W9", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 IS", kat: "C", zuweisung: "Wachter. Manfred", nummer: "K31927" },
-            // Reserve (unten)
             { id: "W10", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Reserve", nummer: "7497" },
             { id: "W11", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Reserve", nummer: "A9424" },
             { id: "W12", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 IS", kat: "C", zuweisung: "Reserve", nummer: "M13685" },
@@ -1060,7 +1048,6 @@
             alert("Lagerbestand erfolgreich gespeichert!");
         }
 
-        // --- VOLLSTÄNDIGER WAFFENLISTEN PDF EXPORT FÜR ADMIN ---
         function exportFullWeaponListPDF() {
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
@@ -1100,7 +1087,7 @@
             pdf.save(`Vollstaendiges_Waffenverzeichnis_${dateStr.replace(/\./g, '-')}.pdf`);
         }
 
-        // --- EXAKTER DIENSTPLAN AUS PDF (SAISON 2026/2027) ---
+        // --- DIENSTPLAN ---
         const defaultDutyRoster = [
             { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
             { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
@@ -1316,11 +1303,164 @@
             return defaultDutyRoster.map((item, index) => ({ id: "default-" + index, ...item }));
         }
 
+        // --- TERMINE & ABSTIMMUNG ---
+        async function addEvent(e) {
+            e.preventDefault();
+            const title = document.getElementById('new-event-title').value.trim();
+            const date = document.getElementById('new-event-date').value.trim();
+            const desc = document.getElementById('new-event-desc').value.trim();
+
+            if (!title || !date) {
+                alert("Bitte Titel und Datum angeben!");
+                return;
+            }
+
+            try {
+                await db.collection("events").add({
+                    title,
+                    date,
+                    desc,
+                    votes: {},
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                document.getElementById('new-event-title').value = '';
+                document.getElementById('new-event-date').value = '';
+                document.getElementById('new-event-desc').value = '';
+                alert("Termin erfolgreich gespeichert!");
+                loadEvents();
+            } catch (err) {
+                alert("Fehler beim Speichern: " + err.message);
+            }
+        }
+
+        let selectedEventIdForVote = null;
+
+        function openVoteModal(eventId, eventTitle) {
+            selectedEventIdForVote = eventId;
+            document.getElementById('vote-modal-title').innerText = "Abstimmung: " + eventTitle;
+            const selectEl = document.getElementById('vote-member-select');
+            let html = "";
+            officialActiveMembers.forEach(m => {
+                html += `<option value="${m}">${m}</option>`;
+            });
+            selectEl.innerHTML = html;
+            document.getElementById('vote-modal').style.display = 'flex';
+        }
+
+        function closeVoteModal() {
+            document.getElementById('vote-modal').style.display = 'none';
+            selectedEventIdForVote = null;
+        }
+
+        async function submitVoteSelection() {
+            if (!selectedEventIdForVote) return;
+            const memberName = document.getElementById('vote-member-select').value;
+            
+            try {
+                const docRef = db.collection("events").doc(selectedEventIdForVote);
+                const doc = await docRef.get();
+                if (!doc.exists) return;
+                const data = doc.data();
+                let votes = data.votes || {};
+
+                if (votes[memberName] === 'Dabei') {
+                    delete votes[memberName];
+                } else {
+                    votes[memberName] = 'Dabei';
+                }
+
+                await docRef.update({ votes });
+                closeVoteModal();
+                loadEvents();
+            } catch (err) {
+                alert("Fehler bei der Abstimmung: " + err.message);
+            }
+        }
+
+        async function loadEvents() {
+            const container = document.getElementById('events-container');
+            const adminContainer = document.getElementById('admin-events-list');
+            if (!container) return;
+
+            try {
+                const snapshot = await db.collection("events").orderBy("createdAt", "asc").get();
+                let eventsList = [];
+
+                snapshot.forEach(doc => {
+                    eventsList.push({ id: doc.id, ...doc.data() });
+                });
+
+                const today = getViennaToday();
+
+                eventsList.forEach(ev => {
+                    ev.parsedDate = parseLocalDate(ev.date);
+                    ev.parsedDate.setHours(0,0,0,0);
+                });
+
+                let futureEvents = eventsList.filter(ev => ev.parsedDate >= today);
+                let pastEvents = eventsList.filter(ev => ev.parsedDate < today);
+
+                futureEvents.sort((a, b) => a.parsedDate - b.parsedDate);
+                pastEvents.sort((a, b) => b.parsedDate - a.parsedDate);
+
+                let sortedEvents = [...futureEvents, ...pastEvents];
+
+                let html = "";
+                let adminHtml = "";
+
+                if (sortedEvents.length === 0) {
+                    container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Termine eingetragen.</p>';
+                    if(adminContainer) adminContainer.innerHTML = '<p style="font-size:0.8em; color:var(--text-muted);">Keine Termine.</p>';
+                    return;
+                }
+
+                sortedEvents.forEach((ev, idx) => {
+                    const isNext = (idx === 0 && ev.parsedDate >= today);
+                    const votes = ev.votes || {};
+                    const voteNames = Object.keys(votes);
+
+                    let votesHtml = "";
+                    if (voteNames.length > 0) {
+                        voteNames.forEach(n => {
+                            votesHtml += `<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:6px; font-weight:700; font-size:0.75em; display:inline-block; margin:2px;">✅ ${n}</span>`;
+                        });
+                    } else {
+                        votesHtml = `<span style="font-size:0.8em; color:var(--text-muted);">Noch keine Rückmeldungen.</span>`;
+                    }
+
+                    html += `
+                        <div class="glass-card ${isNext ? 'next-duty-neon' : ''}" style="margin-bottom: 10px; padding: ${isNext ? '18px' : '12px'}; ${isNext ? '' : 'border-left: 4px solid #2563eb; opacity: 0.9;'}">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <div style="font-size: ${isNext ? '1em' : '0.85em'}; font-weight: 800; color: #0f172a;">📅 ${ev.date} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;" class="live-pulse-badge">NÄCHSTER TERMIN</span>' : ''}</div>
+                                ${isNext ? '<span style="font-size: 0.75em; background: #0f172a; color: #22c55e; font-weight: 800; padding: 3px 8px; border-radius: 6px;" class="live-pulse-badge">● LIVE</span>' : ''}
+                            </div>
+                            <div style="font-size: ${isNext ? '1.1em' : '0.95em'}; font-weight: 800; color: #b91c1c; margin-bottom: 3px;">${ev.title}</div>
+                            <div style="font-size: ${isNext ? '0.85em' : '0.75em'}; color: var(--text-muted); margin-bottom: 6px;">📍 ${ev.desc || 'Kein Ort angegeben'}</div>
+                            <div style="margin: 6px 0; display: flex; flex-wrap: wrap; gap: 4px;">${votesHtml}</div>
+                            <button onclick="openVoteModal('${ev.id}', '${ev.title}')" class="btn btn-green btn-block" style="padding: ${isNext ? '10px' : '8px'}; font-size: ${isNext ? '0.9em' : '0.8em'};">✋ Ich bin dabei / Stimme abgeben</button>
+                        </div>
+                    `;
+
+                    adminHtml += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 10px; border-radius:8px; margin-bottom:6px; border:1px solid #cbd5e1; font-size:0.85em;">
+                            <div><strong>${ev.date}</strong> - ${ev.title} (${voteNames.length} Zusagen)</div>
+                            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75em;" onclick="deleteItem('events', '${ev.id}')">🗑️</button>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+                if(adminContainer) adminContainer.innerHTML = adminHtml;
+            } catch (e) {
+                container.innerHTML = '<p style="font-size:0.85em; color:red;">Fehler beim Laden der Termine.</p>';
+            }
+        }
+
         let html5QrCode = null;
         let currentScanMode = 'issue';
         let pendingReturnRecordId = null;
 
-        // --- WAFFENBUCH / QR SCANNER ---
+        // --- WAFFENBUCH QR SCANNER ---
         function startQrScanner(mode, recordId = null) {
             currentScanMode = mode;
             pendingReturnRecordId = recordId;
@@ -1490,7 +1630,6 @@
                 document.getElementById('scanner-status-badge').innerText = 'GESPERRT (Tresor-Scan erforderlich)';
 
                 loadWeaponHistory();
-                loadAdminWeaponPDFs();
             } catch (err) {
                 alert("Fehler beim Speichern: " + err.message);
             }
@@ -1561,7 +1700,6 @@
                 pdf.save(`${recordId}_Rueckgabe.pdf`);
                 alert("Tresor-Scan erfolgreich! Waffenrückgabe protokolliert.");
                 loadWeaponHistory();
-                loadAdminWeaponPDFs();
             } catch (err) {
                 alert("Fehler bei Rückgabe: " + err.message);
             }
@@ -1613,7 +1751,7 @@
                                 ${w.returnTime ? `📥 Rückgabe: <strong>${w.returnTime}</strong>` : ''}
                             </div>
                             ${!isReturned ? `<button onclick="promptReturnWeapon('${doc.id}')" class="btn btn-green btn-block" style="padding: 8px; font-size: 0.85em;">📷 QR-Code scannen & Waffe(n) zurückbringen</button>` : ''}
-                            ${document.body.classList.contains('admin-mode') ? `<button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.7em; margin-top: 8px;" onclick="deleteItem('weapon_log', '${doc.id}'); loadWeaponHistory(); loadAdminWeaponPDFs();">Eintrag löschen</button>` : ''}
+                            ${document.body.classList.contains('admin-mode') ? `<button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.7em; margin-top: 8px;" onclick="deleteItem('weapon_log', '${doc.id}'); loadWeaponHistory();">Eintrag löschen</button>` : ''}
                         </div>
                     `;
                 });
@@ -1621,61 +1759,6 @@
             } catch (e) {
                 container.innerHTML = '<p style="font-size:0.85em; color:red;">Fehler beim Laden.</p>';
             }
-        }
-
-        async function loadAdminWeaponPDFs() {
-            const container = document.getElementById('admin-weapon-pdf-list');
-            if (!container) return;
-
-            try {
-                const snapshot = await db.collection("weapon_log").orderBy("createdAt", "desc").get();
-                let html = "";
-                window.weaponPdfMap = {};
-
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Protokolle im Admin-Archiv.</p>';
-                    return;
-                }
-
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    window.weaponPdfMap[doc.id] = data;
-
-                    let weaponsFullHtml = "";
-                    (data.selectedWeapons || []).forEach(w => {
-                        weaponsFullHtml += `<span style="font-size: 0.8em; color: #b91c1c; display:block;">• ${w}</span>`;
-                    });
-
-                    html += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.85em;">
-                            <div>
-                                <strong>${data.id}</strong> - ${data.collectorStr}<br>
-                                <span style="color:var(--text-muted); font-size:0.8em;">${data.occasion} | ${data.issueTime}</span>
-                                <div style="margin-top: 2px;">${weaponsFullHtml}</div>
-                            </div>
-                            <div style="display: flex; gap: 6px;">
-                                <button class="btn btn-admin" style="padding: 6px 10px; font-size: 0.75em;" onclick="downloadWeaponPDF('${doc.id}')">📥 PDF</button>
-                                <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75em;" onclick="deleteItem('weapon_log', '${doc.id}'); loadWeaponHistory(); loadAdminWeaponPDFs();">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-            } catch(e) {}
-        }
-
-        function downloadWeaponPDF(docId) {
-            const data = window.weaponPdfMap[docId];
-            if (!data || !data.pdfData) {
-                alert("Kein PDF gefunden.");
-                return;
-            }
-            const link = document.createElement('a');
-            link.href = data.pdfData;
-            link.download = `${data.id}_Protokoll.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
 
         const drinkPrices = {
@@ -1977,150 +2060,6 @@
             if(passiveList) passiveList.innerHTML = passHtml;
         }
 
-        async function addNewsItem(e) {
-            e.preventDefault();
-            const title = document.getElementById('news-title').value;
-            const text = document.getElementById('news-text').value;
-            const fileInput = document.getElementById('news-photo-input');
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = async function(uploadEvent) {
-                    await saveNewsToFirestore(title, text, uploadEvent.target.result);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                await saveNewsToFirestore(title, text, "");
-            }
-        }
-
-        async function saveNewsToFirestore(title, text, imageUrl) {
-            try {
-                await db.collection("news").add({ title, text, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                alert("News veröffentlicht!");
-                document.getElementById('news-title').value = '';
-                document.getElementById('news-text').value = '';
-                document.getElementById('news-photo-input').value = '';
-                loadNews();
-            } catch (err) {}
-        }
-
-        async function loadNews() {
-            const container = document.getElementById('news-container');
-            if (!container) return;
-            try {
-                const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
-                let html = "";
-                if (snapshot.empty) {
-                    container.innerHTML = "";
-                    return;
-                }
-                snapshot.forEach(doc => {
-                    const n = doc.data();
-                    html += `
-                        <div class="glass-card">
-                            <div class="card-title"><span>📢 ${n.title}</span></div>
-                            <p style="font-size: 0.9em; line-height: 1.4; margin-bottom: 8px;">${n.text}</p>
-                            ${n.imageUrl ? `<img src="${n.imageUrl}" style="width:100%; border-radius:12px; margin-top:8px;" alt="News Bild">` : ''}
-                            ${document.body.classList.contains('admin-mode') ? `<button class="btn btn-danger" style="margin-top:10px; padding:6px 12px; font-size:0.8em;" onclick="deleteItem('news', '${doc.id}')">Löschen</button>` : ''}
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-            } catch(e) {}
-        }
-
-        async function addEvent(e) {
-            e.preventDefault();
-            const title = document.getElementById('new-event-title').value;
-            const date = document.getElementById('new-event-date').value;
-            const desc = document.getElementById('new-event-desc').value;
-            try {
-                await db.collection("events").add({ title, date, desc, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                alert("Termin gespeichert!");
-                document.getElementById('new-event-title').value = '';
-                document.getElementById('new-event-date').value = '';
-                document.getElementById('new-event-desc').value = '';
-                loadEvents();
-            } catch(e){}
-        }
-
-        async function loadEvents() {
-            const container = document.getElementById('events-container');
-            const adminContainer = document.getElementById('admin-events-list');
-            if (!container) return;
-            try {
-                const snapshot = await db.collection("events").orderBy("createdAt", "desc").get();
-                let html = "";
-                let adminHtml = "";
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="font-size: 0.85em; color: var(--text-muted);">Keine Termine eingetragen.</p>';
-                    if(adminContainer) adminContainer.innerHTML = '';
-                    return;
-                }
-                snapshot.forEach(doc => {
-                    const ev = doc.data();
-                    html += `
-                        <div class="dark-event-item">
-                            <div style="font-size: 0.9em; font-weight: 800; color: #2563eb;">📅 ${ev.date}</div>
-                            <div style="font-size: 1.1em; font-weight: 800; margin: 4px 0;">${ev.title}</div>
-                            <div style="font-size: 0.85em; color: var(--text-muted);">${ev.desc || ''}</div>
-                        </div>
-                    `;
-                    adminHtml += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #fee2e2; font-size:0.85em;">
-                            <span><strong>${ev.date}</strong> - ${ev.title}</span>
-                            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75em;" onclick="deleteItem('events', '${doc.id}')">🗑️</button>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-                if(adminContainer) adminContainer.innerHTML = adminHtml;
-            } catch(e) {}
-        }
-
-        function loadKeyList() {
-            const container = document.getElementById('admin-keys-list');
-            if (!container) return;
-            let html = "";
-            exactPdfKeyList.forEach((k, idx) => {
-                if (k.header) {
-                    html += `<div style="font-weight:800; color:#b91c1c; font-size:0.9em; margin:12px 0 6px 0; border-bottom:1.5px solid #fecaca; padding-bottom:4px;">${k.header}</div>`;
-                } else {
-                    html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #e2e8f0; font-size:0.85em;">
-                            <div>
-                                <strong>${k.name}</strong><br>
-                                <span style="color:var(--text-muted); font-size:0.8em;">${k.addr} | Tel: ${k.tel || 'Keine'} | <em>${k.role}</em></span>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            container.innerHTML = html;
-        }
-
-        function addKeyListItem() {
-            alert("Schlüsselliste entspricht dem offiziellen PDF-Verzeichnis.");
-        }
-
-        let exactPdfKeyList = [
-            { header: "Mitglieder (Eingang & Büro)" },
-            { name: "Kofler Konrad", dob: "27.02.1960", addr: "Gaschurn 164d", tel: "0664 4331385", role: "Eingang & Büro" },
-            { name: "Wachter Manfred", dob: "23.06.1963", addr: "Gaschurn 164e", tel: "0664 4752129", role: "Waffenschrank" },
-            { name: "Wachter Werner", dob: "26.05.1966", addr: "Gaschurn 153", tel: "0664 2804791", role: "Eingang & Büro" },
-            { name: "Schweighofer Dietmar", dob: "28.03.1972", addr: "Gaschurn 160", tel: "0664 19281005", role: "Eingang & Büro" },
-            { name: "Schweighofer Simon", dob: "17.09.1997", addr: "Gaschurn 160", tel: "0650 3049466", role: "Waffenschrank" },
-            { name: "Spettel Norbert", dob: "14.01.1958", addr: "Gaschurn 11e", tel: "0664 5367206", role: "Waffenschrank" },
-            { name: "Stocker Heimo", dob: "23.01.1983", addr: "Gortipohl 59", tel: "0664 42144179", role: "Waffenschrank" },
-            { name: "Wittwer Christoph", dob: "17.11.1965", addr: "Gaschurn 71", tel: "0664 8258518", role: "Eingang & Büro" },
-            { name: "Wittwer Werner", dob: "08.02.1974", addr: "Gaschurn 60", tel: "0650 2501910", role: "Eingang & Büro" },
-            { name: "Mattle Werner", dob: "28.03.1979", addr: "Partenen 43b", tel: "0664 2520974", role: "Eingang & Büro" },
-            { name: "Markus Netzer", dob: "10.05.1983", addr: "Gaschurn 139a", tel: "0664 7605263", role: "Eingang & Büro" },
-            { name: "Werner Netzer", dob: "15.09.1956", addr: "Gaschurn 35a", tel: "", role: "Eingang & Büro" },
-            { name: "Pascal Tripolt", dob: "01.05.1984", addr: "Gaschurn 162", tel: "0664 5162082", role: "Eingang & Büro" }
-        ];
-
         function loadPublicMembersList() {
             const container = document.getElementById('public-members-list');
             if (container) {
@@ -2136,7 +2075,7 @@
             if (confirm("Wirklich löschen?")) {
                 await db.collection(collectionName).doc(docId).delete();
                 alert("Gelöscht!");
-                loadEvents(); loadNews(); loadInvoices(); loadWeaponHistory(); loadAdminWeaponPDFs();
+                loadEvents(); loadNews(); loadInvoices(); loadWeaponHistory();
             }
         }
 
@@ -2155,7 +2094,7 @@
                     showAdminSuccessModal();
                     resetInactivityTimer();
                     
-                    loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory(); loadAdminWeaponPDFs();
+                    loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory();
                 })
                 .catch((error) => {
                     showAdminErrorModal();
@@ -2181,7 +2120,7 @@
                 document.body.classList.add('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'none';
                 resetInactivityTimer();
-                loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory(); loadAdminWeaponPDFs();
+                loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory();
             } else {
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
@@ -2202,7 +2141,6 @@
             try { loadKeyList(); } catch(e) {}
             try { loadInventory(); renderInventoryDisplay(); } catch(e) {}
             try { populateWeaponCheckboxes(); loadWeaponHistory(); } catch(e) {}
-            try { loadAdminWeaponPDFs(); } catch(e) {}
         });
     </script>
 </body>
