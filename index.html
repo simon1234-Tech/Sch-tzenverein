@@ -434,18 +434,7 @@
 
     <!-- 4. MITGLIEDER -->
     <div id="page-guide" class="page-content">
-        <div class="glass-card glass-card-yellow">
-            <div class="card-title" style="color: #ca8a04;">⭐ Vorstand & Funktionsträger ⭐</div>
-            <div style="font-size: 0.85em; display: flex; flex-direction: column; gap: 8px;">
-                <div class="price-item"><div><strong>Simon Schweighofer</strong><br><span style="color:var(--primary-red);">Obmann</span></div><a href="tel:06503049466" style="color:#2563eb; font-weight:700;">0650 3049466</a></div>
-                <div class="price-item"><div><strong>Heimo Stocker</strong><br><span style="color:var(--primary-red);">Obmann-Stv. & Waffenwart</span></div><a href="tel:06503600415" style="color:#2563eb; font-weight:700;">0650 3600415</a></div>
-                <div class="price-item"><div><strong>Karin Stocker</strong><br><span style="color:var(--primary-red);">Kassierin</span></div><a href="tel:06502800596" style="color:#2563eb; font-weight:700;">0650 2800596</a></div>
-                <div class="price-item"><div><strong>Sabrina Kinzl</strong><br><span style="color:var(--primary-red);">Schriftführerin</span></div><a href="tel:06601113150" style="color:#2563eb; font-weight:700;">0660 1113150</a></div>
-                <div class="price-item"><div><strong>Daniel Sandrell</strong><br><span style="color:var(--primary-red);">Bürgermeister</span></div><a href="tel:06641134051" style="color:#2563eb; font-weight:700;">0664 1134051</a></div>
-                <div class="price-item"><div><strong>Manfred Wachter</strong><br><span style="color:var(--primary-red);">Waffenwart</span></div><a href="tel:06644752129" style="color:#2563eb; font-weight:700;">0664 4752129</a></div>
-            </div>
-        </div>
-
+        <!-- Vorstandskarte entfernt -->
         <div class="glass-card glass-card-yellow">
             <div class="card-title" style="color: #ca8a04;">👥 Alle Aktiven Mitglieder</div>
             <div id="public-members-list" style="font-size: 0.85em; display: flex; flex-direction: column; gap: 6px;"></div>
@@ -454,85 +443,93 @@
 
     <!-- WAFFENBUCH -->
     <div id="page-weapons" class="page-content">
-        <div id="scanner-card-issue" class="glass-card glass-card-red" style="border-left-color: #2563eb !important; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(239,246,255,0.95));">
-            <div class="card-title" style="color: #2563eb;">📷 Tresor QR-Code Scanner (Entnahme)</div>
-            <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 12px;">
-                <strong>Wichtig:</strong> Scanne den QR-Code direkt am Waffentresor, um die Waffenentnahme freizuschalten.
-            </p>
-            <button onclick="startQrScanner('issue')" class="btn btn-admin btn-block">📷 QR-Code für Entnahme scannen</button>
-            <div id="reader" style="width: 100%; margin-top: 12px; border-radius: 12px; overflow: hidden; display:none;"></div>
-            <button id="stop-scanner-btn" onclick="stopQrScanner()" class="btn btn-danger btn-block" style="display: none; margin-top: 8px;">Scanner stoppen</button>
+        <div id="weapon-book-restricted-msg" class="glass-card glass-card-red" style="display:none; text-align:center; padding: 25px;">
+            <div style="font-size: 2.5em; margin-bottom: 10px;">🔒</div>
+            <h3 style="color: #b91c1c; font-size: 1.2em; font-weight: 800; margin-bottom: 8px;">Geschützter Bereich</h3>
+            <p style="font-size: 0.9em; color: var(--text-muted);">Das digitale Waffenbuch ist strikt nur für eingeloggte Admins zugänglich. Bitte melde dich im Admin-Bereich an.</p>
         </div>
 
-        <div id="weapon-form-card" class="glass-card glass-card-red" style="border-left-color: #b91c1c !important; opacity: 0.5; pointer-events: none; transition: all 0.3s;">
-            <div class="card-title" style="color: #b91c1c; font-size: 1.2em;">
-                <span>🛡️ Digitales Waffenbuch (Salutwaffen Kat. C)</span>
-                <span id="scanner-status-badge" style="font-size: 0.65em; background: #dc2626; color: white; padding: 4px 8px; border-radius: 6px;">GESPERRT (Tresor-Scan erforderlich)</span>
+        <div id="weapon-book-content-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <button onclick="downloadWeaponBookPDF()" class="btn btn-admin" style="font-size: 0.85em; padding: 8px 14px;">📥 Vollständige Waffenliste als PDF exportieren</button>
             </div>
-            <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 16px;">
-                Erfassung für Ausrückungen gemäß ZVR-624291509 (Schützenhaus Partenen).
-            </p>
 
-            <form onsubmit="saveWeaponIssue(event)">
-                <div class="form-group">
-                    <label>1. Übernehmer / Hauptverantwortlicher</label>
-                    <select class="form-control" id="weapon-member-primary" required style="font-weight: 700;">
-                        <option value="Manfred Wachter">Manfred Wachter (Waffenwart Stv.)</option>
-                        <option value="Heimo Stocker">Heimo Stocker (Salutkommandant/Waffenwart)</option>
-                        <option value="Simon Schweighofer">Simon Schweighofer (Obmann)</option>
-                        <option value="Norbert Spettel">Norbert Spettel (Schützenkamerad)</option>
-                    </select>
+            <!-- GEWEHR-LISTE (GRUPPIERT: ZUGEWIESENE OBEN, RESERVE UNTEN) -->
+            <div class="glass-card glass-card-red" style="border-left-color: #b91c1c !important;">
+                <div class="card-title" style="color: #b91c1c; font-size: 1.1em;">
+                    <span>🛡️ Vereins-Waffenbestand & Zuweisung</span>
                 </div>
+                <div id="grouped-weapons-list"></div>
+            </div>
 
-                <div class="form-group">
-                    <label>2. Mitabholer / Zweiter Waffenwart (optional)</label>
-                    <select class="form-control" id="weapon-member-secondary">
-                        <option value="">-- Keiner / Alleinübernahme --</option>
-                        <option value="Manfred Wachter">Manfred Wachter</option>
-                        <option value="Heimo Stocker">Heimo Stocker</option>
-                        <option value="Simon Schweighofer">Simon Schweighofer</option>
-                        <option value="Norbert Spettel">Norbert Spettel</option>
-                    </select>
+            <div id="scanner-card-issue" class="glass-card glass-card-red" style="border-left-color: #2563eb !important; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(239,246,255,0.95));">
+                <div class="card-title" style="color: #2563eb;">📷 Tresor QR-Code Scanner (Entnahme)</div>
+                <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 12px;">
+                    <strong>Wichtig:</strong> Scanne den QR-Code direkt am Waffentresor, um die Waffenentnahme freizuschalten.
+                </p>
+                <button onclick="startQrScanner('issue')" class="btn btn-admin btn-block">📷 QR-Code für Entnahme scannen</button>
+                <div id="reader" style="width: 100%; margin-top: 12px; border-radius: 12px; overflow: hidden; display:none;"></div>
+                <button id="stop-scanner-btn" onclick="stopQrScanner()" class="btn btn-danger btn-block" style="display: none; margin-top: 8px;">Scanner stoppen</button>
+            </div>
+
+            <div id="weapon-form-card" class="glass-card glass-card-red" style="border-left-color: #b91c1c !important; opacity: 0.5; pointer-events: none; transition: all 0.3s;">
+                <div class="card-title" style="color: #b91c1c; font-size: 1.2em;">
+                    <span>🛡️ Digitales Waffenbuch (Salutwaffen Kat. C)</span>
+                    <span id="scanner-status-badge" style="font-size: 0.65em; background: #dc2626; color: white; padding: 4px 8px; border-radius: 6px;">GESPERRT (Tresor-Scan erforderlich)</span>
                 </div>
+                <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 16px;">
+                    Erfassung für Ausrückungen gemäß ZVR-624291509 (Schützenhaus Partenen).
+                </p>
 
-                <div class="form-group">
-                    <label>3. Karabiner / Salutwaffen auswählen (Mehrfachauswahl möglich)</label>
-                    <div style="background: rgba(248,250,252,0.9); border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
-                        <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="checkbox" name="weapons" value="Steyr Mannlicher M1895 (ST-8841 / ZVR11223399)" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
-                            <strong>K-01</strong>: Steyr Mannlicher M1895 (ST-88XX)
-                        </label>
-                        <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="checkbox" name="weapons" value="Steyr Mannlicher M1895 (ST-8842 / ZVR-11223400)" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
-                            <strong>K-02</strong>: Steyr Mannlicher M1895 (ST-88XX)
-                        </label>
-                        <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="checkbox" name="weapons" value="Mauser K98k Salut (MK-5092 / ZVR-44556611)" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
-                            <strong>MK-03</strong>: Mauser K98k Salut (MK-50XX)
-                        </label>
+                <form onsubmit="saveWeaponIssue(event)">
+                    <div class="form-group">
+                        <label>1. Übernehmer / Hauptverantwortlicher</label>
+                        <select class="form-control" id="weapon-member-primary" required style="font-weight: 700;">
+                            <option value="Manfred Wachter">Manfred Wachter (Waffenwart Stv.)</option>
+                            <option value="Heimo Stocker">Heimo Stocker (Salutkommandant/Waffenwart)</option>
+                            <option value="Simon Schweighofer">Simon Schweighofer (Obmann)</option>
+                            <option value="Norbert Spettel">Norbert Spettel (Schützenkamerad)</option>
+                        </select>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label>4. Anlass / Grund der Ausrückung</label>
-                    <input type="text" class="form-control" id="weapon-occasion" required placeholder="z.B. Fronleichnam Prozession / Begräbnis">
-                </div>
+                    <div class="form-group">
+                        <label>2. Mitabholer / Zweiter Waffenwart (optional)</label>
+                        <select class="form-control" id="weapon-member-secondary">
+                            <option value="">-- Keiner / Alleinübernahme --</option>
+                            <option value="Manfred Wachter">Manfred Wachter</option>
+                            <option value="Heimo Stocker">Heimo Stocker</option>
+                            <option value="Simon Schweighofer">Simon Schweighofer</option>
+                            <option value="Norbert Spettel">Norbert Spettel</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label>5. Ort der Ausrückung</label>
-                    <input type="text" class="form-control" id="weapon-location" required value="Pfarrkirche Partenen" placeholder="Ort eingeben">
-                </div>
+                    <div class="form-group">
+                        <label>3. Karabiner / Salutwaffen auswählen (Mehrfachauswahl möglich)</label>
+                        <div id="weapon-checkboxes-container" style="background: rgba(248,250,252,0.9); border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+                        </div>
+                    </div>
 
-                <button type="submit" class="btn btn-primary btn-block" style="font-size: 1em; padding: 14px;">🚀 Waffen entnehmen & Protokoll-PDF erstellen</button>
-            </form>
-        </div>
+                    <div class="form-group">
+                        <label>4. Anlass / Grund der Ausrückung</label>
+                        <input type="text" class="form-control" id="weapon-occasion" required placeholder="z.B. Fronleichnam Prozession / Begräbnis">
+                    </div>
 
-        <div class="glass-card glass-card-blue" style="border-left-color: #2563eb !important;">
-            <div class="card-title" style="color: #2563eb;">📋 Aktive Entnahmen & Rückgabe</div>
-            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">
-                Für die Rückgabe ist ebenfalls ein erneuter QR-Code-Scan am Tresor erforderlich.
-            </p>
-            <div id="weapon-history-list"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Entnahmen...</p></div>
+                    <div class="form-group">
+                        <label>5. Ort der Ausrückung</label>
+                        <input type="text" class="form-control" id="weapon-location" required value="Pfarrkirche Partenen" placeholder="Ort eingeben">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" style="font-size: 1em; padding: 14px;">🚀 Waffen entnehmen & Protokoll-PDF erstellen</button>
+                </form>
+            </div>
+
+            <div class="glass-card glass-card-blue" style="border-left-color: #2563eb !important;">
+                <div class="card-title" style="color: #2563eb;">📋 Aktive Entnahmen & Rückgabe</div>
+                <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">
+                    Für die Rückgabe ist ebenfalls ein erneuter QR-Code-Scan am Tresor erforderlich.
+                </p>
+                <div id="weapon-history-list"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Entnahmen...</p></div>
+            </div>
         </div>
     </div>
 
@@ -559,7 +556,7 @@
         </div>
 
         <div class="admin-delete-btn">
-            <!-- ADMIN UNTER-TABS -->
+            <!-- ADMIN UNTER-TABS MIT AKTUALISIERTEN NUMERISCHEN BESCHRIFTUNGEN -->
             <div class="admin-nav-tabs">
                 <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">
                     <div class="admin-3d-icon-box">
@@ -613,7 +610,7 @@
                             <path d="M11 11H21V15H19V17H16V15H13V13H11V11Z" fill="url(#keyGrad)"/>
                         </svg>
                     </div>
-                    <span>5. Schlüssel</span>
+                    <span>4. Schlüssel</span>
                 </button>
 
                 <button onclick="switchAdminTab('tab-weapons-admin')" class="admin-tab-btn" id="btn-tab-weapons-admin">
@@ -626,7 +623,7 @@
                             <path d="M9 12L11 14L15 10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <span>6. Waffen-PDFs</span>
+                    <span>5. Waffen-PDFs</span>
                 </button>
             </div>
 
@@ -688,27 +685,18 @@
                 <div id="admin-tally-history-list"></div>
             </div>
 
-            <!-- TAB 4: MITGLIEDER -->
-            <div id="tab-members" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">👥 4. Aktive und passive Mitglieder</div>
-                <h4 style="color: #2563eb; font-size: 0.9em; margin: 8px 0 4px 0;">Aktive Mitglieder</h4>
-                <div id="admin-active-members-list"></div>
-                <h4 style="color: #dc2626; font-size: 0.9em; margin: 14px 0 4px 0;">Passive Mitglieder (Hervorgehoben)</h4>
-                <div id="admin-passive-members-list"></div>
-            </div>
-
-            <!-- TAB 5: SCHLÜSSELLISTE -->
+            <!-- TAB 4: SCHLÜSSELLISTE -->
             <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
-                    <span>🔑 5. Schlüsselliste</span> 
+                    <span>🔑 4. Schlüsselliste</span> 
                     <button class="btn btn-admin" style="padding: 8px 14px; font-size: 0.85em;" onclick="addKeyListItem()">➕ Person hinzufügen</button>
                 </div>
                 <div id="admin-keys-list"></div>
             </div>
 
-            <!-- TAB 6: WAFFEN-PDF ARCHIV -->
+            <!-- TAB 5: WAFFEN-PDF ARCHIV -->
             <div id="tab-weapons-admin" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">🔫 6. Waffenbuch-Protokolle</div>
+                <div class="card-title" style="color: #dc2626;">🔫 5. Waffenbuch-Protokolle</div>
                 <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Hier sind alle Waffennummern für den Admin vollständig sichtbar:</p>
                 <div id="admin-weapon-pdf-list"><p style="font-size: 0.85em; color: var(--text-muted);">Keine Protokolle vorhanden.</p></div>
             </div>
@@ -947,6 +935,10 @@
             if(targetPage) targetPage.classList.add('active');
             if(targetNav) targetNav.classList.add('active');
             window.scrollTo(0, 0);
+
+            if (tabId === 'weapons') {
+                checkWeaponBookAccess();
+            }
         }
 
         function switchAdminTab(tabContentId) {
@@ -1014,7 +1006,163 @@
         let currentScanMode = 'issue';
         let pendingReturnRecordId = null;
 
-        // --- EXakter DIENSTPLAN AUS DEM PDF (SAISON 2026/2027) ---
+        // Vereins-Waffenbestand mit Zuweisungen und vollständigen Nummern
+        const clubWeaponsInventory = [
+            { id: "K-01", name: "Steyr Mannlicher M1895", number: "ST-8841", zvr: "ZVR-11223399", assignedTo: "Simon Schweighofer" },
+            { id: "K-02", name: "Steyr Mannlicher M1895", number: "ST-8842", zvr: "ZVR-11223400", assignedTo: "Heimo Stocker" },
+            { id: "MK-03", name: "Mauser K98k Salut", number: "MK-5092", zvr: "ZVR-44556611", assignedTo: "Manfred Wachter" },
+            { id: "K-04", name: "Steyr Mannlicher M1895", number: "ST-8843", zvr: "ZVR-11223401", assignedTo: "" },
+            { id: "MK-05", name: "Mauser K98k Salut", number: "MK-5093", zvr: "ZVR-44556612", assignedTo: "" }
+        ];
+
+        function maskWeaponNumber(fullNum) {
+            if (!fullNum || fullNum.length <= 2) return "XX";
+            return fullNum.slice(0, -2) + "XX";
+        }
+
+        function checkWeaponBookAccess() {
+            const isAdmin = document.body.classList.contains('admin-mode');
+            const restrictedMsg = document.getElementById('weapon-book-restricted-msg');
+            const contentContainer = document.getElementById('weapon-book-content-container');
+
+            if (restrictedMsg && contentContainer) {
+                if (isAdmin) {
+                    restrictedMsg.style.display = 'none';
+                    contentContainer.style.display = 'block';
+                    loadGroupedWeaponsView();
+                } else {
+                    restrictedMsg.style.display = 'block';
+                    contentContainer.style.display = 'none';
+                }
+            }
+        }
+
+        function loadGroupedWeaponsView() {
+            const container = document.getElementById('grouped-weapons-list');
+            const checkboxesContainer = document.getElementById('weapon-checkboxes-container');
+            if (!container) return;
+
+            let assignedWeapons = [];
+            let reserveWeapons = [];
+
+            clubWeaponsInventory.forEach(w => {
+                if (w.assignedTo && w.assignedTo.trim() !== "") {
+                    assignedWeapons.push(w);
+                } else {
+                    reserveWeapons.push(w);
+                }
+            });
+
+            assignedWeapons.sort((a, b) => a.assignedTo.localeCompare(b.assignedTo));
+            reserveWeapons.sort((a, b) => a.id.localeCompare(b.id));
+
+            let html = "";
+            let checkboxHtml = "";
+
+            // 1. Zugewiesene Gewehre Oben
+            html += `<div style="font-size: 0.8em; font-weight: 800; color: #2563eb; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">🎖️ Zugewiesene Waffen (Mitglied)</div>`;
+            assignedWeapons.forEach(w => {
+                let maskedNum = maskWeaponNumber(w.number);
+                html += `
+                    <div class="price-item" style="background: rgba(239, 246, 255, 0.6); padding: 8px 10px; border-radius: 8px; margin-bottom: 6px;">
+                        <div>
+                            <strong>${w.id}</strong>: ${w.name} (<span id="num-span-${w.id}">${maskedNum}</span>)
+                            <button onclick="toggleFullNumber('${w.id}', '${w.number}')" style="background: none; border: none; cursor: pointer; font-size: 0.9em; margin-left: 4px;" title="Vollständige Nummer anzeigen">👁️</button><br>
+                            <span style="font-size: 0.8em; color: var(--text-muted);">${w.zvr}</span>
+                        </div>
+                        <span style="background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 6px; font-size: 0.75em; font-weight: 700;">Zugeordnet: ${w.assignedTo}</span>
+                    </div>
+                `;
+                checkboxHtml += `
+                    <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" name="weapons" value="${w.name} (${w.number} / ${w.zvr})" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
+                        <strong>${w.id}</strong>: ${w.name} (${maskedNum}) [Zugeordnet: ${w.assignedTo}]
+                    </label>
+                `;
+            });
+
+            // 2. Reserve-Waffen Unten
+            html += `<div style="font-size: 0.8em; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin: 14px 0 8px 0; letter-spacing: 0.5px;">📦 Reserve-Waffen (Keine Zuweisung)</div>`;
+            reserveWeapons.forEach(w => {
+                let maskedNum = maskWeaponNumber(w.number);
+                html += `
+                    <div class="price-item" style="background: rgba(248, 250, 252, 0.9); padding: 8px 10px; border-radius: 8px; margin-bottom: 6px;">
+                        <div>
+                            <strong>${w.id}</strong>: ${w.name} (<span id="num-span-${w.id}">${maskedNum}</span>)
+                            <button onclick="toggleFullNumber('${w.id}', '${w.number}')" style="background: none; border: none; cursor: pointer; font-size: 0.9em; margin-left: 4px;" title="Vollständige Nummer anzeigen">👁️</button><br>
+                            <span style="font-size: 0.8em; color: var(--text-muted);">${w.zvr}</span>
+                        </div>
+                        <span style="background: #f1f5f9; color: #64748b; padding: 4px 8px; border-radius: 6px; font-size: 0.75em; font-weight: 700;">Reserve</span>
+                    </div>
+                `;
+                checkboxHtml += `
+                    <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" name="weapons" value="${w.name} (${w.number} / ${w.zvr})" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
+                        <strong>${w.id}</strong>: ${w.name} (${maskedNum}) [Reserve]
+                    </label>
+                `;
+            });
+
+            container.innerHTML = html;
+            if (checkboxesContainer) checkboxesContainer.innerHTML = checkboxHtml;
+        }
+
+        let revealedNumbers = {};
+        function toggleFullNumber(id, fullNum) {
+            const span = document.getElementById(`num-span-${id}`);
+            if (!span) return;
+            if (revealedNumbers[id]) {
+                span.innerText = maskWeaponNumber(fullNum);
+                revealedNumbers[id] = false;
+            } else {
+                span.innerText = fullNum;
+                revealedNumbers[id] = true;
+            }
+        }
+
+        // 3. VOLLSTÄNDIGE NUMMERN BEIM PDF-EXPORT
+        function downloadWeaponBookPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('de-AT');
+            const timeStr = now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'});
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(14);
+            pdf.setTextColor(185, 28, 28);
+            pdf.text("ÖSTERREICHISCHER KAMERADSCHAFTSBUND & SCHÜTZENVEREIN", 14, 18);
+            pdf.setFontSize(10);
+            pdf.setTextColor(80, 80, 80);
+            pdf.text("Offizieller Vereins-Waffenbestand & Zuweisungsliste (Kat. C)", 14, 24);
+            pdf.text("Schützenhaus Partenen | ZVR: 624291509", 14, 30);
+
+            let tableData = clubWeaponsInventory.map(w => [
+                w.id,
+                w.name,
+                w.number, // Unzensiert!
+                w.zvr,
+                w.assignedTo ? w.assignedTo : "Reserve-Waffe"
+            ]);
+
+            pdf.autoTable({
+                startY: 38,
+                head: [['ID', 'Waffenbezeichnung', 'Waffennummer (Vollständig)', 'ZVR-Nummer', 'Zuweisung / Status']],
+                body: tableData,
+                theme: 'striped',
+                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
+                styles: { fontSize: 8.5 }
+            });
+
+            let finalY = pdf.lastAutoTable.finalY + 15;
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(8.5);
+            pdf.text(`Exportiert am: ${dateStr} um ${timeStr} Uhr durch adminstrativen Vereins-App Zugriff`, 14, finalY);
+
+            pdf.save(`Vereins_Waffenbestand_${dateStr.replace(/\./g, '-')}.pdf`);
+        }
+
         const defaultDutyRoster = [
             { dateStr: "09.10.2026", team: "Team 4", names: "Norbert · Maria · Erwin", status: "open" },
             { dateStr: "23.10.2026", team: "Team 3", names: "Christoph · Werner Wittwer", status: "open" },
@@ -1038,17 +1186,15 @@
             return new Date(parts[2], parts[1] - 1, parts[0]);
         }
 
-        // --- HILFSFUNKTION FÜR WIENER LOKALZEIT (Europe/Vienna) ---
         function getViennaToday() {
             const now = new Date();
-            const viennaDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Europe/Vienna' }); // YYYY-MM-DD
+            const viennaDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Europe/Vienna' });
             const parts = viennaDateStr.split('-');
             const viennaDate = new Date(parts[0], parts[1] - 1, parts[2]);
             viennaDate.setHours(0, 0, 0, 0);
             return viennaDate;
         }
 
-        // --- FIREBASE LIVE DIENSTPLAN & MITTERNACHTS-AKTUALISIERUNG ---
         async function addDutyEntry() {
             const dateVal = document.getElementById('duty-date').value;
             const teamVal = document.getElementById('duty-team').value.trim();
@@ -1153,7 +1299,6 @@
             futureList.sort((a, b) => parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr));
             pastList.sort((a, b) => parseLocalDate(b.dateStr) - parseLocalDate(a.dateStr));
 
-            // 1. LIVE-VORSCHAU FÜR DEN AKTUELLEN BZW. NÄCHSTEN DIENST
             const nextWidget = document.getElementById('next-duty-widget');
             const badgeLabel = document.getElementById('live-badge-label');
             if (nextWidget && badgeLabel) {
@@ -1182,7 +1327,6 @@
                 }
             }
 
-            // GESAMTER DIENSTPLAN
             const fullList = document.getElementById('full-roster-list');
             if (fullList) {
                 let html = "";
@@ -1204,7 +1348,6 @@
                 fullList.innerHTML = html || '<p style="font-size: 0.8em; color: var(--text-muted);">Keine kommenden Dienste.</p>';
             }
 
-            // ARCHIV
             const archiveList = document.getElementById('archive-roster-list');
             if (archiveList) {
                 let archHtml = "";
@@ -1223,20 +1366,18 @@
             }
         }
 
-        // 2. AUTOMATISCHE ZEITPRÜFUNG / MITTERNACHTS-TIMER
         function initMidnightAndMinuteChecker() {
             setInterval(() => {
                 if (globalDutyList.length > 0) {
                     renderDutyPlanViews(globalDutyList, true);
                 }
-            }, 60 * 1000); // Prüfung jede Minute
+            }, 60 * 1000);
         }
 
         function defaultDutyPlanWithIds() {
             return defaultDutyRoster.map((item, index) => ({ id: "default-" + index, ...item }));
         }
 
-        // --- SCANNER LOGIK ---
         function startQrScanner(mode, recordId = null) {
             currentScanMode = mode;
             pendingReturnRecordId = recordId;
@@ -2284,6 +2425,7 @@
                     resetInactivityTimer();
                     
                     loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory(); loadAdminWeaponPDFs();
+                    checkWeaponBookAccess();
                 })
                 .catch((error) => {
                     showAdminErrorModal();
@@ -2300,6 +2442,7 @@
                 document.getElementById('admin-login-card').style.display = 'block';
                 loadNews();
                 loadWeaponHistory();
+                checkWeaponBookAccess();
                 alert("Admin-Modus beendet.");
             });
         }
@@ -2310,6 +2453,7 @@
                 document.getElementById('admin-login-card').style.display = 'none';
                 resetInactivityTimer();
                 loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory(); loadAdminWeaponPDFs();
+                checkWeaponBookAccess();
             } else {
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
@@ -2318,6 +2462,7 @@
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
                 loadWeaponHistory();
+                checkWeaponBookAccess();
             }
         });
 
@@ -2331,6 +2476,7 @@
             try { loadInventory(); } catch(e) {}
             try { loadWeaponHistory(); } catch(e) {}
             try { loadAdminWeaponPDFs(); } catch(e) {}
+            try { checkWeaponBookAccess(); } catch(e) {}
         });
     </script>
 </body>
