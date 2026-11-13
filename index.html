@@ -343,9 +343,9 @@
         <p>Gaschurn-Partenen</p>
     </div>
 
-    <!-- 1. NEWS & STARTSEITE (DIENSTPLAN INTEGRATION) -->
+    <!-- 1. NEWS & STARTSEITE (AKTUELLER DIENSTPLAN) -->
     <div id="page-news" class="page-content active">
-        <!-- NÄCHSTER DIENST -->
+        <!-- NÄCHSTER DIENST (LIVE VORSCHAU) -->
         <div class="glass-card next-duty-neon">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span id="live-badge-label" style="font-size: 0.8em; background: #15803d; color: #ffffff; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Nächster Dienst</span>
@@ -499,7 +499,7 @@
             </form>
         </div>
 
-        <!-- PUNKT 2 & 3: KEIN DOWNLOAD, KEINE HISTORIE IM WAFFENBUCH SELBST, STRIKT READ-ONLY -->
+        <!-- PUNKT 2 & 3: KEIN LOCAL DOWNLOAD, KEINE HISTORIE IM WAFFENBUCH SELBST, STRIKT READ-ONLY -->
         <div class="glass-card glass-card-blue" style="border-left-color: #2563eb !important;">
             <div class="card-title" style="color: #2563eb;">📋 Aktive Entnahmen & Rückgabe (Read-Only)</div>
             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">
@@ -980,7 +980,7 @@
             officialWeaponList.forEach(w => {
                 let maskedNum = maskWeaponNumber(w.nummer);
                 let labelText = `${w.hersteller} ${w.modell} (${w.kaliber}) – Nr. ${maskedNum} [${w.zuweisung}]`;
-                let fullValue = `${w.hersteller} ${w.modell} (${w.kaliber} / Nr. ${w.nummer} / ZWR-624291509)`;
+                let fullValue = `${w.hersteller} ${w.modell} (${w.kaliber} / Nr. ${w.nummer} / ZVR-624291509)`;
                 html += `
                     <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
                         <input type="checkbox" name="weapons" value="${fullValue}" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
@@ -1663,7 +1663,6 @@
                 collectorStr += ` (+ ${secondaryName})`;
             }
 
-            // --- PUNKT 4: PDF AUFBAU (ZWR UND ZVR GETRENNT DARSTELLEN) ---
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
 
@@ -1678,15 +1677,14 @@
 
             let tableRows = [];
             selectedWeaponsData.forEach(item => {
-                // item contains e.g. "MAUSER 98 (8x57 I / Nr. V8640 / ZVR-624291509)"
                 let parts = item.split(' / Nr. ');
                 let weaponDesc = parts[0];
                 let serialNum = parts[1] ? parts[1].split(' /')[0] : "k.A.";
 
                 tableRows.push([
                     weaponDesc,
-                    serialNum,           // ZWR (Herstellernummer unzensiert)
-                    "ZVR-624291509",    // ZVR (Vereinsnummer)
+                    serialNum,
+                    "ZVR-624291509",
                     occasion,
                     location,
                     collectorStr,
@@ -1723,7 +1721,6 @@
             };
 
             try {
-                // --- PUNKT 2 & 5: KEIN LOCAL DOWNLOAD, AUSSCHLIESSLICH DB SPEICHERUNG FÜR ADMIN ---
                 await db.collection("weapon_log").doc(recordId).set(weaponLogObj);
                 alert("Waffenentnahme erfolgreich erfasst und im Admin-Bereich hinterlegt. Das Waffenbuch wird gesperrt.");
                 
@@ -1761,7 +1758,6 @@
                 if (!doc.exists) return;
                 const data = doc.data();
 
-                // --- PUNKT 4: PDF RÜCKGABE (ZWR & ZVR GETRENNT) ---
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF();
 
@@ -1810,7 +1806,6 @@
                     pdfData: pdfBase64
                 });
 
-                // --- PUNKT 2 & 5: KEIN LOCAL DOWNLOAD, AUSSCHLIESSLICH DB SPEICHERUNG FÜR ADMIN ---
                 alert("Tresor-Scan erfolgreich! Rückgabe protokolliert und im Admin-Bereich gespeichert.");
                 loadWeaponHistory();
                 loadAdminWeaponPDFs();
@@ -1824,7 +1819,6 @@
             if (!container) return;
 
             try {
-                // Nur aktive Entnahmen anzeigen, keine Historie/Downloads im öffentlichen Bereich
                 const snapshot = await db.collection("weapon_log").where("status", "==", "Entnommen").get();
                 let html = "";
                 
@@ -1851,7 +1845,6 @@
                         weaponsListHtml += `<div style="font-size: 0.85em; color: var(--primary-red); font-weight: 700;">• ${maskedItem}</div>`;
                     });
 
-                    // --- PUNKT 3: AKTIVE ENTNAMMEN STRIKT READ-ONLY (KEIN BEARBEITEN/LÖSCHEN) ---
                     html += `
                         <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px; margin-bottom: 12px; border-left: 6px solid #b91c1c; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
@@ -1863,7 +1856,6 @@
                             <div style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px;">
                                 📤 Entnommen: <strong>${w.issueTime}</strong> | ZVR: 624291509
                             </div>
-                            <!-- PUNKT 1: RÜCKGABE BUTTON DEUTLICH GRÖSSER -->
                             <button onclick="promptReturnWeapon('${doc.id}')" class="btn btn-green btn-block" style="padding: 14px 20px; font-size: 1.05em; font-weight: 800; background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35);">📷 QR-Code scannen & Waffe(n) zurückbringen</button>
                         </div>
                     `;
@@ -1874,7 +1866,6 @@
             }
         }
 
-        // --- PUNKT 6: ADMIN WAFFENBUCH-PDFs LISTE (ANSEHEN & HERUNTERLADEN) ---
         async function loadAdminWeaponPDFs() {
             const container = document.getElementById('admin-weapon-pdf-list');
             if (!container) return;
