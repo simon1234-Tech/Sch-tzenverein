@@ -1014,22 +1014,23 @@
         let currentScanMode = 'issue';
         let pendingReturnRecordId = null;
 
-        // --- STANDARD DIENSTPLAN (DEFAULT) ---
+        // --- VOLLSTÄNDIGER ORIGINAL-DIENSTPLAN 2026/2027 AUS DEM SCREENSHOT ---
         const defaultDutyRoster = [
-            { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
-            { dateStr: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
-            { dateStr: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
-            { dateStr: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
-            { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
+            { dateStr: "02.10.2026", team: "Team 4", names: "Norbert · Maria", status: "open" },
+            { dateStr: "16.10.2026", team: "Team 5", names: "Heimo · Karin · Werner Wachter", status: "open" },
+            { dateStr: "30.10.2026", team: "Team 1", names: "Manfred · Pascal", status: "open" },
+            { dateStr: "13.11.2026", team: "Team 2", names: "Dietmar · Simon · Sabrina", status: "open" },
+            { dateStr: "27.11.2026", team: "Team 3", names: "Christoph · Werner Wittwer", status: "open" },
+            { dateStr: "11.12.2026", team: "Team 4", names: "Norbert · Maria", status: "open" },
+            { dateStr: "25.12.2026", team: "Team 5", names: "Heimo · Karin · Werner Wachter", status: "open" },
+            { dateStr: "08.01.2027", team: "Team 1", names: "Manfred · Pascal", status: "open" },
+            { dateStr: "22.01.2027", team: "Team 2", names: "Dietmar · Simon · Sabrina", status: "open" },
+            { dateStr: "05.02.2027", team: "Team 3", names: "Christoph · Werner Wittwer", status: "open" },
+            { dateStr: "19.02.2027", team: "Team 4", names: "Norbert · Maria", status: "open" },
+            { dateStr: "05.03.2027", team: "Team 5", names: "Heimo · Karin · Werner Wachter", status: "open" },
+            { dateStr: "19.03.2027", team: "Team 1", names: "Manfred · Pascal", status: "open" },
+            { dateStr: "02.04.2027", team: "Team 2", names: "Dietmar · Simon · Sabrina", status: "open" },
+            { dateStr: "09.04.2027", team: "Team 3", names: "Christoph · Werner Wittwer", status: "open" }
         ];
 
         function parseLocalDate(dateStr) {
