@@ -343,7 +343,7 @@
         <p>Gaschurn-Partenen</p>
     </div>
 
-    <!-- 1. NEWS & STARTSEITE -->
+    <!-- 1. NEWS & STARTSEITE (DIENSTPLAN INTEGRATION) -->
     <div id="page-news" class="page-content active">
         <!-- NÄCHSTER DIENST -->
         <div class="glass-card next-duty-neon">
@@ -494,15 +494,16 @@
                     <input type="text" class="form-control" id="weapon-location" required value="Pfarrkirche Partenen" placeholder="Ort eingeben">
                 </div>
 
-                <!-- GRÖSSERE ENTNAMME-SCHALTFLÄCHE -->
+                <!-- PUNKT 1: ENTNAMME BUTTON DEUTLICH GRÖSSER & KLARER KONTRAST -->
                 <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.15em; padding: 18px 24px; font-weight: 800; background: linear-gradient(135deg, #dc2626, #991b1b); box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);">🚀 Waffen entnehmen & Protokoll abschließen</button>
             </form>
         </div>
 
+        <!-- PUNKT 2 & 3: KEIN DOWNLOAD, KEINE HISTORIE IM WAFFENBUCH SELBST, STRIKT READ-ONLY -->
         <div class="glass-card glass-card-blue" style="border-left-color: #2563eb !important;">
             <div class="card-title" style="color: #2563eb;">📋 Aktive Entnahmen & Rückgabe (Read-Only)</div>
             <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">
-                Aktive Entnahmen sind schreibgeschützt. Für die Rückgabe ist ein erneuter Tresor-Scan erforderlich.
+                Aktive Entnahmen sind schreibgeschützt (keine Bearbeitung/Löschung möglich). Nach Abschluss wird das Waffenbuch automatisch gesperrt.
             </p>
             <div id="weapon-history-list"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Entnahmen...</p></div>
         </div>
@@ -588,7 +589,7 @@
                     <span>5. Schlüssel</span>
                 </button>
 
-                <!-- 6. WAFFEN-PDFs TAB BUTTON -->
+                <!-- PUNKT 6: NEUER BUTTON „WAFFENBUCH PDFs“ IM ADMIN-BEREICH -->
                 <button onclick="switchAdminTab('tab-weapons-admin')" class="admin-tab-btn" id="btn-tab-weapons-admin">
                     <div class="admin-3d-icon-box">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -599,7 +600,7 @@
                             <path d="M9 12L11 14L15 10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <span>6. Waffen-PDFs</span>
+                    <span>6. Waffenbuch PDFs</span>
                 </button>
             </div>
 
@@ -673,13 +674,13 @@
                 <div id="admin-keys-list"></div>
             </div>
 
-            <!-- TAB 6: WAFFEN-PDF ARCHIV (ADMIN) -->
+            <!-- PUNKT 6: TAB 6 - WAFFENBUCH PDFs (ANSEHEN & HERUNTERLADEN) -->
             <div id="tab-weapons-admin" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">🔫 6. Waffenbuch-Protokolle</div>
+                <div class="card-title" style="color: #dc2626;">🔫 6. Waffenbuch-Protokolle (PDFs)</div>
                 <div style="margin-bottom: 14px;">
                     <button class="btn btn-admin btn-block" onclick="exportFullWeaponListPDF()">📥 Vollständige Waffenliste als PDF exportieren</button>
                 </div>
-                <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Hier sind alle gespeicherten Entnahme- & Rückgabeprotokolle für den Admin einsehbar:</p>
+                <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Übersicht aller gespeicherten Entnahme- und Rückgabeprotokolle (inkl. getrennter ZWR/ZVR-Daten):</p>
                 <div id="admin-weapon-pdf-list"><p style="font-size: 0.85em; color: var(--text-muted);">Keine Protokolle vorhanden.</p></div>
             </div>
 
@@ -946,7 +947,7 @@
             "Essig Armin", "Carlos Da Ponte"
         ];
 
-        // --- EXAKT DIE 17 WAFFEN (ZUGEWIESENE OBEN, RESERVE UNTEN) ---
+        // --- EXAKT DIE 17 WAFFEN ---
         const officialWeaponList = [
             { id: "W1", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Heimo", nummer: "V8640" },
             { id: "W2", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Werner.Wa", nummer: "A2605" },
@@ -979,7 +980,7 @@
             officialWeaponList.forEach(w => {
                 let maskedNum = maskWeaponNumber(w.nummer);
                 let labelText = `${w.hersteller} ${w.modell} (${w.kaliber}) – Nr. ${maskedNum} [${w.zuweisung}]`;
-                let fullValue = `${w.hersteller} ${w.modell} (${w.kaliber} / Nr. ${w.nummer} / ZVR-624291509)`;
+                let fullValue = `${w.hersteller} ${w.modell} (${w.kaliber} / Nr. ${w.nummer} / ZWR-624291509)`;
                 html += `
                     <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
                         <input type="checkbox" name="weapons" value="${fullValue}" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
@@ -1083,7 +1084,7 @@
             pdf.setFontSize(10);
             pdf.setTextColor(80, 80, 80);
             pdf.text("Vollständiges Waffenverzeichnis (Kat. C) - Ungekürzte Seriennummern", 14, 24);
-            pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR: 624291509", 14, 30);
+            pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR-Zahl: 624291509", 14, 30);
             pdf.text(`Export-Datum: ${dateStr}`, 14, 36);
 
             let tableData = officialWeaponList.map((w, idx) => [
@@ -1099,7 +1100,7 @@
 
             pdf.autoTable({
                 startY: 44,
-                head: [['Nr.', 'Art', 'Hersteller', 'Modell', 'Kaliber', 'Kat.', 'Zuweisung / Status', 'Herstellernummer (ZWR)']],
+                head: [['Nr.', 'Art', 'Hersteller', 'Modell', 'Kaliber', 'Kat.', 'Zuweisung', 'ZWR (Seriennummer)']],
                 body: tableData,
                 theme: 'striped',
                 headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
@@ -1649,9 +1650,7 @@
 
             let selectedWeaponsData = [];
             checkboxes.forEach(cb => {
-                // Parse original weapon details for unmasked ZWR
-                let val = cb.value; // e.g. "Büchse MAUSER 98 (8x57 I / Nr. V8640 / ZVR-624291509)"
-                selectedWeaponsData.push(val);
+                selectedWeaponsData.push(cb.value);
             });
 
             const now = new Date();
@@ -1664,7 +1663,7 @@
                 collectorStr += ` (+ ${secondaryName})`;
             }
 
-            // --- PDF GENERIERUNG (ZWR & ZVR GETRENNT) ---
+            // --- PUNKT 4: PDF AUFBAU (ZWR UND ZVR GETRENNT DARSTELLEN) ---
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
 
@@ -1674,14 +1673,20 @@
             pdf.text("ÖSTERREICHISCHER KAMERADSCHAFTSBUND", 14, 18);
             pdf.setFontSize(10);
             pdf.setTextColor(80, 80, 80);
-            pdf.text("Waffenentnahme-Protokoll gemäß Kat. C (Ungekürzte ZWR-Seriennummern)", 14, 24);
+            pdf.text("Waffenentnahme-Protokoll gemäß Kat. C", 14, 24);
             pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR-Zahl: 624291509", 14, 30);
 
             let tableRows = [];
             selectedWeaponsData.forEach(item => {
+                // item contains e.g. "MAUSER 98 (8x57 I / Nr. V8640 / ZVR-624291509)"
+                let parts = item.split(' / Nr. ');
+                let weaponDesc = parts[0];
+                let serialNum = parts[1] ? parts[1].split(' /')[0] : "k.A.";
+
                 tableRows.push([
-                    item,
-                    "ZVR-624291509",
+                    weaponDesc,
+                    serialNum,           // ZWR (Herstellernummer unzensiert)
+                    "ZVR-624291509",    // ZVR (Vereinsnummer)
                     occasion,
                     location,
                     collectorStr,
@@ -1692,11 +1697,11 @@
 
             pdf.autoTable({
                 startY: 38,
-                head: [['Waffe & Herstellernummer (ZWR)', 'Vereins-ZVR', 'Anlass', 'Ort', 'Übernehmer', 'Zeitstempel', 'Status']],
+                head: [['Waffe / Modell', 'ZWR (Seriennummer)', 'ZVR (Vereins-Nr.)', 'Anlass', 'Ort', 'Übernehmer', 'Zeitstempel', 'Status']],
                 body: tableRows,
                 theme: 'striped',
                 headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
-                styles: { fontSize: 8 }
+                styles: { fontSize: 7.5 }
             });
 
             const pdfBase64 = pdf.output('datauristring');
@@ -1718,9 +1723,9 @@
             };
 
             try {
-                // KEIN Client-Download auf Smartphone! Speicherung ausschließlich in Datenbank für Admin.
+                // --- PUNKT 2 & 5: KEIN LOCAL DOWNLOAD, AUSSCHLIESSLICH DB SPEICHERUNG FÜR ADMIN ---
                 await db.collection("weapon_log").doc(recordId).set(weaponLogObj);
-                alert("Waffenentnahme erfolgreich in der Datenbank für den Admin protokolliert. Das Waffenbuch wird wieder gesperrt.");
+                alert("Waffenentnahme erfolgreich erfasst und im Admin-Bereich hinterlegt. Das Waffenbuch wird gesperrt.");
                 
                 document.getElementById('weapon-occasion').value = '';
                 checkboxes.forEach(cb => cb.checked = false);
@@ -1756,6 +1761,7 @@
                 if (!doc.exists) return;
                 const data = doc.data();
 
+                // --- PUNKT 4: PDF RÜCKGABE (ZWR & ZVR GETRENNT) ---
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF();
 
@@ -1765,13 +1771,18 @@
                 pdf.text("ÖSTERREICHISCHER KAMERADSCHAFTSBUND", 14, 18);
                 pdf.setFontSize(10);
                 pdf.setTextColor(80, 80, 80);
-                pdf.text("Waffenrückgabe-Protokoll gemäß Kat. C (Ungekürzte ZWR-Seriennummern)", 14, 24);
+                pdf.text("Waffenrückgabe-Protokoll gemäß Kat. C", 14, 24);
                 pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR-Zahl: 624291509", 14, 30);
 
                 let tableRows = [];
                 (data.selectedWeapons || []).forEach(item => {
+                    let parts = item.split(' / Nr. ');
+                    let weaponDesc = parts[0];
+                    let serialNum = parts[1] ? parts[1].split(' /')[0] : "k.A.";
+
                     tableRows.push([
-                        item,
+                        weaponDesc,
+                        serialNum,
                         "ZVR-624291509",
                         data.occasion,
                         data.location,
@@ -1784,11 +1795,11 @@
 
                 pdf.autoTable({
                     startY: 38,
-                    head: [['Waffe & Herstellernummer (ZWR)', 'Vereins-ZVR', 'Grund', 'Ort', 'Übernehmer', 'Entnahme', 'Rückgabe', 'Status']],
+                    head: [['Waffe / Modell', 'ZWR (Seriennummer)', 'ZVR (Vereins-Nr.)', 'Grund', 'Ort', 'Übernehmer', 'Entnahme', 'Rückgabe', 'Status']],
                     body: tableRows,
                     theme: 'striped',
                     headStyles: { fillColor: [16, 185, 129], textColor: [255, 255, 255], fontStyle: 'bold' },
-                    styles: { fontSize: 7.5 }
+                    styles: { fontSize: 7 }
                 });
 
                 const pdfBase64 = pdf.output('datauristring');
@@ -1799,8 +1810,8 @@
                     pdfData: pdfBase64
                 });
 
-                // KEIN Client-Download auf Smartphone! Speicherung ausschließlich in DB für Admin.
-                alert("Tresor-Scan erfolgreich! Waffenrückgabe wurde in der Datenbank für den Admin protokolliert.");
+                // --- PUNKT 2 & 5: KEIN LOCAL DOWNLOAD, AUSSCHLIESSLICH DB SPEICHERUNG FÜR ADMIN ---
+                alert("Tresor-Scan erfolgreich! Rückgabe protokolliert und im Admin-Bereich gespeichert.");
                 loadWeaponHistory();
                 loadAdminWeaponPDFs();
             } catch (err) {
@@ -1813,6 +1824,7 @@
             if (!container) return;
 
             try {
+                // Nur aktive Entnahmen anzeigen, keine Historie/Downloads im öffentlichen Bereich
                 const snapshot = await db.collection("weapon_log").where("status", "==", "Entnommen").get();
                 let html = "";
                 
@@ -1839,7 +1851,7 @@
                         weaponsListHtml += `<div style="font-size: 0.85em; color: var(--primary-red); font-weight: 700;">• ${maskedItem}</div>`;
                     });
 
-                    // STRIKT READ-ONLY: Keine Bearbeiten- oder Lösch-Buttons für Mitglieder!
+                    // --- PUNKT 3: AKTIVE ENTNAMMEN STRIKT READ-ONLY (KEIN BEARBEITEN/LÖSCHEN) ---
                     html += `
                         <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px; margin-bottom: 12px; border-left: 6px solid #b91c1c; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
@@ -1851,7 +1863,7 @@
                             <div style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px;">
                                 📤 Entnommen: <strong>${w.issueTime}</strong> | ZVR: 624291509
                             </div>
-                            <!-- GRÖSSERE RÜCKGABE-SCHALTFLÄCHE -->
+                            <!-- PUNKT 1: RÜCKGABE BUTTON DEUTLICH GRÖSSER -->
                             <button onclick="promptReturnWeapon('${doc.id}')" class="btn btn-green btn-block" style="padding: 14px 20px; font-size: 1.05em; font-weight: 800; background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35);">📷 QR-Code scannen & Waffe(n) zurückbringen</button>
                         </div>
                     `;
@@ -1862,6 +1874,7 @@
             }
         }
 
+        // --- PUNKT 6: ADMIN WAFFENBUCH-PDFs LISTE (ANSEHEN & HERUNTERLADEN) ---
         async function loadAdminWeaponPDFs() {
             const container = document.getElementById('admin-weapon-pdf-list');
             if (!container) return;
