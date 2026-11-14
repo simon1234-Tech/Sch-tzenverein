@@ -309,6 +309,7 @@
             box-shadow: 0 6px 18px rgba(185, 28, 28, 0.4), inset 0 1px 1px rgba(255,255,255,0.4) !important;
         }
         .nav-icon { font-size: 1.4em !important; margin-bottom: 3px !important; display: block !important; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); }
+        .nav-item.active .mauser-svg { filter: drop-shadow(0 0 1.4px rgba(255,255,255,0.9)) drop-shadow(0 2px 4px rgba(0,0,0,0.35)); }
 
         .admin-delete-btn { display: none; }
         body.admin-mode .admin-delete-btn { display: block !important; }
@@ -334,9 +335,139 @@
         .modal-anim {
             animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+
+        /* VEREINS-ZUGANGSCODE SPERRBILDSCHIRM */
+        #club-lock-screen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000000;
+            background: linear-gradient(160deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 20px 16px;
+            overflow-y: auto;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        body.app-locked #club-lock-screen {
+            display: flex;
+        }
+        body.app-locked.admin-direct-login #club-lock-screen {
+            display: none !important;
+        }
+        body.app-locked .app-header,
+        body.app-locked .page-content,
+        body.app-locked .bottom-nav,
+        body.app-locked #legal-footer-link {
+            display: none !important;
+        }
+        body.app-locked.admin-direct-login .app-header {
+            display: block !important;
+        }
+        body.app-locked.admin-direct-login #page-card {
+            display: block !important;
+        }
+        .lock-screen-card {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 24px;
+            padding: 28px 22px;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
+            border: 1.5px solid rgba(255, 255, 255, 0.95);
+            text-align: center;
+            margin: auto 0;
+        }
+        .lock-screen-banner {
+            background: linear-gradient(135deg, #7f1d1d, #b91c1c);
+            color: #ffffff;
+            border-radius: 18px;
+            padding: 18px 14px;
+            margin-bottom: 22px;
+            box-shadow: 0 10px 24px rgba(185, 28, 28, 0.25);
+        }
+        .lock-screen-logo {
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            background: #ffffff;
+            padding: 5px;
+            margin: 0 auto 12px auto;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            object-fit: contain;
+            display: block;
+        }
+        .lock-pin-input {
+            width: 100%;
+            padding: 16px 14px;
+            font-size: 1.35em;
+            font-weight: 800;
+            letter-spacing: 4px;
+            text-align: center;
+            border-radius: 16px;
+            border: 2px solid #cbd5e1;
+            background: #ffffff;
+            color: #0f172a;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .lock-pin-input:focus {
+            outline: none;
+            border-color: #b91c1c;
+            box-shadow: 0 0 0 4px rgba(185, 28, 28, 0.15);
+        }
+        .admin-direct-back-btn {
+            display: none;
+        }
+        body.app-locked.admin-direct-login .admin-direct-back-btn {
+            display: inline-flex !important;
+        }
     </style>
 </head>
-<body>
+<body class="app-locked">
+
+    <!-- SPERRBILDSCHIRM BEIM ÖFFNEN -->
+    <div id="club-lock-screen">
+        <div style="width: 100%; height: 10px;"></div>
+        <div class="lock-screen-card modal-anim">
+            <div class="lock-screen-banner">
+                <img src="logo.png" alt="Vereinslogo KB & SV Gaschurn-Partenen" class="lock-screen-logo" onerror="this.style.display='none'">
+                <div style="font-size: 1.08em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; line-height: 1.25;">Kameradschaftsbund &amp; Schützenverein</div>
+                <div style="font-size: 0.85em; font-weight: 700; color: #fca5a5; margin-top: 4px;">Gaschurn-Partenen</div>
+            </div>
+
+            <h2 style="font-size: 1.1em; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Vereins-Zugangscode</h2>
+            <p style="font-size: 0.82em; color: var(--text-muted); margin-bottom: 18px; line-height: 1.4;">
+                Bitte gib den aktuellen Vereins-Zugangscode ein, um die App zu öffnen.
+            </p>
+
+            <form onsubmit="verifyClubAccessCode(event)">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <input type="password" inputmode="numeric" id="club-pin-input" class="lock-pin-input" placeholder="Code eingeben" required autocomplete="off">
+                </div>
+                <div id="club-pin-error" style="display: none; color: #dc2626; background: #fee2e2; border: 1px solid #fecaca; border-radius: 10px; padding: 9px 12px; font-size: 0.85em; font-weight: 700; margin-bottom: 12px;">
+                    Falscher Zugangscode
+                </div>
+                <button type="submit" id="club-pin-submit-btn" class="btn btn-primary btn-block" style="padding: 15px 20px; font-size: 1.05em; margin-top: 4px;">
+                    🔓 App entsperren
+                </button>
+            </form>
+        </div>
+
+        <div style="padding: 18px 0 8px 0; text-align: center;">
+            <button type="button" onclick="openAdminDirectLogin()" style="background: none; border: none; color: #64748b; font-size: 0.8em; font-weight: 600; text-decoration: underline; cursor: pointer; font-family: inherit; padding: 6px 12px;">
+                Direkt zum Admin-Login
+            </button>
+        </div>
+    </div>
+
+    <script>
+        try {
+            if (localStorage.getItem('kbsv_club_pin')) {
+                document.body.classList.remove('app-locked');
+            }
+        } catch(e) {}
+    </script>
 
     <div class="app-header">
         <h1>Kameradschaftsbund & Schützenverein</h1>
@@ -415,10 +546,10 @@
 
             <div style="margin-top: 14px; background: rgba(248, 250, 252, 0.9); padding: 14px; border-radius: 14px; border: 1.5px solid #cbd5e1;">
                 <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger:</h4>
-                <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Betriebsrat ASG"></div>
-                <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Ladner Manfred"></div>
-                <div class="form-group"><label>Straße</label><input type="text" class="form-control" id="cust-address" placeholder="St. Jakob 151"></div>
-                <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="6580 St. Anton am Arlberg"></div>
+                <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Firma / Verein"></div>
+                <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Vorname Nachname"></div>
+                <div class="form-group"><label>Straße</label><input type="text" class="form-control" id="cust-address" placeholder="Straße & Hausnummer"></div>
+                <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="PLZ & Ort"></div>
             </div>
 
             <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 14px;">💾 Abrechnung speichern</button>
@@ -448,21 +579,43 @@
 
         <div id="weapon-form-card" class="glass-card glass-card-red" style="border-left-color: #b91c1c !important; opacity: 0.5; pointer-events: none; transition: all 0.3s;">
             <div class="card-title" style="color: #b91c1c; font-size: 1.2em;">
-                <span>🛡️ Digitales Waffenbuch (Salutwaffen Kat. C)</span>
+                <span style="display: inline-flex; align-items: center; gap: 8px;">
+                    <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                        <defs>
+                            <linearGradient id="mauserWoodHdr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#92400e"/><stop offset="100%" stop-color="#78350f"/></linearGradient>
+                            <linearGradient id="mauserSteelHdr" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#1e293b"/></linearGradient>
+                        </defs>
+                        <g transform="rotate(-42 16 16)">
+                            <rect x="11.5" y="13.8" width="21.5" height="1.5" rx="0.4" fill="url(#mauserSteelHdr)"/>
+                            <path d="M30.8 13.8 L31.6 12.1 L32.4 13.8 Z" fill="#1e293b"/>
+                            <path d="M17.6 13.8 L18.2 12.7 L20.1 13.0 L20.1 13.8 Z" fill="#1e293b"/>
+                            <rect x="27.2" y="15.4" width="4.6" height="0.7" rx="0.3" fill="#334155"/>
+                            <path d="M9.8 16.5 C9.8 18.8 13.2 18.8 13.2 16.5" stroke="#1e293b" stroke-width="1.0" fill="none"/>
+                            <path d="M11.6 16.4 C11.4 17.3 11.7 17.8 12.0 18.0" stroke="#1e293b" stroke-width="0.9" stroke-linecap="round" fill="none"/>
+                            <path d="M0.5 15.1 L8.5 14.9 C9.8 14.9 10.6 14.7 11.8 14.7 L27.6 14.7 L27.6 16.0 L13.8 16.3 C12.0 16.4 10.2 16.8 9.0 17.6 C6.5 18.8 3.2 19.6 0.4 20.1 Z" fill="url(#mauserWoodHdr)"/>
+                            <path d="M15.6 14.1 L26.8 14.1 L26.8 14.8 L15.6 14.8 Z" fill="#92400e"/>
+                            <path d="M0.1 15.0 L0.9 15.0 L0.7 20.1 L0.0 20.2 Z" fill="#334155"/>
+                            <rect x="20.4" y="14.0" width="1.1" height="2.2" rx="0.2" fill="#1e293b"/>
+                            <rect x="26.8" y="14.0" width="1.1" height="2.1" rx="0.2" fill="#1e293b"/>
+                            <rect x="10.4" y="13.5" width="5.2" height="1.8" rx="0.4" fill="#334155"/>
+                            <rect x="11.6" y="13.9" width="2.8" height="0.9" rx="0.3" fill="#94a3b8"/>
+                            <path d="M12.2 14.8 L11.3 16.6 L10.7 17.9" stroke="#1e293b" stroke-width="1.1" stroke-linecap="round"/>
+                            <circle cx="10.6" cy="18.1" r="0.95" fill="#334155" stroke="#1e293b" stroke-width="0.4"/>
+                        </g>
+                    </svg>
+                    <span>Digitales Waffenbuch (Salutwaffen Kat. C)</span>
+                </span>
                 <span id="scanner-status-badge" style="font-size: 0.65em; background: #dc2626; color: white; padding: 4px 8px; border-radius: 6px;">GESPERRT (Tresor-Scan erforderlich)</span>
             </div>
             <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 16px;">
-                Erfassung für Ausrückungen gemäß ZVR-624291509 (Schützenhaus Partenen).
+                Erfassung für Ausrückungen gemäß ZVR-XXXXXXXXX (Schützenhaus Partenen).
             </p>
 
             <form onsubmit="saveWeaponIssue(event)">
                 <div class="form-group">
                     <label>1. Übernehmer / Hauptverantwortlicher</label>
                     <select class="form-control" id="weapon-member-primary" required style="font-weight: 700;">
-                        <option value="Manfred Wachter">Manfred Wachter (Waffenwart Stv.)</option>
-                        <option value="Heimo Stocker">Heimo Stocker (Salutkommandant/Waffenwart)</option>
-                        <option value="Simon Schweighofer">Simon Schweighofer (Obmann)</option>
-                        <option value="Norbert Spettel">Norbert Spettel (Schützenkamerad)</option>
+                        <option value="">-- Übernehmer wählen --</option>
                     </select>
                 </div>
 
@@ -470,10 +623,6 @@
                     <label>2. Mitabholer / Zweiter Waffenwart (optional)</label>
                     <select class="form-control" id="weapon-member-secondary">
                         <option value="">-- Keiner / Alleinübernahme --</option>
-                        <option value="Manfred Wachter">Manfred Wachter</option>
-                        <option value="Heimo Stocker">Heimo Stocker</option>
-                        <option value="Simon Schweighofer">Simon Schweighofer</option>
-                        <option value="Norbert Spettel">Norbert Spettel</option>
                     </select>
                 </div>
 
@@ -526,10 +675,26 @@
                     <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required autocomplete="off">
                 </div>
                 <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
+                <button type="button" onclick="exitAdminDirectLogin()" class="btn btn-danger btn-block admin-direct-back-btn" style="margin-top: 10px;">← Zurück zur Zugangscode-Eingabe</button>
             </form>
         </div>
 
         <div class="admin-delete-btn">
+            <!-- VEREINS-ZUGANGSCODE VERWALTUNG -->
+            <div class="glass-card glass-card-blue" id="admin-access-pin-card" style="border: 2px solid #2563eb; background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(239,246,255,0.95));">
+                <div class="card-title" style="color: #1d4ed8; margin-bottom: 8px;">🔐 Vereins-Zugangscode ändern</div>
+                <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 12px;">
+                    Aktueller Zugangscode aus Firestore (<code>settings/access</code>). Nach dem Speichern wird die App auf allen Geräten mit dem alten Code automatisch wieder gesperrt.
+                </p>
+                <form onsubmit="updateClubAccessPin(event)">
+                    <div class="form-group">
+                        <label>Aktueller / Neuer Vereins-Zugangscode</label>
+                        <input type="text" class="form-control" id="admin-club-pin-input" placeholder="Lade aktuellen Code..." required autocomplete="off" style="font-weight: 800; font-size: 1.1em; letter-spacing: 3px; text-align: center;">
+                    </div>
+                    <button type="submit" class="btn btn-admin btn-block">💾 Neuen Zugangscode speichern</button>
+                </form>
+            </div>
+
             <!-- ADMIN UNTER-TABS -->
             <div class="admin-nav-tabs">
                 <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">
@@ -572,6 +737,21 @@
                         </svg>
                     </div>
                     <span>3. Rechnungen</span>
+                </button>
+
+                <button onclick="switchAdminTab('tab-members')" class="admin-tab-btn" id="btn-tab-members">
+                    <div class="admin-3d-icon-box">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="memGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#5b21b6"/></linearGradient>
+                            </defs>
+                            <circle cx="9" cy="8" r="3.5" fill="url(#memGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
+                            <path d="M3 19C3 15.6863 5.68629 13 9 13C12.3137 13 15 15.6863 15 19" fill="url(#memGrad)"/>
+                            <circle cx="16.5" cy="9" r="2.5" fill="#a78bfa"/>
+                            <path d="M15.5 13.5C18.5 13.5 21 15.5 21 18.5" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span>4. Mitglieder</span>
                 </button>
 
                 <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys">
@@ -618,7 +798,7 @@
                 <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 6px;">Dienst eintragen</h4>
                 <div class="form-group"><label>Datum</label><input type="date" class="form-control" id="duty-date"></div>
                 <div class="form-group"><label>Team</label><input type="text" class="form-control" id="duty-team" placeholder="z. B. Team 1"></div>
-                <div class="form-group"><label>Mitglieder</label><input type="text" class="form-control" id="duty-names" placeholder="z. B. Dietmar, Simon, Sabrina"></div>
+                <div class="form-group"><label>Mitglieder</label><input type="text" class="form-control" id="duty-names" placeholder="z. B. Name 1, Name 2, Name 3"></div>
                 <button onclick="addDutyEntry()" class="btn btn-primary btn-block" style="margin-bottom: 16px;">Dienst eintragen</button>
 
                 <div style="margin-bottom: 16px; border-top: 1px solid #fecaca; padding-top: 10px;">
@@ -656,6 +836,21 @@
             <!-- TAB 4: MITGLIEDER -->
             <div id="tab-members" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">👥 4. Aktive und passive Mitglieder</div>
+                <form onsubmit="addMemberToFirestore(event)" style="background: rgba(248, 250, 252, 0.95); padding: 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; margin-bottom: 14px;">
+                    <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 8px;">➕ Neues Mitglied hinzufügen</h4>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label>Name (Vorname Nachname)</label>
+                        <input type="text" class="form-control" id="new-member-name" placeholder="Vorname Nachname" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <label>Status</label>
+                        <select class="form-control" id="new-member-type">
+                            <option value="active">Aktives Mitglied</option>
+                            <option value="passive">Passives Mitglied</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-admin btn-block" style="margin-top: 0;">💾 Mitglied speichern</button>
+                </form>
                 <h4 style="color: #2563eb; font-size: 0.9em; margin: 8px 0 4px 0;">Aktive Mitglieder</h4>
                 <div id="admin-active-members-list"></div>
                 <h4 style="color: #dc2626; font-size: 0.9em; margin: 14px 0 4px 0;">Passive Mitglieder (Hervorgehoben)</h4>
@@ -671,7 +866,7 @@
                 <div id="admin-keys-list"></div>
             </div>
 
-            <!-- TAB 6: WAFFENBUCH PDFs -->
+            <!-- TAB 6: WAFFENBUCH PDFs & WAFFENVERWALTUNG -->
             <div id="tab-weapons-admin" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">🔫 6. Waffenbuch-Protokolle (PDFs)</div>
                 <div style="margin-bottom: 14px;">
@@ -679,6 +874,26 @@
                 </div>
                 <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Übersicht aller gespeicherten Entnahme- und Rückgabeprotokolle (inkl. getrennter ZWR/ZVR-Daten):</p>
                 <div id="admin-weapon-pdf-list"><p style="font-size: 0.85em; color: var(--text-muted);">Keine Protokolle vorhanden.</p></div>
+
+                <div style="margin-top: 20px; padding-top: 16px; border-top: 2px dashed #fecaca;">
+                    <div class="card-title" style="color: #dc2626; margin-bottom: 10px;">🛠️ Waffenliste verwalten (Firestore)</div>
+                    <form onsubmit="saveWeaponToFirestore(event)" style="background: rgba(248, 250, 252, 0.95); padding: 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; margin-bottom: 14px;">
+                        <input type="hidden" id="weapon-edit-doc-id" value="">
+                        <h4 id="weapon-form-admin-title" style="color: #b91c1c; font-size: 0.9em; margin-bottom: 8px;">➕ Neue Waffe hinzufügen</h4>
+                        <div class="form-group" style="margin-bottom: 8px;"><label>Waffenart</label><input type="text" class="form-control" id="admin-weapon-art" value="Büchse" required></div>
+                        <div class="form-group" style="margin-bottom: 8px;"><label>Hersteller</label><input type="text" class="form-control" id="admin-weapon-hersteller" value="MAUSER" required></div>
+                        <div class="form-group" style="margin-bottom: 8px;"><label>Modell</label><input type="text" class="form-control" id="admin-weapon-modell" value="98" required></div>
+                        <div class="form-group" style="margin-bottom: 8px;"><label>Kaliber</label><input type="text" class="form-control" id="admin-weapon-kaliber" placeholder="z. B. 8x57 I" required></div>
+                        <div class="form-group" style="margin-bottom: 8px;"><label>Kategorie</label><input type="text" class="form-control" id="admin-weapon-kat" value="C" required></div>
+                        <div class="form-group" style="margin-bottom: 8px;"><label>Zuweisung / Schütze</label><input type="text" class="form-control" id="admin-weapon-zuweisung" placeholder="Name oder Reserve" required></div>
+                        <div class="form-group" style="margin-bottom: 10px;"><label>ZWR-Seriennummer</label><input type="text" class="form-control" id="admin-weapon-nummer" placeholder="Seriennummer eingeben" required></div>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="submit" id="admin-weapon-save-btn" class="btn btn-admin" style="flex: 1; margin-top: 0;">💾 Waffe speichern</button>
+                            <button type="button" id="admin-weapon-cancel-btn" onclick="resetAdminWeaponForm()" class="btn btn-danger" style="display: none; margin-top: 0;">Abbrechen</button>
+                        </div>
+                    </form>
+                    <div id="admin-weapons-list"><p style="font-size: 0.8em; color: var(--text-muted);">Lade Waffenliste...</p></div>
+                </div>
             </div>
 
             <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 15px;">Admin-Modus Beenden</button>
@@ -686,7 +901,7 @@
     </div>
 
     <!-- IMPRESSUM & DATENSCHUTZ LINK & MODAL -->
-    <div style="text-align: center; margin: 24px 0 10px 0; font-size: 0.75em; color: var(--text-muted);">
+    <div id="legal-footer-link" style="text-align: center; margin: 24px 0 10px 0; font-size: 0.75em; color: var(--text-muted);">
         <span onclick="openLegalModal()" style="cursor: pointer; text-decoration: underline;">Impressum</span> | <span onclick="openLegalModal()" style="cursor: pointer; text-decoration: underline;">Datenschutz</span>
     </div>
 
@@ -824,13 +1039,39 @@
 
         <a onclick="switchTab('weapons')" class="nav-item" id="nav-weapons">
             <span class="nav-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="mauser-svg" width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <linearGradient id="navRifle" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#475569"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+                        <linearGradient id="mauserWoodNav" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#92400e"/><stop offset="100%" stop-color="#78350f"/></linearGradient>
+                        <linearGradient id="mauserSteelNav" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#334155"/><stop offset="100%" stop-color="#1e293b"/></linearGradient>
                     </defs>
-                    <path d="M2 13H5L7 11H15L17 13H22V15H17L15 13H7L5 15H2V13Z" fill="url(#navRifle)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/>
-                    <path d="M10 9H18V11H10V9Z" fill="url(#navRifle)"/>
-                    <circle cx="6" cy="14" r="1.5" fill="#94a3b8"/>
+                    <g transform="rotate(-42 16 16)">
+                        <!-- Stahllauf -->
+                        <rect x="11.5" y="13.8" width="21.5" height="1.5" rx="0.4" fill="url(#mauserSteelNav)"/>
+                        <!-- Korn an der Mündung -->
+                        <path d="M30.8 13.8 L31.6 12.1 L32.4 13.8 Z" fill="#1e293b"/>
+                        <!-- Kimme -->
+                        <path d="M17.6 13.8 L18.2 12.7 L20.1 13.0 L20.1 13.8 Z" fill="#1e293b"/>
+                        <!-- Putzstock unter dem Lauf -->
+                        <rect x="27.2" y="15.4" width="4.6" height="0.7" rx="0.3" fill="#334155"/>
+                        <!-- Abzugsbügel & Abzug -->
+                        <path d="M9.8 16.5 C9.8 18.8 13.2 18.8 13.2 16.5" stroke="#1e293b" stroke-width="1.0" fill="none"/>
+                        <path d="M11.6 16.4 C11.4 17.3 11.7 17.8 12.0 18.0" stroke="#1e293b" stroke-width="0.9" stroke-linecap="round" fill="none"/>
+                        <!-- Dunkelbrauner Holzschaft mit Kolben -->
+                        <path d="M0.5 15.1 L8.5 14.9 C9.8 14.9 10.6 14.7 11.8 14.7 L27.6 14.7 L27.6 16.0 L13.8 16.3 C12.0 16.4 10.2 16.8 9.0 17.6 C6.5 18.8 3.2 19.6 0.4 20.1 Z" fill="url(#mauserWoodNav)"/>
+                        <!-- Handschutz oben -->
+                        <path d="M15.6 14.1 L26.8 14.1 L26.8 14.8 L15.6 14.8 Z" fill="#92400e"/>
+                        <!-- Schaftkappe (Stahl) -->
+                        <path d="M0.1 15.0 L0.9 15.0 L0.7 20.1 L0.0 20.2 Z" fill="#334155"/>
+                        <!-- Laufbänder -->
+                        <rect x="20.4" y="14.0" width="1.1" height="2.2" rx="0.2" fill="#1e293b"/>
+                        <rect x="26.8" y="14.0" width="1.1" height="2.1" rx="0.2" fill="#1e293b"/>
+                        <!-- Systemhülse / Verschluss -->
+                        <rect x="10.4" y="13.5" width="5.2" height="1.8" rx="0.4" fill="#334155"/>
+                        <rect x="11.6" y="13.9" width="2.8" height="0.9" rx="0.3" fill="#cbd5e1"/>
+                        <!-- Gebogener Kammerstängel & Kugel -->
+                        <path d="M12.2 14.8 L11.3 16.6 L10.7 17.9" stroke="#1e293b" stroke-width="1.1" stroke-linecap="round"/>
+                        <circle cx="10.6" cy="18.1" r="0.95" fill="#334155" stroke="#1e293b" stroke-width="0.4"/>
+                    </g>
                 </svg>
             </span>
             <span>Waffenbuch</span>
@@ -928,60 +1169,302 @@
             if(targetBtn) targetBtn.classList.add('active');
         }
 
-        const officialActiveMembers = [
-            "Manfred Wachter", "Werner Wachter", "Dietmar Schweighofer", "Simon Schweighofer",
-            "Norbert Spettel", "Heimo Stocker", "Christoph Wittwer", "Werner Wittwer",
-            "Erwin Rudigier", "Daniel Sandrell", "Werner Mattle", "Pascal Tripolt",
-            "Karin Stocker", "Jasmin Suntinger", "Sabrina Kinzl", "Maria Spettel",
-            "Natalie Stocker", "Elias Stocker"
-        ];
+        let officialActiveMembers = [];
+        let officialPassiveMembers = [];
+        let officialWeaponList = [];
 
-        const officialPassiveMembers = [
-            "Joel Wachter", "Kofler Marlene", "Wachter Monika", "Schallner Harry",
-            "Netzer Werner", "Netzer Markus", "Fitsch Manuela", "Geiger Monika",
-            "Frank Sandrell", "Barbisch Andreas", "Patrick Wachter", "Steurer Harald",
-            "Steurer Angela", "Kofler Corinna", "Bitschnau Jutta", "Bitschnau Klaus",
-            "Essig Armin", "Carlos Da Ponte"
-        ];
-
-        // --- EXAKT DIE 17 WAFFEN ---
-        const officialWeaponList = [
-            { id: "W1", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Heimo", nummer: "V8640" },
-            { id: "W2", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Werner.Wa", nummer: "A2605" },
-            { id: "W3", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Simon.Schw", nummer: "N1657" },
-            { id: "W4", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 IS", kat: "C", zuweisung: "Wittwer. Werner", nummer: "A37928" },
-            { id: "W5", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Kofler Konrad", nummer: "Z7738" },
-            { id: "W6", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Pascal. Tripolt", nummer: "J20020" },
-            { id: "W7", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Spettel Norbert", nummer: "R713" },
-            { id: "W8", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 IS", kat: "C", zuweisung: "Wittwer.Christoph", nummer: "K83466" },
-            { id: "W9", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 IS", kat: "C", zuweisung: "Wachter. Manfred", nummer: "K31927" },
-            { id: "W10", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Reserve", nummer: "7497" },
-            { id: "W11", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Reserve", nummer: "A9424" },
-            { id: "W12", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 IS", kat: "C", zuweisung: "Reserve", nummer: "M13685" },
-            { id: "W13", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Reserve", nummer: "15742" },
-            { id: "W14", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 I", kat: "C", zuweisung: "Reserve", nummer: "5711" },
-            { id: "W15", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 IS", kat: "C", zuweisung: "Reserve", nummer: "T99373" },
-            { id: "W16", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 IS", kat: "C", zuweisung: "Reserve", nummer: "9164e" },
-            { id: "W17", art: "Büchse", hersteller: "MAUSER", modell: "98", kaliber: "8x57 IS", kat: "C", zuweisung: "Reserve", nummer: "A63775" }
-        ];
+        function escapeHtml(str) {
+            return String(str === undefined || str === null ? '' : str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
 
         function maskWeaponNumber(num) {
-            if (!num || num.length <= 2) return "XX";
-            return num.slice(0, -2) + "XX";
+            if (!num) return "XXXXXX";
+            return "X".repeat(String(num).length);
+        }
+
+        function maskZvrNumber(zvr) {
+            if (!zvr) return "XXXXXXXXX";
+            return "X".repeat(String(zvr).length);
+        }
+
+        function populateWeaponMemberSelects() {
+            const primarySelect = document.getElementById('weapon-member-primary');
+            const secondarySelect = document.getElementById('weapon-member-secondary');
+
+            if (primarySelect) {
+                const currentVal = primarySelect.value;
+                let primaryHtml = '<option value="">-- Übernehmer wählen --</option>';
+                officialActiveMembers.forEach(name => {
+                    const safe = escapeHtml(name);
+                    primaryHtml += `<option value="${safe}">${safe}</option>`;
+                });
+                primarySelect.innerHTML = primaryHtml;
+                if (currentVal && officialActiveMembers.includes(currentVal)) {
+                    primarySelect.value = currentVal;
+                }
+            }
+
+            if (secondarySelect) {
+                const currentVal = secondarySelect.value;
+                let secondaryHtml = '<option value="">-- Keiner / Alleinübernahme --</option>';
+                officialActiveMembers.forEach(name => {
+                    const safe = escapeHtml(name);
+                    secondaryHtml += `<option value="${safe}">${safe}</option>`;
+                });
+                secondarySelect.innerHTML = secondaryHtml;
+                if (currentVal && officialActiveMembers.includes(currentVal)) {
+                    secondarySelect.value = currentVal;
+                }
+            }
+        }
+
+        async function loadMembersFromFirestore() {
+            try {
+                const doc = await db.collection("settings").doc("members").get();
+                if (doc.exists && doc.data()) {
+                    const data = doc.data();
+                    officialActiveMembers = Array.isArray(data.active)
+                        ? data.active.map(x => String(x || '').trim()).filter(Boolean)
+                        : (Array.isArray(data.activeMembers) ? data.activeMembers.map(x => String(x || '').trim()).filter(Boolean) : []);
+                    officialPassiveMembers = Array.isArray(data.passive)
+                        ? data.passive.map(x => String(x || '').trim()).filter(Boolean)
+                        : (Array.isArray(data.passiveMembers) ? data.passiveMembers.map(x => String(x || '').trim()).filter(Boolean) : []);
+                } else {
+                    officialActiveMembers = [];
+                    officialPassiveMembers = [];
+                }
+            } catch (e) {
+                officialActiveMembers = [];
+                officialPassiveMembers = [];
+            }
+            populateWeaponMemberSelects();
+            loadPublicMembersList();
+            loadAdminMembers();
+        }
+
+        async function persistMembersToFirestore() {
+            await db.collection("settings").doc("members").set({
+                active: officialActiveMembers,
+                passive: officialPassiveMembers,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+            populateWeaponMemberSelects();
+            loadPublicMembersList();
+            loadAdminMembers();
+        }
+
+        async function addMemberToFirestore(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('new-member-name');
+            const typeSelect = document.getElementById('new-member-type');
+            const name = nameInput ? nameInput.value.trim() : '';
+            const type = typeSelect ? typeSelect.value : 'active';
+            if (!name) return;
+
+            try {
+                if (type === 'passive') {
+                    if (!officialPassiveMembers.includes(name)) officialPassiveMembers.push(name);
+                } else {
+                    if (!officialActiveMembers.includes(name)) officialActiveMembers.push(name);
+                }
+                await persistMembersToFirestore();
+                if (nameInput) nameInput.value = '';
+                alert("Mitglied erfolgreich gespeichert!");
+            } catch (err) {
+                alert("Fehler beim Speichern des Mitglieds: " + err.message);
+            }
+        }
+
+        async function editMemberInFirestore(type, index) {
+            const list = type === 'passive' ? officialPassiveMembers : officialActiveMembers;
+            const currentName = list[index];
+            if (!currentName) return;
+            const newName = prompt("Name des Mitglieds bearbeiten:", currentName);
+            if (newName === null) return;
+            const trimmed = newName.trim();
+            if (!trimmed) return;
+
+            try {
+                list[index] = trimmed;
+                await persistMembersToFirestore();
+            } catch (err) {
+                alert("Fehler beim Aktualisieren: " + err.message);
+            }
+        }
+
+        async function deleteMemberFromFirestore(type, index) {
+            const list = type === 'passive' ? officialPassiveMembers : officialActiveMembers;
+            const name = list[index];
+            if (!name) return;
+            if (!confirm(`Mitglied "${name}" wirklich löschen?`)) return;
+
+            try {
+                list.splice(index, 1);
+                await persistMembersToFirestore();
+            } catch (err) {
+                alert("Fehler beim Löschen: " + err.message);
+            }
+        }
+
+        function sortWeaponsList(list) {
+            return [...list].sort((a, b) => {
+                const aMatch = String(a.code || a.id || '').match(/^W(\d+)$/i);
+                const bMatch = String(b.code || b.id || '').match(/^W(\d+)$/i);
+                if (aMatch && bMatch) {
+                    return parseInt(aMatch[1], 10) - parseInt(bMatch[1], 10);
+                }
+                return String(a.hersteller || '').localeCompare(String(b.hersteller || '')) || String(a.nummer || '').localeCompare(String(b.nummer || ''));
+            });
+        }
+
+        async function loadWeaponsFromFirestore() {
+            try {
+                const snapshot = await db.collection("weapons").get();
+                const list = [];
+                snapshot.forEach(doc => {
+                    const d = doc.data() || {};
+                    list.push({
+                        docId: doc.id,
+                        id: d.id || doc.id,
+                        code: d.id || doc.id,
+                        art: d.art || 'Büchse',
+                        hersteller: d.hersteller || '',
+                        modell: d.modell || '',
+                        kaliber: d.kaliber || '',
+                        kat: d.kat || 'C',
+                        zuweisung: d.zuweisung || 'Reserve',
+                        nummer: d.nummer || ''
+                    });
+                });
+                officialWeaponList = sortWeaponsList(list);
+            } catch (e) {
+                officialWeaponList = [];
+            }
+            populateWeaponCheckboxes();
+            renderAdminWeaponsList();
+        }
+
+        function renderAdminWeaponsList() {
+            const container = document.getElementById('admin-weapons-list');
+            if (!container) return;
+            if (!officialWeaponList || officialWeaponList.length === 0) {
+                container.innerHTML = '<p style="font-size:0.8em; color:var(--text-muted);">Keine Waffen in Firestore (<code>weapons</code>) vorhanden.</p>';
+                return;
+            }
+            let html = "";
+            officialWeaponList.forEach((w, idx) => {
+                html += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; background:#fff; border-radius:8px; margin-bottom:6px; border:1px solid #cbd5e1; font-size:0.82em; gap:8px;">
+                        <div style="flex:1;">
+                            <strong>${escapeHtml(w.art)}: ${escapeHtml(w.hersteller)} ${escapeHtml(w.modell)}</strong> (${escapeHtml(w.kaliber)}, Kat. ${escapeHtml(w.kat)})<br>
+                            <span style="color:var(--text-muted);">ZWR: <strong>${escapeHtml(w.nummer)}</strong> | Zuweisung: <strong>${escapeHtml(w.zuweisung)}</strong></span>
+                        </div>
+                        <div style="display:flex; gap:4px; flex-shrink:0;">
+                            <button type="button" class="btn btn-admin" style="padding:5px 9px; font-size:0.78em; margin-top:0;" onclick="startEditWeapon(${idx})">✏️</button>
+                            <button type="button" class="btn btn-danger" style="padding:5px 9px; font-size:0.78em; margin-top:0;" onclick="deleteWeaponFromFirestore(${idx})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function startEditWeapon(index) {
+            const w = officialWeaponList[index];
+            if (!w) return;
+            document.getElementById('weapon-edit-doc-id').value = w.docId || w.id || '';
+            document.getElementById('admin-weapon-art').value = w.art || 'Büchse';
+            document.getElementById('admin-weapon-hersteller').value = w.hersteller || '';
+            document.getElementById('admin-weapon-modell').value = w.modell || '';
+            document.getElementById('admin-weapon-kaliber').value = w.kaliber || '';
+            document.getElementById('admin-weapon-kat').value = w.kat || 'C';
+            document.getElementById('admin-weapon-zuweisung').value = w.zuweisung || '';
+            document.getElementById('admin-weapon-nummer').value = w.nummer || '';
+            document.getElementById('weapon-form-admin-title').innerText = '✏️ Waffe bearbeiten';
+            document.getElementById('admin-weapon-save-btn').innerText = '💾 Änderungen speichern';
+            document.getElementById('admin-weapon-cancel-btn').style.display = 'inline-flex';
+        }
+
+        function resetAdminWeaponForm() {
+            document.getElementById('weapon-edit-doc-id').value = '';
+            document.getElementById('admin-weapon-art').value = 'Büchse';
+            document.getElementById('admin-weapon-hersteller').value = 'MAUSER';
+            document.getElementById('admin-weapon-modell').value = '98';
+            document.getElementById('admin-weapon-kaliber').value = '';
+            document.getElementById('admin-weapon-kat').value = 'C';
+            document.getElementById('admin-weapon-zuweisung').value = '';
+            document.getElementById('admin-weapon-nummer').value = '';
+            document.getElementById('weapon-form-admin-title').innerText = '➕ Neue Waffe hinzufügen';
+            document.getElementById('admin-weapon-save-btn').innerText = '💾 Waffe speichern';
+            document.getElementById('admin-weapon-cancel-btn').style.display = 'none';
+        }
+
+        async function saveWeaponToFirestore(e) {
+            e.preventDefault();
+            const docId = document.getElementById('weapon-edit-doc-id').value.trim();
+            const payload = {
+                art: document.getElementById('admin-weapon-art').value.trim(),
+                hersteller: document.getElementById('admin-weapon-hersteller').value.trim(),
+                modell: document.getElementById('admin-weapon-modell').value.trim(),
+                kaliber: document.getElementById('admin-weapon-kaliber').value.trim(),
+                kat: document.getElementById('admin-weapon-kat').value.trim() || 'C',
+                zuweisung: document.getElementById('admin-weapon-zuweisung').value.trim() || 'Reserve',
+                nummer: document.getElementById('admin-weapon-nummer').value.trim(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            if (!payload.hersteller || !payload.nummer) {
+                alert("Bitte Hersteller und Seriennummer angeben!");
+                return;
+            }
+            try {
+                if (docId) {
+                    await db.collection("weapons").doc(docId).set(payload, { merge: true });
+                } else {
+                    payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                    await db.collection("weapons").add(payload);
+                }
+                resetAdminWeaponForm();
+                await loadWeaponsFromFirestore();
+                alert("Waffe erfolgreich in Firestore gespeichert!");
+            } catch (err) {
+                alert("Fehler beim Speichern der Waffe: " + err.message);
+            }
+        }
+
+        async function deleteWeaponFromFirestore(index) {
+            const w = officialWeaponList[index];
+            if (!w || !w.docId) return;
+            if (!confirm(`Waffe "${w.hersteller} ${w.modell} (${w.nummer})" wirklich löschen?`)) return;
+            try {
+                await db.collection("weapons").doc(w.docId).delete();
+                await loadWeaponsFromFirestore();
+            } catch (err) {
+                alert("Fehler beim Löschen der Waffe: " + err.message);
+            }
         }
 
         function populateWeaponCheckboxes() {
             const container = document.getElementById('weapon-checkboxes-container');
             if (!container) return;
+            if (!officialWeaponList || officialWeaponList.length === 0) {
+                container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Waffen aus Firestore geladen.</p>';
+                return;
+            }
             let html = "";
             officialWeaponList.forEach(w => {
                 let maskedNum = maskWeaponNumber(w.nummer);
-                let labelText = `${w.hersteller} ${w.modell} (${w.kaliber}) – Nr. ${maskedNum} [${w.zuweisung}]`;
+                let maskedZvr = maskZvrNumber("624291509");
+                let labelText = `${escapeHtml(w.hersteller)} ${escapeHtml(w.modell)} (${escapeHtml(w.kaliber)}) – ZWR: ${maskedNum} | ZVR: ${maskedZvr} [${escapeHtml(w.zuweisung)}]`;
                 let fullValue = `${w.hersteller} ${w.modell} (${w.kaliber} / Nr. ${w.nummer} / ZVR-624291509)`;
                 html += `
                     <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input type="checkbox" name="weapons" value="${fullValue}" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
-                        <strong>${w.art}</strong>: ${labelText}
+                        <input type="checkbox" name="weapons" value="${escapeHtml(fullValue)}" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
+                        <strong>${escapeHtml(w.art)}</strong>: ${labelText}
                     </label>
                 `;
             });
@@ -993,6 +1476,7 @@
         let lastInventoryChangeTime = "Noch nicht geändert";
 
         async function loadInventory() {
+            if (!(auth.currentUser || document.body.classList.contains('admin-mode'))) return;
             try {
                 const doc = await db.collection("settings").doc("inventory").get();
                 if (doc.exists) {
@@ -1107,23 +1591,8 @@
             pdf.save(`Vollstaendiges_Waffenverzeichnis_${dateStr.replace(/\./g, '-')}.pdf`);
         }
 
-        // --- DIENSTPLAN ---
-        const defaultDutyRoster = [
-            { dateStr: "09.10.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "23.10.2026", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "06.11.2026", team: "Geschlossen", names: "Interne Veranstaltung / Geschlossen", status: "closed" },
-            { dateStr: "20.11.2026", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "04.12.2026", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "18.12.2026", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "01.01.2027", team: "Geschlossen", names: "Neujahr (Geschlossen)", status: "closed" },
-            { dateStr: "15.01.2027", team: "Team 1", names: "Manfred, Pascal, Jasmine", status: "open" },
-            { dateStr: "29.01.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" },
-            { dateStr: "12.02.2027", team: "Team 5", names: "Heimo, Karin, Werner Wachter", status: "open" },
-            { dateStr: "26.02.2027", team: "Team 4", names: "Norbert, Maria, Erwin", status: "open" },
-            { dateStr: "12.03.2027", team: "Team 3", names: "Christoph, Werner Wittwer", status: "open" },
-            { dateStr: "26.03.2027", team: "Geschlossen", names: "Karfreitag (Geschlossen)", status: "closed" },
-            { dateStr: "09.04.2027", team: "Team 2", names: "Dietmar, Simon, Sabrina", status: "open" }
-        ];
+        // --- DIENSTPLAN (AUSSCHLIESSLICH AUS FIRESTORE / CACHE NACH ENTSPERREN) ---
+        const defaultDutyRoster = [];
 
         function parseLocalDate(dateStr) {
             if (!dateStr) return new Date();
@@ -1196,27 +1665,91 @@
             }
         }
 
+        const DUTY_PLAN_CACHE_KEY = 'kbsv_duty_plan_cache_v1';
         let globalDutyList = [];
+        let globalDutyIsFromFirebase = false;
+        let lastRenderedDutySignature = null;
+
+        function getDutyPlanSignature(list, isFromFirebase) {
+            try {
+                return JSON.stringify({ isFromFirebase: !!isFromFirebase, list: list });
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function saveDutyPlanToCache(list, isFromFirebase) {
+            try {
+                localStorage.setItem(DUTY_PLAN_CACHE_KEY, JSON.stringify({
+                    list: list,
+                    isFromFirebase: !!isFromFirebase,
+                    updatedAt: Date.now()
+                }));
+            } catch (e) {}
+        }
+
+        let dutyPlanUnsubscribe = null;
+        let midnightCheckerInterval = null;
+
+        function loadDutyPlanFromCache() {
+            if (document.body.classList.contains('app-locked') && !document.body.classList.contains('admin-mode')) {
+                return false;
+            }
+            try {
+                const raw = localStorage.getItem(DUTY_PLAN_CACHE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && Array.isArray(parsed.list) && parsed.list.length > 0) {
+                        globalDutyList = parsed.list;
+                        globalDutyIsFromFirebase = !!parsed.isFromFirebase;
+                        lastRenderedDutySignature = getDutyPlanSignature(globalDutyList, globalDutyIsFromFirebase);
+                        renderDutyPlanViews(globalDutyList, globalDutyIsFromFirebase);
+                        return true;
+                    }
+                }
+            } catch (e) {}
+            return false;
+        }
 
         function initDutyPlanRealtimeListener() {
-            db.collection("duty_plan").orderBy("createdAt", "asc").onSnapshot((snapshot) => {
+            if (globalDutyList.length === 0) {
+                loadDutyPlanFromCache();
+            }
+            if (dutyPlanUnsubscribe) return;
+
+            dutyPlanUnsubscribe = db.collection("duty_plan").orderBy("createdAt", "asc").onSnapshot((snapshot) => {
                 let dutyList = [];
                 snapshot.forEach(doc => {
                     let d = doc.data();
                     dutyList.push({
                         id: doc.id,
-                        dateStr: d.dateStr || d.datum || d.date || "09.10.2026",
+                        dateStr: d.dateStr || d.datum || d.date || "",
                         team: d.team || d.gruppe || "Team",
                         names: d.names || d.mitglieder || d.diensthabende || "",
                         status: d.status || 'open'
                     });
                 });
 
-                globalDutyList = (dutyList.length > 0) ? dutyList : defaultDutyPlanWithIds();
-                renderDutyPlanViews(globalDutyList, dutyList.length > 0);
+                const isFromFirebase = dutyList.length > 0;
+                const nextList = isFromFirebase ? dutyList : [];
+                const nextSignature = getDutyPlanSignature(nextList, isFromFirebase);
+
+                globalDutyList = nextList;
+                globalDutyIsFromFirebase = isFromFirebase;
+
+                if (nextSignature === null || nextSignature !== lastRenderedDutySignature) {
+                    lastRenderedDutySignature = nextSignature;
+                    renderDutyPlanViews(globalDutyList, isFromFirebase);
+                }
+                if (isFromFirebase) {
+                    saveDutyPlanToCache(globalDutyList, isFromFirebase);
+                }
             }, (error) => {
-                globalDutyList = defaultDutyPlanWithIds();
-                renderDutyPlanViews(globalDutyList, false);
+                if (globalDutyList.length === 0) {
+                    globalDutyList = [];
+                    globalDutyIsFromFirebase = false;
+                    renderDutyPlanViews([], false);
+                }
             });
         }
 
@@ -1330,16 +1863,19 @@
         }
 
         function initMidnightAndMinuteChecker() {
-            setInterval(() => {
+            if (midnightCheckerInterval) return;
+            midnightCheckerInterval = setInterval(() => {
                 if (globalDutyList.length > 0) {
-                    renderDutyPlanViews(globalDutyList, true);
+                    renderDutyPlanViews(globalDutyList, globalDutyIsFromFirebase);
                 }
             }, 60 * 1000);
         }
 
-        function defaultDutyPlanWithIds() {
-            return defaultDutyRoster.map((item, index) => ({ id: "default-" + index, ...item }));
-        }
+        try {
+            if (!document.body.classList.contains('app-locked')) {
+                loadDutyPlanFromCache();
+            }
+        } catch(e) {}
 
         // --- TERMINE & ABSTIMMUNG ---
         async function addEvent(e) {
@@ -1378,9 +1914,14 @@
             document.getElementById('vote-modal-title').innerText = "Abstimmung: " + eventTitle;
             const selectEl = document.getElementById('vote-member-select');
             let html = "";
-            officialActiveMembers.forEach(m => {
-                html += `<option value="${m}">${m}</option>`;
-            });
+            if (officialActiveMembers.length === 0) {
+                html = '<option value="">-- Keine Mitglieder geladen --</option>';
+            } else {
+                officialActiveMembers.forEach(m => {
+                    const safe = escapeHtml(m);
+                    html += `<option value="${safe}">${safe}</option>`;
+                });
+            }
             selectEl.innerHTML = html;
             document.getElementById('vote-modal').style.display = 'flex';
         }
@@ -1514,19 +2055,26 @@
             } catch(e) {}
         }
 
-        // --- SCHLÜSSELLISTE ---
-        async function loadKeyList() {
+        // --- SCHLÜSSELLISTE (AUSSCHLIESSLICH IM ADMIN-BEREICH AUS FIRESTORE) ---
+        let exactPdfKeyList = [];
+
+        function renderKeyList() {
             const container = document.getElementById('admin-keys-list');
             if (!container) return;
+            if (!exactPdfKeyList || exactPdfKeyList.length === 0) {
+                container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Einträge in der Schlüsselliste (Firestore <code>settings/pdfKeys</code>).</p>';
+                return;
+            }
             let html = "";
-            exactPdfKeyList.forEach(k => {
+            exactPdfKeyList.forEach((k, idx) => {
                 if (k.header) {
-                    html += `<div class="strich-category-header" style="margin-top: 12px;">${k.header}</div>`;
+                    html += `<div class="strich-category-header" style="margin-top: 12px;">${escapeHtml(k.header)}</div>`;
                 } else {
                     html += `
-                        <div class="price-item" style="font-size: 0.85em;">
-                            <div><strong>${k.name}</strong><br><span style="color:var(--text-muted); font-size:0.8em;">${k.addr} | Tel: ${k.tel || 'k.A.'}</span></div>
-                            <span style="background: ${k.role.includes('Schlüssel') || k.role.includes('Waffenschrank') || k.role.includes('Büro') ? '#d1fae5' : '#f1f5f9'}; color: ${k.role.includes('Schlüssel') || k.role.includes('Waffenschrank') || k.role.includes('Büro') ? '#065f46' : '#64748b'}; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75em;">${k.role}</span>
+                        <div class="price-item" style="font-size: 0.85em; gap: 8px;">
+                            <div style="flex:1;"><strong>${escapeHtml(k.name)}</strong><br><span style="color:var(--text-muted); font-size:0.8em;">${escapeHtml(k.addr || '')} | Tel: ${escapeHtml(k.tel || 'k.A.')}</span></div>
+                            <span style="background: ${(k.role || '').includes('Schlüssel') || (k.role || '').includes('Waffenschrank') || (k.role || '').includes('Büro') ? '#d1fae5' : '#f1f5f9'}; color: ${(k.role || '').includes('Schlüssel') || (k.role || '').includes('Waffenschrank') || (k.role || '').includes('Büro') ? '#065f46' : '#64748b'}; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75em;">${escapeHtml(k.role || '')}</span>
+                            <button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.75em; margin-top:0;" onclick="deleteKeyListItem(${idx})">🗑️</button>
                         </div>
                     `;
                 }
@@ -1534,48 +2082,53 @@
             container.innerHTML = html;
         }
 
-        let exactPdfKeyList = [
-            { header: "Mitglieder (Eingang & Büro)" },
-            { name: "Kofler Konrad", dob: "27.02.1960", addr: "Gaschurn 164d", tel: "0664 4331385", role: "Eingang & Büro" },
-            { name: "Wachter Manfred", dob: "23.06.1963", addr: "Gaschurn 164e", tel: "0664 4752129", role: "Waffenschrank" },
-            { name: "Wachter Werner", dob: "26.05.1966", addr: "Gaschurn 153", tel: "0664 2804791", role: "Eingang & Büro" },
-            { name: "Schweighofer Dietmar", dob: "28.03.1972", addr: "Gaschurn 160", tel: "0664 19281005", role: "Eingang & Büro" },
-            { name: "Schweighofer Simon", dob: "17.09.1997", addr: "Gaschurn 160", tel: "0650 3049466", role: "Waffenschrank" },
-            { name: "Spettel Norbert", dob: "14.01.1958", addr: "Gaschurn 11e", tel: "0664 5367206", role: "Waffenschrank" },
-            { name: "Stocker Heimo", dob: "23.01.1983", addr: "Gortipohl 59", tel: "0664 42144179", role: "Waffenschrank" },
-            { name: "Wittwer Christoph", dob: "17.11.1965", addr: "Gaschurn 71", tel: "0664 8258518", role: "Eingang & Büro" },
-            { name: "Wittwer Werner", dob: "08.02.1974", addr: "Gaschurn 60", tel: "0650 2501910", role: "Eingang & Büro" },
-            { name: "Mattle Werner", dob: "28.03.1979", addr: "Partenen 43b", tel: "0664 2520974", role: "Eingang & Büro" },
-            { name: "Markus Netzer", dob: "10.05.1983", addr: "Gaschurn 139a", tel: "0664 7605263", role: "Eingang & Büro" },
-            { name: "Werner Netzer", dob: "15.09.1956", addr: "Gaschurn 35a", tel: "", role: "Eingang & Büro" },
-            { name: "Pascal Tripolt", dob: "01.05.1984", addr: "Gaschurn 162", tel: "0664 5162082", role: "Eingang & Büro" },
-            
-            { header: "Marketenderinnen Montafonertracht" },
-            { name: "Suntinger Jamin", dob: "23.12.1984", addr: "Gaschurn 162", tel: "0664 2135908", role: "Kein Schlüssel" },
-            { name: "Sabrina Kinzl", dob: "12.06.1991", addr: "Tschagguns 14a", tel: "0660 1113150", role: "Kein Schlüssel" },
-            { name: "Stocker Karin", dob: "07.11.1986", addr: "Gortipohl 59", tel: "0650 2800596", role: "Kein Schlüssel" },
-            { name: "Maria Spettel", dob: "06.12.1960", addr: "Gaschurn 11e", tel: "0664 7644140", role: "Schlüssel vorhanden" },
-            { name: "Natalie Stocker", dob: "01.12.2007", addr: "Gortipohl 59", tel: "0664 4587288", role: "Kein Schlüssel" },
+        async function loadKeyList() {
+            if (!(auth.currentUser || document.body.classList.contains('admin-mode'))) return;
+            try {
+                const doc = await db.collection("settings").doc("pdfKeys").get();
+                if (doc.exists && doc.data() && Array.isArray(doc.data().items)) {
+                    exactPdfKeyList = doc.data().items;
+                } else {
+                    exactPdfKeyList = [];
+                }
+            } catch (e) {
+                exactPdfKeyList = [];
+            }
+            renderKeyList();
+        }
 
-            { header: "Ehrenmitglieder" },
-            { name: "Sandrell Heinrich", dob: "23.01.1951", addr: "Gaschurn 172", tel: "0664 1228485", role: "Kein Schlüssel" },
-            { name: "Kofler Konrad", dob: "27.02.1960", addr: "Gaschurn 164d", tel: "0664 4331385", role: "Eingang & Büro" },
-            { name: "Dona Lothar", dob: "10.06.1960", addr: "Partenen 78b", tel: "0664 45754735", role: "Kein Schlüssel" },
-            { name: "Gerd Spratler", dob: "05.10.1945", addr: "Gaschurn 140a", tel: "0650 9600245", role: "Kein Schlüssel" },
-
-            { header: "Jugendmitglieder" },
-            { name: "Elias Stocker", dob: "15.03.2010", addr: "Gortipohl 59", tel: "0676 7103446", role: "Kein Schlüssel" }
-        ];
-
-        function addKeyListItem() {
+        async function addKeyListItem() {
             const name = prompt("Name der Person:");
-            const addr = prompt("Adresse:", "Gaschurn");
-            const tel = prompt("Telefonnummer:", "0664");
+            if (!name || !name.trim()) return;
+            const addr = prompt("Adresse:", "");
+            const tel = prompt("Telefonnummer:", "");
             const role = prompt("Funktion / Schlüsselstatus:", "Eingang & Büro");
-            if (name) {
-                exactPdfKeyList.push({ name, dob: "", addr, tel, role });
-                loadKeyList();
-                alert("Person hinzugefügt!");
+            exactPdfKeyList.push({ name: name.trim(), dob: "", addr: (addr || "").trim(), tel: (tel || "").trim(), role: (role || "").trim() });
+            try {
+                await db.collection("settings").doc("pdfKeys").set({
+                    items: exactPdfKeyList,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                renderKeyList();
+                alert("Person in Firestore gespeichert!");
+            } catch (err) {
+                alert("Fehler beim Speichern: " + err.message);
+            }
+        }
+
+        async function deleteKeyListItem(index) {
+            const item = exactPdfKeyList[index];
+            if (!item) return;
+            if (!confirm(`Eintrag "${item.name || item.header}" wirklich löschen?`)) return;
+            exactPdfKeyList.splice(index, 1);
+            try {
+                await db.collection("settings").doc("pdfKeys").set({
+                    items: exactPdfKeyList,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                renderKeyList();
+            } catch (err) {
+                alert("Fehler beim Löschen: " + err.message);
             }
         }
 
@@ -1584,6 +2137,117 @@
         let currentScanMode = 'issue';
         let pendingReturnRecordId = null;
         let isProcessingScan = false;
+        let weaponSessionUnlocked = false;
+        window.__weaponBookLockedAfterReturn = false;
+
+        function resetWeaponScanState() {
+            currentScanMode = 'issue';
+            pendingReturnRecordId = null;
+            isProcessingScan = false;
+        }
+
+        function lockWeaponFormUI() {
+            weaponSessionUnlocked = false;
+            try {
+                const formCard = document.getElementById('weapon-form-card');
+                if (formCard) {
+                    formCard.style.opacity = '0.5';
+                    formCard.style.pointerEvents = 'none';
+                }
+                const badge = document.getElementById('scanner-status-badge');
+                if (badge) {
+                    badge.style.background = '#dc2626';
+                    badge.innerText = 'GESPERRT (Tresor-Scan erforderlich)';
+                }
+                const occInput = document.getElementById('weapon-occasion');
+                if (occInput) occInput.value = '';
+                const locInput = document.getElementById('weapon-location');
+                if (locInput) locInput.value = 'Pfarrkirche Partenen';
+                const primarySelect = document.getElementById('weapon-member-primary');
+                if (primarySelect) primarySelect.selectedIndex = 0;
+                const secondarySelect = document.getElementById('weapon-member-secondary');
+                if (secondarySelect) secondarySelect.value = '';
+                document.querySelectorAll('input[name="weapons"]').forEach(cb => {
+                    cb.checked = false;
+                });
+            } catch(e) {}
+        }
+
+        function lockWeaponBookAfterReturn() {
+            resetWeaponScanState();
+            weaponSessionUnlocked = false;
+            window.__weaponBookLockedAfterReturn = true;
+            try { sessionStorage.setItem('kbsv_weapon_return_locked', '1'); } catch(e) {}
+
+            stopQrScanner();
+            lockWeaponFormUI();
+
+            try {
+                const historyList = document.getElementById('weapon-history-list');
+                if (historyList) {
+                    historyList.innerHTML = '';
+                    const historyCard = historyList.closest('.glass-card');
+                    if (historyCard) {
+                        historyCard.style.display = 'none';
+                    }
+                }
+                const scannerCard = document.getElementById('scanner-card-issue');
+                if (scannerCard) {
+                    scannerCard.style.display = 'block';
+                }
+                const pageWeapons = document.getElementById('page-weapons');
+                if (pageWeapons && pageWeapons.classList.contains('active')) {
+                    window.scrollTo(0, 0);
+                }
+            } catch(e) {}
+
+            try {
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState({ weaponBookLocked: true }, '', window.location.href);
+                }
+            } catch(e) {}
+        }
+
+        function initWeaponBookNavigationGuard() {
+            let isBackForwardNav = false;
+            try {
+                const navEntries = performance.getEntriesByType('navigation') || [];
+                isBackForwardNav = navEntries.length > 0 && navEntries[0].type === 'back_forward';
+            } catch(e) {}
+
+            if (!isBackForwardNav) {
+                window.__weaponBookLockedAfterReturn = false;
+                try { sessionStorage.removeItem('kbsv_weapon_return_locked'); } catch(e) {}
+            } else {
+                try {
+                    if (sessionStorage.getItem('kbsv_weapon_return_locked') === '1') {
+                        lockWeaponBookAfterReturn();
+                    }
+                } catch(e) {}
+            }
+        }
+
+        window.addEventListener('pageshow', (event) => {
+            let sessionLocked = false;
+            try { sessionLocked = sessionStorage.getItem('kbsv_weapon_return_locked') === '1'; } catch(e) {}
+            if (event.persisted || window.__weaponBookLockedAfterReturn || sessionLocked) {
+                if (window.__weaponBookLockedAfterReturn || sessionLocked) {
+                    lockWeaponBookAfterReturn();
+                } else if (event.persisted) {
+                    resetWeaponScanState();
+                    stopQrScanner();
+                    lockWeaponFormUI();
+                }
+            }
+        });
+
+        window.addEventListener('popstate', () => {
+            let sessionLocked = false;
+            try { sessionLocked = sessionStorage.getItem('kbsv_weapon_return_locked') === '1'; } catch(e) {}
+            if (window.__weaponBookLockedAfterReturn || sessionLocked) {
+                lockWeaponBookAfterReturn();
+            }
+        });
 
         function startQrScanner(mode, recordId = null) {
             currentScanMode = mode;
@@ -1608,23 +2272,27 @@
                     (decodedText, decodedResult) => {
                         if (isProcessingScan) return;
                         isProcessingScan = true;
+                        const scanMode = currentScanMode;
+                        const returnId = pendingReturnRecordId;
 
                         stopQrScanner().then(() => {
-                            if (currentScanMode === 'issue') {
+                            if (scanMode === 'issue') {
                                 unlockWeaponForm();
-                            } else if (currentScanMode === 'return' && pendingReturnRecordId) {
-                                executeReturnProcess(pendingReturnRecordId);
+                            } else if (scanMode === 'return' && returnId) {
+                                executeReturnProcess(returnId);
                             }
                         });
                     },
                     (errorMessage) => {}
                 ).catch(err => {
+                    const scanMode = currentScanMode;
+                    const returnId = pendingReturnRecordId;
                     if (confirm("Kamera konnte nicht gestartet werden. Möchtest du den Tresor-Code manuell bestätigen?")) {
                         stopQrScanner();
-                        if (currentScanMode === 'issue') {
+                        if (scanMode === 'issue') {
                             unlockWeaponForm();
-                        } else if (currentScanMode === 'return' && pendingReturnRecordId) {
-                            executeReturnProcess(pendingReturnRecordId);
+                        } else if (scanMode === 'return' && returnId) {
+                            executeReturnProcess(returnId);
                         }
                     } else {
                         stopQrScanner();
@@ -1635,6 +2303,7 @@
 
         function unlockWeaponForm() {
             try {
+                weaponSessionUnlocked = true;
                 const formCard = document.getElementById('weapon-form-card');
                 const badge = document.getElementById('scanner-status-badge');
                 
@@ -1651,9 +2320,12 @@
         }
 
         async function stopQrScanner() {
+            resetWeaponScanState();
             if (html5QrCode) {
                 try {
                     await html5QrCode.stop();
+                } catch(e) {}
+                try {
                     await html5QrCode.clear();
                 } catch(e) {}
             }
@@ -1661,8 +2333,305 @@
                 const stopBtn = document.getElementById('stop-scanner-btn');
                 const readerDiv = document.getElementById('reader');
                 if(stopBtn) stopBtn.style.display = 'none';
-                if(readerDiv) readerDiv.style.display = 'none';
+                if(readerDiv) {
+                    readerDiv.style.display = 'none';
+                    readerDiv.innerHTML = '';
+                }
             } catch(e) {}
+        }
+
+        function parseWeaponItemForPDF(item) {
+            let parts = String(item || "").split(' / Nr. ');
+            let weaponDesc = (parts[0] || String(item || "")).trim();
+            let serialNum = parts[1] ? parts[1].split(' /')[0].trim() : "k.A.";
+            let zvrMatch = String(item || "").match(/ZVR[-:\s]*([A-Za-z0-9]+)/i);
+            let zvrNum = zvrMatch ? zvrMatch[1] : "624291509";
+
+            let matched = (typeof officialWeaponList !== 'undefined')
+                ? officialWeaponList.find(w => w.nummer === serialNum)
+                : null;
+
+            let artModel = weaponDesc;
+            let calKat = "Kat. C";
+
+            if (matched) {
+                artModel = `${matched.art}: ${matched.hersteller} ${matched.modell}`;
+                calKat = `${matched.kaliber} / Kat. ${matched.kat}`;
+            } else {
+                const parenMatch = weaponDesc.match(/^(.+?)\s*\((.+)\)$/);
+                if (parenMatch) {
+                    artModel = parenMatch[1].trim();
+                    calKat = `${parenMatch[2].trim()} / Kat. C`;
+                }
+            }
+
+            return {
+                artModel: artModel,
+                calKat: calKat,
+                zwrNum: serialNum,
+                zvrNum: zvrNum
+            };
+        }
+
+        function formatPdfTimestamp(ts) {
+            if (!ts) return "";
+            const str = String(ts).trim();
+            return str.toLowerCase().includes("uhr") ? str : `${str} Uhr`;
+        }
+
+        function buildWeaponProtocolPDF(data) {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            const margin = 14;
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const contentWidth = pageWidth - margin * 2; // 182 mm
+
+            let primaryPerson = data.primaryName || "";
+            let secondaryPerson = data.secondaryName || "";
+            if (!primaryPerson && data.collectorStr) {
+                if (data.collectorStr.includes(" (+ ")) {
+                    const p = data.collectorStr.split(" (+ ");
+                    primaryPerson = p[0].trim();
+                    secondaryPerson = p[1].replace(/\)$/, "").trim();
+                } else {
+                    primaryPerson = data.collectorStr.trim();
+                }
+            }
+
+            const issueDisplay = data.issueTime ? formatPdfTimestamp(data.issueTime) : "k.A.";
+            const returnDisplay = data.returnTime ? formatPdfTimestamp(data.returnTime) : "Noch offen (Entnommen)";
+            const statusText = data.status || (data.returnTime ? "Zurückgebracht" : "Entnommen");
+            const isReturned = statusText.toLowerCase().includes("zurück");
+
+            // 1. Vereinskopf
+            let y = 16;
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(13);
+            pdf.setTextColor(185, 28, 28);
+            pdf.text("Kameradschaftsbund & Schützenverein Gaschurn-Partenen", margin, y);
+
+            y += 6.5;
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(12);
+            pdf.setTextColor(15, 23, 42);
+            pdf.text(`ZVR-Zahl: 624291509   |   Protokoll-ID: ${data.id || "-"}`, margin, y);
+
+            // 2. Hauptüberschrift (19 pt fett)
+            y += 10.5;
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(19);
+            pdf.setTextColor(0, 0, 0);
+            const titleLines = pdf.splitTextToSize("Waffenbuch – Entnahme- & Rückgabeprotokoll", contentWidth);
+            pdf.text(titleLines, margin, y);
+            y += titleLines.length * 8;
+
+            pdf.setDrawColor(185, 28, 28);
+            pdf.setLineWidth(0.8);
+            pdf.line(margin, y, margin + contentWidth, y);
+            y += 7;
+
+            // 3. Stark hervorgehobene Kern-Box vermessen
+            const boxPadX = 6;
+            const labelX = margin + boxPadX;
+            const valueOffset = 42;
+            const valueX = labelX + valueOffset;
+            const valueMaxWidth = contentWidth - boxPadX * 2 - valueOffset;
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(14);
+            const primaryLines = pdf.splitTextToSize(primaryPerson || "k.A.", valueMaxWidth - 4);
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(13.5);
+            const issueLines = pdf.splitTextToSize(issueDisplay, valueMaxWidth - 4);
+            const returnLines = pdf.splitTextToSize(returnDisplay, valueMaxWidth - 4);
+
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(12);
+            const secondaryLines = pdf.splitTextToSize(secondaryPerson || "Keine (Alleinübernahme)", valueMaxWidth);
+            const occasionLines = pdf.splitTextToSize(data.occasion || "k.A.", valueMaxWidth);
+            const locationLines = pdf.splitTextToSize(data.location || "k.A.", valueMaxWidth);
+
+            const lineH14 = 6.5;
+            const lineH13 = 6.2;
+            const lineH12 = 5.8;
+
+            const innerBoxTopOffset = 8;
+            const innerBoxHeight =
+                innerBoxTopOffset +
+                (primaryLines.length * lineH14 + 3.5) +
+                (issueLines.length * lineH13 + 3) +
+                ((returnLines.length - 1) * lineH13 + 6);
+
+            const detailsHeight =
+                (secondaryLines.length * lineH12 + 3) +
+                (occasionLines.length * lineH12 + 3) +
+                ((locationLines.length - 1) * lineH12 + 5);
+
+            const boxStartY = y;
+            const highlightBoxY = boxStartY + 12.5;
+            const detailsStartY = highlightBoxY + innerBoxHeight + 7.5;
+            const outerBoxHeight = (detailsStartY - boxStartY) + detailsHeight + 2;
+
+            // Äußere Kern-Box zeichnen
+            pdf.setFillColor(241, 245, 249);
+            pdf.setDrawColor(30, 41, 59);
+            pdf.setLineWidth(0.7);
+            pdf.roundedRect(margin, boxStartY, contentWidth, outerBoxHeight, 2.5, 2.5, 'FD');
+
+            // Box-Abschnittstitel (14 pt fett)
+            let curY = boxStartY + 8.5;
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(14);
+            pdf.setTextColor(15, 23, 42);
+            pdf.text("Protokoll-Übersicht", labelX, curY);
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(12);
+            if (isReturned) {
+                pdf.setTextColor(21, 128, 61);
+            } else {
+                pdf.setTextColor(185, 28, 28);
+            }
+            pdf.text(`Status: ${statusText}`, margin + contentWidth - boxPadX, curY, { align: 'right' });
+
+            // Weiße Highlight-Box für Übernehmer, Entnahme, Rückgabe
+            const highlightBoxX = margin + boxPadX - 1;
+            const highlightBoxW = contentWidth - (boxPadX - 1) * 2;
+            pdf.setFillColor(255, 255, 255);
+            pdf.setDrawColor(185, 28, 28);
+            pdf.setLineWidth(0.5);
+            pdf.roundedRect(highlightBoxX, highlightBoxY, highlightBoxW, innerBoxHeight, 2, 2, 'FD');
+
+            curY = highlightBoxY + innerBoxTopOffset;
+
+            // a) Übernehmer
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(13.5);
+            pdf.setTextColor(51, 65, 85);
+            pdf.text("Übernehmer:", labelX + 2, curY);
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(14);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text(primaryLines, valueX, curY);
+            curY += primaryLines.length * lineH14 + 3.5;
+
+            // b) Entnahme
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(13);
+            pdf.setTextColor(51, 65, 85);
+            pdf.text("Entnahme:", labelX + 2, curY);
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(13.5);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text(issueLines, valueX, curY);
+            curY += issueLines.length * lineH13 + 3;
+
+            // c) Rückgabe
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(13);
+            pdf.setTextColor(51, 65, 85);
+            pdf.text("Rückgabe:", labelX + 2, curY);
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(13.5);
+            if (isReturned) {
+                pdf.setTextColor(21, 128, 61);
+            } else {
+                pdf.setTextColor(185, 28, 28);
+            }
+            pdf.text(returnLines, valueX, curY);
+
+            // Weitere Angaben (12 pt)
+            curY = detailsStartY;
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(12);
+            pdf.setTextColor(30, 41, 59);
+            pdf.text("Mitabholer:", labelX, curY);
+            pdf.setFont("helvetica", "normal");
+            pdf.setTextColor(0, 0, 0);
+            pdf.text(secondaryLines, valueX, curY);
+            curY += secondaryLines.length * lineH12 + 3;
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setTextColor(30, 41, 59);
+            pdf.text("Anlass:", labelX, curY);
+            pdf.setFont("helvetica", "normal");
+            pdf.setTextColor(0, 0, 0);
+            pdf.text(occasionLines, valueX, curY);
+            curY += occasionLines.length * lineH12 + 3;
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setTextColor(30, 41, 59);
+            pdf.text("Ort:", labelX, curY);
+            pdf.setFont("helvetica", "normal");
+            pdf.setTextColor(0, 0, 0);
+            pdf.text(locationLines, valueX, curY);
+
+            // 4. Abschnittstitel Waffentabelle (14 pt fett)
+            let tableSectionY = boxStartY + outerBoxHeight + 11;
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(14);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text("Entnommene Waffen (Kat. C – Unzensierte Registerdaten)", margin, tableSectionY);
+
+            const tableRows = (data.selectedWeapons || []).map((item, idx) => {
+                const parsed = parseWeaponItemForPDF(item);
+                return [
+                    String(idx + 1),
+                    parsed.artModel,
+                    parsed.calKat,
+                    parsed.zwrNum,
+                    parsed.zvrNum
+                ];
+            });
+
+            pdf.autoTable({
+                startY: tableSectionY + 4,
+                margin: { left: margin, right: margin },
+                tableWidth: contentWidth,
+                head: [['Nr.', 'Waffenart, Hersteller & Modell', 'Kaliber & Kat.', 'ZWR-Nummer', 'ZVR-Zahl']],
+                body: tableRows,
+                theme: 'grid',
+                styles: {
+                    font: 'helvetica',
+                    fontSize: 12,
+                    textColor: [0, 0, 0],
+                    fillColor: [255, 255, 255],
+                    lineColor: [100, 116, 139],
+                    lineWidth: 0.35,
+                    cellPadding: { top: 4.5, right: 3.5, bottom: 4.5, left: 3.5 },
+                    valign: 'middle',
+                    overflow: 'linebreak'
+                },
+                headStyles: {
+                    fillColor: [30, 41, 59],
+                    textColor: [255, 255, 255],
+                    fontStyle: 'bold',
+                    fontSize: 12,
+                    cellPadding: { top: 5, right: 3.5, bottom: 5, left: 3.5 }
+                },
+                alternateRowStyles: {
+                    fillColor: [248, 250, 252]
+                },
+                columnStyles: {
+                    0: { cellWidth: 12, halign: 'center', fontStyle: 'bold' },
+                    1: { cellWidth: 58 },
+                    2: { cellWidth: 34 },
+                    3: { cellWidth: 40, fontStyle: 'bold', textColor: [0, 0, 0] },
+                    4: { cellWidth: 38, fontStyle: 'bold', textColor: [0, 0, 0] }
+                }
+            });
+
+            const finalY = (pdf.lastAutoTable && pdf.lastAutoTable.finalY) ? pdf.lastAutoTable.finalY + 10 : tableSectionY + 40;
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const footerY = (finalY > pageHeight - 15) ? (pdf.addPage(), 20) : finalY;
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(12);
+            pdf.setTextColor(51, 65, 85);
+            pdf.text(`Protokoll-ID: ${data.id || "-"}   |   Aktueller Status: ${statusText}`, margin, footerY);
+
+            return pdf;
         }
 
         async function saveWeaponIssue(e) {
@@ -1694,46 +2663,6 @@
                     collectorStr += ` (+ ${secondaryName})`;
                 }
 
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF();
-
-                pdf.setFont("helvetica", "bold");
-                pdf.setFontSize(14);
-                pdf.setTextColor(185, 28, 28);
-                pdf.text("ÖSTERREICHISCHER KAMERADSCHAFTSBUND", 14, 18);
-                pdf.setFontSize(10);
-                pdf.setTextColor(80, 80, 80);
-                pdf.text("Waffenentnahme-Protokoll gemäß Kat. C", 14, 24);
-                pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR-Zahl: 624291509", 14, 30);
-
-                let tableRows = [];
-                selectedWeaponsData.forEach(item => {
-                    let parts = item.split(' / Nr. ');
-                    let weaponDesc = parts[0] || item;
-                    let serialNum = parts[1] ? parts[1].split(' /')[0] : "k.A.";
-
-                    tableRows.push([
-                        weaponDesc,
-                        serialNum,
-                        "ZVR-624291509",
-                        occasion || "",
-                        location || "",
-                        collectorStr,
-                        fullTimestamp,
-                        "Entnommen (Offen)"
-                    ]);
-                });
-
-                pdf.autoTable({
-                    startY: 38,
-                    head: [['Waffe / Modell', 'ZWR (Seriennummer)', 'ZVR (Vereins-Nr.)', 'Anlass', 'Ort', 'Übernehmer', 'Zeitstempel', 'Status']],
-                    body: tableRows,
-                    theme: 'striped',
-                    headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold' },
-                    styles: { fontSize: 7.5 }
-                });
-
-                const pdfBase64 = pdf.output('datauristring');
                 const recordId = "WB-" + Date.now();
 
                 const weaponLogObj = {
@@ -1747,27 +2676,20 @@
                     issueTime: fullTimestamp,
                     returnTime: null,
                     status: "Entnommen",
-                    pdfData: pdfBase64,
+                    pdfData: "",
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
+
+                const pdf = buildWeaponProtocolPDF(weaponLogObj);
+                weaponLogObj.pdfData = pdf.output('datauristring');
 
                 await db.collection("weapon_log").doc(recordId).set(weaponLogObj);
                 alert("Waffenentnahme erfolgreich erfasst und im Admin-Bereich hinterlegt. Das Waffenbuch wird gesperrt.");
                 
-                const occInput = document.getElementById('weapon-occasion');
-                if (occInput) occInput.value = '';
-                checkboxes.forEach(cb => cb.checked = false);
-                
-                const formCard = document.getElementById('weapon-form-card');
-                if (formCard) {
-                    formCard.style.opacity = '0.5';
-                    formCard.style.pointerEvents = 'none';
-                }
-                const badge = document.getElementById('scanner-status-badge');
-                if (badge) {
-                    badge.style.background = '#dc2626';
-                    badge.innerText = 'GESPERRT (Tresor-Scan erforderlich)';
-                }
+                resetWeaponScanState();
+                lockWeaponFormUI();
+                window.__weaponBookLockedAfterReturn = false;
+                try { sessionStorage.removeItem('kbsv_weapon_return_locked'); } catch(e) {}
 
                 loadWeaponHistory();
                 loadAdminWeaponPDFs();
@@ -1791,49 +2713,20 @@
 
                 const docRef = db.collection("weapon_log").doc(recordId);
                 const doc = await docRef.get();
-                if (!doc.exists) return;
+                if (!doc.exists) {
+                    resetWeaponScanState();
+                    return;
+                }
                 const data = doc.data() || {};
 
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF();
+                const updatedData = {
+                    ...data,
+                    id: data.id || recordId,
+                    returnTime: returnTimestamp,
+                    status: "Zurückgebracht"
+                };
 
-                pdf.setFont("helvetica", "bold");
-                pdf.setFontSize(14);
-                pdf.setTextColor(16, 185, 129);
-                pdf.text("ÖSTERREICHISCHER KAMERADSCHAFTSBUND", 14, 18);
-                pdf.setFontSize(10);
-                pdf.setTextColor(80, 80, 80);
-                pdf.text("Waffenrückgabe-Protokoll gemäß Kat. C", 14, 24);
-                pdf.text("Verein: Schützenverein & Kameradschaftsbund Gaschurn-Partenen | ZVR-Zahl: 624291509", 14, 30);
-
-                let tableRows = [];
-                (data.selectedWeapons || []).forEach(item => {
-                    let parts = item.split(' / Nr. ');
-                    let weaponDesc = parts[0] || item;
-                    let serialNum = parts[1] ? parts[1].split(' /')[0] : "k.A.";
-
-                    tableRows.push([
-                        weaponDesc,
-                        serialNum,
-                        "ZVR-624291509",
-                        data.occasion || "",
-                        data.location || "",
-                        data.collectorStr || "",
-                        data.issueTime || "",
-                        returnTimestamp,
-                        "Zurückgebracht"
-                    ]);
-                });
-
-                pdf.autoTable({
-                    startY: 38,
-                    head: [['Waffe / Modell', 'ZWR (Seriennummer)', 'ZVR (Vereins-Nr.)', 'Grund', 'Ort', 'Übernehmer', 'Entnahme', 'Rückgabe', 'Status']],
-                    body: tableRows,
-                    theme: 'striped',
-                    headStyles: { fillColor: [16, 185, 129], textColor: [255, 255, 255], fontStyle: 'bold' },
-                    styles: { fontSize: 7 }
-                });
-
+                const pdf = buildWeaponProtocolPDF(updatedData);
                 const pdfBase64 = pdf.output('datauristring');
 
                 await docRef.update({
@@ -1842,10 +2735,11 @@
                     pdfData: pdfBase64
                 });
 
-                alert("Tresor-Scan erfolgreich! Rückgabe protokolliert und im Admin-Bereich gespeichert.");
-                loadWeaponHistory();
+                lockWeaponBookAfterReturn();
                 loadAdminWeaponPDFs();
+                alert("Tresor-Scan erfolgreich! Rückgabe protokolliert und im Admin-Bereich gespeichert.");
             } catch (err) {
+                resetWeaponScanState();
                 alert("Fehler bei Rückgabe: " + err.message);
             }
         }
@@ -1853,6 +2747,16 @@
         async function loadWeaponHistory() {
             const container = document.getElementById('weapon-history-list');
             if (!container) return;
+
+            const historyCard = container.closest('.glass-card');
+            let sessionLocked = false;
+            try { sessionLocked = sessionStorage.getItem('kbsv_weapon_return_locked') === '1'; } catch(e) {}
+            if (window.__weaponBookLockedAfterReturn || sessionLocked) {
+                container.innerHTML = '';
+                if (historyCard) historyCard.style.display = 'none';
+                return;
+            }
+            if (historyCard) historyCard.style.display = '';
 
             try {
                 const snapshot = await db.collection("weapon_log").where("status", "==", "Entnommen").get();
@@ -1870,14 +2774,15 @@
                         let maskedItem = item;
                         if (item.includes('Nr. ')) {
                             let parts = item.split('Nr. ');
-                            let prefix = parts[0] + 'Nr. ';
-                            let numPart = parts[1].split(' /')[0];
-                            let rest = item.substring(prefix.length + numPart.length);
-                            if (numPart.length > 2) {
-                                numPart = maskWeaponNumber(numPart);
-                            }
-                            maskedItem = prefix + numPart + rest;
+                            let prefix = parts[0] + 'ZWR: ';
+                            let numPart = parts[1].split(' /')[0].trim();
+                            let rest = item.substring((parts[0] + 'Nr. ').length + parts[1].split(' /')[0].length);
+                            maskedItem = prefix + maskWeaponNumber(numPart) + rest;
                         }
+                        maskedItem = maskedItem
+                            .replace(/ZVR-\s*([A-Za-z0-9]+)/gi, (_, code) => 'ZVR: ' + maskZvrNumber(code))
+                            .replace(/ZVR:\s*([A-Za-z0-9]+)/gi, (_, code) => 'ZVR: ' + maskZvrNumber(code))
+                            .replace(/624291509/g, maskZvrNumber('624291509'));
                         weaponsListHtml += `<div style="font-size: 0.85em; color: var(--primary-red); font-weight: 700;">• ${maskedItem}</div>`;
                     });
 
@@ -1890,7 +2795,7 @@
                             <div style="margin-bottom: 6px;">${weaponsListHtml}</div>
                             <div style="font-size: 0.8em; color: var(--text-dark); margin-bottom: 4px;"><strong>Anlass:</strong> ${w.occasion || ''} (${w.location || ''})</div>
                             <div style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px;">
-                                📤 Entnommen: <strong>${w.issueTime || ''}</strong> | ZVR: 624291509
+                                📤 Entnommen: <strong>${w.issueTime || ''}</strong> | ZVR: ${maskZvrNumber('624291509')}
                             </div>
                             <button onclick="promptReturnWeapon('${doc.id}')" class="btn btn-green btn-block" style="padding: 14px 20px; font-size: 1.05em; font-weight: 800; background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35);">📷 QR-Code scannen & Waffe(n) zurückbringen</button>
                         </div>
@@ -1903,6 +2808,7 @@
         }
 
         async function loadAdminWeaponPDFs() {
+            if (!(auth.currentUser || document.body.classList.contains('admin-mode'))) return;
             const container = document.getElementById('admin-weapon-pdf-list');
             if (!container) return;
 
@@ -1947,7 +2853,21 @@
 
         function previewWeaponPDF(docId) {
             const data = window.weaponPdfMap[docId];
-            if (!data || !data.pdfData) {
+            if (!data) {
+                alert("Kein PDF gefunden.");
+                return;
+            }
+            let pdfSrc = data.pdfData || "";
+            if (Array.isArray(data.selectedWeapons) && data.selectedWeapons.length > 0) {
+                const pdf = buildWeaponProtocolPDF({ ...data, id: data.id || docId });
+                try {
+                    const blob = pdf.output('blob');
+                    pdfSrc = URL.createObjectURL(blob);
+                } catch (e) {
+                    pdfSrc = pdf.output('datauristring');
+                }
+            }
+            if (!pdfSrc) {
                 alert("Kein PDF gefunden.");
                 return;
             }
@@ -1957,7 +2877,7 @@
                     <html>
                     <head><title>Protokoll ${data.id || docId}</title></head>
                     <body style="margin:0; background:#333; display:flex; justify-content:center; align-items:center; height:100vh;">
-                        <iframe src="${data.pdfData}" style="width:100%; height:100%; border:none;"></iframe>
+                        <iframe src="${pdfSrc}" style="width:100%; height:100%; border:none;"></iframe>
                     </body>
                     </html>
                 `);
@@ -1967,7 +2887,16 @@
 
         function downloadWeaponPDF(docId) {
             const data = window.weaponPdfMap[docId];
-            if (!data || !data.pdfData) {
+            if (!data) {
+                alert("Kein PDF gefunden.");
+                return;
+            }
+            if (Array.isArray(data.selectedWeapons) && data.selectedWeapons.length > 0) {
+                const pdf = buildWeaponProtocolPDF({ ...data, id: data.id || docId });
+                pdf.save(`${data.id || docId}_Protokoll.pdf`);
+                return;
+            }
+            if (!data.pdfData) {
                 alert("Kein PDF gefunden.");
                 return;
             }
@@ -2070,6 +2999,7 @@
         }
 
         async function loadInvoices() {
+            if (!(auth.currentUser || document.body.classList.contains('admin-mode'))) return;
             const container = document.getElementById('admin-tally-history-list');
             if (!container) return;
             try {
@@ -2253,29 +3183,41 @@
             const passiveList = document.getElementById('admin-passive-members-list');
             
             let actHtml = "";
-            officialActiveMembers.forEach((m) => {
-                actHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
-                        <span><strong>${m}</strong></span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em;" placeholder="Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                        </div>
-                    </div>`;
-            });
+            if (officialActiveMembers.length === 0) {
+                actHtml = '<p style="font-size:0.8em; color:var(--text-muted);">Keine aktiven Mitglieder geladen.</p>';
+            } else {
+                officialActiveMembers.forEach((m, idx) => {
+                    actHtml += `
+                        <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
+                            <span><strong>${escapeHtml(m)}</strong></span>
+                            <div style="display: flex; gap: 6px; align-items: center;">
+                                <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em;" placeholder="Datum">
+                                <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
+                                <button type="button" class="btn btn-admin" style="padding: 4px 8px; font-size: 0.75em; margin-top: 0;" onclick="editMemberInFirestore('active', ${idx})">✏️</button>
+                                <button type="button" class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em; margin-top: 0;" onclick="deleteMemberFromFirestore('active', ${idx})">🗑️</button>
+                            </div>
+                        </div>`;
+                });
+            }
             if(activeList) activeList.innerHTML = actHtml;
 
             let passHtml = "";
-            officialPassiveMembers.forEach((m) => {
-                passHtml += `
-                    <div class="price-item" style="flex-wrap: wrap; gap: 6px; background: rgba(254, 226, 226, 0.7); padding: 8px 10px; border-radius: 10px; margin-bottom: 6px; border: 1.5px solid #fecaca;">
-                        <span><strong style="color: #991b1b; font-size: 0.95em;">${m}</strong></span>
-                        <div style="display: flex; gap: 6px; align-items: center;">
-                            <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em; background: #fff;" placeholder="Datum">
-                            <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                        </div>
-                    </div>`;
-            });
+            if (officialPassiveMembers.length === 0) {
+                passHtml = '<p style="font-size:0.8em; color:var(--text-muted);">Keine passiven Mitglieder geladen.</p>';
+            } else {
+                officialPassiveMembers.forEach((m, idx) => {
+                    passHtml += `
+                        <div class="price-item" style="flex-wrap: wrap; gap: 6px; background: rgba(254, 226, 226, 0.7); padding: 8px 10px; border-radius: 10px; margin-bottom: 6px; border: 1.5px solid #fecaca;">
+                            <span><strong style="color: #991b1b; font-size: 0.95em;">${escapeHtml(m)}</strong></span>
+                            <div style="display: flex; gap: 6px; align-items: center;">
+                                <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em; background: #fff;" placeholder="Datum">
+                                <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
+                                <button type="button" class="btn btn-admin" style="padding: 4px 8px; font-size: 0.75em; margin-top: 0;" onclick="editMemberInFirestore('passive', ${idx})">✏️</button>
+                                <button type="button" class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em; margin-top: 0;" onclick="deleteMemberFromFirestore('passive', ${idx})">🗑️</button>
+                            </div>
+                        </div>`;
+                });
+            }
             if(passiveList) passiveList.innerHTML = passHtml;
         }
 
@@ -2310,9 +3252,13 @@
         function loadPublicMembersList() {
             const container = document.getElementById('public-members-list');
             if (container) {
+                if (officialActiveMembers.length === 0) {
+                    container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Mitglieder geladen.</p>';
+                    return;
+                }
                 let html = "";
                 officialActiveMembers.forEach(m => {
-                    html += `<div class="price-item"><div><strong>${m}</strong></div><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div>`;
+                    html += `<div class="price-item"><div><strong>${escapeHtml(m)}</strong></div><span style="font-size:0.75em; color:var(--text-muted);">Aktiv</span></div>`;
                 });
                 container.innerHTML = html;
             }
@@ -2326,6 +3272,207 @@
             }
         }
 
+        // --- VEREINS-ZUGANGSCODE & SICHERES NACHLADEN NACH ENTSPERREN ---
+        const CLUB_PIN_STORAGE_KEY = 'kbsv_club_pin';
+        let currentFirestoreClubPin = null;
+        let appDataLoadedAfterUnlock = false;
+
+        function loadAppDataAfterUnlock() {
+            if (!appDataLoadedAfterUnlock) {
+                appDataLoadedAfterUnlock = true;
+                try { initDutyPlanRealtimeListener(); } catch(e) {}
+                try { initMidnightAndMinuteChecker(); } catch(e) {}
+            }
+            try { loadMembersFromFirestore(); } catch(e) {}
+            try { loadWeaponsFromFirestore(); } catch(e) {}
+            try { loadNews(); } catch(e) {}
+            try { loadEvents(); } catch(e) {}
+            try { loadWeaponHistory(); } catch(e) {}
+        }
+
+        function loadAdminProtectedData() {
+            loadAppDataAfterUnlock();
+            try { loadInvoices(); } catch(e) {}
+            try { loadKeyList(); } catch(e) {}
+            try { loadInventory(); renderInventoryDisplay(); } catch(e) {}
+            try { loadAdminWeaponPDFs(); } catch(e) {}
+            try { loadAdminClubPin(); } catch(e) {}
+        }
+
+        function clearSensitiveAppData() {
+            appDataLoadedAfterUnlock = false;
+            if (dutyPlanUnsubscribe) {
+                try { dutyPlanUnsubscribe(); } catch(e) {}
+                dutyPlanUnsubscribe = null;
+            }
+            if (midnightCheckerInterval) {
+                try { clearInterval(midnightCheckerInterval); } catch(e) {}
+                midnightCheckerInterval = null;
+            }
+            officialActiveMembers = [];
+            officialPassiveMembers = [];
+            officialWeaponList = [];
+            exactPdfKeyList = [];
+            globalDutyList = [];
+            lastRenderedDutySignature = null;
+            window.weaponPdfMap = {};
+            window.invoicesMap = {};
+            try { localStorage.removeItem(DUTY_PLAN_CACHE_KEY); } catch(e) {}
+
+            populateWeaponMemberSelects();
+            ['next-duty-widget', 'full-roster-list', 'archive-roster-list', 'events-container', 'news-container', 'public-members-list', 'weapon-checkboxes-container', 'weapon-history-list', 'admin-keys-list', 'admin-active-members-list', 'admin-passive-members-list', 'admin-weapons-list', 'admin-weapon-pdf-list', 'admin-tally-history-list'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = '';
+            });
+        }
+
+        async function fetchOrInitClubPinFromFirestore() {
+            const docRef = db.collection("settings").doc("access");
+            const doc = await docRef.get();
+            if (doc.exists && doc.data() && doc.data().clubPin !== undefined && doc.data().clubPin !== null && String(doc.data().clubPin).trim() !== "") {
+                currentFirestoreClubPin = String(doc.data().clubPin).trim();
+                return currentFirestoreClubPin;
+            }
+            const defaultPin = String(2026);
+            try {
+                await docRef.set({ clubPin: defaultPin }, { merge: true });
+            } catch (e) {}
+            currentFirestoreClubPin = defaultPin;
+            return defaultPin;
+        }
+
+        function unlockClubApp() {
+            document.body.classList.remove('app-locked');
+            document.body.classList.remove('admin-direct-login');
+            const errEl = document.getElementById('club-pin-error');
+            if (errEl) errEl.style.display = 'none';
+            const inputEl = document.getElementById('club-pin-input');
+            if (inputEl) inputEl.value = '';
+            loadAppDataAfterUnlock();
+        }
+
+        function lockClubApp() {
+            try { localStorage.removeItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+            document.body.classList.remove('admin-direct-login');
+            document.body.classList.add('app-locked');
+            const inputEl = document.getElementById('club-pin-input');
+            if (inputEl) inputEl.value = '';
+            clearSensitiveAppData();
+        }
+
+        function openAdminDirectLogin() {
+            document.body.classList.add('admin-direct-login');
+            switchTab('card');
+            window.scrollTo(0, 0);
+        }
+
+        function exitAdminDirectLogin() {
+            document.body.classList.remove('admin-direct-login');
+            document.body.classList.add('app-locked');
+            window.scrollTo(0, 0);
+        }
+
+        async function verifyClubAccessCode(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('club-pin-input');
+            const errEl = document.getElementById('club-pin-error');
+            const submitBtn = document.getElementById('club-pin-submit-btn');
+            const enteredPin = inputEl ? inputEl.value.trim() : "";
+
+            if (errEl) errEl.style.display = 'none';
+            if (!enteredPin) return;
+
+            if (submitBtn) submitBtn.disabled = true;
+            try {
+                const validPin = await fetchOrInitClubPinFromFirestore();
+                if (enteredPin === validPin) {
+                    try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, enteredPin); } catch (err) {}
+                    unlockClubApp();
+                    switchTab('news');
+                } else {
+                    if (errEl) {
+                        errEl.innerText = "Falscher Zugangscode";
+                        errEl.style.display = 'block';
+                    }
+                    if (inputEl) {
+                        inputEl.value = '';
+                        inputEl.focus();
+                    }
+                }
+            } catch (err) {
+                if (errEl) {
+                    errEl.innerText = "Verbindung zu Firebase fehlgeschlagen. Bitte erneut versuchen.";
+                    errEl.style.display = 'block';
+                }
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+            }
+        }
+
+        async function loadAdminClubPin() {
+            const adminPinInput = document.getElementById('admin-club-pin-input');
+            if (!adminPinInput) return;
+            try {
+                const pin = await fetchOrInitClubPinFromFirestore();
+                adminPinInput.value = pin;
+            } catch (e) {}
+        }
+
+        async function updateClubAccessPin(e) {
+            e.preventDefault();
+            const adminPinInput = document.getElementById('admin-club-pin-input');
+            const newPin = adminPinInput ? adminPinInput.value.trim() : "";
+            if (!newPin) {
+                alert("Bitte einen gültigen Zugangscode eingeben!");
+                return;
+            }
+            try {
+                await db.collection("settings").doc("access").set({
+                    clubPin: newPin,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                currentFirestoreClubPin = newPin;
+                try {
+                    if (localStorage.getItem(CLUB_PIN_STORAGE_KEY)) {
+                        localStorage.setItem(CLUB_PIN_STORAGE_KEY, newPin);
+                    }
+                } catch (err) {}
+                alert("Vereins-Zugangscode erfolgreich geändert! Alle Geräte mit dem alten Code werden automatisch wieder gesperrt.");
+            } catch (err) {
+                alert("Fehler beim Speichern des Zugangscodes: " + err.message);
+            }
+        }
+
+        function initClubAccessGuard() {
+            db.collection("settings").doc("access").onSnapshot((doc) => {
+                let remotePin = null;
+                if (doc.exists && doc.data() && doc.data().clubPin !== undefined && doc.data().clubPin !== null && String(doc.data().clubPin).trim() !== "") {
+                    remotePin = String(doc.data().clubPin).trim();
+                } else {
+                    fetchOrInitClubPinFromFirestore().catch(() => {});
+                    return;
+                }
+
+                currentFirestoreClubPin = remotePin;
+                const adminPinInput = document.getElementById('admin-club-pin-input');
+                if (adminPinInput && document.activeElement !== adminPinInput) {
+                    adminPinInput.value = remotePin;
+                }
+
+                const isAdminLoggedIn = !!(auth.currentUser || document.body.classList.contains('admin-mode'));
+                let savedPin = null;
+                try { savedPin = localStorage.getItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+
+                if (savedPin && savedPin === remotePin) {
+                    unlockClubApp();
+                } else if (!isAdminLoggedIn) {
+                    lockClubApp();
+                } else if (savedPin && savedPin !== remotePin) {
+                    try { localStorage.removeItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+                }
+            }, () => {});
+        }
+
         function handleAdminLogin(e) {
             e.preventDefault();
             const selectedUser = document.getElementById('admin-user-select').value;
@@ -2335,13 +3482,15 @@
             auth.signInWithEmailAndPassword(adminEmail, password)
                 .then((userCredential) => {
                     document.body.classList.add('admin-mode');
+                    document.body.classList.remove('app-locked');
+                    document.body.classList.remove('admin-direct-login');
                     document.getElementById('admin-login-card').style.display = 'none';
                     document.getElementById('admin-password-input').value = '';
                     
                     showAdminSuccessModal();
                     resetInactivityTimer();
                     
-                    loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory(); loadAdminWeaponPDFs();
+                    loadAdminProtectedData();
                 })
                 .catch((error) => {
                     showAdminErrorModal();
@@ -2356,8 +3505,15 @@
                 
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
-                loadNews();
-                loadWeaponHistory();
+
+                let savedPin = null;
+                try { savedPin = localStorage.getItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+                if (!savedPin || (currentFirestoreClubPin && savedPin !== currentFirestoreClubPin)) {
+                    lockClubApp();
+                } else {
+                    loadNews();
+                    loadWeaponHistory();
+                }
                 alert("Admin-Modus beendet.");
             });
         }
@@ -2365,9 +3521,11 @@
         auth.onAuthStateChanged((user) => {
             if (user) {
                 document.body.classList.add('admin-mode');
+                document.body.classList.remove('app-locked');
+                document.body.classList.remove('admin-direct-login');
                 document.getElementById('admin-login-card').style.display = 'none';
                 resetInactivityTimer();
-                loadNews(); loadInvoices(); loadAdminMembers(); loadKeyList(); loadEvents(); loadInventory(); loadWeaponHistory(); loadAdminWeaponPDFs();
+                loadAdminProtectedData();
             } else {
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
@@ -2375,20 +3533,22 @@
                 
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
-                loadWeaponHistory();
+
+                let savedPin = null;
+                try { savedPin = localStorage.getItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+                if (!savedPin || (currentFirestoreClubPin && savedPin !== currentFirestoreClubPin)) {
+                    if (!document.body.classList.contains('admin-direct-login')) {
+                        lockClubApp();
+                    }
+                } else {
+                    loadWeaponHistory();
+                }
             }
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            try { initDutyPlanRealtimeListener(); } catch(e) {}
-            try { initMidnightAndMinuteChecker(); } catch(e) {}
-            try { loadNews(); } catch(e) {}
-            try { loadEvents(); } catch(e) {}
-            try { loadPublicMembersList(); } catch(e) {}
-            try { loadKeyList(); } catch(e) {}
-            try { loadInventory(); renderInventoryDisplay(); } catch(e) {}
-            try { populateWeaponCheckboxes(); loadWeaponHistory(); } catch(e) {}
-            try { loadAdminWeaponPDFs(); } catch(e) {}
+            try { initClubAccessGuard(); } catch(e) {}
+            try { initWeaponBookNavigationGuard(); } catch(e) {}
         });
     </script>
 </body>
