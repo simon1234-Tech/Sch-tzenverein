@@ -35,7 +35,8 @@
       try { firebase.initializeApp(firebaseConfig); } catch(e) {}
       const db = firebase.firestore();
       const auth = firebase.auth();
-      const messaging = firebase.messaging();
+      let messaging = null;
+      try { messaging = firebase.messaging(); } catch(e) {}
     </script>
 
     <style>
@@ -220,51 +221,70 @@
         .admin-nav-tabs {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
         .admin-tab-btn {
             background: linear-gradient(135deg, #ffffff, #f8fafc);
             border: 1.5px solid #cbd5e1;
-            padding: 18px 14px;
-            border-radius: 16px;
+            padding: 6px 10px;
+            border-radius: 11px;
             font-weight: 800;
-            font-size: 1.05em;
+            font-size: 12px;
             color: var(--text-dark);
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             text-align: left;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.06), inset 0 1px 1px rgba(255,255,255,0.9);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06), inset 0 1px 1px rgba(255,255,255,0.9);
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .admin-tab-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,0.1); }
+        .admin-tab-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
         .admin-tab-btn:active { transform: scale(0.97); }
 
         .admin-tab-btn.active {
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: white;
             border-color: #1d4ed8;
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35), inset 0 1px 1px rgba(255,255,255,0.4);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.32), inset 0 1px 1px rgba(255,255,255,0.4);
         }
         .admin-tab-content { display: none; }
         .admin-tab-content.active { display: block; }
 
         .admin-3d-icon-box {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 7px;
             background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(226,232,240,0.8));
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.12), inset 0 1px 2px rgba(255,255,255,0.8);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12), inset 0 1px 2px rgba(255,255,255,0.8);
             flex-shrink: 0;
+        }
+        .admin-3d-icon-box svg {
+            width: 16px;
+            height: 16px;
         }
         .admin-tab-btn.active .admin-3d-icon-box {
             background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.5);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.5);
+        }
+        .admin-delete-btn .btn {
+            padding: 6px 10px !important;
+            font-size: 12px !important;
+            border-radius: 10px;
+            gap: 5px;
+        }
+        .admin-delete-btn .counter-btn {
+            width: 28px !important;
+            height: 28px !important;
+            font-size: 14px !important;
+        }
+        .admin-delete-btn .admin-accordion-header {
+            padding: 9px 12px;
+            font-size: 13px;
         }
 
         .bottom-nav {
@@ -318,9 +338,32 @@
         .badge-open { background: #fee2e2; color: #991b1b; padding: 6px 12px; border-radius: 10px; font-weight: 700; font-size: 0.75em; border: 1px solid #fecaca; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
 
         #invoice-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.65); z-index: 999999; justify-content: center; align-items: center; padding: 12px;
+            display: none; pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.65); z-index: 99998; justify-content: center; align-items: center; padding: 12px;
             backdrop-filter: blur(5px);
+        }
+        #weapon-pdf-modal {
+            display: none; pointer-events: none; position: fixed; inset: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.82); z-index: 99999; justify-content: center; align-items: center; padding: 10px;
+            backdrop-filter: blur(6px);
+        }
+        #reader:empty,
+        #legal-modal[style*="display:none"],
+        #legal-modal[style*="display: none"],
+        #invoice-modal[style*="display:none"],
+        #invoice-modal[style*="display: none"],
+        #weapon-pdf-modal[style*="display:none"],
+        #weapon-pdf-modal[style*="display: none"],
+        #customConfirm[style*="display:none"],
+        #customConfirm[style*="display: none"],
+        #admin-success-modal[style*="display:none"],
+        #admin-success-modal[style*="display: none"],
+        #admin-error-modal[style*="display:none"],
+        #admin-error-modal[style*="display: none"],
+        #vote-modal[style*="display:none"],
+        #vote-modal[style*="display: none"] {
+            display: none !important;
+            pointer-events: none !important;
         }
         .invoice-preview-box {
             background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); width: 100%; max-width: 500px; border-radius: 20px; padding: 22px;
@@ -339,9 +382,10 @@
         /* VEREINS-ZUGANGSCODE SPERRBILDSCHIRM */
         #club-lock-screen {
             display: none;
+            pointer-events: none;
             position: fixed;
             inset: 0;
-            z-index: 1000000;
+            z-index: 99999;
             background: linear-gradient(160deg, #f8fafc 0%, #e2e8f0 100%);
             padding: 20px 16px;
             overflow-y: auto;
@@ -351,9 +395,11 @@
         }
         body.app-locked #club-lock-screen {
             display: flex;
+            pointer-events: auto;
         }
         body.app-locked.admin-direct-login #club-lock-screen {
             display: none !important;
+            pointer-events: none !important;
         }
         body.app-locked .app-header,
         body.app-locked .page-content,
@@ -377,6 +423,9 @@
             border: 1.5px solid rgba(255, 255, 255, 0.95);
             text-align: center;
             margin: auto 0;
+            position: relative;
+            z-index: 2;
+            pointer-events: auto;
         }
         .lock-screen-banner {
             background: linear-gradient(135deg, #7f1d1d, #b91c1c);
@@ -410,6 +459,12 @@
             color: #0f172a;
             font-family: inherit;
             transition: all 0.2s;
+            position: relative;
+            z-index: 3;
+            pointer-events: auto;
+            -webkit-user-select: text;
+            user-select: text;
+            touch-action: manipulation;
         }
         .lock-pin-input:focus {
             outline: none;
@@ -421,6 +476,65 @@
         }
         body.app-locked.admin-direct-login .admin-direct-back-btn {
             display: inline-flex !important;
+        }
+        .admin-accordion-box {
+            background: rgba(255, 255, 255, 0.94);
+            border: 1.5px solid #fecaca;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+        .admin-accordion-box:last-child {
+            margin-bottom: 0;
+        }
+        .admin-accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 13px 14px;
+            background: rgba(254, 242, 242, 0.9);
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            font-family: inherit;
+            font-size: 0.95em;
+            font-weight: 800;
+            color: #b91c1c;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            transition: background 0.2s ease;
+        }
+        .admin-accordion-header:hover {
+            background: rgba(254, 226, 226, 0.95);
+        }
+        .admin-accordion-arrow {
+            display: inline-block;
+            font-size: 0.85em;
+            color: #b91c1c;
+            margin-left: 10px;
+            flex-shrink: 0;
+            transition: transform 0.28s ease;
+        }
+        .admin-accordion-box.open .admin-accordion-arrow {
+            transform: rotate(180deg);
+        }
+        .admin-accordion-body {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.28s ease;
+        }
+        .admin-accordion-box.open .admin-accordion-body {
+            grid-template-rows: 1fr;
+        }
+        .admin-accordion-inner {
+            overflow: hidden;
+        }
+        .admin-accordion-content {
+            padding: 12px 14px 14px 14px;
+            border-top: 1px solid #fecaca;
         }
     </style>
 </head>
@@ -454,8 +568,8 @@
             </form>
         </div>
 
-        <div style="padding: 18px 0 8px 0; text-align: center;">
-            <button type="button" onclick="openAdminDirectLogin()" style="background: none; border: none; color: #64748b; font-size: 0.8em; font-weight: 600; text-decoration: underline; cursor: pointer; font-family: inherit; padding: 6px 12px;">
+        <div style="padding: 18px 0 8px 0; text-align: center; position: relative; z-index: 5; pointer-events: auto;">
+            <button type="button" id="admin-direct-login-btn" onclick="openAdminDirectLogin()" style="background: none; border: none; color: #64748b; font-size: 0.8em; font-weight: 600; text-decoration: underline; cursor: pointer; font-family: inherit; padding: 10px 14px; position: relative; z-index: 6; pointer-events: auto;">
                 Direkt zum Admin-Login
             </button>
         </div>
@@ -680,21 +794,6 @@
         </div>
 
         <div class="admin-delete-btn">
-            <!-- VEREINS-ZUGANGSCODE VERWALTUNG -->
-            <div class="glass-card glass-card-blue" id="admin-access-pin-card" style="border: 2px solid #2563eb; background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(239,246,255,0.95));">
-                <div class="card-title" style="color: #1d4ed8; margin-bottom: 8px;">🔐 Vereins-Zugangscode ändern</div>
-                <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 12px;">
-                    Aktueller Zugangscode aus Firestore (<code>settings/access</code>). Nach dem Speichern wird die App auf allen Geräten mit dem alten Code automatisch wieder gesperrt.
-                </p>
-                <form onsubmit="updateClubAccessPin(event)">
-                    <div class="form-group">
-                        <label>Aktueller / Neuer Vereins-Zugangscode</label>
-                        <input type="text" class="form-control" id="admin-club-pin-input" placeholder="Lade aktuellen Code..." required autocomplete="off" style="font-weight: 800; font-size: 1.1em; letter-spacing: 3px; text-align: center;">
-                    </div>
-                    <button type="submit" class="btn btn-admin btn-block">💾 Neuen Zugangscode speichern</button>
-                </form>
-            </div>
-
             <!-- ADMIN UNTER-TABS -->
             <div class="admin-nav-tabs">
                 <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">
@@ -739,21 +838,6 @@
                     <span>3. Rechnungen</span>
                 </button>
 
-                <button onclick="switchAdminTab('tab-members')" class="admin-tab-btn" id="btn-tab-members">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="memGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#5b21b6"/></linearGradient>
-                            </defs>
-                            <circle cx="9" cy="8" r="3.5" fill="url(#memGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M3 19C3 15.6863 5.68629 13 9 13C12.3137 13 15 15.6863 15 19" fill="url(#memGrad)"/>
-                            <circle cx="16.5" cy="9" r="2.5" fill="#a78bfa"/>
-                            <path d="M15.5 13.5C18.5 13.5 21 15.5 21 18.5" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <span>4. Mitglieder</span>
-                </button>
-
                 <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys">
                     <div class="admin-3d-icon-box">
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -764,7 +848,7 @@
                             <path d="M11 11H21V15H19V17H16V15H13V13H11V11Z" fill="url(#keyGrad)"/>
                         </svg>
                     </div>
-                    <span>5. Schlüssel</span>
+                    <span>4. Schlüssel</span>
                 </button>
 
                 <button onclick="switchAdminTab('tab-weapons-admin')" class="admin-tab-btn" id="btn-tab-weapons-admin">
@@ -777,7 +861,7 @@
                             <path d="M9 12L11 14L15 10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <span>6. Waffenbuch PDFs</span>
+                    <span>5. Waffenbuch PDFs</span>
                 </button>
             </div>
 
@@ -785,7 +869,7 @@
             <div id="tab-inventory" class="admin-tab-content active glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">
                     <span>📦 1. Lagerbestand</span>
-                    <button class="btn btn-admin" style="padding: 10px 18px; font-size: 0.95em;" onclick="editInventory()">✏️ Bearbeiten</button>
+                    <button class="btn btn-admin" style="padding: 6px 10px; font-size: 12px;" onclick="editInventory()">✏️ Bearbeiten</button>
                 </div>
                 <div id="inventory-timestamp" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 6px;">Noch nicht geändert</div>
                 <div id="admin-inventory-display"></div>
@@ -794,36 +878,73 @@
             <!-- TAB 2: NEWS & DIENSTPLAN -->
             <div id="tab-newstermins" class="admin-tab-content glass-card glass-card-red">
                 <div class="card-title" style="color: #dc2626;">📢 2. News, Foto & Dienstplan / Termine</div>
-                
-                <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 6px;">Dienst eintragen</h4>
-                <div class="form-group"><label>Datum</label><input type="date" class="form-control" id="duty-date"></div>
-                <div class="form-group"><label>Team</label><input type="text" class="form-control" id="duty-team" placeholder="z. B. Team 1"></div>
-                <div class="form-group"><label>Mitglieder</label><input type="text" class="form-control" id="duty-names" placeholder="z. B. Name 1, Name 2, Name 3"></div>
-                <button onclick="addDutyEntry()" class="btn btn-primary btn-block" style="margin-bottom: 16px;">Dienst eintragen</button>
 
-                <div style="margin-bottom: 16px; border-top: 1px solid #fecaca; padding-top: 10px;">
-                    <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Dienstplan Verwaltung:</div>
-                    <div id="admin-duty-list"><p style="font-size: 0.8em; color: var(--text-muted);">Lade Dienste...</p></div>
+                <!-- Kategorie A: Dienstplan eintragen & Verwaltung -->
+                <div class="admin-accordion-box">
+                    <button type="button" class="admin-accordion-header" aria-expanded="false" onclick="toggleAdminAccordion(this)">
+                        <span>📅 Dienstplan eintragen &amp; Verwaltung</span>
+                        <span class="admin-accordion-arrow" aria-hidden="true">▼</span>
+                    </button>
+                    <div class="admin-accordion-body">
+                        <div class="admin-accordion-inner">
+                            <div class="admin-accordion-content">
+                                <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 6px;">Dienst eintragen</h4>
+                                <div class="form-group"><label>Datum</label><input type="date" class="form-control" id="duty-date"></div>
+                                <div class="form-group"><label>Team</label><input type="text" class="form-control" id="duty-team" placeholder="z. B. Team 1"></div>
+                                <div class="form-group"><label>Mitglieder</label><input type="text" class="form-control" id="duty-names" placeholder="z. B. Name 1, Name 2, Name 3"></div>
+                                <button onclick="addDutyEntry()" class="btn btn-primary btn-block" style="margin-bottom: 16px;">Dienst eintragen</button>
+
+                                <div style="border-top: 1px solid #fecaca; padding-top: 10px;">
+                                    <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Dienstplan Verwaltung:</div>
+                                    <div id="admin-duty-list"><p style="font-size: 0.8em; color: var(--text-muted);">Lade Dienste...</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 6px;">Neuen News-Beitrag erstellen</h4>
-                <form onsubmit="addNewsItem(event)">
-                    <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
-                    <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
-                    <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
-                    <button type="submit" class="btn btn-admin btn-block">News Veröffentlichen</button>
-                </form>
+                <!-- Kategorie B: Neuen News-Beitrag erstellen -->
+                <div class="admin-accordion-box">
+                    <button type="button" class="admin-accordion-header" aria-expanded="false" onclick="toggleAdminAccordion(this)">
+                        <span>📰 Neuen News-Beitrag erstellen</span>
+                        <span class="admin-accordion-arrow" aria-hidden="true">▼</span>
+                    </button>
+                    <div class="admin-accordion-body">
+                        <div class="admin-accordion-inner">
+                            <div class="admin-accordion-content">
+                                <form onsubmit="addNewsItem(event)">
+                                    <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
+                                    <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
+                                    <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
+                                    <button type="submit" class="btn btn-admin btn-block">News Veröffentlichen</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <h4 style="color: #b91c1c; font-size: 0.9em; margin: 16px 0 6px 0;">Termin hinzufügen</h4>
-                <form onsubmit="addEvent(event)">
-                    <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="Generalversammlung"></div>
-                    <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="15.12.2026"></div>
-                    <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
-                    <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
-                </form>
-                <div style="margin-top: 10px; border-top: 1px solid #fecaca; padding-top: 8px;">
-                    <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Bestehende Termine:</div>
-                    <div id="admin-events-list"></div>
+                <!-- Kategorie C: Termine hinzufügen & verwalten -->
+                <div class="admin-accordion-box">
+                    <button type="button" class="admin-accordion-header" aria-expanded="false" onclick="toggleAdminAccordion(this)">
+                        <span>📆 Termine hinzufügen &amp; verwalten</span>
+                        <span class="admin-accordion-arrow" aria-hidden="true">▼</span>
+                    </button>
+                    <div class="admin-accordion-body">
+                        <div class="admin-accordion-inner">
+                            <div class="admin-accordion-content">
+                                <form onsubmit="addEvent(event)">
+                                    <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="Generalversammlung"></div>
+                                    <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="15.12.2026"></div>
+                                    <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
+                                    <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
+                                </form>
+                                <div style="margin-top: 10px; border-top: 1px solid #fecaca; padding-top: 8px;">
+                                    <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Bestehende Termine:</div>
+                                    <div id="admin-events-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -833,67 +954,71 @@
                 <div id="admin-tally-history-list"></div>
             </div>
 
-            <!-- TAB 4: MITGLIEDER -->
-            <div id="tab-members" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">👥 4. Aktive und passive Mitglieder</div>
-                <form onsubmit="addMemberToFirestore(event)" style="background: rgba(248, 250, 252, 0.95); padding: 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; margin-bottom: 14px;">
-                    <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 8px;">➕ Neues Mitglied hinzufügen</h4>
-                    <div class="form-group" style="margin-bottom: 8px;">
-                        <label>Name (Vorname Nachname)</label>
-                        <input type="text" class="form-control" id="new-member-name" placeholder="Vorname Nachname" required>
-                    </div>
-                    <div class="form-group" style="margin-bottom: 10px;">
-                        <label>Status</label>
-                        <select class="form-control" id="new-member-type">
-                            <option value="active">Aktives Mitglied</option>
-                            <option value="passive">Passives Mitglied</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-admin btn-block" style="margin-top: 0;">💾 Mitglied speichern</button>
-                </form>
-                <h4 style="color: #2563eb; font-size: 0.9em; margin: 8px 0 4px 0;">Aktive Mitglieder</h4>
-                <div id="admin-active-members-list"></div>
-                <h4 style="color: #dc2626; font-size: 0.9em; margin: 14px 0 4px 0;">Passive Mitglieder (Hervorgehoben)</h4>
-                <div id="admin-passive-members-list"></div>
-            </div>
-
-            <!-- TAB 5: SCHLÜSSELLISTE -->
+            <!-- TAB 4: SCHLÜSSELLISTE -->
             <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">
-                    <span>🔑 5. Schlüsselliste</span> 
-                    <button class="btn btn-admin" style="padding: 8px 14px; font-size: 0.85em;" onclick="addKeyListItem()">➕ Person hinzufügen</button>
+                <div class="card-title" style="color: #dc2626; flex-wrap: wrap; gap: 8px;">
+                    <span>🔑 4. Schlüsselliste</span>
+                    <button type="button" class="btn btn-admin" style="padding: 6px 10px; font-size: 12px;" onclick="exportKeyListPDF()">📥 PDF Export / Drucken</button>
                 </div>
+
+                <form id="key-list-form" onsubmit="saveKeyListItem(event)" style="background: rgba(248, 250, 252, 0.95); padding: 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; margin-bottom: 14px;">
+                    <input type="hidden" id="key-edit-index" value="">
+                    <input type="hidden" id="key-edit-is-header" value="0">
+                    <h4 id="key-form-title" style="color: #b91c1c; font-size: 0.9em; margin-bottom: 8px;">➕ Neuen Schlüsselinhaber hinzufügen</h4>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label id="key-name-label">Name (Vorname Nachname)</label>
+                        <input type="text" class="form-control" id="key-name" placeholder="Vorname Nachname" required>
+                    </div>
+                    <div id="key-person-fields">
+                        <div class="form-group" style="margin-bottom: 8px;">
+                            <label>Geburtsdatum</label>
+                            <input type="text" class="form-control" id="key-dob" placeholder="TT.MM.JJJJ">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 8px;">
+                            <label>Wohnadresse</label>
+                            <input type="text" class="form-control" id="key-addr" placeholder="Straße Hausnummer, PLZ Ort">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 8px;">
+                            <label>Telefonnummer</label>
+                            <input type="text" class="form-control" id="key-tel" placeholder="z. B. +43 664 ...">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 10px;">
+                            <label>Schlüsselnummer / Bemerkung</label>
+                            <input type="text" class="form-control" id="key-role" placeholder="z. B. Schlüssel Nr. 1 / Eingang &amp; Büro">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="submit" id="key-save-btn" class="btn btn-admin" style="flex: 1; margin-top: 0;">💾 In Datenbank speichern</button>
+                        <button type="button" id="key-cancel-btn" onclick="resetKeyListForm()" class="btn btn-danger" style="display: none; margin-top: 0;">Abbrechen</button>
+                    </div>
+                </form>
+
                 <div id="admin-keys-list"></div>
             </div>
 
-            <!-- TAB 6: WAFFENBUCH PDFs & WAFFENVERWALTUNG -->
+            <!-- TAB 5: WAFFENBUCH PDFs & WAFFENVERWALTUNG -->
             <div id="tab-weapons-admin" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">🔫 6. Waffenbuch-Protokolle (PDFs)</div>
-                <div style="margin-bottom: 14px;">
+                <div class="card-title" style="color: #dc2626;">🔫 5. Waffenbuch-Protokolle (PDFs)</div>
+                <div style="margin-bottom: 10px;">
                     <button class="btn btn-admin btn-block" onclick="exportFullWeaponListPDF()">📥 Vollständige Waffenliste als PDF exportieren</button>
                 </div>
                 <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Übersicht aller gespeicherten Entnahme- und Rückgabeprotokolle (inkl. getrennter ZWR/ZVR-Daten):</p>
                 <div id="admin-weapon-pdf-list"><p style="font-size: 0.85em; color: var(--text-muted);">Keine Protokolle vorhanden.</p></div>
+            </div>
 
-                <div style="margin-top: 20px; padding-top: 16px; border-top: 2px dashed #fecaca;">
-                    <div class="card-title" style="color: #dc2626; margin-bottom: 10px;">🛠️ Waffenliste verwalten (Firestore)</div>
-                    <form onsubmit="saveWeaponToFirestore(event)" style="background: rgba(248, 250, 252, 0.95); padding: 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; margin-bottom: 14px;">
-                        <input type="hidden" id="weapon-edit-doc-id" value="">
-                        <h4 id="weapon-form-admin-title" style="color: #b91c1c; font-size: 0.9em; margin-bottom: 8px;">➕ Neue Waffe hinzufügen</h4>
-                        <div class="form-group" style="margin-bottom: 8px;"><label>Waffenart</label><input type="text" class="form-control" id="admin-weapon-art" value="Büchse" required></div>
-                        <div class="form-group" style="margin-bottom: 8px;"><label>Hersteller</label><input type="text" class="form-control" id="admin-weapon-hersteller" value="MAUSER" required></div>
-                        <div class="form-group" style="margin-bottom: 8px;"><label>Modell</label><input type="text" class="form-control" id="admin-weapon-modell" value="98" required></div>
-                        <div class="form-group" style="margin-bottom: 8px;"><label>Kaliber</label><input type="text" class="form-control" id="admin-weapon-kaliber" placeholder="z. B. 8x57 I" required></div>
-                        <div class="form-group" style="margin-bottom: 8px;"><label>Kategorie</label><input type="text" class="form-control" id="admin-weapon-kat" value="C" required></div>
-                        <div class="form-group" style="margin-bottom: 8px;"><label>Zuweisung / Schütze</label><input type="text" class="form-control" id="admin-weapon-zuweisung" placeholder="Name oder Reserve" required></div>
-                        <div class="form-group" style="margin-bottom: 10px;"><label>ZWR-Seriennummer</label><input type="text" class="form-control" id="admin-weapon-nummer" placeholder="Seriennummer eingeben" required></div>
-                        <div style="display: flex; gap: 8px;">
-                            <button type="submit" id="admin-weapon-save-btn" class="btn btn-admin" style="flex: 1; margin-top: 0;">💾 Waffe speichern</button>
-                            <button type="button" id="admin-weapon-cancel-btn" onclick="resetAdminWeaponForm()" class="btn btn-danger" style="display: none; margin-top: 0;">Abbrechen</button>
-                        </div>
-                    </form>
-                    <div id="admin-weapons-list"><p style="font-size: 0.8em; color: var(--text-muted);">Lade Waffenliste...</p></div>
-                </div>
+            <!-- VEREINS-ZUGANGSCODE VERWALTUNG -->
+            <div class="glass-card glass-card-blue" id="admin-access-pin-card" style="margin-top: 14px; border: 2px solid #2563eb; background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(239,246,255,0.95));">
+                <div class="card-title" style="color: #1d4ed8; margin-bottom: 8px;">🔐 Vereins-Zugangscode ändern</div>
+                <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 12px;">
+                    Aktueller Zugangscode aus Firestore (<code>settings/access</code>). Nach dem Speichern wird die App auf allen Geräten mit dem alten Code automatisch wieder gesperrt.
+                </p>
+                <form onsubmit="updateClubAccessPin(event)">
+                    <div class="form-group">
+                        <label>Aktueller / Neuer Vereins-Zugangscode</label>
+                        <input type="text" class="form-control" id="admin-club-pin-input" placeholder="Lade aktuellen Code..." required autocomplete="off" style="font-weight: 800; font-size: 1.1em; letter-spacing: 3px; text-align: center;">
+                    </div>
+                    <button type="submit" class="btn btn-admin btn-block">💾 Neuen Zugangscode speichern</button>
+                </form>
             </div>
 
             <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 15px;">Admin-Modus Beenden</button>
@@ -931,6 +1056,29 @@
             </div>
             <div id="invoice-modal-content" style="font-size: 0.85em; line-height: 1.4;"></div>
             <button class="btn btn-green btn-block" style="margin-top: 12px;" onclick="downloadCurrentModalPDF()">📥 PDF Herunterladen</button>
+        </div>
+    </div>
+
+    <!-- VOLLBILD-MODAL FÜR WAFFENBUCH PDF-VORSCHAU -->
+    <div id="weapon-pdf-modal" style="display: none; pointer-events: none;">
+        <div style="background: #ffffff; width: 100%; max-width: 920px; height: 94vh; border-radius: 18px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.45); border: 1.5px solid #e2e8f0;" class="modal-anim">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding: 12px 16px; background: #f8fafc; border-bottom: 1.5px solid #e2e8f0; flex-shrink: 0;">
+                <h3 id="weapon-pdf-modal-title" style="color: #b91c1c; font-size: 1em; font-weight: 800; margin: 0;">Waffenbuch-Protokoll</h3>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" id="weapon-pdf-modal-download-btn" class="btn btn-green" style="padding: 8px 14px; font-size: 13px; margin-top: 0;">📥 PDF Herunterladen</button>
+                    <button type="button" onclick="closeWeaponPDFModal()" class="btn btn-danger" style="padding: 8px 14px; font-size: 13px; margin-top: 0;">✖ Schließen</button>
+                </div>
+            </div>
+            <div style="flex: 1; overflow-y: auto; padding: 14px; background: #f1f5f9; display: flex; flex-direction: column; gap: 12px;">
+                <div id="weapon-pdf-protocol-preview" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px; color: #0f172a; font-size: 0.85em; line-height: 1.45; box-shadow: 0 2px 8px rgba(0,0,0,0.05);"></div>
+                <div id="weapon-pdf-frame-wrap" style="background: #334155; border-radius: 12px; overflow: hidden; border: 1px solid #cbd5e1; min-height: 440px; flex-shrink: 0; display: flex; flex-direction: column;">
+                    <div style="background: #1e293b; color: #e2e8f0; font-size: 0.75em; font-weight: 700; padding: 6px 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                        <span>PDF-Dokumentansicht</span>
+                        <a id="weapon-pdf-fallback-link" href="#" download="Protokoll.pdf" style="color: #93c5fd; text-decoration: underline;">Direkt öffnen / speichern</a>
+                    </div>
+                    <iframe id="weapon-pdf-iframe" title="Waffenbuch PDF Vorschau" style="width: 100%; height: 480px; border: none; background: #ffffff; display: block;"></iframe>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1094,10 +1242,12 @@
     <!-- JAVASCRIPT LOGIK -->
     <script>
         function openLegalModal() {
-            document.getElementById('legal-modal').style.display = 'flex';
+            const modal = document.getElementById('legal-modal');
+            if (modal) { modal.style.display = 'flex'; modal.style.pointerEvents = 'auto'; }
         }
         function closeLegalModal() {
-            document.getElementById('legal-modal').style.display = 'none';
+            const modal = document.getElementById('legal-modal');
+            if (modal) { modal.style.display = 'none'; modal.style.pointerEvents = 'none'; }
         }
 
         function showCustomConfirm(titleText, messageText, onConfirm) {
@@ -1105,30 +1255,37 @@
             document.getElementById('customConfirmTitle').innerHTML = '<span style="font-size: 2em; vertical-align: middle;">⚠️</span><br>' + titleText;
             document.getElementById('customConfirmMessage').innerText = messageText;
             modal.style.display = 'flex';
+            modal.style.pointerEvents = 'auto';
 
             document.getElementById('customConfirmYes').onclick = function() {
                 modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
                 onConfirm(true);
             };
 
             document.getElementById('customConfirmNo').onclick = function() {
                 modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
                 onConfirm(false);
             };
         }
 
         function showAdminSuccessModal() {
-            document.getElementById('admin-success-modal').style.display = 'flex';
+            const modal = document.getElementById('admin-success-modal');
+            if (modal) { modal.style.display = 'flex'; modal.style.pointerEvents = 'auto'; }
         }
         function closeAdminSuccessModal() {
-            document.getElementById('admin-success-modal').style.display = 'none';
+            const modal = document.getElementById('admin-success-modal');
+            if (modal) { modal.style.display = 'none'; modal.style.pointerEvents = 'none'; }
         }
 
         function showAdminErrorModal() {
-            document.getElementById('admin-error-modal').style.display = 'flex';
+            const modal = document.getElementById('admin-error-modal');
+            if (modal) { modal.style.display = 'flex'; modal.style.pointerEvents = 'auto'; }
         }
         function closeAdminErrorModal() {
-            document.getElementById('admin-error-modal').style.display = 'none';
+            const modal = document.getElementById('admin-error-modal');
+            if (modal) { modal.style.display = 'none'; modal.style.pointerEvents = 'none'; }
         }
 
         let inactivityTimer = null;
@@ -1168,6 +1325,14 @@
             if(targetTab) targetTab.classList.add('active');
             if(targetBtn) targetBtn.classList.add('active');
         }
+
+        window.toggleAdminAccordion = function(btn) {
+            if (!btn) return;
+            const box = btn.closest('.admin-accordion-box');
+            if (!box) return;
+            const isOpen = box.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        };
 
         let officialActiveMembers = [];
         let officialPassiveMembers = [];
@@ -1244,71 +1409,6 @@
             }
             populateWeaponMemberSelects();
             loadPublicMembersList();
-            loadAdminMembers();
-        }
-
-        async function persistMembersToFirestore() {
-            await db.collection("settings").doc("members").set({
-                active: officialActiveMembers,
-                passive: officialPassiveMembers,
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-            populateWeaponMemberSelects();
-            loadPublicMembersList();
-            loadAdminMembers();
-        }
-
-        async function addMemberToFirestore(e) {
-            e.preventDefault();
-            const nameInput = document.getElementById('new-member-name');
-            const typeSelect = document.getElementById('new-member-type');
-            const name = nameInput ? nameInput.value.trim() : '';
-            const type = typeSelect ? typeSelect.value : 'active';
-            if (!name) return;
-
-            try {
-                if (type === 'passive') {
-                    if (!officialPassiveMembers.includes(name)) officialPassiveMembers.push(name);
-                } else {
-                    if (!officialActiveMembers.includes(name)) officialActiveMembers.push(name);
-                }
-                await persistMembersToFirestore();
-                if (nameInput) nameInput.value = '';
-                alert("Mitglied erfolgreich gespeichert!");
-            } catch (err) {
-                alert("Fehler beim Speichern des Mitglieds: " + err.message);
-            }
-        }
-
-        async function editMemberInFirestore(type, index) {
-            const list = type === 'passive' ? officialPassiveMembers : officialActiveMembers;
-            const currentName = list[index];
-            if (!currentName) return;
-            const newName = prompt("Name des Mitglieds bearbeiten:", currentName);
-            if (newName === null) return;
-            const trimmed = newName.trim();
-            if (!trimmed) return;
-
-            try {
-                list[index] = trimmed;
-                await persistMembersToFirestore();
-            } catch (err) {
-                alert("Fehler beim Aktualisieren: " + err.message);
-            }
-        }
-
-        async function deleteMemberFromFirestore(type, index) {
-            const list = type === 'passive' ? officialPassiveMembers : officialActiveMembers;
-            const name = list[index];
-            if (!name) return;
-            if (!confirm(`Mitglied "${name}" wirklich löschen?`)) return;
-
-            try {
-                list.splice(index, 1);
-                await persistMembersToFirestore();
-            } catch (err) {
-                alert("Fehler beim Löschen: " + err.message);
-            }
         }
 
         function sortWeaponsList(list) {
@@ -1346,106 +1446,6 @@
                 officialWeaponList = [];
             }
             populateWeaponCheckboxes();
-            renderAdminWeaponsList();
-        }
-
-        function renderAdminWeaponsList() {
-            const container = document.getElementById('admin-weapons-list');
-            if (!container) return;
-            if (!officialWeaponList || officialWeaponList.length === 0) {
-                container.innerHTML = '<p style="font-size:0.8em; color:var(--text-muted);">Keine Waffen in Firestore (<code>weapons</code>) vorhanden.</p>';
-                return;
-            }
-            let html = "";
-            officialWeaponList.forEach((w, idx) => {
-                html += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; background:#fff; border-radius:8px; margin-bottom:6px; border:1px solid #cbd5e1; font-size:0.82em; gap:8px;">
-                        <div style="flex:1;">
-                            <strong>${escapeHtml(w.art)}: ${escapeHtml(w.hersteller)} ${escapeHtml(w.modell)}</strong> (${escapeHtml(w.kaliber)}, Kat. ${escapeHtml(w.kat)})<br>
-                            <span style="color:var(--text-muted);">ZWR: <strong>${escapeHtml(w.nummer)}</strong> | Zuweisung: <strong>${escapeHtml(w.zuweisung)}</strong></span>
-                        </div>
-                        <div style="display:flex; gap:4px; flex-shrink:0;">
-                            <button type="button" class="btn btn-admin" style="padding:5px 9px; font-size:0.78em; margin-top:0;" onclick="startEditWeapon(${idx})">✏️</button>
-                            <button type="button" class="btn btn-danger" style="padding:5px 9px; font-size:0.78em; margin-top:0;" onclick="deleteWeaponFromFirestore(${idx})">🗑️</button>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function startEditWeapon(index) {
-            const w = officialWeaponList[index];
-            if (!w) return;
-            document.getElementById('weapon-edit-doc-id').value = w.docId || w.id || '';
-            document.getElementById('admin-weapon-art').value = w.art || 'Büchse';
-            document.getElementById('admin-weapon-hersteller').value = w.hersteller || '';
-            document.getElementById('admin-weapon-modell').value = w.modell || '';
-            document.getElementById('admin-weapon-kaliber').value = w.kaliber || '';
-            document.getElementById('admin-weapon-kat').value = w.kat || 'C';
-            document.getElementById('admin-weapon-zuweisung').value = w.zuweisung || '';
-            document.getElementById('admin-weapon-nummer').value = w.nummer || '';
-            document.getElementById('weapon-form-admin-title').innerText = '✏️ Waffe bearbeiten';
-            document.getElementById('admin-weapon-save-btn').innerText = '💾 Änderungen speichern';
-            document.getElementById('admin-weapon-cancel-btn').style.display = 'inline-flex';
-        }
-
-        function resetAdminWeaponForm() {
-            document.getElementById('weapon-edit-doc-id').value = '';
-            document.getElementById('admin-weapon-art').value = 'Büchse';
-            document.getElementById('admin-weapon-hersteller').value = 'MAUSER';
-            document.getElementById('admin-weapon-modell').value = '98';
-            document.getElementById('admin-weapon-kaliber').value = '';
-            document.getElementById('admin-weapon-kat').value = 'C';
-            document.getElementById('admin-weapon-zuweisung').value = '';
-            document.getElementById('admin-weapon-nummer').value = '';
-            document.getElementById('weapon-form-admin-title').innerText = '➕ Neue Waffe hinzufügen';
-            document.getElementById('admin-weapon-save-btn').innerText = '💾 Waffe speichern';
-            document.getElementById('admin-weapon-cancel-btn').style.display = 'none';
-        }
-
-        async function saveWeaponToFirestore(e) {
-            e.preventDefault();
-            const docId = document.getElementById('weapon-edit-doc-id').value.trim();
-            const payload = {
-                art: document.getElementById('admin-weapon-art').value.trim(),
-                hersteller: document.getElementById('admin-weapon-hersteller').value.trim(),
-                modell: document.getElementById('admin-weapon-modell').value.trim(),
-                kaliber: document.getElementById('admin-weapon-kaliber').value.trim(),
-                kat: document.getElementById('admin-weapon-kat').value.trim() || 'C',
-                zuweisung: document.getElementById('admin-weapon-zuweisung').value.trim() || 'Reserve',
-                nummer: document.getElementById('admin-weapon-nummer').value.trim(),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            if (!payload.hersteller || !payload.nummer) {
-                alert("Bitte Hersteller und Seriennummer angeben!");
-                return;
-            }
-            try {
-                if (docId) {
-                    await db.collection("weapons").doc(docId).set(payload, { merge: true });
-                } else {
-                    payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-                    await db.collection("weapons").add(payload);
-                }
-                resetAdminWeaponForm();
-                await loadWeaponsFromFirestore();
-                alert("Waffe erfolgreich in Firestore gespeichert!");
-            } catch (err) {
-                alert("Fehler beim Speichern der Waffe: " + err.message);
-            }
-        }
-
-        async function deleteWeaponFromFirestore(index) {
-            const w = officialWeaponList[index];
-            if (!w || !w.docId) return;
-            if (!confirm(`Waffe "${w.hersteller} ${w.modell} (${w.nummer})" wirklich löschen?`)) return;
-            try {
-                await db.collection("weapons").doc(w.docId).delete();
-                await loadWeaponsFromFirestore();
-            } catch (err) {
-                alert("Fehler beim Löschen der Waffe: " + err.message);
-            }
         }
 
         function populateWeaponCheckboxes() {
@@ -1459,12 +1459,17 @@
             officialWeaponList.forEach(w => {
                 let maskedNum = maskWeaponNumber(w.nummer);
                 let maskedZvr = maskZvrNumber("624291509");
-                let labelText = `${escapeHtml(w.hersteller)} ${escapeHtml(w.modell)} (${escapeHtml(w.kaliber)}) – ZWR: ${maskedNum} | ZVR: ${maskedZvr} [${escapeHtml(w.zuweisung)}]`;
-                let fullValue = `${w.hersteller} ${w.modell} (${w.kaliber} / Nr. ${w.nummer} / ZVR-624291509)`;
+                let zuwText = String(w.zuweisung || 'Reserve').trim();
+                let isReserve = /^reserve/i.test(zuwText);
+                let zuwBadge = isReserve
+                    ? `<span style="display:inline-block; background:#fef3c7; color:#92400e; border:1px solid #f59e0b; padding:1px 6px; border-radius:6px; font-weight:800; font-size:0.82em;">${escapeHtml(zuwText.toUpperCase())}</span>`
+                    : `<span style="display:inline-block; background:#e0f2fe; color:#075985; border:1px solid #7dd3fc; padding:1px 6px; border-radius:6px; font-weight:800; font-size:0.82em;">👤 ${escapeHtml(zuwText)}</span>`;
+                let labelText = `${escapeHtml(w.hersteller)} ${escapeHtml(w.modell)} (${escapeHtml(w.kaliber)}) – ZWR: ${maskedNum} | ZVR: ${maskedZvr} ${zuwBadge}`;
+                let fullValue = `${w.hersteller} ${w.modell} (${w.kaliber} / Nr. ${w.nummer} / ZVR-624291509 / Zuw: ${zuwText})`;
                 html += `
-                    <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input type="checkbox" name="weapons" value="${escapeHtml(fullValue)}" style="width: 18px; height: 18px; accent-color: #b91c1c;"> 
-                        <strong>${escapeHtml(w.art)}</strong>: ${labelText}
+                    <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer; flex-wrap: wrap;">
+                        <input type="checkbox" name="weapons" value="${escapeHtml(fullValue)}" style="width: 18px; height: 18px; accent-color: #b91c1c; flex-shrink: 0;"> 
+                        <span><strong>${escapeHtml(w.art)}</strong>: ${labelText}</span>
                     </label>
                 `;
             });
@@ -1595,32 +1600,34 @@
         const defaultDutyRoster = [];
 
         function parseLocalDate(dateStr) {
-            if (!dateStr) return new Date();
+            if (!dateStr) return new Date(NaN);
             if (typeof dateStr !== 'string') dateStr = String(dateStr);
-            if (dateStr.includes('-')) {
-                const parts = dateStr.split('-');
+            const clean = dateStr.trim();
+            if (clean.includes('-')) {
+                const parts = clean.split('-');
                 if (parts[0].length === 4) {
-                    return new Date(parts[0], parts[1] - 1, parts[2]);
+                    return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
                 } else {
-                    return new Date(parts[2], parts[1] - 1, parts[0]);
+                    return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
                 }
-            } else if (dateStr.includes('.')) {
-                const parts = dateStr.split('.');
-                return new Date(parts[2], parts[1] - 1, parts[0]);
+            } else if (clean.includes('.')) {
+                const parts = clean.split('.');
+                return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
             }
-            return new Date(dateStr);
+            return new Date(clean);
         }
 
         function getViennaToday() {
             const now = new Date();
             const viennaDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Europe/Vienna' });
             const parts = viennaDateStr.split('-');
-            const viennaDate = new Date(parts[0], parts[1] - 1, parts[2]);
+            const viennaDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
             viennaDate.setHours(0, 0, 0, 0);
             return viennaDate;
         }
 
         async function addDutyEntry() {
+            if (!auth.currentUser) return;
             const dateVal = document.getElementById('duty-date').value;
             const teamVal = document.getElementById('duty-team').value.trim();
             const namesVal = document.getElementById('duty-names').value.trim();
@@ -1636,12 +1643,17 @@
                 formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
             }
 
+            const isClosed = teamVal.toLowerCase().includes('geschlossen');
+            const dutyTime = isClosed ? '—' : '19:00 – 21:00 Uhr';
+
             try {
                 await db.collection("duty_plan").add({
                     dateStr: formattedDate,
                     team: teamVal,
                     names: namesVal,
-                    status: teamVal.toLowerCase().includes('geschlossen') ? 'closed' : 'open',
+                    time: dutyTime,
+                    dienstzeit: dutyTime,
+                    status: isClosed ? 'closed' : 'open',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
@@ -1655,6 +1667,7 @@
         }
 
         async function deleteDutyEntry(id) {
+            if (!auth.currentUser) return;
             if (confirm("Diesen Dienst wirklich löschen?")) {
                 try {
                     await db.collection("duty_plan").doc(id).delete();
@@ -1721,12 +1734,16 @@
                 let dutyList = [];
                 snapshot.forEach(doc => {
                     let d = doc.data();
+                    const teamStr = d.team || d.gruppe || "Team";
+                    const statusStr = d.status || (String(teamStr).toLowerCase().includes('geschlossen') ? 'closed' : 'open');
+                    const timeStr = d.time || d.dienstzeit || (statusStr === 'closed' ? '—' : '19:00 – 21:00 Uhr');
                     dutyList.push({
                         id: doc.id,
                         dateStr: d.dateStr || d.datum || d.date || "",
-                        team: d.team || d.gruppe || "Team",
+                        team: teamStr,
                         names: d.names || d.mitglieder || d.diensthabende || "",
-                        status: d.status || 'open'
+                        time: timeStr,
+                        status: statusStr
                     });
                 });
 
@@ -1760,7 +1777,8 @@
             let pastList = [];
             let adminHtml = "";
 
-            dutyList.forEach(d => {
+            const sortedForAdmin = [...dutyList].sort((a, b) => parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr));
+            sortedForAdmin.forEach(d => {
                 const dDate = parseLocalDate(d.dateStr);
                 dDate.setHours(0,0,0,0);
 
@@ -1774,10 +1792,10 @@
                     adminHtml += `
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #fff; border-radius: 8px; margin-bottom: 6px; border: 1px solid #cbd5e1; font-size: 0.85em;">
                             <div>
-                                <strong>${d.dateStr}</strong> - <span style="color:var(--primary-red);">${d.team}</span><br>
-                                <span style="color:var(--text-muted); font-size:0.8em;">${d.names}</span>
+                                <strong>${escapeHtml(d.dateStr)}</strong> - <span style="color:var(--primary-red);">${escapeHtml(d.team)}</span>${d.time && d.time !== '—' ? ` <span style="color:var(--text-muted); font-size:0.8em;">(${escapeHtml(d.time)})</span>` : ''}<br>
+                                <span style="color:var(--text-muted); font-size:0.8em;">${escapeHtml(d.names)}</span>
                             </div>
-                            <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteDutyEntry('${d.id}')">🗑️</button>
+                            <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteDutyEntry('${escapeHtml(d.id)}')">🗑️</button>
                         </div>
                     `;
                 }
@@ -1814,9 +1832,9 @@
                     }
 
                     nextWidget.innerHTML = `
-                        <div style="font-size: 1.1em; color: ${isToday ? '#b91c1c' : '#15803d'}; font-weight: 800; margin-bottom: 2px;">📅 ${nextDienst.dateStr} ${isToday ? '⚡ HEUTE' : ''}</div>
-                        <div style="font-size: 1.5em; font-weight: 900; margin: 4px 0; color: #0f172a; letter-spacing: 0.5px;">${nextDienst.team}</div>
-                        <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 700;">${nextDienst.names}</div>
+                        <div style="font-size: 1.1em; color: ${isToday ? '#b91c1c' : '#15803d'}; font-weight: 800; margin-bottom: 2px;">📅 ${escapeHtml(nextDienst.dateStr)} ${isToday ? '⚡ HEUTE' : ''}${nextDienst.time && nextDienst.time !== '—' ? ` <span style="font-size:0.78em; font-weight:700; color:#475569;">(${escapeHtml(nextDienst.time)})</span>` : ''}</div>
+                        <div style="font-size: 1.5em; font-weight: 900; margin: 4px 0; color: #0f172a; letter-spacing: 0.5px;">${escapeHtml(nextDienst.team)}</div>
+                        <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 700;">${escapeHtml(nextDienst.names)}</div>
                     `;
                 } else {
                     nextWidget.innerHTML = `<div style="font-size: 0.95em; color: var(--text-muted);">Kein anstehender Dienst eingetragen.</div>`;
@@ -1834,10 +1852,10 @@
                     html += `
                         <div class="dark-event-item" style="border-left-color: ${borderCol}; ${isNext ? 'background: rgba(34, 197, 94, 0.08);' : ''}">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div style="font-size: 0.9em; font-weight: 800; color: #0f172a;">${d.dateStr} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
-                                <span style="background: ${borderCol}; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.65em;">${d.team}</span>
+                                <div style="font-size: 0.9em; font-weight: 800; color: #0f172a;">${escapeHtml(d.dateStr)} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER</span>' : ''}</div>
+                                <span style="background: ${borderCol}; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.65em;">${escapeHtml(d.team)}</span>
                             </div>
-                            <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
+                            <div style="font-size: 0.75em; color: var(--text-muted); margin-top: 2px;">${escapeHtml(d.names)}${d.time && d.time !== '—' ? ` | 🕒 ${escapeHtml(d.time)}` : ''}</div>
                         </div>
                     `;
                 });
@@ -1851,10 +1869,10 @@
                     archHtml += `
                         <div class="dark-event-item" style="border-left-color: #94a3b8; opacity: 0.85; margin-bottom: 8px;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div style="font-size: 0.85em; font-weight: 700; color: #475569;">${d.dateStr}</div>
-                                <span style="background: #94a3b8; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.6em;">${d.team}</span>
+                                <div style="font-size: 0.85em; font-weight: 700; color: #475569;">${escapeHtml(d.dateStr)}</div>
+                                <span style="background: #94a3b8; color: white; padding: 2px 6px; border-radius: 5px; font-weight: 700; font-size: 0.6em;">${escapeHtml(d.team)}</span>
                             </div>
-                            <div style="font-size: 0.7em; color: var(--text-muted); margin-top: 2px;">${d.names}</div>
+                            <div style="font-size: 0.7em; color: var(--text-muted); margin-top: 2px;">${escapeHtml(d.names)}${d.time && d.time !== '—' ? ` | 🕒 ${escapeHtml(d.time)}` : ''}</div>
                         </div>
                     `;
                 });
@@ -1880,6 +1898,7 @@
         // --- TERMINE & ABSTIMMUNG ---
         async function addEvent(e) {
             e.preventDefault();
+            if (!auth.currentUser) return;
             const title = document.getElementById('new-event-title').value.trim();
             const date = document.getElementById('new-event-date').value.trim();
             const desc = document.getElementById('new-event-desc').value.trim();
@@ -1923,11 +1942,13 @@
                 });
             }
             selectEl.innerHTML = html;
-            document.getElementById('vote-modal').style.display = 'flex';
+            const modal = document.getElementById('vote-modal');
+            if (modal) { modal.style.display = 'flex'; modal.style.pointerEvents = 'auto'; }
         }
 
         function closeVoteModal() {
-            document.getElementById('vote-modal').style.display = 'none';
+            const modal = document.getElementById('vote-modal');
+            if (modal) { modal.style.display = 'none'; modal.style.pointerEvents = 'none'; }
             selectedEventIdForVote = null;
         }
 
@@ -2001,29 +2022,34 @@
                     let votesHtml = "";
                     if (voteNames.length > 0) {
                         voteNames.forEach(n => {
-                            votesHtml += `<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:6px; font-weight:700; font-size:0.75em; display:inline-block; margin:2px;">✅ ${n}</span>`;
+                            votesHtml += `<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:6px; font-weight:700; font-size:0.75em; display:inline-block; margin:2px;">✅ ${escapeHtml(n)}</span>`;
                         });
                     } else {
                         votesHtml = `<span style="font-size:0.8em; color:var(--text-muted);">Noch keine Rückmeldungen.</span>`;
                     }
 
+                    const safeEvId = escapeHtml(ev.id);
+                    const safeEvDate = escapeHtml(ev.date);
+                    const safeEvTitle = escapeHtml(ev.title);
+                    const safeEvDesc = escapeHtml(ev.desc || 'Kein Ort angegeben');
+
                     html += `
                         <div class="glass-card ${isNext ? 'next-duty-neon' : ''}" style="margin-bottom: 10px; padding: ${isNext ? '18px' : '12px'}; ${isNext ? '' : 'border-left: 4px solid #2563eb; opacity: 0.9;'}">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                <div style="font-size: ${isNext ? '1em' : '0.85em'}; font-weight: 800; color: #0f172a;">📅 ${ev.date} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;" class="live-pulse-badge">NÄCHSTER TERMIN</span>' : ''}</div>
+                                <div style="font-size: ${isNext ? '1em' : '0.85em'}; font-weight: 800; color: #0f172a;">📅 ${safeEvDate} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;" class="live-pulse-badge">NÄCHSTER TERMIN</span>' : ''}</div>
                                 ${isNext ? '<span style="font-size: 0.75em; background: #0f172a; color: #22c55e; font-weight: 800; padding: 3px 8px; border-radius: 6px;" class="live-pulse-badge">● LIVE</span>' : ''}
                             </div>
-                            <div style="font-size: ${isNext ? '1.1em' : '0.95em'}; font-weight: 800; color: #b91c1c; margin-bottom: 3px;">${ev.title}</div>
-                            <div style="font-size: ${isNext ? '0.85em' : '0.75em'}; color: var(--text-muted); margin-bottom: 6px;">📍 ${ev.desc || 'Kein Ort angegeben'}</div>
+                            <div style="font-size: ${isNext ? '1.1em' : '0.95em'}; font-weight: 800; color: #b91c1c; margin-bottom: 3px;">${safeEvTitle}</div>
+                            <div style="font-size: ${isNext ? '0.85em' : '0.75em'}; color: var(--text-muted); margin-bottom: 6px;">📍 ${safeEvDesc}</div>
                             <div style="margin: 6px 0; display: flex; flex-wrap: wrap; gap: 4px;">${votesHtml}</div>
-                            <button onclick="openVoteModal('${ev.id}', '${ev.title}')" class="btn btn-green btn-block" style="padding: ${isNext ? '10px' : '8px'}; font-size: ${isNext ? '0.9em' : '0.8em'};">✋ Ich bin dabei / Stimme abgeben</button>
+                            <button data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle)" class="btn btn-green btn-block" style="padding: ${isNext ? '10px' : '8px'}; font-size: ${isNext ? '0.9em' : '0.8em'};">✋ Ich bin dabei / Stimme abgeben</button>
                         </div>
                     `;
 
                     adminHtml += `
                         <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 10px; border-radius:8px; margin-bottom:6px; border:1px solid #cbd5e1; font-size:0.85em;">
-                            <div><strong>${ev.date}</strong> - ${ev.title} (${voteNames.length} Zusagen)</div>
-                            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75em;" onclick="deleteItem('events', '${ev.id}')">🗑️</button>
+                            <div><strong>${safeEvDate}</strong> - ${safeEvTitle} (${voteNames.length} Zusagen)</div>
+                            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75em;" data-doc-id="${safeEvId}" onclick="deleteItem('events', this.dataset.docId)">🗑️</button>
                         </div>
                     `;
                 });
@@ -2042,12 +2068,14 @@
                 const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
                 let html = "";
                 snapshot.forEach(doc => {
-                    const n = doc.data();
+                    const n = doc.data() || {};
+                    const rawImg = String(n.imageUrl || '').trim();
+                    const safeImgUrl = (/^(https?:\/\/|data:image\/(png|jpe?g|gif|webp);base64,)/i.test(rawImg)) ? escapeHtml(rawImg) : '';
                     html += `
                         <div class="glass-card glass-card-red" style="margin-top: 16px;">
-                            <div class="card-title">📢 ${n.title}</div>
-                            <p style="font-size: 0.9em; line-height: 1.4; margin-bottom: 10px;">${n.text}</p>
-                            ${n.imageUrl ? `<img src="${n.imageUrl}" style="width: 100%; border-radius: 12px; margin-top: 8px;" />` : ''}
+                            <div class="card-title">📢 ${escapeHtml(n.title)}</div>
+                            <p style="font-size: 0.9em; line-height: 1.4; margin-bottom: 10px;">${escapeHtml(n.text)}</p>
+                            ${safeImgUrl ? `<img src="${safeImgUrl}" style="width: 100%; border-radius: 12px; margin-top: 8px;" />` : ''}
                         </div>
                     `;
                 });
@@ -2055,81 +2083,316 @@
             } catch(e) {}
         }
 
-        // --- SCHLÜSSELLISTE (AUSSCHLIESSLICH IM ADMIN-BEREICH AUS FIRESTORE) ---
+        // --- SCHLÜSSELLISTE (AUSSCHLIESSLICH IM ADMIN-BEREICH AUS FIRESTORE settings/keys & settings/pdfKeys) ---
         let exactPdfKeyList = [];
+
+        function normalizeKeyEntry(raw) {
+            if (!raw || typeof raw !== 'object') return null;
+            if (raw.header) {
+                return { header: String(raw.header).trim() };
+            }
+            const name = String(raw.name || raw.fullName || raw.vornameNachname || '').trim();
+            const dob = String(raw.dob || raw.geburtsdatum || raw.birthDate || '').trim();
+            const addr = String(raw.addr || raw.address || raw.adresse || raw.wohnadresse || '').trim();
+            const tel = String(raw.tel || raw.telefon || raw.phone || raw.telefonnummer || '').trim();
+            const role = String(raw.role || raw.keyNumber || raw.schluessel || raw.schluesselnummer || raw.bemerkung || raw.function || '').trim();
+            const group = String(raw.group || raw.gruppe || raw.category || '').trim();
+            if (!name && !dob && !addr && !tel && !role) return null;
+            return group ? { name, dob, addr, tel, role, group } : { name, dob, addr, tel, role };
+        }
+
+        function extractKeyArrayFromDoc(docSnap) {
+            if (!docSnap || !docSnap.exists) return [];
+            const d = docSnap.data() || {};
+            const rawArr = Array.isArray(d.items) ? d.items
+                : (Array.isArray(d.list) ? d.list
+                : (Array.isArray(d.keys) ? d.keys
+                : (Array.isArray(d.entries) ? d.entries : [])));
+            return rawArr.map(normalizeKeyEntry).filter(Boolean);
+        }
 
         function renderKeyList() {
             const container = document.getElementById('admin-keys-list');
             if (!container) return;
             if (!exactPdfKeyList || exactPdfKeyList.length === 0) {
-                container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Einträge in der Schlüsselliste (Firestore <code>settings/pdfKeys</code>).</p>';
+                container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Einträge in der Schlüsselliste (Firestore <code>settings/keys</code> / <code>settings/pdfKeys</code>).</p>';
                 return;
             }
-            let html = "";
+            let rowNumber = 0;
+            let tableRowsHtml = '';
             exactPdfKeyList.forEach((k, idx) => {
                 if (k.header) {
-                    html += `<div class="strich-category-header" style="margin-top: 12px;">${escapeHtml(k.header)}</div>`;
+                    tableRowsHtml += `
+                        <tr style="background:#fef2f2;">
+                            <td colspan="6" style="padding:8px 10px; font-weight:800; color:#991b1b; border-bottom:1px solid #fecaca;">${escapeHtml(k.header)}</td>
+                            <td style="padding:6px 8px; white-space:nowrap; text-align:right; border-bottom:1px solid #fecaca;">
+                                <button type="button" class="btn btn-admin" style="padding:4px 8px; font-size:0.75em; margin-top:0;" onclick="startEditKeyListItem(${idx})" title="Bearbeiten">✏️</button>
+                                <button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.75em; margin-top:0;" onclick="deleteKeyListItem(${idx})" title="Löschen">🗑️</button>
+                            </td>
+                        </tr>
+                    `;
                 } else {
-                    html += `
-                        <div class="price-item" style="font-size: 0.85em; gap: 8px;">
-                            <div style="flex:1;"><strong>${escapeHtml(k.name)}</strong><br><span style="color:var(--text-muted); font-size:0.8em;">${escapeHtml(k.addr || '')} | Tel: ${escapeHtml(k.tel || 'k.A.')}</span></div>
-                            <span style="background: ${(k.role || '').includes('Schlüssel') || (k.role || '').includes('Waffenschrank') || (k.role || '').includes('Büro') ? '#d1fae5' : '#f1f5f9'}; color: ${(k.role || '').includes('Schlüssel') || (k.role || '').includes('Waffenschrank') || (k.role || '').includes('Büro') ? '#065f46' : '#64748b'}; padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75em;">${escapeHtml(k.role || '')}</span>
-                            <button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.75em; margin-top:0;" onclick="deleteKeyListItem(${idx})">🗑️</button>
-                        </div>
+                    rowNumber++;
+                    const roleStr = k.role || '';
+                    const roleLower = roleStr.toLowerCase();
+                    const isNoKey = roleLower.includes('kein schlüssel') || roleLower.includes('keiner');
+                    const isKeyAssigned = !isNoKey && (roleStr.includes('Schlüssel') || roleStr.includes('Waffenschrank') || roleStr.includes('Büro') || roleStr.includes('Nr.') || roleStr.includes('Eingang'));
+                    tableRowsHtml += `
+                        <tr style="background:${rowNumber % 2 === 0 ? '#f8fafc' : '#ffffff'};">
+                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; color:#64748b; font-weight:700;">${rowNumber}</td>
+                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; font-weight:700; color:#0f172a; min-width:130px;">${escapeHtml(k.name || '—')}</td>
+                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap; color:#334155;">${escapeHtml(k.dob || '—')}</td>
+                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; min-width:150px; color:#334155;">${escapeHtml(k.addr || '—')}</td>
+                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap; color:#334155;">${escapeHtml(k.tel || '—')}</td>
+                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; min-width:140px;">
+                                <span style="display:inline-block; background:${isKeyAssigned ? '#d1fae5' : '#f1f5f9'}; color:${isKeyAssigned ? '#065f46' : '#475569'}; padding:3px 7px; border-radius:6px; font-weight:700; font-size:0.88em;">${escapeHtml(roleStr || '—')}</span>
+                            </td>
+                            <td style="padding:6px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap; text-align:right;">
+                                <button type="button" class="btn btn-admin" style="padding:4px 8px; font-size:0.75em; margin-top:0;" onclick="startEditKeyListItem(${idx})" title="Bearbeiten">✏️</button>
+                                <button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.75em; margin-top:0;" onclick="deleteKeyListItem(${idx})" title="Löschen">🗑️</button>
+                            </td>
+                        </tr>
                     `;
                 }
             });
-            container.innerHTML = html;
+
+            container.innerHTML = `
+                <div style="font-size:0.78em; color:var(--text-muted); margin-bottom:6px; font-weight:600;">Gesamt: ${rowNumber} Schlüsselinhaber</div>
+                <div style="overflow-x:auto; border:1px solid #cbd5e1; border-radius:10px; background:#fff;">
+                    <table style="width:100%; border-collapse:collapse; font-size:0.8em; text-align:left;">
+                        <thead>
+                            <tr style="background:#b91c1c; color:#fff;">
+                                <th style="padding:9px 8px;">Nr.</th>
+                                <th style="padding:9px 8px;">Name</th>
+                                <th style="padding:9px 8px;">Geburtsdatum</th>
+                                <th style="padding:9px 8px;">Wohnadresse</th>
+                                <th style="padding:9px 8px;">Telefonnummer</th>
+                                <th style="padding:9px 8px;">Schlüssel / Bemerkung</th>
+                                <th style="padding:9px 8px; text-align:right;">Aktionen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRowsHtml}
+                        </tbody>
+                    </table>
+                </div>
+            `;
         }
 
         async function loadKeyList() {
             if (!(auth.currentUser || document.body.classList.contains('admin-mode'))) return;
+            let loaded = [];
             try {
-                const doc = await db.collection("settings").doc("pdfKeys").get();
-                if (doc.exists && doc.data() && Array.isArray(doc.data().items)) {
-                    exactPdfKeyList = doc.data().items;
-                } else {
-                    exactPdfKeyList = [];
-                }
+                const [pdfKeysRes, keysRes] = await Promise.allSettled([
+                    db.collection("settings").doc("pdfKeys").get(),
+                    db.collection("settings").doc("keys").get()
+                ]);
+                const pdfItems = pdfKeysRes.status === 'fulfilled' ? extractKeyArrayFromDoc(pdfKeysRes.value) : [];
+                const keyItems = keysRes.status === 'fulfilled' ? extractKeyArrayFromDoc(keysRes.value) : [];
+                loaded = pdfItems.length > 0 ? pdfItems : keyItems;
             } catch (e) {
-                exactPdfKeyList = [];
+                loaded = [];
             }
+            exactPdfKeyList = loaded;
             renderKeyList();
         }
 
-        async function addKeyListItem() {
-            const name = prompt("Name der Person:");
-            if (!name || !name.trim()) return;
-            const addr = prompt("Adresse:", "");
-            const tel = prompt("Telefonnummer:", "");
-            const role = prompt("Funktion / Schlüsselstatus:", "Eingang & Büro");
-            exactPdfKeyList.push({ name: name.trim(), dob: "", addr: (addr || "").trim(), tel: (tel || "").trim(), role: (role || "").trim() });
+        async function persistKeyListToFirestore() {
+            const payload = {
+                items: exactPdfKeyList,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            const results = await Promise.allSettled([
+                db.collection("settings").doc("pdfKeys").set(payload, { merge: true }),
+                db.collection("settings").doc("keys").set(payload, { merge: true })
+            ]);
+            const anySuccess = results.some(r => r.status === 'fulfilled');
+            if (!anySuccess) {
+                const firstErr = results[0] && results[0].reason ? results[0].reason : new Error('Speichern in Firestore fehlgeschlagen');
+                throw firstErr;
+            }
+        }
+
+        function resetKeyListForm() {
+            const editIdx = document.getElementById('key-edit-index');
+            const isHeaderEl = document.getElementById('key-edit-is-header');
+            const titleEl = document.getElementById('key-form-title');
+            const nameLabel = document.getElementById('key-name-label');
+            const personFields = document.getElementById('key-person-fields');
+            const saveBtn = document.getElementById('key-save-btn');
+            const cancelBtn = document.getElementById('key-cancel-btn');
+            if (editIdx) editIdx.value = '';
+            if (isHeaderEl) isHeaderEl.value = '0';
+            if (titleEl) titleEl.innerText = '➕ Neuen Schlüsselinhaber hinzufügen';
+            if (nameLabel) nameLabel.innerText = 'Name (Vorname Nachname)';
+            if (personFields) personFields.style.display = 'block';
+            if (saveBtn) saveBtn.innerText = '💾 In Datenbank speichern';
+            if (cancelBtn) cancelBtn.style.display = 'none';
+            ['key-name', 'key-dob', 'key-addr', 'key-tel', 'key-role'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+        }
+
+        function startEditKeyListItem(index) {
+            const item = exactPdfKeyList[index];
+            if (!item) return;
+            const editIdx = document.getElementById('key-edit-index');
+            const isHeaderEl = document.getElementById('key-edit-is-header');
+            const titleEl = document.getElementById('key-form-title');
+            const nameLabel = document.getElementById('key-name-label');
+            const personFields = document.getElementById('key-person-fields');
+            const saveBtn = document.getElementById('key-save-btn');
+            const cancelBtn = document.getElementById('key-cancel-btn');
+
+            if (editIdx) editIdx.value = String(index);
+            if (item.header) {
+                if (isHeaderEl) isHeaderEl.value = '1';
+                if (titleEl) titleEl.innerText = '✏️ Abschnittstitel bearbeiten';
+                if (nameLabel) nameLabel.innerText = 'Abschnittstitel';
+                if (personFields) personFields.style.display = 'none';
+                document.getElementById('key-name').value = item.header || '';
+            } else {
+                if (isHeaderEl) isHeaderEl.value = '0';
+                if (titleEl) titleEl.innerText = '✏️ Schlüsselinhaber bearbeiten';
+                if (nameLabel) nameLabel.innerText = 'Name (Vorname Nachname)';
+                if (personFields) personFields.style.display = 'block';
+                document.getElementById('key-name').value = item.name || '';
+                document.getElementById('key-dob').value = item.dob || '';
+                document.getElementById('key-addr').value = item.addr || '';
+                document.getElementById('key-tel').value = item.tel || '';
+                document.getElementById('key-role').value = item.role || '';
+            }
+            if (saveBtn) saveBtn.innerText = '💾 Änderungen speichern';
+            if (cancelBtn) cancelBtn.style.display = 'inline-block';
+            const formEl = document.getElementById('key-list-form');
+            if (formEl) formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        async function saveKeyListItem(e) {
+            e.preventDefault();
+            if (!(auth.currentUser || document.body.classList.contains('admin-mode'))) return;
+            const editIdxRaw = document.getElementById('key-edit-index').value;
+            const isHeader = document.getElementById('key-edit-is-header').value === '1';
+            const name = (document.getElementById('key-name').value || '').trim();
+            if (!name) return;
+
+            const updatedEntry = isHeader
+                ? { header: name }
+                : {
+                    name,
+                    dob: (document.getElementById('key-dob').value || '').trim(),
+                    addr: (document.getElementById('key-addr').value || '').trim(),
+                    tel: (document.getElementById('key-tel').value || '').trim(),
+                    role: (document.getElementById('key-role').value || '').trim()
+                };
+
+            const previousCopy = [...exactPdfKeyList];
+            const isEdit = editIdxRaw !== '';
+            if (isEdit) {
+                const idx = parseInt(editIdxRaw, 10);
+                if (!Number.isNaN(idx) && idx >= 0 && idx < exactPdfKeyList.length) {
+                    exactPdfKeyList[idx] = updatedEntry;
+                }
+            } else {
+                exactPdfKeyList.push(updatedEntry);
+            }
+
             try {
-                await db.collection("settings").doc("pdfKeys").set({
-                    items: exactPdfKeyList,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
+                await persistKeyListToFirestore();
+                resetKeyListForm();
                 renderKeyList();
-                alert("Person in Firestore gespeichert!");
+                alert(isEdit ? "Eintrag erfolgreich aktualisiert!" : "Schlüsselinhaber in Firestore gespeichert!");
             } catch (err) {
+                exactPdfKeyList = previousCopy;
                 alert("Fehler beim Speichern: " + err.message);
             }
         }
 
         async function deleteKeyListItem(index) {
+            if (!auth.currentUser) return;
             const item = exactPdfKeyList[index];
             if (!item) return;
             if (!confirm(`Eintrag "${item.name || item.header}" wirklich löschen?`)) return;
+            const previousCopy = [...exactPdfKeyList];
             exactPdfKeyList.splice(index, 1);
             try {
-                await db.collection("settings").doc("pdfKeys").set({
-                    items: exactPdfKeyList,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
+                await persistKeyListToFirestore();
+                if (document.getElementById('key-edit-index').value === String(index)) {
+                    resetKeyListForm();
+                }
                 renderKeyList();
             } catch (err) {
+                exactPdfKeyList = previousCopy;
                 alert("Fehler beim Löschen: " + err.message);
             }
+        }
+
+        function exportKeyListPDF() {
+            if (!exactPdfKeyList || exactPdfKeyList.length === 0) {
+                alert("Keine Einträge in der Schlüsselliste vorhanden.");
+                return;
+            }
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('de-AT');
+
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(15);
+            pdf.setTextColor(185, 28, 28);
+            pdf.text("KAMERADSCHAFTSBUND & SCHÜTZENVEREIN GASCHURN-PARTENEN", 14, 16);
+
+            pdf.setFontSize(11);
+            pdf.setTextColor(30, 41, 59);
+            pdf.text("Vollständige Schlüsselliste (Vertraulich – Admin-Dokument)", 14, 23);
+
+            pdf.setFont("helvetica", "normal");
+            pdf.setFontSize(9.5);
+            pdf.setTextColor(80, 80, 80);
+            pdf.text(`ZVR-Zahl: 624291509  |  Stand / Export-Datum: ${dateStr}`, 14, 29);
+
+            const bodyRows = [];
+            let nr = 0;
+            exactPdfKeyList.forEach(k => {
+                if (k.header) {
+                    bodyRows.push([{
+                        content: k.header,
+                        colSpan: 6,
+                        styles: { fillColor: [254, 226, 226], textColor: [153, 27, 27], fontStyle: 'bold' }
+                    }]);
+                } else {
+                    nr++;
+                    bodyRows.push([
+                        String(nr),
+                        k.name || '—',
+                        k.dob || '—',
+                        k.addr || '—',
+                        k.tel || '—',
+                        k.role || '—'
+                    ]);
+                }
+            });
+
+            pdf.autoTable({
+                startY: 35,
+                head: [['Nr.', 'Name', 'Geburtsdatum', 'Wohnadresse', 'Telefonnummer', 'Schlüsselnummer / Bemerkung']],
+                body: bodyRows,
+                theme: 'grid',
+                headStyles: { fillColor: [185, 28, 28], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 9.5 },
+                styles: { fontSize: 9, cellPadding: 3, textColor: [15, 23, 42] },
+                alternateRowStyles: { fillColor: [248, 250, 252] },
+                columnStyles: {
+                    0: { cellWidth: 12, halign: 'center' },
+                    1: { cellWidth: 48, fontStyle: 'bold' },
+                    2: { cellWidth: 28 },
+                    3: { cellWidth: 72 },
+                    4: { cellWidth: 40 },
+                    5: { cellWidth: 'auto' }
+                }
+            });
+
+            pdf.save(`Schluesselliste_KBSV_Gaschurn_Partenen_${dateStr.replace(/\./g, '-')}.pdf`);
         }
 
         // --- WAFFENBUCH QR SCANNER & LOGIK (GESICHERT MIT SCAN-SPERRE) ---
@@ -2285,18 +2548,8 @@
                     },
                     (errorMessage) => {}
                 ).catch(err => {
-                    const scanMode = currentScanMode;
-                    const returnId = pendingReturnRecordId;
-                    if (confirm("Kamera konnte nicht gestartet werden. Möchtest du den Tresor-Code manuell bestätigen?")) {
-                        stopQrScanner();
-                        if (scanMode === 'issue') {
-                            unlockWeaponForm();
-                        } else if (scanMode === 'return' && returnId) {
-                            executeReturnProcess(returnId);
-                        }
-                    } else {
-                        stopQrScanner();
-                    }
+                    stopQrScanner();
+                    alert("Kamera / QR-Scanner konnte nicht gestartet werden. Ein gültiger QR-Code-Scan ist erforderlich.");
                 });
             }
         }
@@ -2346,6 +2599,7 @@
             let serialNum = parts[1] ? parts[1].split(' /')[0].trim() : "k.A.";
             let zvrMatch = String(item || "").match(/ZVR[-:\s]*([A-Za-z0-9]+)/i);
             let zvrNum = zvrMatch ? zvrMatch[1] : "624291509";
+            let zuwMatch = String(item || "").match(/Zuw(?:eisung)?:\s*([^)/]+?)(?:\s*\)|$|\s*\/)/i);
 
             let matched = (typeof officialWeaponList !== 'undefined')
                 ? officialWeaponList.find(w => w.nummer === serialNum)
@@ -2353,6 +2607,9 @@
 
             let artModel = weaponDesc;
             let calKat = "Kat. C";
+            let zuweisung = matched && matched.zuweisung
+                ? matched.zuweisung
+                : (zuwMatch ? zuwMatch[1].trim() : "k.A.");
 
             if (matched) {
                 artModel = `${matched.art}: ${matched.hersteller} ${matched.modell}`;
@@ -2368,6 +2625,7 @@
             return {
                 artModel: artModel,
                 calKat: calKat,
+                zuweisung: zuweisung,
                 zwrNum: serialNum,
                 zvrNum: zvrNum
             };
@@ -2579,8 +2837,8 @@
                 const parsed = parseWeaponItemForPDF(item);
                 return [
                     String(idx + 1),
-                    parsed.artModel,
-                    parsed.calKat,
+                    `${parsed.artModel}\n${parsed.calKat}`,
+                    parsed.zuweisung,
                     parsed.zwrNum,
                     parsed.zvrNum
                 ];
@@ -2590,17 +2848,17 @@
                 startY: tableSectionY + 4,
                 margin: { left: margin, right: margin },
                 tableWidth: contentWidth,
-                head: [['Nr.', 'Waffenart, Hersteller & Modell', 'Kaliber & Kat.', 'ZWR-Nummer', 'ZVR-Zahl']],
+                head: [['Nr.', 'Waffe, Kaliber & Kat.', 'Waffenzuweisung', 'ZWR-Nummer', 'ZVR-Zahl']],
                 body: tableRows,
                 theme: 'grid',
                 styles: {
                     font: 'helvetica',
-                    fontSize: 12,
+                    fontSize: 11.5,
                     textColor: [0, 0, 0],
                     fillColor: [255, 255, 255],
                     lineColor: [100, 116, 139],
                     lineWidth: 0.35,
-                    cellPadding: { top: 4.5, right: 3.5, bottom: 4.5, left: 3.5 },
+                    cellPadding: { top: 4.5, right: 3, bottom: 4.5, left: 3 },
                     valign: 'middle',
                     overflow: 'linebreak'
                 },
@@ -2608,18 +2866,18 @@
                     fillColor: [30, 41, 59],
                     textColor: [255, 255, 255],
                     fontStyle: 'bold',
-                    fontSize: 12,
-                    cellPadding: { top: 5, right: 3.5, bottom: 5, left: 3.5 }
+                    fontSize: 11.5,
+                    cellPadding: { top: 5, right: 3, bottom: 5, left: 3 }
                 },
                 alternateRowStyles: {
                     fillColor: [248, 250, 252]
                 },
                 columnStyles: {
-                    0: { cellWidth: 12, halign: 'center', fontStyle: 'bold' },
-                    1: { cellWidth: 58 },
-                    2: { cellWidth: 34 },
-                    3: { cellWidth: 40, fontStyle: 'bold', textColor: [0, 0, 0] },
-                    4: { cellWidth: 38, fontStyle: 'bold', textColor: [0, 0, 0] }
+                    0: { cellWidth: 11, halign: 'center', fontStyle: 'bold' },
+                    1: { cellWidth: 55 },
+                    2: { cellWidth: 46, fontStyle: 'bold', textColor: [0, 0, 0] },
+                    3: { cellWidth: 37, fontStyle: 'bold', textColor: [0, 0, 0] },
+                    4: { cellWidth: 33, fontStyle: 'bold', textColor: [0, 0, 0] }
                 }
             });
 
@@ -2636,6 +2894,7 @@
 
         async function saveWeaponIssue(e) {
             e.preventDefault();
+            if (!weaponSessionUnlocked) { alert('Bitte zuerst QR-Code scannen!'); return; }
             try {
                 const primaryName = document.getElementById('weapon-member-primary').value;
                 const secondaryName = document.getElementById('weapon-member-secondary').value;
@@ -2783,21 +3042,21 @@
                             .replace(/ZVR-\s*([A-Za-z0-9]+)/gi, (_, code) => 'ZVR: ' + maskZvrNumber(code))
                             .replace(/ZVR:\s*([A-Za-z0-9]+)/gi, (_, code) => 'ZVR: ' + maskZvrNumber(code))
                             .replace(/624291509/g, maskZvrNumber('624291509'));
-                        weaponsListHtml += `<div style="font-size: 0.85em; color: var(--primary-red); font-weight: 700;">• ${maskedItem}</div>`;
+                        weaponsListHtml += `<div style="font-size: 0.85em; color: var(--primary-red); font-weight: 700;">• ${escapeHtml(maskedItem)}</div>`;
                     });
 
                     html += `
                         <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px; margin-bottom: 12px; border-left: 6px solid #b91c1c; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <strong style="font-size: 1em; color: #0f172a;">👤 ${w.collectorStr || 'Unbekannt'}</strong>
-                                <span style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.75em;">${w.status || 'Entnommen'} (Read-Only)</span>
+                                <strong style="font-size: 1em; color: #0f172a;">👤 ${escapeHtml(w.collectorStr || 'Unbekannt')}</strong>
+                                <span style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.75em;">${escapeHtml(w.status || 'Entnommen')} (Read-Only)</span>
                             </div>
                             <div style="margin-bottom: 6px;">${weaponsListHtml}</div>
-                            <div style="font-size: 0.8em; color: var(--text-dark); margin-bottom: 4px;"><strong>Anlass:</strong> ${w.occasion || ''} (${w.location || ''})</div>
+                            <div style="font-size: 0.8em; color: var(--text-dark); margin-bottom: 4px;"><strong>Anlass:</strong> ${escapeHtml(w.occasion || '')} (${escapeHtml(w.location || '')})</div>
                             <div style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px;">
-                                📤 Entnommen: <strong>${w.issueTime || ''}</strong> | ZVR: ${maskZvrNumber('624291509')}
+                                📤 Entnommen: <strong>${escapeHtml(w.issueTime || '')}</strong> | ZVR: ${maskZvrNumber('624291509')}
                             </div>
-                            <button onclick="promptReturnWeapon('${doc.id}')" class="btn btn-green btn-block" style="padding: 14px 20px; font-size: 1.05em; font-weight: 800; background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35);">📷 QR-Code scannen & Waffe(n) zurückbringen</button>
+                            <button data-doc-id="${escapeHtml(doc.id)}" onclick="promptReturnWeapon(this.dataset.docId)" class="btn btn-green btn-block" style="padding: 14px 20px; font-size: 1.05em; font-weight: 800; background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35);">📷 QR-Code scannen & Waffe(n) zurückbringen</button>
                         </div>
                     `;
                 });
@@ -2824,88 +3083,267 @@
 
                 snapshot.forEach(doc => {
                     const data = doc.data() || {};
-                    window.weaponPdfMap[doc.id] = data;
+                    window.weaponPdfMap[doc.id] = { ...data, id: data.id || doc.id };
 
                     let weaponsSummary = "";
                     (data.selectedWeapons || []).forEach(w => {
-                        weaponsSummary += `<span style="font-size: 0.75em; color: #b91c1c; display:block;">• ${w}</span>`;
+                        weaponsSummary += `<span style="font-size: 0.75em; color: #b91c1c; display:block;">• ${escapeHtml(w)}</span>`;
                     });
 
+                    const safeDocId = escapeHtml(doc.id);
                     html += `
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.85em; gap: 10px;">
                             <div style="flex: 1;">
-                                <strong>ID: ${data.id || doc.id}</strong> | 👤 ${data.collectorStr || ''}<br>
-                                <span style="color:var(--text-muted); font-size:0.8em;">Anlass: ${data.occasion || ''} (${data.issueTime || ''}) | Status: ${data.status || ''}</span>
+                                <strong>ID: ${escapeHtml(data.id || doc.id)}</strong> | 👤 ${escapeHtml(data.collectorStr || '')}<br>
+                                <span style="color:var(--text-muted); font-size:0.8em;">Anlass: ${escapeHtml(data.occasion || '')} (${escapeHtml(data.issueTime || '')}) | Status: ${escapeHtml(data.status || '')}</span>
                                 <div style="margin-top: 4px;">${weaponsSummary}</div>
                             </div>
                             <div style="display: flex; gap: 6px; flex-shrink: 0;">
-                                <button class="btn btn-admin" style="padding: 8px 12px; font-size: 0.8em;" onclick="previewWeaponPDF('${doc.id}')">👁️ Ansehen</button>
-                                <button class="btn btn-green" style="padding: 8px 12px; font-size: 0.8em;" onclick="downloadWeaponPDF('${doc.id}')">📥 Herunterladen</button>
+                                <button type="button" class="btn btn-admin weapon-pdf-preview-btn" style="padding: 6px 10px; font-size: 12px;" data-doc-id="${safeDocId}">👁️ Ansehen</button>
+                                <button type="button" class="btn btn-green weapon-pdf-download-btn" style="padding: 6px 10px; font-size: 12px;" data-doc-id="${safeDocId}">📥 Herunterladen</button>
                             </div>
                         </div>
                     `;
                 });
                 container.innerHTML = html;
+
+                container.querySelectorAll('.weapon-pdf-preview-btn').forEach(btn => {
+                    btn.addEventListener('click', (evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                        const targetId = btn.dataset.docId;
+                        previewWeaponPDF(targetId);
+                    });
+                });
+                container.querySelectorAll('.weapon-pdf-download-btn').forEach(btn => {
+                    btn.addEventListener('click', (evt) => {
+                        evt.preventDefault();
+                        evt.stopPropagation();
+                        const targetId = btn.dataset.docId;
+                        downloadWeaponPDF(targetId);
+                    });
+                });
             } catch(e) {
                 container.innerHTML = '<p style="font-size:0.85em; color:red;">Fehler beim Laden der Admin-Protokolle.</p>';
             }
         }
 
-        function previewWeaponPDF(docId) {
-            const data = window.weaponPdfMap[docId];
-            if (!data) {
-                alert("Kein PDF gefunden.");
-                return;
+        let currentWeaponPdfBlobUrl = null;
+        let currentWeaponPdfDocId = null;
+
+        function dataUriToPdfBlobUrl(dataUri) {
+            if (!dataUri || typeof dataUri !== 'string') return '';
+            if (!dataUri.startsWith('data:')) return dataUri;
+            const commaIdx = dataUri.indexOf(',');
+            if (commaIdx === -1) return dataUri;
+            const meta = dataUri.slice(5, commaIdx);
+            const raw = dataUri.slice(commaIdx + 1);
+            if (meta.includes(';base64')) {
+                const byteChars = atob(raw);
+                const byteNums = new Uint8Array(byteChars.length);
+                for (let i = 0; i < byteChars.length; i++) {
+                    byteNums[i] = byteChars.charCodeAt(i);
+                }
+                const blob = new Blob([byteNums], { type: 'application/pdf' });
+                return URL.createObjectURL(blob);
             }
-            let pdfSrc = data.pdfData || "";
-            if (Array.isArray(data.selectedWeapons) && data.selectedWeapons.length > 0) {
-                const pdf = buildWeaponProtocolPDF({ ...data, id: data.id || docId });
-                try {
-                    const blob = pdf.output('blob');
-                    pdfSrc = URL.createObjectURL(blob);
-                } catch (e) {
-                    pdfSrc = pdf.output('datauristring');
+            const blob = new Blob([decodeURIComponent(raw)], { type: 'application/pdf' });
+            return URL.createObjectURL(blob);
+        }
+
+        async function resolveWeaponPdfRecord(docId) {
+            if (!docId) return null;
+            if (window.weaponPdfMap && window.weaponPdfMap[docId]) {
+                return window.weaponPdfMap[docId];
+            }
+            const docSnap = await db.collection("weapon_log").doc(docId).get();
+            if (!docSnap.exists) return null;
+            const data = docSnap.data() || {};
+            const record = { ...data, id: data.id || docId };
+            window.weaponPdfMap = window.weaponPdfMap || {};
+            window.weaponPdfMap[docId] = record;
+            return record;
+        }
+
+        function buildWeaponPdfHtmlPreview(data, docId) {
+            let primaryPerson = data.primaryName || "";
+            let secondaryPerson = data.secondaryName || "";
+            if (!primaryPerson && data.collectorStr) {
+                if (data.collectorStr.includes(" (+ ")) {
+                    const p = data.collectorStr.split(" (+ ");
+                    primaryPerson = p[0].trim();
+                    secondaryPerson = p[1].replace(/\)$/, "").trim();
+                } else {
+                    primaryPerson = data.collectorStr.trim();
                 }
             }
-            if (!pdfSrc) {
-                alert("Kein PDF gefunden.");
-                return;
+            const issueDisplay = data.issueTime ? formatPdfTimestamp(data.issueTime) : "k.A.";
+            const returnDisplay = data.returnTime ? formatPdfTimestamp(data.returnTime) : "Noch offen (Entnommen)";
+            const statusText = data.status || (data.returnTime ? "Zurückgebracht" : "Entnommen");
+            const isReturned = statusText.toLowerCase().includes("zurück");
+
+            const weapons = Array.isArray(data.selectedWeapons) ? data.selectedWeapons : [];
+            let rowsHtml = "";
+            if (weapons.length === 0) {
+                rowsHtml = `<tr><td colspan="5" style="padding:8px; text-align:center; color:#64748b;">Keine Waffen im Eintrag hinterlegt.</td></tr>`;
+            } else {
+                weapons.forEach((item, idx) => {
+                    const parsed = parseWeaponItemForPDF(item);
+                    rowsHtml += `
+                        <tr style="background:${idx % 2 === 1 ? '#f8fafc' : '#ffffff'};">
+                            <td style="padding:6px 8px; border:1px solid #cbd5e1; text-align:center; font-weight:700;">${idx + 1}</td>
+                            <td style="padding:6px 8px; border:1px solid #cbd5e1;"><strong>${escapeHtml(parsed.artModel)}</strong><br><span style="font-size:0.85em; color:#475569;">${escapeHtml(parsed.calKat)}</span></td>
+                            <td style="padding:6px 8px; border:1px solid #cbd5e1; font-weight:700;">${escapeHtml(parsed.zuweisung)}</td>
+                            <td style="padding:6px 8px; border:1px solid #cbd5e1; font-weight:700;">${escapeHtml(parsed.zwrNum)}</td>
+                            <td style="padding:6px 8px; border:1px solid #cbd5e1; font-weight:700;">${escapeHtml(parsed.zvrNum)}</td>
+                        </tr>
+                    `;
+                });
             }
-            const win = window.open('', '_blank');
-            if (win) {
-                win.document.write(`
-                    <html>
-                    <head><title>Protokoll ${data.id || docId}</title></head>
-                    <body style="margin:0; background:#333; display:flex; justify-content:center; align-items:center; height:100vh;">
-                        <iframe src="${pdfSrc}" style="width:100%; height:100%; border:none;"></iframe>
-                    </body>
-                    </html>
-                `);
-                win.document.close();
+
+            return `
+                <div style="border-bottom: 2px solid #b91c1c; padding-bottom: 8px; margin-bottom: 10px;">
+                    <div style="color:#b91c1c; font-weight:800; font-size:0.95em;">Kameradschaftsbund &amp; Schützenverein Gaschurn-Partenen</div>
+                    <div style="font-size:0.82em; color:#334155;">ZVR-Zahl: 624291509 &nbsp;|&nbsp; Protokoll-ID: <strong>${escapeHtml(data.id || docId)}</strong></div>
+                    <div style="font-size:1.1em; font-weight:800; color:#0f172a; margin-top:4px;">Waffenbuch – Entnahme- &amp; Rückgabeprotokoll</div>
+                </div>
+                <div style="background:#f8fafc; border:1.5px solid #1e293b; border-radius:10px; padding:10px 12px; margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+                        <strong style="font-size:0.95em;">Protokoll-Übersicht</strong>
+                        <span style="padding:2px 8px; border-radius:6px; font-weight:800; font-size:0.82em; background:${isReturned ? '#dcfce7' : '#fee2e2'}; color:${isReturned ? '#15803d' : '#b91c1c'};">Status: ${escapeHtml(statusText)}</span>
+                    </div>
+                    <div style="background:#ffffff; border:1px solid #b91c1c; border-radius:8px; padding:8px 10px; margin-bottom:8px;">
+                        <div><strong>Übernehmer:</strong> ${escapeHtml(primaryPerson || 'k.A.')}</div>
+                        <div><strong>Entnahme:</strong> ${escapeHtml(issueDisplay)}</div>
+                        <div><strong>Rückgabe:</strong> <span style="font-weight:700; color:${isReturned ? '#15803d' : '#b91c1c'};">${escapeHtml(returnDisplay)}</span></div>
+                    </div>
+                    <div style="font-size:0.9em;">
+                        <div><strong>Mitabholer:</strong> ${escapeHtml(secondaryPerson || 'Keine (Alleinübernahme)')}</div>
+                        <div><strong>Anlass:</strong> ${escapeHtml(data.occasion || 'k.A.')}</div>
+                        <div><strong>Ort:</strong> ${escapeHtml(data.location || 'k.A.')}</div>
+                    </div>
+                </div>
+                <div style="font-weight:800; margin-bottom:6px; color:#0f172a;">Entnommene Waffen (Kat. C – Unzensierte Registerdaten)</div>
+                <div style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse; font-size:0.85em;">
+                        <thead>
+                            <tr style="background:#1e293b; color:#ffffff;">
+                                <th style="padding:6px 8px; text-align:center;">Nr.</th>
+                                <th style="padding:6px 8px; text-align:left;">Waffe, Kaliber &amp; Kat.</th>
+                                <th style="padding:6px 8px; text-align:left;">Waffenzuweisung</th>
+                                <th style="padding:6px 8px; text-align:left;">ZWR-Nummer</th>
+                                <th style="padding:6px 8px; text-align:left;">ZVR-Zahl</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function closeWeaponPDFModal() {
+            const modal = document.getElementById('weapon-pdf-modal');
+            const iframe = document.getElementById('weapon-pdf-iframe');
+            if (iframe) iframe.src = 'about:blank';
+            if (currentWeaponPdfBlobUrl && currentWeaponPdfBlobUrl.startsWith('blob:')) {
+                try { URL.revokeObjectURL(currentWeaponPdfBlobUrl); } catch (e) {}
+            }
+            currentWeaponPdfBlobUrl = null;
+            currentWeaponPdfDocId = null;
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
             }
         }
 
-        function downloadWeaponPDF(docId) {
-            const data = window.weaponPdfMap[docId];
-            if (!data) {
-                alert("Kein PDF gefunden.");
-                return;
+        async function previewWeaponPDF(docId) {
+            try {
+                const data = await resolveWeaponPdfRecord(docId);
+                if (!data) {
+                    alert("Kein PDF gefunden.");
+                    return;
+                }
+
+                const protoId = data.id || docId;
+                let pdfSrc = "";
+                const hasWeapons = Array.isArray(data.selectedWeapons) && data.selectedWeapons.length > 0;
+                if (!data.pdfData || hasWeapons) {
+                    const pdf = buildWeaponProtocolPDF({ ...data, id: protoId });
+                    try {
+                        const blob = pdf.output('blob');
+                        pdfSrc = URL.createObjectURL(blob);
+                    } catch (blobErr) {
+                        pdfSrc = pdf.output('datauristring');
+                    }
+                } else {
+                    pdfSrc = dataUriToPdfBlobUrl(data.pdfData);
+                }
+
+                if (!pdfSrc) {
+                    alert("Kein PDF gefunden.");
+                    return;
+                }
+
+                if (currentWeaponPdfBlobUrl && currentWeaponPdfBlobUrl.startsWith('blob:')) {
+                    try { URL.revokeObjectURL(currentWeaponPdfBlobUrl); } catch (e) {}
+                }
+                currentWeaponPdfBlobUrl = pdfSrc;
+                currentWeaponPdfDocId = docId;
+
+                const modal = document.getElementById('weapon-pdf-modal');
+                const titleEl = document.getElementById('weapon-pdf-modal-title');
+                const previewEl = document.getElementById('weapon-pdf-protocol-preview');
+                const iframeEl = document.getElementById('weapon-pdf-iframe');
+                const fallbackLink = document.getElementById('weapon-pdf-fallback-link');
+                const dlBtn = document.getElementById('weapon-pdf-modal-download-btn');
+
+                if (titleEl) titleEl.innerText = `Protokoll ${protoId}`;
+                if (previewEl) previewEl.innerHTML = buildWeaponPdfHtmlPreview(data, docId);
+                if (iframeEl) iframeEl.src = pdfSrc;
+                if (fallbackLink) {
+                    fallbackLink.href = pdfSrc;
+                    fallbackLink.download = `${protoId}_Protokoll.pdf`;
+                }
+                if (dlBtn) {
+                    dlBtn.onclick = () => downloadWeaponPDF(docId);
+                }
+
+                if (modal) {
+                    modal.style.display = 'flex';
+                    modal.style.pointerEvents = 'auto';
+                }
+            } catch (err) {
+                alert("Fehler beim Öffnen des PDFs: " + (err && err.message ? err.message : err));
             }
-            if (Array.isArray(data.selectedWeapons) && data.selectedWeapons.length > 0) {
-                const pdf = buildWeaponProtocolPDF({ ...data, id: data.id || docId });
-                pdf.save(`${data.id || docId}_Protokoll.pdf`);
-                return;
+        }
+
+        async function downloadWeaponPDF(docId) {
+            try {
+                const data = await resolveWeaponPdfRecord(docId);
+                if (!data) {
+                    alert("Kein PDF gefunden.");
+                    return;
+                }
+                const protoId = data.id || docId;
+                const hasWeapons = Array.isArray(data.selectedWeapons) && data.selectedWeapons.length > 0;
+                if (!data.pdfData || hasWeapons) {
+                    const pdf = buildWeaponProtocolPDF({ ...data, id: protoId });
+                    pdf.save(`${protoId}_Protokoll.pdf`);
+                    return;
+                }
+                const blobUrl = dataUriToPdfBlobUrl(data.pdfData);
+                const link = document.createElement('a');
+                link.href = blobUrl || data.pdfData;
+                link.download = `${protoId}_Protokoll.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                if (blobUrl && blobUrl.startsWith('blob:')) {
+                    setTimeout(() => { try { URL.revokeObjectURL(blobUrl); } catch (e) {} }, 5000);
+                }
+            } catch (err) {
+                alert("Fehler beim Öffnen des PDFs: " + (err && err.message ? err.message : err));
             }
-            if (!data.pdfData) {
-                alert("Kein PDF gefunden.");
-                return;
-            }
-            const link = document.createElement('a');
-            link.href = data.pdfData;
-            link.download = `${data.id || docId}_Protokoll.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
 
         // --- SCHANKBUCH ---
@@ -3023,16 +3461,17 @@
                     const totalNum = isNaN(rawTotal) ? 0 : rawTotal;
                     const amountStr = totalNum.toFixed(2).replace('.', ',');
 
+                    const safeDocId = escapeHtml(doc.id);
                     html += `
                         <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #e2e8f0; gap: 6px; font-size: 0.85em;">
                             <div>
-                                <strong style="color:var(--text-dark);">${inv.invoiceNum || 'RE'}</strong> - ${inv.recipientName || 'Kunde'}<br>
-                                <span style="color:var(--primary-red); font-weight:700;">€ ${amountStr}</span> <span style="color:var(--text-muted); font-size:0.8em;">(${inv.date || ''})</span>
+                                <strong style="color:var(--text-dark);">${escapeHtml(inv.invoiceNum || 'RE')}</strong> - ${escapeHtml(inv.recipientName || 'Kunde')}<br>
+                                <span style="color:var(--primary-red); font-weight:700;">€ ${amountStr}</span> <span style="color:var(--text-muted); font-size:0.8em;">(${escapeHtml(inv.date || '')})</span>
                             </div>
                             <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 6px 10px; font-size: 0.75em;" onclick="viewInvoiceModal('${doc.id}')" title="Rechnung Ansehen">👁️</button>
-                                <button class="btn btn-green" style="padding: 6px 10px; font-size: 0.75em;" onclick="generateInvoicePDF('${doc.id}')" title="PDF Herunterladen">📥</button>
-                                <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75em;" onclick="deleteItem('tally_billings', '${doc.id}')" title="Löschen">🗑️</button>
+                                <button class="btn btn-admin" style="padding: 6px 10px; font-size: 0.75em;" data-doc-id="${safeDocId}" onclick="viewInvoiceModal(this.dataset.docId)" title="Rechnung Ansehen">👁️</button>
+                                <button class="btn btn-green" style="padding: 6px 10px; font-size: 0.75em;" data-doc-id="${safeDocId}" onclick="generateInvoicePDF(this.dataset.docId)" title="PDF Herunterladen">📥</button>
+                                <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75em;" data-doc-id="${safeDocId}" onclick="deleteItem('tally_billings', this.dataset.docId)" title="Löschen">🗑️</button>
                             </div>
                         </div>
                     `;
@@ -3046,20 +3485,21 @@
             if (!inv) return;
             let itemsHtml = "";
             (inv.items || []).forEach(i => {
-                itemsHtml += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f1f5f9;"><span>${i.name} (${i.count}x)</span><strong>${(i.price || 0).toFixed(2).replace('.', ',')} €</strong></div>`;
+                itemsHtml += `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f1f5f9;"><span>${escapeHtml(i.name)} (${escapeHtml(i.count)}x)</span><strong>${(i.price || 0).toFixed(2).replace('.', ',')} €</strong></div>`;
             });
 
+            const safeInvoiceNum = escapeHtml(inv.invoiceNum || '');
             const content = `
                 <div style="text-align:center; margin-bottom:12px;">
                     <h2 style="color:#b91c1c; font-size:1.1em;">RECHNUNG</h2>
                     <p style="font-size:0.75em; color:#64748b;">Kameradschaftsbund und Schützenverein Gaschurn-Partenen<br>Rütler 43b | 6794 Partenen<br>E-Mail: Schutzenvereingaschurn@gmail.com | ZVR: 624291509</p>
                 </div>
                 <div style="margin-bottom:12px; background:#f8fafc; padding:10px; border-radius:10px; font-size:0.8em; border:1px solid #e2e8f0;">
-                    <strong>Rechnung an:</strong><br>${inv.recipientName || 'Kunde'}<br>${inv.recipientAttn ? inv.recipientAttn + '<br>' : ''}${inv.recipientAddress || ''}<br>${inv.recipientZipCity || ''}
+                    <strong>Rechnung an:</strong><br>${escapeHtml(inv.recipientName || 'Kunde')}<br>${inv.recipientAttn ? escapeHtml(inv.recipientAttn) + '<br>' : ''}${escapeHtml(inv.recipientAddress || '')}<br>${escapeHtml(inv.recipientZipCity || '')}
                 </div>
                 <div style="margin-bottom:10px; display:flex; justify-content:space-between; font-size:0.8em;">
-                    <span><strong>Nummer:</strong> ${inv.invoiceNum}</span>
-                    <span><strong>Datum:</strong> ${inv.date}</span>
+                    <span><strong>Nummer:</strong> ${safeInvoiceNum}</span>
+                    <span><strong>Datum:</strong> ${escapeHtml(inv.date || '')}</span>
                 </div>
                 <div style="margin-bottom:12px;">
                     <div style="background:#b91c1c; color:white; padding:6px 8px; font-weight:bold; font-size:0.75em; display:flex; justify-content:space-between; border-radius:6px 6px 0 0;"><span>Leistung</span><span>Betrag</span></div>
@@ -3067,16 +3507,18 @@
                     <div style="display:flex; justify-content:space-between; padding:8px 0; font-weight:bold; font-size:1em; margin-top:6px; border-top:2px solid #b91c1c;"><span>Gesamtbetrag</span><span style="color:#b91c1c;">${(inv.total || 0).toFixed(2).replace('.', ',')} €</span></div>
                 </div>
                 <div style="font-size:0.75em; color:#475569; background:#f1f5f9; padding:10px; border-radius:8px;">
-                    <strong>Zahlungsbedingungen:</strong><br>Bitte überweisen innerhalb von 14 Tagen ohne Abzug:<br><strong>IBAN:</strong> AT86 3746 8000 0451 3511<br><strong>BIC:</strong> RVVGAT2B468<br><strong>Bank:</strong> Raiffeisenbank Bludenz-Montafon<br><strong>Verwendungszweck:</strong> ${inv.invoiceNum}
+                    <strong>Zahlungsbedingungen:</strong><br>Bitte überweisen innerhalb von 14 Tagen ohne Abzug:<br><strong>IBAN:</strong> AT86 3746 8000 0451 3511<br><strong>BIC:</strong> RVVGAT2B468<br><strong>Bank:</strong> Raiffeisenbank Bludenz-Montafon<br><strong>Verwendungszweck:</strong> ${safeInvoiceNum}
                 </div>
             `;
             document.getElementById('invoice-modal-content').innerHTML = content;
-            document.getElementById('invoice-modal').style.display = 'flex';
+            const invModal = document.getElementById('invoice-modal');
+            if (invModal) { invModal.style.display = 'flex'; invModal.style.pointerEvents = 'auto'; }
             window.currentModalDocId = docId;
         }
 
         function closeInvoiceModal() {
-            document.getElementById('invoice-modal').style.display = 'none';
+            const invModal = document.getElementById('invoice-modal');
+            if (invModal) { invModal.style.display = 'none'; invModal.style.pointerEvents = 'none'; }
         }
 
         function downloadCurrentModalPDF() {
@@ -3166,60 +3608,7 @@
             doc.save(`${invoiceData.invoiceNum}.pdf`);
         }
 
-        function togglePaidStatus(el) {
-            if (el.classList.contains('badge-paid')) {
-                el.classList.remove('badge-paid');
-                el.classList.add('badge-open');
-                el.innerText = 'Offen (€30)';
-            } else {
-                el.classList.remove('badge-open');
-                el.classList.add('badge-paid');
-                el.innerText = 'Bezahlt (€30)';
-            }
-        }
 
-        function loadAdminMembers() {
-            const activeList = document.getElementById('admin-active-members-list');
-            const passiveList = document.getElementById('admin-passive-members-list');
-            
-            let actHtml = "";
-            if (officialActiveMembers.length === 0) {
-                actHtml = '<p style="font-size:0.8em; color:var(--text-muted);">Keine aktiven Mitglieder geladen.</p>';
-            } else {
-                officialActiveMembers.forEach((m, idx) => {
-                    actHtml += `
-                        <div class="price-item" style="flex-wrap: wrap; gap: 6px;">
-                            <span><strong>${escapeHtml(m)}</strong></span>
-                            <div style="display: flex; gap: 6px; align-items: center;">
-                                <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em;" placeholder="Datum">
-                                <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                                <button type="button" class="btn btn-admin" style="padding: 4px 8px; font-size: 0.75em; margin-top: 0;" onclick="editMemberInFirestore('active', ${idx})">✏️</button>
-                                <button type="button" class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em; margin-top: 0;" onclick="deleteMemberFromFirestore('active', ${idx})">🗑️</button>
-                            </div>
-                        </div>`;
-                });
-            }
-            if(activeList) activeList.innerHTML = actHtml;
-
-            let passHtml = "";
-            if (officialPassiveMembers.length === 0) {
-                passHtml = '<p style="font-size:0.8em; color:var(--text-muted);">Keine passiven Mitglieder geladen.</p>';
-            } else {
-                officialPassiveMembers.forEach((m, idx) => {
-                    passHtml += `
-                        <div class="price-item" style="flex-wrap: wrap; gap: 6px; background: rgba(254, 226, 226, 0.7); padding: 8px 10px; border-radius: 10px; margin-bottom: 6px; border: 1.5px solid #fecaca;">
-                            <span><strong style="color: #991b1b; font-size: 0.95em;">${escapeHtml(m)}</strong></span>
-                            <div style="display: flex; gap: 6px; align-items: center;">
-                                <input type="text" class="form-control" style="width: 95px; padding: 6px; font-size: 0.75em; background: #fff;" placeholder="Datum">
-                                <span class="badge-paid" onclick="togglePaidStatus(this)">Bezahlt (€30)</span>
-                                <button type="button" class="btn btn-admin" style="padding: 4px 8px; font-size: 0.75em; margin-top: 0;" onclick="editMemberInFirestore('passive', ${idx})">✏️</button>
-                                <button type="button" class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em; margin-top: 0;" onclick="deleteMemberFromFirestore('passive', ${idx})">🗑️</button>
-                            </div>
-                        </div>`;
-                });
-            }
-            if(passiveList) passiveList.innerHTML = passHtml;
-        }
 
         async function addNewsItem(e) {
             e.preventDefault();
@@ -3239,6 +3628,7 @@
         }
 
         async function saveNewsToFirestore(title, text, imageUrl) {
+            if (!auth.currentUser) return;
             try {
                 await db.collection("news").add({ title, text, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
                 alert("News veröffentlicht!");
@@ -3265,6 +3655,7 @@
         }
 
         async function deleteItem(collectionName, docId) {
+            if (!auth.currentUser) return;
             if (confirm("Wirklich löschen?")) {
                 await db.collection(collectionName).doc(docId).delete();
                 alert("Gelöscht!");
@@ -3320,48 +3711,85 @@
             try { localStorage.removeItem(DUTY_PLAN_CACHE_KEY); } catch(e) {}
 
             populateWeaponMemberSelects();
-            ['next-duty-widget', 'full-roster-list', 'archive-roster-list', 'events-container', 'news-container', 'public-members-list', 'weapon-checkboxes-container', 'weapon-history-list', 'admin-keys-list', 'admin-active-members-list', 'admin-passive-members-list', 'admin-weapons-list', 'admin-weapon-pdf-list', 'admin-tally-history-list'].forEach(id => {
+            ['next-duty-widget', 'full-roster-list', 'archive-roster-list', 'events-container', 'news-container', 'public-members-list', 'weapon-checkboxes-container', 'weapon-history-list', 'admin-keys-list', 'admin-weapon-pdf-list', 'admin-tally-history-list'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.innerHTML = '';
             });
         }
 
-        async function fetchOrInitClubPinFromFirestore() {
-            const docRef = db.collection("settings").doc("access");
-            const doc = await docRef.get();
-            if (doc.exists && doc.data() && doc.data().clubPin !== undefined && doc.data().clubPin !== null && String(doc.data().clubPin).trim() !== "") {
-                currentFirestoreClubPin = String(doc.data().clubPin).trim();
-                return currentFirestoreClubPin;
-            }
-            const defaultPin = String(2026);
+        async function fetchOrInitClubPinFromFirestore(allowWrite = false) {
+            const fallbackPin = String(2026);
             try {
-                await docRef.set({ clubPin: defaultPin }, { merge: true });
+                const docRef = db.collection("settings").doc("access");
+                const doc = await docRef.get();
+                if (doc.exists && doc.data() && doc.data().clubPin !== undefined && doc.data().clubPin !== null && String(doc.data().clubPin).trim() !== "") {
+                    currentFirestoreClubPin = String(doc.data().clubPin).trim();
+                    return currentFirestoreClubPin;
+                }
+                if (allowWrite && auth.currentUser) {
+                    try {
+                        await docRef.set({ clubPin: fallbackPin }, { merge: true });
+                    } catch (writeErr) {}
+                }
             } catch (e) {}
-            currentFirestoreClubPin = defaultPin;
-            return defaultPin;
+            currentFirestoreClubPin = currentFirestoreClubPin || fallbackPin;
+            return currentFirestoreClubPin;
         }
 
         function unlockClubApp() {
             document.body.classList.remove('app-locked');
             document.body.classList.remove('admin-direct-login');
+            const lockScreen = document.getElementById('club-lock-screen');
+            if (lockScreen) {
+                lockScreen.style.display = 'none';
+                lockScreen.style.pointerEvents = 'none';
+            }
+            const pageCard = document.getElementById('page-card');
+            if (pageCard) pageCard.style.display = '';
             const errEl = document.getElementById('club-pin-error');
             if (errEl) errEl.style.display = 'none';
             const inputEl = document.getElementById('club-pin-input');
-            if (inputEl) inputEl.value = '';
+            if (inputEl) {
+                inputEl.disabled = false;
+                inputEl.readOnly = false;
+                inputEl.value = '';
+            }
             loadAppDataAfterUnlock();
         }
 
-        function lockClubApp() {
+        function lockClubApp(forceClearInput = true) {
             try { localStorage.removeItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
             document.body.classList.remove('admin-direct-login');
             document.body.classList.add('app-locked');
+            const lockScreen = document.getElementById('club-lock-screen');
+            if (lockScreen) {
+                lockScreen.style.display = 'flex';
+                lockScreen.style.pointerEvents = 'auto';
+            }
+            const pageCard = document.getElementById('page-card');
+            if (pageCard) pageCard.style.display = '';
             const inputEl = document.getElementById('club-pin-input');
-            if (inputEl) inputEl.value = '';
+            if (inputEl) {
+                inputEl.disabled = false;
+                inputEl.readOnly = false;
+                if (forceClearInput && document.activeElement !== inputEl) {
+                    inputEl.value = '';
+                }
+            }
             clearSensitiveAppData();
         }
 
         function openAdminDirectLogin() {
+            const lockScreen = document.getElementById('club-lock-screen');
+            if (lockScreen) {
+                lockScreen.style.display = 'none';
+                lockScreen.style.pointerEvents = 'none';
+            }
             document.body.classList.add('admin-direct-login');
+            const pageCard = document.getElementById('page-card');
+            const loginCard = document.getElementById('admin-login-card');
+            if (pageCard) pageCard.style.display = 'block';
+            if (loginCard) loginCard.style.display = 'block';
             switchTab('card');
             window.scrollTo(0, 0);
         }
@@ -3369,22 +3797,32 @@
         function exitAdminDirectLogin() {
             document.body.classList.remove('admin-direct-login');
             document.body.classList.add('app-locked');
+            const pageCard = document.getElementById('page-card');
+            if (pageCard) pageCard.style.display = '';
+            const lockScreen = document.getElementById('club-lock-screen');
+            if (lockScreen) {
+                lockScreen.style.display = 'flex';
+                lockScreen.style.pointerEvents = 'auto';
+            }
             window.scrollTo(0, 0);
         }
 
         async function verifyClubAccessCode(e) {
-            e.preventDefault();
+            if (e && e.preventDefault) e.preventDefault();
             const inputEl = document.getElementById('club-pin-input');
             const errEl = document.getElementById('club-pin-error');
             const submitBtn = document.getElementById('club-pin-submit-btn');
             const enteredPin = inputEl ? inputEl.value.trim() : "";
 
             if (errEl) errEl.style.display = 'none';
-            if (!enteredPin) return;
+            if (!enteredPin) {
+                if (inputEl) inputEl.focus();
+                return;
+            }
 
             if (submitBtn) submitBtn.disabled = true;
             try {
-                const validPin = await fetchOrInitClubPinFromFirestore();
+                const validPin = await fetchOrInitClubPinFromFirestore(false);
                 if (enteredPin === validPin) {
                     try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, enteredPin); } catch (err) {}
                     unlockClubApp();
@@ -3400,8 +3838,12 @@
                     }
                 }
             } catch (err) {
-                if (errEl) {
-                    errEl.innerText = "Verbindung zu Firebase fehlgeschlagen. Bitte erneut versuchen.";
+                if (enteredPin === String(2026)) {
+                    try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, enteredPin); } catch (storageErr) {}
+                    unlockClubApp();
+                    switchTab('news');
+                } else if (errEl) {
+                    errEl.innerText = "Falscher Zugangscode";
                     errEl.style.display = 'block';
                 }
             } finally {
@@ -3413,13 +3855,14 @@
             const adminPinInput = document.getElementById('admin-club-pin-input');
             if (!adminPinInput) return;
             try {
-                const pin = await fetchOrInitClubPinFromFirestore();
+                const pin = await fetchOrInitClubPinFromFirestore(true);
                 adminPinInput.value = pin;
             } catch (e) {}
         }
 
         async function updateClubAccessPin(e) {
             e.preventDefault();
+            if (!auth.currentUser) return;
             const adminPinInput = document.getElementById('admin-club-pin-input');
             const newPin = adminPinInput ? adminPinInput.value.trim() : "";
             if (!newPin) {
@@ -3444,33 +3887,42 @@
         }
 
         function initClubAccessGuard() {
-            db.collection("settings").doc("access").onSnapshot((doc) => {
-                let remotePin = null;
-                if (doc.exists && doc.data() && doc.data().clubPin !== undefined && doc.data().clubPin !== null && String(doc.data().clubPin).trim() !== "") {
-                    remotePin = String(doc.data().clubPin).trim();
-                } else {
-                    fetchOrInitClubPinFromFirestore().catch(() => {});
-                    return;
-                }
+            try {
+                db.collection("settings").doc("access").onSnapshot((doc) => {
+                    let remotePin = String(2026);
+                    if (doc.exists && doc.data() && doc.data().clubPin !== undefined && doc.data().clubPin !== null && String(doc.data().clubPin).trim() !== "") {
+                        remotePin = String(doc.data().clubPin).trim();
+                    } else if (auth.currentUser) {
+                        fetchOrInitClubPinFromFirestore(true).catch(() => {});
+                    }
 
-                currentFirestoreClubPin = remotePin;
-                const adminPinInput = document.getElementById('admin-club-pin-input');
-                if (adminPinInput && document.activeElement !== adminPinInput) {
-                    adminPinInput.value = remotePin;
-                }
+                    currentFirestoreClubPin = remotePin;
+                    const adminPinInput = document.getElementById('admin-club-pin-input');
+                    if (adminPinInput && document.activeElement !== adminPinInput) {
+                        adminPinInput.value = remotePin;
+                    }
 
-                const isAdminLoggedIn = !!(auth.currentUser || document.body.classList.contains('admin-mode'));
-                let savedPin = null;
-                try { savedPin = localStorage.getItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+                    const isAdminLoggedIn = !!(auth.currentUser || document.body.classList.contains('admin-mode'));
+                    const isDirectAdminFlow = document.body.classList.contains('admin-direct-login');
+                    let savedPin = null;
+                    try { savedPin = localStorage.getItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
 
-                if (savedPin && savedPin === remotePin) {
-                    unlockClubApp();
-                } else if (!isAdminLoggedIn) {
-                    lockClubApp();
-                } else if (savedPin && savedPin !== remotePin) {
-                    try { localStorage.removeItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
-                }
-            }, () => {});
+                    if (savedPin && savedPin === remotePin) {
+                        unlockClubApp();
+                    } else if (!isAdminLoggedIn && !isDirectAdminFlow) {
+                        const wasUnlocked = !document.body.classList.contains('app-locked');
+                        if (wasUnlocked || savedPin) {
+                            lockClubApp(false);
+                        }
+                    } else if (savedPin && savedPin !== remotePin) {
+                        try { localStorage.removeItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+                    }
+                }, () => {
+                    currentFirestoreClubPin = currentFirestoreClubPin || String(2026);
+                });
+            } catch (e) {
+                currentFirestoreClubPin = currentFirestoreClubPin || String(2026);
+            }
         }
 
         function handleAdminLogin(e) {
@@ -3484,6 +3936,13 @@
                     document.body.classList.add('admin-mode');
                     document.body.classList.remove('app-locked');
                     document.body.classList.remove('admin-direct-login');
+                    const lockScreen = document.getElementById('club-lock-screen');
+                    if (lockScreen) {
+                        lockScreen.style.display = 'none';
+                        lockScreen.style.pointerEvents = 'none';
+                    }
+                    const pageCard = document.getElementById('page-card');
+                    if (pageCard) pageCard.style.display = '';
                     document.getElementById('admin-login-card').style.display = 'none';
                     document.getElementById('admin-password-input').value = '';
                     
@@ -3509,7 +3968,7 @@
                 let savedPin = null;
                 try { savedPin = localStorage.getItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
                 if (!savedPin || (currentFirestoreClubPin && savedPin !== currentFirestoreClubPin)) {
-                    lockClubApp();
+                    lockClubApp(true);
                 } else {
                     loadNews();
                     loadWeaponHistory();
@@ -3523,6 +3982,13 @@
                 document.body.classList.add('admin-mode');
                 document.body.classList.remove('app-locked');
                 document.body.classList.remove('admin-direct-login');
+                const lockScreen = document.getElementById('club-lock-screen');
+                if (lockScreen) {
+                    lockScreen.style.display = 'none';
+                    lockScreen.style.pointerEvents = 'none';
+                }
+                const pageCard = document.getElementById('page-card');
+                if (pageCard) pageCard.style.display = '';
                 document.getElementById('admin-login-card').style.display = 'none';
                 resetInactivityTimer();
                 loadAdminProtectedData();
@@ -3537,8 +4003,8 @@
                 let savedPin = null;
                 try { savedPin = localStorage.getItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
                 if (!savedPin || (currentFirestoreClubPin && savedPin !== currentFirestoreClubPin)) {
-                    if (!document.body.classList.contains('admin-direct-login')) {
-                        lockClubApp();
+                    if (!document.body.classList.contains('admin-direct-login') && !document.body.classList.contains('app-locked')) {
+                        lockClubApp(false);
                     }
                 } else {
                     loadWeaponHistory();
@@ -3547,6 +4013,25 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const pinInput = document.getElementById('club-pin-input');
+                if (pinInput) {
+                    pinInput.disabled = false;
+                    pinInput.readOnly = false;
+                    pinInput.addEventListener('keydown', (evt) => {
+                        if (evt.key === 'Enter') {
+                            evt.preventDefault();
+                            verifyClubAccessCode(evt);
+                        }
+                    });
+                }
+                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'vote-modal'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el && getComputedStyle(el).display === 'none') {
+                        el.style.pointerEvents = 'none';
+                    }
+                });
+            } catch(e) {}
             try { initClubAccessGuard(); } catch(e) {}
             try { initWeaponBookNavigationGuard(); } catch(e) {}
         });
