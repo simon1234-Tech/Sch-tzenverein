@@ -4295,7 +4295,13 @@
         function registerFirebaseMessagingSW() {
             if (!('serviceWorker' in navigator)) return Promise.resolve(null);
             if (!fcmServiceWorkerRegPromise) {
-                fcmServiceWorkerRegPromise = navigator.serviceWorker.register('firebase-messaging-sw.js').catch(() => null);
+                fcmServiceWorkerRegPromise = navigator.serviceWorker
+                    .register('./firebase-messaging-sw.js', { updateViaCache: 'none' })
+                    .then(async (reg) => {
+                        try { await reg.update(); } catch (e) {}
+                        return (await navigator.serviceWorker.ready) || reg;
+                    })
+                    .catch(() => null);
             }
             return fcmServiceWorkerRegPromise;
         }
@@ -4343,22 +4349,47 @@
             }
         }
 
-        async function syncFcmTokenToFirestore() {
+        async function syncFcmTokenToFirestore(cleanExisting = true) {
             if (!messaging || typeof messaging.getToken !== 'function') return null;
             if (!('serviceWorker' in navigator)) return null;
-            const registration = (await registerFirebaseMessagingSW()) || (await navigator.serviceWorker.ready);
+
+            let registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js', { updateViaCache: 'none' });
+            try { await registration.update(); } catch (e) {}
+            registration = await navigator.serviceWorker.ready;
             if (!registration) return null;
 
-            const token = await messaging.getToken({
-                vapidKey: FCM_VAPID_KEY,
-                serviceWorkerRegistration: registration
-            });
+            if (cleanExisting && registration.pushManager) {
+                const existingSub = await registration.pushManager.getSubscription();
+                if (existingSub) {
+                    await existingSub.unsubscribe();
+                }
+            }
+
+            let token;
+            try {
+                token = await messaging.getToken({
+                    vapidKey: FCM_VAPID_KEY,
+                    serviceWorkerRegistration: registration
+                });
+            } catch (firstErr) {
+                if (!cleanExisting && registration.pushManager) {
+                    const existingSub = await registration.pushManager.getSubscription();
+                    if (existingSub) {
+                        await existingSub.unsubscribe();
+                    }
+                    token = await messaging.getToken({
+                        vapidKey: FCM_VAPID_KEY,
+                        serviceWorkerRegistration: registration
+                    });
+                } else {
+                    throw firstErr;
+                }
+            }
 
             if (token) {
-                await db.collection("fcm_tokens").doc(token).set({
+                await db.collection('fcm_tokens').doc(token).set({
                     token: token,
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    platform: navigator.userAgent || ''
+                    updatedAt: new Date().toISOString()
                 }, { merge: true });
             }
             return token;
@@ -4383,7 +4414,7 @@
                 updatePushButtonUI();
 
                 if (permission === 'granted') {
-                    const token = await syncFcmTokenToFirestore();
+                    const token = await syncFcmTokenToFirestore(true);
                     if (!token) {
                         updatePushButtonUI('Erlaubnis erteilt, aber kein Push-Token erhalten. Bitte später erneut versuchen.', true);
                     }
@@ -4401,7 +4432,7 @@
             registerFirebaseMessagingSW();
             updatePushButtonUI();
             if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-                syncFcmTokenToFirestore().catch(() => {});
+                syncFcmTokenToFirestore(false).catch(() => {});
             }
         }
 
@@ -4413,7 +4444,7 @@
                     const title = notif.title || data.title || 'KB & SV Gaschurn-Partenen';
                     const body = notif.body || data.body || 'Neue Nachricht in der Vereins-App';
                     if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-                        navigator.serviceWorker.getRegistration('firebase-messaging-sw.js').then((reg) => {
+                        navigator.serviceWorker.getRegistration('./firebase-messaging-sw.js').then((reg) => {
                             if (reg && reg.showNotification) {
                                 reg.showNotification(title, { body: body, icon: 'logo.png', badge: 'logo.png' });
                             }
