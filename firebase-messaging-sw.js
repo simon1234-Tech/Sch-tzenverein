@@ -1,13 +1,13 @@
-// Firebase SDKs im Service Worker laden (kompatibel zur App-Version 9.22.1)
-importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/9.22.1/firebase-messaging-compat.js');
+// Firebase SDKs im Service Worker laden (kompatibel zur App-Version 10.14.1)
+importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js');
 
 // Firebase Konfiguration initialisieren (exakter Abgleich mit index.html)
 const firebaseConfig = {
   apiKey: "AIzaSyDchsz_qOTMpvT48cKBYLqUmX30Lw39iGA",
   authDomain: "kb-sv-vereinsapp.firebaseapp.com",
   projectId: "kb-sv-vereinsapp",
-  storageBucket: "kb-sv-vereinsapp.appspot.com",
+  storageBucket: "kb-sv-vereinsapp.firebasestorage.app",
   messagingSenderId: "1015802588615",
   appId: "1:1015802588615:web:bcecb74526a2096d2ebde2"
 };
