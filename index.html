@@ -4403,9 +4403,8 @@
         }
 
         let pushStatusHintLockUntil = 0;
-        let pushStatusHintHideTimer = null;
 
-        function updatePushButtonUI(customHint = null, isError = false, variant = null) {
+        function updatePushButtonUI(customHint = null, isError = false, variant = null, useHtml = false) {
             const btn = document.getElementById('push-activate-btn');
             const hint = document.getElementById('push-status-hint');
             if (!btn) return;
@@ -4425,11 +4424,13 @@
 
             if (hint) {
                 if (customHint) {
-                    if (pushStatusHintHideTimer) {
-                        clearTimeout(pushStatusHintHideTimer);
-                        pushStatusHintHideTimer = null;
+                    if (useHtml) {
+                        hint.innerHTML = customHint;
+                        hint.style.textAlign = 'left';
+                    } else {
+                        hint.innerText = customHint;
+                        hint.style.textAlign = 'center';
                     }
-                    hint.innerText = customHint;
                     hint.style.display = 'block';
                     if (isError) {
                         hint.style.background = '#fee2e2';
@@ -4444,10 +4445,11 @@
                         hint.style.borderColor = '#bfdbfe';
                         hint.style.color = '#1e40af';
                     }
-                } else if (Date.now() < pushStatusHintLockUntil && hint.innerText) {
-                    // Aktive Status-Meldung (z.B. Subscription-ID) nicht sofort durch permissionChange ausblenden
+                } else if (Date.now() < pushStatusHintLockUntil && (hint.innerText || hint.innerHTML)) {
+                    // Aktive Diagnose-Meldung nicht durch permissionChange ausblenden
                 } else if (isIosDeviceForPush() && !window.navigator.standalone && !isGranted) {
                     hint.innerText = 'Auf dem iPhone zuerst über Teilen → Zum Home-Bildschirm hinzufügen';
+                    hint.style.textAlign = 'center';
                     hint.style.display = 'block';
                     hint.style.background = '#eff6ff';
                     hint.style.borderColor = '#bfdbfe';
@@ -4459,51 +4461,70 @@
             }
         }
 
-        function showTemporaryPushSubscriptionMessage(subId) {
-            const hasId = Boolean(subId && String(subId).trim());
-            const msg = hasId
-                ? `✅ Gerät bei OneSignal registriert! Subscription-ID: ${subId}`
-                : 'ℹ️ Push aktiv, aber noch keine OneSignal-Subscription-ID vorhanden (evtl. Service Worker / Seite neu laden).';
-            pushStatusHintLockUntil = Date.now() + 10000;
-            updatePushButtonUI(msg, false, hasId ? 'success' : null);
-            pushStatusHintHideTimer = setTimeout(() => {
-                pushStatusHintLockUntil = 0;
-                pushStatusHintHideTimer = null;
-                updatePushButtonUI();
-            }, 10000);
-        }
+        async function collectPushDiagnostics(OneSignalRef, errorObj = null) {
+            const os = OneSignalRef || window.OneSignal || null;
+            const browserPermission = (typeof Notification !== 'undefined') ? Notification.permission : 'nicht unterstützt';
 
-        async function getOneSignalSubscriptionId(OneSignal, maxWaitMs = 2000) {
+            let optedInVal = 'unbekannt';
+            let subIdVal = 'KEINE';
             try {
-                const existingId = OneSignal?.User?.PushSubscription?.id;
-                if (existingId) return existingId;
+                if (os && os.User && os.User.PushSubscription) {
+                    if (typeof os.User.PushSubscription.optedIn !== 'undefined') {
+                        optedInVal = String(os.User.PushSubscription.optedIn);
+                    }
+                    subIdVal = os.User.PushSubscription.id || 'KEINE';
+                }
             } catch (e) {}
 
-            return new Promise((resolve) => {
-                let done = false;
-                const finish = (idVal) => {
-                    if (done) return;
-                    done = true;
-                    clearInterval(pollTimer);
-                    clearTimeout(timeoutTimer);
-                    resolve(idVal || null);
-                };
+            let swUrls = [];
+            let swErrorText = '';
+            if ('serviceWorker' in navigator && typeof navigator.serviceWorker.getRegistrations === 'function') {
+                try {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    swUrls = registrations.map(reg => reg.active?.scriptURL).filter(Boolean);
+                } catch (swErr) {
+                    swErrorText = swErr?.message || String(swErr);
+                }
+            } else {
+                swErrorText = 'Service Worker API nicht unterstützt';
+            }
 
-                const pollTimer = setInterval(() => {
-                    try {
-                        const idVal = OneSignal?.User?.PushSubscription?.id;
-                        if (idVal) finish(idVal);
-                    } catch (e) {}
-                }, 150);
+            const errMsg = errorObj ? (errorObj.message || String(errorObj)) : '';
+            return {
+                browserPermission,
+                optedInVal,
+                subIdVal,
+                swUrls,
+                swErrorText,
+                errMsg
+            };
+        }
 
-                const timeoutTimer = setTimeout(() => {
-                    try {
-                        finish(OneSignal?.User?.PushSubscription?.id || null);
-                    } catch (e) {
-                        finish(null);
-                    }
-                }, maxWaitMs);
-            });
+        function renderPushDiagnosticsBox(diag, extraNote = '', isError = false) {
+            const hasSubId = diag.subIdVal && diag.subIdVal !== 'KEINE';
+            const swText = diag.swErrorText
+                ? `Fehler (${diag.swErrorText})`
+                : (diag.swUrls.length > 0 ? diag.swUrls.join(', ') : 'KEINE');
+
+            const headerLine = hasSubId && !isError
+                ? '✅ Push-Diagnose (Gerät registriert)'
+                : (isError ? '⚠️ Push-Diagnose (Fehler / Blockiert)' : 'ℹ️ Push-Diagnose');
+
+            let html = `<div style="font-weight: 800; margin-bottom: 6px; font-size: 1.03em;">${escapeHtml(headerLine)}</div>`;
+            if (extraNote) {
+                html += `<div style="margin-bottom: 6px; font-weight: 700;">${escapeHtml(extraNote)}</div>`;
+            }
+            html += `<div style="display: flex; flex-direction: column; gap: 3px; word-break: break-word; font-weight: 600;">`
+                + `<div><strong>Browser-Erlaubnis:</strong> ${escapeHtml(diag.browserPermission)}</div>`
+                + `<div><strong>OneSignal OptedIn:</strong> ${escapeHtml(diag.optedInVal)}</div>`
+                + `<div><strong>OneSignal Subscription-ID:</strong> <span style="font-family: monospace; font-weight: 800;">${escapeHtml(diag.subIdVal)}</span></div>`
+                + `<div><strong>Aktive Service Worker URLs:</strong> <span style="font-family: monospace; font-size: 0.92em;">${escapeHtml(swText)}</span></div>`
+                + (diag.errMsg ? `<div style="margin-top: 4px; color: #b91c1c;"><strong>Fehlermeldung:</strong> ${escapeHtml(diag.errMsg)}</div>` : '')
+                + `</div>`;
+
+            pushStatusHintLockUntil = Date.now() + 60 * 60 * 1000;
+            const variant = (!isError && hasSubId) ? 'success' : null;
+            updatePushButtonUI(html, isError, variant, true);
         }
 
         function waitForOneSignalInstance(timeoutMs = 3000) {
@@ -4542,6 +4563,7 @@
             if (isPushRequestInFlight) return;
 
             if (isIosDeviceForPush() && !window.navigator.standalone) {
+                pushStatusHintLockUntil = 0;
                 updatePushButtonUI('Auf dem iPhone zuerst über Teilen → Zum Home-Bildschirm hinzufügen', false);
                 return;
             }
@@ -4556,40 +4578,38 @@
                 btn.style.color = '#1e293b';
             }
 
+            let resolvedOneSignal = null;
+            let capturedErr = null;
+            let extraNote = '';
+
             try {
-                const OneSignal = await waitForOneSignalInstance(3000);
-                if (!OneSignal || !OneSignal.Notifications) {
+                resolvedOneSignal = await waitForOneSignalInstance(3000);
+                if (!resolvedOneSignal || !resolvedOneSignal.Notifications) {
                     throw new Error('ONESIGNAL_NOT_LOADED');
                 }
 
-                await OneSignal.Notifications.requestPermission();
+                await resolvedOneSignal.Notifications.requestPermission();
 
-                if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.optIn === 'function') {
-                    try {
-                        await OneSignal.User.PushSubscription.optIn();
-                    } catch (optInErr) {}
-                }
-
-                if (isOneSignalPermissionGranted()) {
-                    const subscriptionId = await getOneSignalSubscriptionId(OneSignal, 2000);
-                    showTemporaryPushSubscriptionMessage(subscriptionId);
-                } else if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
-                    pushStatusHintLockUntil = 0;
-                    updatePushButtonUI('⚠️ Benachrichtigungen sind im Browser blockiert – bitte oben links neben der Webadresse auf das Schloss-Symbol tippen und Benachrichtigungen erlauben.', true);
-                } else {
-                    pushStatusHintLockUntil = 0;
-                    updatePushButtonUI();
+                if (resolvedOneSignal.User && resolvedOneSignal.User.PushSubscription && typeof resolvedOneSignal.User.PushSubscription.optIn === 'function') {
+                    await resolvedOneSignal.User.PushSubscription.optIn();
                 }
             } catch (err) {
-                pushStatusHintLockUntil = 0;
+                capturedErr = err;
                 if (err && err.message === 'ONESIGNAL_NOT_LOADED') {
-                    updatePushButtonUI('Push-Dienst konnte nicht geladen werden (evtl. Werbeblocker deaktivieren oder Seite neu laden).', true);
+                    extraNote = 'Push-Dienst konnte nicht geladen werden (evtl. Werbeblocker deaktivieren oder Seite neu laden).';
                 } else if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
-                    updatePushButtonUI('⚠️ Benachrichtigungen sind im Browser blockiert – bitte oben links neben der Webadresse auf das Schloss-Symbol tippen und Benachrichtigungen erlauben.', true);
-                } else {
-                    updatePushButtonUI();
-                    alert("Push-Fehler: " + (err?.message || err));
+                    extraNote = 'Benachrichtigungen sind im Browser blockiert – bitte oben links neben der Webadresse auf das Schloss-Symbol tippen und Benachrichtigungen erlauben.';
                 }
+            }
+
+            try {
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                const diag = await collectPushDiagnostics(resolvedOneSignal, capturedErr);
+                if (!extraNote && typeof Notification !== 'undefined' && Notification.permission === 'denied') {
+                    extraNote = 'Benachrichtigungen sind im Browser blockiert – bitte oben links neben der Webadresse auf das Schloss-Symbol tippen und Benachrichtigungen erlauben.';
+                }
+                const hasError = Boolean(capturedErr) || (typeof Notification !== 'undefined' && Notification.permission === 'denied');
+                renderPushDiagnosticsBox(diag, extraNote, hasError);
             } finally {
                 isPushRequestInFlight = false;
                 if (btn) btn.disabled = false;
