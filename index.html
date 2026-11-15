@@ -4570,30 +4570,34 @@
             if (!auth.currentUser) {
                 return { ok: false, error: 'Nicht als Admin angemeldet.' };
             }
+
+            const cleanTitle = String(title || 'KB & SV Gaschurn-Partenen').trim();
+            const cleanMessage = String(message || '').trim() || cleanTitle;
+
             try {
                 const doc = await db.collection("settings").doc("push").get();
-                const restApiKey = (doc.exists && doc.data() && doc.data().restApiKey)
-                    ? String(doc.data().restApiKey).trim()
-                    : '';
+                const rawKey = (doc.exists && doc.data() && doc.data().restApiKey) ? String(doc.data().restApiKey).trim() : '';
 
-                if (!restApiKey) {
-                    return { ok: false, error: 'Kein OneSignal REST API Key unter settings/push gespeichert.' };
+                if (!rawKey) {
+                    return { ok: false, error: 'Bitte zuerst den OneSignal REST API Key ganz unten im Admin-Bereich speichern!' };
                 }
 
-                const cleanTitle = String(title || 'KB & SV Gaschurn-Partenen').trim();
-                const cleanMessage = String(message || '').trim() || cleanTitle;
+                const targetUrl = (typeof window !== 'undefined' && window.location && /^https?:\/\//i.test(window.location.origin))
+                    ? (window.location.origin + window.location.pathname)
+                    : 'https://github.io';
 
-                const response = await fetch('https://api.onesignal.com/notifications', {
+                const response = await fetch('https://onesignal.com/api/v1/notifications', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Key ' + restApiKey
+                        'Content-Type': 'application/json; charset=utf-8',
+                        'Authorization': 'Basic ' + rawKey
                     },
                     body: JSON.stringify({
                         app_id: ONESIGNAL_APP_ID,
-                        included_segments: ['Total Subscriptions'],
-                        headings: { de: cleanTitle, en: cleanTitle },
-                        contents: { de: cleanMessage, en: cleanMessage }
+                        included_segments: ['Subscribed Users', 'Total Subscriptions'],
+                        headings: { en: cleanTitle, de: cleanTitle },
+                        contents: { en: cleanMessage, de: cleanMessage },
+                        url: targetUrl
                     })
                 });
 
@@ -4604,7 +4608,61 @@
                 }
                 return { ok: true, data: result };
             } catch (err) {
-                return { ok: false, error: (err && err.message) ? err.message : String(err) };
+                const errMsg = (err && err.message) ? err.message : String(err);
+                const isFetchBlocked = /failed to fetch|networkerror|load failed/i.test(errMsg) || (err && err.name === 'TypeError');
+
+                if (isFetchBlocked) {
+                    const clipboardText = `${cleanTitle}\n\n${cleanMessage}`;
+                    const copyTextToClipboard = async (text) => {
+                        try {
+                            if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                                await navigator.clipboard.writeText(text);
+                                return true;
+                            }
+                        } catch (clipErr) {}
+                        try {
+                            const ta = document.createElement('textarea');
+                            ta.value = text;
+                            ta.style.position = 'fixed';
+                            ta.style.left = '-9999px';
+                            document.body.appendChild(ta);
+                            ta.focus();
+                            ta.select();
+                            const ok = document.execCommand('copy');
+                            document.body.removeChild(ta);
+                            return ok;
+                        } catch (fbErr) {
+                            return false;
+                        }
+                    };
+
+                    await copyTextToClipboard(clipboardText);
+
+                    await new Promise((resolve) => {
+                        if (typeof showCustomConfirm === 'function') {
+                            showCustomConfirm(
+                                'Direkter Push-Versand blockiert (CORS / VPN / AdBlocker)',
+                                `Der fertige Nachrichtentext wurde in die Zwischenablage kopiert:\n\n${cleanTitle}\n${cleanMessage}\n\nMöchtest du jetzt OneSignal öffnen, um die Push-Nachricht direkt abzusenden?`,
+                                async (confirmed) => {
+                                    if (confirmed) {
+                                        await copyTextToClipboard(clipboardText);
+                                        window.open(`https://dashboard.onesignal.com/apps/${ONESIGNAL_APP_ID}/notifications/new`, '_blank', 'noopener,noreferrer');
+                                    }
+                                    resolve(confirmed);
+                                }
+                            );
+                        } else {
+                            if (confirm(`Direkter Push-Versand blockiert (CORS / VPN / AdBlocker).\n\nNachricht wurde kopiert:\n${cleanTitle}\n${cleanMessage}\n\nOneSignal jetzt öffnen?`)) {
+                                window.open(`https://dashboard.onesignal.com/apps/${ONESIGNAL_APP_ID}/notifications/new`, '_blank', 'noopener,noreferrer');
+                            }
+                            resolve(true);
+                        }
+                    });
+
+                    return { ok: false, error: 'Direkter Versand blockiert (CORS/VPN/Werbeblocker) – Text in Zwischenablage kopiert.' };
+                }
+
+                return { ok: false, error: errMsg };
             }
         }
 
