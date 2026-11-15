@@ -21,7 +21,28 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
+
+    <!-- OneSignal Web SDK v16 -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "97c2c2ee-175b-4e71-876a-f86f1ab04ace",
+          serviceWorkerParam: { scope: "/Sch-tzenverein/" },
+          serviceWorkerPath: "Sch-tzenverein/OneSignalSDKWorker.js",
+          allowLocalhostAsSecureOrigin: true
+        });
+        try {
+          if (typeof updatePushButtonUI === 'function') updatePushButtonUI();
+          if (OneSignal && OneSignal.Notifications && typeof OneSignal.Notifications.addEventListener === 'function') {
+            OneSignal.Notifications.addEventListener('permissionChange', function() {
+              if (typeof updatePushButtonUI === 'function') updatePushButtonUI();
+            });
+          }
+        } catch(e) {}
+      });
+    </script>
 
     <script>
       const firebaseConfig = {
@@ -35,8 +56,6 @@
       try { firebase.initializeApp(firebaseConfig); } catch(e) {}
       const db = firebase.firestore();
       const auth = firebase.auth();
-      let messaging = null;
-      try { messaging = firebase.messaging(); } catch(e) {}
     </script>
 
     <script>
@@ -656,7 +675,7 @@
     <div id="page-news" class="page-content active">
         <!-- PUSH-BENACHRICHTIGUNGEN (DEZENT GANZ OBEN IM NEWS-BEREICH) -->
         <div id="push-notification-bar" style="margin-bottom: 12px;">
-            <button type="button" id="push-activate-btn" onclick="requestPushPermissionAndSaveToken()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border-radius: 14px; border: 1.5px solid #cbd5e1; background: rgba(255, 255, 255, 0.92); color: #1e293b; font-size: 0.85em; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06); transition: all 0.2s;">
+            <button type="button" id="push-activate-btn" onclick="requestOneSignalPushPermission()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border-radius: 14px; border: 1.5px solid #cbd5e1; background: rgba(255, 255, 255, 0.92); color: #1e293b; font-size: 0.85em; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06); transition: all 0.2s;">
                 🔔 Push-Benachrichtigungen aktivieren
             </button>
             <div id="push-status-hint" style="display: none; margin-top: 6px; padding: 9px 12px; border-radius: 10px; font-size: 0.78em; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
@@ -990,8 +1009,8 @@
                                     <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
                                     <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
                                     <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85em; font-weight: 700; color: #1e293b; margin-bottom: 12px; cursor: pointer;">
-                                        <input type="checkbox" id="news-send-push" style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
-                                        <span>📲 Push-Nachricht beim Veröffentlichen vormerken</span>
+                                        <input type="checkbox" id="news-send-push" checked style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+                                        <span>📲 Push-Nachricht an alle Mitglieder senden</span>
                                     </label>
                                     <button type="submit" class="btn btn-admin btn-block">News Veröffentlichen</button>
                                 </form>
@@ -1014,8 +1033,8 @@
                                     <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="15.12.2026"></div>
                                     <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
                                     <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85em; font-weight: 700; color: #1e293b; margin-bottom: 12px; cursor: pointer;">
-                                        <input type="checkbox" id="event-send-push" style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
-                                        <span>📲 Push-Nachricht beim Veröffentlichen vormerken</span>
+                                        <input type="checkbox" id="event-send-push" checked style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+                                        <span>📲 Push-Nachricht an alle Mitglieder senden</span>
                                     </label>
                                     <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
                                 </form>
@@ -1099,6 +1118,21 @@
                         <input type="text" class="form-control" id="admin-club-pin-input" placeholder="Lade aktuellen Code..." required autocomplete="off" style="font-weight: 800; font-size: 1.1em; letter-spacing: 3px; text-align: center;">
                     </div>
                     <button type="submit" class="btn btn-admin btn-block">💾 Neuen Zugangscode speichern</button>
+                </form>
+            </div>
+
+            <!-- ONESIGNAL REST API KEY VERWALTUNG -->
+            <div class="glass-card glass-card-blue" id="admin-onesignal-push-card" style="margin-top: 12px; border: 1.5px solid #2563eb; background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(239,246,255,0.95));">
+                <div class="card-title" style="color: #1d4ed8; margin-bottom: 6px; font-size: 0.98em;">🔔 OneSignal REST API Key</div>
+                <p style="font-size: 0.78em; color: var(--text-muted); margin-bottom: 10px;">
+                    Geschützt gespeichert in Firestore (<code>settings/push</code>) für automatische Push-Benachrichtigungen.
+                </p>
+                <form onsubmit="saveOneSignalRestApiKey(event)">
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <label>OneSignal REST API Key</label>
+                        <input type="password" class="form-control" id="admin-onesignal-key-input" placeholder="REST API Key eingeben..." required autocomplete="off" style="font-size: 0.9em;">
+                    </div>
+                    <button type="submit" class="btn btn-admin btn-block">💾 Push-Key speichern</button>
                 </form>
             </div>
 
@@ -1949,12 +1983,15 @@
 
                 if (isFromFirebase) {
                     adminHtml += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #fff; border-radius: 8px; margin-bottom: 6px; border: 1px solid #cbd5e1; font-size: 0.85em;">
-                            <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 10px; background: #fff; border-radius: 8px; margin-bottom: 6px; border: 1px solid #cbd5e1; font-size: 0.85em;">
+                            <div style="flex: 1; min-width: 0;">
                                 <strong>${escapeHtml(d.dateStr)}</strong> - <span style="color:var(--primary-red);">${escapeHtml(d.team)}</span>${d.time && d.time !== '—' ? ` <span style="color:var(--text-muted); font-size:0.8em;">(${escapeHtml(d.time)})</span>` : ''}<br>
                                 <span style="color:var(--text-muted); font-size:0.8em;">${escapeHtml(d.names)}</span>
                             </div>
-                            <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteDutyEntry('${escapeHtml(d.id)}')">🗑️</button>
+                            <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                                <button type="button" class="btn btn-admin" style="padding: 4px 8px; font-size: 0.72em;" data-date="${escapeHtml(d.dateStr)}" data-team="${escapeHtml(d.team)}" data-names="${escapeHtml(d.names)}" onclick="sendDutyReminderPush(this.dataset.date, this.dataset.team, this.dataset.names, this)">🔔 Erinnerung senden</button>
+                                <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteDutyEntry('${escapeHtml(d.id)}')">🗑️</button>
+                            </div>
                         </div>
                     `;
                 }
@@ -2078,11 +2115,19 @@
                     votes: {},
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
+                let pushNotice = "";
+                if (sendPush) {
+                    const pushBody = desc ? `${date} – ${desc}` : date;
+                    const pushRes = await sendOneSignalPushToAll(`📆 Neuer Termin: ${title}`, pushBody);
+                    if (!pushRes.ok) {
+                        pushNotice = "\n\n⚠️ Push-Hinweis: " + pushRes.error;
+                    }
+                }
                 document.getElementById('new-event-title').value = '';
                 document.getElementById('new-event-date').value = '';
                 document.getElementById('new-event-desc').value = '';
-                if (sendPushEl) sendPushEl.checked = false;
-                alert("Termin erfolgreich gespeichert!");
+                if (sendPushEl) sendPushEl.checked = true;
+                alert("Termin erfolgreich gespeichert!" + pushNotice);
                 loadEvents();
             } catch (err) {
                 alert("Fehler beim Speichern: " + err.message);
@@ -3893,12 +3938,19 @@
                     sendPush: !!sendPush,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
-                alert("News veröffentlicht!");
+                let pushNotice = "";
+                if (sendPush) {
+                    const pushRes = await sendOneSignalPushToAll(`📢 Neue Vereins-News: ${title}`, text);
+                    if (!pushRes.ok) {
+                        pushNotice = "\n\n⚠️ Push-Hinweis: " + pushRes.error;
+                    }
+                }
+                alert("News veröffentlicht!" + pushNotice);
                 document.getElementById('news-title').value = '';
                 document.getElementById('news-text').value = '';
                 document.getElementById('news-photo-input').value = '';
                 const sendPushEl = document.getElementById('news-send-push');
-                if (sendPushEl) sendPushEl.checked = false;
+                if (sendPushEl) sendPushEl.checked = true;
                 loadNews();
             } catch (err) {}
         }
@@ -3953,6 +4005,7 @@
             try { loadInventory(); renderInventoryDisplay(); } catch(e) {}
             try { loadAdminWeaponPDFs(); } catch(e) {}
             try { loadAdminClubPin(); } catch(e) {}
+            try { loadAdminOneSignalKey(); } catch(e) {}
         }
 
         function clearSensitiveAppData() {
@@ -4235,6 +4288,8 @@
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
                 if (pwdInput) pwdInput.value = '';
+                const pushKeyInput = document.getElementById('admin-onesignal-key-input');
+                if (pushKeyInput) pushKeyInput.value = '';
                 
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
@@ -4272,6 +4327,8 @@
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
                 if (pwdInput) pwdInput.value = '';
+                const pushKeyInput = document.getElementById('admin-onesignal-key-input');
+                if (pushKeyInput) pushKeyInput.value = '';
                 
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
@@ -4288,27 +4345,21 @@
             }
         });
 
-        // --- FIREBASE PUSH-BENACHRICHTIGUNGEN (FCM) ---
-        const FCM_VAPID_KEY = 'BF2_KfUG_keimCkr0oKTA8BGXXOAv4QsmEsSUjjHwwgUG0H-vKJhWYm3rMqS-YFPJ6LlLrn2Ip-vAzT5hm2-2dg';
-        let fcmServiceWorkerRegPromise = null;
-
-        function registerFirebaseMessagingSW() {
-            if (!('serviceWorker' in navigator)) return Promise.resolve(null);
-            if (!fcmServiceWorkerRegPromise) {
-                fcmServiceWorkerRegPromise = navigator.serviceWorker
-                    .register('./firebase-messaging-sw.js', { updateViaCache: 'none' })
-                    .then(async (reg) => {
-                        try { await reg.update(); } catch (e) {}
-                        return (await navigator.serviceWorker.ready) || reg;
-                    })
-                    .catch(() => null);
-            }
-            return fcmServiceWorkerRegPromise;
-        }
+        // --- ONESIGNAL WEB PUSH BENACHRICHTIGUNGEN ---
+        const ONESIGNAL_APP_ID = '97c2c2ee-175b-4e71-876a-f86f1ab04ace';
 
         function isIosDeviceForPush() {
             const ua = navigator.userAgent || '';
             return /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        }
+
+        function isOneSignalPermissionGranted() {
+            try {
+                if (window.OneSignal && window.OneSignal.Notifications && typeof window.OneSignal.Notifications.permission === 'boolean') {
+                    return window.OneSignal.Notifications.permission;
+                }
+            } catch (e) {}
+            return (typeof Notification !== 'undefined') && Notification.permission === 'granted';
         }
 
         function updatePushButtonUI(customHint = null, isError = false) {
@@ -4316,8 +4367,8 @@
             const hint = document.getElementById('push-status-hint');
             if (!btn) return;
 
-            const permission = (typeof Notification !== 'undefined') ? Notification.permission : 'default';
-            if (permission === 'granted') {
+            const isGranted = isOneSignalPermissionGranted();
+            if (isGranted) {
                 btn.innerText = '✅ Push-Benachrichtigungen aktiv';
                 btn.style.background = '#ecfdf5';
                 btn.style.borderColor = '#86efac';
@@ -4336,8 +4387,8 @@
                     hint.style.background = isError ? '#fee2e2' : '#eff6ff';
                     hint.style.borderColor = isError ? '#fca5a5' : '#bfdbfe';
                     hint.style.color = isError ? '#b91c1c' : '#1e40af';
-                } else if (isIosDeviceForPush() && !window.navigator.standalone && permission !== 'granted') {
-                    hint.innerText = 'Auf dem iPhone bitte zuerst über Teilen → Zum Home-Bildschirm hinzufügen, danach Push aktivieren.';
+                } else if (isIosDeviceForPush() && !window.navigator.standalone && !isGranted) {
+                    hint.innerText = 'Auf dem iPhone zuerst über Teilen → Zum Home-Bildschirm hinzufügen';
                     hint.style.display = 'block';
                     hint.style.background = '#eff6ff';
                     hint.style.borderColor = '#bfdbfe';
@@ -4349,93 +4400,9 @@
             }
         }
 
-        async function syncFcmTokenToFirestore(cleanExisting = true) {
-            if (!messaging || typeof messaging.getToken !== 'function') return null;
-            if (!('serviceWorker' in navigator)) return null;
-
-            let registration = await navigator.serviceWorker.register('./firebase-messaging-sw.js', { updateViaCache: 'none' });
-            try { await registration.update(); } catch (e) {}
-            registration = await navigator.serviceWorker.ready;
-            if (!registration) return null;
-
-            if (cleanExisting && registration.pushManager) {
-                const existingSub = await registration.pushManager.getSubscription();
-                if (existingSub) {
-                    await existingSub.unsubscribe();
-                }
-            }
-
-            let token;
-            try {
-                token = await messaging.getToken({
-                    vapidKey: FCM_VAPID_KEY,
-                    serviceWorkerRegistration: registration
-                });
-            } catch (firstErr) {
-                const errCode = String((firstErr && firstErr.code) || '');
-                const errMsg = String((firstErr && firstErr.message) || firstErr || '');
-                const isSubscribeFailed = errCode.includes('token-subscribe-failed') || errMsg.includes('token-subscribe-failed');
-
-                if (isSubscribeFailed) {
-                    try {
-                        const allRegs = await navigator.serviceWorker.getRegistrations();
-                        await Promise.all(allRegs.map((reg) => reg.unregister().catch(() => false)));
-                    } catch (e) {}
-                    try {
-                        if (registration && typeof registration.unregister === 'function') {
-                            await registration.unregister();
-                        }
-                    } catch (e) {}
-
-                    fcmServiceWorkerRegPromise = null;
-                    await new Promise((resolve) => setTimeout(resolve, 500));
-
-                    const freshReg = await navigator.serviceWorker.register('./firebase-messaging-sw.js', { updateViaCache: 'none' });
-                    try { await freshReg.update(); } catch (e) {}
-                    const readyReg = (await navigator.serviceWorker.ready) || freshReg;
-
-                    if (readyReg && readyReg.pushManager) {
-                        const leftoverSub = await readyReg.pushManager.getSubscription();
-                        if (leftoverSub) {
-                            await leftoverSub.unsubscribe();
-                        }
-                    }
-
-                    token = await messaging.getToken({
-                        vapidKey: FCM_VAPID_KEY,
-                        serviceWorkerRegistration: readyReg
-                    });
-                } else if (!cleanExisting && registration.pushManager) {
-                    const existingSub = await registration.pushManager.getSubscription();
-                    if (existingSub) {
-                        await existingSub.unsubscribe();
-                    }
-                    token = await messaging.getToken({
-                        vapidKey: FCM_VAPID_KEY,
-                        serviceWorkerRegistration: registration
-                    });
-                } else {
-                    throw firstErr;
-                }
-            }
-
-            if (token) {
-                await db.collection('fcm_tokens').doc(token).set({
-                    token: token,
-                    updatedAt: new Date().toISOString()
-                }, { merge: true });
-            }
-            return token;
-        }
-
-        async function requestPushPermissionAndSaveToken() {
+        async function requestOneSignalPushPermission() {
             if (isIosDeviceForPush() && !window.navigator.standalone) {
-                updatePushButtonUI('Auf dem iPhone bitte zuerst über Teilen → Zum Home-Bildschirm hinzufügen, danach Push aktivieren.', false);
-                return;
-            }
-
-            if (typeof Notification === 'undefined' || !('serviceWorker' in navigator) || !messaging) {
-                updatePushButtonUI('Push-Benachrichtigungen werden von diesem Browser leider nicht unterstützt.', true);
+                updatePushButtonUI('Auf dem iPhone zuerst über Teilen → Zum Home-Bildschirm hinzufügen', false);
                 return;
             }
 
@@ -4443,15 +4410,19 @@
             if (btn) btn.disabled = true;
 
             try {
-                const permission = await Notification.requestPermission();
+                await new Promise((resolve, reject) => {
+                    window.OneSignalDeferred = window.OneSignalDeferred || [];
+                    window.OneSignalDeferred.push(async function(OneSignal) {
+                        try {
+                            await OneSignal.Notifications.requestPermission();
+                            resolve();
+                        } catch (err) {
+                            reject(err);
+                        }
+                    });
+                });
                 updatePushButtonUI();
-
-                if (permission === 'granted') {
-                    const token = await syncFcmTokenToFirestore(true);
-                    if (!token) {
-                        updatePushButtonUI('Erlaubnis erteilt, aber kein Push-Token erhalten. Bitte später erneut versuchen.', true);
-                    }
-                } else if (permission === 'denied') {
+                if (!isOneSignalPermissionGranted() && typeof Notification !== 'undefined' && Notification.permission === 'denied') {
                     updatePushButtonUI('Push-Benachrichtigungen sind im Browser blockiert. Bitte in den Website-Einstellungen erlauben.', true);
                 }
             } catch (err) {
@@ -4462,29 +4433,103 @@
         }
 
         function initPushNotificationsUI() {
-            registerFirebaseMessagingSW();
             updatePushButtonUI();
-            if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-                syncFcmTokenToFirestore(false).catch(() => {});
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            window.OneSignalDeferred.push(function() {
+                updatePushButtonUI();
+            });
+        }
+
+        async function loadAdminOneSignalKey() {
+            if (!auth.currentUser) return;
+            const inputEl = document.getElementById('admin-onesignal-key-input');
+            if (!inputEl) return;
+            try {
+                const doc = await db.collection("settings").doc("push").get();
+                if (doc.exists && doc.data() && doc.data().restApiKey) {
+                    inputEl.value = String(doc.data().restApiKey).trim();
+                } else {
+                    inputEl.value = '';
+                }
+            } catch (e) {}
+        }
+
+        async function saveOneSignalRestApiKey(e) {
+            e.preventDefault();
+            if (!auth.currentUser) return;
+            const inputEl = document.getElementById('admin-onesignal-key-input');
+            const restApiKey = inputEl ? inputEl.value.trim() : '';
+            if (!restApiKey) {
+                alert("Bitte einen gültigen OneSignal REST API Key eingeben!");
+                return;
+            }
+            try {
+                await db.collection("settings").doc("push").set({
+                    restApiKey: restApiKey,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                alert("OneSignal REST API Key erfolgreich in Firestore (settings/push) gespeichert!");
+            } catch (err) {
+                alert("Fehler beim Speichern des Push-Keys: " + err.message);
             }
         }
 
-        if (messaging && typeof messaging.onMessage === 'function') {
+        async function sendOneSignalPushToAll(title, message) {
+            if (!auth.currentUser) {
+                return { ok: false, error: 'Nicht als Admin angemeldet.' };
+            }
             try {
-                messaging.onMessage((payload) => {
-                    const notif = (payload && payload.notification) ? payload.notification : {};
-                    const data = (payload && payload.data) ? payload.data : {};
-                    const title = notif.title || data.title || 'KB & SV Gaschurn-Partenen';
-                    const body = notif.body || data.body || 'Neue Nachricht in der Vereins-App';
-                    if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-                        navigator.serviceWorker.getRegistration('./firebase-messaging-sw.js').then((reg) => {
-                            if (reg && reg.showNotification) {
-                                reg.showNotification(title, { body: body, icon: 'logo.png', badge: 'logo.png' });
-                            }
-                        }).catch(() => {});
-                    }
+                const doc = await db.collection("settings").doc("push").get();
+                const restApiKey = (doc.exists && doc.data() && doc.data().restApiKey)
+                    ? String(doc.data().restApiKey).trim()
+                    : '';
+
+                if (!restApiKey) {
+                    return { ok: false, error: 'Kein OneSignal REST API Key unter settings/push gespeichert.' };
+                }
+
+                const cleanTitle = String(title || 'KB & SV Gaschurn-Partenen').trim();
+                const cleanMessage = String(message || '').trim() || cleanTitle;
+
+                const response = await fetch('https://api.onesignal.com/notifications', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Key ' + restApiKey
+                    },
+                    body: JSON.stringify({
+                        app_id: ONESIGNAL_APP_ID,
+                        included_segments: ['Total Subscriptions'],
+                        headings: { de: cleanTitle, en: cleanTitle },
+                        contents: { de: cleanMessage, en: cleanMessage }
+                    })
                 });
-            } catch (e) {}
+
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok || (result && result.errors)) {
+                    const errDetail = (result && result.errors) ? JSON.stringify(result.errors) : ('HTTP ' + response.status);
+                    return { ok: false, error: errDetail };
+                }
+                return { ok: true, data: result };
+            } catch (err) {
+                return { ok: false, error: (err && err.message) ? err.message : String(err) };
+            }
+        }
+
+        async function sendDutyReminderPush(dateStr, team, names, btnEl) {
+            if (!auth.currentUser) return;
+            const reminderText = `⏰ Dienst-Erinnerung: ${dateStr} – ${team} (${names})`;
+            if (btnEl) btnEl.disabled = true;
+            try {
+                const res = await sendOneSignalPushToAll('⏰ Dienst-Erinnerung', reminderText);
+                if (res.ok) {
+                    alert("Dienst-Erinnerung per Push gesendet!\n\n" + reminderText);
+                } else {
+                    alert("Push-Versand fehlgeschlagen: " + res.error);
+                }
+            } finally {
+                if (btnEl) btnEl.disabled = false;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
