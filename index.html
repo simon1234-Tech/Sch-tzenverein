@@ -25,14 +25,22 @@
     <!-- OneSignal Web SDK v16 -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
+      window.__oneSignalReady = false;
+      window.__oneSignalInitError = null;
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-          appId: "97c2c2ee-175b-4e71-876a-f86f1ab04ace",
-          serviceWorkerParam: { scope: "/Sch-tzenverein/" },
-          serviceWorkerPath: "Sch-tzenverein/OneSignalSDKWorker.js",
-          allowLocalhostAsSecureOrigin: true
-        });
+        try {
+          await OneSignal.init({
+            appId: "97c2c2ee-175b-4e71-876a-f86f1ab04ace",
+            serviceWorkerParam: { scope: "/Sch-tzenverein/" },
+            serviceWorkerPath: "/Sch-tzenverein/OneSignalSDKWorker.js",
+            allowLocalhostAsSecureOrigin: true
+          });
+          window.__oneSignalReady = true;
+          window.__oneSignalInitError = null;
+        } catch (err) {
+          window.__oneSignalInitError = err;
+        }
         try {
           if (typeof updatePushButtonUI === 'function') updatePushButtonUI();
           if (OneSignal && OneSignal.Notifications && typeof OneSignal.Notifications.addEventListener === 'function') {
@@ -675,7 +683,7 @@
     <div id="page-news" class="page-content active">
         <!-- PUSH-BENACHRICHTIGUNGEN (DEZENT GANZ OBEN IM NEWS-BEREICH) -->
         <div id="push-notification-bar" style="margin-bottom: 12px;">
-            <button type="button" id="push-activate-btn" onclick="requestOneSignalPushPermission()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border-radius: 14px; border: 1.5px solid #cbd5e1; background: rgba(255, 255, 255, 0.92); color: #1e293b; font-size: 0.85em; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06); transition: all 0.2s;">
+            <button type="button" id="push-activate-btn" onclick="enablePushNotifications()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border-radius: 14px; border: 1.5px solid #cbd5e1; background: rgba(255, 255, 255, 0.92); color: #1e293b; font-size: 0.85em; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06); transition: all 0.2s;">
                 🔔 Push-Benachrichtigungen aktivieren
             </button>
             <div id="push-status-hint" style="display: none; margin-top: 6px; padding: 9px 12px; border-radius: 10px; font-size: 0.78em; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
@@ -4347,6 +4355,26 @@
 
         // --- ONESIGNAL WEB PUSH BENACHRICHTIGUNGEN ---
         const ONESIGNAL_APP_ID = '97c2c2ee-175b-4e71-876a-f86f1ab04ace';
+        let isPushRequestInFlight = false;
+
+        async function unregisterLegacyFirebaseServiceWorkers() {
+            if (!('serviceWorker' in navigator) || typeof navigator.serviceWorker.getRegistrations !== 'function') return;
+            try {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (const reg of registrations) {
+                    const urls = [
+                        reg.active && reg.active.scriptURL,
+                        reg.installing && reg.installing.scriptURL,
+                        reg.waiting && reg.waiting.scriptURL
+                    ].filter(Boolean);
+                    if (urls.some(url => url.includes('firebase-messaging-sw.js'))) {
+                        await reg.unregister().catch(() => false);
+                    }
+                }
+            } catch (e) {}
+        }
+
+        try { unregisterLegacyFirebaseServiceWorkers(); } catch (e) {}
 
         function isIosDeviceForPush() {
             const ua = navigator.userAgent || '';
@@ -4400,39 +4428,103 @@
             }
         }
 
-        async function requestOneSignalPushPermission() {
+        function waitForOneSignalInstance(timeoutMs = 3000) {
+            if (window.OneSignal && window.OneSignal.Notifications && window.__oneSignalReady) {
+                return Promise.resolve(window.OneSignal);
+            }
+            return new Promise((resolve, reject) => {
+                let settled = false;
+                const timer = setTimeout(() => {
+                    if (settled) return;
+                    settled = true;
+                    if (!window.OneSignal) {
+                        reject(new Error('ONESIGNAL_NOT_LOADED'));
+                    } else if (window.__oneSignalInitError) {
+                        reject(window.__oneSignalInitError);
+                    } else {
+                        reject(new Error('ONESIGNAL_NOT_LOADED'));
+                    }
+                }, timeoutMs);
+
+                window.OneSignalDeferred = window.OneSignalDeferred || [];
+                window.OneSignalDeferred.push(function(OneSignal) {
+                    if (settled) return;
+                    clearTimeout(timer);
+                    settled = true;
+                    if (window.__oneSignalInitError) {
+                        reject(window.__oneSignalInitError);
+                    } else {
+                        resolve(OneSignal);
+                    }
+                });
+            });
+        }
+
+        async function enablePushNotifications() {
+            if (isPushRequestInFlight) return;
+
             if (isIosDeviceForPush() && !window.navigator.standalone) {
                 updatePushButtonUI('Auf dem iPhone zuerst über Teilen → Zum Home-Bildschirm hinzufügen', false);
                 return;
             }
 
             const btn = document.getElementById('push-activate-btn');
-            if (btn) btn.disabled = true;
+            isPushRequestInFlight = true;
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = '⏳ Verbinde mit Push-Dienst...';
+                btn.style.background = 'rgba(255, 255, 255, 0.92)';
+                btn.style.borderColor = '#cbd5e1';
+                btn.style.color = '#1e293b';
+            }
 
             try {
-                await new Promise((resolve, reject) => {
-                    window.OneSignalDeferred = window.OneSignalDeferred || [];
-                    window.OneSignalDeferred.push(async function(OneSignal) {
-                        try {
-                            await OneSignal.Notifications.requestPermission();
-                            resolve();
-                        } catch (err) {
-                            reject(err);
-                        }
-                    });
-                });
-                updatePushButtonUI();
-                if (!isOneSignalPermissionGranted() && typeof Notification !== 'undefined' && Notification.permission === 'denied') {
-                    updatePushButtonUI('Push-Benachrichtigungen sind im Browser blockiert. Bitte in den Website-Einstellungen erlauben.', true);
+                const OneSignal = await waitForOneSignalInstance(3000);
+                if (!OneSignal || !OneSignal.Notifications) {
+                    throw new Error('ONESIGNAL_NOT_LOADED');
+                }
+
+                await OneSignal.Notifications.requestPermission();
+
+                if (OneSignal.User && OneSignal.User.PushSubscription && typeof OneSignal.User.PushSubscription.optIn === 'function') {
+                    try {
+                        await OneSignal.User.PushSubscription.optIn();
+                    } catch (optInErr) {}
+                }
+
+                if (isOneSignalPermissionGranted()) {
+                    updatePushButtonUI();
+                } else if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
+                    updatePushButtonUI('⚠️ Benachrichtigungen sind im Browser blockiert – bitte oben links neben der Webadresse auf das Schloss-Symbol tippen und Benachrichtigungen erlauben.', true);
+                } else {
+                    updatePushButtonUI();
                 }
             } catch (err) {
-                updatePushButtonUI('Push-Aktivierung fehlgeschlagen: ' + (err && err.message ? err.message : String(err)), true);
+                if (err && err.message === 'ONESIGNAL_NOT_LOADED') {
+                    updatePushButtonUI('Push-Dienst konnte nicht geladen werden (evtl. Werbeblocker deaktivieren oder Seite neu laden).', true);
+                } else if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
+                    updatePushButtonUI('⚠️ Benachrichtigungen sind im Browser blockiert – bitte oben links neben der Webadresse auf das Schloss-Symbol tippen und Benachrichtigungen erlauben.', true);
+                } else {
+                    updatePushButtonUI();
+                    alert("Push-Fehler: " + (err?.message || err));
+                }
             } finally {
+                isPushRequestInFlight = false;
                 if (btn) btn.disabled = false;
             }
         }
 
+        function requestOneSignalPushPermission() {
+            return enablePushNotifications();
+        }
+
         function initPushNotificationsUI() {
+            unregisterLegacyFirebaseServiceWorkers();
+            const btn = document.getElementById('push-activate-btn');
+            if (btn && !btn.dataset.pushListenerBound) {
+                btn.dataset.pushListenerBound = '1';
+                btn.addEventListener('click', enablePushNotifications);
+            }
             updatePushButtonUI();
             window.OneSignalDeferred = window.OneSignalDeferred || [];
             window.OneSignalDeferred.push(function() {
