@@ -36,7 +36,7 @@
           await OneSignal.init({
             appId: "97c2c2ee-175b-4e7f-876a-f86f1ab04ace",
             serviceWorkerParam: { scope: "/Sch-tzenverein/" },
-            serviceWorkerPath: "Sch-tzenverein/OneSignalSDKWorker.js",
+            serviceWorkerPath: "OneSignalSDKWorker.js",
             allowLocalhostAsSecureOrigin: true
           });
           window.__oneSignalReady = true;
@@ -4370,9 +4370,16 @@
                         reg.installing && reg.installing.scriptURL,
                         reg.waiting && reg.waiting.scriptURL
                     ].filter(Boolean);
+                    const isValidOneSignalSw = urls.some(url => {
+                        try {
+                            return new URL(url).pathname === '/Sch-tzenverein/OneSignalSDKWorker.js';
+                        } catch (e) {
+                            return url.endsWith('/Sch-tzenverein/OneSignalSDKWorker.js') && !url.includes('/Sch-tzenverein/Sch-tzenverein/');
+                        }
+                    });
                     const hasLegacyFirebaseSw = urls.some(url => url.includes('firebase-messaging-sw.js'));
-                    const hasWrongRootOneSignalSw = urls.some(url => url.includes('/OneSignalSDKWorker.js') && !url.includes('/Sch-tzenverein/'));
-                    if (hasLegacyFirebaseSw || hasWrongRootOneSignalSw) {
+                    const hasWrongOneSignalSw = urls.some(url => url.includes('OneSignalSDK')) && !isValidOneSignalSw;
+                    if (hasLegacyFirebaseSw || hasWrongOneSignalSw) {
                         await reg.unregister().catch(() => false);
                     }
                 }
