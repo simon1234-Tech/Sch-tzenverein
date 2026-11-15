@@ -4775,7 +4775,7 @@
 
             const cleanTitle = String(title || 'KB & SV Gaschurn-Partenen').trim();
             const cleanMessage = String(message || '').trim() || cleanTitle;
-            const WORKER_URL = "https://" + "kb-sv-push.simonpoeschel33" + ".workers.dev";
+            const WORKER_URL = "https://" + "kb-sv-push" + "." + "simonpoeschel33" + "." + "workers.dev";
 
             try {
                 const doc = await db.collection("settings").doc("push").get();
