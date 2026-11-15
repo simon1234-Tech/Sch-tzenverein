@@ -4372,7 +4372,40 @@
                     serviceWorkerRegistration: registration
                 });
             } catch (firstErr) {
-                if (!cleanExisting && registration.pushManager) {
+                const errCode = String((firstErr && firstErr.code) || '');
+                const errMsg = String((firstErr && firstErr.message) || firstErr || '');
+                const isSubscribeFailed = errCode.includes('token-subscribe-failed') || errMsg.includes('token-subscribe-failed');
+
+                if (isSubscribeFailed) {
+                    try {
+                        const allRegs = await navigator.serviceWorker.getRegistrations();
+                        await Promise.all(allRegs.map((reg) => reg.unregister().catch(() => false)));
+                    } catch (e) {}
+                    try {
+                        if (registration && typeof registration.unregister === 'function') {
+                            await registration.unregister();
+                        }
+                    } catch (e) {}
+
+                    fcmServiceWorkerRegPromise = null;
+                    await new Promise((resolve) => setTimeout(resolve, 500));
+
+                    const freshReg = await navigator.serviceWorker.register('./firebase-messaging-sw.js', { updateViaCache: 'none' });
+                    try { await freshReg.update(); } catch (e) {}
+                    const readyReg = (await navigator.serviceWorker.ready) || freshReg;
+
+                    if (readyReg && readyReg.pushManager) {
+                        const leftoverSub = await readyReg.pushManager.getSubscription();
+                        if (leftoverSub) {
+                            await leftoverSub.unsubscribe();
+                        }
+                    }
+
+                    token = await messaging.getToken({
+                        vapidKey: FCM_VAPID_KEY,
+                        serviceWorkerRegistration: readyReg
+                    });
+                } else if (!cleanExisting && registration.pushManager) {
                     const existingSub = await registration.pushManager.getSubscription();
                     if (existingSub) {
                         await existingSub.unsubscribe();
