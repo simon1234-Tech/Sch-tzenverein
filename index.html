@@ -39,6 +39,18 @@
       try { messaging = firebase.messaging(); } catch(e) {}
     </script>
 
+    <script>
+      try {
+        if (localStorage.getItem('kbsv_club_pin')) {
+          document.documentElement.classList.add('kbsv-pre-unlocked');
+        } else {
+          document.documentElement.classList.add('kbsv-pre-locked');
+        }
+      } catch (e) {
+        document.documentElement.classList.add('kbsv-pre-locked');
+      }
+    </script>
+
     <style>
         :root {
             --primary-red: #b91c1c; 
@@ -347,7 +359,6 @@
             background: rgba(15, 23, 42, 0.82); z-index: 99999; justify-content: center; align-items: center; padding: 10px;
             backdrop-filter: blur(6px);
         }
-        #reader:empty,
         #legal-modal[style*="display:none"],
         #legal-modal[style*="display: none"],
         #invoice-modal[style*="display:none"],
@@ -364,6 +375,44 @@
         #vote-modal[style*="display: none"] {
             display: none !important;
             pointer-events: none !important;
+        }
+        .legal-tabs-nav {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .legal-tab-btn {
+            flex: 1;
+            min-width: 110px;
+            background: #f1f5f9;
+            color: #334155;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.78em;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .legal-tab-btn.active {
+            background: linear-gradient(135deg, #b91c1c, #7f1d1d);
+            color: #ffffff;
+            border-color: #991b1b;
+            box-shadow: 0 4px 10px rgba(185, 28, 28, 0.22);
+        }
+        .legal-tab-panel {
+            display: none;
+            font-size: 0.84em;
+            line-height: 1.55;
+            color: var(--text-dark);
+        }
+        .legal-tab-panel.active {
+            display: block;
         }
         .invoice-preview-box {
             background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); width: 100%; max-width: 500px; border-radius: 20px; padding: 22px;
@@ -393,7 +442,11 @@
             align-items: center;
             justify-content: space-between;
         }
-        body.app-locked #club-lock-screen {
+        html.kbsv-pre-unlocked #club-lock-screen {
+            display: none !important;
+            pointer-events: none !important;
+        }
+        html:not(.kbsv-pre-unlocked) body.app-locked #club-lock-screen {
             display: flex;
             pointer-events: auto;
         }
@@ -401,15 +454,17 @@
             display: none !important;
             pointer-events: none !important;
         }
-        body.app-locked .app-header,
-        body.app-locked .page-content,
-        body.app-locked .bottom-nav,
-        body.app-locked #legal-footer-link {
+        html:not(.kbsv-pre-unlocked) body.app-locked .app-header,
+        html:not(.kbsv-pre-unlocked) body.app-locked .page-content,
+        html:not(.kbsv-pre-unlocked) body.app-locked .bottom-nav,
+        html:not(.kbsv-pre-unlocked) body.app-locked #legal-footer-link {
             display: none !important;
         }
+        html:not(.kbsv-pre-unlocked) body.app-locked.admin-direct-login .app-header,
         body.app-locked.admin-direct-login .app-header {
             display: block !important;
         }
+        html:not(.kbsv-pre-unlocked) body.app-locked.admin-direct-login #page-card,
         body.app-locked.admin-direct-login #page-card {
             display: block !important;
         }
@@ -572,12 +627,21 @@
             <button type="button" id="admin-direct-login-btn" onclick="openAdminDirectLogin()" style="background: none; border: none; color: #64748b; font-size: 0.8em; font-weight: 600; text-decoration: underline; cursor: pointer; font-family: inherit; padding: 10px 14px; position: relative; z-index: 6; pointer-events: auto;">
                 Direkt zum Admin-Login
             </button>
+            <div style="margin-top: 2px; font-size: 0.72em; color: #64748b; line-height: 1.5;">
+                <button type="button" onclick="openLegalModal('impressum')" style="background: none; border: none; color: #64748b; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Impressum</button>
+                <span> · </span>
+                <button type="button" onclick="openLegalModal('datenschutz')" style="background: none; border: none; color: #64748b; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Datenschutz</button>
+                <span> · </span>
+                <button type="button" onclick="openLegalModal('cookies')" style="background: none; border: none; color: #64748b; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Cookie-Einstellungen</button>
+            </div>
         </div>
     </div>
 
     <script>
         try {
             if (localStorage.getItem('kbsv_club_pin')) {
+                document.documentElement.classList.add('kbsv-pre-unlocked');
+                document.documentElement.classList.remove('kbsv-pre-locked');
                 document.body.classList.remove('app-locked');
             }
         } catch(e) {}
@@ -590,6 +654,14 @@
 
     <!-- 1. NEWS & STARTSEITE (AKTUELLER DIENSTPLAN) -->
     <div id="page-news" class="page-content active">
+        <!-- PUSH-BENACHRICHTIGUNGEN (DEZENT GANZ OBEN IM NEWS-BEREICH) -->
+        <div id="push-notification-bar" style="margin-bottom: 12px;">
+            <button type="button" id="push-activate-btn" onclick="requestPushPermissionAndSaveToken()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border-radius: 14px; border: 1.5px solid #cbd5e1; background: rgba(255, 255, 255, 0.92); color: #1e293b; font-size: 0.85em; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06); transition: all 0.2s;">
+                🔔 Push-Benachrichtigungen aktivieren
+            </button>
+            <div id="push-status-hint" style="display: none; margin-top: 6px; padding: 9px 12px; border-radius: 10px; font-size: 0.78em; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
+        </div>
+
         <!-- NÄCHSTER DIENST (LIVE VORSCHAU) -->
         <div class="glass-card next-duty-neon">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -688,6 +760,7 @@
             </p>
             <button onclick="startQrScanner('issue')" class="btn btn-admin btn-block">📷 QR-Code für Entnahme scannen</button>
             <div id="reader" style="width: 100%; margin-top: 12px; border-radius: 12px; overflow: hidden; display:none;"></div>
+            <div id="scanner-error-msg" style="display: none; margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: #fee2e2; border: 1.5px solid #fca5a5; color: #b91c1c; font-size: 0.82em; font-weight: 700; line-height: 1.4;"></div>
             <button id="stop-scanner-btn" onclick="stopQrScanner()" class="btn btn-danger btn-block" style="display: none; margin-top: 8px;">Scanner stoppen</button>
         </div>
 
@@ -916,6 +989,10 @@
                                     <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
                                     <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
                                     <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
+                                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85em; font-weight: 700; color: #1e293b; margin-bottom: 12px; cursor: pointer;">
+                                        <input type="checkbox" id="news-send-push" style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+                                        <span>📲 Push-Nachricht beim Veröffentlichen vormerken</span>
+                                    </label>
                                     <button type="submit" class="btn btn-admin btn-block">News Veröffentlichen</button>
                                 </form>
                             </div>
@@ -936,6 +1013,10 @@
                                     <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="Generalversammlung"></div>
                                     <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="15.12.2026"></div>
                                     <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
+                                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85em; font-weight: 700; color: #1e293b; margin-bottom: 12px; cursor: pointer;">
+                                        <input type="checkbox" id="event-send-push" style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
+                                        <span>📲 Push-Nachricht beim Veröffentlichen vormerken</span>
+                                    </label>
                                     <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
                                 </form>
                                 <div style="margin-top: 10px; border-top: 1px solid #fecaca; padding-top: 8px;">
@@ -1025,24 +1106,86 @@
         </div>
     </div>
 
-    <!-- IMPRESSUM & DATENSCHUTZ LINK & MODAL -->
+    <!-- IMPRESSUM, DATENSCHUTZ & COOKIE-EINSTELLUNGEN -->
     <div id="legal-footer-link" style="text-align: center; margin: 24px 0 10px 0; font-size: 0.75em; color: var(--text-muted);">
-        <span onclick="openLegalModal()" style="cursor: pointer; text-decoration: underline;">Impressum</span> | <span onclick="openLegalModal()" style="cursor: pointer; text-decoration: underline;">Datenschutz</span>
+        <span onclick="openLegalModal('impressum')" style="cursor: pointer; text-decoration: underline;">Impressum</span> · <span onclick="openLegalModal('datenschutz')" style="cursor: pointer; text-decoration: underline;">Datenschutz</span> · <span onclick="openLegalModal('cookies')" style="cursor: pointer; text-decoration: underline;">Cookie-Einstellungen</span>
     </div>
 
     <div id="legal-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:999999; justify-content:center; align-items:center; padding:16px; backdrop-filter:blur(5px);">
-        <div style="background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); width: 100%; max-width: 480px; border-radius: 20px; padding: 22px; max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 25px 35px -5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.9);" class="modal-anim">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                <h3 style="color: #b91c1c; font-size: 1.1em; font-weight: 800;">Impressum & Datenschutz</h3>
-                <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.75em;" onclick="closeLegalModal()">Schließen</button>
+        <div style="background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); width: 100%; max-width: 520px; border-radius: 20px; padding: 20px; max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 25px 35px -5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.9);" class="modal-anim">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="color: #b91c1c; font-size: 1.05em; font-weight: 800;">Rechtliche Hinweise</h3>
+                <button type="button" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.75em;" onclick="closeLegalModal()">Schließen</button>
             </div>
-            <div style="font-size: 0.85em; line-height: 1.5; color: var(--text-dark);">
-                <strong style="color: #b91c1c; font-size: 1em;">Kameradschaftsbund & Schützenverein Gaschurn-Partenen</strong><br>
-                Rütler 43b, 6794 Partenen<br>
-                ZVR-Zahl: 624291509<br>
-                E-Mail: Schutzenvereingaschurn@gmail.com<br><br>
-                <strong style="color: #2563eb;">Datenschutzhinweis:</strong><br>
-                Diese Vereins-App dient ausschließlich der internen Organisation, dem Schankbuch, dem digitalen Waffenbuch gemäß behördlichen Auflagen sowie der Terminverwaltung für Mitglieder. Alle Daten werden sicher über Firebase (Google Cloud) verarbeitet und nicht an Dritte weitergegeben.
+
+            <div class="legal-tabs-nav">
+                <button type="button" id="legal-btn-impressum" class="legal-tab-btn active" onclick="switchLegalTab('impressum')">Impressum</button>
+                <button type="button" id="legal-btn-datenschutz" class="legal-tab-btn" onclick="switchLegalTab('datenschutz')">Datenschutzerklärung</button>
+                <button type="button" id="legal-btn-cookies" class="legal-tab-btn" onclick="switchLegalTab('cookies')">Cookie-Einstellungen</button>
+            </div>
+
+            <div id="legal-panel-impressum" class="legal-tab-panel active">
+                <div style="font-size: 0.85em; font-weight: 800; color: #2563eb; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px;">Offenlegung nach § 25 MedienG &amp; § 5 ECG</div>
+                <p style="margin-bottom: 8px;">
+                    <strong style="color: #b91c1c; font-size: 1.05em;">KB Schützenverein Gaschurn-Partenen</strong><br>
+                    (Kameradschaftsbund und Schützenverein Gaschurn - Partenen, KB-SV-GP)
+                </p>
+                <p style="margin-bottom: 8px;">
+                    <strong>Sitz &amp; Zustellanschrift:</strong><br>
+                    Valschavielstraße 160, 6793 Gaschurn, Österreich
+                </p>
+                <p style="margin-bottom: 8px;">
+                    <strong>ZVR-Zahl:</strong> 624291509<br>
+                    <strong>Zuständige Behörde:</strong> Bezirkshauptmannschaft Bludenz<br>
+                    <strong>Kontakt E-Mail:</strong> Schutzenvereingaschurn@gmail.com
+                </p>
+                <p style="margin-bottom: 8px;">
+                    <strong>Vertretungsbefugte Organe (Vorstand):</strong><br>
+                    Oberschützenmeister Simon Schweighofer, Schützenmeister Heimo Stocker, Kassierin Karin Stocker, Schriftführerin Sabrina Kinzl.
+                </p>
+                <p style="margin-bottom: 8px;">
+                    <strong>Vertretungsregelung:</strong><br>
+                    Oberschützenmeister und Schriftführer gemeinsam, in Geldangelegenheiten Oberschützenmeister und Kassier gemeinsam.
+                </p>
+                <p style="margin-bottom: 0;">
+                    <strong>Vereinszweck:</strong><br>
+                    Pflege der Kameradschaft, Erhaltung des heimischen Brauchtums und der Tradition sowie Förderung des Schießsports im Montafon. Diese Web-App dient ausschließlich der internen Organisation und Information der Vereinsmitglieder.
+                </p>
+            </div>
+
+            <div id="legal-panel-datenschutz" class="legal-tab-panel">
+                <div style="font-size: 0.85em; font-weight: 800; color: #2563eb; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px;">Datenschutzerklärung (nach DSGVO &amp; österreichischem DSG)</div>
+                <p style="margin-bottom: 8px;">
+                    <strong>Verantwortlicher:</strong><br>
+                    KB Schützenverein Gaschurn-Partenen, Valschavielstraße 160, 6793 Gaschurn, vertreten durch Oberschützenmeister Simon Schweighofer (Schutzenvereingaschurn@gmail.com).
+                </p>
+                <p style="margin-bottom: 8px;">
+                    <strong>Zweck &amp; Rechtsgrundlage:</strong><br>
+                    Verarbeitung personenbezogener Daten ausschließlich für Vereinszwecke (Art. 6 Abs. 1 lit. b, c, f DSGVO): Dienstplan &amp; Termine, Schankbuch &amp; Lagerverwaltung sowie gesetzlich bzw. vereinsintern erforderliche Waffenbuch-Protokolle. Einsicht in abgeschlossene Waffenbuch-PDFs und unzensierte Waffennummern hat ausschließlich der berechtigte Vereinsvorstand.
+                </p>
+                <p style="margin-bottom: 8px;">
+                    <strong>Auftragsverarbeiter:</strong><br>
+                    Google Firebase (Google Ireland Limited, Dublin) für Datenbank &amp; Authentifizierung sowie GitHub Pages (GitHub B.V., Amsterdam) für die Bereitstellung der Web-Oberfläche.
+                </p>
+                <p style="margin-bottom: 0;">
+                    <strong>Speicherdauer &amp; Betroffenenrechte:</strong><br>
+                    Löschung nach Wegfall des Zwecks bzw. Ablauf gesetzlicher Aufbewahrungspflichten. Sie haben jederzeit das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung bei der Vereinsleitung sowie ein Beschwerderecht bei der Österreichischen Datenschutzbehörde (Barichgasse 40–42, 1030 Wien).
+                </p>
+            </div>
+
+            <div id="legal-panel-cookies" class="legal-tab-panel">
+                <div style="font-size: 0.85em; font-weight: 800; color: #2563eb; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px;">Cookie-Einstellungen (nach § 165 Abs. 3 TKG 2021)</div>
+                <p style="margin-bottom: 10px;">
+                    Diese Vereins-App setzt <strong>keine Werbe-, Statistik- oder Tracking-Cookies</strong> ein. Es erfolgt keine Weitergabe von Nutzungsdaten an Dritte zu Analysezwecken.
+                </p>
+                <p style="margin-bottom: 14px;">
+                    Zur technisch notwendigen Funktion verwendet die App ausschließlich lokalen Gerätespeicher:
+                    <br>• <code>localStorage</code> für das Merken des Vereins-Zugangscodes sowie den Dienstplan-Cache
+                    <br>• <code>sessionStorage</code> für den QR-Code-Sitzungsschutz beim Waffenbuch
+                </p>
+                <button type="button" onclick="clearLocalDeviceStorageAndReload()" class="btn btn-danger btn-block" style="margin-top: 4px; font-size: 0.9em;">
+                    🗑️ Lokalen Speicher &amp; Zugangscode auf diesem Gerät löschen
+                </button>
             </div>
         </div>
     </div>
@@ -1241,13 +1384,29 @@
 
     <!-- JAVASCRIPT LOGIK -->
     <script>
-        function openLegalModal() {
+        function switchLegalTab(tabName) {
+            const validTabs = ['impressum', 'datenschutz', 'cookies'];
+            const activeTab = validTabs.includes(tabName) ? tabName : 'impressum';
+            validTabs.forEach(t => {
+                const btn = document.getElementById('legal-btn-' + t);
+                const panel = document.getElementById('legal-panel-' + t);
+                if (btn) btn.classList.toggle('active', t === activeTab);
+                if (panel) panel.classList.toggle('active', t === activeTab);
+            });
+        }
+        function openLegalModal(tabName = 'impressum') {
+            switchLegalTab(tabName);
             const modal = document.getElementById('legal-modal');
             if (modal) { modal.style.display = 'flex'; modal.style.pointerEvents = 'auto'; }
         }
         function closeLegalModal() {
             const modal = document.getElementById('legal-modal');
             if (modal) { modal.style.display = 'none'; modal.style.pointerEvents = 'none'; }
+        }
+        function clearLocalDeviceStorageAndReload() {
+            try { localStorage.clear(); } catch (e) {}
+            try { sessionStorage.clear(); } catch (e) {}
+            window.location.reload();
         }
 
         function showCustomConfirm(titleText, messageText, onConfirm) {
@@ -1902,6 +2061,8 @@
             const title = document.getElementById('new-event-title').value.trim();
             const date = document.getElementById('new-event-date').value.trim();
             const desc = document.getElementById('new-event-desc').value.trim();
+            const sendPushEl = document.getElementById('event-send-push');
+            const sendPush = !!(sendPushEl && sendPushEl.checked);
 
             if (!title || !date) {
                 alert("Bitte Titel und Datum angeben!");
@@ -1913,12 +2074,14 @@
                     title,
                     date,
                     desc,
+                    sendPush,
                     votes: {},
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 document.getElementById('new-event-title').value = '';
                 document.getElementById('new-event-date').value = '';
                 document.getElementById('new-event-desc').value = '';
+                if (sendPushEl) sendPushEl.checked = false;
                 alert("Termin erfolgreich gespeichert!");
                 loadEvents();
             } catch (err) {
@@ -2512,45 +2675,131 @@
             }
         });
 
-        function startQrScanner(mode, recordId = null) {
+        let qrVideoObserver = null;
+
+        function enforceQrVideoInlineAttributes(readerDiv) {
+            if (!readerDiv) return;
+            readerDiv.querySelectorAll('video').forEach(video => {
+                video.setAttribute('playsinline', 'true');
+                video.setAttribute('webkit-playsinline', 'true');
+                video.playsInline = true;
+                video.muted = true;
+                video.setAttribute('muted', 'true');
+                video.setAttribute('autoplay', 'true');
+            });
+        }
+
+        function showScannerError(err) {
+            const reason = (err && err.message) ? err.message : String(err || 'Unbekannter Kamerafehler');
+            const userMsg = "Kamera-Zugriff blockiert oder nicht verfügbar – bitte Kamera-Berechtigung im Browser erlauben oder HTTPS prüfen. Grund: " + reason;
+            const errBox = document.getElementById('scanner-error-msg');
+            if (errBox) {
+                errBox.innerText = userMsg;
+                errBox.style.display = 'block';
+            }
+            const scannerCard = document.getElementById('scanner-card-issue');
+            const isScannerCardVisible = scannerCard && getComputedStyle(scannerCard).display !== 'none';
+            if (!errBox || !isScannerCardVisible) {
+                alert(userMsg);
+            }
+        }
+
+        function clearScannerError() {
+            const errBox = document.getElementById('scanner-error-msg');
+            if (errBox) {
+                errBox.innerText = '';
+                errBox.style.display = 'none';
+            }
+        }
+
+        async function startQrScanner(mode, recordId = null) {
             currentScanMode = mode;
             pendingReturnRecordId = recordId;
             isProcessingScan = false;
+            clearScannerError();
 
             const readerDiv = document.getElementById('reader');
-            if (readerDiv) readerDiv.style.display = 'block';
             const stopBtn = document.getElementById('stop-scanner-btn');
+            if (readerDiv) {
+                readerDiv.style.display = 'block';
+                readerDiv.style.minHeight = '260px';
+                readerDiv.style.width = '100%';
+            }
             if (stopBtn) stopBtn.style.display = 'block';
 
-            if (!html5QrCode) {
-                try {
-                    html5QrCode = new Html5Qrcode("reader");
-                } catch(e) {}
+            if (typeof Html5Qrcode === 'undefined') {
+                await stopQrScanner();
+                showScannerError(new Error('QR-Scanner-Bibliothek (Html5Qrcode) wurde nicht geladen.'));
+                return;
             }
 
             if (html5QrCode) {
-                html5QrCode.start(
-                    { facingMode: "environment" },
-                    { fps: 10, qrbox: { width: 250, height: 250 } },
-                    (decodedText, decodedResult) => {
-                        if (isProcessingScan) return;
-                        isProcessingScan = true;
-                        const scanMode = currentScanMode;
-                        const returnId = pendingReturnRecordId;
+                try { await html5QrCode.stop(); } catch (e) {}
+                try { await html5QrCode.clear(); } catch (e) {}
+            } else {
+                try {
+                    html5QrCode = new Html5Qrcode("reader");
+                } catch (e) {
+                    await stopQrScanner();
+                    showScannerError(e);
+                    return;
+                }
+            }
 
-                        stopQrScanner().then(() => {
-                            if (scanMode === 'issue') {
-                                unlockWeaponForm();
-                            } else if (scanMode === 'return' && returnId) {
-                                executeReturnProcess(returnId);
-                            }
-                        });
-                    },
-                    (errorMessage) => {}
-                ).catch(err => {
-                    stopQrScanner();
-                    alert("Kamera / QR-Scanner konnte nicht gestartet werden. Ein gültiger QR-Code-Scan ist erforderlich.");
+            if (readerDiv) {
+                readerDiv.style.display = 'block';
+                readerDiv.style.minHeight = '260px';
+                void readerDiv.offsetHeight;
+                if (qrVideoObserver) {
+                    try { qrVideoObserver.disconnect(); } catch (e) {}
+                }
+                qrVideoObserver = new MutationObserver(() => enforceQrVideoInlineAttributes(readerDiv));
+                qrVideoObserver.observe(readerDiv, { childList: true, subtree: true });
+            }
+            if (stopBtn) stopBtn.style.display = 'block';
+
+            const qrConfig = { fps: 10, qrbox: { width: 250, height: 250 } };
+            const onScanSuccess = (decodedText, decodedResult) => {
+                if (isProcessingScan) return;
+                isProcessingScan = true;
+                const scanMode = currentScanMode;
+                const returnId = pendingReturnRecordId;
+
+                stopQrScanner().then(() => {
+                    if (scanMode === 'issue') {
+                        unlockWeaponForm();
+                    } else if (scanMode === 'return' && returnId) {
+                        executeReturnProcess(returnId);
+                    }
                 });
+            };
+            const onScanFailure = (errorMessage) => {};
+
+            try {
+                await html5QrCode.start(
+                    { facingMode: "environment" },
+                    qrConfig,
+                    onScanSuccess,
+                    onScanFailure
+                );
+                enforceQrVideoInlineAttributes(readerDiv);
+            } catch (envErr) {
+                try {
+                    const cameras = await Html5Qrcode.getCameras();
+                    const fallbackSource = (Array.isArray(cameras) && cameras.length > 0)
+                        ? cameras[0].id
+                        : { facingMode: "user" };
+                    await html5QrCode.start(
+                        fallbackSource,
+                        qrConfig,
+                        onScanSuccess,
+                        onScanFailure
+                    );
+                    enforceQrVideoInlineAttributes(readerDiv);
+                } catch (fallbackErr) {
+                    await stopQrScanner();
+                    showScannerError(fallbackErr || envErr);
+                }
             }
         }
 
@@ -2574,6 +2823,10 @@
 
         async function stopQrScanner() {
             resetWeaponScanState();
+            if (qrVideoObserver) {
+                try { qrVideoObserver.disconnect(); } catch (e) {}
+                qrVideoObserver = null;
+            }
             if (html5QrCode) {
                 try {
                     await html5QrCode.stop();
@@ -2588,6 +2841,7 @@
                 if(stopBtn) stopBtn.style.display = 'none';
                 if(readerDiv) {
                     readerDiv.style.display = 'none';
+                    readerDiv.style.minHeight = '';
                     readerDiv.innerHTML = '';
                 }
             } catch(e) {}
@@ -3615,26 +3869,36 @@
             const title = document.getElementById('news-title').value;
             const text = document.getElementById('news-text').value;
             const fileInput = document.getElementById('news-photo-input');
+            const sendPushEl = document.getElementById('news-send-push');
+            const sendPush = !!(sendPushEl && sendPushEl.checked);
 
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = async function(uploadEvent) {
-                    await saveNewsToFirestore(title, text, uploadEvent.target.result);
+                    await saveNewsToFirestore(title, text, uploadEvent.target.result, sendPush);
                 };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
-                await saveNewsToFirestore(title, text, "");
+                await saveNewsToFirestore(title, text, "", sendPush);
             }
         }
 
-        async function saveNewsToFirestore(title, text, imageUrl) {
+        async function saveNewsToFirestore(title, text, imageUrl, sendPush = false) {
             if (!auth.currentUser) return;
             try {
-                await db.collection("news").add({ title, text, imageUrl, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                await db.collection("news").add({
+                    title,
+                    text,
+                    imageUrl,
+                    sendPush: !!sendPush,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
                 alert("News veröffentlicht!");
                 document.getElementById('news-title').value = '';
                 document.getElementById('news-text').value = '';
                 document.getElementById('news-photo-input').value = '';
+                const sendPushEl = document.getElementById('news-send-push');
+                if (sendPushEl) sendPushEl.checked = false;
                 loadNews();
             } catch (err) {}
         }
@@ -3679,6 +3943,7 @@
             try { loadNews(); } catch(e) {}
             try { loadEvents(); } catch(e) {}
             try { loadWeaponHistory(); } catch(e) {}
+            try { initPushNotificationsUI(); } catch(e) {}
         }
 
         function loadAdminProtectedData() {
@@ -3737,6 +4002,8 @@
         }
 
         function unlockClubApp() {
+            document.documentElement.classList.add('kbsv-pre-unlocked');
+            document.documentElement.classList.remove('kbsv-pre-locked');
             document.body.classList.remove('app-locked');
             document.body.classList.remove('admin-direct-login');
             const lockScreen = document.getElementById('club-lock-screen');
@@ -3759,6 +4026,8 @@
 
         function lockClubApp(forceClearInput = true) {
             try { localStorage.removeItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+            document.documentElement.classList.remove('kbsv-pre-unlocked');
+            document.documentElement.classList.add('kbsv-pre-locked');
             document.body.classList.remove('admin-direct-login');
             document.body.classList.add('app-locked');
             const lockScreen = document.getElementById('club-lock-screen');
@@ -3785,6 +4054,7 @@
                 lockScreen.style.display = 'none';
                 lockScreen.style.pointerEvents = 'none';
             }
+            document.documentElement.classList.remove('kbsv-pre-unlocked');
             document.body.classList.add('admin-direct-login');
             const pageCard = document.getElementById('page-card');
             const loginCard = document.getElementById('admin-login-card');
@@ -3795,6 +4065,8 @@
         }
 
         function exitAdminDirectLogin() {
+            document.documentElement.classList.remove('kbsv-pre-unlocked');
+            document.documentElement.classList.add('kbsv-pre-locked');
             document.body.classList.remove('admin-direct-login');
             document.body.classList.add('app-locked');
             const pageCard = document.getElementById('page-card');
@@ -3933,6 +4205,8 @@
 
             auth.signInWithEmailAndPassword(adminEmail, password)
                 .then((userCredential) => {
+                    document.documentElement.classList.add('kbsv-pre-unlocked');
+                    document.documentElement.classList.remove('kbsv-pre-locked');
                     document.body.classList.add('admin-mode');
                     document.body.classList.remove('app-locked');
                     document.body.classList.remove('admin-direct-login');
@@ -3979,6 +4253,8 @@
 
         auth.onAuthStateChanged((user) => {
             if (user) {
+                document.documentElement.classList.add('kbsv-pre-unlocked');
+                document.documentElement.classList.remove('kbsv-pre-locked');
                 document.body.classList.add('admin-mode');
                 document.body.classList.remove('app-locked');
                 document.body.classList.remove('admin-direct-login');
@@ -4012,6 +4288,141 @@
             }
         });
 
+        // --- FIREBASE PUSH-BENACHRICHTIGUNGEN (FCM) ---
+        const FCM_VAPID_KEY = 'BF2_KfUG_keimCkr0oKTA8BGXXOAv4QsmEsSUjjHwwgUG0H-vKJhWYm3rMqS-YFPJ6LlLrn2Ip-vAzT5hm2-2dg';
+        let fcmServiceWorkerRegPromise = null;
+
+        function registerFirebaseMessagingSW() {
+            if (!('serviceWorker' in navigator)) return Promise.resolve(null);
+            if (!fcmServiceWorkerRegPromise) {
+                fcmServiceWorkerRegPromise = navigator.serviceWorker.register('firebase-messaging-sw.js').catch(() => null);
+            }
+            return fcmServiceWorkerRegPromise;
+        }
+
+        function isIosDeviceForPush() {
+            const ua = navigator.userAgent || '';
+            return /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        }
+
+        function updatePushButtonUI(customHint = null, isError = false) {
+            const btn = document.getElementById('push-activate-btn');
+            const hint = document.getElementById('push-status-hint');
+            if (!btn) return;
+
+            const permission = (typeof Notification !== 'undefined') ? Notification.permission : 'default';
+            if (permission === 'granted') {
+                btn.innerText = '✅ Push-Benachrichtigungen aktiv';
+                btn.style.background = '#ecfdf5';
+                btn.style.borderColor = '#86efac';
+                btn.style.color = '#166534';
+            } else {
+                btn.innerText = '🔔 Push-Benachrichtigungen aktivieren';
+                btn.style.background = 'rgba(255, 255, 255, 0.92)';
+                btn.style.borderColor = '#cbd5e1';
+                btn.style.color = '#1e293b';
+            }
+
+            if (hint) {
+                if (customHint) {
+                    hint.innerText = customHint;
+                    hint.style.display = 'block';
+                    hint.style.background = isError ? '#fee2e2' : '#eff6ff';
+                    hint.style.borderColor = isError ? '#fca5a5' : '#bfdbfe';
+                    hint.style.color = isError ? '#b91c1c' : '#1e40af';
+                } else if (isIosDeviceForPush() && !window.navigator.standalone && permission !== 'granted') {
+                    hint.innerText = 'Auf dem iPhone bitte zuerst über Teilen → Zum Home-Bildschirm hinzufügen, danach Push aktivieren.';
+                    hint.style.display = 'block';
+                    hint.style.background = '#eff6ff';
+                    hint.style.borderColor = '#bfdbfe';
+                    hint.style.color = '#1e40af';
+                } else {
+                    hint.style.display = 'none';
+                    hint.innerText = '';
+                }
+            }
+        }
+
+        async function syncFcmTokenToFirestore() {
+            if (!messaging || typeof messaging.getToken !== 'function') return null;
+            if (!('serviceWorker' in navigator)) return null;
+            const registration = (await registerFirebaseMessagingSW()) || (await navigator.serviceWorker.ready);
+            if (!registration) return null;
+
+            const token = await messaging.getToken({
+                vapidKey: FCM_VAPID_KEY,
+                serviceWorkerRegistration: registration
+            });
+
+            if (token) {
+                await db.collection("fcm_tokens").doc(token).set({
+                    token: token,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    platform: navigator.userAgent || ''
+                }, { merge: true });
+            }
+            return token;
+        }
+
+        async function requestPushPermissionAndSaveToken() {
+            if (isIosDeviceForPush() && !window.navigator.standalone) {
+                updatePushButtonUI('Auf dem iPhone bitte zuerst über Teilen → Zum Home-Bildschirm hinzufügen, danach Push aktivieren.', false);
+                return;
+            }
+
+            if (typeof Notification === 'undefined' || !('serviceWorker' in navigator) || !messaging) {
+                updatePushButtonUI('Push-Benachrichtigungen werden von diesem Browser leider nicht unterstützt.', true);
+                return;
+            }
+
+            const btn = document.getElementById('push-activate-btn');
+            if (btn) btn.disabled = true;
+
+            try {
+                const permission = await Notification.requestPermission();
+                updatePushButtonUI();
+
+                if (permission === 'granted') {
+                    const token = await syncFcmTokenToFirestore();
+                    if (!token) {
+                        updatePushButtonUI('Erlaubnis erteilt, aber kein Push-Token erhalten. Bitte später erneut versuchen.', true);
+                    }
+                } else if (permission === 'denied') {
+                    updatePushButtonUI('Push-Benachrichtigungen sind im Browser blockiert. Bitte in den Website-Einstellungen erlauben.', true);
+                }
+            } catch (err) {
+                updatePushButtonUI('Push-Aktivierung fehlgeschlagen: ' + (err && err.message ? err.message : String(err)), true);
+            } finally {
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        function initPushNotificationsUI() {
+            registerFirebaseMessagingSW();
+            updatePushButtonUI();
+            if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+                syncFcmTokenToFirestore().catch(() => {});
+            }
+        }
+
+        if (messaging && typeof messaging.onMessage === 'function') {
+            try {
+                messaging.onMessage((payload) => {
+                    const notif = (payload && payload.notification) ? payload.notification : {};
+                    const data = (payload && payload.data) ? payload.data : {};
+                    const title = notif.title || data.title || 'KB & SV Gaschurn-Partenen';
+                    const body = notif.body || data.body || 'Neue Nachricht in der Vereins-App';
+                    if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+                        navigator.serviceWorker.getRegistration('firebase-messaging-sw.js').then((reg) => {
+                            if (reg && reg.showNotification) {
+                                reg.showNotification(title, { body: body, icon: 'logo.png', badge: 'logo.png' });
+                            }
+                        }).catch(() => {});
+                    }
+                });
+            } catch (e) {}
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 const pinInput = document.getElementById('club-pin-input');
@@ -4032,6 +4443,7 @@
                     }
                 });
             } catch(e) {}
+            try { initPushNotificationsUI(); } catch(e) {}
             try { initClubAccessGuard(); } catch(e) {}
             try { initWeaponBookNavigationGuard(); } catch(e) {}
         });
