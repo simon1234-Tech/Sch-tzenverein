@@ -4395,7 +4395,10 @@
             return (typeof Notification !== 'undefined') && Notification.permission === 'granted';
         }
 
-        function updatePushButtonUI(customHint = null, isError = false) {
+        let pushStatusHintLockUntil = 0;
+        let pushStatusHintHideTimer = null;
+
+        function updatePushButtonUI(customHint = null, isError = false, variant = null) {
             const btn = document.getElementById('push-activate-btn');
             const hint = document.getElementById('push-status-hint');
             if (!btn) return;
@@ -4415,11 +4418,27 @@
 
             if (hint) {
                 if (customHint) {
+                    if (pushStatusHintHideTimer) {
+                        clearTimeout(pushStatusHintHideTimer);
+                        pushStatusHintHideTimer = null;
+                    }
                     hint.innerText = customHint;
                     hint.style.display = 'block';
-                    hint.style.background = isError ? '#fee2e2' : '#eff6ff';
-                    hint.style.borderColor = isError ? '#fca5a5' : '#bfdbfe';
-                    hint.style.color = isError ? '#b91c1c' : '#1e40af';
+                    if (isError) {
+                        hint.style.background = '#fee2e2';
+                        hint.style.borderColor = '#fca5a5';
+                        hint.style.color = '#b91c1c';
+                    } else if (variant === 'success') {
+                        hint.style.background = '#ecfdf5';
+                        hint.style.borderColor = '#86efac';
+                        hint.style.color = '#166534';
+                    } else {
+                        hint.style.background = '#eff6ff';
+                        hint.style.borderColor = '#bfdbfe';
+                        hint.style.color = '#1e40af';
+                    }
+                } else if (Date.now() < pushStatusHintLockUntil && hint.innerText) {
+                    // Aktive Status-Meldung (z.B. Subscription-ID) nicht sofort durch permissionChange ausblenden
                 } else if (isIosDeviceForPush() && !window.navigator.standalone && !isGranted) {
                     hint.innerText = 'Auf dem iPhone zuerst über Teilen → Zum Home-Bildschirm hinzufügen';
                     hint.style.display = 'block';
@@ -4431,6 +4450,53 @@
                     hint.innerText = '';
                 }
             }
+        }
+
+        function showTemporaryPushSubscriptionMessage(subId) {
+            const hasId = Boolean(subId && String(subId).trim());
+            const msg = hasId
+                ? `✅ Gerät bei OneSignal registriert! Subscription-ID: ${subId}`
+                : 'ℹ️ Push aktiv, aber noch keine OneSignal-Subscription-ID vorhanden (evtl. Service Worker / Seite neu laden).';
+            pushStatusHintLockUntil = Date.now() + 10000;
+            updatePushButtonUI(msg, false, hasId ? 'success' : null);
+            pushStatusHintHideTimer = setTimeout(() => {
+                pushStatusHintLockUntil = 0;
+                pushStatusHintHideTimer = null;
+                updatePushButtonUI();
+            }, 10000);
+        }
+
+        async function getOneSignalSubscriptionId(OneSignal, maxWaitMs = 2000) {
+            try {
+                const existingId = OneSignal?.User?.PushSubscription?.id;
+                if (existingId) return existingId;
+            } catch (e) {}
+
+            return new Promise((resolve) => {
+                let done = false;
+                const finish = (idVal) => {
+                    if (done) return;
+                    done = true;
+                    clearInterval(pollTimer);
+                    clearTimeout(timeoutTimer);
+                    resolve(idVal || null);
+                };
+
+                const pollTimer = setInterval(() => {
+                    try {
+                        const idVal = OneSignal?.User?.PushSubscription?.id;
+                        if (idVal) finish(idVal);
+                    } catch (e) {}
+                }, 150);
+
+                const timeoutTimer = setTimeout(() => {
+                    try {
+                        finish(OneSignal?.User?.PushSubscription?.id || null);
+                    } catch (e) {
+                        finish(null);
+                    }
+                }, maxWaitMs);
+            });
         }
 
         function waitForOneSignalInstance(timeoutMs = 3000) {
@@ -4498,13 +4564,17 @@
                 }
 
                 if (isOneSignalPermissionGranted()) {
-                    updatePushButtonUI();
+                    const subscriptionId = await getOneSignalSubscriptionId(OneSignal, 2000);
+                    showTemporaryPushSubscriptionMessage(subscriptionId);
                 } else if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
+                    pushStatusHintLockUntil = 0;
                     updatePushButtonUI('⚠️ Benachrichtigungen sind im Browser blockiert – bitte oben links neben der Webadresse auf das Schloss-Symbol tippen und Benachrichtigungen erlauben.', true);
                 } else {
+                    pushStatusHintLockUntil = 0;
                     updatePushButtonUI();
                 }
             } catch (err) {
+                pushStatusHintLockUntil = 0;
                 if (err && err.message === 'ONESIGNAL_NOT_LOADED') {
                     updatePushButtonUI('Push-Dienst konnte nicht geladen werden (evtl. Werbeblocker deaktivieren oder Seite neu laden).', true);
                 } else if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
