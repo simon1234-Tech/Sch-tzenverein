@@ -4789,7 +4789,7 @@
                     ? (window.location.origin + window.location.pathname)
                     : "https://github.io";
 
-                const response = await fetch(WORKER_URL, {
+                const res = await fetch(WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -4801,36 +4801,26 @@
                     })
                 });
 
-                const rawText = await response.text().catch(() => '');
-                let result = {};
-                try {
-                    result = rawText ? JSON.parse(rawText) : {};
-                } catch (parseErr) {}
+                const data = await res.json();
 
-                const hasErrors = !!(
-                    (result && result.ok === false) ||
-                    (result && result.error) ||
-                    (result && result.errors && (!Array.isArray(result.errors) || result.errors.length > 0))
-                );
-                if (!response.ok || hasErrors) {
-                    const errorText = (result && result.error)
-                        ? String(result.error)
-                        : (result && result.errors ? JSON.stringify(result.errors) : (rawText || ('HTTP ' + response.status)));
-                    return { ok: false, error: errorText };
+                if (res.ok && data && data.id && !data.errors && !data.error && data.ok !== false) {
+                    const recipientCount = data.recipients ?? 'OK';
+                    try {
+                        const existingToast = document.getElementById('push-success-toast');
+                        if (existingToast) existingToast.remove();
+                        const toast = document.createElement('div');
+                        toast.id = 'push-success-toast';
+                        toast.innerText = `✅ Push-Nachricht erfolgreich an alle Mitglieder gesendet! (Empfänger: ${recipientCount})`;
+                        toast.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99999999;background:#16a34a;color:#ffffff;padding:12px 18px;border-radius:14px;font-weight:800;font-size:0.9em;box-shadow:0 10px 25px rgba(22,163,74,0.35);border:2px solid #86efac;max-width:92%;text-align:center;';
+                        document.body.appendChild(toast);
+                        setTimeout(() => { try { toast.remove(); } catch (e) {} }, 4000);
+                    } catch (toastErr) {}
+
+                    return { ok: true, data: data };
                 }
 
-                try {
-                    const existingToast = document.getElementById('push-success-toast');
-                    if (existingToast) existingToast.remove();
-                    const toast = document.createElement('div');
-                    toast.id = 'push-success-toast';
-                    toast.innerText = '✅ Push-Nachricht erfolgreich an alle Mitglieder gesendet!';
-                    toast.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99999999;background:#16a34a;color:#ffffff;padding:12px 18px;border-radius:14px;font-weight:800;font-size:0.9em;box-shadow:0 10px 25px rgba(22,163,74,0.35);border:2px solid #86efac;max-width:92%;text-align:center;';
-                    document.body.appendChild(toast);
-                    setTimeout(() => { try { toast.remove(); } catch (e) {} }, 4000);
-                } catch (toastErr) {}
-
-                return { ok: true, data: result };
+                alert("OneSignal-Rückmeldung: " + JSON.stringify(data));
+                return { ok: false, error: JSON.stringify(data) };
             } catch (err) {
                 const errorText = (err && err.message) ? err.message : String(err);
                 return { ok: false, error: errorText };
