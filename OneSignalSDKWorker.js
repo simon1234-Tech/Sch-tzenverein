@@ -1,3 +1,1 @@
 importScripts("https://onesignal.com");
-
-
