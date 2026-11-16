@@ -833,12 +833,19 @@
             background: rgba(15, 23, 42, 0.82); z-index: 99999; justify-content: center; align-items: center; padding: 10px;
             backdrop-filter: blur(6px);
         }
+        #tresor-qr-modal {
+            display: none; pointer-events: none; position: fixed; inset: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.82); z-index: 99999; justify-content: center; align-items: center; padding: 12px;
+            backdrop-filter: blur(6px);
+        }
         #legal-modal[style*="display:none"],
         #legal-modal[style*="display: none"],
         #invoice-modal[style*="display:none"],
         #invoice-modal[style*="display: none"],
         #weapon-pdf-modal[style*="display:none"],
         #weapon-pdf-modal[style*="display: none"],
+        #tresor-qr-modal[style*="display:none"],
+        #tresor-qr-modal[style*="display: none"],
         #customConfirm[style*="display:none"],
         #customConfirm[style*="display: none"],
         #admin-success-modal[style*="display:none"],
@@ -1242,7 +1249,7 @@
             <button id="stop-scanner-btn" onclick="stopQrScanner()" class="btn btn-danger btn-block" style="display: none; margin-top: 8px;">Scanner stoppen</button>
         </div>
 
-        <div id="weapon-form-card" class="glass-card glass-card-red" style="border-left-color: #b91c1c !important; opacity: 0.5; pointer-events: none; transition: all 0.3s;">
+        <div id="weapon-form-card" class="glass-card glass-card-red" style="border-left-color: #b91c1c !important; transition: all 0.3s;">
             <div class="card-title" style="color: #b91c1c; font-size: 1.2em;">
                 <span style="display: inline-flex; align-items: center; gap: 8px;">
                     <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
@@ -1276,40 +1283,53 @@
                 Erfassung für Ausrückungen gemäß ZVR-XXXXXXXXX (Schützenhaus Partenen).
             </p>
 
-            <form onsubmit="saveWeaponIssue(event)">
-                <div class="form-group">
-                    <label>1. Übernehmer / Hauptverantwortlicher</label>
-                    <select class="form-control" id="weapon-member-primary" required style="font-weight: 700;">
-                        <option value="">-- Übernehmer wählen --</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>2. Mitabholer / Zweiter Waffenwart (optional)</label>
-                    <select class="form-control" id="weapon-member-secondary">
-                        <option value="">-- Keiner / Alleinübernahme --</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>3. Karabiner / Salutwaffen auswählen (Mehrfachauswahl möglich)</label>
-                    <div id="weapon-checkboxes-container" style="background: rgba(248,250,252,0.9); border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
-                        <!-- Dynamisch generierte Waffenliste -->
+            <div id="weapon-form-container" style="position: relative; border-radius: 16px;">
+                <div id="weapon-lock-overlay" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.72); backdrop-filter: blur(4px); border-radius: 16px; z-index: 20; padding: 20px;">
+                    <div style="background: linear-gradient(145deg, #fef2f2 0%, #fee2e2 100%); border: 3px solid #dc2626; border-radius: 20px; padding: 24px 28px; max-width: 440px; width: 100%; text-align: center; box-shadow: 0 18px 40px rgba(220, 38, 38, 0.25);">
+                        <span style="font-size: 3.2rem; line-height: 1; margin-bottom: 10px; display: block;">⚠️</span>
+                        <div style="font-size: 1.55rem; font-weight: 900; color: #b91c1c; letter-spacing: 0.04em;">GESPERRT</div>
+                        <div style="font-size: 1.15rem; font-weight: 800; color: #991b1b; margin-top: 2px;">Tresor-Scan erforderlich</div>
+                        <p style="font-size: 0.95rem; font-weight: 600; color: #7f1d1d; margin-top: 10px; margin-bottom: 0; line-height: 1.45;">
+                            Bitte scanne zuerst oben den offiziellen QR-Code direkt am Waffentresor, um die Entnahme freizuschalten.
+                        </p>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>4. Anlass / Grund der Ausrückung</label>
-                    <input type="text" class="form-control" id="weapon-occasion" required placeholder="z.B. Fronleichnam Prozession / Begräbnis">
-                </div>
+                <form id="weapon-issue-form" onsubmit="saveWeaponIssue(event)" style="opacity: 0.45; pointer-events: none; transition: opacity 0.3s;">
+                    <div class="form-group">
+                        <label>1. Übernehmer / Hauptverantwortlicher</label>
+                        <select class="form-control" id="weapon-member-primary" required style="font-weight: 700;">
+                            <option value="">-- Übernehmer wählen --</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <label>5. Ort der Ausrückung</label>
-                    <input type="text" class="form-control" id="weapon-location" required value="Pfarrkirche Partenen" placeholder="Ort eingeben">
-                </div>
+                    <div class="form-group">
+                        <label>2. Mitabholer / Zweiter Waffenwart (optional)</label>
+                        <select class="form-control" id="weapon-member-secondary">
+                            <option value="">-- Keiner / Alleinübernahme --</option>
+                        </select>
+                    </div>
 
-                <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.15em; padding: 18px 24px; font-weight: 800; background: linear-gradient(135deg, #dc2626, #991b1b); box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);">🚀 Waffen entnehmen & Protokoll abschließen</button>
-            </form>
+                    <div class="form-group">
+                        <label>3. Karabiner / Salutwaffen auswählen (Mehrfachauswahl möglich)</label>
+                        <div id="weapon-checkboxes-container" style="background: rgba(248,250,252,0.9); border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+                            <!-- Dynamisch generierte Waffenliste -->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>4. Anlass / Grund der Ausrückung</label>
+                        <input type="text" class="form-control" id="weapon-occasion" required placeholder="z.B. Fronleichnam Prozession / Begräbnis">
+                    </div>
+
+                    <div class="form-group">
+                        <label>5. Ort der Ausrückung</label>
+                        <input type="text" class="form-control" id="weapon-location" required value="Pfarrkirche Partenen" placeholder="Ort eingeben">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.15em; padding: 18px 24px; font-weight: 800; background: linear-gradient(135deg, #dc2626, #991b1b); box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);">🚀 Waffen entnehmen & Protokoll abschließen</button>
+                </form>
+            </div>
         </div>
 
         <div class="glass-card glass-card-blue" style="border-left-color: #2563eb !important;">
@@ -1554,7 +1574,10 @@
                     <div class="admin-glass-card">
                         <div class="admin-glass-card-title">
                             <span>🎯 Waffenbuch-Protokolle &amp; Export</span>
-                            <button type="button" class="btn admin-btn-save" onclick="exportFullWeaponListPDF()">📥 Waffenliste PDF</button>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button type="button" class="btn admin-btn-save" onclick="exportFullWeaponListPDF()">📥 Waffenliste PDF</button>
+                                <button type="button" class="btn admin-btn-edit" onclick="exportTresorQrCodePNG()">📷 Tresor-QR-Code PNG</button>
+                            </div>
                         </div>
                         <p class="admin-muted-text" style="margin-bottom: 10px;">Übersicht aller gespeicherten Entnahme- und Rückgabeprotokolle (inkl. getrennter ZWR/ZVR-Daten):</p>
                         <div id="admin-weapon-pdf-list"><p class="admin-muted-text">Keine Protokolle vorhanden.</p></div>
@@ -1758,6 +1781,29 @@
                         <a id="weapon-pdf-fallback-link" href="#" download="Protokoll.pdf" style="color: #93c5fd; text-decoration: underline;">Direkt öffnen / speichern</a>
                     </div>
                     <iframe id="weapon-pdf-iframe" title="Waffenbuch PDF Vorschau" style="width: 100%; height: 480px; border: none; background: #ffffff; display: block;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FÜR TRESOR-QR-CODE VORSCHAU & DOWNLOAD -->
+    <div id="tresor-qr-modal" style="display: none; pointer-events: none;" onclick="if (event.target === this) closeTresorQrModal()">
+        <div style="background: #ffffff; width: 100%; max-width: 440px; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.45); border: 1.5px solid #e2e8f0;" class="modal-anim">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 14px 16px; background: #f8fafc; border-bottom: 1.5px solid #e2e8f0;">
+                <h3 style="color: #b91c1c; font-size: 1em; font-weight: 800; margin: 0;">📷 Offizieller Tresor-QR-Code</h3>
+                <button type="button" onclick="closeTresorQrModal()" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px; margin-top: 0;">✖ Schließen</button>
+            </div>
+            <div style="padding: 18px 16px; background: #f1f5f9; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                <div style="background: #ffffff; padding: 12px; border-radius: 14px; border: 1.5px solid #cbd5e1; box-shadow: 0 4px 12px rgba(15,23,42,0.08); display: inline-block;">
+                    <img id="tresor-qr-preview-img" src="" alt="Tresor QR-Code KBSV-TRESOR-GASCHURN" style="width: 260px; height: 260px; max-width: 100%; display: block; image-rendering: pixelated; border-radius: 6px;">
+                </div>
+                <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 8px 14px; font-size: 0.85em; color: #0f172a; font-weight: 700; width: 100%;">
+                    Code-Inhalt: <span style="font-family: monospace; color: #b91c1c;">KBSV-TRESOR-GASCHURN</span><br>
+                    <span style="font-size: 0.85em; font-weight: 500; color: #475569;">Auflösung: 500 × 500 px (PNG) – direkt am Bildschirm scannbar</span>
+                </div>
+                <div style="display: flex; gap: 8px; width: 100%;">
+                    <button type="button" onclick="downloadTresorQrCodePNG()" class="btn btn-green" style="flex: 1; padding: 10px 12px; font-size: 13px; margin-top: 0;">📥 Erneut herunterladen</button>
+                    <button type="button" onclick="closeTresorQrModal()" class="btn" style="padding: 10px 14px; font-size: 13px; margin-top: 0; background: #e2e8f0; color: #1e293b;">Schließen</button>
                 </div>
             </div>
         </div>
@@ -2059,6 +2105,9 @@
 
         function switchTab(tabId) {
             stopQrScanner();
+            if (tabId !== 'weapons' && typeof weaponSessionUnlocked !== 'undefined' && weaponSessionUnlocked) {
+                try { lockWeaponFormUI(); } catch(e) {}
+            }
             if (tabId !== 'card') {
                 try { lockSecuritySettingsFields(); } catch(e) {}
                 const secBlock = document.getElementById('admin-sec-security');
@@ -2546,6 +2595,411 @@
             });
 
             pdf.save(`Vollstaendiges_Waffenverzeichnis_${dateStr.replace(/\./g, '-')}.pdf`);
+        }
+
+        // --- OFFLINE TRESOR QR-CODE GENERATOR (500x500 PNG FÜR "KBSV-TRESOR-GASCHURN") ---
+        const TRESOR_QR_TEXT = "KBSV-TRESOR-GASCHURN";
+        const TRESOR_QR_FILENAME = "Tresor_QR_Code_KBSV.png";
+        let lastGeneratedTresorQrDataUrl = "";
+
+        function buildQrMatrixIso(text) {
+            const bytes = Array.from(new TextEncoder().encode(String(text || "")));
+            // ECC-M Tabellen für Versionen 1..6: [version, totalCodewords, ecPerBlock, blocksG1, dataG1, blocksG2, dataG2, alignCenters]
+            const specs = [
+                [1,  26, 10, 1, 16, 0,  0, []],
+                [2,  44, 16, 1, 28, 0,  0, [6, 18]],
+                [3,  70, 26, 1, 44, 0,  0, [6, 22]],
+                [4, 100, 18, 2, 32, 0,  0, [6, 26]],
+                [5, 134, 24, 2, 43, 0,  0, [6, 30]],
+                [6, 172, 16, 4, 27, 0,  0, [6, 34]]
+            ];
+            let chosen = null;
+            for (const s of specs) {
+                const totalDataBytes = s[3] * s[4] + s[5] * s[6];
+                const neededBits = 4 + 8 + bytes.length * 8;
+                if (neededBits <= totalDataBytes * 8) {
+                    chosen = s;
+                    break;
+                }
+            }
+            if (!chosen) throw new Error("QR-Text zu lang");
+
+            const [version, , ecPerBlock, blocksG1, dataG1, blocksG2, dataG2, alignCenters] = chosen;
+            const totalDataBytes = blocksG1 * dataG1 + blocksG2 * dataG2;
+            const size = version * 4 + 17;
+
+            // Bitstream aufbauen (Byte-Mode 0100 + 8-Bit Länge + Payload + Terminator + Padding)
+            const bits = [];
+            const pushBits = (val, len) => {
+                for (let i = len - 1; i >= 0; i--) bits.push((val >>> i) & 1);
+            };
+            pushBits(0b0100, 4);
+            pushBits(bytes.length, 8);
+            for (const b of bytes) pushBits(b, 8);
+            const capBits = totalDataBytes * 8;
+            const termLen = Math.min(4, capBits - bits.length);
+            pushBits(0, termLen);
+            while (bits.length % 8 !== 0) bits.push(0);
+            let padToggle = 0;
+            while (bits.length < capBits) {
+                pushBits(padToggle ? 0x11 : 0xEC, 8);
+                padToggle ^= 1;
+            }
+
+            const dataCodewords = [];
+            for (let i = 0; i < bits.length; i += 8) {
+                let byte = 0;
+                for (let j = 0; j < 8; j++) byte = (byte << 1) | bits[i + j];
+                dataCodewords.push(byte);
+            }
+
+            // GF(256) Tabellen (Polynom 0x11D)
+            const gfExp = new Uint8Array(512);
+            const gfLog = new Uint8Array(256);
+            let x = 1;
+            for (let i = 0; i < 255; i++) {
+                gfExp[i] = x;
+                gfExp[i + 255] = x;
+                gfLog[x] = i;
+                x <<= 1;
+                if (x & 0x100) x ^= 0x11D;
+            }
+            const gfMul = (a, b) => (a === 0 || b === 0) ? 0 : gfExp[gfLog[a] + gfLog[b]];
+
+            let rsPoly = [1];
+            for (let i = 0; i < ecPerBlock; i++) {
+                const next = new Array(rsPoly.length + 1).fill(0);
+                for (let j = 0; j < rsPoly.length; j++) {
+                    next[j] ^= rsPoly[j];
+                    next[j + 1] ^= gfMul(rsPoly[j], gfExp[i]);
+                }
+                rsPoly = next;
+            }
+
+            const computeEc = (blockData) => {
+                const res = new Array(ecPerBlock).fill(0);
+                for (const b of blockData) {
+                    const factor = b ^ res[0];
+                    res.shift();
+                    res.push(0);
+                    for (let j = 0; j < ecPerBlock; j++) {
+                        res[j] ^= gfMul(rsPoly[j + 1], factor);
+                    }
+                }
+                return res;
+            };
+
+            const dataBlocks = [];
+            const ecBlocks = [];
+            let offset = 0;
+            for (let i = 0; i < blocksG1; i++) {
+                const blk = dataCodewords.slice(offset, offset + dataG1);
+                offset += dataG1;
+                dataBlocks.push(blk);
+                ecBlocks.push(computeEc(blk));
+            }
+            for (let i = 0; i < blocksG2; i++) {
+                const blk = dataCodewords.slice(offset, offset + dataG2);
+                offset += dataG2;
+                dataBlocks.push(blk);
+                ecBlocks.push(computeEc(blk));
+            }
+
+            const interleaved = [];
+            const maxDataLen = Math.max(dataG1, dataG2);
+            for (let i = 0; i < maxDataLen; i++) {
+                for (const blk of dataBlocks) {
+                    if (i < blk.length) interleaved.push(blk[i]);
+                }
+            }
+            for (let i = 0; i < ecPerBlock; i++) {
+                for (const blk of ecBlocks) interleaved.push(blk[i]);
+            }
+
+            const fullBits = [];
+            for (const cw of interleaved) {
+                for (let b = 7; b >= 0; b--) fullBits.push((cw >>> b) & 1);
+            }
+
+            // Funktionsmuster aufbauen
+            const baseModules = Array.from({ length: size }, () => new Uint8Array(size));
+            const isFunction = Array.from({ length: size }, () => new Uint8Array(size));
+
+            const setFn = (r, c, dark) => {
+                if (r < 0 || c < 0 || r >= size || c >= size) return;
+                baseModules[r][c] = dark ? 1 : 0;
+                isFunction[r][c] = 1;
+            };
+
+            const drawFinder = (top, left) => {
+                for (let dr = -1; dr <= 7; dr++) {
+                    for (let dc = -1; dc <= 7; dc++) {
+                        const r = top + dr;
+                        const c = left + dc;
+                        if (r < 0 || c < 0 || r >= size || c >= size) continue;
+                        const inside = dr >= 0 && dr <= 6 && dc >= 0 && dc <= 6;
+                        const dark = inside && (
+                            dr === 0 || dr === 6 || dc === 0 || dc === 6 ||
+                            (dr >= 2 && dr <= 4 && dc >= 2 && dc <= 4)
+                        );
+                        setFn(r, c, dark);
+                    }
+                }
+            };
+            drawFinder(0, 0);
+            drawFinder(0, size - 7);
+            drawFinder(size - 7, 0);
+
+            for (const cr of alignCenters) {
+                for (const cc of alignCenters) {
+                    const overlapsFinder =
+                        (cr <= 8 && cc <= 8) ||
+                        (cr <= 8 && cc >= size - 9) ||
+                        (cr >= size - 9 && cc <= 8);
+                    if (overlapsFinder) continue;
+                    for (let dr = -2; dr <= 2; dr++) {
+                        for (let dc = -2; dc <= 2; dc++) {
+                            const dist = Math.max(Math.abs(dr), Math.abs(dc));
+                            setFn(cr + dr, cc + dc, dist === 0 || dist === 2);
+                        }
+                    }
+                }
+            }
+
+            for (let i = 8; i < size - 8; i++) {
+                if (!isFunction[6][i]) setFn(6, i, i % 2 === 0);
+                if (!isFunction[i][6]) setFn(i, 6, i % 2 === 0);
+            }
+
+            setFn(size - 8, 8, true);
+
+            // Format-Info-Felder reservieren
+            for (let i = 0; i <= 8; i++) {
+                if (i !== 6) {
+                    isFunction[8][i] = 1;
+                    isFunction[i][8] = 1;
+                }
+            }
+            for (let i = size - 8; i < size; i++) isFunction[8][i] = 1;
+            for (let i = size - 7; i < size; i++) isFunction[i][8] = 1;
+
+            // Datenbits im Zickzack platzieren
+            let bitIdx = 0;
+            let upward = true;
+            for (let rightCol = size - 1; rightCol >= 1; rightCol -= 2) {
+                if (rightCol === 6) rightCol = 5;
+                for (let step = 0; step < size; step++) {
+                    const r = upward ? (size - 1 - step) : step;
+                    for (let cOffset = 0; cOffset < 2; cOffset++) {
+                        const c = rightCol - cOffset;
+                        if (!isFunction[r][c]) {
+                            baseModules[r][c] = bitIdx < fullBits.length ? fullBits[bitIdx] : 0;
+                            bitIdx++;
+                        }
+                    }
+                }
+                upward = !upward;
+            }
+
+            const applyMaskAndFormat = (maskId) => {
+                const grid = baseModules.map(row => new Uint8Array(row));
+                for (let r = 0; r < size; r++) {
+                    for (let c = 0; c < size; c++) {
+                        if (isFunction[r][c]) continue;
+                        let invert = false;
+                        switch (maskId) {
+                            case 0: invert = (r + c) % 2 === 0; break;
+                            case 1: invert = r % 2 === 0; break;
+                            case 2: invert = c % 3 === 0; break;
+                            case 3: invert = (r + c) % 3 === 0; break;
+                            case 4: invert = (Math.floor(r / 2) + Math.floor(c / 3)) % 2 === 0; break;
+                            case 5: invert = ((r * c) % 2 + (r * c) % 3) === 0; break;
+                            case 6: invert = (((r * c) % 2 + (r * c) % 3) % 2) === 0; break;
+                            case 7: invert = (((r + c) % 2 + (r * c) % 3) % 2) === 0; break;
+                        }
+                        if (invert) grid[r][c] ^= 1;
+                    }
+                }
+
+                // ECC-M = 00 -> 5-bit Format = maskId
+                let rem = maskId << 10;
+                for (let i = 4; i >= 0; i--) {
+                    if ((rem >>> (i + 10)) & 1) rem ^= (0x537 << i);
+                }
+                const fmtBits = ((maskId << 10) | rem) ^ 0x5412;
+                const fmtBit = (pos) => (fmtBits >>> pos) & 1;
+
+                const topLeftCols = [0, 1, 2, 3, 4, 5, 7, 8];
+                for (let i = 0; i < 8; i++) grid[8][topLeftCols[i]] = fmtBit(14 - i);
+                const topLeftRows = [7, 5, 4, 3, 2, 1, 0];
+                for (let i = 0; i < 7; i++) grid[topLeftRows[i]][8] = fmtBit(6 - i);
+                for (let i = 0; i < 7; i++) grid[size - 1 - i][8] = fmtBit(14 - i);
+                for (let i = 0; i < 8; i++) grid[8][size - 8 + i] = fmtBit(7 - i);
+
+                return grid;
+            };
+
+            const scoreGrid = (grid) => {
+                let penalty = 0;
+                // N1: 5+ gleiche Module in Folge
+                for (let r = 0; r < size; r++) {
+                    let runColor = grid[r][0], runLen = 1;
+                    for (let c = 1; c < size; c++) {
+                        if (grid[r][c] === runColor) runLen++;
+                        else {
+                            if (runLen >= 5) penalty += 3 + (runLen - 5);
+                            runColor = grid[r][c];
+                            runLen = 1;
+                        }
+                    }
+                    if (runLen >= 5) penalty += 3 + (runLen - 5);
+                }
+                for (let c = 0; c < size; c++) {
+                    let runColor = grid[0][c], runLen = 1;
+                    for (let r = 1; r < size; r++) {
+                        if (grid[r][c] === runColor) runLen++;
+                        else {
+                            if (runLen >= 5) penalty += 3 + (runLen - 5);
+                            runColor = grid[r][c];
+                            runLen = 1;
+                        }
+                    }
+                    if (runLen >= 5) penalty += 3 + (runLen - 5);
+                }
+                // N2: 2x2 Blöcke
+                for (let r = 0; r < size - 1; r++) {
+                    for (let c = 0; c < size - 1; c++) {
+                        const v = grid[r][c];
+                        if (v === grid[r][c + 1] && v === grid[r + 1][c] && v === grid[r + 1][c + 1]) penalty += 3;
+                    }
+                }
+                // N3: 1011101 + 4x0 Muster
+                const pA = [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0];
+                const pB = [0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1];
+                for (let r = 0; r < size; r++) {
+                    for (let c = 0; c <= size - 11; c++) {
+                        let mA = true, mB = true;
+                        for (let k = 0; k < 11; k++) {
+                            if (grid[r][c + k] !== pA[k]) mA = false;
+                            if (grid[r][c + k] !== pB[k]) mB = false;
+                        }
+                        if (mA) penalty += 40;
+                        if (mB) penalty += 40;
+                    }
+                }
+                for (let c = 0; c < size; c++) {
+                    for (let r = 0; r <= size - 11; r++) {
+                        let mA = true, mB = true;
+                        for (let k = 0; k < 11; k++) {
+                            if (grid[r + k][c] !== pA[k]) mA = false;
+                            if (grid[r + k][c] !== pB[k]) mB = false;
+                        }
+                        if (mA) penalty += 40;
+                        if (mB) penalty += 40;
+                    }
+                }
+                // N4: Verhältnis dunkler Module
+                let darkCount = 0;
+                for (let r = 0; r < size; r++) {
+                    for (let c = 0; c < size; c++) if (grid[r][c]) darkCount++;
+                }
+                const pct = (darkCount * 100) / (size * size);
+                const prev5 = Math.floor(Math.abs(pct - 50) / 5);
+                penalty += prev5 * 10;
+                return penalty;
+            };
+
+            let bestGrid = null;
+            let bestScore = Infinity;
+            for (let m = 0; m < 8; m++) {
+                const candidate = applyMaskAndFormat(m);
+                const sc = scoreGrid(candidate);
+                if (sc < bestScore) {
+                    bestScore = sc;
+                    bestGrid = candidate;
+                }
+            }
+            return bestGrid;
+        }
+
+        function generateTresorQrPngDataUrl(qrText = TRESOR_QR_TEXT, targetPx = 500) {
+            const matrix = buildQrMatrixIso(qrText);
+            const modulesCount = matrix.length;
+            const quietModules = 4;
+            const totalModules = modulesCount + quietModules * 2;
+            const modulePx = Math.max(1, Math.floor(targetPx / totalModules));
+            const qrDrawPx = totalModules * modulePx;
+            const offsetPx = Math.floor((targetPx - qrDrawPx) / 2);
+
+            const canvas = document.createElement('canvas');
+            canvas.width = targetPx;
+            canvas.height = targetPx;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) throw new Error("Canvas-Kontext nicht verfügbar");
+
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, targetPx, targetPx);
+
+            ctx.fillStyle = '#000000';
+            for (let r = 0; r < modulesCount; r++) {
+                for (let c = 0; c < modulesCount; c++) {
+                    if (matrix[r][c]) {
+                        ctx.fillRect(
+                            offsetPx + (c + quietModules) * modulePx,
+                            offsetPx + (r + quietModules) * modulePx,
+                            modulePx,
+                            modulePx
+                        );
+                    }
+                }
+            }
+            return canvas.toDataURL('image/png');
+        }
+
+        function triggerTresorQrDownload(dataUrl) {
+            if (!dataUrl) return;
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = TRESOR_QR_FILENAME;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportTresorQrCodePNG() {
+            if (!auth.currentUser) {
+                alert("Zugriff verweigert: Bitte zuerst als Admin anmelden.");
+                return;
+            }
+            try {
+                lastGeneratedTresorQrDataUrl = generateTresorQrPngDataUrl(TRESOR_QR_TEXT, 500);
+                triggerTresorQrDownload(lastGeneratedTresorQrDataUrl);
+                const previewImg = document.getElementById('tresor-qr-preview-img');
+                if (previewImg) previewImg.src = lastGeneratedTresorQrDataUrl;
+                const modal = document.getElementById('tresor-qr-modal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    modal.style.pointerEvents = 'auto';
+                }
+            } catch (err) {
+                console.error("QR-Code Fehler:", err);
+                alert("QR-Code konnte nicht erzeugt werden: " + (err && err.message ? err.message : err));
+            }
+        }
+
+        function downloadTresorQrCodePNG() {
+            if (!lastGeneratedTresorQrDataUrl) {
+                lastGeneratedTresorQrDataUrl = generateTresorQrPngDataUrl(TRESOR_QR_TEXT, 500);
+            }
+            triggerTresorQrDownload(lastGeneratedTresorQrDataUrl);
+        }
+
+        function closeTresorQrModal() {
+            const modal = document.getElementById('tresor-qr-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+            }
         }
 
         // --- DIENSTPLAN (AUSSCHLIESSLICH AUS FIRESTORE / CACHE NACH ENTSPERREN) ---
@@ -3463,8 +3917,17 @@
             try {
                 const formCard = document.getElementById('weapon-form-card');
                 if (formCard) {
-                    formCard.style.opacity = '0.5';
-                    formCard.style.pointerEvents = 'none';
+                    formCard.style.opacity = '1';
+                    formCard.style.pointerEvents = 'auto';
+                }
+                const issueForm = document.getElementById('weapon-issue-form');
+                if (issueForm) {
+                    issueForm.style.opacity = '0.45';
+                    issueForm.style.pointerEvents = 'none';
+                }
+                const lockOverlay = document.getElementById('weapon-lock-overlay');
+                if (lockOverlay) {
+                    lockOverlay.style.display = 'flex';
                 }
                 const badge = document.getElementById('scanner-status-badge');
                 if (badge) {
@@ -3709,11 +4172,20 @@
             try {
                 weaponSessionUnlocked = true;
                 const formCard = document.getElementById('weapon-form-card');
+                const issueForm = document.getElementById('weapon-issue-form');
+                const lockOverlay = document.getElementById('weapon-lock-overlay');
                 const badge = document.getElementById('scanner-status-badge');
                 
                 if (formCard) {
                     formCard.style.opacity = '1';
                     formCard.style.pointerEvents = 'auto';
+                }
+                if (issueForm) {
+                    issueForm.style.opacity = '1';
+                    issueForm.style.pointerEvents = 'auto';
+                }
+                if (lockOverlay) {
+                    lockOverlay.style.display = 'none';
                 }
                 if (badge) {
                     badge.style.background = '#16a34a';
@@ -6121,7 +6593,7 @@
                         }
                     });
                 }
-                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'vote-modal', 'master-pin-modal', 'admin-logout-modal'].forEach(id => {
+                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'vote-modal', 'master-pin-modal', 'admin-logout-modal'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el && getComputedStyle(el).display === 'none') {
                         el.style.pointerEvents = 'none';
