@@ -1693,9 +1693,16 @@
                             <span>💵 Schankkassa / Bar-Abrechnungen (Normale Gäste &amp; Mitglieder)</span>
                             <button type="button" class="btn admin-btn-save" onclick="exportCashSalesCSV()">📥 Kassenbericht CSV exportieren</button>
                         </div>
-                        <div id="admin-cash-sales-total" class="cash-summary-banner">
-                            <span>Gesamt Schankkassa:</span>
-                            <span id="admin-cash-sales-sum-value" style="font-size: 1.15em; color: #15803d;">€ 0,00</span>
+                        <div id="admin-cash-sales-total" class="cash-summary-banner" style="flex-direction: column; align-items: stretch; gap: 10px; padding: 12px 14px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                                <div>
+                                    <div style="font-size: 0.95em; color: #14532d; font-weight: 800;">
+                                        Gesamt Schankkassa (Bar): <span id="admin-cash-sales-sum-value" style="font-size: 1.15em; color: #15803d;">€ 0,00</span>
+                                    </div>
+                                    <div id="admin-cash-sales-count" style="font-size: 0.78em; color: #166534; font-weight: 700; margin-top: 2px;">0 Buchungen</div>
+                                </div>
+                                <button type="button" id="admin-cash-sales-pdf-btn" class="btn admin-btn-save" style="padding: 9px 13px; font-size: 0.84em; margin-top: 0;" onclick="exportCashSalesPDF()">📥 Kassenbericht als PDF herunterladen</button>
+                            </div>
                         </div>
                         <div id="admin-cash-sales-list"><p class="admin-muted-text">Lade Bar-Abrechnungen...</p></div>
                     </div>
@@ -6171,6 +6178,7 @@
             if (!auth.currentUser) return;
             const container = document.getElementById('admin-cash-sales-list');
             const sumEl = document.getElementById('admin-cash-sales-sum-value');
+            const countEl = document.getElementById('admin-cash-sales-count');
             if (!container) return;
 
             try {
@@ -6204,15 +6212,20 @@
                     const safeDocId = escapeHtml(doc.id);
                     const amountStr = totalNum.toFixed(2).replace('.', ',');
                     html += `
-                        <div class="admin-list-row">
+                        <div class="admin-list-row" style="padding: 8px 10px; align-items: center;">
                             <div style="flex: 1; min-width: 0;">
-                                <strong style="color: #0f172a;">🍺 ${escapeHtml(sale.tabName || DEFAULT_BAR_TAB_NAME)}</strong>
-                                <span style="color: #15803d; font-weight: 800; margin-left: 6px;">€ ${amountStr}</span><br>
-                                <span style="color: #64748b; font-size: 0.82em;">🕒 ${escapeHtml(dateDisplay)}</span>
-                                ${itemsSummary ? `<div style="color: #334155; font-size: 0.82em; margin-top: 2px;">${escapeHtml(itemsSummary)}</div>` : ''}
+                                <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap;">
+                                    <div style="min-width: 0; font-size: 0.96em; color: #0f172a;">
+                                        <span style="color: #64748b; font-size: 0.88em; font-weight: 600;">${escapeHtml(dateDisplay || '–')}</span>
+                                        <span style="color: #cbd5e1; margin: 0 4px;">|</span>
+                                        <strong style="color: #0f172a;">${escapeHtml(sale.tabName || DEFAULT_BAR_TAB_NAME)}</strong>
+                                    </div>
+                                    <span style="color: #15803d; font-weight: 800; font-size: 1.02em; white-space: nowrap;">€ ${amountStr}</span>
+                                </div>
+                                ${itemsSummary ? `<div style="color: #475569; font-size: 0.78em; margin-top: 3px; line-height: 1.35;">${escapeHtml(itemsSummary)}</div>` : ''}
                             </div>
-                            <div style="display: flex; gap: 5px; flex-shrink: 0;">
-                                <button type="button" class="btn admin-btn-delete" style="padding: 6px 9px !important; font-size: 0.78em !important;" data-doc-id="${safeDocId}" onclick="deleteItem('cash_sales', this.dataset.docId)" title="Bar-Abrechnung löschen">🗑️</button>
+                            <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: 6px;">
+                                <button type="button" class="btn" style="background: transparent; color: #94a3b8; border: 1px solid #e2e8f0; box-shadow: none; padding: 4px 7px !important; font-size: 0.8em !important; border-radius: 8px;" data-doc-id="${safeDocId}" onclick="deleteItem('cash_sales', this.dataset.docId)" title="Bar-Abrechnung löschen">🗑</button>
                             </div>
                         </div>
                     `;
@@ -6222,12 +6235,185 @@
                 if (sumEl) {
                     sumEl.innerText = '€ ' + totalCashSum.toFixed(2).replace('.', ',');
                 }
+                if (countEl) {
+                    countEl.innerText = list.length === 1 ? '1 Buchung' : `${list.length} Buchungen`;
+                }
                 if (snapshot.empty) {
                     container.innerHTML = '<p class="admin-muted-text" style="text-align:center; padding:10px;">Noch keine Bar-Abrechnungen in der Schankkassa.</p>';
                 } else {
                     container.innerHTML = html;
                 }
             } catch (e) {}
+        }
+
+        async function exportCashSalesPDF() {
+            if (!auth.currentUser) return;
+            try {
+                if (!window.cashSalesList || window.cashSalesList.length === 0) {
+                    await loadCashSales();
+                }
+                const list = Array.isArray(window.cashSalesList) ? window.cashSalesList : [];
+                if (list.length === 0) {
+                    alert("Keine Bar-Abrechnungen für den PDF-Kassenbericht vorhanden.");
+                    return;
+                }
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+                    alert("PDF-Bibliothek (jsPDF) konnte nicht geladen werden.");
+                    return;
+                }
+
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+                const pageWidth = 210;
+                const marginLeft = 14;
+                const marginRight = 14;
+                const contentWidth = pageWidth - marginLeft - marginRight; // 182 mm
+                const colWidths = [32, 38, 86, 26]; // Sum = 182 mm
+                const colStarts = [
+                    marginLeft,
+                    marginLeft + colWidths[0],
+                    marginLeft + colWidths[0] + colWidths[1],
+                    marginLeft + colWidths[0] + colWidths[1] + colWidths[2]
+                ];
+
+                const now = new Date();
+                const yyyy = now.getFullYear();
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const dd = String(now.getDate()).padStart(2, '0');
+                const printDateStr = now.toLocaleDateString('de-AT');
+                const printTimeStr = now.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
+
+                const drawPageHeader = (isFirstPage) => {
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(13);
+                    doc.setTextColor(185, 28, 28);
+                    doc.text("Kameradschaftsbund & Schützenverein Gaschurn-Partenen", marginLeft, 16);
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(8.5);
+                    doc.setTextColor(71, 85, 105);
+                    doc.text("ZVR-Zahl: 624291509", marginLeft, 21.5);
+                    doc.text(`Stand / Ausdruckdatum: ${printDateStr}, ${printTimeStr} Uhr`, pageWidth - marginRight, 21.5, { align: 'right' });
+
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(12);
+                    doc.setTextColor(15, 23, 42);
+                    doc.text("Kassenbericht – Schankkassa (Bar-Abrechnungen)", marginLeft, 29);
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(8.5);
+                    doc.setTextColor(71, 85, 105);
+                    doc.text(`Anzahl Buchungen: ${list.length}`, marginLeft, 34);
+
+                    doc.setDrawColor(185, 28, 28);
+                    doc.setLineWidth(0.5);
+                    doc.line(marginLeft, 37, pageWidth - marginRight, 37);
+
+                    return isFirstPage ? 42 : 42;
+                };
+
+                const drawTableHeader = (yPos) => {
+                    doc.setFillColor(185, 28, 28);
+                    doc.rect(marginLeft, yPos, contentWidth, 8, 'F');
+                    doc.setFont("helvetica", "bold");
+                    doc.setFontSize(8.5);
+                    doc.setTextColor(255, 255, 255);
+                    doc.text("Datum / Zeit", colStarts[0] + 2, yPos + 5.3);
+                    doc.text("Name / Deckel", colStarts[1] + 2, yPos + 5.3);
+                    doc.text("Positionen / Artikel", colStarts[2] + 2, yPos + 5.3);
+                    doc.text("Betrag (€)", pageWidth - marginRight - 2, yPos + 5.3, { align: 'right' });
+                    return yPos + 8;
+                };
+
+                let y = drawPageHeader(true);
+                y = drawTableHeader(y);
+
+                let totalCashSum = 0;
+                const maxBodyY = 274;
+
+                list.forEach((sale, idx) => {
+                    const amountVal = Number(sale.totalNum || 0);
+                    totalCashSum += amountVal;
+
+                    const dateLines = doc.splitTextToSize(String(sale.dateDisplay || '–'), colWidths[0] - 4);
+                    const nameLines = doc.splitTextToSize(String(sale.tabName || DEFAULT_BAR_TAB_NAME), colWidths[1] - 4);
+                    const itemLines = doc.splitTextToSize(String(sale.itemsSummary || '–'), colWidths[2] - 4);
+                    const amountStr = `€ ${amountVal.toFixed(2).replace('.', ',')}`;
+
+                    const lineCount = Math.max(dateLines.length, nameLines.length, itemLines.length, 1);
+                    const rowHeight = Math.max(7.5, lineCount * 4.2 + 3.5);
+
+                    if (y + rowHeight > maxBodyY) {
+                        doc.addPage();
+                        y = drawPageHeader(false);
+                        y = drawTableHeader(y);
+                    }
+
+                    if (idx % 2 === 1) {
+                        doc.setFillColor(248, 250, 252);
+                        doc.rect(marginLeft, y, contentWidth, rowHeight, 'F');
+                    }
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setFontSize(8);
+                    doc.setTextColor(30, 41, 59);
+                    doc.text(dateLines, colStarts[0] + 2, y + 4.8);
+
+                    doc.setFont("helvetica", "bold");
+                    doc.text(nameLines, colStarts[1] + 2, y + 4.8);
+
+                    doc.setFont("helvetica", "normal");
+                    doc.setTextColor(71, 85, 105);
+                    doc.text(itemLines, colStarts[2] + 2, y + 4.8);
+
+                    doc.setFont("helvetica", "bold");
+                    doc.setTextColor(21, 128, 61);
+                    doc.text(amountStr, pageWidth - marginRight - 2, y + 4.8, { align: 'right' });
+
+                    doc.setDrawColor(226, 232, 240);
+                    doc.setLineWidth(0.2);
+                    doc.line(marginLeft, y + rowHeight, pageWidth - marginRight, y + rowHeight);
+
+                    y += rowHeight;
+                });
+
+                // Abschlusszeile + Unterschriftszeile (Seitenumbruch falls nötig)
+                if (y + 38 > 282) {
+                    doc.addPage();
+                    y = drawPageHeader(false);
+                }
+
+                y += 4;
+                const totalStr = `€ ${totalCashSum.toFixed(2).replace('.', ',')}`;
+                doc.setFillColor(236, 253, 245);
+                doc.setDrawColor(22, 163, 74);
+                doc.setLineWidth(0.5);
+                doc.rect(marginLeft, y, contentWidth, 11, 'FD');
+
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(10.5);
+                doc.setTextColor(20, 83, 45);
+                doc.text(`Gesamtsumme Bar-Einnahmen (${list.length} Buchungen):`, marginLeft + 4, y + 7.2);
+                doc.setTextColor(21, 128, 61);
+                doc.text(totalStr, pageWidth - marginRight - 4, y + 7.2, { align: 'right' });
+
+                y += 24;
+                doc.setDrawColor(100, 116, 139);
+                doc.setLineWidth(0.35);
+                doc.line(marginLeft, y, marginLeft + 75, y);
+                doc.line(pageWidth - marginRight - 75, y, pageWidth - marginRight, y);
+
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(8.5);
+                doc.setTextColor(71, 85, 105);
+                doc.text("Ort, Datum", marginLeft, y + 4.5);
+                doc.text("Kassier / Schankwart", pageWidth - marginRight - 75, y + 4.5);
+
+                const fileName = `Kassenbericht_Schankkassa_${yyyy}-${mm}-${dd}.pdf`;
+                doc.save(fileName);
+            } catch (err) {
+                alert("Fehler beim PDF-Export der Schankkassa: " + (err && err.message ? err.message : String(err)));
+            }
         }
 
         async function exportCashSalesCSV() {
@@ -6637,6 +6823,8 @@
             });
             const cashSumEl = document.getElementById('admin-cash-sales-sum-value');
             if (cashSumEl) cashSumEl.innerText = '€ 0,00';
+            const cashCountEl = document.getElementById('admin-cash-sales-count');
+            if (cashCountEl) cashCountEl.innerText = '0 Buchungen';
         }
 
         async function resolveClubPinHashFromData(data, allowMigrate = false) {
