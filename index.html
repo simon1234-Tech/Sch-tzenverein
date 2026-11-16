@@ -14,8 +14,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="KB & SV App">
-    <link rel="apple-touch-icon" href="logo.png">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="maskottchen.png">
+    <link rel="icon" type="image/png" href="maskottchen.png">
 
     <!-- Firebase SDKs (v10.14.1 compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
@@ -833,7 +833,8 @@
             background: rgba(15, 23, 42, 0.82); z-index: 99999; justify-content: center; align-items: center; padding: 10px;
             backdrop-filter: blur(6px);
         }
-        #tresor-qr-modal {
+        #tresor-qr-modal,
+        #member-app-qr-modal {
             display: none; pointer-events: none; position: fixed; inset: 0; width: 100%; height: 100%;
             background: rgba(15, 23, 42, 0.82); z-index: 99999; justify-content: center; align-items: center; padding: 12px;
             backdrop-filter: blur(6px);
@@ -846,6 +847,8 @@
         #weapon-pdf-modal[style*="display: none"],
         #tresor-qr-modal[style*="display:none"],
         #tresor-qr-modal[style*="display: none"],
+        #member-app-qr-modal[style*="display:none"],
+        #member-app-qr-modal[style*="display: none"],
         #customConfirm[style*="display:none"],
         #customConfirm[style*="display: none"],
         #admin-success-modal[style*="display:none"],
@@ -857,9 +860,38 @@
         #master-pin-modal[style*="display:none"],
         #master-pin-modal[style*="display: none"],
         #admin-logout-modal[style*="display:none"],
-        #admin-logout-modal[style*="display: none"] {
+        #admin-logout-modal[style*="display: none"],
+        #member-help-modal[style*="display:none"],
+        #member-help-modal[style*="display: none"],
+        #admin-help-modal[style*="display:none"],
+        #admin-help-modal[style*="display: none"] {
             display: none !important;
             pointer-events: none !important;
+        }
+        @media print {
+            body.printing-admin-help > *:not(#admin-help-modal) {
+                display: none !important;
+            }
+            body.printing-admin-help #admin-help-modal {
+                position: static !important;
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                background: #ffffff !important;
+                padding: 0 !important;
+                backdrop-filter: none !important;
+            }
+            body.printing-admin-help #admin-help-modal .admin-help-box {
+                max-width: 100% !important;
+                max-height: none !important;
+                overflow: visible !important;
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+            }
+            body.printing-admin-help .no-print-in-modal {
+                display: none !important;
+            }
         }
         .legal-tabs-nav {
             display: flex;
@@ -942,6 +974,7 @@
         html:not(.kbsv-pre-unlocked) body.app-locked .app-header,
         html:not(.kbsv-pre-unlocked) body.app-locked .page-content,
         html:not(.kbsv-pre-unlocked) body.app-locked .bottom-nav,
+        html:not(.kbsv-pre-unlocked) body.app-locked #push-notification-bar,
         html:not(.kbsv-pre-unlocked) body.app-locked #legal-footer-link {
             display: none !important;
         }
@@ -1076,9 +1109,75 @@
             padding: 12px 14px 14px 14px;
             border-top: 1px solid #fecaca;
         }
+        /* OFFENE DECKEL / SCHANKBUCH TABS */
+        .open-tabs-control-box {
+            background: rgba(248, 250, 252, 0.95);
+            border: 1.5px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+        }
+        .open-tabs-inputs {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .open-tabs-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .open-tab-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 13px;
+            border-radius: 12px;
+            border: 1.5px solid #cbd5e1;
+            background: #ffffff;
+            color: #1e293b;
+            font-family: inherit;
+            font-size: 0.84em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.16s ease;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+        }
+        .open-tab-btn:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+        }
+        .open-tab-btn.active {
+            background: #16a34a;
+            color: #ffffff;
+            border-color: #15803d;
+            box-shadow: 0 6px 16px rgba(22, 163, 74, 0.28);
+        }
+        .cash-summary-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: linear-gradient(135deg, #ecfdf5 0%, #dcfce7 100%);
+            border: 1.5px solid #86efac;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            color: #14532d;
+            font-weight: 800;
+            font-size: 0.95em;
+        }
     </style>
 </head>
 <body class="app-locked">
+
+    <!-- OFFLINE-EMPFANGS-HINWEIS -->
+    <div id="offline-warning-banner" role="alert" style="display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 999999999; background: linear-gradient(135deg, #b91c1c, #d97706); color: #ffffff; border-bottom: 2px solid #fef08a; padding: 10px 16px; text-align: center; font-weight: 800; font-size: 0.86em; line-height: 1.35; box-shadow: 0 6px 20px rgba(185, 28, 28, 0.35);">
+        ⚠️ Keine Internetverbindung – Bitte erst speichern, wenn wieder Empfang besteht!
+    </div>
 
     <!-- SPERRBILDSCHIRM BEIM ÖFFNEN -->
     <div id="club-lock-screen">
@@ -1139,14 +1238,6 @@
 
     <!-- 1. NEWS & STARTSEITE (AKTUELLER DIENSTPLAN) -->
     <div id="page-news" class="page-content active">
-        <!-- PUSH-BENACHRICHTIGUNGEN (DEZENT GANZ OBEN IM NEWS-BEREICH) -->
-        <div id="push-notification-bar" style="margin-bottom: 12px;">
-            <button type="button" id="push-activate-btn" onclick="enablePushNotifications()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border-radius: 14px; border: 1.5px solid #cbd5e1; background: rgba(255, 255, 255, 0.92); color: #1e293b; font-size: 0.85em; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06); transition: all 0.2s;">
-                🔔 Push-Benachrichtigungen aktivieren
-            </button>
-            <div id="push-status-hint" style="display: none; margin-top: 6px; padding: 9px 12px; border-radius: 10px; font-size: 0.78em; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
-        </div>
-
         <!-- NÄCHSTER DIENST (LIVE VORSCHAU) -->
         <div class="glass-card next-duty-neon">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -1185,7 +1276,22 @@
     <div id="page-drinks" class="page-content">
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">🍻 Schankbuch & Preisliste</div>
-            
+
+            <!-- OFFENE DECKEL / PERSONEN IM SCHÜTZENHAUS -->
+            <div id="open-tabs-card" class="open-tabs-control-box">
+                <div style="font-size: 0.92em; font-weight: 800; color: #0f172a; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                    <span>🍺 Offene Deckel / Personen im Schützenhaus</span>
+                    <span id="active-tab-badge" style="font-size: 0.8em; background: #16a34a; color: #ffffff; padding: 3px 9px; border-radius: 8px; font-weight: 800;">Aktiv: Direktabrechnung / Bar</span>
+                </div>
+                <div class="open-tabs-inputs">
+                    <input type="text" id="open-tab-guest-input" class="form-control" style="width: 100%; margin-bottom: 0;" placeholder="Name, Gast oder Tisch eingeben..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); createOpenTab(); }">
+                </div>
+                <button type="button" id="open-tab-add-btn" onclick="createOpenTab()" class="btn btn-green btn-block" style="margin-top: 0; padding: 10px 14px; font-size: 0.9em;">
+                    ➕ Deckel öffnen
+                </button>
+                <div id="open-tabs-bar" class="open-tabs-bar"></div>
+            </div>
+
             <div class="strich-category-header">Speisen</div>
             <div class="price-item"><span>🌭 Paar Hauswürste (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
             <div class="price-item"><span>🌭 Paar Wienerle (€ 7,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
@@ -1211,20 +1317,28 @@
             </div>
 
             <div style="margin-top: 14px; padding-top: 10px; border-top: 2px solid #cbd5e1; display: flex; justify-content: space-between; font-weight: 800; font-size: 1.15em;">
-                <span>Gesamtbetrag:</span>
+                <span>Gesamtbetrag (<span id="total-tab-name" style="color: #15803d;">Direktabrechnung / Bar</span>):</span>
                 <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
             </div>
 
+            <div id="schankbuch-save-feedback" style="display: none; margin-top: 12px; padding: 11px 14px; border-radius: 12px; background: #dcfce7; border: 1.5px solid #86efac; color: #166534; font-weight: 800; font-size: 0.9em; text-align: center;"></div>
+
+            <button type="button" id="save-cash-sale-btn" onclick="saveCashSale(this)" class="btn btn-green btn-block" style="margin-top: 14px; padding: 14px 16px; font-size: 1em;">
+                💶 Bar bezahlt (Schankkassa speichern)
+            </button>
+
             <div style="margin-top: 14px; background: rgba(248, 250, 252, 0.9); padding: 14px; border-radius: 14px; border: 1.5px solid #cbd5e1;">
-                <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Rechnungsempfänger:</h4>
+                <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Für große Feiern &amp; Firmen (PDF-Rechnung):</h4>
                 <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Firma / Verein"></div>
                 <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Vorname Nachname"></div>
                 <div class="form-group"><label>Straße</label><input type="text" class="form-control" id="cust-address" placeholder="Straße & Hausnummer"></div>
                 <div class="form-group"><label>PLZ & Ort</label><input type="text" class="form-control" id="cust-zipcity" placeholder="PLZ & Ort"></div>
+                <button type="button" id="save-tally-invoice-btn" onclick="saveTallyBilling(this)" class="btn btn-admin btn-block" style="margin-top: 6px;">
+                    🧾 Als Firmen- / Feier-Rechnung speichern (PDF)
+                </button>
             </div>
 
-            <button onclick="saveTallyBilling()" class="btn btn-green btn-block" style="margin-top: 14px;">💾 Abrechnung speichern</button>
-            <button onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 8px;">Zurücksetzen</button>
+            <button type="button" onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 10px;">🗑 Aktuellen Deckel leeren/löschen</button>
         </div>
     </div>
 
@@ -1379,7 +1493,7 @@
 
                 <!-- KOMPAKTE BEREICHS-BUTTON-LEISTE (2 SPALTEN MOBIL / 3 SPALTEN PC) -->
                 <div class="admin-nav-grid" role="tablist" aria-label="Admin Bereiche">
-                    <button type="button" class="admin-nav-tile active" id="admin-nav-btn-news-events" data-admin-section="admin-sec-news-events" onclick="switchAdminSection('admin-sec-news-events')">
+                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-news-events" data-admin-section="admin-sec-news-events" onclick="switchAdminSection('admin-sec-news-events')">
                         <span class="admin-nav-tile-icon">📰</span>
                         <span>News &amp; Termine</span>
                     </button>
@@ -1406,7 +1520,7 @@
                 </div>
 
                 <!-- UNTERBEREICH 1: NEWS & TERMINE ERSTELLEN / VERWALTEN -->
-                <section class="admin-section-block active" id="admin-sec-news-events">
+                <section class="admin-section-block" id="admin-sec-news-events" style="display: none;">
                     <div class="admin-section-header">
                         <div class="admin-section-heading">
                             <span class="admin-section-num">1</span>
@@ -1420,7 +1534,7 @@
                                 <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
                                 <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
                                 <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
-                                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8em; font-weight: 700; color: #1e293b; margin-bottom: 10px; cursor: pointer;">
+                                <label id="news-send-push-wrap" style="display: none; align-items: center; gap: 8px; font-size: 0.8em; font-weight: 700; color: #1e293b; margin-bottom: 10px; cursor: pointer;">
                                     <input type="checkbox" id="news-send-push" checked style="width: 17px; height: 17px; accent-color: #16a34a; cursor: pointer;">
                                     <span>📲 Push-Nachricht an alle senden</span>
                                 </label>
@@ -1434,7 +1548,7 @@
                                 <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="Generalversammlung"></div>
                                 <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="15.12.2026"></div>
                                 <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
-                                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8em; font-weight: 700; color: #1e293b; margin-bottom: 10px; cursor: pointer;">
+                                <label id="event-send-push-wrap" style="display: none; align-items: center; gap: 8px; font-size: 0.8em; font-weight: 700; color: #1e293b; margin-bottom: 10px; cursor: pointer;">
                                     <input type="checkbox" id="event-send-push" checked style="width: 17px; height: 17px; accent-color: #16a34a; cursor: pointer;">
                                     <span>📲 Push-Nachricht an alle senden</span>
                                 </label>
@@ -1464,6 +1578,21 @@
                             <div class="form-group"><label>Team</label><input type="text" class="form-control" id="duty-team" placeholder="z. B. Team 1"></div>
                             <div class="form-group"><label>Mitglieder</label><input type="text" class="form-control" id="duty-names" placeholder="z. B. Name 1, Name 2, Name 3"></div>
                             <button type="button" onclick="addDutyEntry()" class="btn admin-btn-save btn-block">💾 Dienst eintragen</button>
+                        </div>
+
+                        <div id="admin-custom-push-card" class="admin-glass-card admin-span-full" style="display: none;">
+                            <div class="admin-glass-card-title"><span>📣 Eigene Push-Nachricht an alle Mitglieder senden</span></div>
+                            <p class="admin-muted-text" style="margin-bottom: 10px;">Sende jederzeit eine freie Mitteilung mit eigenem Titel und Text direkt per Push an alle registrierten Geräte.</p>
+                            <div class="form-group">
+                                <label for="custom-push-title">Titel der Nachricht</label>
+                                <input type="text" class="form-control" id="custom-push-title" value="Vereins-Info KB &amp; SV" placeholder="z. B. Wichtige Info / Ausrückung">
+                            </div>
+                            <div class="form-group">
+                                <label for="custom-push-message">Nachrichtentext</label>
+                                <textarea class="form-control" id="custom-push-message" rows="3" placeholder="Hier deine persönliche Nachricht an alle Mitglieder eingeben..."></textarea>
+                            </div>
+                            <div id="custom-push-feedback" style="display: none; margin-bottom: 10px; padding: 10px 12px; border-radius: 10px; background: #dcfce7; border: 1.5px solid #86efac; color: #166534; font-size: 0.85em; font-weight: 700;"></div>
+                            <button type="button" id="custom-push-send-btn" onclick="sendCustomPushMessage(this)" class="btn admin-btn-save btn-block">📲 Push-Nachricht jetzt an alle senden</button>
                         </div>
 
                         <div class="admin-glass-card admin-span-full">
@@ -1557,8 +1686,23 @@
                             <span>🍺 Schankbuch Verwaltung &amp; Exporte</span>
                         </div>
                     </div>
-                    <div class="admin-glass-card">
-                        <div class="admin-glass-card-title"><span>💶 Rechnungen &amp; Schankbuch</span></div>
+
+                    <!-- ORDNER A: SCHANKKASSA / BAR-ABRECHNUNGEN -->
+                    <div class="admin-glass-card" id="admin-cash-sales-card" style="margin-bottom: 14px;">
+                        <div class="admin-glass-card-title">
+                            <span>💵 Schankkassa / Bar-Abrechnungen (Normale Gäste &amp; Mitglieder)</span>
+                            <button type="button" class="btn admin-btn-save" onclick="exportCashSalesCSV()">📥 Kassenbericht CSV exportieren</button>
+                        </div>
+                        <div id="admin-cash-sales-total" class="cash-summary-banner">
+                            <span>Gesamt Schankkassa:</span>
+                            <span id="admin-cash-sales-sum-value" style="font-size: 1.15em; color: #15803d;">€ 0,00</span>
+                        </div>
+                        <div id="admin-cash-sales-list"><p class="admin-muted-text">Lade Bar-Abrechnungen...</p></div>
+                    </div>
+
+                    <!-- ORDNER B: FIRMEN- & FEIER-RECHNUNGEN (MIT PDF) -->
+                    <div class="admin-glass-card" id="admin-tally-invoices-card">
+                        <div class="admin-glass-card-title"><span>📄 Firmen- &amp; Feier-Rechnungen (mit PDF)</span></div>
                         <div id="admin-tally-history-list"><p class="admin-muted-text">Lade Rechnungen...</p></div>
                     </div>
                 </section>
@@ -1577,6 +1721,7 @@
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 <button type="button" class="btn admin-btn-save" onclick="exportFullWeaponListPDF()">📥 Waffenliste PDF</button>
                                 <button type="button" class="btn admin-btn-edit" onclick="exportTresorQrCodePNG()">📷 Tresor-QR-Code PNG</button>
+                                <button type="button" id="admin-member-app-qr-btn" class="btn admin-btn-edit" onclick="exportMemberAppQrCodePNG()">📲 Mitglieder-App-QR-Code PNG</button>
                             </div>
                         </div>
                         <p class="admin-muted-text" style="margin-bottom: 10px;">Übersicht aller gespeicherten Entnahme- und Rückgabeprotokolle (inkl. getrennter ZWR/ZVR-Daten):</p>
@@ -1634,11 +1779,45 @@
                             <form onsubmit="saveOneSignalRestApiKey(event)">
                                 <div class="form-group">
                                     <label>OneSignal REST API Key</label>
-                                    <input type="password" class="form-control" id="admin-onesignal-key-input" value="••••••••" placeholder="REST API Key eingeben..." required autocomplete="off" disabled readonly style="font-size: 0.9em; letter-spacing: 2px;">
+                                    <input type="password" class="form-control" id="admin-onesignal-key-input" value="••••••••" placeholder="Optional – leer lassen für Cloudflare Secret" autocomplete="off" disabled readonly style="font-size: 0.9em; letter-spacing: 2px;">
                                 </div>
                                 <button type="submit" id="admin-onesignal-save-btn" class="btn admin-btn-save btn-block" disabled>💾 Push-Key speichern</button>
                             </form>
                         </div>
+                    </div>
+
+                    <!-- VEREINS-BACKUP & JAHRESABSCHLUSS -->
+                    <div class="admin-glass-card" id="admin-backup-card" style="margin-top: 14px;">
+                        <div class="admin-glass-card-title">
+                            <span>📊 Vereins-Backup &amp; Jahresabschluss</span>
+                        </div>
+                        <p class="admin-muted-text" style="margin-bottom: 12px;">
+                            Lädt alle gespeicherten Abrechnungen (Schankbuch), Waffenbuch-Protokolle und Termine aus Firestore als Excel-kompatible CSV-Datei herunter.
+                        </p>
+                        <div id="admin-board-routine-box" style="background: #f8fafc; border-left: 4px solid #16a34a; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-size: 0.82em; line-height: 1.48; color: #1e293b;">
+                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">Vorstands-Routine:</div>
+                            <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px;">
+                                <li><strong>Quartals- &amp; Jahres-Backup:</strong> Einmal im Quartal oder zum Jahresende über „📥 Gesamt-Backup (CSV)“ Schankbuch, Waffenbuch und Termine lokal auf dem Vereins-PC oder USB-Stick sichern.</li>
+                                <li><strong>Zugangscode-Wechsel:</strong> Bei Vorstands- oder Mitgliederwechsel oben den Vereins-Zugangscode ändern – alle Geräte mit dem alten Code werden automatisch wieder auf den Sperrbildschirm zurückgesetzt.</li>
+                            </ul>
+                        </div>
+                        <button type="button" id="admin-full-backup-btn" onclick="downloadFullClubBackupCSV(this)" class="btn admin-btn-save btn-block">
+                            📥 Gesamt-Backup (Schankbuch, Waffenbuch &amp; Termine als CSV)
+                        </button>
+                        <div id="admin-backup-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700; color: #15803d;"></div>
+                    </div>
+
+                    <!-- VORSTANDS- & ADMIN-HANDBUCH -->
+                    <div class="admin-glass-card" id="admin-handbook-card" style="margin-top: 14px;">
+                        <div class="admin-glass-card-title">
+                            <span>📘 Vorstands- &amp; Admin-Handbuch</span>
+                        </div>
+                        <p class="admin-muted-text" style="margin-bottom: 12px;">
+                            Übersichtliche Anleitung zu allen Admin-Modulen, Berechtigungen, Exporten und Sicherheitsfunktionen – inklusive Druck- &amp; PDF-Funktion.
+                        </p>
+                        <button type="button" id="admin-open-handbook-btn" onclick="openAdminHelpModal()" class="btn admin-btn-edit btn-block">
+                            📘 Vorstands- &amp; Admin-Handbuch öffnen
+                        </button>
                     </div>
                 </section>
 
@@ -1647,9 +1826,27 @@
         </div>
     </div>
 
+    <!-- PUSH-BENACHRICHTIGUNGEN & INSTALLATIONSHILFE (KOMPAKT ÜBER DER FUSSZEILE) -->
+    <div id="push-notification-bar" style="margin: 16px auto 8px auto;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
+            <button type="button" id="push-activate-btn" onclick="enablePushNotifications()" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid #cbd5e1; background: rgba(255, 255, 255, 0.92); color: #1e293b; font-size: 0.85rem; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06); transition: all 0.2s;">
+                🔔 Push-Benachrichtigungen aktivieren
+            </button>
+            <button type="button" id="install-help-btn" onclick="openInstallHelpModal()" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid #cbd5e1; background: rgba(255, 255, 255, 0.92); color: #334155; font-size: 0.85rem; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06); transition: all 0.2s;">
+                📲 App auf dem Handy speichern
+            </button>
+        </div>
+        <div id="push-status-hint" style="display: none; margin: 8px auto 0 auto; max-width: 480px; padding: 9px 12px; border-radius: 10px; font-size: 0.78em; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
+    </div>
+
     <!-- IMPRESSUM, DATENSCHUTZ & COOKIE-EINSTELLUNGEN -->
-    <div id="legal-footer-link" style="text-align: center; margin: 24px 0 10px 0; font-size: 0.75em; color: var(--text-muted);">
-        <span onclick="openLegalModal('impressum')" style="cursor: pointer; text-decoration: underline;">Impressum</span> · <span onclick="openLegalModal('datenschutz')" style="cursor: pointer; text-decoration: underline;">Datenschutz</span> · <span onclick="openLegalModal('cookies')" style="cursor: pointer; text-decoration: underline;">Cookie-Einstellungen</span>
+    <div id="legal-footer-link" style="text-align: center; margin: 12px 0 10px 0; font-size: 0.75em; color: var(--text-muted);">
+        <span onclick="openLegalModal('impressum')" style="cursor: pointer; text-decoration: underline;">Impressum</span> · <span onclick="openLegalModal('datenschutz')" style="cursor: pointer; text-decoration: underline;">Datenschutz</span> · <span onclick="openLegalModal('cookies')" style="cursor: pointer; text-decoration: underline;">Cookie-Einstellungen</span> · <span id="member-help-link" onclick="openMemberHelpModal()" style="cursor: pointer; text-decoration: underline; font-weight: 700; color: #b91c1c;">📖 App-Anleitung</span>
+        <div style="margin-top: 8px; font-size: 0.92em; color: #64748b; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 10px;">
+            <span>Version 1.0 · Stand November 2026</span>
+            <span>·</span>
+            <button type="button" id="app-refresh-btn" onclick="forceRefreshApp()" style="background: none; border: 1px solid #cbd5e1; border-radius: 8px; color: #334155; font-size: 0.95em; font-weight: 700; font-family: inherit; cursor: pointer; padding: 3px 9px;">🔄 App aktualisieren</button>
+        </div>
     </div>
 
     <div id="legal-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:999999; justify-content:center; align-items:center; padding:16px; backdrop-filter:blur(5px);">
@@ -1804,6 +2001,166 @@
                 <div style="display: flex; gap: 8px; width: 100%;">
                     <button type="button" onclick="downloadTresorQrCodePNG()" class="btn btn-green" style="flex: 1; padding: 10px 12px; font-size: 13px; margin-top: 0;">📥 Erneut herunterladen</button>
                     <button type="button" onclick="closeTresorQrModal()" class="btn" style="padding: 10px 14px; font-size: 13px; margin-top: 0; background: #e2e8f0; color: #1e293b;">Schließen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FÜR MITGLIEDER-APP-QR-CODE VORSCHAU & DOWNLOAD -->
+    <div id="member-app-qr-modal" style="display: none; pointer-events: none;" onclick="if (event.target === this) closeMemberAppQrModal()">
+        <div style="background: #ffffff; width: 100%; max-width: 440px; border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.45); border: 1.5px solid #e2e8f0;" class="modal-anim">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 14px 16px; background: #f8fafc; border-bottom: 1.5px solid #e2e8f0;">
+                <h3 style="color: #b91c1c; font-size: 1em; font-weight: 800; margin: 0;">📲 Offizieller Mitglieder-App-QR-Code</h3>
+                <button type="button" onclick="closeMemberAppQrModal()" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px; margin-top: 0;">✖ Schließen</button>
+            </div>
+            <div style="padding: 18px 16px; background: #f1f5f9; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                <div style="background: #ffffff; padding: 12px; border-radius: 14px; border: 1.5px solid #cbd5e1; box-shadow: 0 4px 12px rgba(15,23,42,0.08); display: inline-block;">
+                    <img id="member-app-qr-preview-img" src="" alt="Mitglieder-App QR-Code https://github.io" style="width: 260px; height: 260px; max-width: 100%; display: block; image-rendering: pixelated; border-radius: 6px;">
+                </div>
+                <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px 14px; font-size: 0.85em; color: #0f172a; font-weight: 700; width: 100%; line-height: 1.5;">
+                    App-URL: <span style="font-family: monospace; color: #15803d;">https://github.io</span><br>
+                    <span style="display: block; margin-top: 4px; color: #b91c1c; font-weight: 800;">Ideal zum Ausdrucken für das Schwarze Brett im Schützenhaus</span>
+                    <span style="font-size: 0.86em; font-weight: 500; color: #475569;">Auflösung: 500 × 500 px (PNG) mit weißem Rand</span>
+                </div>
+                <div style="display: flex; gap: 8px; width: 100%;">
+                    <button type="button" onclick="downloadMemberAppQrCodePNG()" class="btn btn-green" style="flex: 1; padding: 10px 12px; font-size: 13px; margin-top: 0;">📥 Erneut herunterladen</button>
+                    <button type="button" onclick="closeMemberAppQrModal()" class="btn" style="padding: 10px 14px; font-size: 13px; margin-top: 0; background: #e2e8f0; color: #1e293b;">Schließen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FÜR STARTBILDSCHIRM-INSTALLATIONSHILFE -->
+    <div id="install-help-modal" style="display: none; pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.65); z-index: 999999; justify-content: center; align-items: center; padding: 16px; backdrop-filter: blur(5px);" onclick="if (event.target === this) closeInstallHelpModal()">
+        <div style="background: rgba(255, 255, 255, 0.98); width: 100%; max-width: 440px; border-radius: 20px; overflow: hidden; color: #1e293b; box-shadow: 0 25px 40px rgba(0, 0, 0, 0.32); border: 1.5px solid #e2e8f0;" class="modal-anim">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 14px 18px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                <h3 style="color: #b91c1c; font-size: 1.02em; font-weight: 800; margin: 0;">📲 App auf dem Handy installieren</h3>
+                <button type="button" onclick="closeInstallHelpModal()" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px; margin-top: 0;">✖</button>
+            </div>
+            <div style="padding: 16px 18px; display: flex; flex-direction: column; gap: 12px; font-size: 0.88em; line-height: 1.48;">
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 14px; padding: 12px 14px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">🤖 Android (Chrome):</div>
+                    <div style="color: #334155;">Oben rechts auf die drei Punkte <strong>⋮</strong> tippen → <em>„Zum Startbildschirm hinzufügen“</em> (oder <em>„App installieren“</em>) wählen.</div>
+                </div>
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 14px; padding: 12px 14px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">🍎 iPhone (Safari):</div>
+                    <div style="color: #334155;">Unten auf das Teilen-Symbol <strong>⬆️</strong> tippen → nach unten scrollen und <em>„Zum Home-Bildschirm“</em> wählen.</div>
+                </div>
+                <button type="button" onclick="closeInstallHelpModal()" class="btn btn-primary btn-block" style="margin-top: 2px;">Verstanden</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FÜR MITGLIEDER-KURZANLEITUNG -->
+    <div id="member-help-modal" style="display: none; pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.68); z-index: 999999; justify-content: center; align-items: center; padding: 14px; backdrop-filter: blur(5px);" onclick="if (event.target === this) closeMemberHelpModal()">
+        <div style="background: rgba(255, 255, 255, 0.98); width: 100%; max-width: 520px; border-radius: 20px; overflow: hidden; color: #1e293b; box-shadow: 0 25px 45px rgba(0, 0, 0, 0.34); border: 1.5px solid #e2e8f0; max-height: 90vh; display: flex; flex-direction: column;" class="modal-anim">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 14px 18px; background: #f8fafc; border-bottom: 1.5px solid #e2e8f0; flex-shrink: 0;">
+                <div>
+                    <h3 style="color: #b91c1c; font-size: 1.05em; font-weight: 800; margin: 0;">📖 App-Anleitung für Mitglieder</h3>
+                    <div style="font-size: 0.76em; color: #64748b; font-weight: 600; margin-top: 2px;">Kameradschaftsbund &amp; Schützenverein Gaschurn-Partenen</div>
+                </div>
+                <button type="button" onclick="closeMemberHelpModal()" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px; margin-top: 0;">✖</button>
+            </div>
+            <div style="padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.86em; line-height: 1.5;">
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">📲 App auf dem Startbildschirm speichern &amp; Push aktivieren</div>
+                    <div style="color: #334155;">
+                        Über den Button <strong>„📲 App auf dem Handy speichern“</strong> ganz unten findest du die Anleitung für Android (<em>⋮ → Zum Startbildschirm hinzufügen</em>) und iPhone (<em>Teilen ⬆️ → Zum Home-Bildschirm</em>). Daneben kannst du über <strong>„🔔 Push-Benachrichtigungen aktivieren“</strong> freiwillig Meldungen zu News, Terminen und Diensten einschalten (auf dem iPhone zuerst auf dem Home-Bildschirm speichern).
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">📰 News &amp; Dienstplan</div>
+                    <div style="color: #334155;">
+                        Die Karte mit dem <strong>grünen Puls-Rahmen</strong> zeigt ganz oben automatisch den <strong>nächsten Dienst</strong> (am Einsatztag rot mit <em>„⚡ HEUTE“</em>) samt rot hervorgehobener Dienstzeit (<strong>19:00 – 21:00 Uhr</strong>). Darunter stehen der vollständige Dienstplan, das aufklappbare Archiv sowie aktuelle Vereins-News.
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">📅 Termine &amp; Zu-/Absage-Abstimmung</div>
+                    <div style="color: #334155;">
+                        Unter <strong>„Termine“</strong> kannst du bei jeder Veranstaltung direkt mit <strong>„✋ Ich bin dabei“</strong> oder <strong>„✖ Absage“</strong> deinen Namen aus der Mitgliederliste wählen. Zusagen und Absagen werden automatisch zusammengezählt und sichtbar angezeigt.
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #d97706; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">🍻 Schankbuch &amp; Deckel-System im Schützenhaus</div>
+                    <div style="color: #334155;">
+                        Lege oben für anwesende Personen, Gäste oder Tische eigene Deckel an (<em>Name eingeben → „➕ Deckel öffnen“</em>) und tippe zwischen den Deckel-Tabs hin und her. Änderungen synchronisieren sich in Echtzeit auf mehreren Handys gleichzeitig. Abgerechnet wird entweder direkt bar über <strong>„💶 Bar bezahlt“</strong> oder mit Adressfeldern als offizielle <strong>Firmen-/Feier-PDF-Rechnung</strong>.
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #b91c1c; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">🎯 Digitales Waffenbuch (Tresor-QR-Code &amp; Rückgabe)</div>
+                    <div style="color: #334155;">
+                        Das Waffenbuch ist zu deiner Sicherheit gesperrt. Scanne zuerst mit dem Scanner-Button den offiziellen <strong>QR-Code am Waffentresor</strong>. Danach wählst du Übernehmer (optional Mitabholer), Salutwaffen, Anlass und Ort und schließt das Protokoll ab. Bei der Rückkehr wird erneut der Tresor-QR-Code zur Rückgabe gescannt; danach sperrt sich das Waffenbuch automatisch.
+                    </div>
+                </div>
+
+                <button type="button" onclick="closeMemberHelpModal()" class="btn btn-primary btn-block" style="margin-top: 4px;">Verstanden</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FÜR VORSTANDS- & ADMIN-HANDBUCH -->
+    <div id="admin-help-modal" style="display: none; pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.74); z-index: 9999999; justify-content: center; align-items: center; padding: 12px; backdrop-filter: blur(6px);" onclick="if (event.target === this) closeAdminHelpModal()">
+        <div class="admin-help-box modal-anim" style="background: #ffffff; width: 100%; max-width: 640px; border-radius: 20px; overflow: hidden; color: #0f172a; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.42); border: 1.5px solid #cbd5e1; max-height: 92vh; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 14px 18px; background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 100%); border-bottom: 1.5px solid #cbd5e1; flex-shrink: 0;">
+                <div>
+                    <h3 style="color: #0f172a; font-size: 1.08em; font-weight: 800; margin: 0;">📘 Vorstands- &amp; Admin-Handbuch</h3>
+                    <div style="font-size: 0.76em; color: #15803d; font-weight: 700; margin-top: 2px;">KB &amp; SV Gaschurn-Partenen · Interne Verwaltung</div>
+                </div>
+                <div class="no-print-in-modal" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" id="admin-help-print-btn" onclick="printAdminHelpModal()" class="btn admin-btn-save" style="padding: 7px 12px; font-size: 12.5px; margin-top: 0;">🖨 Handbuch drucken / als PDF speichern</button>
+                    <button type="button" onclick="closeAdminHelpModal()" class="btn admin-btn-delete" style="padding: 7px 12px; font-size: 12.5px; margin-top: 0;">✖ Schließen</button>
+                </div>
+            </div>
+            <div style="padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.85em; line-height: 1.52; color: #1e293b;">
+                <div style="background: #ecfdf5; border: 1px solid #86efac; border-radius: 12px; padding: 10px 13px; color: #065f46; font-weight: 600;">
+                    <strong>Grundbedienung:</strong> Alle Admin-Module starten eingeklappt als Kacheln und lassen sich per Klick einzeln auf- und zuklappen. Aus Sicherheitsgründen meldet sich der Admin-Modus nach <strong>5 Minuten Inaktivität</strong> automatisch ab.
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">1. 📰 News &amp; Termine</div>
+                    <div>News-Beiträge mit Titel, Text und optionalem Foto veröffentlichen sowie Vereinstermine erstellen, Abstimmungsstände (Zusagen/Absagen) prüfen und alte Termine löschen.</div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">2. 🛡️ Dienstplan &amp; Push-Exklusivrecht für Simon</div>
+                    <div>Neue Dienste (Datum, Team, eingeteilte Mitglieder) eintragen – aktive Dienste erhalten automatisch die Dienstzeit <em>19:00 – 21:00 Uhr</em>. Alle Push-Funktionen (<strong>Freitext-Push</strong> an alle Geräte, Push-Häkchen bei News/Terminen und <strong>🔔 Erinnerung</strong> je Dienst) sind aus Sicherheitsgründen ausschließlich für Haupt-Admin <strong>Simon</strong> sichtbar und über OneSignal + Cloudflare Worker geschützt.</div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">3. 🔑 Schlüssel- &amp; Mitgliederverwaltung</div>
+                    <div>Zeigt alle aktiven Vereinsmitglieder (19er-Liste) sowie die 4 Waffenbuch-Berechtigten. Darunter pflegst du die vertrauliche <strong>Schlüsselliste &amp; Kontaktdaten</strong> (Name, Geburtsdatum, Adresse, Telefon, Schlüsselnummer) inklusive <strong>Querformat-A4-PDF-Export</strong>.</div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">4. 📦 Lagerbestand</div>
+                    <div>Verwaltet Hauswürste, Wienerle sowie Bier- und Limo-Kisten. Jede Buchung im Schankbuch zieht verkaufte Würste (stückgenau) und Getränke (anteilig je 24er-Kiste) automatisch vom Lagerbestand ab; Nachlieferungen werden über <code>+</code>/<code>-</code> oder <em>„✏️ Bearbeiten“</em> eingetragen.</div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">5. 🍺 Schankkassa vs. Firmen-PDF-Rechnungen</div>
+                    <div>
+                        <strong>Ordner A (Schankkassa):</strong> Alle Bar-Abrechnungen normaler Gäste &amp; Mitglieder inklusive automatisch berechneter Gesamtsumme und <strong>CSV-Kassenbericht-Export</strong>.<br>
+                        <strong>Ordner B (Firmen- &amp; Feier-Rechnungen):</strong> Offizielle Rechnungen mit fortlaufender Nummer, Vorschau und druckfertigem <strong>A4-PDF-Download</strong> samt Vereins-Bankverbindung (Raiffeisenbank Bludenz-Montafon).
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">6. 🎯 Waffenbuch-Protokolle &amp; ZWR/ZVR-Exporte</div>
+                    <div>Alle Entnahmen und Rückgaben erscheinen mit <strong>getrennt ausgewiesener ZWR-Nummer und ZVR-Zahl</strong> sowie den Vereinsfunktionen der Übernehmer. Der Vorstand kann jedes Protokoll unzensiert ansehen oder als <strong>A4-PDF</strong> laden, die komplette <strong>Waffenliste als PDF</strong> exportieren und den offiziellen <strong>Tresor-QR-Code (<code>KBSV-TRESOR-GASCHURN</code>) als PNG</strong> herunterladen.</div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">7. ⚙️ Master-PIN, Zugangscode &amp; Gesamt-Backup</div>
+                    <div>Unter <strong>„⚙️ System &amp; Sicherheit“</strong> sind Vereins-Zugangscode und optionaler OneSignal-Key durch einen separaten <strong>Master-PIN</strong> geschützt (SHA-256-Hash; nach dem Speichern des Vereins-Codes werden Geräte mit altem Code automatisch gesperrt). Über <strong>„📥 Gesamt-Backup“</strong> exportierst du alle Schankbuch-Abrechnungen, Waffenbuch-Protokolle und Termine gebündelt als Excel-kompatible CSV-Jahressicherung.</div>
+                </div>
+
+                <div class="no-print-in-modal" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;">
+                    <button type="button" onclick="printAdminHelpModal()" class="btn admin-btn-save" style="flex: 1; min-width: 210px; margin-top: 0;">🖨 Handbuch drucken / als PDF speichern</button>
+                    <button type="button" onclick="closeAdminHelpModal()" class="btn admin-btn-delete" style="padding: 12px 18px; margin-top: 0;">Schließen</button>
                 </div>
             </div>
         </div>
@@ -2111,8 +2468,8 @@
             if (tabId !== 'card') {
                 try { lockSecuritySettingsFields(); } catch(e) {}
                 const secBlock = document.getElementById('admin-sec-security');
-                if (secBlock && secBlock.classList.contains('active')) {
-                    try { switchAdminSection('admin-sec-news-events'); } catch(e) {}
+                if (secBlock && (secBlock.classList.contains('active') || secBlock.style.display === 'block')) {
+                    try { closeAllAdminSections(); } catch(e) {}
                 }
             }
             document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
@@ -2129,35 +2486,52 @@
                 }
             } else if (tabId === 'card') {
                 try { renderAdminMembersOverview(); } catch(e) {}
-                try {
-                    const hasActiveSection = document.querySelector('#admin-panel .admin-section-block.active');
-                    if (!hasActiveSection) {
-                        switchAdminSection('admin-sec-news-events');
-                    }
-                } catch(e) {}
+            } else if (tabId === 'drinks') {
+                try { initOpenTabsListener(); } catch(e) {}
+                try { renderOpenTabsBar(); } catch(e) {}
             }
             window.scrollTo(0, 0);
         }
 
-        function switchAdminSection(sectionId) {
-            const targetSectionId = sectionId || 'admin-sec-news-events';
-            document.querySelectorAll('#admin-panel .admin-section-block').forEach(el => el.classList.remove('active'));
+        function closeAllAdminSections() {
+            document.querySelectorAll('#admin-panel .admin-section-block').forEach(el => {
+                el.classList.remove('active');
+                el.style.display = 'none';
+            });
             document.querySelectorAll('#admin-panel .admin-nav-tile').forEach(btn => btn.classList.remove('active'));
             const gearBtn = document.getElementById('admin-gear-security-btn');
             if (gearBtn) gearBtn.classList.remove('active');
+            try { lockSecuritySettingsFields(); } catch(e) {}
+        }
 
-            const targetEl = document.getElementById(targetSectionId);
-            if (targetEl) targetEl.classList.add('active');
+        function switchAdminSection(sectionId) {
+            if (!sectionId) {
+                closeAllAdminSections();
+                return;
+            }
+            const targetEl = document.getElementById(sectionId);
+            const isAlreadyOpen = !!(targetEl && (targetEl.classList.contains('active') || targetEl.style.display === 'block'));
 
-            if (targetSectionId === 'admin-sec-security') {
+            closeAllAdminSections();
+
+            if (isAlreadyOpen) {
+                return;
+            }
+
+            if (targetEl) {
+                targetEl.classList.add('active');
+                targetEl.style.display = 'block';
+            }
+
+            if (sectionId === 'admin-sec-security') {
+                const gearBtn = document.getElementById('admin-gear-security-btn');
                 if (gearBtn) gearBtn.classList.add('active');
             } else {
-                try { lockSecuritySettingsFields(); } catch(e) {}
-                const matchingBtn = document.querySelector(`#admin-panel .admin-nav-tile[data-admin-section="${targetSectionId}"]`);
+                const matchingBtn = document.querySelector(`#admin-panel .admin-nav-tile[data-admin-section="${sectionId}"]`);
                 if (matchingBtn) matchingBtn.classList.add('active');
             }
 
-            if (targetSectionId === 'admin-sec-members') {
+            if (sectionId === 'admin-sec-members') {
                 try { renderAdminMembersOverview(); } catch(e) {}
             }
         }
@@ -2601,6 +2975,9 @@
         const TRESOR_QR_TEXT = "KBSV-TRESOR-GASCHURN";
         const TRESOR_QR_FILENAME = "Tresor_QR_Code_KBSV.png";
         let lastGeneratedTresorQrDataUrl = "";
+        const MEMBER_APP_QR_URL = "https://github.io";
+        const MEMBER_APP_QR_FILENAME = "Mitglieder_App_QR_Code_KBSV.png";
+        let lastGeneratedMemberAppQrDataUrl = "";
 
         function buildQrMatrixIso(text) {
             const bytes = Array.from(new TextEncoder().encode(String(text || "")));
@@ -3002,6 +3379,56 @@
             }
         }
 
+        function triggerMemberAppQrDownload(dataUrl) {
+            if (!dataUrl) return;
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = MEMBER_APP_QR_FILENAME;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportMemberAppQrCodePNG() {
+            if (!auth.currentUser) {
+                alert("Zugriff verweigert: Bitte zuerst als Admin anmelden.");
+                return;
+            }
+            try {
+                lastGeneratedMemberAppQrDataUrl = generateTresorQrPngDataUrl(MEMBER_APP_QR_URL, 500);
+                triggerMemberAppQrDownload(lastGeneratedMemberAppQrDataUrl);
+                const previewImg = document.getElementById('member-app-qr-preview-img');
+                if (previewImg) previewImg.src = lastGeneratedMemberAppQrDataUrl;
+                const modal = document.getElementById('member-app-qr-modal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    modal.style.pointerEvents = 'auto';
+                }
+            } catch (err) {
+                console.error("Mitglieder-App QR-Code Fehler:", err);
+                alert("QR-Code konnte nicht erzeugt werden: " + (err && err.message ? err.message : err));
+            }
+        }
+
+        function downloadMemberAppQrCodePNG() {
+            if (!auth.currentUser) {
+                alert("Zugriff verweigert: Bitte zuerst als Admin anmelden.");
+                return;
+            }
+            if (!lastGeneratedMemberAppQrDataUrl) {
+                lastGeneratedMemberAppQrDataUrl = generateTresorQrPngDataUrl(MEMBER_APP_QR_URL, 500);
+            }
+            triggerMemberAppQrDownload(lastGeneratedMemberAppQrDataUrl);
+        }
+
+        function closeMemberAppQrModal() {
+            const modal = document.getElementById('member-app-qr-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+            }
+        }
+
         // --- DIENSTPLAN (AUSSCHLIESSLICH AUS FIRESTORE / CACHE NACH ENTSPERREN) ---
         const defaultDutyRoster = [];
 
@@ -3183,6 +3610,7 @@
             let pastList = [];
             let adminHtml = "";
 
+            const canSendPush = isMainPushAdmin();
             const sortedForAdmin = [...dutyList].sort((a, b) => parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr));
             sortedForAdmin.forEach(d => {
                 const dDate = parseLocalDate(d.dateStr);
@@ -3195,6 +3623,9 @@
                 }
 
                 if (isFromFirebase) {
+                    const pushBtnHtml = canSendPush
+                        ? `<button type="button" class="btn admin-btn-edit admin-duty-push-btn" data-date="${escapeHtml(d.dateStr)}" data-team="${escapeHtml(d.team)}" data-names="${escapeHtml(d.names)}" onclick="sendDutyReminderPush(this.dataset.date, this.dataset.team, this.dataset.names, this)">🔔 Erinnerung</button>`
+                        : '';
                     adminHtml += `
                         <div class="admin-duty-card">
                             <div>
@@ -3205,7 +3636,7 @@
                                 <div class="admin-duty-card-team">${escapeHtml(d.team)}${d.time && d.time !== '—' ? ` <span style="color:#64748b; font-weight:600; font-size:0.9em;">(${escapeHtml(d.time)})</span>` : ''}</div>
                                 <div class="admin-duty-card-names">${escapeHtml(d.names)}</div>
                             </div>
-                            <button type="button" class="btn admin-btn-edit admin-duty-push-btn" data-date="${escapeHtml(d.dateStr)}" data-team="${escapeHtml(d.team)}" data-names="${escapeHtml(d.names)}" onclick="sendDutyReminderPush(this.dataset.date, this.dataset.team, this.dataset.names, this)">🔔 Erinnerung</button>
+                            ${pushBtnHtml}
                         </div>
                     `;
                 }
@@ -3313,7 +3744,7 @@
             const date = document.getElementById('new-event-date').value.trim();
             const desc = document.getElementById('new-event-desc').value.trim();
             const sendPushEl = document.getElementById('event-send-push');
-            const sendPush = !!(sendPushEl && sendPushEl.checked);
+            const sendPush = isMainPushAdmin() && !!(sendPushEl && sendPushEl.checked);
 
             if (!title || !date) {
                 alert("Bitte Titel und Datum angeben!");
@@ -3340,7 +3771,7 @@
                 document.getElementById('new-event-title').value = '';
                 document.getElementById('new-event-date').value = '';
                 document.getElementById('new-event-desc').value = '';
-                if (sendPushEl) sendPushEl.checked = true;
+                if (sendPushEl) sendPushEl.checked = isMainPushAdmin();
                 alert("Termin erfolgreich gespeichert!" + pushNotice);
                 loadEvents();
             } catch (err) {
@@ -5113,59 +5544,577 @@
             }
         }
 
-        // --- SCHANKBUCH ---
+        // --- SCHANKBUCH & OFFENE DECKEL ---
         const drinkPrices = {
             hauswuerste: 7.50, wienerle: 7.00, bier: 3.50, radler: 3.50,
             limo: 3.00, mineral: 2.50, wein4: 4.00, wein8: 3.00,
             weingespr: 3.50, schnaps: 3.50, kaffee: 3.00, tee: 2.50, luftgewehr: 8.00
         };
-        const drinkCounts = {
-            hauswuerste: 0, wienerle: 0, bier: 0, radler: 0,
-            limo: 0, mineral: 0, wein4: 0, wein8: 0,
-            weingespr: 0, schnaps: 0, kaffee: 0, tee: 0, luftgewehr: 0
+        const drinkLabels = {
+            hauswuerste: 'Paar Hauswürste',
+            wienerle: 'Paar Wienerle',
+            bier: 'Bier 0,33 lt.',
+            radler: 'Radler 0,33 lt.',
+            limo: 'Limo 0,3 lt.',
+            mineral: 'Mineral 1/4 lt.',
+            wein4: 'Wein 1/4 lt.',
+            wein8: 'Wein 1/8 lt.',
+            weingespr: 'Wein gespritzt',
+            schnaps: 'Schnaps 2 cl.',
+            kaffee: 'Kaffee',
+            tee: 'Tee',
+            luftgewehr: 'Luftgewehrschießen'
         };
 
-        function changeCount(item, delta) {
-            drinkCounts[item] = Math.max(0, drinkCounts[item] + delta);
-            document.getElementById('count-' + item).innerText = drinkCounts[item];
+        function createEmptyDrinkCounts() {
+            const counts = {};
+            for (const k in drinkPrices) {
+                counts[k] = 0;
+            }
+            return counts;
+        }
+
+        function normalizeDrinkCounts(raw) {
+            const counts = createEmptyDrinkCounts();
+            if (raw && typeof raw === 'object') {
+                for (const k in drinkPrices) {
+                    const n = parseInt(raw[k], 10);
+                    counts[k] = (!isNaN(n) && n > 0) ? n : 0;
+                }
+            }
+            return counts;
+        }
+
+        function computeCountsTotal(counts) {
+            let total = 0;
+            if (!counts) return 0;
+            for (const k in drinkPrices) {
+                total += (Number(counts[k]) || 0) * drinkPrices[k];
+            }
+            return Math.round(total * 100) / 100;
+        }
+
+        function hasAnyDrinkItems(counts) {
+            if (!counts) return false;
+            for (const k in drinkPrices) {
+                if ((Number(counts[k]) || 0) > 0) return true;
+            }
+            return false;
+        }
+
+        const DEFAULT_BAR_TAB_DOC_ID = 'default_bar';
+        const DEFAULT_BAR_TAB_NAME = 'Direktabrechnung / Bar';
+
+        const drinkCounts = createEmptyDrinkCounts();
+        let openTabsList = [
+            { id: DEFAULT_BAR_TAB_DOC_ID, name: DEFAULT_BAR_TAB_NAME, counts: createEmptyDrinkCounts(), isDefaultBar: true, isVirtualDefault: true }
+        ];
+        let activeOpenTabId = DEFAULT_BAR_TAB_DOC_ID;
+        let openTabsUnsubscribe = null;
+        const pendingTabSyncTimers = {};
+        const pendingTabDeltas = {};
+        const pendingNewTabIds = new Set();
+        const pendingCreatePromises = {};
+        window.cashSalesList = [];
+
+        function getActiveOpenTab() {
+            let found = openTabsList.find(t => t.id === activeOpenTabId);
+            if (!found && openTabsList.length > 0) {
+                found = openTabsList[0];
+                activeOpenTabId = found.id;
+            }
+            if (!found) {
+                found = { id: DEFAULT_BAR_TAB_DOC_ID, name: DEFAULT_BAR_TAB_NAME, counts: createEmptyDrinkCounts(), isDefaultBar: true, isVirtualDefault: true };
+                openTabsList = [found];
+                activeOpenTabId = found.id;
+            }
+            return found;
+        }
+
+        function applyCountsToDrinkUI(counts) {
+            const normalized = normalizeDrinkCounts(counts);
+            for (const k in drinkPrices) {
+                drinkCounts[k] = normalized[k];
+                const el = document.getElementById('count-' + k);
+                if (el) el.innerText = String(normalized[k]);
+            }
             calculateTotal();
+        }
+
+        function renderOpenTabsBar() {
+            const bar = document.getElementById('open-tabs-bar');
+            const activeTab = getActiveOpenTab();
+            const activeBadge = document.getElementById('active-tab-badge');
+            const totalTabLabel = document.getElementById('total-tab-name');
+            if (activeBadge) activeBadge.innerText = 'Aktiv: ' + (activeTab ? activeTab.name : DEFAULT_BAR_TAB_NAME);
+            if (totalTabLabel) totalTabLabel.innerText = activeTab ? activeTab.name : DEFAULT_BAR_TAB_NAME;
+            if (!bar) return;
+
+            let html = '';
+            openTabsList.forEach(tab => {
+                const isActive = tab.id === activeOpenTabId;
+                const tabTotal = computeCountsTotal(tab.counts);
+                const totalStr = '€ ' + tabTotal.toFixed(2).replace('.', ',');
+                html += `<button type="button" class="open-tab-btn${isActive ? ' active' : ''}" data-tab-id="${escapeHtml(tab.id)}" onclick="switchOpenTab(this.dataset.tabId)">🍺 ${escapeHtml(tab.name)} (${totalStr})</button>`;
+            });
+            bar.innerHTML = html;
+        }
+
+        function switchOpenTab(tabId) {
+            const target = openTabsList.find(t => t.id === tabId);
+            if (!target) return;
+            activeOpenTabId = target.id;
+            applyCountsToDrinkUI(target.counts);
+            renderOpenTabsBar();
+        }
+
+        function getFirestoreTimestampMillis(ts) {
+            if (!ts) return null;
+            if (typeof ts.toMillis === 'function') return ts.toMillis();
+            if (typeof ts.seconds === 'number') return (ts.seconds * 1000) + Math.floor((ts.nanoseconds || 0) / 1e6);
+            if (typeof ts === 'number' && Number.isFinite(ts)) return ts;
+            return null;
+        }
+
+        function recordPendingTabDelta(tab, item, effectiveDelta) {
+            if (!tab || !tab.id || !(item in drinkPrices)) return;
+            const numDelta = Number(effectiveDelta);
+            if (!Number.isFinite(numDelta) || numDelta === 0) return;
+
+            const tabId = tab.id;
+            if (!pendingTabDeltas[tabId]) pendingTabDeltas[tabId] = {};
+            const nextDelta = Number(pendingTabDeltas[tabId][item] || 0) + numDelta;
+            if (nextDelta === 0) {
+                delete pendingTabDeltas[tabId][item];
+            } else {
+                pendingTabDeltas[tabId][item] = nextDelta;
+            }
+
+            if (pendingTabSyncTimers[tabId]) {
+                clearTimeout(pendingTabSyncTimers[tabId]);
+            }
+            pendingTabSyncTimers[tabId] = setTimeout(() => {
+                delete pendingTabSyncTimers[tabId];
+                persistTabDeltasNow(tabId);
+            }, 150);
+        }
+
+        async function persistTabDeltasNow(tabId) {
+            const rawDeltas = pendingTabDeltas[tabId];
+            delete pendingTabDeltas[tabId];
+            if (!rawDeltas) return;
+
+            const nonZeroDeltas = {};
+            let totalDelta = 0;
+            let hasNonZero = false;
+            for (const k in rawDeltas) {
+                if (!(k in drinkPrices)) continue;
+                const dVal = Number(rawDeltas[k] || 0);
+                if (!Number.isFinite(dVal) || dVal === 0) continue;
+                nonZeroDeltas[k] = dVal;
+                totalDelta += dVal * Number(drinkPrices[k] || 0);
+                hasNonZero = true;
+            }
+            if (!hasNonZero) return;
+            totalDelta = Math.round(totalDelta * 100) / 100;
+
+            if (pendingCreatePromises[tabId]) {
+                try { await pendingCreatePromises[tabId]; } catch (e) {}
+            }
+
+            const tab = openTabsList.find(t => t.id === tabId);
+            if (!tab) return;
+
+            try {
+                if (tab.isVirtualDefault) {
+                    const countsInc = {};
+                    for (const k in nonZeroDeltas) {
+                        countsInc[k] = firebase.firestore.FieldValue.increment(nonZeroDeltas[k]);
+                    }
+                    const payload = {
+                        name: tab.name,
+                        counts: countsInc,
+                        total: firebase.firestore.FieldValue.increment(totalDelta),
+                        isDefaultBar: !!tab.isDefaultBar,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    if (!tab.hasCreatedAt) {
+                        payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                        tab.hasCreatedAt = true;
+                    }
+                    await db.collection("open_tabs").doc(tab.id).set(payload, { merge: true });
+                    tab.isVirtualDefault = false;
+                } else {
+                    const updatePayload = {
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    for (const k in nonZeroDeltas) {
+                        updatePayload['counts.' + k] = firebase.firestore.FieldValue.increment(nonZeroDeltas[k]);
+                    }
+                    if (totalDelta !== 0) {
+                        updatePayload.total = firebase.firestore.FieldValue.increment(totalDelta);
+                    }
+                    await db.collection("open_tabs").doc(tab.id).update(updatePayload);
+                }
+            } catch (e) {}
+        }
+
+        async function createOpenTab() {
+            const guestEl = document.getElementById('open-tab-guest-input');
+            const name = guestEl ? guestEl.value.trim() : '';
+
+            if (!name) {
+                alert("Bitte einen Namen, Gast oder Tisch eingeben!");
+                if (guestEl) guestEl.focus();
+                return;
+            }
+
+            const existing = openTabsList.find(t => String(t.name || '').trim().toLowerCase() === name.toLowerCase());
+            if (existing) {
+                if (guestEl) guestEl.value = '';
+                switchOpenTab(existing.id);
+                return;
+            }
+
+            // Flush empty virtual default tab out of view when a real person tab is opened
+            openTabsList = openTabsList.filter(t => !(t.id === DEFAULT_BAR_TAB_DOC_ID && t.isVirtualDefault && !hasAnyDrinkItems(t.counts)));
+
+            const newDocRef = db.collection("open_tabs").doc();
+            const nowMs = Date.now();
+            const newTab = {
+                id: newDocRef.id,
+                name: name,
+                counts: createEmptyDrinkCounts(),
+                isDefaultBar: false,
+                isVirtualDefault: false,
+                hasCreatedAt: true,
+                sortOrderMs: nowMs
+            };
+            openTabsList.push(newTab);
+            activeOpenTabId = newTab.id;
+            if (guestEl) guestEl.value = '';
+
+            applyCountsToDrinkUI(newTab.counts);
+            renderOpenTabsBar();
+
+            pendingNewTabIds.add(newTab.id);
+            const createPromise = newDocRef.set({
+                name: newTab.name,
+                counts: newTab.counts,
+                total: 0,
+                isDefaultBar: false,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            pendingCreatePromises[newTab.id] = createPromise;
+            try {
+                await createPromise;
+            } catch (e) {
+            } finally {
+                pendingNewTabIds.delete(newTab.id);
+                delete pendingCreatePromises[newTab.id];
+            }
+        }
+
+        function initOpenTabsListener() {
+            if (openTabsUnsubscribe) return;
+            try {
+                openTabsUnsubscribe = db.collection("open_tabs").onSnapshot((snapshot) => {
+                    const nextList = [];
+                    const prevById = {};
+                    openTabsList.forEach(t => { prevById[t.id] = t; });
+
+                    snapshot.forEach(doc => {
+                        const d = doc.data() || {};
+                        const mergedCounts = normalizeDrinkCounts(d.counts);
+                        const pendingDeltasForTab = pendingTabDeltas[doc.id];
+                        if (pendingDeltasForTab) {
+                            for (const k in pendingDeltasForTab) {
+                                if (k in drinkPrices) {
+                                    mergedCounts[k] = Math.max(0, Number(mergedCounts[k] || 0) + Number(pendingDeltasForTab[k] || 0));
+                                }
+                            }
+                        }
+                        const isDef = doc.id === DEFAULT_BAR_TAB_DOC_ID || !!d.isDefaultBar;
+                        const prevTab = prevById[doc.id];
+                        const serverMs = getFirestoreTimestampMillis(d.createdAt);
+                        const sortOrderMs = isDef
+                            ? 0
+                            : (serverMs !== null ? serverMs : (prevTab && typeof prevTab.sortOrderMs === 'number' ? prevTab.sortOrderMs : Date.now()));
+
+                        nextList.push({
+                            id: doc.id,
+                            name: String(d.name || DEFAULT_BAR_TAB_NAME),
+                            counts: mergedCounts,
+                            isDefaultBar: isDef,
+                            isVirtualDefault: false,
+                            hasCreatedAt: true,
+                            sortOrderMs: sortOrderMs
+                        });
+                    });
+
+                    // Preserve any unsaved newly created tab still pending initial write
+                    openTabsList.forEach(t => {
+                        if (!t.isVirtualDefault && pendingNewTabIds.has(t.id) && !nextList.some(nt => nt.id === t.id)) {
+                            nextList.push(t);
+                        }
+                    });
+
+                    if (nextList.length === 0) {
+                        const prevDefault = prevById[DEFAULT_BAR_TAB_DOC_ID];
+                        const keepCounts = createEmptyDrinkCounts();
+                        const defaultDeltas = pendingTabDeltas[DEFAULT_BAR_TAB_DOC_ID];
+                        if (prevDefault && defaultDeltas) {
+                            for (const k in defaultDeltas) {
+                                if (k in drinkPrices) {
+                                    keepCounts[k] = Math.max(0, Number(defaultDeltas[k] || 0));
+                                }
+                            }
+                        }
+                        nextList.push({
+                            id: DEFAULT_BAR_TAB_DOC_ID,
+                            name: DEFAULT_BAR_TAB_NAME,
+                            counts: keepCounts,
+                            isDefaultBar: true,
+                            isVirtualDefault: true,
+                            sortOrderMs: 0
+                        });
+                    }
+
+                    nextList.sort((a, b) => {
+                        if (a.isDefaultBar && !b.isDefaultBar) return -1;
+                        if (!a.isDefaultBar && b.isDefaultBar) return 1;
+                        const diff = (a.sortOrderMs || 0) - (b.sortOrderMs || 0);
+                        if (diff !== 0) return diff;
+                        return String(a.id || '').localeCompare(String(b.id || ''));
+                    });
+
+                    openTabsList = nextList;
+                    if (!openTabsList.some(t => t.id === activeOpenTabId)) {
+                        activeOpenTabId = openTabsList[0].id;
+                    }
+                    const current = getActiveOpenTab();
+                    applyCountsToDrinkUI(current.counts);
+                    renderOpenTabsBar();
+                }, () => {
+                    renderOpenTabsBar();
+                });
+            } catch (e) {
+                renderOpenTabsBar();
+            }
+        }
+
+        async function closeSettledOpenTab(tabId) {
+            if (pendingTabSyncTimers[tabId]) {
+                clearTimeout(pendingTabSyncTimers[tabId]);
+                delete pendingTabSyncTimers[tabId];
+            }
+            delete pendingTabDeltas[tabId];
+            pendingNewTabIds.delete(tabId);
+            delete pendingCreatePromises[tabId];
+
+            const target = openTabsList.find(t => t.id === tabId);
+            const wasVirtual = !!(target && target.isVirtualDefault);
+
+            openTabsList = openTabsList.filter(t => t.id !== tabId);
+            if (openTabsList.length === 0) {
+                openTabsList = [{
+                    id: DEFAULT_BAR_TAB_DOC_ID,
+                    name: DEFAULT_BAR_TAB_NAME,
+                    counts: createEmptyDrinkCounts(),
+                    isDefaultBar: true,
+                    isVirtualDefault: true
+                }];
+            }
+            activeOpenTabId = openTabsList[0].id;
+            applyCountsToDrinkUI(openTabsList[0].counts);
+            renderOpenTabsBar();
+
+            if (!wasVirtual || tabId === DEFAULT_BAR_TAB_DOC_ID) {
+                try {
+                    await db.collection("open_tabs").doc(tabId).delete();
+                } catch (e) {}
+            }
+        }
+
+        async function deductInventoryFromCounts(countsObj) {
+            if (!countsObj) return;
+            const hQty = Number(countsObj.hauswuerste || 0);
+            const wQty = Number(countsObj.wienerle || 0);
+            const bQty = Number(countsObj.bier || 0);
+            const lQty = Number(countsObj.limo || 0);
+            if (hQty <= 0 && wQty <= 0 && bQty <= 0 && lQty <= 0) return;
+
+            try {
+                const invRef = db.collection("settings").doc("inventory");
+                try {
+                    const invDoc = await invRef.get();
+                    if (invDoc.exists && invDoc.data()) {
+                        inventoryData = { ...inventoryData, ...invDoc.data() };
+                    }
+                } catch (readErr) {}
+
+                const nextInv = { ...inventoryData };
+                if (hQty > 0) nextInv.hauswuerste = Math.max(0, Number(nextInv.hauswuerste || 0) - hQty);
+                if (wQty > 0) nextInv.wienerle = Math.max(0, Number(nextInv.wienerle || 0) - wQty);
+                if (bQty > 0) nextInv.bier = Math.max(0, Math.round((Number(nextInv.bier || 0) - (bQty / 24)) * 100) / 100);
+                if (lQty > 0) nextInv.limo = Math.max(0, Math.round((Number(nextInv.limo || 0) - (lQty / 24)) * 100) / 100);
+
+                inventoryData = nextInv;
+                const now = new Date();
+                lastInventoryChangeTime = now.toLocaleDateString('de-AT') + ", " + now.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' }) + " Uhr";
+                await invRef.set(inventoryData);
+                try { renderInventoryDisplay(); } catch (e) {}
+            } catch (invErr) {}
+        }
+
+        function showSchankbuchFeedback(message) {
+            const box = document.getElementById('schankbuch-save-feedback');
+            if (box) {
+                box.innerText = '✅ ' + message;
+                box.style.display = 'block';
+                setTimeout(() => {
+                    try { box.style.display = 'none'; } catch (e) {}
+                }, 6000);
+            }
+            try {
+                const oldToast = document.getElementById('schankbuch-toast');
+                if (oldToast) oldToast.remove();
+                const toast = document.createElement('div');
+                toast.id = 'schankbuch-toast';
+                toast.innerText = '✅ ' + message;
+                toast.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99999999;background:#16a34a;color:#ffffff;padding:12px 18px;border-radius:14px;font-weight:800;font-size:0.9em;box-shadow:0 10px 25px rgba(22,163,74,0.35);border:2px solid #86efac;max-width:92%;text-align:center;';
+                document.body.appendChild(toast);
+                setTimeout(() => { try { toast.remove(); } catch (e) {} }, 4500);
+            } catch (e) {}
+        }
+
+        function buildItemsArrayFromCounts(countsObj) {
+            const itemsArray = [];
+            for (const k in drinkPrices) {
+                const qty = Number(countsObj && countsObj[k] ? countsObj[k] : 0);
+                if (qty > 0) {
+                    itemsArray.push({
+                        key: k,
+                        name: drinkLabels[k] || k,
+                        count: qty,
+                        price: Math.round(qty * drinkPrices[k] * 100) / 100
+                    });
+                }
+            }
+            return itemsArray;
+        }
+
+        function changeCount(item, delta) {
+            if (!(item in drinkPrices)) return;
+            const numDelta = Number(delta);
+            if (!Number.isFinite(numDelta) || numDelta === 0) return;
+
+            const activeTab = getActiveOpenTab();
+            const currentVal = Number(activeTab.counts[item] || 0);
+            const nextVal = Math.max(0, currentVal + numDelta);
+            const effectiveDelta = nextVal - currentVal;
+            if (effectiveDelta === 0) return;
+
+            activeTab.counts[item] = nextVal;
+            drinkCounts[item] = nextVal;
+
+            const countEl = document.getElementById('count-' + item);
+            if (countEl) countEl.innerText = String(nextVal);
+            calculateTotal();
+            renderOpenTabsBar();
+            recordPendingTabDelta(activeTab, item, effectiveDelta);
         }
 
         function calculateTotal() {
             let total = 0;
-            for (let k in drinkCounts) { total += drinkCounts[k] * drinkPrices[k]; }
-            document.getElementById('total-price').innerText = '€ ' + total.toFixed(2).replace('.', ',');
+            for (let k in drinkCounts) { total += (Number(drinkCounts[k]) || 0) * drinkPrices[k]; }
+            total = Math.round(total * 100) / 100;
+            const totalEl = document.getElementById('total-price');
+            if (totalEl) totalEl.innerText = '€ ' + total.toFixed(2).replace('.', ',');
             return total;
         }
 
         function confirmResetDrinks() {
+            const activeTab = getActiveOpenTab();
+            const tabLabel = activeTab ? activeTab.name : DEFAULT_BAR_TAB_NAME;
             showCustomConfirm(
-                "ACHTUNG: Möchtest du das Schankbuch wirklich zurücksetzen?",
-                "Alle nicht gespeicherten Eingaben und Einträge gehen dabei verloren!",
+                "ACHTUNG: Aktuellen Deckel leeren/löschen?",
+                `Alle nicht abgerechneten Einträge auf dem Deckel „${tabLabel}“ werden gelöscht!`,
                 function(confirmed) {
                     if (confirmed) {
-                        for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
-                        calculateTotal();
+                        closeSettledOpenTab(activeTab.id);
                     }
                 }
             );
         }
 
-        async function saveTallyBilling() {
-            let total = calculateTotal();
+        async function saveCashSale(btnEl) {
+            const activeTab = getActiveOpenTab();
+            const countsCopy = normalizeDrinkCounts(activeTab.counts);
+            const total = computeCountsTotal(countsCopy);
             if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
 
-            let clientName = document.getElementById('cust-name').value.trim() || "Kunde";
-            let clientAttn = document.getElementById('cust-attn').value.trim() || "";
-            let clientAddress = document.getElementById('cust-address').value.trim() || "";
-            let clientZipCity = document.getElementById('cust-zipcity').value.trim() || "";
+            const itemsArray = buildItemsArrayFromCounts(countsCopy);
+            const typedCustName = document.getElementById('cust-name') ? document.getElementById('cust-name').value.trim() : '';
+            const saleTabName = (activeTab.isDefaultBar && typedCustName) ? typedCustName : activeTab.name;
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('de-AT');
+            const timeStr = now.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
 
-            let itemsArray = [];
-            for (let k in drinkCounts) {
-                if (drinkCounts[k] > 0) {
-                    itemsArray.push({ name: k, count: drinkCounts[k], price: drinkCounts[k] * drinkPrices[k] });
+            const cashSaleObj = {
+                date: dateStr,
+                time: timeStr,
+                dateTime: `${dateStr} ${timeStr}`,
+                tabName: saleTabName,
+                items: itemsArray,
+                total: total,
+                type: 'bar',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            if (btnEl) btnEl.disabled = true;
+            try {
+                await db.collection("cash_sales").add(cashSaleObj);
+                await deductInventoryFromCounts(countsCopy);
+                await closeSettledOpenTab(activeTab.id);
+
+                ['cust-name', 'cust-attn', 'cust-address', 'cust-zipcity'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
+
+                if (auth.currentUser) {
+                    loadCashSales();
                 }
+
+                const amountText = total.toFixed(2).replace('.', ',');
+                showSchankbuchFeedback(`Bar-Abrechnung (€ ${amountText}) in der Schankkassa gespeichert!`);
+            } catch (err) {
+                alert("Fehler beim Speichern der Bar-Abrechnung: " + err.message);
+            } finally {
+                if (btnEl) btnEl.disabled = false;
             }
+        }
+
+        async function saveTallyBilling(btnEl) {
+            const activeTab = getActiveOpenTab();
+            const countsCopy = normalizeDrinkCounts(activeTab.counts);
+            const total = computeCountsTotal(countsCopy);
+            if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
+
+            const custNameEl = document.getElementById('cust-name');
+            const custAttnEl = document.getElementById('cust-attn');
+            const custAddrEl = document.getElementById('cust-address');
+            const custZipEl = document.getElementById('cust-zipcity');
+
+            const rawName = custNameEl ? custNameEl.value.trim() : '';
+            const clientName = rawName || (!activeTab.isDefaultBar ? activeTab.name : "Kunde");
+            const clientAttn = custAttnEl ? custAttnEl.value.trim() : "";
+            const clientAddress = custAddrEl ? custAddrEl.value.trim() : "";
+            const clientZipCity = custZipEl ? custZipEl.value.trim() : "";
+
+            const itemsArray = buildItemsArrayFromCounts(countsCopy);
 
             const todayStr = new Date().toISOString().slice(0,10).replace(/-/g,'');
             const invoiceObj = {
@@ -5177,29 +6126,157 @@
                 recipientZipCity: clientZipCity,
                 total: total,
                 items: itemsArray,
+                type: 'rechnung',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
+            if (btnEl) btnEl.disabled = true;
             try {
-                await db.collection("tally_billings").add(invoiceObj);
-                loadInvoices();
+                const docRef = await db.collection("tally_billings").add(invoiceObj);
+                if (!window.invoicesMap) window.invoicesMap = {};
+                window.invoicesMap[docRef.id] = invoiceObj;
+
+                await deductInventoryFromCounts(countsCopy);
+                await closeSettledOpenTab(activeTab.id);
+
+                if (custNameEl) custNameEl.value = '';
+                if (custAttnEl) custAttnEl.value = '';
+                if (custAddrEl) custAddrEl.value = '';
+                if (custZipEl) custZipEl.value = '';
+
+                if (auth.currentUser) {
+                    loadInvoices();
+                }
+
+                const amountText = total.toFixed(2).replace('.', ',');
+                showSchankbuchFeedback(`Firmen- / Feier-Rechnung (€ ${amountText}) gespeichert!`);
 
                 showCustomConfirm(
-                    "Abrechnung erfolgreich gespeichert!",
-                    "Soll das Schankbuch jetzt zurückgesetzt werden?",
+                    `Rechnung ${invoiceObj.invoiceNum} gespeichert!`,
+                    "Möchtest du das Rechnungs-PDF jetzt direkt herunterladen?",
                     function(confirmed) {
                         if (confirmed) {
-                            for (let k in drinkCounts) { drinkCounts[k] = 0; document.getElementById('count-' + k).innerText = '0'; }
-                            calculateTotal();
-                            document.getElementById('cust-name').value = '';
-                            document.getElementById('cust-attn').value = '';
-                            document.getElementById('cust-address').value = '';
-                            document.getElementById('cust-zipcity').value = '';
+                            generateInvoicePDF(docRef.id);
                         }
                     }
                 );
             } catch (err) {
                 alert("Fehler beim Speichern: " + err.message);
+            } finally {
+                if (btnEl) btnEl.disabled = false;
+            }
+        }
+
+        async function loadCashSales() {
+            if (!auth.currentUser) return;
+            const container = document.getElementById('admin-cash-sales-list');
+            const sumEl = document.getElementById('admin-cash-sales-sum-value');
+            if (!container) return;
+
+            try {
+                const snapshot = await db.collection("cash_sales").orderBy("createdAt", "desc").get();
+                let html = "";
+                let totalCashSum = 0;
+                const list = [];
+
+                snapshot.forEach(doc => {
+                    const sale = doc.data() || {};
+                    let rawTotal = sale.total;
+                    if (typeof rawTotal === 'string') {
+                        rawTotal = parseFloat(rawTotal.replace('€', '').replace(',', '.').trim());
+                    }
+                    const totalNum = isNaN(rawTotal) ? 0 : Number(rawTotal);
+                    totalCashSum += totalNum;
+
+                    const itemsSummary = Array.isArray(sale.items)
+                        ? sale.items.map(it => `${it.count || 0}x ${it.name || it.key || ''}`).join(', ')
+                        : '';
+                    const dateDisplay = sale.dateTime || sale.date || '';
+
+                    list.push({
+                        id: doc.id,
+                        dateDisplay,
+                        tabName: sale.tabName || DEFAULT_BAR_TAB_NAME,
+                        itemsSummary,
+                        totalNum
+                    });
+
+                    const safeDocId = escapeHtml(doc.id);
+                    const amountStr = totalNum.toFixed(2).replace('.', ',');
+                    html += `
+                        <div class="admin-list-row">
+                            <div style="flex: 1; min-width: 0;">
+                                <strong style="color: #0f172a;">🍺 ${escapeHtml(sale.tabName || DEFAULT_BAR_TAB_NAME)}</strong>
+                                <span style="color: #15803d; font-weight: 800; margin-left: 6px;">€ ${amountStr}</span><br>
+                                <span style="color: #64748b; font-size: 0.82em;">🕒 ${escapeHtml(dateDisplay)}</span>
+                                ${itemsSummary ? `<div style="color: #334155; font-size: 0.82em; margin-top: 2px;">${escapeHtml(itemsSummary)}</div>` : ''}
+                            </div>
+                            <div style="display: flex; gap: 5px; flex-shrink: 0;">
+                                <button type="button" class="btn admin-btn-delete" style="padding: 6px 9px !important; font-size: 0.78em !important;" data-doc-id="${safeDocId}" onclick="deleteItem('cash_sales', this.dataset.docId)" title="Bar-Abrechnung löschen">🗑️</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                window.cashSalesList = list;
+                if (sumEl) {
+                    sumEl.innerText = '€ ' + totalCashSum.toFixed(2).replace('.', ',');
+                }
+                if (snapshot.empty) {
+                    container.innerHTML = '<p class="admin-muted-text" style="text-align:center; padding:10px;">Noch keine Bar-Abrechnungen in der Schankkassa.</p>';
+                } else {
+                    container.innerHTML = html;
+                }
+            } catch (e) {}
+        }
+
+        async function exportCashSalesCSV() {
+            if (!auth.currentUser) return;
+            try {
+                if (!window.cashSalesList || window.cashSalesList.length === 0) {
+                    await loadCashSales();
+                }
+                const list = Array.isArray(window.cashSalesList) ? window.cashSalesList : [];
+                if (list.length === 0) {
+                    alert("Keine Bar-Abrechnungen zum Exportieren vorhanden.");
+                    return;
+                }
+
+                const rows = [];
+                rows.push(['Datum / Uhrzeit', 'Name / Deckel', 'Artikel', 'Betrag (EUR)', 'Dokument-ID']);
+                let sum = 0;
+                list.forEach(s => {
+                    sum += Number(s.totalNum || 0);
+                    rows.push([
+                        s.dateDisplay || '',
+                        s.tabName || '',
+                        s.itemsSummary || '',
+                        Number(s.totalNum || 0).toFixed(2).replace('.', ','),
+                        s.id || ''
+                    ]);
+                });
+                rows.push(['GESAMT SCHANKKASSA', `${list.length} Abrechnungen`, '', sum.toFixed(2).replace('.', ','), 'SUMME']);
+
+                const csvContent = rows.map(r => r.map(csvEscapeCell).join(';')).join('\r\n');
+                const now = new Date();
+                const yyyy = now.getFullYear();
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const dd = String(now.getDate()).padStart(2, '0');
+                const fileName = `KBSV_Schankkassa_${yyyy}-${mm}-${dd}.csv`;
+
+                const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => {
+                    try { document.body.removeChild(link); } catch (e) {}
+                    try { URL.revokeObjectURL(url); } catch (e) {}
+                }, 1500);
+            } catch (err) {
+                alert("Fehler beim CSV-Export der Schankkassa: " + (err && err.message ? err.message : String(err)));
             }
         }
 
@@ -5211,14 +6288,12 @@
                 const snapshot = await db.collection("tally_billings").orderBy("createdAt", "desc").get();
                 let html = "";
                 window.invoicesMap = {};
-                
-                if (snapshot.empty) {
-                    container.innerHTML = '<p class="admin-muted-text" style="text-align:center; padding:10px;">Keine Rechnungen in der Datenbank gefunden.</p>';
-                    return;
-                }
+                let invoiceCount = 0;
 
                 snapshot.forEach(doc => {
-                    const inv = doc.data();
+                    const inv = doc.data() || {};
+                    if (inv.type && inv.type !== 'rechnung') return;
+                    invoiceCount++;
                     window.invoicesMap[doc.id] = inv;
                     
                     let rawTotal = inv.total;
@@ -5243,6 +6318,11 @@
                         </div>
                     `;
                 });
+
+                if (invoiceCount === 0) {
+                    container.innerHTML = '<p class="admin-muted-text" style="text-align:center; padding:10px;">Keine Firmen- oder Feier-Rechnungen in der Datenbank gefunden.</p>';
+                    return;
+                }
                 container.innerHTML = html;
             } catch (e) {}
         }
@@ -5383,7 +6463,7 @@
             const text = document.getElementById('news-text').value;
             const fileInput = document.getElementById('news-photo-input');
             const sendPushEl = document.getElementById('news-send-push');
-            const sendPush = !!(sendPushEl && sendPushEl.checked);
+            const sendPush = isMainPushAdmin() && !!(sendPushEl && sendPushEl.checked);
 
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
@@ -5418,7 +6498,7 @@
                 document.getElementById('news-text').value = '';
                 document.getElementById('news-photo-input').value = '';
                 const sendPushEl = document.getElementById('news-send-push');
-                if (sendPushEl) sendPushEl.checked = true;
+                if (sendPushEl) sendPushEl.checked = isMainPushAdmin();
                 loadNews();
             } catch (err) {}
         }
@@ -5443,7 +6523,7 @@
             if (confirm("Wirklich löschen?")) {
                 await db.collection(collectionName).doc(docId).delete();
                 alert("Gelöscht!");
-                loadEvents(); loadNews(); loadInvoices(); loadWeaponHistory(); loadAdminWeaponPDFs();
+                loadEvents(); loadNews(); loadCashSales(); loadInvoices(); loadWeaponHistory(); loadAdminWeaponPDFs();
             }
         }
 
@@ -5479,10 +6559,12 @@
                 officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
             }
             try { populateWeaponMemberSelects(); } catch(e) {}
+            try { renderOpenTabsBar(); } catch(e) {}
             try { loadPublicMembersList(); } catch(e) {}
             if (!appDataLoadedAfterUnlock) {
                 appDataLoadedAfterUnlock = true;
                 try { initDutyPlanRealtimeListener(); } catch(e) {}
+                try { initOpenTabsListener(); } catch(e) {}
                 try { initMidnightAndMinuteChecker(); } catch(e) {}
             }
             try { loadMembersFromFirestore(); } catch(e) {}
@@ -5497,8 +6579,9 @@
             if (!auth.currentUser) return;
             loadAppDataAfterUnlock();
             try { lockSecuritySettingsFields(); } catch(e) {}
-            try { switchAdminSection('admin-sec-news-events'); } catch(e) {}
+            try { closeAllAdminSections(); } catch(e) {}
             try { renderAdminMembersOverview(); } catch(e) {}
+            try { loadCashSales(); } catch(e) {}
             try { loadInvoices(); } catch(e) {}
             try { loadKeyList(); } catch(e) {}
             try { loadInventory(); renderInventoryDisplay(); } catch(e) {}
@@ -5513,6 +6596,22 @@
                 try { dutyPlanUnsubscribe(); } catch(e) {}
                 dutyPlanUnsubscribe = null;
             }
+            if (openTabsUnsubscribe) {
+                try { openTabsUnsubscribe(); } catch(e) {}
+                openTabsUnsubscribe = null;
+            }
+            Object.keys(pendingTabSyncTimers).forEach(id => {
+                try { clearTimeout(pendingTabSyncTimers[id]); } catch(e) {}
+                delete pendingTabSyncTimers[id];
+            });
+            Object.keys(pendingTabDeltas).forEach(id => { delete pendingTabDeltas[id]; });
+            pendingNewTabIds.clear();
+            Object.keys(pendingCreatePromises).forEach(id => { delete pendingCreatePromises[id]; });
+            openTabsList = [
+                { id: DEFAULT_BAR_TAB_DOC_ID, name: DEFAULT_BAR_TAB_NAME, counts: createEmptyDrinkCounts(), isDefaultBar: true, isVirtualDefault: true }
+            ];
+            activeOpenTabId = DEFAULT_BAR_TAB_DOC_ID;
+            try { applyCountsToDrinkUI(openTabsList[0].counts); renderOpenTabsBar(); } catch(e) {}
             if (midnightCheckerInterval) {
                 try { clearInterval(midnightCheckerInterval); } catch(e) {}
                 midnightCheckerInterval = null;
@@ -5525,16 +6624,19 @@
             lastRenderedDutySignature = null;
             window.weaponPdfMap = {};
             window.invoicesMap = {};
+            window.cashSalesList = [];
             loadedClubPinValue = '';
             loadedOneSignalKeyValue = '';
             try { lockSecuritySettingsFields(); } catch(e) {}
             try { localStorage.removeItem(DUTY_PLAN_CACHE_KEY); } catch(e) {}
 
             populateWeaponMemberSelects();
-            ['next-duty-widget', 'full-roster-list', 'archive-roster-list', 'events-container', 'news-container', 'public-members-list', 'weapon-checkboxes-container', 'weapon-history-list', 'admin-keys-list', 'admin-weapon-pdf-list', 'admin-tally-history-list', 'admin-members-overview'].forEach(id => {
+            ['next-duty-widget', 'full-roster-list', 'archive-roster-list', 'events-container', 'news-container', 'public-members-list', 'weapon-checkboxes-container', 'weapon-history-list', 'admin-keys-list', 'admin-weapon-pdf-list', 'admin-cash-sales-list', 'admin-tally-history-list', 'admin-members-overview'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.innerHTML = '';
             });
+            const cashSumEl = document.getElementById('admin-cash-sales-sum-value');
+            if (cashSumEl) cashSumEl.innerText = '€ 0,00';
         }
 
         async function resolveClubPinHashFromData(data, allowMigrate = false) {
@@ -5789,6 +6891,55 @@
             } catch (e) {}
         }
 
+        let activeAdminName = '';
+
+        function isMainPushAdmin() {
+            const user = (typeof auth !== 'undefined' && auth) ? auth.currentUser : null;
+            if (!user) return false;
+            const email = String(user.email || '').trim().toLowerCase();
+            if (email) {
+                return email.includes('simon');
+            }
+            const displayName = String(user.displayName || '').trim().toLowerCase();
+            if (displayName) {
+                return displayName === 'simon';
+            }
+            return String(activeAdminName || '').trim().toLowerCase() === 'simon';
+        }
+
+        function updateAdminPushVisibility() {
+            const isMain = isMainPushAdmin();
+
+            const customPushCard = document.getElementById('admin-custom-push-card');
+            if (customPushCard) {
+                customPushCard.style.display = isMain ? '' : 'none';
+            }
+
+            const newsPushWrap = document.getElementById('news-send-push-wrap');
+            const newsPushInput = document.getElementById('news-send-push');
+            if (newsPushWrap) newsPushWrap.style.display = isMain ? 'flex' : 'none';
+            if (newsPushInput) {
+                if (!isMain) {
+                    newsPushInput.checked = false;
+                } else if (!newsPushWrap || newsPushWrap.dataset.lastRole !== 'simon') {
+                    newsPushInput.checked = true;
+                }
+                if (newsPushWrap) newsPushWrap.dataset.lastRole = isMain ? 'simon' : 'other';
+            }
+
+            const eventPushWrap = document.getElementById('event-send-push-wrap');
+            const eventPushInput = document.getElementById('event-send-push');
+            if (eventPushWrap) eventPushWrap.style.display = isMain ? 'flex' : 'none';
+            if (eventPushInput) {
+                if (!isMain) {
+                    eventPushInput.checked = false;
+                } else if (!eventPushWrap || eventPushWrap.dataset.lastRole !== 'simon') {
+                    eventPushInput.checked = true;
+                }
+                if (eventPushWrap) eventPushWrap.dataset.lastRole = isMain ? 'simon' : 'other';
+            }
+        }
+
         function handleAdminLogin(e) {
             e.preventDefault();
             const selectedUser = document.getElementById('admin-user-select').value;
@@ -5797,6 +6948,7 @@
 
             auth.signInWithEmailAndPassword(adminEmail, password)
                 .then((userCredential) => {
+                    activeAdminName = selectedUser || '';
                     document.documentElement.classList.add('kbsv-pre-unlocked');
                     document.documentElement.classList.remove('kbsv-pre-locked');
                     document.body.classList.add('admin-mode');
@@ -5816,6 +6968,10 @@
                     resetInactivityTimer();
                     
                     loadAdminProtectedData();
+                    updateAdminPushVisibility();
+                    if (globalDutyList.length > 0) {
+                        renderDutyPlanViews(globalDutyList, globalDutyIsFromFirebase);
+                    }
                 })
                 .catch((error) => {
                     showAdminErrorModal();
@@ -5825,12 +6981,17 @@
         function logoutAdmin(reason = 'manual') {
             const isInactivityLogout = (reason === 'inactivity');
             auth.signOut().then(async () => {
+                activeAdminName = '';
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
                 if (pwdInput) pwdInput.value = '';
                 loadedClubPinValue = '';
                 loadedOneSignalKeyValue = '';
                 try { lockSecuritySettingsFields(); } catch(e) {}
+                try { closeAdminHelpModal(); } catch(e) {}
+                try { closeMemberAppQrModal(); } catch(e) {}
+                try { closeTresorQrModal(); } catch(e) {}
+                updateAdminPushVisibility();
                 
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
@@ -5850,6 +7011,8 @@
 
         auth.onAuthStateChanged(async (user) => {
             if (user) {
+                const email = String(user.email || '').trim().toLowerCase();
+                if (email.includes('simon')) activeAdminName = 'simon';
                 document.documentElement.classList.add('kbsv-pre-unlocked');
                 document.documentElement.classList.remove('kbsv-pre-locked');
                 document.body.classList.add('admin-mode');
@@ -5865,13 +7028,25 @@
                 document.getElementById('admin-login-card').style.display = 'none';
                 resetInactivityTimer();
                 loadAdminProtectedData();
+                updateAdminPushVisibility();
+                if (globalDutyList.length > 0) {
+                    renderDutyPlanViews(globalDutyList, globalDutyIsFromFirebase);
+                }
             } else {
+                activeAdminName = '';
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
                 if (pwdInput) pwdInput.value = '';
                 loadedClubPinValue = '';
                 loadedOneSignalKeyValue = '';
                 try { lockSecuritySettingsFields(); } catch(e) {}
+                try { closeAdminHelpModal(); } catch(e) {}
+                try { closeMemberAppQrModal(); } catch(e) {}
+                try { closeTresorQrModal(); } catch(e) {}
+                updateAdminPushVisibility();
+                if (globalDutyList.length > 0) {
+                    renderDutyPlanViews(globalDutyList, globalDutyIsFromFirebase);
+                }
                 
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
@@ -6481,10 +7656,6 @@
             }
             const inputEl = document.getElementById('admin-onesignal-key-input');
             const restApiKey = inputEl ? inputEl.value.trim() : '';
-            if (!restApiKey) {
-                alert("Bitte einen gültigen OneSignal REST API Key eingeben!");
-                return;
-            }
             try {
                 await db.collection("settings").doc("push").set({
                     restApiKey: restApiKey,
@@ -6492,15 +7663,19 @@
                 }, { merge: true });
                 loadedOneSignalKeyValue = restApiKey;
                 lockSecuritySettingsFields();
-                alert("OneSignal REST API Key erfolgreich in Firestore (settings/push) gespeichert!");
+                if (restApiKey) {
+                    alert("OneSignal REST API Key erfolgreich in Firestore (settings/push) gespeichert!");
+                } else {
+                    alert("OneSignal REST API Key in Firestore geleert! Der Push-Versand nutzt das Server-Secret im Cloudflare Worker.");
+                }
             } catch (err) {
                 alert("Fehler beim Speichern des Push-Keys: " + err.message);
             }
         }
 
         async function sendOneSignalPushToAll(title, message) {
-            if (!auth.currentUser) {
-                return { ok: false, error: 'Nicht als Admin angemeldet.' };
+            if (!isMainPushAdmin()) {
+                return { ok: false, error: 'Push-Versand ist nur für den Haupt-Admin (Simon) freigeschaltet.' };
             }
 
             const cleanTitle = String(title || 'KB & SV Gaschurn-Partenen').trim();
@@ -6508,27 +7683,32 @@
             const targetUrl = "https://" + "kb-sv-push" + "." + "simonpoeschel33" + "." + "workers.dev";
 
             try {
-                const doc = await db.collection("settings").doc("push").get();
-                const rawKey = (doc.exists && doc.data() && doc.data().restApiKey) ? String(doc.data().restApiKey).trim() : '';
-
-                if (!rawKey) {
-                    return { ok: false, error: 'Bitte zuerst den OneSignal REST API Key ganz unten im Admin-Bereich speichern!' };
+                let rawKey = '';
+                try {
+                    const doc = await db.collection("settings").doc("push").get();
+                    rawKey = (doc.exists && doc.data() && doc.data().restApiKey) ? String(doc.data().restApiKey).trim() : '';
+                } catch (readErr) {
+                    rawKey = '';
                 }
 
                 const appUrl = (typeof window !== 'undefined' && window.location && /^https?:\/\//i.test(window.location.origin))
                     ? (window.location.origin + window.location.pathname)
                     : "https://github.io";
 
+                const payloadBody = {
+                    appId: ONESIGNAL_APP_ID,
+                    title: cleanTitle,
+                    message: cleanMessage,
+                    url: appUrl
+                };
+                if (rawKey) {
+                    payloadBody.restApiKey = rawKey;
+                }
+
                 const res = await fetch(targetUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        restApiKey: rawKey,
-                        appId: ONESIGNAL_APP_ID,
-                        title: cleanTitle,
-                        message: cleanMessage,
-                        url: appUrl
-                    })
+                    body: JSON.stringify(payloadBody)
                 });
 
                 const rawText = await res.text();
@@ -6565,7 +7745,7 @@
         }
 
         async function sendDutyReminderPush(dateStr, team, names, btnEl) {
-            if (!auth.currentUser) return;
+            if (!auth.currentUser || !isMainPushAdmin()) return;
             const reminderText = `⏰ Dienst-Erinnerung: ${dateStr} – ${team} (${names})`;
             if (btnEl) btnEl.disabled = true;
             try {
@@ -6580,7 +7760,322 @@
             }
         }
 
+        async function sendCustomPushMessage(btnEl) {
+            if (!auth.currentUser || !isMainPushAdmin()) return;
+            const titleEl = document.getElementById('custom-push-title');
+            const msgEl = document.getElementById('custom-push-message');
+            const feedbackEl = document.getElementById('custom-push-feedback');
+            if (feedbackEl) {
+                feedbackEl.style.display = 'none';
+                feedbackEl.innerText = '';
+            }
+
+            const title = (titleEl && titleEl.value ? titleEl.value.trim() : '') || 'Vereins-Info KB & SV';
+            const message = msgEl && msgEl.value ? msgEl.value.trim() : '';
+
+            if (!message) {
+                alert("Bitte gib zuerst einen Nachrichtentext für die Push-Nachricht ein.");
+                if (msgEl) msgEl.focus();
+                return;
+            }
+
+            if (!confirm("Möchtest du diese Push-Nachricht wirklich jetzt an alle registrierten Vereinsmitglieder senden?")) {
+                return;
+            }
+
+            if (btnEl) btnEl.disabled = true;
+            try {
+                const res = await sendOneSignalPushToAll(title, message);
+                if (res && res.ok) {
+                    if (msgEl) msgEl.value = '';
+                    const recipientCount = res.data && res.data.recipients !== undefined ? ` (Empfänger: ${res.data.recipients})` : '';
+                    if (feedbackEl) {
+                        feedbackEl.innerText = `✅ Push-Nachricht erfolgreich an alle Mitglieder gesendet!${recipientCount}`;
+                        feedbackEl.style.display = 'block';
+                    }
+                } else {
+                    alert("Push-Versand fehlgeschlagen: " + (res && res.error ? res.error : "Unbekannter Fehler"));
+                }
+            } finally {
+                if (btnEl) btnEl.disabled = false;
+            }
+        }
+
+        function openInstallHelpModal() {
+            const modal = document.getElementById('install-help-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.style.pointerEvents = 'auto';
+            }
+        }
+
+        function closeInstallHelpModal() {
+            const modal = document.getElementById('install-help-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+            }
+        }
+
+        function openMemberHelpModal() {
+            const modal = document.getElementById('member-help-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.style.pointerEvents = 'auto';
+            }
+        }
+
+        function closeMemberHelpModal() {
+            const modal = document.getElementById('member-help-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+            }
+        }
+
+        function openAdminHelpModal() {
+            if (!auth.currentUser) return;
+            const modal = document.getElementById('admin-help-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.style.pointerEvents = 'auto';
+            }
+        }
+
+        function closeAdminHelpModal() {
+            const modal = document.getElementById('admin-help-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+            }
+            try { document.body.classList.remove('printing-admin-help'); } catch (e) {}
+        }
+
+        function printAdminHelpModal() {
+            if (!auth.currentUser) return;
+            document.body.classList.add('printing-admin-help');
+            try {
+                window.print();
+            } finally {
+                setTimeout(() => {
+                    try { document.body.classList.remove('printing-admin-help'); } catch (e) {}
+                }, 500);
+            }
+        }
+
+        if (typeof window !== 'undefined' && window.addEventListener) {
+            window.addEventListener('afterprint', () => {
+                try { document.body.classList.remove('printing-admin-help'); } catch (e) {}
+            });
+        }
+
+        function updateOfflineWarningBanner() {
+            const banner = document.getElementById('offline-warning-banner');
+            if (!banner) return;
+            const isOffline = (typeof navigator !== 'undefined' && navigator.onLine === false);
+            banner.style.display = isOffline ? 'block' : 'none';
+        }
+
+        window.addEventListener('offline', updateOfflineWarningBanner);
+        window.addEventListener('online', updateOfflineWarningBanner);
+
+        async function forceRefreshApp() {
+            try {
+                if ('caches' in window && caches && typeof caches.keys === 'function') {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map(k => caches.delete(k).catch(() => {})));
+                }
+            } catch (e) {}
+            try {
+                if ('serviceWorker' in navigator && navigator.serviceWorker && typeof navigator.serviceWorker.getRegistrations === 'function') {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(regs.map(r => (r && typeof r.update === 'function') ? r.update().catch(() => {}) : Promise.resolve()));
+                }
+            } catch (e) {}
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.set('_refresh', String(Date.now()));
+                window.location.replace(url.toString());
+                return;
+            } catch (e) {}
+            try {
+                window.location.reload(true);
+            } catch (e2) {
+                window.location.reload();
+            }
+        }
+
+        function csvEscapeCell(val) {
+            const str = String(val === null || val === undefined ? '' : val).replace(/\r\n|\r|\n/g, ' ');
+            if (/[;"\n]/.test(str)) {
+                return '"' + str.replace(/"/g, '""') + '"';
+            }
+            return str;
+        }
+
+        async function downloadFullClubBackupCSV(btnEl) {
+            if (!auth.currentUser) return;
+            const feedbackEl = document.getElementById('admin-backup-feedback');
+            if (feedbackEl) {
+                feedbackEl.style.display = 'none';
+                feedbackEl.innerText = '';
+            }
+            if (btnEl) btnEl.disabled = true;
+
+            try {
+                const [tallySnap, weaponSnap, eventsSnap] = await Promise.all([
+                    db.collection("tally_billings").orderBy("createdAt", "desc").get(),
+                    db.collection("weapon_log").orderBy("createdAt", "desc").get(),
+                    db.collection("events").orderBy("createdAt", "asc").get()
+                ]);
+
+                const rows = [];
+                rows.push([
+                    'Bereich',
+                    'Datum / Zeit',
+                    'Nummer / Titel',
+                    'Personen / Empfänger',
+                    'Betrag (EUR) / Status / Ort',
+                    'Details (Artikel / Waffen / Zusagen & Absagen)',
+                    'Dokument-ID'
+                ]);
+
+                let tallyTotalSum = 0;
+                let tallyCount = 0;
+                tallySnap.forEach(doc => {
+                    tallyCount++;
+                    const inv = doc.data() || {};
+                    let rawTotal = inv.total;
+                    if (typeof rawTotal === 'string') {
+                        rawTotal = parseFloat(rawTotal.replace('€', '').replace(',', '.').trim());
+                    }
+                    const totalNum = isNaN(rawTotal) ? 0 : Number(rawTotal);
+                    tallyTotalSum += totalNum;
+                    const amountStr = totalNum.toFixed(2).replace('.', ',');
+
+                    const recipient = [inv.recipientName, inv.recipientAttn, inv.recipientAddress, inv.recipientZipCity]
+                        .map(s => String(s || '').trim())
+                        .filter(Boolean)
+                        .join(', ');
+
+                    const itemsStr = Array.isArray(inv.items)
+                        ? inv.items.map(it => {
+                            const p = Number(it && it.price || 0);
+                            return `${it && it.count ? it.count : 0}x ${it && it.name ? it.name : ''} (€ ${isNaN(p) ? '0,00' : p.toFixed(2).replace('.', ',')})`;
+                        }).join(' | ')
+                        : '';
+
+                    rows.push([
+                        'Schankbuch',
+                        inv.date || '',
+                        inv.invoiceNum || 'Abrechnung',
+                        recipient || 'Kunde',
+                        amountStr,
+                        itemsStr,
+                        doc.id
+                    ]);
+                });
+
+                let weaponCount = 0;
+                weaponSnap.forEach(doc => {
+                    weaponCount++;
+                    const w = doc.data() || {};
+                    const collector = w.collectorStr || [w.primaryName, w.secondaryName].filter(Boolean).join(' + ');
+                    const titleParts = [w.occasion || 'Waffenentnahme', w.location ? `(${w.location})` : ''].filter(Boolean).join(' ');
+                    const statusText = w.status || (w.returnTime ? 'Zurückgebracht' : 'Entnommen');
+                    const weaponsText = Array.isArray(w.selectedWeapons) ? w.selectedWeapons.join(' | ') : '';
+                    const detailText = `Rückgabe: ${w.returnTime || 'Offen'} | Waffen: ${weaponsText}`;
+
+                    rows.push([
+                        'Waffenbuch',
+                        w.issueTime || '',
+                        titleParts,
+                        collector,
+                        statusText,
+                        detailText,
+                        doc.id
+                    ]);
+                });
+
+                let eventsCount = 0;
+                eventsSnap.forEach(doc => {
+                    eventsCount++;
+                    const ev = doc.data() || {};
+                    const votes = ev.votes || {};
+                    const dabeiNames = [];
+                    const absageSet = new Set();
+
+                    Object.keys(votes).forEach(name => {
+                        const statusVal = String(votes[name] || '').trim().toLowerCase();
+                        if (statusVal === 'absage') {
+                            absageSet.add(name);
+                        } else if (votes[name]) {
+                            dabeiNames.push(name);
+                        }
+                    });
+                    if (Array.isArray(ev.absagen)) {
+                        ev.absagen.forEach(name => {
+                            const clean = String(name || '').trim();
+                            if (clean && !dabeiNames.includes(clean)) {
+                                absageSet.add(clean);
+                            }
+                        });
+                    }
+                    const absageNames = Array.from(absageSet);
+
+                    rows.push([
+                        'Termine',
+                        ev.date || '',
+                        ev.title || '',
+                        `Zusagen: ${dabeiNames.length} | Absagen: ${absageNames.length}`,
+                        ev.desc || '',
+                        `Dabei: ${dabeiNames.join(', ') || 'Keine'} | Absagen: ${absageNames.join(', ') || 'Keine'}`,
+                        doc.id
+                    ]);
+                });
+
+                rows.push([
+                    'Zusammenfassung',
+                    new Date().toLocaleDateString('de-AT'),
+                    'Jahresabschluss-Export',
+                    `Schankbuch: ${tallyCount} | Waffenbuch: ${weaponCount} | Termine: ${eventsCount}`,
+                    tallyTotalSum.toFixed(2).replace('.', ','),
+                    'Summe Schankbuch-Abrechnungen in EUR',
+                    'SUMME'
+                ]);
+
+                const csvContent = rows.map(r => r.map(csvEscapeCell).join(';')).join('\r\n');
+                const now = new Date();
+                const yyyy = now.getFullYear();
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const dd = String(now.getDate()).padStart(2, '0');
+                const fileName = `KBSV_Vereinsbackup_${yyyy}-${mm}-${dd}.csv`;
+
+                const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => {
+                    try { document.body.removeChild(link); } catch (e) {}
+                    try { URL.revokeObjectURL(url); } catch (e) {}
+                }, 1500);
+
+                if (feedbackEl) {
+                    feedbackEl.innerText = `✅ Backup erstellt (${fileName}): ${tallyCount} Abrechnungen, ${weaponCount} Waffenbuch-Protokolle, ${eventsCount} Termine.`;
+                    feedbackEl.style.display = 'block';
+                }
+            } catch (err) {
+                alert("Fehler beim Erstellen des Vereins-Backups: " + (err && err.message ? err.message : String(err)));
+            } finally {
+                if (btnEl) btnEl.disabled = false;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            try { updateOfflineWarningBanner(); } catch(e) {}
             try {
                 const pinInput = document.getElementById('club-pin-input');
                 if (pinInput) {
@@ -6593,7 +8088,7 @@
                         }
                     });
                 }
-                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'vote-modal', 'master-pin-modal', 'admin-logout-modal'].forEach(id => {
+                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'vote-modal', 'master-pin-modal', 'admin-logout-modal'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el && getComputedStyle(el).display === 'none') {
                         el.style.pointerEvents = 'none';
@@ -6601,6 +8096,7 @@
                 });
             } catch(e) {}
             try { populateWeaponMemberSelects(); } catch(e) {}
+            try { renderOpenTabsBar(); } catch(e) {}
             try { initPushNotificationsUI(); } catch(e) {}
             try { initClubAccessGuard(); } catch(e) {}
             try { initWeaponBookNavigationGuard(); } catch(e) {}
