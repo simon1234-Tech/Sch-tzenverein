@@ -229,23 +229,23 @@
             justify-content: space-between;
         }
 
-        @keyframes softGreenGlow {
-            0% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.35); border-color: rgba(34, 197, 94, 0.6); }
-            50% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.75); border-color: rgba(34, 197, 94, 1); }
-            100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.35); border-color: rgba(34, 197, 94, 0.6); }
+        @keyframes calmGreenBorderPulse {
+            0%, 100% {
+                border-color: #86efac;
+                box-shadow: 0 4px 12px rgba(22, 163, 74, 0.12), 0 0 6px rgba(134, 239, 172, 0.3);
+            }
+            50% {
+                border-color: #16a34a;
+                box-shadow: 0 4px 14px rgba(22, 163, 74, 0.2), 0 0 12px rgba(22, 163, 74, 0.45);
+            }
         }
-        @keyframes pulseBadge {
-            0% { opacity: 0.5; transform: scale(0.98); }
-            50% { opacity: 1; transform: scale(1.02); }
-            100% { opacity: 0.5; transform: scale(0.98); }
-        }
-        .next-duty-neon {
-            background: rgba(255, 255, 255, 0.95) !important;
-            border: 2.5px solid #22c55e !important;
-            animation: softGreenGlow 3s infinite ease-in-out;
+        .glass-card.next-duty-neon {
+            background: var(--card-glass);
+            border: 2px solid #86efac;
+            animation: calmGreenBorderPulse 2.4s ease-in-out infinite;
         }
         .live-pulse-badge {
-            animation: pulseBadge 2s infinite ease-in-out;
+            animation: none;
         }
 
         .dark-event-item {
@@ -335,73 +335,442 @@
             box-shadow: 0 4px 12px rgba(185, 28, 28, 0.2);
         }
 
-        .admin-nav-tabs {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-bottom: 12px;
+        /* --- ADMIN LIGHT GLASSMORPHISM DESIGN (EXKLUSIV FÜR EINGELOGGTEN #admin-panel) --- */
+        #admin-panel {
+            background: linear-gradient(135deg, #f0fdf4 0%, #f8fafc 50%, #ecfdf5 100%);
+            border-radius: 22px;
+            padding: 16px;
+            color: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 0 14px 36px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
-        .admin-tab-btn {
-            background: linear-gradient(135deg, #ffffff, #f8fafc);
-            border: 1.5px solid #cbd5e1;
-            padding: 6px 10px;
-            border-radius: 11px;
-            font-weight: 800;
-            font-size: 12px;
-            color: var(--text-dark);
-            cursor: pointer;
+        #admin-login-card {
+            background: linear-gradient(155deg, #0f172a 0%, #0d261f 55%, #064e3b 100%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            border-left: 1px solid rgba(255, 255, 255, 0.18) !important;
+            color: #f8fafc !important;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
+        }
+        #admin-login-card .card-title { color: #f8fafc !important; }
+        #admin-login-card label { color: #cbd5e1 !important; }
+        #admin-login-card .form-control {
+            background: rgba(15, 23, 42, 0.72);
+            color: #f8fafc;
+            border: 1.5px solid rgba(255, 255, 255, 0.22);
+        }
+        #admin-login-card .form-control option { background: #0f172a; color: #f8fafc; }
+
+        .admin-panel-topbar {
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding-bottom: 12px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.1);
+        }
+        .admin-panel-title {
+            font-size: 1.12em;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: 0.2px;
+        }
+        .admin-panel-subtitle {
+            font-size: 0.76em;
+            color: #047857;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+        .admin-topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .admin-gear-btn {
+            background: rgba(255, 255, 255, 0.9) !important;
+            color: #0f172a !important;
+            border: 1px solid #cbd5e1 !important;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .admin-gear-btn.active {
+            background: #16a34a !important;
+            color: #ffffff !important;
+            border-color: #15803d !important;
+            box-shadow: 0 6px 16px rgba(22, 163, 74, 0.3) !important;
+        }
+
+        .admin-nav-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        @media (min-width: 500px) {
+            .admin-nav-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        .admin-nav-tile {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 7px;
+            padding: 12px 12px 11px 13px;
+            border-radius: 16px;
+            border: 1.5px solid rgba(255, 255, 255, 0.95);
+            outline: 1px solid rgba(148, 163, 184, 0.35);
+            background: linear-gradient(180deg, #ffffff 0%, #eef2f6 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #1e293b;
+            font-family: inherit;
+            font-size: 0.79em;
+            font-weight: 700;
+            line-height: 1.25;
             text-align: left;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06), inset 0 1px 1px rgba(255,255,255,0.9);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
         }
-        .admin-tab-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.1); }
-        .admin-tab-btn:active { transform: scale(0.97); }
-
-        .admin-tab-btn.active {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: white;
-            border-color: #1d4ed8;
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.32), inset 0 1px 1px rgba(255,255,255,0.4);
+        .admin-nav-tile-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+            font-size: 1.18em;
+            line-height: 1;
         }
-        .admin-tab-content { display: none; }
-        .admin-tab-content.active { display: block; }
-
-        .admin-3d-icon-box {
-            width: 24px;
-            height: 24px;
-            border-radius: 7px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(226,232,240,0.8));
+        .admin-nav-tile:hover {
+            background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+            border-color: rgba(255, 255, 255, 1);
+            outline-color: rgba(37, 99, 235, 0.45);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+        .admin-nav-tile.active {
+            background: linear-gradient(180deg, #ffffff 0%, #e0f2fe 100%);
+            color: #1e293b;
+            border-color: #2563eb;
+            outline: 1px solid rgba(22, 163, 74, 0.35);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+        .admin-nav-tile.active .admin-nav-tile-icon {
+            background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+            border-color: rgba(147, 197, 253, 0.75);
+        }
+        .admin-nav-tile.active::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #2563eb 0%, #16a34a 100%);
+            color: #ffffff;
+            font-size: 0.72em;
+            font-weight: 800;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.12), inset 0 1px 2px rgba(255,255,255,0.8);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
+        }
+
+        #admin-duty-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            align-items: stretch;
+        }
+        #admin-duty-list > p.admin-muted-text {
+            grid-column: 1 / -1;
+        }
+        .admin-duty-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 10px;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            min-width: 0;
+        }
+        .admin-duty-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 5px;
+        }
+        .admin-duty-card-date {
+            font-size: 0.84em;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+        .admin-duty-card-team {
+            font-size: 0.8em;
+            font-weight: 700;
+            color: #15803d;
+            margin-top: 3px;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+        .admin-duty-card-names {
+            font-size: 0.76em;
+            color: #475569;
+            margin-top: 3px;
+            line-height: 1.3;
+            word-break: break-word;
+        }
+        .admin-duty-del-btn {
+            padding: 4px 7px !important;
+            font-size: 0.74em !important;
+            border-radius: 8px !important;
+            flex-shrink: 0;
+            line-height: 1.1;
+        }
+        .admin-duty-push-btn {
+            width: 100%;
+            padding: 8px 6px !important;
+            font-size: 0.76em !important;
+            font-weight: 800 !important;
+            border-radius: 10px !important;
+            line-height: 1.2;
+            white-space: normal;
+            text-align: center;
+        }
+
+        .admin-section-block {
+            display: none;
+            margin-bottom: 12px;
+            padding-bottom: 4px;
+            border-bottom: none;
+        }
+        .admin-section-block.active {
+            display: block;
+            animation: fadeIn 0.22s ease;
+        }
+        .admin-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .admin-section-heading {
+            font-size: 0.96em;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: 0.2px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .admin-section-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
+            background: rgba(22, 163, 74, 0.14);
+            border: 1px solid rgba(22, 163, 74, 0.35);
+            color: #15803d;
+            font-size: 0.85em;
+            font-weight: 800;
             flex-shrink: 0;
         }
-        .admin-3d-icon-box svg {
-            width: 16px;
-            height: 16px;
+
+        .admin-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
-        .admin-tab-btn.active .admin-3d-icon-box {
-            background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.5);
+        @media (min-width: 520px) {
+            .admin-grid-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .admin-span-full {
+                grid-column: 1 / -1;
+            }
         }
+
+        .admin-glass-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+            border-radius: 18px;
+            padding: 15px;
+            color: #0f172a;
+        }
+        .admin-glass-card-title {
+            font-size: 0.96em;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .admin-muted-text {
+            font-size: 0.78em;
+            color: #475569;
+            line-height: 1.45;
+        }
+        .admin-divider {
+            border-top: 1px solid rgba(15, 23, 42, 0.1);
+            margin: 12px 0;
+            padding-top: 10px;
+        }
+
+        #admin-panel .form-group { margin-bottom: 10px; }
+        #admin-panel .form-group label {
+            color: #1e293b;
+            font-size: 0.8em;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        #admin-panel .form-control {
+            background: rgba(255, 255, 255, 0.92);
+            color: #0f172a;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 0.88em;
+            box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.05);
+        }
+        #admin-panel .form-control::placeholder { color: #64748b; }
+        #admin-panel .form-control:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+        }
+        #admin-panel .form-control:disabled,
+        #admin-panel .form-control[readonly] {
+            background: rgba(241, 245, 249, 0.9);
+            color: #64748b;
+            border-color: #cbd5e1;
+            cursor: not-allowed;
+        }
+        #admin-panel select.form-control option {
+            background: #ffffff;
+            color: #0f172a;
+        }
+        #admin-panel code {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+            padding: 1px 5px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        .admin-btn-save {
+            background: linear-gradient(135deg, #16a34a, #059669) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(5, 150, 105, 0.4) !important;
+            box-shadow: 0 6px 16px rgba(22, 163, 74, 0.24) !important;
+        }
+        .admin-btn-edit {
+            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+            color: #0f172a !important;
+            border: 1px solid rgba(217, 119, 6, 0.4) !important;
+            box-shadow: 0 6px 16px rgba(217, 119, 6, 0.22) !important;
+        }
+        .admin-btn-delete {
+            background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(185, 28, 28, 0.4) !important;
+            box-shadow: 0 6px 16px rgba(185, 28, 28, 0.22) !important;
+        }
+        .admin-btn-save:disabled,
+        .admin-btn-edit:disabled,
+        .admin-btn-delete:disabled {
+            opacity: 0.48 !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+        }
+
         .admin-delete-btn .btn {
-            padding: 6px 10px !important;
-            font-size: 12px !important;
-            border-radius: 10px;
+            padding: 8px 12px !important;
+            font-size: 12.5px !important;
+            border-radius: 11px;
             gap: 5px;
         }
         .admin-delete-btn .counter-btn {
-            width: 28px !important;
-            height: 28px !important;
-            font-size: 14px !important;
+            width: 30px !important;
+            height: 30px !important;
+            font-size: 15px !important;
+            background: #f1f5f9;
+            color: #0f172a;
+            border-color: #cbd5e1;
         }
-        .admin-delete-btn .admin-accordion-header {
-            padding: 9px 12px;
-            font-size: 13px;
+        .admin-list-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 11px;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid #e2e8f0;
+            border-radius: 11px;
+            margin-bottom: 7px;
+            font-size: 0.82em;
+            color: #0f172a;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+        }
+        .admin-list-row:last-child { margin-bottom: 0; }
+        .admin-security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.76em;
+            font-weight: 800;
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #f59e0b;
+        }
+        .admin-security-badge.unlocked {
+            background: #d1fae5;
+            color: #065f46;
+            border-color: #34d399;
+        }
+        .admin-security-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            border-radius: 14px;
+            background: rgba(255, 251, 235, 0.92);
+            border: 1px solid #fcd34d;
+        }
+        .admin-security-banner.unlocked {
+            background: rgba(236, 253, 245, 0.92);
+            border-color: #6ee7b7;
         }
 
         .bottom-nav {
@@ -477,7 +846,11 @@
         #admin-error-modal[style*="display:none"],
         #admin-error-modal[style*="display: none"],
         #vote-modal[style*="display:none"],
-        #vote-modal[style*="display: none"] {
+        #vote-modal[style*="display: none"],
+        #master-pin-modal[style*="display:none"],
+        #master-pin-modal[style*="display: none"],
+        #admin-logout-modal[style*="display:none"],
+        #admin-logout-modal[style*="display: none"] {
             display: none !important;
             pointer-events: none !important;
         }
@@ -704,16 +1077,16 @@
     <div id="club-lock-screen">
         <div style="width: 100%; height: 10px;"></div>
         <div class="lock-screen-card modal-anim">
-            <div class="lock-screen-banner">
-                <img src="logo.png" alt="Vereinslogo KB & SV Gaschurn-Partenen" class="lock-screen-logo" onerror="this.style.display='none'">
-                <div style="font-size: 1.08em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; line-height: 1.25;">Kameradschaftsbund &amp; Schützenverein</div>
-                <div style="font-size: 0.85em; font-weight: 700; color: #fca5a5; margin-top: 4px;">Gaschurn-Partenen</div>
-            </div>
+            <img src="maskottchen.png" alt="Schützen-Maskottchen KB &amp; SV Gaschurn-Partenen" style="width: 170px; height: 170px; max-width: 100%; object-fit: cover; object-position: top center; border-radius: 24px; border: 3px solid #991b1b; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22); margin: 0 auto 14px auto; display: block;" onerror="this.onerror=null; this.src='logo.png';">
+            <div style="font-size: 1.08em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; line-height: 1.25; color: #0f172a;">Kameradschaftsbund &amp; Schützenverein</div>
+            <div style="font-size: 0.88em; font-weight: 800; color: #991b1b; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px;">GASCHURN-PARTENEN</div>
 
-            <h2 style="font-size: 1.1em; font-weight: 800; color: #0f172a; margin-bottom: 6px;">Vereins-Zugangscode</h2>
-            <p style="font-size: 0.82em; color: var(--text-muted); margin-bottom: 18px; line-height: 1.4;">
-                Bitte gib den aktuellen Vereins-Zugangscode ein, um die App zu öffnen.
-            </p>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px 14px; margin: 12px 0 16px 0;">
+                <div style="color: #15803d; font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; line-height: 1.3;">Herzlich willkommen im digitalen Vereinsheim!</div>
+                <p style="color: #334155; font-size: 0.92rem; line-height: 1.5; margin: 0; font-weight: 500;">
+                    Schön, dass du da bist! Hier findest du alle aktuellen Vereins-News, Termine, den Dienstplan sowie unsere digitalen Vereinsbücher. Bitte gib den Vereins-Zugangscode ein, um einzutreten.
+                </p>
+            </div>
 
             <form onsubmit="verifyClubAccessCode(event)">
                 <div class="form-group" style="margin-bottom: 12px;">
@@ -771,7 +1144,7 @@
         <div class="glass-card next-duty-neon">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span id="live-badge-label" style="font-size: 0.8em; background: #15803d; color: #ffffff; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Nächster Dienst</span>
-                <span class="live-pulse-badge" style="font-size: 0.75em; background: #0f172a; color: #22c55e; font-weight: 800; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;">● LIVE</span>
+                <span style="font-size: 0.75em; background: #0f172a; color: #22c55e; font-weight: 800; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;">● LIVE</span>
             </div>
             <div id="next-duty-widget">Lade aktuellen Dienst...</div>
         </div>
@@ -951,7 +1324,7 @@
     <!-- 6. ADMIN-BEREICH -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
-            <div class="card-title" style="color: #dc2626 !important;">🔐 Geschützter Admin-Bereich</div>
+            <div class="card-title" style="color: #f8fafc !important;">🔐 Geschützter Admin-Bereich</div>
             <form onsubmit="handleAdminLogin(event)">
                 <div class="form-group">
                     <label>Admin-Name</label>
@@ -966,263 +1339,288 @@
                     <label>Dein persönliches Passwort</label>
                     <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required autocomplete="off">
                 </div>
-                <button type="submit" class="btn btn-admin btn-block">Anmelden</button>
-                <button type="button" onclick="exitAdminDirectLogin()" class="btn btn-danger btn-block admin-direct-back-btn" style="margin-top: 10px;">← Zurück zur Zugangscode-Eingabe</button>
+                <button type="submit" class="btn admin-btn-save btn-block">Anmelden</button>
+                <button type="button" onclick="exitAdminDirectLogin()" class="btn admin-btn-delete btn-block admin-direct-back-btn" style="margin-top: 10px;">← Zurück zur Zugangscode-Eingabe</button>
             </form>
         </div>
 
         <div class="admin-delete-btn">
-            <!-- ADMIN UNTER-TABS -->
-            <div class="admin-nav-tabs">
-                <button onclick="switchAdminTab('tab-inventory')" class="admin-tab-btn active" id="btn-tab-inventory">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="boxGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
-                                <linearGradient id="boxTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#d97706"/></linearGradient>
-                            </defs>
-                            <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" fill="url(#boxGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M12 3L20 7.5L12 12L4 7.5L12 3Z" fill="url(#boxTop)"/>
-                            <path d="M12 12V21" stroke="#fff" stroke-width="1.5" stroke-opacity="0.6"/>
-                        </svg>
+            <div id="admin-panel">
+                <div class="admin-panel-topbar">
+                    <div>
+                        <div class="admin-panel-title">🛡️ Vereins-Administration</div>
+                        <div class="admin-panel-subtitle">KB &amp; SV Gaschurn-Partenen</div>
                     </div>
-                    <span>1. Lager</span>
-                </button>
-
-                <button onclick="switchAdminTab('tab-newstermins')" class="admin-tab-btn" id="btn-tab-newstermins">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="megaGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#991b1b"/></linearGradient>
-                            </defs>
-                            <path d="M3 11V13C3 14.1046 3.89543 15 5 15H7L12 19V5L7 9H5C3.89543 9 3 9.89543 3 11Z" fill="url(#megaGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M15.5 8.5C16.5 9.5 17 10.7 17 12C17 13.3 16.5 14.5 15.5 15.5" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
-                            <path d="M18.5 5.5C20.2 7.2 21 9.5 21 12C21 14.5 20.2 16.8 18.5 18.5" stroke="#b91c1c" stroke-width="2.5" stroke-linecap="round"/>
-                        </svg>
+                    <div class="admin-topbar-actions">
+                        <button type="button" id="admin-gear-security-btn" class="btn admin-gear-btn" onclick="switchAdminSection('admin-sec-security')" title="System &amp; Sicherheit">⚙️ System &amp; Sicherheit</button>
+                        <button type="button" class="btn admin-btn-delete" onclick="logoutAdmin()">🚪 Abmelden</button>
                     </div>
-                    <span>2. News</span>
-                </button>
-
-                <button onclick="switchAdminTab('tab-invoices')" class="admin-tab-btn" id="btn-tab-invoices">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="invGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient>
-                            </defs>
-                            <rect x="4" y="3" width="16" height="18" rx="3" fill="url(#invGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M8 7H16M8 11H16M8 15H12" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <span>3. Rechnungen</span>
-                </button>
-
-                <button onclick="switchAdminTab('tab-keys')" class="admin-tab-btn" id="btn-tab-keys">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="keyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#facc15"/><stop offset="100%" stop-color="#ca8a04"/></linearGradient>
-                            </defs>
-                            <circle cx="8" cy="12" r="4" fill="url(#keyGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M11 11H21V15H19V17H16V15H13V13H11V11Z" fill="url(#keyGrad)"/>
-                        </svg>
-                    </div>
-                    <span>4. Schlüssel</span>
-                </button>
-
-                <button onclick="switchAdminTab('tab-weapons-admin')" class="admin-tab-btn" id="btn-tab-weapons-admin">
-                    <div class="admin-3d-icon-box">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e40af"/></linearGradient>
-                            </defs>
-                            <path d="M12 2L4 5V11C4 16.5 7.5 21.2 12 22C16.5 21.2 20 16.5 20 11V5L12 2Z" fill="url(#shieldGrad)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.25))"/>
-                            <path d="M9 12L11 14L15 10" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span>5. Waffenbuch PDFs</span>
-                </button>
-            </div>
-
-            <!-- TAB 1: LAGERBESTAND -->
-            <div id="tab-inventory" class="admin-tab-content active glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">
-                    <span>📦 1. Lagerbestand</span>
-                    <button class="btn btn-admin" style="padding: 6px 10px; font-size: 12px;" onclick="editInventory()">✏️ Bearbeiten</button>
                 </div>
-                <div id="inventory-timestamp" style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 6px;">Noch nicht geändert</div>
-                <div id="admin-inventory-display"></div>
-            </div>
 
-            <!-- TAB 2: NEWS & DIENSTPLAN -->
-            <div id="tab-newstermins" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">📢 2. News, Foto & Dienstplan / Termine</div>
-
-                <!-- Kategorie A: Dienstplan eintragen & Verwaltung -->
-                <div class="admin-accordion-box">
-                    <button type="button" class="admin-accordion-header" aria-expanded="false" onclick="toggleAdminAccordion(this)">
-                        <span>📅 Dienstplan eintragen &amp; Verwaltung</span>
-                        <span class="admin-accordion-arrow" aria-hidden="true">▼</span>
+                <!-- KOMPAKTE BEREICHS-BUTTON-LEISTE (2 SPALTEN MOBIL / 3 SPALTEN PC) -->
+                <div class="admin-nav-grid" role="tablist" aria-label="Admin Bereiche">
+                    <button type="button" class="admin-nav-tile active" id="admin-nav-btn-news-events" data-admin-section="admin-sec-news-events" onclick="switchAdminSection('admin-sec-news-events')">
+                        <span class="admin-nav-tile-icon">📰</span>
+                        <span>News &amp; Termine</span>
                     </button>
-                    <div class="admin-accordion-body">
-                        <div class="admin-accordion-inner">
-                            <div class="admin-accordion-content">
-                                <h4 style="color: #b91c1c; font-size: 0.9em; margin-bottom: 6px;">Dienst eintragen</h4>
-                                <div class="form-group"><label>Datum</label><input type="date" class="form-control" id="duty-date"></div>
-                                <div class="form-group"><label>Team</label><input type="text" class="form-control" id="duty-team" placeholder="z. B. Team 1"></div>
-                                <div class="form-group"><label>Mitglieder</label><input type="text" class="form-control" id="duty-names" placeholder="z. B. Name 1, Name 2, Name 3"></div>
-                                <button onclick="addDutyEntry()" class="btn btn-primary btn-block" style="margin-bottom: 16px;">Dienst eintragen</button>
+                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-duty" data-admin-section="admin-sec-duty" onclick="switchAdminSection('admin-sec-duty')">
+                        <span class="admin-nav-tile-icon">🛡️</span>
+                        <span>Dienstplan &amp; Push</span>
+                    </button>
+                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-members" data-admin-section="admin-sec-members" onclick="switchAdminSection('admin-sec-members')">
+                        <span class="admin-nav-tile-icon">🔑</span>
+                        <span>Schlüssel &amp; Mitglieder</span>
+                    </button>
+                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-inventory" data-admin-section="admin-sec-inventory" onclick="switchAdminSection('admin-sec-inventory')">
+                        <span class="admin-nav-tile-icon">📦</span>
+                        <span>Lagerbestand</span>
+                    </button>
+                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-drinks" data-admin-section="admin-sec-drinks" onclick="switchAdminSection('admin-sec-drinks')">
+                        <span class="admin-nav-tile-icon">🍺</span>
+                        <span>Schankbuch</span>
+                    </button>
+                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-weapons" data-admin-section="admin-sec-weapons" onclick="switchAdminSection('admin-sec-weapons')">
+                        <span class="admin-nav-tile-icon">🎯</span>
+                        <span>Waffenprotokoll</span>
+                    </button>
+                </div>
 
-                                <div style="border-top: 1px solid #fecaca; padding-top: 10px;">
-                                    <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Dienstplan Verwaltung:</div>
-                                    <div id="admin-duty-list"><p style="font-size: 0.8em; color: var(--text-muted);">Lade Dienste...</p></div>
+                <!-- UNTERBEREICH 1: NEWS & TERMINE ERSTELLEN / VERWALTEN -->
+                <section class="admin-section-block active" id="admin-sec-news-events">
+                    <div class="admin-section-header">
+                        <div class="admin-section-heading">
+                            <span class="admin-section-num">1</span>
+                            <span>📰 News &amp; 📅 Termine erstellen / verwalten</span>
+                        </div>
+                    </div>
+                    <div class="admin-grid-2">
+                        <div class="admin-glass-card">
+                            <div class="admin-glass-card-title"><span>📰 Neuen News-Beitrag erstellen</span></div>
+                            <form onsubmit="addNewsItem(event)">
+                                <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
+                                <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
+                                <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
+                                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8em; font-weight: 700; color: #1e293b; margin-bottom: 10px; cursor: pointer;">
+                                    <input type="checkbox" id="news-send-push" checked style="width: 17px; height: 17px; accent-color: #16a34a; cursor: pointer;">
+                                    <span>📲 Push-Nachricht an alle senden</span>
+                                </label>
+                                <button type="submit" class="btn admin-btn-save btn-block">💾 News veröffentlichen</button>
+                            </form>
+                        </div>
+
+                        <div class="admin-glass-card">
+                            <div class="admin-glass-card-title"><span>📅 Neuen Termin erstellen</span></div>
+                            <form onsubmit="addEvent(event)">
+                                <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="Generalversammlung"></div>
+                                <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="15.12.2026"></div>
+                                <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
+                                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8em; font-weight: 700; color: #1e293b; margin-bottom: 10px; cursor: pointer;">
+                                    <input type="checkbox" id="event-send-push" checked style="width: 17px; height: 17px; accent-color: #16a34a; cursor: pointer;">
+                                    <span>📲 Push-Nachricht an alle senden</span>
+                                </label>
+                                <button type="submit" class="btn admin-btn-save btn-block">💾 Termin speichern</button>
+                            </form>
+                        </div>
+
+                        <div class="admin-glass-card admin-span-full">
+                            <div class="admin-glass-card-title"><span>📆 Bestehende Termine verwalten</span></div>
+                            <div id="admin-events-list"><p class="admin-muted-text">Lade Termine...</p></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- UNTERBEREICH 2: DIENSTPLAN & PUSH-ERINNERUNGEN -->
+                <section class="admin-section-block" id="admin-sec-duty">
+                    <div class="admin-section-header">
+                        <div class="admin-section-heading">
+                            <span class="admin-section-num">2</span>
+                            <span>🛡️ Dienstplan Verwaltung &amp; 🔔 Push-Erinnerungen</span>
+                        </div>
+                    </div>
+                    <div class="admin-grid-2">
+                        <div class="admin-glass-card admin-span-full">
+                            <div class="admin-glass-card-title"><span>➕ Neuen Dienst eintragen</span></div>
+                            <div class="form-group"><label>Datum</label><input type="date" class="form-control" id="duty-date"></div>
+                            <div class="form-group"><label>Team</label><input type="text" class="form-control" id="duty-team" placeholder="z. B. Team 1"></div>
+                            <div class="form-group"><label>Mitglieder</label><input type="text" class="form-control" id="duty-names" placeholder="z. B. Name 1, Name 2, Name 3"></div>
+                            <button type="button" onclick="addDutyEntry()" class="btn admin-btn-save btn-block">💾 Dienst eintragen</button>
+                        </div>
+
+                        <div class="admin-glass-card admin-span-full">
+                            <div class="admin-glass-card-title"><span>🔔 Dienstplan &amp; Erinnerungen</span></div>
+                            <p class="admin-muted-text" style="margin-bottom: 10px;">Erinnerung per Push senden oder gespeicherte Dienste entfernen.</p>
+                            <div id="admin-duty-list"><p class="admin-muted-text">Lade Dienste...</p></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- UNTERBEREICH 3: SCHLÜSSEL & MITGLIEDER -->
+                <section class="admin-section-block" id="admin-sec-members">
+                    <div class="admin-section-header">
+                        <div class="admin-section-heading">
+                            <span class="admin-section-num">3</span>
+                            <span>🔑 Schlüssel &amp; 👥 Mitgliederverwaltung</span>
+                        </div>
+                    </div>
+                    <div class="admin-grid-2">
+                        <div class="admin-glass-card admin-span-full">
+                            <div class="admin-glass-card-title"><span>📋 Hinterlegte Mitglieder- &amp; Berechtigungslisten</span></div>
+                            <div id="admin-members-overview"><p class="admin-muted-text">Lade Mitgliederübersicht...</p></div>
+                        </div>
+
+                        <div class="admin-glass-card admin-span-full">
+                            <div class="admin-glass-card-title">
+                                <span>🔑 Schlüsselliste &amp; Kontaktdaten</span>
+                                <button type="button" class="btn admin-btn-edit" onclick="exportKeyListPDF()">📥 PDF Export / Drucken</button>
+                            </div>
+
+                            <form id="key-list-form" onsubmit="saveKeyListItem(event)" style="background: rgba(255, 255, 255, 0.88); padding: 12px; border-radius: 14px; border: 1px solid #cbd5e1; margin-bottom: 14px;">
+                                <input type="hidden" id="key-edit-index" value="">
+                                <input type="hidden" id="key-edit-is-header" value="0">
+                                <h4 id="key-form-title" style="color: #15803d; font-size: 0.9em; margin-bottom: 8px; font-weight: 800;">➕ Neuen Schlüsselinhaber hinzufügen</h4>
+                                <div class="form-group">
+                                    <label id="key-name-label">Name (Vorname Nachname)</label>
+                                    <input type="text" class="form-control" id="key-name" placeholder="Vorname Nachname" required>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Kategorie B: Neuen News-Beitrag erstellen -->
-                <div class="admin-accordion-box">
-                    <button type="button" class="admin-accordion-header" aria-expanded="false" onclick="toggleAdminAccordion(this)">
-                        <span>📰 Neuen News-Beitrag erstellen</span>
-                        <span class="admin-accordion-arrow" aria-hidden="true">▼</span>
-                    </button>
-                    <div class="admin-accordion-body">
-                        <div class="admin-accordion-inner">
-                            <div class="admin-accordion-content">
-                                <form onsubmit="addNewsItem(event)">
-                                    <div class="form-group"><label>Titel</label><input type="text" class="form-control" id="news-title" required placeholder="z.B. Ausrückung"></div>
-                                    <div class="form-group"><label>Inhalt</label><textarea class="form-control" id="news-text" rows="3" required placeholder="Text..."></textarea></div>
-                                    <div class="form-group"><label>Foto hinzufügen</label><input type="file" id="news-photo-input" accept="image/*" class="form-control"></div>
-                                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85em; font-weight: 700; color: #1e293b; margin-bottom: 12px; cursor: pointer;">
-                                        <input type="checkbox" id="news-send-push" checked style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
-                                        <span>📲 Push-Nachricht an alle Mitglieder senden</span>
-                                    </label>
-                                    <button type="submit" class="btn btn-admin btn-block">News Veröffentlichen</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Kategorie C: Termine hinzufügen & verwalten -->
-                <div class="admin-accordion-box">
-                    <button type="button" class="admin-accordion-header" aria-expanded="false" onclick="toggleAdminAccordion(this)">
-                        <span>📆 Termine hinzufügen &amp; verwalten</span>
-                        <span class="admin-accordion-arrow" aria-hidden="true">▼</span>
-                    </button>
-                    <div class="admin-accordion-body">
-                        <div class="admin-accordion-inner">
-                            <div class="admin-accordion-content">
-                                <form onsubmit="addEvent(event)">
-                                    <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="Generalversammlung"></div>
-                                    <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="15.12.2026"></div>
-                                    <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
-                                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85em; font-weight: 700; color: #1e293b; margin-bottom: 12px; cursor: pointer;">
-                                        <input type="checkbox" id="event-send-push" checked style="width: 18px; height: 18px; accent-color: #2563eb; cursor: pointer;">
-                                        <span>📲 Push-Nachricht an alle Mitglieder senden</span>
-                                    </label>
-                                    <button type="submit" class="btn btn-admin btn-block">Termin Speichern</button>
-                                </form>
-                                <div style="margin-top: 10px; border-top: 1px solid #fecaca; padding-top: 8px;">
-                                    <div style="font-size: 0.85em; font-weight: 700; margin-bottom: 6px;">Bestehende Termine:</div>
-                                    <div id="admin-events-list"></div>
+                                <div id="key-person-fields" class="admin-grid-2" style="gap: 8px;">
+                                    <div class="form-group" style="margin-bottom: 4px;">
+                                        <label>Geburtsdatum</label>
+                                        <input type="text" class="form-control" id="key-dob" placeholder="TT.MM.JJJJ">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 4px;">
+                                        <label>Telefonnummer</label>
+                                        <input type="text" class="form-control" id="key-tel" placeholder="z. B. +43 664 ...">
+                                    </div>
+                                    <div class="form-group admin-span-full" style="margin-bottom: 4px;">
+                                        <label>Wohnadresse</label>
+                                        <input type="text" class="form-control" id="key-addr" placeholder="Straße Hausnummer, PLZ Ort">
+                                    </div>
+                                    <div class="form-group admin-span-full" style="margin-bottom: 6px;">
+                                        <label>Schlüsselnummer / Bemerkung</label>
+                                        <input type="text" class="form-control" id="key-role" placeholder="z. B. Schlüssel Nr. 1 / Eingang &amp; Büro">
+                                    </div>
                                 </div>
+                                <div style="display: flex; gap: 8px; margin-top: 6px;">
+                                    <button type="submit" id="key-save-btn" class="btn admin-btn-save" style="flex: 1; margin-top: 0;">💾 In Datenbank speichern</button>
+                                    <button type="button" id="key-cancel-btn" onclick="resetKeyListForm()" class="btn admin-btn-delete" style="display: none; margin-top: 0;">Abbrechen</button>
+                                </div>
+                            </form>
+
+                            <div id="admin-keys-list"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- UNTERBEREICH 4: LAGERBESTAND -->
+                <section class="admin-section-block" id="admin-sec-inventory">
+                    <div class="admin-section-header">
+                        <div class="admin-section-heading">
+                            <span class="admin-section-num">4</span>
+                            <span>📦 Lagerbestand</span>
+                        </div>
+                    </div>
+                    <div class="admin-glass-card">
+                        <div class="admin-glass-card-title">
+                            <span>📦 Aktueller Lagerbestand</span>
+                            <button type="button" class="btn admin-btn-edit" onclick="editInventory()">✏️ Bearbeiten</button>
+                        </div>
+                        <div id="inventory-timestamp" class="admin-muted-text" style="margin-bottom: 8px;">Noch nicht geändert</div>
+                        <div id="admin-inventory-display"></div>
+                    </div>
+                </section>
+
+                <!-- UNTERBEREICH 5: SCHANKBUCH VERWALTUNG / EXPORTE -->
+                <section class="admin-section-block" id="admin-sec-drinks">
+                    <div class="admin-section-header">
+                        <div class="admin-section-heading">
+                            <span class="admin-section-num">5</span>
+                            <span>🍺 Schankbuch Verwaltung &amp; Exporte</span>
+                        </div>
+                    </div>
+                    <div class="admin-glass-card">
+                        <div class="admin-glass-card-title"><span>💶 Rechnungen &amp; Schankbuch</span></div>
+                        <div id="admin-tally-history-list"><p class="admin-muted-text">Lade Rechnungen...</p></div>
+                    </div>
+                </section>
+
+                <!-- UNTERBEREICH 6: WAFFENPROTOKOLL / EXPORT -->
+                <section class="admin-section-block" id="admin-sec-weapons">
+                    <div class="admin-section-header">
+                        <div class="admin-section-heading">
+                            <span class="admin-section-num">6</span>
+                            <span>🎯 Waffenbuch &amp; Waffenprotokoll</span>
+                        </div>
+                    </div>
+                    <div class="admin-glass-card">
+                        <div class="admin-glass-card-title">
+                            <span>🎯 Waffenbuch-Protokolle &amp; Export</span>
+                            <button type="button" class="btn admin-btn-save" onclick="exportFullWeaponListPDF()">📥 Waffenliste PDF</button>
+                        </div>
+                        <p class="admin-muted-text" style="margin-bottom: 10px;">Übersicht aller gespeicherten Entnahme- und Rückgabeprotokolle (inkl. getrennter ZWR/ZVR-Daten):</p>
+                        <div id="admin-weapon-pdf-list"><p class="admin-muted-text">Keine Protokolle vorhanden.</p></div>
+                    </div>
+                </section>
+
+                <!-- UNTERBEREICH 7 (ÜBER ZAHNRAD ⚙️): SYSTEM & SICHERHEIT (GESCHÜTZT DURCH MASTER-PIN) -->
+                <section class="admin-section-block" id="admin-sec-security">
+                    <div class="admin-section-header">
+                        <div class="admin-section-heading">
+                            <span class="admin-section-num">⚙️</span>
+                            <span>🔐 System &amp; Sicherheit (Vereins-Zugangscode &amp; OneSignal REST API Key)</span>
+                        </div>
+                    </div>
+
+                    <div id="admin-security-banner" class="admin-security-banner">
+                        <div>
+                            <span id="admin-security-status-badge" class="admin-security-badge">🔒 Geschützt – nur Haupt-Admin</span>
+                            <div id="admin-security-status-text" class="admin-muted-text" style="margin-top: 5px;">
+                                Zugangsdaten sind maskiert und gegen versehentliches Verstellen gesperrt.
                             </div>
                         </div>
+                        <button type="button" id="admin-security-unlock-btn" onclick="handleSecurityUnlockToggle()" class="btn admin-btn-edit">
+                            🔓 Zum Bearbeiten entsperren
+                        </button>
                     </div>
-                </div>
-            </div>
 
-            <!-- TAB 3: RECHNUNGEN -->
-            <div id="tab-invoices" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">💶 3. Rechnungen & Schankbuch</div>
-                <div id="admin-tally-history-list"></div>
-            </div>
+                    <div class="admin-grid-2">
+                        <!-- VEREINS-ZUGANGSCODE VERWALTUNG -->
+                        <div class="admin-glass-card" id="admin-access-pin-card">
+                            <div class="admin-glass-card-title">
+                                <span>🔐 Vereins-Zugangscode ändern</span>
+                            </div>
+                            <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                Firestore (<code>settings/access</code>). Nach Speichern sperrt sich der Code auf Geräten mit altem Code automatisch.
+                            </p>
+                            <form onsubmit="updateClubAccessPin(event)">
+                                <div class="form-group">
+                                    <label>Aktueller / Neuer Vereins-Zugangscode</label>
+                                    <input type="password" class="form-control" id="admin-club-pin-input" value="••••••••" placeholder="Lade aktuellen Code..." required autocomplete="off" disabled readonly style="font-weight: 800; font-size: 1.05em; letter-spacing: 3px; text-align: center;">
+                                </div>
+                                <button type="submit" id="admin-club-pin-save-btn" class="btn admin-btn-save btn-block" disabled>💾 Neuen Zugangscode speichern</button>
+                            </form>
+                        </div>
 
-            <!-- TAB 4: SCHLÜSSELLISTE -->
-            <div id="tab-keys" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626; flex-wrap: wrap; gap: 8px;">
-                    <span>🔑 4. Schlüsselliste</span>
-                    <button type="button" class="btn btn-admin" style="padding: 6px 10px; font-size: 12px;" onclick="exportKeyListPDF()">📥 PDF Export / Drucken</button>
-                </div>
-
-                <form id="key-list-form" onsubmit="saveKeyListItem(event)" style="background: rgba(248, 250, 252, 0.95); padding: 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; margin-bottom: 14px;">
-                    <input type="hidden" id="key-edit-index" value="">
-                    <input type="hidden" id="key-edit-is-header" value="0">
-                    <h4 id="key-form-title" style="color: #b91c1c; font-size: 0.9em; margin-bottom: 8px;">➕ Neuen Schlüsselinhaber hinzufügen</h4>
-                    <div class="form-group" style="margin-bottom: 8px;">
-                        <label id="key-name-label">Name (Vorname Nachname)</label>
-                        <input type="text" class="form-control" id="key-name" placeholder="Vorname Nachname" required>
-                    </div>
-                    <div id="key-person-fields">
-                        <div class="form-group" style="margin-bottom: 8px;">
-                            <label>Geburtsdatum</label>
-                            <input type="text" class="form-control" id="key-dob" placeholder="TT.MM.JJJJ">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 8px;">
-                            <label>Wohnadresse</label>
-                            <input type="text" class="form-control" id="key-addr" placeholder="Straße Hausnummer, PLZ Ort">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 8px;">
-                            <label>Telefonnummer</label>
-                            <input type="text" class="form-control" id="key-tel" placeholder="z. B. +43 664 ...">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label>Schlüsselnummer / Bemerkung</label>
-                            <input type="text" class="form-control" id="key-role" placeholder="z. B. Schlüssel Nr. 1 / Eingang &amp; Büro">
+                        <!-- ONESIGNAL REST API KEY VERWALTUNG -->
+                        <div class="admin-glass-card" id="admin-onesignal-push-card">
+                            <div class="admin-glass-card-title">
+                                <span>🔔 OneSignal REST API Key</span>
+                            </div>
+                            <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                Geschützt gespeichert in Firestore (<code>settings/push</code>) für automatische Push-Benachrichtigungen.
+                            </p>
+                            <form onsubmit="saveOneSignalRestApiKey(event)">
+                                <div class="form-group">
+                                    <label>OneSignal REST API Key</label>
+                                    <input type="password" class="form-control" id="admin-onesignal-key-input" value="••••••••" placeholder="REST API Key eingeben..." required autocomplete="off" disabled readonly style="font-size: 0.9em; letter-spacing: 2px;">
+                                </div>
+                                <button type="submit" id="admin-onesignal-save-btn" class="btn admin-btn-save btn-block" disabled>💾 Push-Key speichern</button>
+                            </form>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 8px;">
-                        <button type="submit" id="key-save-btn" class="btn btn-admin" style="flex: 1; margin-top: 0;">💾 In Datenbank speichern</button>
-                        <button type="button" id="key-cancel-btn" onclick="resetKeyListForm()" class="btn btn-danger" style="display: none; margin-top: 0;">Abbrechen</button>
-                    </div>
-                </form>
+                </section>
 
-                <div id="admin-keys-list"></div>
+                <button type="button" class="btn admin-btn-delete btn-block" onclick="logoutAdmin()" style="margin-top: 8px; padding: 12px !important;">🚪 Admin-Modus beenden</button>
             </div>
-
-            <!-- TAB 5: WAFFENBUCH PDFs & WAFFENVERWALTUNG -->
-            <div id="tab-weapons-admin" class="admin-tab-content glass-card glass-card-red">
-                <div class="card-title" style="color: #dc2626;">🔫 5. Waffenbuch-Protokolle (PDFs)</div>
-                <div style="margin-bottom: 10px;">
-                    <button class="btn btn-admin btn-block" onclick="exportFullWeaponListPDF()">📥 Vollständige Waffenliste als PDF exportieren</button>
-                </div>
-                <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">Übersicht aller gespeicherten Entnahme- und Rückgabeprotokolle (inkl. getrennter ZWR/ZVR-Daten):</p>
-                <div id="admin-weapon-pdf-list"><p style="font-size: 0.85em; color: var(--text-muted);">Keine Protokolle vorhanden.</p></div>
-            </div>
-
-            <!-- VEREINS-ZUGANGSCODE VERWALTUNG -->
-            <div class="glass-card glass-card-blue" id="admin-access-pin-card" style="margin-top: 14px; border: 2px solid #2563eb; background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(239,246,255,0.95));">
-                <div class="card-title" style="color: #1d4ed8; margin-bottom: 8px;">🔐 Vereins-Zugangscode ändern</div>
-                <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 12px;">
-                    Aktueller Zugangscode aus Firestore (<code>settings/access</code>). Nach dem Speichern wird die App auf allen Geräten mit dem alten Code automatisch wieder gesperrt.
-                </p>
-                <form onsubmit="updateClubAccessPin(event)">
-                    <div class="form-group">
-                        <label>Aktueller / Neuer Vereins-Zugangscode</label>
-                        <input type="text" class="form-control" id="admin-club-pin-input" placeholder="Lade aktuellen Code..." required autocomplete="off" style="font-weight: 800; font-size: 1.1em; letter-spacing: 3px; text-align: center;">
-                    </div>
-                    <button type="submit" class="btn btn-admin btn-block">💾 Neuen Zugangscode speichern</button>
-                </form>
-            </div>
-
-            <!-- ONESIGNAL REST API KEY VERWALTUNG -->
-            <div class="glass-card glass-card-blue" id="admin-onesignal-push-card" style="margin-top: 12px; border: 1.5px solid #2563eb; background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(239,246,255,0.95));">
-                <div class="card-title" style="color: #1d4ed8; margin-bottom: 6px; font-size: 0.98em;">🔔 OneSignal REST API Key</div>
-                <p style="font-size: 0.78em; color: var(--text-muted); margin-bottom: 10px;">
-                    Geschützt gespeichert in Firestore (<code>settings/push</code>) für automatische Push-Benachrichtigungen.
-                </p>
-                <form onsubmit="saveOneSignalRestApiKey(event)">
-                    <div class="form-group" style="margin-bottom: 10px;">
-                        <label>OneSignal REST API Key</label>
-                        <input type="password" class="form-control" id="admin-onesignal-key-input" placeholder="REST API Key eingeben..." required autocomplete="off" style="font-size: 0.9em;">
-                    </div>
-                    <button type="submit" class="btn btn-admin btn-block">💾 Push-Key speichern</button>
-                </form>
-            </div>
-
-            <button class="btn btn-danger btn-block" onclick="logoutAdmin()" style="margin-top: 15px;">Admin-Modus Beenden</button>
         </div>
     </div>
 
@@ -1287,22 +1685,42 @@
                     <strong>Auftragsverarbeiter:</strong><br>
                     Google Firebase (Google Ireland Limited, Dublin) für Datenbank &amp; Authentifizierung sowie GitHub Pages (GitHub B.V., Amsterdam) für die Bereitstellung der Web-Oberfläche.
                 </p>
-                <p style="margin-bottom: 0;">
+                <p style="margin-bottom: 8px;">
                     <strong>Speicherdauer &amp; Betroffenenrechte:</strong><br>
                     Löschung nach Wegfall des Zwecks bzw. Ablauf gesetzlicher Aufbewahrungspflichten. Sie haben jederzeit das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung bei der Vereinsleitung sowie ein Beschwerderecht bei der Österreichischen Datenschutzbehörde (Barichgasse 40–42, 1030 Wien).
+                </p>
+                <p style="margin-bottom: 0;">
+                    <strong>Push-Benachrichtigungen (OneSignal &amp; Cloudflare)</strong><br>
+                    Wenn Mitglieder freiwillig die Push-Benachrichtigungen aktivieren, wird eine anonyme Geräte-Kennung (Subscription-ID) über den Dienst OneSignal Inc. (USA) sowie einen technischen Vermittlungsdienst von Cloudflare Inc. verarbeitet, um Vereins-News, Termine und Dienst-Erinnerungen zuzustellen. Die Einwilligung kann jederzeit direkt in den Browser- oder Geräteeinstellungen widerrufen werden.
                 </p>
             </div>
 
             <div id="legal-panel-cookies" class="legal-tab-panel">
                 <div style="font-size: 0.85em; font-weight: 800; color: #2563eb; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px;">Cookie-Einstellungen (nach § 165 Abs. 3 TKG 2021)</div>
-                <p style="margin-bottom: 10px;">
-                    Diese Vereins-App setzt <strong>keine Werbe-, Statistik- oder Tracking-Cookies</strong> ein. Es erfolgt keine Weitergabe von Nutzungsdaten an Dritte zu Analysezwecken.
+                <p style="margin-bottom: 12px; font-weight: 600;">
+                    Diese App verwendet keine Werbe-, Analyse- oder Tracking-Cookies.
                 </p>
-                <p style="margin-bottom: 14px;">
-                    Zur technisch notwendigen Funktion verwendet die App ausschließlich lokalen Gerätespeicher:
-                    <br>• <code>localStorage</code> für das Merken des Vereins-Zugangscodes sowie den Dienstplan-Cache
-                    <br>• <code>sessionStorage</code> für den QR-Code-Sitzungsschutz beim Waffenbuch
-                </p>
+
+                <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 11px 12px; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                        <strong style="color: #0f172a;">Technisch notwendige Speicher (immer aktiv)</strong>
+                        <span style="background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 6px; font-size: 0.82em; font-weight: 800;">Immer aktiv</span>
+                    </div>
+                    <p style="margin: 0; color: #334155;">
+                        Speicherung des Entsperr-Status (Vereins-Code), Datenbankverbindung (Google Firebase) sowie technische Zustellung über Cloudflare. Ohne diese Speicher funktioniert die Vereins-App nicht.
+                    </p>
+                </div>
+
+                <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 11px 12px; margin-bottom: 14px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap;">
+                        <strong style="color: #0f172a;">Freiwillige Push-Benachrichtigungen (OneSignal)</strong>
+                        <span style="background: #eff6ff; color: #1e40af; padding: 2px 8px; border-radius: 6px; font-size: 0.82em; font-weight: 800;">Freiwillig</span>
+                    </div>
+                    <p style="margin: 0; color: #334155;">
+                        Lokaler Browser-Speicher (Service Worker &amp; anonyme Geräte-Kennung), der ausschließlich dann genutzt wird, wenn ein Mitglied freiwillig auf „Push-Benachrichtigungen aktivieren“ tippt.
+                    </p>
+                </div>
+
                 <button type="button" onclick="clearLocalDeviceStorageAndReload()" class="btn btn-danger btn-block" style="margin-top: 4px; font-size: 0.9em;">
                     🗑️ Lokalen Speicher &amp; Zugangscode auf diesem Gerät löschen
                 </button>
@@ -1392,16 +1810,51 @@
 
     <!-- ABSTIMMUNGS-AUSWAHL MODAL -->
     <div id="vote-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.7); backdrop-filter:blur(6px); z-index:999999999; justify-content:center; align-items:center; padding:16px;">
-        <div style="background:#ffffff; padding:24px; border-radius:22px; max-width:400px; width:100%; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); border:3px solid #2563eb;" class="modal-anim">
+        <div id="vote-modal-box" style="background:#ffffff; padding:24px; border-radius:22px; max-width:400px; width:100%; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); border:3px solid #2563eb;" class="modal-anim">
             <h3 id="vote-modal-title" style="color:#2563eb; font-size:1.15em; font-weight:800; margin-bottom:12px; text-align:center;">Name auswählen</h3>
-            <p style="font-size:0.85em; color:var(--text-muted); text-align:center; margin-bottom:14px;">Bitte wähle deinen Namen aus der Liste aus:</p>
+            <p id="vote-modal-subtitle" style="font-size:0.85em; color:var(--text-muted); text-align:center; margin-bottom:14px;">Bitte wähle deinen Namen aus der Liste aus:</p>
             <div class="form-group">
                 <select id="vote-member-select" class="form-control" style="font-weight:700; font-size:1em;"></select>
             </div>
             <div style="display:flex; gap:10px; margin-top:16px;">
-                <button onclick="submitVoteSelection()" class="btn btn-green" style="flex:1; padding:12px;">Speichern</button>
-                <button onclick="closeVoteModal()" class="btn btn-danger" style="flex:1; padding:12px;">Abbrechen</button>
+                <button id="vote-modal-submit-btn" onclick="submitVoteSelection()" class="btn btn-green" style="flex:1; padding:12px;">Speichern</button>
+                <button onclick="closeVoteModal()" class="btn" style="flex:1; padding:12px; background:#e2e8f0; color:#1e293b;">Abbrechen</button>
             </div>
+        </div>
+    </div>
+
+    <!-- MASTER-PIN MODAL FÜR ADMIN SYSTEM & SICHERHEIT -->
+    <div id="master-pin-modal" style="display:none; pointer-events:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.78); backdrop-filter:blur(8px); z-index:999999999; justify-content:center; align-items:center; padding:16px;">
+        <div style="background:linear-gradient(155deg, #0f172a, #064e3b); color:#f8fafc; padding:24px; border-radius:22px; max-width:400px; width:100%; box-shadow:0 25px 50px -12px rgba(0,0,0,0.6); border:1.5px solid rgba(255,255,255,0.22);" class="modal-anim">
+            <h3 id="master-pin-modal-title" style="color:#fde68a; font-size:1.12em; font-weight:800; margin-bottom:8px; text-align:center;">🔐 Haupt-Admin Master-PIN</h3>
+            <p id="master-pin-modal-desc" style="font-size:0.84em; color:#cbd5e1; text-align:center; margin-bottom:14px; line-height:1.45;">
+                Bitte Master-PIN eingeben, um Vereins-Zugangscode und OneSignal Key zu entsperren.
+            </p>
+            <form id="master-pin-form" onsubmit="submitMasterPinModal(event)">
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label id="master-pin-label-1" style="color:#cbd5e1;">Master-PIN</label>
+                    <input type="password" id="master-pin-input-1" class="form-control" placeholder="Master-PIN eingeben" required autocomplete="off" style="background:rgba(15,23,42,0.8); color:#f8fafc; border:1.5px solid rgba(255,255,255,0.25); text-align:center; font-weight:800; letter-spacing:3px;">
+                </div>
+                <div id="master-pin-confirm-wrap" class="form-group" style="display:none; margin-bottom:10px;">
+                    <label style="color:#cbd5e1;">Master-PIN bestätigen</label>
+                    <input type="password" id="master-pin-input-2" class="form-control" placeholder="Master-PIN wiederholen" autocomplete="off" style="background:rgba(15,23,42,0.8); color:#f8fafc; border:1.5px solid rgba(255,255,255,0.25); text-align:center; font-weight:800; letter-spacing:3px;">
+                </div>
+                <div id="master-pin-modal-error" style="display:none; margin-bottom:10px; padding:8px 10px; border-radius:10px; background:rgba(220,38,38,0.25); border:1px solid rgba(248,113,113,0.5); color:#fecaca; font-size:0.82em; font-weight:700; text-align:center;"></div>
+                <div style="display:flex; gap:10px; margin-top:12px;">
+                    <button type="submit" id="master-pin-submit-btn" class="btn admin-btn-save" style="flex:1; padding:11px;">🔓 Entsperren</button>
+                    <button type="button" onclick="closeMasterPinModal()" class="btn admin-btn-delete" style="flex:1; padding:11px;">Abbrechen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- BLAUES ADMIN-ABMELDE MODAL (MANUELL & INAKTIVITÄT) -->
+    <div id="admin-logout-modal" style="display:none; pointer-events:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.72); backdrop-filter:blur(6px); z-index:999999999; justify-content:center; align-items:center; padding:16px;">
+        <div style="background: linear-gradient(145deg, #1e3a8a 0%, #1d4ed8 55%, #2563eb 100%); border: 2px solid #60a5fa; box-shadow: 0 20px 50px rgba(30, 58, 138, 0.65); border-radius: 22px; padding: 28px 24px; max-width: 420px; width: 100%; text-align: center;" class="modal-anim">
+            <div style="font-size: 2.6em; margin-bottom: 8px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));">🔒</div>
+            <h3 id="admin-logout-modal-title" style="color: #fde047; font-size: 1.25rem; font-weight: 800; letter-spacing: 0.01em; text-shadow: 0 2px 8px rgba(0,0,0,0.45); margin-bottom: 10px;">🔒 Admin-Abmeldung</h3>
+            <p id="admin-logout-modal-message" style="color: #fde047; font-size: 1.15rem; font-weight: 800; letter-spacing: 0.01em; line-height: 1.45; text-shadow: 0 2px 8px rgba(0,0,0,0.45); margin-bottom: 22px;">Admin-Modus beendet.</p>
+            <button type="button" id="admin-logout-modal-ok-btn" onclick="closeAdminLogoutModal()" style="width: 100%; background: #facc15; color: #1e3a8a; border: 2px solid #fef08a; padding: 14px 20px; font-weight: 900; font-size: 1.05rem; border-radius: 14px; cursor: pointer; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28); font-family: inherit;">OK</button>
         </div>
     </div>
 
@@ -1567,16 +2020,35 @@
             if (modal) { modal.style.display = 'none'; modal.style.pointerEvents = 'none'; }
         }
 
+        function showAdminLogoutModal(message, title = '🔒 Admin-Abmeldung') {
+            const modal = document.getElementById('admin-logout-modal');
+            const titleEl = document.getElementById('admin-logout-modal-title');
+            const msgEl = document.getElementById('admin-logout-modal-message');
+            if (titleEl) titleEl.innerText = title;
+            if (msgEl) msgEl.innerText = message;
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.style.pointerEvents = 'auto';
+            }
+        }
+        function closeAdminLogoutModal() {
+            const modal = document.getElementById('admin-logout-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+            }
+        }
+
         let inactivityTimer = null;
         const INACTIVITY_LIMIT = 5 * 60 * 1000;
 
         function resetInactivityTimer() {
-            if (!document.body.classList.contains('admin-mode')) return;
+            if (!auth.currentUser) return;
             clearTimeout(inactivityTimer);
             inactivityTimer = setTimeout(() => {
-                if (document.body.classList.contains('admin-mode')) {
-                    logoutAdmin();
-                    alert("Du wurdest wegen Inaktivität (5 Minuten) automatisch abgemeldet.");
+                if (auth.currentUser) {
+                    logoutAdmin('inactivity');
+                    showAdminLogoutModal("Du wurdest wegen Inaktivität (5 Minuten) automatisch abgemeldet.", "ℹ️ Sicherheitshinweis");
                 }
             }, INACTIVITY_LIMIT);
         }
@@ -1587,22 +2059,72 @@
 
         function switchTab(tabId) {
             stopQrScanner();
+            if (tabId !== 'card') {
+                try { lockSecuritySettingsFields(); } catch(e) {}
+                const secBlock = document.getElementById('admin-sec-security');
+                if (secBlock && secBlock.classList.contains('active')) {
+                    try { switchAdminSection('admin-sec-news-events'); } catch(e) {}
+                }
+            }
             document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             const targetPage = document.getElementById('page-' + tabId);
             const targetNav = document.getElementById('nav-' + tabId);
             if(targetPage) targetPage.classList.add('active');
             if(targetNav) targetNav.classList.add('active');
+            if (tabId === 'weapons') {
+                try { populateWeaponMemberSelects(); } catch(e) {}
+            } else if (tabId === 'events') {
+                if (!officialActiveMembers || officialActiveMembers.length === 0) {
+                    officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
+                }
+            } else if (tabId === 'card') {
+                try { renderAdminMembersOverview(); } catch(e) {}
+                try {
+                    const hasActiveSection = document.querySelector('#admin-panel .admin-section-block.active');
+                    if (!hasActiveSection) {
+                        switchAdminSection('admin-sec-news-events');
+                    }
+                } catch(e) {}
+            }
             window.scrollTo(0, 0);
         }
 
+        function switchAdminSection(sectionId) {
+            const targetSectionId = sectionId || 'admin-sec-news-events';
+            document.querySelectorAll('#admin-panel .admin-section-block').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#admin-panel .admin-nav-tile').forEach(btn => btn.classList.remove('active'));
+            const gearBtn = document.getElementById('admin-gear-security-btn');
+            if (gearBtn) gearBtn.classList.remove('active');
+
+            const targetEl = document.getElementById(targetSectionId);
+            if (targetEl) targetEl.classList.add('active');
+
+            if (targetSectionId === 'admin-sec-security') {
+                if (gearBtn) gearBtn.classList.add('active');
+            } else {
+                try { lockSecuritySettingsFields(); } catch(e) {}
+                const matchingBtn = document.querySelector(`#admin-panel .admin-nav-tile[data-admin-section="${targetSectionId}"]`);
+                if (matchingBtn) matchingBtn.classList.add('active');
+            }
+
+            if (targetSectionId === 'admin-sec-members') {
+                try { renderAdminMembersOverview(); } catch(e) {}
+            }
+        }
+
         function switchAdminTab(tabContentId) {
-            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.admin-tab-btn').forEach(el => el.classList.remove('active'));
-            const targetTab = document.getElementById(tabContentId);
-            const targetBtn = document.getElementById('btn-' + tabContentId);
-            if(targetTab) targetTab.classList.add('active');
-            if(targetBtn) targetBtn.classList.add('active');
+            const sectionMap = {
+                'admin-tab-news': 'admin-sec-news-events',
+                'admin-tab-events': 'admin-sec-news-events',
+                'admin-tab-duty': 'admin-sec-duty',
+                'admin-tab-inventory': 'admin-sec-inventory',
+                'admin-tab-drinks': 'admin-sec-drinks',
+                'admin-tab-weapons': 'admin-sec-weapons',
+                'admin-tab-members': 'admin-sec-members',
+                'admin-tab-security': 'admin-sec-security'
+            };
+            switchAdminSection(sectionMap[tabContentId] || tabContentId);
         }
 
         window.toggleAdminAccordion = function(btn) {
@@ -1613,7 +2135,112 @@
             btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         };
 
-        let officialActiveMembers = [];
+
+        const DEFAULT_ACTIVE_MEMBERS = [
+            "Kinzl Sabrina",
+            "Kofler Konrad",
+            "Mattle Werner",
+            "Rudigier Erwin",
+            "Sandrell Daniel",
+            "Schweighofer Dietmar",
+            "Schweighofer Simon",
+            "Spettel Maria",
+            "Spettel Norbert",
+            "Stocker Elias",
+            "Stocker Heimo",
+            "Stocker Karin",
+            "Stocker Natalie",
+            "Suntinger Jasmin",
+            "Tripolt Pascal",
+            "Wachter Manfred",
+            "Wachter Werner",
+            "Wittwer Christoph",
+            "Wittwer Werner"
+        ];
+
+        const WEAPON_AUTHORIZED_MEMBERS = [
+            "Schweighofer Simon",
+            "Stocker Heimo",
+            "Spettel Norbert",
+            "Wachter Manfred"
+        ];
+
+        const WEAPON_ROLE_MAP = {
+            "schweighofer simon": "Obmann",
+            "simon schweighofer": "Obmann",
+            "stocker heimo": "Obmann Stellvertreter + Waffenwart",
+            "heimo stocker": "Obmann Stellvertreter + Waffenwart",
+            "spettel norbert": "Waffenwart",
+            "norbert spettel": "Waffenwart",
+            "wachter manfred": "Waffenwart",
+            "manfred wachter": "Waffenwart"
+        };
+
+        function splitWeaponPerson(rawName) {
+            let clean = String(rawName || '').trim().replace(/\s+/g, ' ');
+            if (!clean) return { name: '', role: '' };
+
+            let explicitRole = '';
+            const parenMatch = clean.match(/^(.+?)\s*\((Obmann(?:\s+Stellvertreter\s*\+\s*Waffenwart)?|Waffenwart)\)\s*$/i);
+            if (parenMatch) {
+                clean = parenMatch[1].trim();
+                explicitRole = parenMatch[2].trim();
+            } else {
+                const dashMatch = clean.match(/^(.+?)\s*[–-]\s*(Obmann(?:\s+Stellvertreter\s*\+\s*Waffenwart)?|Waffenwart)\s*$/i);
+                if (dashMatch) {
+                    clean = dashMatch[1].trim();
+                    explicitRole = dashMatch[2].trim();
+                }
+            }
+
+            const lookupKey = clean.toLowerCase();
+            let role = WEAPON_ROLE_MAP[lookupKey] || '';
+            if (!role) {
+                const tokens = lookupKey.split(' ').filter(Boolean);
+                if (tokens.length === 2) {
+                    role = WEAPON_ROLE_MAP[`${tokens[1]} ${tokens[0]}`] || '';
+                }
+            }
+            if (!role && explicitRole) {
+                role = explicitRole;
+            }
+            return { name: clean, role };
+        }
+
+        function formatWeaponPersonHtml(rawName) {
+            const { name, role } = splitWeaponPerson(rawName);
+            if (!name) return '';
+            if (!role) return `<span style="font-weight: 700; color: #1e293b;">${escapeHtml(name)}</span>`;
+            return `<span style="font-weight: 700; color: #1e293b;">${escapeHtml(name)}</span><span style="color: #dc2626; font-weight: 800;"> (${escapeHtml(role)})</span>`;
+        }
+
+        const ALLOWED_ACTIVE_MEMBERS_NORMALIZED = new Set(
+            DEFAULT_ACTIVE_MEMBERS.map(name => String(name || '').trim().replace(/\s+/g, ' ').toLowerCase())
+        );
+
+        function isAllowedActiveMemberName(name, allowCustom = false) {
+            const normalized = String(name || '').trim().replace(/\s+/g, ' ').toLowerCase();
+            if (!normalized) return false;
+            return allowCustom || ALLOWED_ACTIVE_MEMBERS_NORMALIZED.has(normalized);
+        }
+
+        function sanitizeActiveMembersList(list, allowCustom = false) {
+            if (!Array.isArray(list)) return [];
+            const seen = new Set();
+            const cleaned = [];
+            list.forEach(item => {
+                const name = String(item || '').trim().replace(/\s+/g, ' ');
+                if (!name || !isAllowedActiveMemberName(name, allowCustom)) return;
+                const key = name.toLowerCase();
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    cleaned.push(name);
+                }
+            });
+            return cleaned.sort((a, b) => a.localeCompare(b, 'de'));
+        }
+
+        let officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
         let officialPassiveMembers = [];
         let officialWeaponList = [];
 
@@ -1643,12 +2270,13 @@
             if (primarySelect) {
                 const currentVal = primarySelect.value;
                 let primaryHtml = '<option value="">-- Übernehmer wählen --</option>';
-                officialActiveMembers.forEach(name => {
-                    const safe = escapeHtml(name);
-                    primaryHtml += `<option value="${safe}">${safe}</option>`;
+                WEAPON_AUTHORIZED_MEMBERS.forEach(name => {
+                    const { role } = splitWeaponPerson(name);
+                    const label = role ? `${name} – ${role}` : name;
+                    primaryHtml += `<option value="${escapeHtml(name)}">${escapeHtml(label)}</option>`;
                 });
                 primarySelect.innerHTML = primaryHtml;
-                if (currentVal && officialActiveMembers.includes(currentVal)) {
+                if (currentVal && WEAPON_AUTHORIZED_MEMBERS.includes(currentVal)) {
                     primarySelect.value = currentVal;
                 }
             }
@@ -1656,12 +2284,13 @@
             if (secondarySelect) {
                 const currentVal = secondarySelect.value;
                 let secondaryHtml = '<option value="">-- Keiner / Alleinübernahme --</option>';
-                officialActiveMembers.forEach(name => {
-                    const safe = escapeHtml(name);
-                    secondaryHtml += `<option value="${safe}">${safe}</option>`;
+                WEAPON_AUTHORIZED_MEMBERS.forEach(name => {
+                    const { role } = splitWeaponPerson(name);
+                    const label = role ? `${name} – ${role}` : name;
+                    secondaryHtml += `<option value="${escapeHtml(name)}">${escapeHtml(label)}</option>`;
                 });
                 secondarySelect.innerHTML = secondaryHtml;
-                if (currentVal && officialActiveMembers.includes(currentVal)) {
+                if (currentVal && WEAPON_AUTHORIZED_MEMBERS.includes(currentVal)) {
                     secondarySelect.value = currentVal;
                 }
             }
@@ -1672,22 +2301,66 @@
                 const doc = await db.collection("settings").doc("members").get();
                 if (doc.exists && doc.data()) {
                     const data = doc.data();
-                    officialActiveMembers = Array.isArray(data.active)
-                        ? data.active.map(x => String(x || '').trim()).filter(Boolean)
-                        : (Array.isArray(data.activeMembers) ? data.activeMembers.map(x => String(x || '').trim()).filter(Boolean) : []);
-                    officialPassiveMembers = Array.isArray(data.passive)
-                        ? data.passive.map(x => String(x || '').trim()).filter(Boolean)
-                        : (Array.isArray(data.passiveMembers) ? data.passiveMembers.map(x => String(x || '').trim()).filter(Boolean) : []);
+                    const rawActive = Array.isArray(data.active)
+                        ? data.active
+                        : (Array.isArray(data.activeMembers) ? data.activeMembers : []);
+                    const sanitizedBaseActive = sanitizeActiveMembersList(rawActive, false);
+                    const rawCustomActive = Array.isArray(data.customActive) ? data.customActive : [];
+                    const customActive = sanitizeActiveMembersList(rawCustomActive, true);
+                    const combinedActive = sanitizeActiveMembersList(
+                        [...(sanitizedBaseActive.length > 0 ? sanitizedBaseActive : DEFAULT_ACTIVE_MEMBERS), ...customActive],
+                        true
+                    );
+                    officialActiveMembers = combinedActive.length > 0 ? combinedActive : [...DEFAULT_ACTIVE_MEMBERS];
+
+                    const rawPassive = Array.isArray(data.passive)
+                        ? data.passive
+                        : (Array.isArray(data.passiveMembers) ? data.passiveMembers : []);
+                    officialPassiveMembers = sanitizeActiveMembersList(rawPassive, false);
                 } else {
-                    officialActiveMembers = [];
+                    officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
                     officialPassiveMembers = [];
                 }
             } catch (e) {
-                officialActiveMembers = [];
+                officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
                 officialPassiveMembers = [];
             }
             populateWeaponMemberSelects();
             loadPublicMembersList();
+            try { renderAdminMembersOverview(); } catch(e) {}
+        }
+
+        function renderAdminMembersOverview() {
+            const container = document.getElementById('admin-members-overview');
+            if (!container) return;
+            const cleanedActive = sanitizeActiveMembersList(officialActiveMembers);
+            const activeList = cleanedActive.length > 0 ? cleanedActive : DEFAULT_ACTIVE_MEMBERS;
+            const weaponList = Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [];
+
+            const activeBadges = activeList.map(name =>
+                `<span style="display:inline-block; background:#ffffff; color:#0f172a; border:1px solid #cbd5e1; padding:4px 9px; border-radius:8px; font-size:0.78em; font-weight:700; box-shadow:0 1px 3px rgba(15,23,42,0.04);">${escapeHtml(name)}</span>`
+            ).join('');
+
+            const weaponBadges = weaponList.map(name =>
+                `<span style="display:inline-block; background:#ecfdf5; color:#065f46; border:1px solid #6ee7b7; padding:4px 9px; border-radius:8px; font-size:0.78em; font-weight:800;">🎯 ${escapeHtml(name)}</span>`
+            ).join('');
+
+            container.innerHTML = `
+                <div style="margin-bottom: 12px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+                        <strong style="color:#0f172a; font-size:0.84em;">Aktive Vereinsmitglieder (Termine &amp; Abstimmung)</strong>
+                        <span style="background:#d1fae5; color:#065f46; border:1px solid #6ee7b7; padding:2px 8px; border-radius:7px; font-size:0.74em; font-weight:800;">${activeList.length} Mitglieder</span>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:5px;">${activeBadges}</div>
+                </div>
+                <div style="border-top:1px solid rgba(15,23,42,0.1); padding-top:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+                        <strong style="color:#92400e; font-size:0.84em;">Waffenbuch-Berechtigte (Übernehmer &amp; Mitabholer)</strong>
+                        <span style="background:#fef3c7; color:#92400e; border:1px solid #fcd34d; padding:2px 8px; border-radius:7px; font-size:0.74em; font-weight:800;">${weaponList.length} Berechtigte</span>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:5px;">${weaponBadges}</div>
+                </div>
+            `;
         }
 
         function sortWeaponsList(list) {
@@ -1744,10 +2417,10 @@
                     ? `<span style="display:inline-block; background:#fef3c7; color:#92400e; border:1px solid #f59e0b; padding:1px 6px; border-radius:6px; font-weight:800; font-size:0.82em;">${escapeHtml(zuwText.toUpperCase())}</span>`
                     : `<span style="display:inline-block; background:#e0f2fe; color:#075985; border:1px solid #7dd3fc; padding:1px 6px; border-radius:6px; font-weight:800; font-size:0.82em;">👤 ${escapeHtml(zuwText)}</span>`;
                 let labelText = `${escapeHtml(w.hersteller)} ${escapeHtml(w.modell)} (${escapeHtml(w.kaliber)}) – ZWR: ${maskedNum} | ZVR: ${maskedZvr} ${zuwBadge}`;
-                let fullValue = `${w.hersteller} ${w.modell} (${w.kaliber} / Nr. ${w.nummer} / ZVR-624291509 / Zuw: ${zuwText})`;
+                let weaponInternalId = String(w.id || w.docId || '').trim();
                 html += `
                     <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer; flex-wrap: wrap;">
-                        <input type="checkbox" name="weapons" value="${escapeHtml(fullValue)}" style="width: 18px; height: 18px; accent-color: #b91c1c; flex-shrink: 0;"> 
+                        <input type="checkbox" name="weapons" value="${escapeHtml(weaponInternalId)}" style="width: 18px; height: 18px; accent-color: #b91c1c; flex-shrink: 0;"> 
                         <span><strong>${escapeHtml(w.art)}</strong>: ${labelText}</span>
                     </label>
                 `;
@@ -1760,7 +2433,7 @@
         let lastInventoryChangeTime = "Noch nicht geändert";
 
         async function loadInventory() {
-            if (!(auth.currentUser || document.body.classList.contains('admin-mode'))) return;
+            if (!auth.currentUser) return;
             try {
                 const doc = await db.collection("settings").doc("inventory").get();
                 if (doc.exists) {
@@ -1789,12 +2462,12 @@
             items.forEach(item => {
                 let val = inventoryData[item.key] || 0;
                 html += `
-                    <div class="price-item" style="background: rgba(255,255,255,0.95); padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; border: 1.5px solid #cbd5e1;">
-                        <span><strong>${item.label}</strong></span>
+                    <div class="price-item" style="background: rgba(255, 255, 255, 0.92); padding: 10px 12px; border-radius: 11px; margin-bottom: 8px; border: 1px solid #cbd5e1; color: #0f172a; box-shadow: 0 2px 6px rgba(15,23,42,0.04);">
+                        <span style="font-size: 0.88em; color: #0f172a;"><strong>${item.label}</strong></span>
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <button class="counter-btn" style="width: 32px; height: 32px; font-size: 1.1em;" onclick="updateInventoryQty('${item.key}', -1)">-</button>
-                            <span style="font-weight: 800; width: 45px; text-align: center; font-size: 1.05em;" id="inv-val-${item.key}">${val} ${item.unit}</span>
-                            <button class="counter-btn" style="width: 32px; height: 32px; font-size: 1.1em;" onclick="updateInventoryQty('${item.key}', 1)">+</button>
+                            <button type="button" class="counter-btn" style="width: 32px; height: 32px; font-size: 1.05em; background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1;" onclick="updateInventoryQty('${item.key}', -1)">-</button>
+                            <span style="font-weight: 800; min-width: 58px; text-align: center; font-size: 0.95em; color: #15803d;" id="inv-val-${item.key}">${val} ${item.unit}</span>
+                            <button type="button" class="counter-btn" style="width: 32px; height: 32px; font-size: 1.05em; background: #ecfdf5; color: #15803d; border: 1px solid #6ee7b7;" onclick="updateInventoryQty('${item.key}', 1)">+</button>
                         </div>
                     </div>
                 `;
@@ -1984,7 +2657,7 @@
         let midnightCheckerInterval = null;
 
         function loadDutyPlanFromCache() {
-            if (document.body.classList.contains('app-locked') && !document.body.classList.contains('admin-mode')) {
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) {
                 return false;
             }
             try {
@@ -2069,15 +2742,16 @@
 
                 if (isFromFirebase) {
                     adminHtml += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 10px; background: #fff; border-radius: 8px; margin-bottom: 6px; border: 1px solid #cbd5e1; font-size: 0.85em;">
-                            <div style="flex: 1; min-width: 0;">
-                                <strong>${escapeHtml(d.dateStr)}</strong> - <span style="color:var(--primary-red);">${escapeHtml(d.team)}</span>${d.time && d.time !== '—' ? ` <span style="color:var(--text-muted); font-size:0.8em;">(${escapeHtml(d.time)})</span>` : ''}<br>
-                                <span style="color:var(--text-muted); font-size:0.8em;">${escapeHtml(d.names)}</span>
+                        <div class="admin-duty-card">
+                            <div>
+                                <div class="admin-duty-card-top">
+                                    <div class="admin-duty-card-date">${escapeHtml(d.dateStr)}</div>
+                                    <button type="button" class="btn admin-btn-delete admin-duty-del-btn" onclick="deleteDutyEntry('${escapeHtml(d.id)}')" title="Dienst löschen">🗑️</button>
+                                </div>
+                                <div class="admin-duty-card-team">${escapeHtml(d.team)}${d.time && d.time !== '—' ? ` <span style="color:#64748b; font-weight:600; font-size:0.9em;">(${escapeHtml(d.time)})</span>` : ''}</div>
+                                <div class="admin-duty-card-names">${escapeHtml(d.names)}</div>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
-                                <button type="button" class="btn btn-admin" style="padding: 4px 8px; font-size: 0.72em;" data-date="${escapeHtml(d.dateStr)}" data-team="${escapeHtml(d.team)}" data-names="${escapeHtml(d.names)}" onclick="sendDutyReminderPush(this.dataset.date, this.dataset.team, this.dataset.names, this)">🔔 Erinnerung senden</button>
-                                <button class="btn btn-danger" style="padding: 4px 8px; font-size: 0.75em;" onclick="deleteDutyEntry('${escapeHtml(d.id)}')">🗑️</button>
-                            </div>
+                            <button type="button" class="btn admin-btn-edit admin-duty-push-btn" data-date="${escapeHtml(d.dateStr)}" data-team="${escapeHtml(d.team)}" data-names="${escapeHtml(d.names)}" onclick="sendDutyReminderPush(this.dataset.date, this.dataset.team, this.dataset.names, this)">🔔 Erinnerung</button>
                         </div>
                     `;
                 }
@@ -2089,7 +2763,7 @@
 
             const adminDutyListContainer = document.getElementById('admin-duty-list');
             if (adminDutyListContainer) {
-                adminDutyListContainer.innerHTML = adminHtml || '<p style="font-size: 0.8em; color: var(--text-muted);">Keine eigenen Dienste in Firebase.</p>';
+                adminDutyListContainer.innerHTML = adminHtml || '<p class="admin-muted-text">Keine eigenen Dienste in Firebase.</p>';
             }
 
             futureList.sort((a, b) => parseLocalDate(a.dateStr) - parseLocalDate(b.dateStr));
@@ -2114,7 +2788,7 @@
                     }
 
                     nextWidget.innerHTML = `
-                        <div style="font-size: 1.1em; color: ${isToday ? '#b91c1c' : '#15803d'}; font-weight: 800; margin-bottom: 2px;">📅 ${escapeHtml(nextDienst.dateStr)} ${isToday ? '⚡ HEUTE' : ''}${nextDienst.time && nextDienst.time !== '—' ? ` <span style="font-size:0.78em; font-weight:700; color:#475569;">(${escapeHtml(nextDienst.time)})</span>` : ''}</div>
+                        <div style="font-size: 1.1em; color: ${isToday ? '#b91c1c' : '#15803d'}; font-weight: 800; margin-bottom: 2px;">📅 ${escapeHtml(nextDienst.dateStr)} ${isToday ? '⚡ HEUTE' : ''}${nextDienst.time && nextDienst.time !== '—' ? ` <span style="font-size:0.86em; font-weight:800; color:#dc2626;">(${escapeHtml(nextDienst.time)})</span>` : ''}</div>
                         <div style="font-size: 1.5em; font-weight: 900; margin: 4px 0; color: #0f172a; letter-spacing: 0.5px;">${escapeHtml(nextDienst.team)}</div>
                         <div style="font-size: 0.9em; color: var(--text-dark); font-weight: 700;">${escapeHtml(nextDienst.names)}</div>
                     `;
@@ -2221,20 +2895,55 @@
         }
 
         let selectedEventIdForVote = null;
+        let selectedVoteMode = 'dabei';
 
-        function openVoteModal(eventId, eventTitle) {
+        function openVoteModal(eventId, eventTitle, voteMode = 'dabei') {
             selectedEventIdForVote = eventId;
-            document.getElementById('vote-modal-title').innerText = "Abstimmung: " + eventTitle;
-            const selectEl = document.getElementById('vote-member-select');
-            let html = "";
-            if (officialActiveMembers.length === 0) {
-                html = '<option value="">-- Keine Mitglieder geladen --</option>';
+            selectedVoteMode = (voteMode === 'absage') ? 'absage' : 'dabei';
+
+            const modalBox = document.getElementById('vote-modal-box');
+            const titleEl = document.getElementById('vote-modal-title');
+            const subtitleEl = document.getElementById('vote-modal-subtitle');
+            const submitBtn = document.getElementById('vote-modal-submit-btn');
+
+            if (selectedVoteMode === 'absage') {
+                if (titleEl) {
+                    titleEl.innerText = "Absage: " + eventTitle;
+                    titleEl.style.color = "#dc2626";
+                }
+                if (subtitleEl) {
+                    subtitleEl.innerText = "Bitte wähle deinen Namen aus der Liste für die Absage aus:";
+                }
+                if (modalBox) modalBox.style.borderColor = "#dc2626";
+                if (submitBtn) {
+                    submitBtn.className = "btn";
+                    submitBtn.style.cssText = "flex:1; padding:12px; background:#dc2626; color:#ffffff;";
+                    submitBtn.innerText = "✖ Absage speichern";
+                }
             } else {
-                officialActiveMembers.forEach(m => {
-                    const safe = escapeHtml(m);
-                    html += `<option value="${safe}">${safe}</option>`;
-                });
+                if (titleEl) {
+                    titleEl.innerText = "Ich bin dabei: " + eventTitle;
+                    titleEl.style.color = "#15803d";
+                }
+                if (subtitleEl) {
+                    subtitleEl.innerText = "Bitte wähle deinen Namen aus der Liste aus:";
+                }
+                if (modalBox) modalBox.style.borderColor = "#16a34a";
+                if (submitBtn) {
+                    submitBtn.className = "btn btn-green";
+                    submitBtn.style.cssText = "flex:1; padding:12px;";
+                    submitBtn.innerText = "✅ Zusage speichern";
+                }
             }
+
+            const selectEl = document.getElementById('vote-member-select');
+            const cleanedMembers = sanitizeActiveMembersList(officialActiveMembers);
+            const membersForVote = cleanedMembers.length > 0 ? cleanedMembers : DEFAULT_ACTIVE_MEMBERS;
+            let html = "";
+            membersForVote.forEach(m => {
+                const safe = escapeHtml(m);
+                html += `<option value="${safe}">${safe}</option>`;
+            });
             selectEl.innerHTML = html;
             const modal = document.getElementById('vote-modal');
             if (modal) { modal.style.display = 'flex'; modal.style.pointerEvents = 'auto'; }
@@ -2244,23 +2953,33 @@
             const modal = document.getElementById('vote-modal');
             if (modal) { modal.style.display = 'none'; modal.style.pointerEvents = 'none'; }
             selectedEventIdForVote = null;
+            selectedVoteMode = 'dabei';
         }
 
         async function submitVoteSelection() {
             if (!selectedEventIdForVote) return;
             const memberName = document.getElementById('vote-member-select').value;
+            if (!memberName) return;
             
             try {
                 const docRef = db.collection("events").doc(selectedEventIdForVote);
                 const doc = await docRef.get();
                 if (!doc.exists) return;
-                const data = doc.data();
-                let votes = data.votes || {};
+                const data = doc.data() || {};
+                let votes = { ...(data.votes || {}) };
 
-                if (votes[memberName] === 'Dabei') {
-                    delete votes[memberName];
+                if (selectedVoteMode === 'absage') {
+                    if (String(votes[memberName] || '').toLowerCase() === 'absage') {
+                        delete votes[memberName];
+                    } else {
+                        votes[memberName] = 'absage';
+                    }
                 } else {
-                    votes[memberName] = 'Dabei';
+                    if (votes[memberName] === 'Dabei') {
+                        delete votes[memberName];
+                    } else {
+                        votes[memberName] = 'Dabei';
+                    }
                 }
 
                 await docRef.update({ votes });
@@ -2304,20 +3023,50 @@
 
                 if (sortedEvents.length === 0) {
                     container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Termine eingetragen.</p>';
-                    if(adminContainer) adminContainer.innerHTML = '<p style="font-size:0.8em; color:var(--text-muted);">Keine Termine.</p>';
+                    if(adminContainer) adminContainer.innerHTML = '<p class="admin-muted-text">Keine Termine eingetragen.</p>';
                     return;
                 }
 
                 sortedEvents.forEach((ev, idx) => {
                     const isNext = (idx === 0 && (isNaN(ev.parsedDate.getTime()) || ev.parsedDate >= today));
                     const votes = ev.votes || {};
-                    const voteNames = Object.keys(votes);
+                    const dabeiNames = [];
+                    const absageSet = new Set();
+
+                    Object.keys(votes).forEach(name => {
+                        const statusVal = String(votes[name] || '').trim().toLowerCase();
+                        if (statusVal === 'absage') {
+                            absageSet.add(name);
+                        } else if (votes[name]) {
+                            dabeiNames.push(name);
+                        }
+                    });
+                    if (Array.isArray(ev.absagen)) {
+                        ev.absagen.forEach(name => {
+                            const clean = String(name || '').trim();
+                            if (clean && !dabeiNames.includes(clean)) {
+                                absageSet.add(clean);
+                            }
+                        });
+                    }
+                    const absageNames = Array.from(absageSet);
 
                     let votesHtml = "";
-                    if (voteNames.length > 0) {
-                        voteNames.forEach(n => {
-                            votesHtml += `<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:6px; font-weight:700; font-size:0.75em; display:inline-block; margin:2px;">✅ ${escapeHtml(n)}</span>`;
-                        });
+                    if (dabeiNames.length > 0 || absageNames.length > 0) {
+                        if (dabeiNames.length > 0) {
+                            let dabeiBadges = "";
+                            dabeiNames.forEach(n => {
+                                dabeiBadges += `<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:6px; font-weight:700; font-size:0.75em; display:inline-block; margin:2px;">✅ ${escapeHtml(n)}</span>`;
+                            });
+                            votesHtml += `<div style="width:100%; margin-bottom:4px;"><span style="font-size:0.78em; font-weight:800; color:#065f46; margin-right:4px;">Dabei (${dabeiNames.length}):</span>${dabeiBadges}</div>`;
+                        }
+                        if (absageNames.length > 0) {
+                            let absageBadges = "";
+                            absageNames.forEach(n => {
+                                absageBadges += `<span style="background:#fee2e2; color:#dc2626; border:1px solid #fca5a5; padding:2px 8px; border-radius:6px; font-weight:700; font-size:0.75em; display:inline-block; margin:2px;">✖ ${escapeHtml(n)}</span>`;
+                            });
+                            votesHtml += `<div style="width:100%;"><span style="font-size:0.78em; font-weight:800; color:#dc2626; margin-right:4px;">Abgesagt (${absageNames.length}):</span>${absageBadges}</div>`;
+                        }
                     } else {
                         votesHtml = `<span style="font-size:0.8em; color:var(--text-muted);">Noch keine Rückmeldungen.</span>`;
                     }
@@ -2330,20 +3079,26 @@
                     html += `
                         <div class="glass-card ${isNext ? 'next-duty-neon' : ''}" style="margin-bottom: 10px; padding: ${isNext ? '18px' : '12px'}; ${isNext ? '' : 'border-left: 4px solid #2563eb; opacity: 0.9;'}">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                <div style="font-size: ${isNext ? '1em' : '0.85em'}; font-weight: 800; color: #0f172a;">📅 ${safeEvDate} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;" class="live-pulse-badge">NÄCHSTER TERMIN</span>' : ''}</div>
-                                ${isNext ? '<span style="font-size: 0.75em; background: #0f172a; color: #22c55e; font-weight: 800; padding: 3px 8px; border-radius: 6px;" class="live-pulse-badge">● LIVE</span>' : ''}
+                                <div style="font-size: ${isNext ? '1em' : '0.85em'}; font-weight: 800; color: #0f172a;">📅 ${safeEvDate} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER TERMIN</span>' : ''}</div>
+                                ${isNext ? '<span style="font-size: 0.75em; background: #0f172a; color: #22c55e; font-weight: 800; padding: 3px 8px; border-radius: 6px;">● LIVE</span>' : ''}
                             </div>
                             <div style="font-size: ${isNext ? '1.1em' : '0.95em'}; font-weight: 800; color: #b91c1c; margin-bottom: 3px;">${safeEvTitle}</div>
                             <div style="font-size: ${isNext ? '0.85em' : '0.75em'}; color: var(--text-muted); margin-bottom: 6px;">📍 ${safeEvDesc}</div>
-                            <div style="margin: 6px 0; display: flex; flex-wrap: wrap; gap: 4px;">${votesHtml}</div>
-                            <button data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle)" class="btn btn-green btn-block" style="padding: ${isNext ? '10px' : '8px'}; font-size: ${isNext ? '0.9em' : '0.8em'};">✋ Ich bin dabei / Stimme abgeben</button>
+                            <div style="margin: 6px 0; display: flex; flex-direction: column; gap: 4px;">${votesHtml}</div>
+                            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                <button data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'dabei')" class="btn btn-green" style="flex: 1; padding: ${isNext ? '10px' : '8px'}; font-size: ${isNext ? '0.88em' : '0.78em'};">✋ Ich bin dabei</button>
+                                <button data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'absage')" class="btn" style="flex: 1; padding: ${isNext ? '10px' : '8px'}; font-size: ${isNext ? '0.88em' : '0.78em'}; background: #dc2626; color: #ffffff;">✖ Absage</button>
+                            </div>
                         </div>
                     `;
 
                     adminHtml += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 10px; border-radius:8px; margin-bottom:6px; border:1px solid #cbd5e1; font-size:0.85em;">
-                            <div><strong>${safeEvDate}</strong> - ${safeEvTitle} (${voteNames.length} Zusagen)</div>
-                            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75em;" data-doc-id="${safeEvId}" onclick="deleteItem('events', this.dataset.docId)">🗑️</button>
+                        <div class="admin-list-row">
+                            <div style="flex:1; min-width:0;">
+                                <strong style="color:#0f172a;">${safeEvDate}</strong> – <span style="color:#b91c1c; font-weight:700;">${safeEvTitle}</span><br>
+                                <span style="color:#475569; font-size:0.86em;">✅ ${dabeiNames.length} Zusagen · ✖ ${absageNames.length} Absagen</span>
+                            </div>
+                            <button type="button" class="btn admin-btn-delete" style="padding:6px 10px !important; font-size:0.78em !important; flex-shrink:0;" data-doc-id="${safeEvId}" onclick="deleteItem('events', this.dataset.docId)">🗑️</button>
                         </div>
                     `;
                 });
@@ -2409,7 +3164,7 @@
             const container = document.getElementById('admin-keys-list');
             if (!container) return;
             if (!exactPdfKeyList || exactPdfKeyList.length === 0) {
-                container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Einträge in der Schlüsselliste (Firestore <code>settings/keys</code> / <code>settings/pdfKeys</code>).</p>';
+                container.innerHTML = '<p class="admin-muted-text">Keine Einträge in der Schlüsselliste (Firestore <code>settings/keys</code> / <code>settings/pdfKeys</code>).</p>';
                 return;
             }
             let rowNumber = 0;
@@ -2417,11 +3172,11 @@
             exactPdfKeyList.forEach((k, idx) => {
                 if (k.header) {
                     tableRowsHtml += `
-                        <tr style="background:#fef2f2;">
-                            <td colspan="6" style="padding:8px 10px; font-weight:800; color:#991b1b; border-bottom:1px solid #fecaca;">${escapeHtml(k.header)}</td>
-                            <td style="padding:6px 8px; white-space:nowrap; text-align:right; border-bottom:1px solid #fecaca;">
-                                <button type="button" class="btn btn-admin" style="padding:4px 8px; font-size:0.75em; margin-top:0;" onclick="startEditKeyListItem(${idx})" title="Bearbeiten">✏️</button>
-                                <button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.75em; margin-top:0;" onclick="deleteKeyListItem(${idx})" title="Löschen">🗑️</button>
+                        <tr style="background:#fef3c7;">
+                            <td colspan="6" style="padding:8px 10px; font-weight:800; color:#92400e; border-bottom:1px solid #fde68a;">${escapeHtml(k.header)}</td>
+                            <td style="padding:6px 8px; white-space:nowrap; text-align:right; border-bottom:1px solid #fde68a;">
+                                <button type="button" class="btn admin-btn-edit" style="padding:4px 8px !important; font-size:0.75em !important; margin-top:0;" onclick="startEditKeyListItem(${idx})" title="Bearbeiten">✏️</button>
+                                <button type="button" class="btn admin-btn-delete" style="padding:4px 8px !important; font-size:0.75em !important; margin-top:0;" onclick="deleteKeyListItem(${idx})" title="Löschen">🗑️</button>
                             </td>
                         </tr>
                     `;
@@ -2439,11 +3194,11 @@
                             <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; min-width:150px; color:#334155;">${escapeHtml(k.addr || '—')}</td>
                             <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap; color:#334155;">${escapeHtml(k.tel || '—')}</td>
                             <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; min-width:140px;">
-                                <span style="display:inline-block; background:${isKeyAssigned ? '#d1fae5' : '#f1f5f9'}; color:${isKeyAssigned ? '#065f46' : '#475569'}; padding:3px 7px; border-radius:6px; font-weight:700; font-size:0.88em;">${escapeHtml(roleStr || '—')}</span>
+                                <span style="display:inline-block; background:${isKeyAssigned ? '#d1fae5' : '#f1f5f9'}; color:${isKeyAssigned ? '#065f46' : '#475569'}; border:1px solid ${isKeyAssigned ? '#6ee7b7' : '#cbd5e1'}; padding:3px 7px; border-radius:6px; font-weight:700; font-size:0.88em;">${escapeHtml(roleStr || '—')}</span>
                             </td>
                             <td style="padding:6px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap; text-align:right;">
-                                <button type="button" class="btn btn-admin" style="padding:4px 8px; font-size:0.75em; margin-top:0;" onclick="startEditKeyListItem(${idx})" title="Bearbeiten">✏️</button>
-                                <button type="button" class="btn btn-danger" style="padding:4px 8px; font-size:0.75em; margin-top:0;" onclick="deleteKeyListItem(${idx})" title="Löschen">🗑️</button>
+                                <button type="button" class="btn admin-btn-edit" style="padding:4px 8px !important; font-size:0.75em !important; margin-top:0;" onclick="startEditKeyListItem(${idx})" title="Bearbeiten">✏️</button>
+                                <button type="button" class="btn admin-btn-delete" style="padding:4px 8px !important; font-size:0.75em !important; margin-top:0;" onclick="deleteKeyListItem(${idx})" title="Löschen">🗑️</button>
                             </td>
                         </tr>
                     `;
@@ -2451,11 +3206,11 @@
             });
 
             container.innerHTML = `
-                <div style="font-size:0.78em; color:var(--text-muted); margin-bottom:6px; font-weight:600;">Gesamt: ${rowNumber} Schlüsselinhaber</div>
-                <div style="overflow-x:auto; border:1px solid #cbd5e1; border-radius:10px; background:#fff;">
+                <div class="admin-muted-text" style="margin-bottom:6px; font-weight:700;">Gesamt: ${rowNumber} Schlüsselinhaber</div>
+                <div style="overflow-x:auto; border:1px solid #cbd5e1; border-radius:12px; background:rgba(255,255,255,0.95); box-shadow:0 4px 12px rgba(15,23,42,0.05);">
                     <table style="width:100%; border-collapse:collapse; font-size:0.8em; text-align:left;">
                         <thead>
-                            <tr style="background:#b91c1c; color:#fff;">
+                            <tr style="background:linear-gradient(135deg, #16a34a, #15803d); color:#ffffff;">
                                 <th style="padding:9px 8px;">Nr.</th>
                                 <th style="padding:9px 8px;">Name</th>
                                 <th style="padding:9px 8px;">Geburtsdatum</th>
@@ -2474,7 +3229,7 @@
         }
 
         async function loadKeyList() {
-            if (!(auth.currentUser || document.body.classList.contains('admin-mode'))) return;
+            if (!auth.currentUser) return;
             let loaded = [];
             try {
                 const [pdfKeysRes, keysRes] = await Promise.allSettled([
@@ -2565,7 +3320,7 @@
 
         async function saveKeyListItem(e) {
             e.preventDefault();
-            if (!(auth.currentUser || document.body.classList.contains('admin-mode'))) return;
+            if (!auth.currentUser) return;
             const editIdxRaw = document.getElementById('key-edit-index').value;
             const isHeader = document.getElementById('key-edit-is-header').value === '1';
             const name = (document.getElementById('key-name').value || '').trim();
@@ -2889,9 +3644,25 @@
             }
             if (stopBtn) stopBtn.style.display = 'block';
 
+            const VALID_TRESOR_QR_CODE = "KBSV-TRESOR-GASCHURN";
             const qrConfig = { fps: 10, qrbox: { width: 250, height: 250 } };
             const onScanSuccess = (decodedText, decodedResult) => {
                 if (isProcessingScan) return;
+                const scannedCode = String(decodedText || '').trim();
+                if (scannedCode !== VALID_TRESOR_QR_CODE) {
+                    isProcessingScan = true;
+                    stopQrScanner().then(() => {
+                        const errMsg = "Ungültiger QR-Code – bitte den offiziellen Tresor-QR-Code scannen";
+                        const errBox = document.getElementById('scanner-error-msg');
+                        if (errBox) {
+                            errBox.innerText = errMsg;
+                            errBox.style.display = 'block';
+                        }
+                        alert(errMsg);
+                        resetWeaponScanState();
+                    });
+                    return;
+                }
                 isProcessingScan = true;
                 const scanMode = currentScanMode;
                 const returnId = pendingReturnRecordId;
@@ -2991,25 +3762,31 @@
                 : null;
 
             let artModel = weaponDesc;
-            let calKat = "Kat. C";
+            let kaliber = "k.A.";
+            let kategorie = "Kat. C";
             let zuweisung = matched && matched.zuweisung
                 ? matched.zuweisung
                 : (zuwMatch ? zuwMatch[1].trim() : "k.A.");
 
             if (matched) {
                 artModel = `${matched.art}: ${matched.hersteller} ${matched.modell}`;
-                calKat = `${matched.kaliber} / Kat. ${matched.kat}`;
+                kaliber = matched.kaliber ? String(matched.kaliber).trim() : "k.A.";
+                const rawKat = matched.kat ? String(matched.kat).trim() : "C";
+                kategorie = /^kat\./i.test(rawKat) ? rawKat : `Kat. ${rawKat}`;
             } else {
-                const parenMatch = weaponDesc.match(/^(.+?)\s*\((.+)\)$/);
+                const parenMatch = weaponDesc.match(/^(.+?)\s*\(([^)]+)\)?$/);
                 if (parenMatch) {
                     artModel = parenMatch[1].trim();
-                    calKat = `${parenMatch[2].trim()} / Kat. C`;
+                    kaliber = parenMatch[2].trim();
+                    kategorie = "Kat. C";
                 }
             }
 
             return {
                 artModel: artModel,
-                calKat: calKat,
+                kaliber: kaliber,
+                kategorie: kategorie,
+                calKat: `${kaliber} / ${kategorie}`,
                 zuweisung: zuweisung,
                 zwrNum: serialNum,
                 zvrNum: zvrNum
@@ -3080,20 +3857,87 @@
             const valueX = labelX + valueOffset;
             const valueMaxWidth = contentWidth - boxPadX * 2 - valueOffset;
 
-            pdf.setFont("helvetica", "bold");
-            pdf.setFontSize(14);
-            const primaryLines = pdf.splitTextToSize(primaryPerson || "k.A.", valueMaxWidth - 4);
+            const primaryInfo = splitWeaponPerson(primaryPerson);
+            const secondaryInfo = splitWeaponPerson(secondaryPerson);
+
+            function preparePersonPdfLayout(parsed, fallbackText, fontSize, maxW) {
+                pdf.setFont("helvetica", "bold");
+                pdf.setFontSize(fontSize);
+                if (!parsed.name) {
+                    const fallbackLines = pdf.splitTextToSize(fallbackText, maxW);
+                    return { nameLines: fallbackLines, roleLines: [], roleInline: false, nameWidth: 0, totalLines: fallbackLines.length };
+                }
+                if (!parsed.role) {
+                    const nameLines = pdf.splitTextToSize(parsed.name, maxW);
+                    return { nameLines, roleLines: [], roleInline: false, nameWidth: 0, totalLines: nameLines.length };
+                }
+                const roleSuffix = ` (${parsed.role})`;
+                const nameWidth = pdf.getTextWidth(parsed.name);
+                const roleWidth = pdf.getTextWidth(roleSuffix);
+                if (nameWidth + roleWidth <= maxW) {
+                    return {
+                        nameLines: [parsed.name],
+                        roleLines: [roleSuffix],
+                        roleInline: true,
+                        nameWidth,
+                        totalLines: 1
+                    };
+                }
+                const nameLines = pdf.splitTextToSize(parsed.name, maxW);
+                const lastLineW = pdf.getTextWidth(nameLines[nameLines.length - 1]);
+                if (lastLineW + roleWidth <= maxW) {
+                    return {
+                        nameLines,
+                        roleLines: [roleSuffix],
+                        roleInline: true,
+                        nameWidth: lastLineW,
+                        totalLines: nameLines.length
+                    };
+                }
+                const roleLines = pdf.splitTextToSize(`(${parsed.role})`, maxW);
+                return {
+                    nameLines,
+                    roleLines,
+                    roleInline: false,
+                    nameWidth: 0,
+                    totalLines: nameLines.length + roleLines.length
+                };
+            }
+
+            function drawPersonPdfLayout(layout, startX, startY, lineH, fontSize) {
+                pdf.setFont("helvetica", "bold");
+                pdf.setFontSize(fontSize);
+                pdf.setTextColor(15, 23, 42);
+                layout.nameLines.forEach((line, idx) => {
+                    pdf.text(line, startX, startY + idx * lineH);
+                });
+                if (layout.roleLines.length > 0) {
+                    pdf.setTextColor(220, 38, 38);
+                    if (layout.roleInline) {
+                        const lastIdx = layout.nameLines.length - 1;
+                        pdf.text(layout.roleLines[0], startX + layout.nameWidth, startY + lastIdx * lineH);
+                    } else {
+                        const roleStartY = startY + layout.nameLines.length * lineH;
+                        layout.roleLines.forEach((rLine, rIdx) => {
+                            pdf.text(rLine, startX, roleStartY + rIdx * lineH);
+                        });
+                    }
+                    pdf.setTextColor(15, 23, 42);
+                }
+            }
+
+            const primaryLayout = preparePersonPdfLayout(primaryInfo, "k.A.", 14, valueMaxWidth - 4);
 
             pdf.setFont("helvetica", "bold");
             pdf.setFontSize(13.5);
             const issueLines = pdf.splitTextToSize(issueDisplay, valueMaxWidth - 4);
             const returnLines = pdf.splitTextToSize(returnDisplay, valueMaxWidth - 4);
 
-            pdf.setFont("helvetica", "normal");
+            const secondaryLayout = preparePersonPdfLayout(secondaryInfo, "Keine (Alleinübernahme)", 12, valueMaxWidth - 4);
+            pdf.setFont("helvetica", "bold");
             pdf.setFontSize(12);
-            const secondaryLines = pdf.splitTextToSize(secondaryPerson || "Keine (Alleinübernahme)", valueMaxWidth);
-            const occasionLines = pdf.splitTextToSize(data.occasion || "k.A.", valueMaxWidth);
-            const locationLines = pdf.splitTextToSize(data.location || "k.A.", valueMaxWidth);
+            const occasionLines = pdf.splitTextToSize(data.occasion || "k.A.", valueMaxWidth - 4);
+            const locationLines = pdf.splitTextToSize(data.location || "k.A.", valueMaxWidth - 4);
 
             const lineH14 = 6.5;
             const lineH13 = 6.2;
@@ -3102,19 +3946,21 @@
             const innerBoxTopOffset = 8;
             const innerBoxHeight =
                 innerBoxTopOffset +
-                (primaryLines.length * lineH14 + 3.5) +
+                (primaryLayout.totalLines * lineH14 + 3.5) +
                 (issueLines.length * lineH13 + 3) +
                 ((returnLines.length - 1) * lineH13 + 6);
 
             const detailsHeight =
-                (secondaryLines.length * lineH12 + 3) +
+                (secondaryLayout.totalLines * lineH12 + 3) +
                 (occasionLines.length * lineH12 + 3) +
                 ((locationLines.length - 1) * lineH12 + 5);
 
             const boxStartY = y;
             const highlightBoxY = boxStartY + 12.5;
-            const detailsStartY = highlightBoxY + innerBoxHeight + 7.5;
-            const outerBoxHeight = (detailsStartY - boxStartY) + detailsHeight + 2;
+            const detailsBoxY = highlightBoxY + innerBoxHeight + 4;
+            const detailsStartY = detailsBoxY + 6.5;
+            const detailsBoxHeight = (detailsStartY - detailsBoxY) + detailsHeight;
+            const outerBoxHeight = (detailsBoxY - boxStartY) + detailsBoxHeight + 4.5;
 
             // Äußere Kern-Box zeichnen
             pdf.setFillColor(241, 245, 249);
@@ -3138,77 +3984,76 @@
             }
             pdf.text(`Status: ${statusText}`, margin + contentWidth - boxPadX, curY, { align: 'right' });
 
-            // Weiße Highlight-Box für Übernehmer, Entnahme, Rückgabe
+            // Hervorgehobene Highlight-Box für Übernehmer, Entnahme, Rückgabe
             const highlightBoxX = margin + boxPadX - 1;
             const highlightBoxW = contentWidth - (boxPadX - 1) * 2;
-            pdf.setFillColor(255, 255, 255);
-            pdf.setDrawColor(185, 28, 28);
-            pdf.setLineWidth(0.5);
-            pdf.roundedRect(highlightBoxX, highlightBoxY, highlightBoxW, innerBoxHeight, 2, 2, 'FD');
+            pdf.setFillColor(254, 243, 199);
+            pdf.setDrawColor(217, 119, 6);
+            pdf.setLineWidth(0.8);
+            pdf.roundedRect(highlightBoxX, highlightBoxY, highlightBoxW, innerBoxHeight, 2.5, 2.5, 'FD');
 
             curY = highlightBoxY + innerBoxTopOffset;
 
             // a) Übernehmer
             pdf.setFont("helvetica", "bold");
             pdf.setFontSize(13.5);
-            pdf.setTextColor(51, 65, 85);
+            pdf.setTextColor(15, 23, 42);
             pdf.text("Übernehmer:", labelX + 2, curY);
-            pdf.setFont("helvetica", "bold");
-            pdf.setFontSize(14);
-            pdf.setTextColor(0, 0, 0);
-            pdf.text(primaryLines, valueX, curY);
-            curY += primaryLines.length * lineH14 + 3.5;
+            drawPersonPdfLayout(primaryLayout, valueX, curY, lineH14, 14);
+            curY += primaryLayout.totalLines * lineH14 + 3.5;
 
             // b) Entnahme
             pdf.setFont("helvetica", "bold");
             pdf.setFontSize(13);
-            pdf.setTextColor(51, 65, 85);
+            pdf.setTextColor(15, 23, 42);
             pdf.text("Entnahme:", labelX + 2, curY);
             pdf.setFont("helvetica", "bold");
             pdf.setFontSize(13.5);
-            pdf.setTextColor(0, 0, 0);
+            pdf.setTextColor(30, 41, 59);
             pdf.text(issueLines, valueX, curY);
             curY += issueLines.length * lineH13 + 3;
 
             // c) Rückgabe
             pdf.setFont("helvetica", "bold");
             pdf.setFontSize(13);
-            pdf.setTextColor(51, 65, 85);
-            pdf.text("Rückgabe:", labelX + 2, curY);
-            pdf.setFont("helvetica", "bold");
-            pdf.setFontSize(13.5);
             if (isReturned) {
                 pdf.setTextColor(21, 128, 61);
             } else {
                 pdf.setTextColor(185, 28, 28);
             }
+            pdf.text("Rückgabe:", labelX + 2, curY);
+            pdf.setFont("helvetica", "bold");
+            pdf.setFontSize(13.5);
             pdf.text(returnLines, valueX, curY);
 
-            // Weitere Angaben (12 pt)
+            // Weitere Angaben in eigener Info-Box (12 pt fett & kontrastreich)
+            pdf.setFillColor(241, 245, 249);
+            pdf.setDrawColor(203, 213, 225);
+            pdf.setLineWidth(0.5);
+            pdf.roundedRect(highlightBoxX, detailsBoxY, highlightBoxW, detailsBoxHeight, 2.2, 2.2, 'FD');
+
             curY = detailsStartY;
 
             pdf.setFont("helvetica", "bold");
             pdf.setFontSize(12);
-            pdf.setTextColor(30, 41, 59);
-            pdf.text("Mitabholer:", labelX, curY);
-            pdf.setFont("helvetica", "normal");
-            pdf.setTextColor(0, 0, 0);
-            pdf.text(secondaryLines, valueX, curY);
-            curY += secondaryLines.length * lineH12 + 3;
+            pdf.setTextColor(15, 23, 42);
+            pdf.text("Mitabholer:", labelX + 2, curY);
+            drawPersonPdfLayout(secondaryLayout, valueX, curY, lineH12, 12);
+            curY += secondaryLayout.totalLines * lineH12 + 3;
 
             pdf.setFont("helvetica", "bold");
+            pdf.setTextColor(15, 23, 42);
+            pdf.text("Anlass:", labelX + 2, curY);
+            pdf.setFont("helvetica", "bold");
             pdf.setTextColor(30, 41, 59);
-            pdf.text("Anlass:", labelX, curY);
-            pdf.setFont("helvetica", "normal");
-            pdf.setTextColor(0, 0, 0);
             pdf.text(occasionLines, valueX, curY);
             curY += occasionLines.length * lineH12 + 3;
 
             pdf.setFont("helvetica", "bold");
+            pdf.setTextColor(15, 23, 42);
+            pdf.text("Ort:", labelX + 2, curY);
+            pdf.setFont("helvetica", "bold");
             pdf.setTextColor(30, 41, 59);
-            pdf.text("Ort:", labelX, curY);
-            pdf.setFont("helvetica", "normal");
-            pdf.setTextColor(0, 0, 0);
             pdf.text(locationLines, valueX, curY);
 
             // 4. Abschnittstitel Waffentabelle (14 pt fett)
@@ -3222,7 +4067,9 @@
                 const parsed = parseWeaponItemForPDF(item);
                 return [
                     String(idx + 1),
-                    `${parsed.artModel}\n${parsed.calKat}`,
+                    parsed.artModel,
+                    parsed.kaliber,
+                    parsed.kategorie,
                     parsed.zuweisung,
                     parsed.zwrNum,
                     parsed.zvrNum
@@ -3233,17 +4080,17 @@
                 startY: tableSectionY + 4,
                 margin: { left: margin, right: margin },
                 tableWidth: contentWidth,
-                head: [['Nr.', 'Waffe, Kaliber & Kat.', 'Waffenzuweisung', 'ZWR-Nummer', 'ZVR-Zahl']],
+                head: [['Nr.', 'Waffe', 'Kaliber', 'Kategorie', 'Waffenzuweisung', 'ZWR-Nummer', 'ZVR-Zahl']],
                 body: tableRows,
                 theme: 'grid',
                 styles: {
                     font: 'helvetica',
-                    fontSize: 11.5,
+                    fontSize: 9.5,
                     textColor: [0, 0, 0],
                     fillColor: [255, 255, 255],
                     lineColor: [100, 116, 139],
                     lineWidth: 0.35,
-                    cellPadding: { top: 4.5, right: 3, bottom: 4.5, left: 3 },
+                    cellPadding: { top: 4, right: 2.2, bottom: 4, left: 2.2 },
                     valign: 'middle',
                     overflow: 'linebreak'
                 },
@@ -3251,18 +4098,20 @@
                     fillColor: [30, 41, 59],
                     textColor: [255, 255, 255],
                     fontStyle: 'bold',
-                    fontSize: 11.5,
-                    cellPadding: { top: 5, right: 3, bottom: 5, left: 3 }
+                    fontSize: 9.5,
+                    cellPadding: { top: 4.5, right: 2.2, bottom: 4.5, left: 2.2 }
                 },
                 alternateRowStyles: {
                     fillColor: [248, 250, 252]
                 },
                 columnStyles: {
                     0: { cellWidth: 11, halign: 'center', fontStyle: 'bold' },
-                    1: { cellWidth: 55 },
-                    2: { cellWidth: 46, fontStyle: 'bold', textColor: [0, 0, 0] },
-                    3: { cellWidth: 37, fontStyle: 'bold', textColor: [0, 0, 0] },
-                    4: { cellWidth: 33, fontStyle: 'bold', textColor: [0, 0, 0] }
+                    1: { cellWidth: 39, fontStyle: 'bold' },
+                    2: { cellWidth: 20 },
+                    3: { cellWidth: 22 },
+                    4: { cellWidth: 36, fontStyle: 'bold', textColor: [0, 0, 0] },
+                    5: { cellWidth: 30, fontStyle: 'bold', textColor: [0, 0, 0] },
+                    6: { cellWidth: 24, fontStyle: 'bold', textColor: [0, 0, 0] }
                 }
             });
 
@@ -3294,8 +4143,21 @@
 
                 let selectedWeaponsData = [];
                 checkboxes.forEach(cb => {
-                    selectedWeaponsData.push(cb.value);
+                    const weaponId = String(cb.value || '').trim();
+                    const matchedWeapon = (officialWeaponList || []).find(w =>
+                        String(w.id || w.docId || '').trim() === weaponId ||
+                        String(w.docId || '').trim() === weaponId
+                    );
+                    if (matchedWeapon) {
+                        const zuwText = String(matchedWeapon.zuweisung || 'Reserve').trim();
+                        selectedWeaponsData.push(`${matchedWeapon.hersteller} ${matchedWeapon.modell} (${matchedWeapon.kaliber} / Nr. ${matchedWeapon.nummer} / ZVR-624291509 / Zuw: ${zuwText})`);
+                    }
                 });
+
+                if (selectedWeaponsData.length === 0) {
+                    alert("Fehler: Die ausgewählten Waffen konnten nicht zugeordnet werden. Bitte Seite neu laden.");
+                    return;
+                }
 
                 const now = new Date();
                 const dateStr = now.toLocaleDateString('de-AT');
@@ -3452,7 +4314,7 @@
         }
 
         async function loadAdminWeaponPDFs() {
-            if (!(auth.currentUser || document.body.classList.contains('admin-mode'))) return;
+            if (!auth.currentUser) return;
             const container = document.getElementById('admin-weapon-pdf-list');
             if (!container) return;
 
@@ -3462,7 +4324,7 @@
                 window.weaponPdfMap = {};
 
                 if (snapshot.empty) {
-                    container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Protokolle im Admin-Archiv.</p>';
+                    container.innerHTML = '<p class="admin-muted-text">Keine Protokolle im Admin-Archiv.</p>';
                     return;
                 }
 
@@ -3470,22 +4332,66 @@
                     const data = doc.data() || {};
                     window.weaponPdfMap[doc.id] = { ...data, id: data.id || doc.id };
 
+                    let primaryPerson = data.primaryName || "";
+                    let secondaryPerson = data.secondaryName || "";
+                    if (!primaryPerson && data.collectorStr) {
+                        if (data.collectorStr.includes(" (+ ")) {
+                            const parts = data.collectorStr.split(" (+ ");
+                            primaryPerson = parts[0].trim();
+                            secondaryPerson = parts[1].replace(/\)$/, "").trim();
+                        } else {
+                            primaryPerson = data.collectorStr.trim();
+                        }
+                    }
+
+                    const statusText = data.status || (data.returnTime ? "Zurückgebracht" : "Ausgeliehen");
+                    const isReturned = statusText.toLowerCase().includes("zurück");
+                    const issueDisplay = data.issueTime ? formatPdfTimestamp(data.issueTime) : "k.A.";
+
+                    const weapons = Array.isArray(data.selectedWeapons) ? data.selectedWeapons : [];
                     let weaponsSummary = "";
-                    (data.selectedWeapons || []).forEach(w => {
-                        weaponsSummary += `<span style="font-size: 0.75em; color: #b91c1c; display:block;">• ${escapeHtml(w)}</span>`;
-                    });
+                    if (weapons.length === 0) {
+                        weaponsSummary = `<div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; margin-top: 6px; font-size: 0.9rem; color: #475569; font-weight: 600;">Keine Waffen im Protokoll hinterlegt.</div>`;
+                    } else {
+                        weapons.forEach(w => {
+                            const parsed = parseWeaponItemForPDF(w);
+                            weaponsSummary += `
+                                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; margin-top: 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 0.92rem; line-height: 1.4;">
+                                    <span style="font-weight: 800; color: #0f172a;">${escapeHtml(parsed.artModel)}</span>
+                                    <span style="display: inline-block; background: #e2e8f0; color: #0f172a; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.85em; white-space: nowrap;">${escapeHtml(parsed.kaliber)}</span>
+                                    <span style="font-weight: 800; color: #1e293b; white-space: nowrap;">ZWR: ${escapeHtml(parsed.zwrNum)}</span>
+                                    <span style="font-weight: 700; color: #334155; white-space: nowrap;">ZVR: ${escapeHtml(parsed.zvrNum)}</span>
+                                </div>
+                            `;
+                        });
+                    }
 
                     const safeDocId = escapeHtml(doc.id);
+                    const primaryHtml = primaryPerson
+                        ? formatWeaponPersonHtml(primaryPerson)
+                        : '<span style="font-weight: 700; color: #1e293b;">k.A.</span>';
+                    const secondaryHtml = secondaryPerson
+                        ? ` <span style="color: #475569; font-weight: 700;">(+ ${formatWeaponPersonHtml(secondaryPerson)})</span>`
+                        : '';
+
                     html += `
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #e2e8f0; font-size: 0.85em; gap: 10px;">
-                            <div style="flex: 1;">
-                                <strong>ID: ${escapeHtml(data.id || doc.id)}</strong> | 👤 ${escapeHtml(data.collectorStr || '')}<br>
-                                <span style="color:var(--text-muted); font-size:0.8em;">Anlass: ${escapeHtml(data.occasion || '')} (${escapeHtml(data.issueTime || '')}) | Status: ${escapeHtml(data.status || '')}</span>
-                                <div style="margin-top: 4px;">${weaponsSummary}</div>
+                        <div class="admin-list-row" style="flex-direction: column; align-items: stretch; gap: 10px; padding: 14px;">
+                            <div style="width: 100%;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                                    <span style="display: inline-block; background: #0f172a; color: #ffffff; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.84rem; white-space: nowrap;">ID: ${escapeHtml(data.id || doc.id)}</span>
+                                    <span style="display: inline-block; background: ${isReturned ? '#dcfce7' : '#fee2e2'}; color: ${isReturned ? '#15803d' : '#b91c1c'}; border: 1px solid ${isReturned ? '#86efac' : '#fca5a5'}; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.84rem; white-space: nowrap;">Status: ${escapeHtml(statusText)}</span>
+                                </div>
+                                <div style="font-size: 1rem; line-height: 1.45; margin-bottom: 4px; color: #0f172a;">
+                                    <strong style="color: #0f172a;">Übernehmer:</strong> ${primaryHtml}${secondaryHtml}
+                                </div>
+                                <div style="font-size: 0.95rem; font-weight: 600; color: #1e293b; line-height: 1.45; margin-bottom: 6px;">
+                                    <strong style="color: #0f172a;">Anlass:</strong> ${escapeHtml(data.occasion || 'k.A.')} <span style="color: #94a3b8; margin: 0 4px;">|</span> <strong style="color: #0f172a;">Datum/Uhrzeit:</strong> <span style="white-space: nowrap;">${escapeHtml(issueDisplay)}</span>
+                                </div>
+                                <div>${weaponsSummary}</div>
                             </div>
-                            <div style="display: flex; gap: 6px; flex-shrink: 0;">
-                                <button type="button" class="btn btn-admin weapon-pdf-preview-btn" style="padding: 6px 10px; font-size: 12px;" data-doc-id="${safeDocId}">👁️ Ansehen</button>
-                                <button type="button" class="btn btn-green weapon-pdf-download-btn" style="padding: 6px 10px; font-size: 12px;" data-doc-id="${safeDocId}">📥 Herunterladen</button>
+                            <div style="display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; padding-top: 2px;">
+                                <button type="button" class="btn admin-btn-edit weapon-pdf-preview-btn" style="padding: 7px 12px !important; font-size: 13px !important;" data-doc-id="${safeDocId}">👁️ Ansehen</button>
+                                <button type="button" class="btn admin-btn-save weapon-pdf-download-btn" style="padding: 7px 12px !important; font-size: 13px !important;" data-doc-id="${safeDocId}">📥 Herunterladen</button>
                             </div>
                         </div>
                     `;
@@ -3570,17 +4476,19 @@
             const weapons = Array.isArray(data.selectedWeapons) ? data.selectedWeapons : [];
             let rowsHtml = "";
             if (weapons.length === 0) {
-                rowsHtml = `<tr><td colspan="5" style="padding:8px; text-align:center; color:#64748b;">Keine Waffen im Eintrag hinterlegt.</td></tr>`;
+                rowsHtml = `<tr><td colspan="7" style="padding:8px; text-align:center; color:#64748b;">Keine Waffen im Eintrag hinterlegt.</td></tr>`;
             } else {
                 weapons.forEach((item, idx) => {
                     const parsed = parseWeaponItemForPDF(item);
                     rowsHtml += `
                         <tr style="background:${idx % 2 === 1 ? '#f8fafc' : '#ffffff'};">
                             <td style="padding:6px 8px; border:1px solid #cbd5e1; text-align:center; font-weight:700;">${idx + 1}</td>
-                            <td style="padding:6px 8px; border:1px solid #cbd5e1;"><strong>${escapeHtml(parsed.artModel)}</strong><br><span style="font-size:0.85em; color:#475569;">${escapeHtml(parsed.calKat)}</span></td>
+                            <td style="padding:6px 8px; border:1px solid #cbd5e1; font-weight:700;">${escapeHtml(parsed.artModel)}</td>
+                            <td style="padding:6px 8px; border:1px solid #cbd5e1; white-space:nowrap;">${escapeHtml(parsed.kaliber)}</td>
+                            <td style="padding:6px 8px; border:1px solid #cbd5e1; white-space:nowrap;">${escapeHtml(parsed.kategorie)}</td>
                             <td style="padding:6px 8px; border:1px solid #cbd5e1; font-weight:700;">${escapeHtml(parsed.zuweisung)}</td>
-                            <td style="padding:6px 8px; border:1px solid #cbd5e1; font-weight:700;">${escapeHtml(parsed.zwrNum)}</td>
-                            <td style="padding:6px 8px; border:1px solid #cbd5e1; font-weight:700;">${escapeHtml(parsed.zvrNum)}</td>
+                            <td style="padding:6px 8px; border:1px solid #cbd5e1; font-weight:700; white-space:nowrap;">${escapeHtml(parsed.zwrNum)}</td>
+                            <td style="padding:6px 8px; border:1px solid #cbd5e1; font-weight:700; white-space:nowrap;">${escapeHtml(parsed.zvrNum)}</td>
                         </tr>
                     `;
                 });
@@ -3597,15 +4505,15 @@
                         <strong style="font-size:0.95em;">Protokoll-Übersicht</strong>
                         <span style="padding:2px 8px; border-radius:6px; font-weight:800; font-size:0.82em; background:${isReturned ? '#dcfce7' : '#fee2e2'}; color:${isReturned ? '#15803d' : '#b91c1c'};">Status: ${escapeHtml(statusText)}</span>
                     </div>
-                    <div style="background:#ffffff; border:1px solid #b91c1c; border-radius:8px; padding:8px 10px; margin-bottom:8px;">
-                        <div><strong>Übernehmer:</strong> ${escapeHtml(primaryPerson || 'k.A.')}</div>
-                        <div><strong>Entnahme:</strong> ${escapeHtml(issueDisplay)}</div>
-                        <div><strong>Rückgabe:</strong> <span style="font-weight:700; color:${isReturned ? '#15803d' : '#b91c1c'};">${escapeHtml(returnDisplay)}</span></div>
+                    <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 2px solid #d97706; border-radius: 14px; padding: 14px 16px; box-shadow: 0 6px 16px rgba(217, 119, 6, 0.18); margin-bottom: 10px; font-size: 1rem; line-height: 1.55;">
+                        <div><span style="font-weight: 800; color: #0f172a;">Übernehmer:</span> ${primaryPerson ? formatWeaponPersonHtml(primaryPerson) : '<span style="font-weight: 700; color: #1e293b;">k.A.</span>'}</div>
+                        <div><span style="font-weight: 800; color: #0f172a;">Entnahme:</span> <span style="font-weight: 700; color: #1e293b;">${escapeHtml(issueDisplay)}</span></div>
+                        <div style="color: ${isReturned ? '#15803d' : '#b91c1c'}; font-weight: 800;"><span>Rückgabe:</span> <span>${escapeHtml(returnDisplay)}</span></div>
                     </div>
-                    <div style="font-size:0.9em;">
-                        <div><strong>Mitabholer:</strong> ${escapeHtml(secondaryPerson || 'Keine (Alleinübernahme)')}</div>
-                        <div><strong>Anlass:</strong> ${escapeHtml(data.occasion || 'k.A.')}</div>
-                        <div><strong>Ort:</strong> ${escapeHtml(data.location || 'k.A.')}</div>
+                    <div style="background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px 16px; margin-top: 10px; font-size: 1rem; line-height: 1.6;">
+                        <div><span style="font-weight: 800; color: #0f172a;">Mitabholer:</span> ${secondaryPerson ? formatWeaponPersonHtml(secondaryPerson) : '<span style="font-weight: 700; color: #1e293b;">Keine (Alleinübernahme)</span>'}</div>
+                        <div><span style="font-weight: 800; color: #0f172a;">Anlass:</span> <span style="font-weight: 700; color: #1e293b;">${escapeHtml(data.occasion || 'k.A.')}</span></div>
+                        <div><span style="font-weight: 800; color: #0f172a;">Ort:</span> <span style="font-weight: 700; color: #1e293b;">${escapeHtml(data.location || 'k.A.')}</span></div>
                     </div>
                 </div>
                 <div style="font-weight:800; margin-bottom:6px; color:#0f172a;">Entnommene Waffen (Kat. C – Unzensierte Registerdaten)</div>
@@ -3614,7 +4522,9 @@
                         <thead>
                             <tr style="background:#1e293b; color:#ffffff;">
                                 <th style="padding:6px 8px; text-align:center;">Nr.</th>
-                                <th style="padding:6px 8px; text-align:left;">Waffe, Kaliber &amp; Kat.</th>
+                                <th style="padding:6px 8px; text-align:left;">Waffe</th>
+                                <th style="padding:6px 8px; text-align:left;">Kaliber</th>
+                                <th style="padding:6px 8px; text-align:left;">Kategorie</th>
                                 <th style="padding:6px 8px; text-align:left;">Waffenzuweisung</th>
                                 <th style="padding:6px 8px; text-align:left;">ZWR-Nummer</th>
                                 <th style="padding:6px 8px; text-align:left;">ZVR-Zahl</th>
@@ -3822,7 +4732,7 @@
         }
 
         async function loadInvoices() {
-            if (!(auth.currentUser || document.body.classList.contains('admin-mode'))) return;
+            if (!auth.currentUser) return;
             const container = document.getElementById('admin-tally-history-list');
             if (!container) return;
             try {
@@ -3831,7 +4741,7 @@
                 window.invoicesMap = {};
                 
                 if (snapshot.empty) {
-                    container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85em; text-align:center; padding:10px;">Keine Rechnungen in der Datenbank gefunden.</p>';
+                    container.innerHTML = '<p class="admin-muted-text" style="text-align:center; padding:10px;">Keine Rechnungen in der Datenbank gefunden.</p>';
                     return;
                 }
 
@@ -3848,15 +4758,15 @@
 
                     const safeDocId = escapeHtml(doc.id);
                     html += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #e2e8f0; gap: 6px; font-size: 0.85em;">
-                            <div>
-                                <strong style="color:var(--text-dark);">${escapeHtml(inv.invoiceNum || 'RE')}</strong> - ${escapeHtml(inv.recipientName || 'Kunde')}<br>
-                                <span style="color:var(--primary-red); font-weight:700;">€ ${amountStr}</span> <span style="color:var(--text-muted); font-size:0.8em;">(${escapeHtml(inv.date || '')})</span>
+                        <div class="admin-list-row">
+                            <div style="flex:1; min-width:0;">
+                                <strong style="color:#0f172a;">${escapeHtml(inv.invoiceNum || 'RE')}</strong> – <span style="color:#334155;">${escapeHtml(inv.recipientName || 'Kunde')}</span><br>
+                                <span style="color:#15803d; font-weight:800;">€ ${amountStr}</span> <span style="color:#64748b; font-size:0.86em;">(${escapeHtml(inv.date || '')})</span>
                             </div>
-                            <div style="display: flex; gap: 4px;">
-                                <button class="btn btn-admin" style="padding: 6px 10px; font-size: 0.75em;" data-doc-id="${safeDocId}" onclick="viewInvoiceModal(this.dataset.docId)" title="Rechnung Ansehen">👁️</button>
-                                <button class="btn btn-green" style="padding: 6px 10px; font-size: 0.75em;" data-doc-id="${safeDocId}" onclick="generateInvoicePDF(this.dataset.docId)" title="PDF Herunterladen">📥</button>
-                                <button class="btn btn-danger" style="padding: 6px 10px; font-size: 0.75em;" data-doc-id="${safeDocId}" onclick="deleteItem('tally_billings', this.dataset.docId)" title="Löschen">🗑️</button>
+                            <div style="display: flex; gap: 5px; flex-shrink: 0;">
+                                <button type="button" class="btn admin-btn-edit" style="padding: 6px 9px !important; font-size: 0.78em !important;" data-doc-id="${safeDocId}" onclick="viewInvoiceModal(this.dataset.docId)" title="Rechnung Ansehen">👁️</button>
+                                <button type="button" class="btn admin-btn-save" style="padding: 6px 9px !important; font-size: 0.78em !important;" data-doc-id="${safeDocId}" onclick="generateInvoicePDF(this.dataset.docId)" title="PDF Herunterladen">📥</button>
+                                <button type="button" class="btn admin-btn-delete" style="padding: 6px 9px !important; font-size: 0.78em !important;" data-doc-id="${safeDocId}" onclick="deleteItem('tally_billings', this.dataset.docId)" title="Löschen">🗑️</button>
                             </div>
                         </div>
                     `;
@@ -4065,12 +4975,39 @@
             }
         }
 
-        // --- VEREINS-ZUGANGSCODE & SICHERES NACHLADEN NACH ENTSPERREN ---
+        // --- VEREINS-ZUGANGSCODE (SHA-256 HASH) & SICHERES NACHLADEN NACH ENTSPERREN ---
         const CLUB_PIN_STORAGE_KEY = 'kbsv_club_pin';
-        let currentFirestoreClubPin = null;
+        let currentFirestoreClubPinHash = null;
         let appDataLoadedAfterUnlock = false;
 
+        async function sha256Hex(text) {
+            const raw = String(text === undefined || text === null ? '' : text);
+            if (typeof crypto !== 'undefined' && crypto.subtle && typeof TextEncoder !== 'undefined') {
+                const bytes = new TextEncoder().encode(raw);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
+                return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+            let h1 = 0xdeadbeef ^ raw.length, h2 = 0x41c6ce57 ^ raw.length;
+            for (let i = 0; i < raw.length; i++) {
+                const ch = raw.charCodeAt(i);
+                h1 = Math.imul(h1 ^ ch, 2654435761);
+                h2 = Math.imul(h2 ^ ch, 1597334677);
+            }
+            h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+            h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+            return ('00000000' + (h2 >>> 0).toString(16)).slice(-8) + ('00000000' + (h1 >>> 0).toString(16)).slice(-8);
+        }
+
+        function isSha256Hex(val) {
+            return typeof val === 'string' && /^[a-f0-9]{64}$/i.test(val.trim());
+        }
+
         function loadAppDataAfterUnlock() {
+            if (!officialActiveMembers || officialActiveMembers.length === 0) {
+                officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
+            }
+            try { populateWeaponMemberSelects(); } catch(e) {}
+            try { loadPublicMembersList(); } catch(e) {}
             if (!appDataLoadedAfterUnlock) {
                 appDataLoadedAfterUnlock = true;
                 try { initDutyPlanRealtimeListener(); } catch(e) {}
@@ -4085,7 +5022,11 @@
         }
 
         function loadAdminProtectedData() {
+            if (!auth.currentUser) return;
             loadAppDataAfterUnlock();
+            try { lockSecuritySettingsFields(); } catch(e) {}
+            try { switchAdminSection('admin-sec-news-events'); } catch(e) {}
+            try { renderAdminMembersOverview(); } catch(e) {}
             try { loadInvoices(); } catch(e) {}
             try { loadKeyList(); } catch(e) {}
             try { loadInventory(); renderInventoryDisplay(); } catch(e) {}
@@ -4112,32 +5053,65 @@
             lastRenderedDutySignature = null;
             window.weaponPdfMap = {};
             window.invoicesMap = {};
+            loadedClubPinValue = '';
+            loadedOneSignalKeyValue = '';
+            try { lockSecuritySettingsFields(); } catch(e) {}
             try { localStorage.removeItem(DUTY_PLAN_CACHE_KEY); } catch(e) {}
 
             populateWeaponMemberSelects();
-            ['next-duty-widget', 'full-roster-list', 'archive-roster-list', 'events-container', 'news-container', 'public-members-list', 'weapon-checkboxes-container', 'weapon-history-list', 'admin-keys-list', 'admin-weapon-pdf-list', 'admin-tally-history-list'].forEach(id => {
+            ['next-duty-widget', 'full-roster-list', 'archive-roster-list', 'events-container', 'news-container', 'public-members-list', 'weapon-checkboxes-container', 'weapon-history-list', 'admin-keys-list', 'admin-weapon-pdf-list', 'admin-tally-history-list', 'admin-members-overview'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.innerHTML = '';
             });
         }
 
-        async function fetchOrInitClubPinFromFirestore(allowWrite = false) {
-            const fallbackPin = String(2026);
+        async function resolveClubPinHashFromData(data, allowMigrate = false) {
+            if (!data) return null;
+            const rawHash = data.clubPinHash !== undefined && data.clubPinHash !== null ? String(data.clubPinHash).trim() : '';
+            if (isSha256Hex(rawHash)) {
+                return rawHash.toLowerCase();
+            }
+            const rawClubPin = data.clubPin !== undefined && data.clubPin !== null ? String(data.clubPin).trim() : '';
+            if (!rawClubPin) return null;
+            if (isSha256Hex(rawClubPin)) {
+                return rawClubPin.toLowerCase();
+            }
+            const computedHash = await sha256Hex(rawClubPin);
+            if (allowMigrate && auth.currentUser) {
+                try {
+                    await db.collection("settings").doc("access").set({
+                        clubPin: computedHash,
+                        clubPinHash: computedHash,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                } catch (e) {}
+            }
+            return computedHash;
+        }
+
+        async function fetchOrInitClubPinFromFirestore(allowMigrate = false) {
             try {
                 const docRef = db.collection("settings").doc("access");
                 const doc = await docRef.get();
-                if (doc.exists && doc.data() && doc.data().clubPin !== undefined && doc.data().clubPin !== null && String(doc.data().clubPin).trim() !== "") {
-                    currentFirestoreClubPin = String(doc.data().clubPin).trim();
-                    return currentFirestoreClubPin;
-                }
-                if (allowWrite && auth.currentUser) {
-                    try {
-                        await docRef.set({ clubPin: fallbackPin }, { merge: true });
-                    } catch (writeErr) {}
+                if (doc.exists && doc.data()) {
+                    const resolvedHash = await resolveClubPinHashFromData(doc.data(), allowMigrate);
+                    if (resolvedHash) {
+                        currentFirestoreClubPinHash = resolvedHash;
+                        return currentFirestoreClubPinHash;
+                    }
                 }
             } catch (e) {}
-            currentFirestoreClubPin = currentFirestoreClubPin || fallbackPin;
-            return currentFirestoreClubPin;
+            return currentFirestoreClubPinHash;
+        }
+
+        async function getNormalizedSavedClubToken() {
+            let savedToken = null;
+            try { savedToken = localStorage.getItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+            if (!savedToken) return null;
+            if (isSha256Hex(savedToken)) return savedToken.trim().toLowerCase();
+            const convertedToken = await sha256Hex(savedToken);
+            try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, convertedToken); } catch (e) {}
+            return convertedToken;
         }
 
         function unlockClubApp() {
@@ -4233,14 +5207,15 @@
 
             if (submitBtn) submitBtn.disabled = true;
             try {
-                const validPin = await fetchOrInitClubPinFromFirestore(false);
-                if (enteredPin === validPin) {
-                    try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, enteredPin); } catch (err) {}
+                const enteredHash = await sha256Hex(enteredPin);
+                const validHash = await fetchOrInitClubPinFromFirestore(false);
+                if (validHash && enteredHash === validHash) {
+                    try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, enteredHash); } catch (err) {}
                     unlockClubApp();
                     switchTab('news');
                 } else {
                     if (errEl) {
-                        errEl.innerText = "Falscher Zugangscode";
+                        errEl.innerText = validHash ? "Falscher Zugangscode" : "Zugangscode noch nicht im System hinterlegt";
                         errEl.style.display = 'block';
                     }
                     if (inputEl) {
@@ -4249,12 +5224,8 @@
                     }
                 }
             } catch (err) {
-                if (enteredPin === String(2026)) {
-                    try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, enteredPin); } catch (storageErr) {}
-                    unlockClubApp();
-                    switchTab('news');
-                } else if (errEl) {
-                    errEl.innerText = "Falscher Zugangscode";
+                if (errEl) {
+                    errEl.innerText = "Verbindungsfehler beim Prüfen des Zugangscodes";
                     errEl.style.display = 'block';
                 }
             } finally {
@@ -4263,35 +5234,50 @@
         }
 
         async function loadAdminClubPin() {
+            if (!auth.currentUser) return;
             const adminPinInput = document.getElementById('admin-club-pin-input');
             if (!adminPinInput) return;
             try {
-                const pin = await fetchOrInitClubPinFromFirestore(true);
-                adminPinInput.value = pin;
+                const pinHash = await fetchOrInitClubPinFromFirestore(true);
+                loadedClubPinValue = pinHash || '';
+                if (masterSecurityUnlocked) {
+                    adminPinInput.value = '';
+                    adminPinInput.placeholder = 'Neuen Vereins-Zugangscode eingeben';
+                } else {
+                    adminPinInput.value = '••••••••';
+                }
             } catch (e) {}
         }
 
         async function updateClubAccessPin(e) {
             e.preventDefault();
             if (!auth.currentUser) return;
+            if (!masterSecurityUnlocked) {
+                alert("Dieser Bereich ist geschützt. Bitte zuerst mit dem Haupt-Admin Master-PIN entsperren.");
+                return;
+            }
             const adminPinInput = document.getElementById('admin-club-pin-input');
             const newPin = adminPinInput ? adminPinInput.value.trim() : "";
             if (!newPin) {
-                alert("Bitte einen gültigen Zugangscode eingeben!");
+                alert("Bitte einen gültigen neuen Zugangscode eingeben!");
                 return;
             }
             try {
+                const newPinHash = await sha256Hex(newPin);
                 await db.collection("settings").doc("access").set({
-                    clubPin: newPin,
+                    clubPin: newPinHash,
+                    clubPinHash: newPinHash,
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
-                currentFirestoreClubPin = newPin;
+                currentFirestoreClubPinHash = newPinHash;
+                loadedClubPinValue = newPinHash;
                 try {
                     if (localStorage.getItem(CLUB_PIN_STORAGE_KEY)) {
-                        localStorage.setItem(CLUB_PIN_STORAGE_KEY, newPin);
+                        localStorage.setItem(CLUB_PIN_STORAGE_KEY, newPinHash);
                     }
                 } catch (err) {}
-                alert("Vereins-Zugangscode erfolgreich geändert! Alle Geräte mit dem alten Code werden automatisch wieder gesperrt.");
+                lockSecuritySettingsFields();
+                alert("Vereins-Zugangscode erfolgreich als SHA-256-Hash gespeichert! Alle Geräte mit dem alten Code werden automatisch wieder gesperrt.");
             } catch (err) {
                 alert("Fehler beim Speichern des Zugangscodes: " + err.message);
             }
@@ -4299,41 +5285,36 @@
 
         function initClubAccessGuard() {
             try {
-                db.collection("settings").doc("access").onSnapshot((doc) => {
-                    let remotePin = String(2026);
-                    if (doc.exists && doc.data() && doc.data().clubPin !== undefined && doc.data().clubPin !== null && String(doc.data().clubPin).trim() !== "") {
-                        remotePin = String(doc.data().clubPin).trim();
-                    } else if (auth.currentUser) {
-                        fetchOrInitClubPinFromFirestore(true).catch(() => {});
+                db.collection("settings").doc("access").onSnapshot(async (doc) => {
+                    let remoteHash = null;
+                    if (doc.exists && doc.data()) {
+                        remoteHash = await resolveClubPinHashFromData(doc.data(), !!auth.currentUser);
                     }
 
-                    currentFirestoreClubPin = remotePin;
+                    currentFirestoreClubPinHash = remoteHash;
+                    loadedClubPinValue = remoteHash || '';
                     const adminPinInput = document.getElementById('admin-club-pin-input');
-                    if (adminPinInput && document.activeElement !== adminPinInput) {
-                        adminPinInput.value = remotePin;
+                    if (adminPinInput && masterSecurityUnlocked && document.activeElement !== adminPinInput) {
+                        adminPinInput.value = '';
+                        adminPinInput.placeholder = 'Neuen Vereins-Zugangscode eingeben';
                     }
 
-                    const isAdminLoggedIn = !!(auth.currentUser || document.body.classList.contains('admin-mode'));
+                    const isAdminLoggedIn = !!auth.currentUser;
                     const isDirectAdminFlow = document.body.classList.contains('admin-direct-login');
-                    let savedPin = null;
-                    try { savedPin = localStorage.getItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+                    const savedToken = await getNormalizedSavedClubToken();
 
-                    if (savedPin && savedPin === remotePin) {
+                    if (savedToken && remoteHash && savedToken === remoteHash) {
                         unlockClubApp();
                     } else if (!isAdminLoggedIn && !isDirectAdminFlow) {
                         const wasUnlocked = !document.body.classList.contains('app-locked');
-                        if (wasUnlocked || savedPin) {
+                        if (wasUnlocked || savedToken) {
                             lockClubApp(false);
                         }
-                    } else if (savedPin && savedPin !== remotePin) {
+                    } else if (savedToken && remoteHash && savedToken !== remoteHash) {
                         try { localStorage.removeItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
                     }
-                }, () => {
-                    currentFirestoreClubPin = currentFirestoreClubPin || String(2026);
-                });
-            } catch (e) {
-                currentFirestoreClubPin = currentFirestoreClubPin || String(2026);
-            }
+                }, () => {});
+            } catch (e) {}
         }
 
         function handleAdminLogin(e) {
@@ -4369,30 +5350,33 @@
                 });
         }
 
-        function logoutAdmin() {
-            auth.signOut().then(() => {
+        function logoutAdmin(reason = 'manual') {
+            const isInactivityLogout = (reason === 'inactivity');
+            auth.signOut().then(async () => {
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
                 if (pwdInput) pwdInput.value = '';
-                const pushKeyInput = document.getElementById('admin-onesignal-key-input');
-                if (pushKeyInput) pushKeyInput.value = '';
+                loadedClubPinValue = '';
+                loadedOneSignalKeyValue = '';
+                try { lockSecuritySettingsFields(); } catch(e) {}
                 
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
 
-                let savedPin = null;
-                try { savedPin = localStorage.getItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
-                if (!savedPin || (currentFirestoreClubPin && savedPin !== currentFirestoreClubPin)) {
+                const savedToken = await getNormalizedSavedClubToken();
+                if (!savedToken || !currentFirestoreClubPinHash || savedToken !== currentFirestoreClubPinHash) {
                     lockClubApp(true);
                 } else {
                     loadNews();
                     loadWeaponHistory();
                 }
-                alert("Admin-Modus beendet.");
+                if (!isInactivityLogout) {
+                    showAdminLogoutModal("Admin-Modus beendet.", "🔒 Admin-Abmeldung");
+                }
             });
         }
 
-        auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged(async (user) => {
             if (user) {
                 document.documentElement.classList.add('kbsv-pre-unlocked');
                 document.documentElement.classList.remove('kbsv-pre-locked');
@@ -4413,15 +5397,15 @@
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
                 if (pwdInput) pwdInput.value = '';
-                const pushKeyInput = document.getElementById('admin-onesignal-key-input');
-                if (pushKeyInput) pushKeyInput.value = '';
+                loadedClubPinValue = '';
+                loadedOneSignalKeyValue = '';
+                try { lockSecuritySettingsFields(); } catch(e) {}
                 
                 document.body.classList.remove('admin-mode');
                 document.getElementById('admin-login-card').style.display = 'block';
 
-                let savedPin = null;
-                try { savedPin = localStorage.getItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
-                if (!savedPin || (currentFirestoreClubPin && savedPin !== currentFirestoreClubPin)) {
+                const savedToken = await getNormalizedSavedClubToken();
+                if (!savedToken || (currentFirestoreClubPinHash && savedToken !== currentFirestoreClubPinHash)) {
                     if (!document.body.classList.contains('admin-direct-login') && !document.body.classList.contains('app-locked')) {
                         lockClubApp(false);
                     }
@@ -4579,13 +5563,19 @@
 
         function renderPushDiagnosticsBox(diag, extraNote = '', isError = false) {
             const hasSubId = diag.subIdVal && diag.subIdVal !== 'KEINE';
+            if (hasSubId && !isError) {
+                pushStatusHintLockUntil = 0;
+                updatePushButtonUI(null, false, null, false);
+                return;
+            }
+
             const swText = diag.swErrorText
                 ? `Fehler (${diag.swErrorText})`
                 : (diag.swUrls.length > 0 ? diag.swUrls.join(', ') : 'KEINE');
 
-            const headerLine = hasSubId && !isError
-                ? '✅ Push-Diagnose (Gerät registriert)'
-                : (isError ? '⚠️ Push-Diagnose (Fehler / Blockiert)' : 'ℹ️ Push-Diagnose');
+            const headerLine = isError
+                ? '⚠️ Push-Diagnose (Fehler / Blockiert)'
+                : 'ℹ️ Push-Diagnose';
 
             let html = `<div style="font-weight: 800; margin-bottom: 6px; font-size: 1.03em;">${escapeHtml(headerLine)}</div>`;
             if (extraNote) {
@@ -4601,8 +5591,7 @@
                 + `</div>`;
 
             pushStatusHintLockUntil = Date.now() + 60 * 60 * 1000;
-            const variant = (!isError && hasSubId) ? 'success' : null;
-            updatePushButtonUI(html, isError, variant, true);
+            updatePushButtonUI(html, isError, null, true);
         }
 
         function waitForOneSignalInstance(timeoutMs = 3000) {
@@ -4734,6 +5723,264 @@
             });
         }
 
+        let masterSecurityUnlocked = false;
+        let loadedClubPinValue = "";
+        let loadedOneSignalKeyValue = "";
+        let masterPinModalMode = "verify";
+        let expectedFirestoreMasterPinHash = "";
+        let expectedFirestoreMasterLegacyPlain = false;
+
+        function lockSecuritySettingsFields() {
+            masterSecurityUnlocked = false;
+            const clubPinInput = document.getElementById('admin-club-pin-input');
+            const clubPinBtn = document.getElementById('admin-club-pin-save-btn');
+            const osInput = document.getElementById('admin-onesignal-key-input');
+            const osBtn = document.getElementById('admin-onesignal-save-btn');
+            const banner = document.getElementById('admin-security-banner');
+            const badge = document.getElementById('admin-security-status-badge');
+            const text = document.getElementById('admin-security-status-text');
+            const unlockBtn = document.getElementById('admin-security-unlock-btn');
+
+            if (clubPinInput) {
+                clubPinInput.type = 'password';
+                clubPinInput.disabled = true;
+                clubPinInput.readOnly = true;
+                clubPinInput.value = '••••••••';
+            }
+            if (clubPinBtn) clubPinBtn.disabled = true;
+
+            if (osInput) {
+                osInput.type = 'password';
+                osInput.disabled = true;
+                osInput.readOnly = true;
+                osInput.value = '••••••••';
+            }
+            if (osBtn) osBtn.disabled = true;
+
+            if (banner) banner.classList.remove('unlocked');
+            if (badge) {
+                badge.classList.remove('unlocked');
+                badge.innerText = '🔒 Geschützt – nur Haupt-Admin';
+            }
+            if (text) {
+                text.innerText = 'Zugangsdaten sind maskiert und gegen versehentliches Verstellen gesperrt.';
+            }
+            if (unlockBtn) {
+                unlockBtn.className = 'btn admin-btn-edit';
+                unlockBtn.innerText = '🔓 Zum Bearbeiten entsperren';
+            }
+        }
+
+        function unlockSecuritySettingsFields() {
+            masterSecurityUnlocked = true;
+            const clubPinInput = document.getElementById('admin-club-pin-input');
+            const clubPinBtn = document.getElementById('admin-club-pin-save-btn');
+            const osInput = document.getElementById('admin-onesignal-key-input');
+            const osBtn = document.getElementById('admin-onesignal-save-btn');
+            const banner = document.getElementById('admin-security-banner');
+            const badge = document.getElementById('admin-security-status-badge');
+            const text = document.getElementById('admin-security-status-text');
+            const unlockBtn = document.getElementById('admin-security-unlock-btn');
+
+            if (clubPinInput) {
+                clubPinInput.disabled = false;
+                clubPinInput.readOnly = false;
+                clubPinInput.type = 'text';
+                clubPinInput.value = '';
+                clubPinInput.placeholder = 'Neuen Vereins-Zugangscode eingeben';
+            }
+            if (clubPinBtn) clubPinBtn.disabled = false;
+
+            if (osInput) {
+                osInput.disabled = false;
+                osInput.readOnly = false;
+                osInput.type = 'text';
+                osInput.value = loadedOneSignalKeyValue || '';
+            }
+            if (osBtn) osBtn.disabled = false;
+
+            if (banner) banner.classList.add('unlocked');
+            if (badge) {
+                badge.classList.add('unlocked');
+                badge.innerText = '🔓 Entsperrt – Bearbeitung aktiv';
+            }
+            if (text) {
+                text.innerText = 'Die Felder sind temporär freigegeben und sperren nach dem Speichern oder Verlassen automatisch wieder.';
+            }
+            if (unlockBtn) {
+                unlockBtn.className = 'btn admin-btn-delete';
+                unlockBtn.innerText = '🔒 Jetzt sperren';
+            }
+        }
+
+        function handleSecurityUnlockToggle() {
+            if (masterSecurityUnlocked) {
+                lockSecuritySettingsFields();
+            } else {
+                openMasterPinModal();
+            }
+        }
+
+        function closeMasterPinModal() {
+            const modal = document.getElementById('master-pin-modal');
+            const input1 = document.getElementById('master-pin-input-1');
+            const input2 = document.getElementById('master-pin-input-2');
+            const errEl = document.getElementById('master-pin-modal-error');
+            if (input1) input1.value = '';
+            if (input2) input2.value = '';
+            if (errEl) { errEl.style.display = 'none'; errEl.innerText = ''; }
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+            }
+        }
+
+        async function openMasterPinModal() {
+            if (!auth.currentUser) return;
+
+            const modal = document.getElementById('master-pin-modal');
+            const titleEl = document.getElementById('master-pin-modal-title');
+            const descEl = document.getElementById('master-pin-modal-desc');
+            const label1El = document.getElementById('master-pin-label-1');
+            const input1 = document.getElementById('master-pin-input-1');
+            const input2 = document.getElementById('master-pin-input-2');
+            const confirmWrap = document.getElementById('master-pin-confirm-wrap');
+            const errEl = document.getElementById('master-pin-modal-error');
+            const submitBtn = document.getElementById('master-pin-submit-btn');
+
+            if (input1) input1.value = '';
+            if (input2) input2.value = '';
+            if (errEl) { errEl.style.display = 'none'; errEl.innerText = ''; }
+
+            masterPinModalMode = 'verify';
+            expectedFirestoreMasterPinHash = '';
+            expectedFirestoreMasterLegacyPlain = false;
+
+            try {
+                const secDoc = await db.collection("settings").doc("security").get();
+                const secData = secDoc.exists ? (secDoc.data() || {}) : {};
+                const storedRaw = String(secData.masterPinHash || secData.masterPin || '').trim();
+                if (storedRaw !== '') {
+                    masterPinModalMode = 'verify';
+                    if (isSha256Hex(storedRaw)) {
+                        expectedFirestoreMasterPinHash = storedRaw.toLowerCase();
+                        expectedFirestoreMasterLegacyPlain = false;
+                    } else {
+                        expectedFirestoreMasterPinHash = await sha256Hex(storedRaw);
+                        expectedFirestoreMasterLegacyPlain = true;
+                    }
+                    if (titleEl) titleEl.innerText = '🔐 Haupt-Admin Master-PIN';
+                    if (descEl) descEl.innerText = 'Bitte Master-PIN eingeben, um Vereins-Zugangscode und OneSignal Key zu entsperren.';
+                    if (label1El) label1El.innerText = 'Master-PIN';
+                    if (confirmWrap) confirmWrap.style.display = 'none';
+                    if (submitBtn) submitBtn.innerText = '🔓 Entsperren';
+                } else {
+                    masterPinModalMode = 'setup';
+                    if (titleEl) titleEl.innerText = '🔐 Master-PIN erstmalig festlegen';
+                    if (descEl) descEl.innerText = 'Es wurde noch kein Master-PIN hinterlegt. Lege jetzt einen separaten Master-PIN (min. 4 Zeichen) fest.';
+                    if (label1El) label1El.innerText = 'Neuer Master-PIN';
+                    if (confirmWrap) confirmWrap.style.display = 'block';
+                    if (submitBtn) submitBtn.innerText = '💾 Festlegen & entsperren';
+                }
+            } catch (e) {
+                masterPinModalMode = 'error';
+                if (titleEl) titleEl.innerText = '🔐 Haupt-Admin Master-PIN';
+                if (descEl) descEl.innerText = 'Sicherheitsdaten konnten nicht aus Firestore geladen werden.';
+                if (label1El) label1El.innerText = 'Master-PIN';
+                if (confirmWrap) confirmWrap.style.display = 'none';
+                if (submitBtn) submitBtn.innerText = '🔓 Prüfen';
+                if (errEl) {
+                    errEl.innerText = 'Firestore settings/security konnte nicht gelesen werden.';
+                    errEl.style.display = 'block';
+                }
+            }
+
+            if (modal) {
+                modal.style.display = 'flex';
+                modal.style.pointerEvents = 'auto';
+            }
+            if (input1) {
+                setTimeout(() => { try { input1.focus(); } catch(e) {} }, 40);
+            }
+        }
+
+        async function submitMasterPinModal(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (!auth.currentUser) return;
+            const input1 = document.getElementById('master-pin-input-1');
+            const input2 = document.getElementById('master-pin-input-2');
+            const errEl = document.getElementById('master-pin-modal-error');
+            const submitBtn = document.getElementById('master-pin-submit-btn');
+
+            const pin1 = input1 ? input1.value.trim() : '';
+            const pin2 = input2 ? input2.value.trim() : '';
+            const showErr = (msg) => {
+                if (errEl) {
+                    errEl.innerText = msg;
+                    errEl.style.display = 'block';
+                }
+            };
+
+            if (errEl) errEl.style.display = 'none';
+            if (!pin1) {
+                showErr('Bitte einen Master-PIN eingeben.');
+                return;
+            }
+
+            if (masterPinModalMode === 'setup') {
+                if (pin1.length < 4) {
+                    showErr('Der Master-PIN muss mindestens 4 Zeichen lang sein.');
+                    return;
+                }
+                if (pin1 !== pin2) {
+                    showErr('Die beiden Master-PIN-Eingaben stimmen nicht überein.');
+                    return;
+                }
+                if (submitBtn) submitBtn.disabled = true;
+                try {
+                    const pinHash = await sha256Hex(pin1);
+                    await db.collection("settings").doc("security").set({
+                        masterPin: pinHash,
+                        masterPinHash: pinHash,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                    expectedFirestoreMasterPinHash = pinHash;
+                    expectedFirestoreMasterLegacyPlain = false;
+                    closeMasterPinModal();
+                    unlockSecuritySettingsFields();
+                } catch (err) {
+                    showErr('Speichern des Master-PIN in Firestore fehlgeschlagen: ' + (err && err.message ? err.message : String(err)));
+                } finally {
+                    if (submitBtn) submitBtn.disabled = false;
+                }
+                return;
+            }
+
+            if (masterPinModalMode === 'verify' && expectedFirestoreMasterPinHash) {
+                const enteredHash = await sha256Hex(pin1);
+                if (enteredHash === expectedFirestoreMasterPinHash) {
+                    if (expectedFirestoreMasterLegacyPlain) {
+                        try {
+                            await db.collection("settings").doc("security").set({
+                                masterPin: enteredHash,
+                                masterPinHash: enteredHash,
+                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                            }, { merge: true });
+                            expectedFirestoreMasterLegacyPlain = false;
+                        } catch (migErr) {}
+                    }
+                    closeMasterPinModal();
+                    unlockSecuritySettingsFields();
+                } else {
+                    showErr('Falscher Master-PIN!');
+                    if (input1) { input1.value = ''; input1.focus(); }
+                }
+                return;
+            }
+
+            showErr('Master-PIN-Prüfung nicht verfügbar – bitte Firestore settings/security prüfen.');
+        }
+
         async function loadAdminOneSignalKey() {
             if (!auth.currentUser) return;
             const inputEl = document.getElementById('admin-onesignal-key-input');
@@ -4741,9 +5988,14 @@
             try {
                 const doc = await db.collection("settings").doc("push").get();
                 if (doc.exists && doc.data() && doc.data().restApiKey) {
-                    inputEl.value = String(doc.data().restApiKey).trim();
+                    loadedOneSignalKeyValue = String(doc.data().restApiKey).trim();
                 } else {
-                    inputEl.value = '';
+                    loadedOneSignalKeyValue = '';
+                }
+                if (masterSecurityUnlocked) {
+                    inputEl.value = loadedOneSignalKeyValue;
+                } else {
+                    inputEl.value = '••••••••';
                 }
             } catch (e) {}
         }
@@ -4751,6 +6003,10 @@
         async function saveOneSignalRestApiKey(e) {
             e.preventDefault();
             if (!auth.currentUser) return;
+            if (!masterSecurityUnlocked) {
+                alert("Dieser Bereich ist geschützt. Bitte zuerst mit dem Haupt-Admin Master-PIN entsperren.");
+                return;
+            }
             const inputEl = document.getElementById('admin-onesignal-key-input');
             const restApiKey = inputEl ? inputEl.value.trim() : '';
             if (!restApiKey) {
@@ -4762,6 +6018,8 @@
                     restApiKey: restApiKey,
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
+                loadedOneSignalKeyValue = restApiKey;
+                lockSecuritySettingsFields();
                 alert("OneSignal REST API Key erfolgreich in Firestore (settings/push) gespeichert!");
             } catch (err) {
                 alert("Fehler beim Speichern des Push-Keys: " + err.message);
@@ -4863,13 +6121,14 @@
                         }
                     });
                 }
-                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'vote-modal'].forEach(id => {
+                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'vote-modal', 'master-pin-modal', 'admin-logout-modal'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el && getComputedStyle(el).display === 'none') {
                         el.style.pointerEvents = 'none';
                     }
                 });
             } catch(e) {}
+            try { populateWeaponMemberSelects(); } catch(e) {}
             try { initPushNotificationsUI(); } catch(e) {}
             try { initClubAccessGuard(); } catch(e) {}
             try { initWeaponBookNavigationGuard(); } catch(e) {}
