@@ -1961,7 +1961,7 @@
                             <div class="admin-glass-card-title"><span>📅 Neuen Termin erstellen</span></div>
                             <form onsubmit="addEvent(event)">
                                 <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="Generalversammlung"></div>
-                                <div class="form-group"><label>Datum</label><input type="text" class="form-control" id="new-event-date" required placeholder="15.12.2026"></div>
+                                <div class="form-group"><label>Datum</label><input type="date" class="form-control" id="new-event-date" required></div>
                                 <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
                                 <label id="event-send-push-wrap" style="display: none; align-items: center; gap: 8px; font-size: 0.8em; font-weight: 700; color: #1e293b; margin-bottom: 10px; cursor: pointer;">
                                     <input type="checkbox" id="event-send-push" checked style="width: 17px; height: 17px; accent-color: #16a34a; cursor: pointer;">
@@ -4561,11 +4561,37 @@
         } catch(e) {}
 
         // --- TERMINE & ABSTIMMUNG ---
+        function getTodayIsoDateString() {
+            const now = new Date();
+            const yyyy = String(now.getFullYear());
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function setDefaultNewEventDate() {
+            const el = document.getElementById('new-event-date');
+            if (el) el.value = getTodayIsoDateString();
+        }
+
+        function formatEventDateToGerman(rawDate) {
+            const trimmed = String(rawDate || '').trim();
+            const isoMatch = trimmed.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+            if (isoMatch) {
+                const yyyy = isoMatch[1];
+                const mm = String(Number(isoMatch[2])).padStart(2, '0');
+                const dd = String(Number(isoMatch[3])).padStart(2, '0');
+                return `${dd}.${mm}.${yyyy}`;
+            }
+            return trimmed;
+        }
+
         async function addEvent(e) {
             e.preventDefault();
             if (!auth.currentUser) return;
             const title = document.getElementById('new-event-title').value.trim();
-            const date = document.getElementById('new-event-date').value.trim();
+            const rawDate = document.getElementById('new-event-date').value.trim();
+            const date = formatEventDateToGerman(rawDate);
             const desc = document.getElementById('new-event-desc').value.trim();
             const sendPushEl = document.getElementById('event-send-push');
             const sendPush = isMainPushAdmin() && !!(sendPushEl && sendPushEl.checked);
@@ -4593,7 +4619,7 @@
                     }
                 }
                 document.getElementById('new-event-title').value = '';
-                document.getElementById('new-event-date').value = '';
+                setDefaultNewEventDate();
                 document.getElementById('new-event-desc').value = '';
                 if (sendPushEl) sendPushEl.checked = isMainPushAdmin();
                 alert("Termin erfolgreich gespeichert!" + pushNotice);
@@ -4985,26 +5011,28 @@
             const raw = String(dateStr).trim();
             if (!raw) return null;
 
-            const deMatch = raw.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})/);
+            const deMatch = raw.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/);
             if (deMatch) {
                 const tag = Number(deMatch[1]);
-                const monat = Number(deMatch[2]);
+                const monat = Number(deMatch[2]) - 1;
                 const jahr = Number(deMatch[3]);
-                const d = new Date(jahr, monat - 1, tag, 23, 59, 59);
-                if (!isNaN(d.getTime()) && d.getFullYear() === jahr && d.getMonth() === monat - 1 && d.getDate() === tag) {
+                const d = new Date(jahr, monat, tag, 23, 59, 59);
+                if (!isNaN(d.getTime()) && d.getFullYear() === jahr && d.getMonth() === monat && d.getDate() === tag) {
                     return d;
                 }
+                return null;
             }
 
-            const isoMatch = raw.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+            const isoMatch = raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
             if (isoMatch) {
                 const jahr = Number(isoMatch[1]);
-                const monat = Number(isoMatch[2]);
+                const monat = Number(isoMatch[2]) - 1;
                 const tag = Number(isoMatch[3]);
-                const d = new Date(jahr, monat - 1, tag, 23, 59, 59);
-                if (!isNaN(d.getTime()) && d.getFullYear() === jahr && d.getMonth() === monat - 1 && d.getDate() === tag) {
+                const d = new Date(jahr, monat, tag, 23, 59, 59);
+                if (!isNaN(d.getTime()) && d.getFullYear() === jahr && d.getMonth() === monat && d.getDate() === tag) {
                     return d;
                 }
+                return null;
             }
 
             return null;
@@ -7168,9 +7196,13 @@
             let html = '';
             openTabsList.forEach(tab => {
                 const isActive = tab.id === activeOpenTabId;
+                const isDefaultTab = !!(tab.isDefaultBar || tab.id === DEFAULT_BAR_TAB_DOC_ID || tab.name === DEFAULT_BAR_TAB_NAME);
                 const tabTotal = computeCountsTotal(tab.counts);
                 const totalStr = '€ ' + tabTotal.toFixed(2).replace('.', ',');
-                html += `<button type="button" class="open-tab-btn${isActive ? ' active' : ''}" data-tab-id="${escapeHtml(tab.id)}" onclick="switchOpenTab(this.dataset.tabId)">🍺 ${escapeHtml(tab.name)} (${totalStr})</button>`;
+                const labelText = isDefaultTab
+                    ? `🍺 ${escapeHtml(tab.name)}`
+                    : `🍺 ${escapeHtml(tab.name)} (${totalStr})`;
+                html += `<button type="button" class="open-tab-btn${isActive ? ' active' : ''}" data-tab-id="${escapeHtml(tab.id)}" onclick="switchOpenTab(this.dataset.tabId)">${labelText}</button>`;
             });
             bar.innerHTML = html;
         }
@@ -11939,6 +11971,7 @@
             try { initClubAccessGuard(); } catch(e) {}
             try { initWeaponBookNavigationGuard(); } catch(e) {}
             try { bindWeaponFormActivityListeners(); } catch(e) {}
+            try { setDefaultNewEventDate(); } catch(e) {}
         });
     </script>
 </body>
