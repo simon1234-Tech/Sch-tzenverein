@@ -193,6 +193,15 @@
             min-height: 100vh;
             font-size: 0.95em;
         }
+        body.compact-bottom-tab {
+            padding-bottom: 82px !important;
+        }
+        #page-events > .glass-card:last-child,
+        #page-drinks > .glass-card:last-child,
+        #page-weapons > .glass-card:last-child,
+        #page-card > #admin-login-card {
+            margin-bottom: 0;
+        }
 
         .app-header {
             position: relative;
@@ -984,6 +993,8 @@
         html:not(.kbsv-pre-unlocked) body.app-locked .app-header,
         html:not(.kbsv-pre-unlocked) body.app-locked .page-content,
         html:not(.kbsv-pre-unlocked) body.app-locked .bottom-nav,
+        html:not(.kbsv-pre-unlocked) body.app-locked #app-main-footer,
+        body.app-locked #app-main-footer,
         html:not(.kbsv-pre-unlocked) body.app-locked #push-notification-bar,
         html:not(.kbsv-pre-unlocked) body.app-locked #legal-footer-link {
             display: none !important;
@@ -1182,6 +1193,8 @@
         }
 
         /* VEREINS-CHAT ICON IM HEADER & VORHANG-FENSTER */
+        body.app-locked #header-help-btn,
+        html:not(.kbsv-pre-unlocked) body.app-locked #header-help-btn,
         body.app-locked #chat-side-trigger,
         html:not(.kbsv-pre-unlocked) body.app-locked #chat-side-trigger,
         body.app-locked #chat-drawer-overlay,
@@ -1503,6 +1516,44 @@
             display: none !important;
             pointer-events: none !important;
         }
+        .next-event-hero-card {
+            background: #ffffff !important;
+            border: 1.5px solid #86efac !important;
+            border-radius: 18px !important;
+            padding: 18px !important;
+            box-shadow: 0 4px 14px rgba(22, 163, 74, 0.08) !important;
+            margin-bottom: 12px;
+        }
+        .next-event-hero-card .event-card-title {
+            font-size: 1.3rem !important;
+            font-weight: 900 !important;
+            color: #0f172a !important;
+            margin-bottom: 4px;
+            line-height: 1.25;
+        }
+        .upcoming-event-compact-card {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 14px !important;
+            padding: 13px 14px !important;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04) !important;
+            margin-bottom: 10px;
+        }
+        .upcoming-event-compact-card .event-card-title {
+            font-size: 1.02rem !important;
+            font-weight: 800 !important;
+            color: #0f172a !important;
+            margin-bottom: 3px;
+            line-height: 1.3;
+        }
+        .upcoming-event-compact-card .event-vote-btn {
+            padding: 7px 8px !important;
+            font-size: 0.84rem !important;
+        }
+        .upcoming-event-compact-card .event-ics-btn {
+            padding: 7px 10px !important;
+            font-size: 0.84rem !important;
+        }
     </style>
 </head>
 <body class="app-locked">
@@ -1567,15 +1618,13 @@
     <div class="app-header">
         <h1>Kameradschaftsbund & Schützenverein</h1>
         <p>Gaschurn-Partenen</p>
-        <button type="button" id="chat-side-trigger" onclick="openChatDrawer()" aria-label="Vereins-Chat öffnen" title="Vereins-Chat öffnen">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#991b1b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" fill="#ffffff"/>
-                <circle cx="8.5" cy="12" r="1.2" fill="#991b1b" stroke="none"/>
-                <circle cx="12" cy="12" r="1.2" fill="#991b1b" stroke="none"/>
-                <circle cx="15.5" cy="12" r="1.2" fill="#991b1b" stroke="none"/>
+        <button type="button" id="header-help-btn" onclick="openMemberHelpModal()" aria-label="App-Anleitung öffnen" title="App-Anleitung öffnen" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); z-index: 20; width: auto; min-width: 56px; padding: 7px 10px; background: #ffffff; color: #991b1b; border: none; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22); cursor: pointer; font-family: inherit; touch-action: manipulation;">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#991b1b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9.5"/>
+                <path d="M9.5 9.2a2.7 2.7 0 0 1 5.2.9c0 1.8-2.7 2.2-2.7 3.7"/>
+                <circle cx="12" cy="17.2" r="0.6" fill="#991b1b"/>
             </svg>
-            <span class="chat-header-trigger-label">Chat</span>
-            <span id="chat-unread-dot" aria-hidden="true"></span>
+            <span style="font-size: 0.78rem; font-weight: 900; color: #991b1b; line-height: 1;">Hilfe</span>
         </button>
     </div>
 
@@ -1590,6 +1639,10 @@
                 <span id="news-chat-new-badge" style="display: none; background: #dc2626; color: #ffffff; border: 1.5px solid #ffffff; border-radius: 999px; padding: 2px 8px; font-size: 0.74rem; font-weight: 800; line-height: 1.2;">Neu!</span>
                 <span aria-hidden="true" style="font-size: 1.25rem; font-weight: 900; color: #ffffff; line-height: 1;">→</span>
             </span>
+        </button>
+
+        <button type="button" id="push-setup-banner-btn" onclick="enablePushNotifications()" style="display: none; width: 100%; margin: 0 0 14px 0; padding: 11px 14px; background: #fef3c7; color: #92400e; border: 2px solid #f59e0b; border-radius: 14px; align-items: center; justify-content: center; text-align: center; gap: 8px; font-size: 0.9rem; font-weight: 800; font-family: inherit; cursor: pointer; box-shadow: 0 3px 10px rgba(245, 158, 11, 0.16);">
+            🔔 Wichtige Vereins-Infos aufs Handy erhalten – hier Push aktivieren
         </button>
 
         <!-- NÄCHSTER DIENST (LIVE VORSCHAU) -->
@@ -1633,8 +1686,23 @@
         <div class="glass-card glass-card-blue">
             <div class="card-title" style="color: #2563eb;">🍻 Schankbuch & Preisliste</div>
 
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+                <button type="button" id="tally-select-cash-btn" onclick="setTallyBillingMode('cash')" aria-pressed="true" style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: 2px solid #14532d; border-radius: 14px; padding: 14px 10px; font-weight: 800; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25); cursor: pointer; font-family: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px;">
+                    <span style="font-size: 0.96rem; line-height: 1.2;">💶 Bar-Abrechnung</span>
+                    <span style="font-size: 0.76rem; font-weight: 600; opacity: 0.92; line-height: 1.2;">Gäste &amp; Mitglieder bar</span>
+                </button>
+                <button type="button" id="tally-select-invoice-btn" onclick="setTallyBillingMode('invoice')" aria-pressed="false" style="background: #ffffff; color: #334155; border: 2px solid #cbd5e1; border-radius: 14px; padding: 14px 10px; font-weight: 700; cursor: pointer; font-family: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px;">
+                    <span style="font-size: 0.96rem; line-height: 1.2;">🧾 Firmen-Rechnung</span>
+                    <span style="font-size: 0.76rem; font-weight: 600; opacity: 0.85; line-height: 1.2;">Vereine, Firmen &amp; Feiern</span>
+                </button>
+            </div>
+
+            <div id="tally-active-mode-banner" style="margin-bottom: 14px; padding: 10px 12px; border-radius: 12px; background: #dcfce7; border: 1.5px solid #86efac; color: #166534; font-weight: 800; font-size: 0.88rem; text-align: center;">
+                ✅ Aktiver Modus: Bar-Abrechnung (Schankkassa)
+            </div>
+
             <!-- OFFENE DECKEL / PERSONEN IM SCHÜTZENHAUS -->
-            <div id="open-tabs-card" class="open-tabs-control-box">
+            <div id="tally-open-tabs-card" class="open-tabs-control-box" style="display: block;">
                 <div style="font-size: 0.92em; font-weight: 800; color: #0f172a; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
                     <span>🍺 Offene Deckel / Personen im Schützenhaus</span>
                     <span id="active-tab-badge" style="font-size: 0.8em; background: #16a34a; color: #ffffff; padding: 3px 9px; border-radius: 8px; font-weight: 800;">Aktiv: Direktabrechnung / Bar</span>
@@ -1679,11 +1747,13 @@
 
             <div id="schankbuch-save-feedback" style="display: none; margin-top: 12px; padding: 11px 14px; border-radius: 12px; background: #dcfce7; border: 1.5px solid #86efac; color: #166534; font-weight: 800; font-size: 0.9em; text-align: center;"></div>
 
-            <button type="button" id="save-cash-sale-btn" onclick="saveCashSale(this)" class="btn btn-green btn-block" style="margin-top: 14px; padding: 14px 16px; font-size: 1em;">
-                💶 Bar bezahlt (Schankkassa speichern)
-            </button>
+            <div id="tally-cash-checkout-section" style="display: block; margin-top: 14px;">
+                <button type="button" id="save-cash-sale-btn" onclick="saveCashSale(this)" class="btn btn-green btn-block" style="margin-top: 0; padding: 14px 16px; font-size: 1em;">
+                    💶 Bar bezahlt (Schankkassa speichern)
+                </button>
+            </div>
 
-            <div style="margin-top: 14px; background: rgba(248, 250, 252, 0.9); padding: 14px; border-radius: 14px; border: 1.5px solid #cbd5e1;">
+            <div id="tally-invoice-checkout-section" style="display: none; margin-top: 14px; background: rgba(248, 250, 252, 0.9); padding: 14px; border-radius: 14px; border: 1.5px solid #93c5fd;">
                 <h4 style="color: #2563eb; margin-bottom: 8px; font-size: 0.9em;">Für große Feiern &amp; Firmen (PDF-Rechnung):</h4>
                 <div class="form-group"><label>Name / Firma</label><input type="text" class="form-control" id="cust-name" placeholder="z. B. Firma / Verein"></div>
                 <div class="form-group"><label>Zusatz / z. Hd.</label><input type="text" class="form-control" id="cust-attn" placeholder="z. B. z. Hd. Vorname Nachname"></div>
@@ -1694,7 +1764,7 @@
                 </button>
             </div>
 
-            <button type="button" onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 10px;">🗑 Aktuellen Deckel leeren/löschen</button>
+            <button type="button" onclick="confirmResetDrinks()" class="btn btn-danger btn-block" style="margin-top: 22px;">🗑️ Aktuellen Deckel leeren / löschen</button>
         </div>
     </div>
 
@@ -2214,32 +2284,16 @@
         </div>
     </div>
 
-    <!-- PUSH-BENACHRICHTIGUNGEN & INSTALLATIONSHILFE (KOMPAKT ÜBER DER FUSSZEILE) -->
-    <div id="push-notification-bar" style="margin: 16px auto 8px auto;">
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
-            <button type="button" id="push-activate-btn" onclick="enablePushNotifications()" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid #cbd5e1; background: rgba(255, 255, 255, 0.92); color: #1e293b; font-size: 0.85rem; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06); transition: all 0.2s;">
-                🔔 Push-Benachrichtigungen aktivieren
-            </button>
-            <button type="button" id="install-help-btn" onclick="openInstallHelpModal()" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid #cbd5e1; background: rgba(255, 255, 255, 0.92); color: #334155; font-size: 0.85rem; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06); transition: all 0.2s;">
-                📲 App auf dem Handy speichern
-            </button>
+    <!-- FUSSZEILE (NUR IM TAB „NEWS“ SICHTBAR) -->
+    <footer id="app-main-footer" style="display: block;">
+        <!-- MITGLIED-ANZEIGE & RECHTLICHES -->
+        <div id="legal-footer-link" style="text-align: center; margin: 12px 0 10px 0; font-size: 0.75em; color: var(--text-muted);">
+            <div id="footer-member-identity" style="margin-bottom: 7px; font-size: 1.02em; color: #334155;">Angemeldet als: <strong id="footer-active-member-name" style="color:#64748b;">Noch nicht gewählt</strong></div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 8px; margin-bottom: 6px;">
+                <span onclick="openLegalModal('impressum')" style="cursor: pointer; text-decoration: underline;">Impressum</span> · <span onclick="openLegalModal('datenschutz')" style="cursor: pointer; text-decoration: underline;">Datenschutz</span> · <span onclick="openLegalModal('cookies')" style="cursor: pointer; text-decoration: underline;">Cookie-Einstellungen</span>
+            </div>
         </div>
-        <div id="push-status-hint" style="display: none; margin: 8px auto 0 auto; max-width: 480px; padding: 9px 12px; border-radius: 10px; font-size: 0.78em; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
-    </div>
-
-    <!-- IMPRESSUM, DATENSCHUTZ & COOKIE-EINSTELLUNGEN -->
-    <div id="legal-footer-link" style="text-align: center; margin: 12px 0 10px 0; font-size: 0.75em; color: var(--text-muted);">
-        <div id="footer-member-identity" style="margin-bottom: 7px; font-size: 1.02em; color: #334155;"></div>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 8px; margin-bottom: 10px;">
-            <span onclick="openLegalModal('impressum')" style="cursor: pointer; text-decoration: underline;">Impressum</span> · <span onclick="openLegalModal('datenschutz')" style="cursor: pointer; text-decoration: underline;">Datenschutz</span> · <span onclick="openLegalModal('cookies')" style="cursor: pointer; text-decoration: underline;">Cookie-Einstellungen</span> · <span id="member-help-link" onclick="openMemberHelpModal()" style="cursor: pointer; text-decoration: underline; font-weight: 700; color: #b91c1c;">📖 App-Anleitung</span>
-            <button type="button" id="font-size-toggle-btn" onclick="toggleLargeFontMode()" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 16px; border-radius: 999px; border: 1.5px solid #94a3b8; background: #ffffff; color: #0f172a; font-size: 0.92rem; font-weight: 800; font-family: inherit; cursor: pointer; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08); transition: all 0.2s;">🔍 Große Schrift: Aus</button>
-        </div>
-        <div style="margin-top: 8px; font-size: 0.92em; color: #64748b; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px 10px;">
-            <span>Version 1.0 · Stand November 2026</span>
-            <span>·</span>
-            <button type="button" id="app-refresh-btn" onclick="forceRefreshApp()" style="background: none; border: 1px solid #cbd5e1; border-radius: 8px; color: #334155; font-size: 0.95em; font-weight: 700; font-family: inherit; cursor: pointer; padding: 3px 9px;">🔄 App aktualisieren</button>
-        </div>
-    </div>
+    </footer>
 
     <div id="legal-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); z-index:999999; justify-content:center; align-items:center; padding:16px; backdrop-filter:blur(5px);">
         <div style="background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); width: 100%; max-width: 520px; border-radius: 20px; padding: 20px; max-height: 90vh; overflow-y: auto; color: #1e293b; box-shadow: 0 25px 35px -5px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.9);" class="modal-anim">
@@ -2457,7 +2511,7 @@
     </div>
 
     <!-- MODAL FÜR STARTBILDSCHIRM-INSTALLATIONSHILFE -->
-    <div id="install-help-modal" style="display: none; pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.65); z-index: 999999; justify-content: center; align-items: center; padding: 16px; backdrop-filter: blur(5px);" onclick="if (event.target === this) closeInstallHelpModal()">
+    <div id="install-help-modal" style="display: none; pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.65); z-index: 9999999; justify-content: center; align-items: center; padding: 16px; backdrop-filter: blur(5px);" onclick="if (event.target === this) closeInstallHelpModal()">
         <div style="background: rgba(255, 255, 255, 0.98); width: 100%; max-width: 440px; border-radius: 20px; overflow: hidden; color: #1e293b; box-shadow: 0 25px 40px rgba(0, 0, 0, 0.32); border: 1.5px solid #e2e8f0;" class="modal-anim">
             <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 14px 18px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
                 <h3 style="color: #b91c1c; font-size: 1.02em; font-weight: 800; margin: 0;">📲 App auf dem Handy installieren</h3>
@@ -2488,45 +2542,71 @@
                 <button type="button" onclick="closeMemberHelpModal()" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px; margin-top: 0;">✖</button>
             </div>
             <div style="padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.86em; line-height: 1.5;">
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">👤 Einstieg, Name &amp; App auf dem Handy speichern</div>
+                <div style="display: flex; flex-direction: column;">
+                    <button type="button" id="read-member-help-btn" onclick="toggleReadMemberHelpAloud()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #16a34a; color: #ffffff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔊 Anleitung laut vorlesen</button>
+                    <button type="button" id="push-activate-btn" onclick="enablePushNotifications()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #fef3c7; color: #92400e; border: 2px solid #f59e0b; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔔 Push-Benachrichtigungen aktivieren</button>
+                    <div id="push-status-hint" style="display: none; margin: -2px 0 10px 0; padding: 9px 12px; border-radius: 10px; font-size: 0.85em; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
+                    <button type="button" id="font-size-toggle-btn" onclick="toggleLargeFontMode()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #ffffff; color: #1e293b; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔍 Große Schrift: Aus</button>
+                    <button type="button" id="install-help-btn" onclick="openInstallHelpModal()" style="width: 100%; margin-bottom: 16px; padding: 12px 14px; background: #eff6ff; color: #1d4ed8; border: 2px solid #93c5fd; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">📲 App auf dem Handy speichern</button>
+                </div>
+
+                <div class="member-help-card" data-speech="Punkt 1. Einstieg und Lesehilfe. Nach dem einmaligen Eingeben des Vereins-Zugangscodes wählst du deinen Namen aus. Unten auf der Startseite findest du die Knöpfe für Push-Benachrichtigungen, zum Speichern der App auf dem Handy-Bildschirm und für größere Schrift." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
+                        <div style="font-weight: 800; color: #0f172a;">👤 Einstieg, Name, Große Schrift &amp; App speichern</div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
+                    </div>
                     <div style="color: #334155;">
-                        Nach der einmaligen Eingabe des Vereins-Zugangscodes wählst du einmalig deinen Namen aus (jederzeit unten über „(ändern)“ anpassbar). Über „📲 App auf dem Handy speichern“ ganz unten findest du die Anleitung für Android (⋮ → Zum Startbildschirm hinzufügen) und iPhone (Teilen ⬆ → Zum Home-Bildschirm), und über „🔔 Push-Benachrichtigungen aktivieren“ schaltest du Vereins-Meldungen freiwillig ein.
+                        Nach der einmaligen Eingabe des Vereins-Zugangscodes wählst du einmalig deinen Namen aus – er wird dauerhaft auf deinem Gerät gespeichert und im Tab „News“ ganz unten als „Angemeldet als: [Name]“ angezeigt (Vorstands-Namen sind zusätzlich geschützt). Im Tab „News“ ganz unten findest du drei praktische Knöpfe untereinander: „🔔 Push-Benachrichtigungen aktivieren“, „📲 App auf dem Handy speichern“ (Anleitung für Android &amp; iPhone) und „🔍 Große Schrift: Aus / An“ für besonders gut lesbare größere Schrift.
                     </div>
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">📰 News &amp; Dienstplan</div>
+                <div class="member-help-card" data-speech="Punkt 2. News und Dienstplan. Ganz oben siehst du immer den nächsten Schankdienst. Deine eigenen Dienste sind mit einem Stern markiert. Über den Vorlesen-Knopf kannst du dir Vereins-News laut vorlesen lassen." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
+                        <div style="font-weight: 800; color: #0f172a;">📰 News, Dienstplan &amp; Vorlesefunktion</div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
+                    </div>
                     <div style="color: #334155;">
-                        Die Karte mit dem grünen Puls-Rahmen zeigt ganz oben den nächsten Dienst (am Einsatztag rot mit „⚡ HEUTE“) samt rot hervorgehobener Dienstzeit (19:00 – 21:00 Uhr). Deine eigenen Dienste sind klar mit „⭐ Dein Dienst“ hervorgehoben. News-Beiträge kannst du dir per „🔊 Vorlesen“ auch bequem vorlesen lassen.
+                        Ganz oben auf „News“ siehst du den großen royalblauen Button zum Vereins-Chat und direkt darunter die Karte „NÄCHSTER DIENST“ mit grünem Puls-Rahmen (am Einsatztag rot mit „⚡ HEUTE“ und hervorgehobener Dienstzeit 19:00 – 21:00 Uhr). Im gesamten Dienstplan sind deine eigenen Dienste deutlich mit „⭐ Dein Dienst“ markiert. Vereins-News kannst du dir direkt über den Button „🔊 Vorlesen“ bequem laut vorlesen lassen und per „⏹️ Stopp“ jederzeit anhalten.
                     </div>
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">📅 Termine &amp; Direkt-Abstimmung</div>
+                <div class="member-help-card" data-speech="Punkt 3. Termine und Abstimmung. Der nächste Termin steht groß und grün ganz oben. Mit einem Tipp auf Zusage, Vielleicht oder Absage wird dein Name sofort eingetragen. Über In Kalender speichern übernimmst du den Termin in deinen Handy-Kalender." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
+                        <div style="font-weight: 800; color: #0f172a;">📅 Termine &amp; Direkt-Abstimmung</div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
+                    </div>
                     <div style="color: #334155;">
-                        Unter „Termine“ genügt bei jeder Veranstaltung ein einziger Tipp auf „✋ Ich bin dabei“ oder „✖ Absage“ – dein gespeicherter Name wird sofort ohne erneute Auswahl eingetragen. Zusagen und Absagen werden automatisch zusammengezählt.
+                        Unter „Termine“ genügt bei jeder Veranstaltung ein einziger Tipp auf „✋ Zusage“, „❓ Vielleicht“ oder „✖ Absage“ – dein gespeicherter Name wird sofort ohne erneute Auswahl eingetragen, und Zu- sowie Absagen werden live zusammengezählt.
                     </div>
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">💬 Vereins-Chat (Vorhang links)</div>
+                <div class="member-help-card" data-speech="Punkt 4. Vereins-Chat. Tippe auf der Startseite auf den blauen Balken Vereins-Chat öffnen. Du kannst fertige Schnell-Antworten antippen, eine Sprachnachricht einsprechen, Fotos teilen oder selbst eine Nachricht schreiben." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
+                        <div style="font-weight: 800; color: #0f172a;">💬 Vereins-Chat (Vollbild, Schnell-Antworten &amp; Sprachnachricht)</div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
+                    </div>
                     <div style="color: #334155;">
-                        Über den grünen Reiter „💬 Chat“ am linken Bildschirmrand öffnet sich unser Echtzeit-Vereins-Chat. Du kannst sofort schreiben oder über „📷“ Fotos teilen, wichtige Obmann-Infos oben angepinnt sehen und bei Bedarf oben rechts über „🔔/🔕“ den Chat-Ton auf deinem Handy stummschalten.
+                        Über den großen royalblauen Button „💬 Vereins-Chat öffnen“ auf der Startseite „News“ gelangst du in den übersichtlichen Vollbild-Chat (bei neuen Nachrichten erscheint dort ein rotes „Neu!“-Zeichen). Du kannst mit einem Fingertipp eine der Schnell-Antworten („👍 Passt!“, „🍺 Bin im Schützenhaus!“, „🎯 Bin dabei!“, „⏰ Bin gleich da!“, „❌ Kann leider nicht“) senden, Text schreiben, über „📷“ direkt fotografieren, über „🖼️“ ein Foto aus der Galerie senden oder über „🎤“ eine Sprachnachricht (bis 45 Sekunden) aufnehmen. Oben siehst du wichtige angepinnte Obmann-Infos sowie Vorstands-Badges und kannst über „🔔/🔕“ den Chat-Ton stummschalten.
                     </div>
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #d97706; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">🍻 Schankbuch &amp; Deckel-System im Schützenhaus</div>
+                <div class="member-help-card" data-speech="Punkt 5. Schankbuch im Schützenhaus. Lege oben für Gäste oder Tische einen Deckel an und tippe die Getränke ein. Abgerechnet wird entweder über Bar bezahlt oder als Rechnung." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #d97706; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
+                        <div style="font-weight: 800; color: #0f172a;">🍻 Schankbuch &amp; Deckel-System im Schützenhaus</div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
+                    </div>
                     <div style="color: #334155;">
-                        Lege oben für anwesende Personen, Gäste oder Tische eigene Deckel an (Name eingeben → „➕ Deckel öffnen“) und tippe zwischen den Deckel-Tabs hin und her. Änderungen synchronisieren sich in Echtzeit auf mehreren Handys gleichzeitig. Abgerechnet wird entweder direkt bar über „💶 Bar bezahlt“ oder mit Adressfeldern als offizielle Firmen-/Feier-PDF-Rechnung.
+                        Lege oben für anwesende Personen, Gäste oder Tische eigene Deckel an (Name eingeben → „➕ Deckel öffnen“) und tippe zwischen den Deckel-Tabs hin und her. Änderungen synchronisieren sich in Echtzeit auf mehreren Handys gleichzeitig. Beim Tippen auf „💶 Bar bezahlt (Schankkassa speichern)“ erscheint zur Sicherheit eine kurze Bestätigungsabfrage mit Deckelname und Betrag, bevor gebucht und der Deckel geschlossen wird; alternativ kannst du über die Adressfelder eine offizielle Firmen-/Feier-PDF-Rechnung erstellen.
                     </div>
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #b91c1c; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">🎯 Digitales Waffenbuch (Tresor-QR-Code &amp; Rückgabe)</div>
+                <div class="member-help-card" data-speech="Punkt 6. Digitales Waffenbuch. Scanne zuerst den Q R Code im Waffentresor. Danach wählst du den Übernehmer und die Waffen aus. Nach zwei Minuten ohne Eingabe sperrt sich das Waffenbuch aus Sicherheitsgründen automatisch wieder." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #b91c1c; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
+                        <div style="font-weight: 800; color: #0f172a;">🎯 Digitales Waffenbuch (Tresor-QR-Code &amp; 2-Minuten-Auto-Sperre)</div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
+                    </div>
                     <div style="color: #334155;">
-                        Das Waffenbuch ist zu deiner Sicherheit durch ein großes rotes Warn-Schild gesperrt. Scanne zuerst mit dem Scanner-Button den offiziellen QR-Code am Waffentresor. Danach ist ein berechtigter Übernehmer direkt vorausgewählt; du ergänzt nur noch optional Mitabholer, Salutwaffen, Anlass und Ort. Bei der Rückkehr wird erneut der Tresor-QR-Code gescannt.
+                        Das Waffenbuch ist durch ein großes rotes Warn-Schild geschützt, und der Tresor-QR-Scanner ist strikt auf die 4 berechtigten Waffenwarte (Simon Schweighofer, Heimo Stocker, Norbert Spettel, Manfred Wachter) beschränkt. Scanne zuerst mit dem Scanner-Button den offiziellen QR-Code am Waffentresor. Danach prüfst bzw. ergänzt du Übernehmer, optional Mitabholer, Salutwaffen, Anlass und Ort. Bei der Rückkehr wird erneut der Tresor-QR-Code gescannt; nach 2 Minuten Inaktivität oder einem Tab-Wechsel sperrt sich das Waffenbuch automatisch wieder.
                     </div>
                 </div>
 
@@ -2554,40 +2634,50 @@
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">🔐 Vorstands-Login, Session-Timeout &amp; dauerhafte Namens-Erkennung</div>
+                    <div>Nach dem Login mit einem der 4 autorisierten Vorstands-Accounts (Simon, Heimo, Karin, Sabrina) merkt sich dein Gerät deinen vollen Namen dauerhaft. Auch wenn sich der sensible Admin-Bereich nach 5 Minuten Inaktivität aus Sicherheitsgründen wieder sperrt, bleibt dein Name im Chat und in der App erhalten, ohne dass das Namens-Pop-up erneut erscheint.</div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
                     <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">1. 📰 News &amp; Termine</div>
                     <div>News-Beiträge mit Titel, Text und optionalem Foto veröffentlichen sowie Vereinstermine erstellen, Abstimmungsstände (Zusagen/Absagen) prüfen und alte Termine löschen.</div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">2. 🛡️ Dienstplan, Chat &amp; Push-Exklusivrecht für Simon</div>
-                    <div>Neue Dienste (Datum, Team, eingeteilte Mitglieder) eintragen – aktive Dienste erhalten automatisch die Dienstzeit <em>19:00 – 21:00 Uhr</em>. Alle Push-Funktionen (<strong>Freitext-Push</strong> an alle Geräte, Push-Häkchen bei News/Terminen und <strong>🔔 Erinnerung</strong> je Dienst) sind aus Sicherheitsgründen ausschließlich für Haupt-Admin <strong>Simon</strong> sichtbar und über OneSignal + Cloudflare Worker geschützt. Im <strong>Vereins-Chat</strong> sind alle 4 Vorstandsrollen (<em>Obmann &amp; App-Inhaber, Obmann Stv., Kassierin, Schriftführerin</em>) mit eigenen Abzeichen sichtbar, und der Obmann kann wichtige Nachrichten mit <code>📌</code> dauerhaft oben im Chat anpinnen (und per <code>✖</code> wieder lösen).</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">2. 🛡️ Dienstplan &amp; Push-Exklusivrecht für Simon</div>
+                    <div>Neue Dienste (Datum, Team, eingeteilte Mitglieder) eintragen – aktive Dienste erhalten automatisch die Dienstzeit <em>19:00 – 21:00 Uhr</em>. Alle Push-Funktionen (<strong>Freitext-Push</strong> an alle Geräte, Push-Häkchen bei News/Terminen und <strong>🔔 Erinnerung</strong> je Dienst) sind aus Sicherheitsgründen ausschließlich für Haupt-Admin <strong>Simon</strong> sichtbar und über OneSignal + Cloudflare Worker geschützt.</div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">3. 🔑 Schlüssel- &amp; Mitgliederverwaltung</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">3. 💬 Vereins-Chat Moderation &amp; Vorstands-Abzeichen</div>
+                    <div>Alle 4 Vorstandsmitglieder werden im Vereins-Chat automatisch mit ihrem offiziellen Rollen-Abzeichen (🛡️ OBMANN &amp; ⭐ APP-INHABER, 🛡️ OBMANN STV., 💰 KASSIERIN, ✍️ SCHRIFTFÜHRERIN) hervorgehoben. Alle 4 Admins können unpassende Nachrichten über das 🗑-Symbol löschen; Haupt-Admin Simon kann zudem wichtige Durchsagen mit 📌 dauerhaft ganz oben im Chat anpinnen (und per ✖ wieder lösen).</div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">4. 🔑 Schlüssel- &amp; Mitgliederverwaltung</div>
                     <div>Zeigt alle aktiven Vereinsmitglieder (19er-Liste) sowie die 4 Waffenbuch-Berechtigten. Darunter pflegst du die vertrauliche <strong>Schlüsselliste &amp; Kontaktdaten</strong> (Name, Geburtsdatum, Adresse, Telefon, Schlüsselnummer) inklusive <strong>Querformat-A4-PDF-Export</strong>.</div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">4. 📦 Lagerbestand</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">5. 📦 Lagerbestand</div>
                     <div>Verwaltet Hauswürste, Wienerle sowie Bier- und Limo-Kisten. Jede Buchung im Schankbuch zieht verkaufte Würste (stückgenau) und Getränke (anteilig je 24er-Kiste) automatisch vom Lagerbestand ab; Nachlieferungen werden über <code>+</code>/<code>-</code> oder <em>„✏️ Bearbeiten“</em> eingetragen.</div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">5. 🍺 Schankkassa vs. Firmen-PDF-Rechnungen</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">6. 🍻 Schankkassa-Vorschau, Rechnungen (§ 6 UStG) &amp; Jahresabschluss</div>
                     <div>
-                        <strong>Ordner A (Schankkassa):</strong> Alle Bar-Abrechnungen normaler Gäste &amp; Mitglieder inklusive automatisch berechneter Gesamtsumme und <strong>CSV-Kassenbericht-Export</strong>.<br>
-                        <strong>Ordner B (Firmen- &amp; Feier-Rechnungen):</strong> Offizielle Rechnungen mit fortlaufender Nummer, Vorschau und druckfertigem <strong>A4-PDF-Download</strong> samt Vereins-Bankverbindung (Raiffeisenbank Bludenz-Montafon).
+                        Unter „Schankbuch Verwaltung &amp; Exporte“ steht eine Live-Vorschau für den Kassenbericht sowie ein A4-PDF-Export bereit, auf dem automatisch das jeweilige Schankdienst-Mitglied vermerkt ist. Alle ausgestellten Firmen-/Feier-Rechnungen enthalten automatisch das Leistungsdatum sowie den gesetzlichen Kleinunternehmer-Hinweis (§ 6 Abs. 1 Z 27 UStG).<br>
+                        <strong>Zusätzlich:</strong> CSV-Kassenbericht-Export für die Schankkassa sowie automatische Gesamtsumme und Vereins-Bankverbindung (Raiffeisenbank Bludenz-Montafon) auf offiziellen PDF-Rechnungen.
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">6. 🎯 Waffenbuch-Protokolle &amp; ZWR/ZVR-Exporte</div>
-                    <div>Alle Entnahmen und Rückgaben erscheinen mit <strong>getrennt ausgewiesener ZWR-Nummer und ZVR-Zahl</strong> sowie den Vereinsfunktionen der Übernehmer. Der Vorstand kann jedes Protokoll unzensiert ansehen oder als <strong>A4-PDF</strong> laden, die komplette <strong>Waffenliste als PDF</strong> exportieren und den offiziellen <strong>Tresor-QR-Code (<code>KBSV-TRESOR-GASCHURN</code>) als PNG</strong> herunterladen. Zusätzlich erhält Haupt-Admin <strong>Simon</strong> bei jedem Tresor-QR-Scan, jeder Waffen-Entnahme und jeder Rückgabe automatisch eine exklusive Sicherheits-Push-Benachrichtigung auf sein Gerät.</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">7. 🎯 Waffenbuch-Sicherheit, Obmann-Alarme &amp; Audit-Log</div>
+                    <div>Der Tresor-QR-Code (<code>KBSV-TRESOR-GASCHURN</code>) lässt sich ausschließlich von den 4 berechtigten Personen (Simon, Heimo, Norbert, Manfred) entsperren und sperrt sich nach 2 Minuten Inaktivität selbstständig wieder. Haupt-Admin Simon erhält bei jedem Tresor-Scan, jeder Entnahme, jeder Rückgabe sowie bei unberechtigten Scan-Versuchen sofort eine private Push-Warnung. Zusätzlich werden alle kritischen Admin-Aktionen unter „System &amp; Sicherheit“ im unveränderlichen Sicherheits-Audit-Log protokolliert. Alle Protokolle stehen zudem mit getrennt ausgewiesener ZWR-Nummer und ZVR-Zahl als A4-PDF sowie der Tresor-QR-Code als PNG-Download bereit.</div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">7. ⚙️ Master-PIN, Zugangscode &amp; Gesamt-Backup</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">8. ⚙️ Master-PIN, Zugangscode &amp; Gesamt-Backup</div>
                     <div>Unter <strong>„⚙️ System &amp; Sicherheit“</strong> sind Vereins-Zugangscode und optionaler OneSignal-Key durch einen separaten <strong>Master-PIN</strong> geschützt (SHA-256-Hash; nach dem Speichern des Vereins-Codes werden Geräte mit altem Code automatisch gesperrt). Über <strong>„📥 Gesamt-Backup“</strong> exportierst du alle Schankbuch-Abrechnungen, Waffenbuch-Protokolle und Termine gebündelt als Excel-kompatible CSV-Jahressicherung.</div>
                 </div>
 
@@ -2987,6 +3077,18 @@
             document.addEventListener(evt, resetInactivityTimer, true);
         });
 
+        function updateAppFooterVisibility(tabId) {
+            const isNewsTab = (tabId === 'news');
+            const footerEl = document.getElementById('app-main-footer');
+            if (footerEl) {
+                footerEl.style.display = isNewsTab ? 'block' : 'none';
+            }
+            if (document.body) {
+                document.body.classList.toggle('compact-bottom-tab', !isNewsTab);
+                document.body.style.setProperty('padding-bottom', isNewsTab ? '180px' : '82px', 'important');
+            }
+        }
+
         function switchTab(tabId) {
             stopQrScanner();
             if (tabId !== 'weapons' && typeof weaponSessionUnlocked !== 'undefined' && weaponSessionUnlocked) {
@@ -3005,6 +3107,7 @@
             const targetNav = document.getElementById('nav-' + tabId);
             if(targetPage) targetPage.classList.add('active');
             if(targetNav) targetNav.classList.add('active');
+            updateAppFooterVisibility(tabId);
             if (tabId === 'weapons') {
                 try { populateWeaponMemberSelects(); } catch(e) {}
             } else if (tabId === 'events') {
@@ -3247,12 +3350,20 @@
         function updateFooterMemberIdentity() {
             const el = document.getElementById('footer-member-identity');
             if (!el) return;
-            const saved = getSavedClubMemberName();
-            if (saved) {
-                el.innerHTML = `Angemeldet als: <strong style="color:#0f172a;">${escapeHtml(saved)}</strong> (<span onclick="openMemberNameSetupModal(true)" style="cursor:pointer; text-decoration:underline; font-weight:700; color:#15803d;">ändern</span>)`;
-            } else {
-                el.innerHTML = `Angemeldet als: <span style="color:#64748b;">Noch nicht gewählt</span> (<span onclick="openMemberNameSetupModal(true)" style="cursor:pointer; text-decoration:underline; font-weight:700; color:#15803d;">auswählen</span>)`;
+            let saved = getSavedClubMemberName();
+            if (!saved && typeof auth !== 'undefined' && auth && auth.currentUser) {
+                const resolvedKey = resolveAdminKeyFromUser(auth.currentUser, typeof activeAdminName !== 'undefined' ? activeAdminName : '');
+                if (resolvedKey && ADMIN_KEY_TO_MEMBER_NAME[resolvedKey]) {
+                    saved = ADMIN_KEY_TO_MEMBER_NAME[resolvedKey];
+                }
             }
+            const safeLabel = saved || 'Noch nicht gewählt';
+            const labelColor = saved ? '#0f172a' : '#64748b';
+            el.innerHTML = `Angemeldet als: <strong id="footer-active-member-name" style="color:${labelColor};">${escapeHtml(safeLabel)}</strong>`;
+        }
+
+        function updateFooterMemberLabel() {
+            return updateFooterMemberIdentity();
         }
 
         function refreshMemberIdentityViews() {
@@ -4525,25 +4636,205 @@
 
         let selectedEventIdForVote = null;
         let selectedVoteMode = 'dabei';
+        let loadedEventsById = {};
+
+        function normalizeEventVoteMode(voteMode) {
+            const normalized = String(voteMode || '').trim().toLowerCase();
+            if (normalized === 'absage') return 'absage';
+            if (normalized === 'maybe' || normalized === 'vielleicht') return 'maybe';
+            return 'dabei';
+        }
+
+        function escapeIcsText(val) {
+            return String(val === undefined || val === null ? '' : val)
+                .replace(/\\/g, '\\\\')
+                .replace(/\r?\n/g, '\\n')
+                .replace(/;/g, '\\;')
+                .replace(/,/g, '\\,');
+        }
+
+        function formatIcsDateParts(dateObj) {
+            const y = String(dateObj.getFullYear());
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}${m}${d}`;
+        }
+
+        function formatIcsUtcStamp(dateObj) {
+            const dt = (dateObj instanceof Date && !isNaN(dateObj.getTime())) ? dateObj : new Date();
+            const y = String(dt.getUTCFullYear());
+            const m = String(dt.getUTCMonth() + 1).padStart(2, '0');
+            const d = String(dt.getUTCDate()).padStart(2, '0');
+            const hh = String(dt.getUTCHours()).padStart(2, '0');
+            const mm = String(dt.getUTCMinutes()).padStart(2, '0');
+            const ss = String(dt.getUTCSeconds()).padStart(2, '0');
+            return `${y}${m}${d}T${hh}${mm}${ss}Z`;
+        }
+
+        function extractEventTimeWindow(ev) {
+            const sources = [
+                ev && ev.time ? String(ev.time) : '',
+                ev && ev.desc ? String(ev.desc) : '',
+                ev && ev.title ? String(ev.title) : ''
+            ].join(' ');
+            const rangeMatch = sources.match(/(\d{1,2})[:.](\d{2})\s*(?:Uhr)?\s*(?:-|–|bis)\s*(\d{1,2})[:.](\d{2})/i);
+            if (rangeMatch) {
+                const sh = parseInt(rangeMatch[1], 10);
+                const sm = parseInt(rangeMatch[2], 10);
+                const eh = parseInt(rangeMatch[3], 10);
+                const em = parseInt(rangeMatch[4], 10);
+                if (sh >= 0 && sh <= 23 && sm >= 0 && sm <= 59 && eh >= 0 && eh <= 23 && em >= 0 && em <= 59) {
+                    return { startHour: sh, startMin: sm, endHour: eh, endMin: em };
+                }
+            }
+            const singleMatch = sources.match(/(?:^|\s)(\d{1,2})[:.](\d{2})(?:\s*Uhr)?(?=\s|$|[.,;)])/i);
+            if (singleMatch) {
+                const sh = parseInt(singleMatch[1], 10);
+                const sm = parseInt(singleMatch[2], 10);
+                if (sh >= 0 && sh <= 23 && sm >= 0 && sm <= 59) {
+                    const totalEndMin = Math.min(23 * 60 + 59, sh * 60 + sm + 120);
+                    return {
+                        startHour: sh,
+                        startMin: sm,
+                        endHour: Math.floor(totalEndMin / 60),
+                        endMin: totalEndMin % 60
+                    };
+                }
+            }
+            return null;
+        }
+
+        function buildEventIcsContent(ev) {
+            if (!ev) return '';
+            const baseDate = parseLocalDate(ev.date);
+            if (isNaN(baseDate.getTime())) return '';
+            baseDate.setHours(0, 0, 0, 0);
+
+            const title = String(ev.title || 'Vereinstermin').trim();
+            const desc = String(ev.desc || '').trim();
+            const timeWindow = extractEventTimeWindow(ev);
+            const dateStr = formatIcsDateParts(baseDate);
+            const uid = `kbsv-event-${String(ev.id || dateStr).replace(/[^a-zA-Z0-9_-]/g, '')}@kbsv-gaschurn.at`;
+            const dtStamp = formatIcsUtcStamp(new Date());
+
+            const lines = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'PRODID:-//KBSV Gaschurn-Partenen//Vereins-App//DE',
+                'CALSCALE:GREGORIAN',
+                'METHOD:PUBLISH'
+            ];
+
+            if (timeWindow) {
+                lines.push(
+                    'BEGIN:VTIMEZONE',
+                    'TZID:Europe/Vienna',
+                    'BEGIN:STANDARD',
+                    'DTSTART:19701025T030000',
+                    'RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU',
+                    'TZOFFSETFROM:+0200',
+                    'TZOFFSETTO:+0100',
+                    'TZNAME:CET',
+                    'END:STANDARD',
+                    'BEGIN:DAYLIGHT',
+                    'DTSTART:19700329T020000',
+                    'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU',
+                    'TZOFFSETFROM:+0100',
+                    'TZOFFSETTO:+0200',
+                    'TZNAME:CEST',
+                    'END:DAYLIGHT',
+                    'END:VTIMEZONE'
+                );
+            }
+
+            lines.push('BEGIN:VEVENT');
+            lines.push(`UID:${uid}`);
+            lines.push(`DTSTAMP:${dtStamp}`);
+
+            if (timeWindow) {
+                const startTime = `${String(timeWindow.startHour).padStart(2, '0')}${String(timeWindow.startMin).padStart(2, '0')}00`;
+                const endTime = `${String(timeWindow.endHour).padStart(2, '0')}${String(timeWindow.endMin).padStart(2, '0')}00`;
+                lines.push(`DTSTART;TZID=Europe/Vienna:${dateStr}T${startTime}`);
+                lines.push(`DTEND;TZID=Europe/Vienna:${dateStr}T${endTime}`);
+            } else {
+                const nextDay = new Date(baseDate.getTime());
+                nextDay.setDate(nextDay.getDate() + 1);
+                lines.push(`DTSTART;VALUE=DATE:${dateStr}`);
+                lines.push(`DTEND;VALUE=DATE:${formatIcsDateParts(nextDay)}`);
+            }
+
+            lines.push(`SUMMARY:${escapeIcsText(title)}`);
+            if (desc) {
+                lines.push(`DESCRIPTION:${escapeIcsText(desc)}`);
+                lines.push(`LOCATION:${escapeIcsText(desc)}`);
+            } else {
+                lines.push('DESCRIPTION:Termin des Kameradschaftsbundes & Schützenvereins Gaschurn-Partenen');
+            }
+            lines.push('END:VEVENT');
+            lines.push('END:VCALENDAR');
+            return lines.join('\r\n');
+        }
+
+        function downloadEventIcs(eventId) {
+            const ev = loadedEventsById[String(eventId || '')];
+            if (!ev) {
+                alert("Termindaten für den Kalender-Export konnten nicht geladen werden.");
+                return;
+            }
+            const icsContent = buildEventIcsContent(ev);
+            if (!icsContent) {
+                alert("Das Datum dieses Termins konnte nicht in eine Kalenderdatei umgewandelt werden.");
+                return;
+            }
+            const slugTitle = String(ev.title || 'termin')
+                .toLowerCase()
+                .replace(/[^a-z0-9äöüß]+/gi, '-')
+                .replace(/^-+|-+$/g, '')
+                .slice(0, 40) || 'termin';
+            const fileName = `kbsv-${slugTitle}.ics`;
+            try {
+                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => {
+                    try { document.body.removeChild(link); } catch (e) {}
+                    try { URL.revokeObjectURL(url); } catch (e) {}
+                }, 1000);
+            } catch (err) {
+                alert("Kalenderdatei konnte nicht heruntergeladen werden: " + (err && err.message ? err.message : String(err)));
+            }
+        }
 
         async function toggleEventVote(eventId, voteMode, memberName) {
             if (!eventId || !memberName) return;
-            const mode = (voteMode === 'absage') ? 'absage' : 'dabei';
+            const mode = normalizeEventVoteMode(voteMode);
             try {
                 const docRef = db.collection("events").doc(eventId);
                 const doc = await docRef.get();
                 if (!doc.exists) return;
                 const data = doc.data() || {};
                 let votes = { ...(data.votes || {}) };
+                const currentStatus = String(votes[memberName] || '').trim().toLowerCase();
 
                 if (mode === 'absage') {
-                    if (String(votes[memberName] || '').toLowerCase() === 'absage') {
+                    if (currentStatus === 'absage') {
                         delete votes[memberName];
                     } else {
                         votes[memberName] = 'absage';
                     }
+                } else if (mode === 'maybe') {
+                    if (currentStatus === 'maybe' || currentStatus === 'vielleicht') {
+                        delete votes[memberName];
+                    } else {
+                        votes[memberName] = 'maybe';
+                    }
                 } else {
-                    if (votes[memberName] === 'Dabei') {
+                    if (votes[memberName] === 'Dabei' || currentStatus === 'dabei') {
                         delete votes[memberName];
                     } else {
                         votes[memberName] = 'Dabei';
@@ -4558,15 +4849,16 @@
         }
 
         function openVoteModal(eventId, eventTitle, voteMode = 'dabei') {
+            const cleanMode = normalizeEventVoteMode(voteMode);
             const savedMemberName = getSavedClubMemberName();
             if (savedMemberName) {
-                toggleEventVote(eventId, voteMode, savedMemberName);
+                toggleEventVote(eventId, cleanMode, savedMemberName);
                 return;
             }
             pendingEventVoteAfterSetup = {
                 eventId,
                 eventTitle,
-                voteMode: (voteMode === 'absage') ? 'absage' : 'dabei'
+                voteMode: cleanMode
             };
             openMemberNameSetupModal(true);
         }
@@ -4588,6 +4880,134 @@
             await toggleEventVote(evId, mode, memberName);
         }
 
+        function buildEventCardHtml(ev, isNext, isPast) {
+            const votes = ev.votes || {};
+            const dabeiNames = [];
+            const maybeNames = [];
+            const absageSet = new Set();
+
+            Object.keys(votes).forEach(name => {
+                const statusVal = String(votes[name] || '').trim().toLowerCase();
+                if (statusVal === 'absage') {
+                    absageSet.add(name);
+                } else if (statusVal === 'maybe' || statusVal === 'vielleicht') {
+                    maybeNames.push(name);
+                } else if (votes[name]) {
+                    dabeiNames.push(name);
+                }
+            });
+            if (Array.isArray(ev.absagen)) {
+                ev.absagen.forEach(name => {
+                    const clean = String(name || '').trim();
+                    if (clean && !dabeiNames.includes(clean) && !maybeNames.includes(clean)) {
+                        absageSet.add(clean);
+                    }
+                });
+            }
+            const absageNames = Array.from(absageSet);
+
+            let votesHtml = "";
+            if (dabeiNames.length > 0 || maybeNames.length > 0 || absageNames.length > 0) {
+                if (dabeiNames.length > 0) {
+                    let dabeiBadges = "";
+                    dabeiNames.forEach(n => {
+                        dabeiBadges += `<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:6px; font-weight:700; font-size:0.75em; display:inline-block; margin:2px;">✅ ${escapeHtml(n)}</span>`;
+                    });
+                    votesHtml += `<div style="width:100%; margin-bottom:4px;"><span style="font-size:0.78em; font-weight:800; color:#065f46; margin-right:4px;">✋ Dabei (${dabeiNames.length}):</span>${dabeiBadges}</div>`;
+                }
+                if (maybeNames.length > 0) {
+                    let maybeBadges = "";
+                    maybeNames.forEach(n => {
+                        maybeBadges += `<span style="background:#fef3c7; color:#b45309; border:1px solid #fcd34d; padding:2px 8px; border-radius:6px; font-weight:700; font-size:0.75em; display:inline-block; margin:2px;">❓ ${escapeHtml(n)}</span>`;
+                    });
+                    votesHtml += `<div style="width:100%; margin-bottom:4px;"><span style="font-size:0.78em; font-weight:800; color:#b45309; margin-right:4px;">❓ Vielleicht (${maybeNames.length}):</span>${maybeBadges}</div>`;
+                }
+                if (absageNames.length > 0) {
+                    let absageBadges = "";
+                    absageNames.forEach(n => {
+                        absageBadges += `<span style="background:#fee2e2; color:#dc2626; border:1px solid #fca5a5; padding:2px 8px; border-radius:6px; font-weight:700; font-size:0.75em; display:inline-block; margin:2px;">✖ ${escapeHtml(n)}</span>`;
+                    });
+                    votesHtml += `<div style="width:100%;"><span style="font-size:0.78em; font-weight:800; color:#dc2626; margin-right:4px;">✖ Abgesagt (${absageNames.length}):</span>${absageBadges}</div>`;
+                }
+            } else {
+                votesHtml = `<span style="font-size:0.8em; color:var(--text-muted);">Noch keine Rückmeldungen.</span>`;
+            }
+
+            const safeEvId = escapeHtml(ev.id);
+            const safeEvDate = escapeHtml(ev.date);
+            const safeEvTitle = escapeHtml(ev.title);
+            const safeEvDesc = escapeHtml(ev.desc || 'Kein Ort angegeben');
+            const cardClass = isNext ? 'next-event-hero-card' : 'upcoming-event-compact-card';
+            const cardInlineStyle = isPast ? ' style="opacity: 0.86;"' : '';
+            const nextHeaderHtml = isNext
+                ? `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="background: #15803d; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em;">NÄCHSTER TERMIN</span>
+                        <span style="background: #0f172a; color: #4ade80; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em;">• LIVE</span>
+                   </div>`
+                : '';
+            const dateHtml = isNext
+                ? `<div style="color: #991b1b; font-weight: 800; font-size: 0.95rem; margin-bottom: 4px;">📅 ${safeEvDate}</div>`
+                : `<div style="font-size: 0.9rem; font-weight: 600; color: #334155; margin-bottom: 4px;">📅 ${safeEvDate}</div>`;
+            const titleAndDateHtml = isNext
+                ? `${dateHtml}<div class="event-card-title">${safeEvTitle}</div>`
+                : `<div class="event-card-title">${safeEvTitle}</div>${dateHtml}`;
+
+            const cardHtml = `
+                <div class="${cardClass}"${cardInlineStyle}>
+                    ${nextHeaderHtml}
+                    ${titleAndDateHtml}
+                    <div style="font-size: ${isNext ? '0.88em' : '0.8em'}; color: var(--text-muted); margin-bottom: 6px;">📍 ${safeEvDesc}</div>
+                    <div style="margin: 6px 0; display: flex; flex-direction: column; gap: 4px;">${votesHtml}</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;">
+                        <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'dabei')" class="btn btn-green event-vote-btn" style="flex: 1 1 30%; min-width: 94px; padding: 10px 8px; font-size: 0.84em;">✋ Zusage</button>
+                        <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'maybe')" class="btn event-vote-btn" style="flex: 1 1 30%; min-width: 94px; padding: 10px 8px; font-size: 0.84em; background: #fef3c7; color: #b45309; border: 1.5px solid #f59e0b; box-shadow: none;">❓ Vielleicht</button>
+                        <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'absage')" class="btn event-vote-btn" style="flex: 1 1 30%; min-width: 94px; padding: 10px 8px; font-size: 0.84em; background: #dc2626; color: #ffffff;">✖ Absage</button>
+                    </div>
+                    <button type="button" data-ev-id="${safeEvId}" onclick="downloadEventIcs(this.dataset.evId)" class="btn event-ics-btn" style="width: 100%; margin-top: 8px; padding: 8px 12px; font-size: 0.84em; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; box-shadow: none;">📅 In Kalender speichern</button>
+                </div>
+            `;
+
+            return {
+                cardHtml,
+                dabeiCount: dabeiNames.length,
+                maybeCount: maybeNames.length,
+                absageCount: absageNames.length,
+                safeEvId,
+                safeEvDate,
+                safeEvTitle
+            };
+        }
+
+        function parseEventDateSafe(dateStr) {
+            if (!dateStr) return null;
+            const raw = String(dateStr).trim();
+            if (!raw) return null;
+
+            const deMatch = raw.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})/);
+            if (deMatch) {
+                const tag = Number(deMatch[1]);
+                const monat = Number(deMatch[2]);
+                const jahr = Number(deMatch[3]);
+                const d = new Date(jahr, monat - 1, tag, 23, 59, 59);
+                if (!isNaN(d.getTime()) && d.getFullYear() === jahr && d.getMonth() === monat - 1 && d.getDate() === tag) {
+                    return d;
+                }
+            }
+
+            const isoMatch = raw.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+            if (isoMatch) {
+                const jahr = Number(isoMatch[1]);
+                const monat = Number(isoMatch[2]);
+                const tag = Number(isoMatch[3]);
+                const d = new Date(jahr, monat - 1, tag, 23, 59, 59);
+                if (!isNaN(d.getTime()) && d.getFullYear() === jahr && d.getMonth() === monat - 1 && d.getDate() === tag) {
+                    return d;
+                }
+            }
+
+            return null;
+        }
+
         async function loadEvents() {
             const container = document.getElementById('events-container');
             const adminContainer = document.getElementById('admin-events-list');
@@ -4596,110 +5016,97 @@
             try {
                 const snapshot = await db.collection("events").orderBy("createdAt", "asc").get();
                 let eventsList = [];
+                loadedEventsById = {};
 
                 snapshot.forEach(doc => {
-                    eventsList.push({ id: doc.id, ...doc.data() });
+                    const evObj = { id: doc.id, ...doc.data() };
+                    eventsList.push(evObj);
+                    loadedEventsById[String(doc.id)] = evObj;
                 });
 
-                const today = getViennaToday();
+                const heuteStart = new Date();
+                heuteStart.setHours(0, 0, 0, 0);
+
+                let futureEvents = [];
+                let pastEvents = [];
 
                 eventsList.forEach(ev => {
-                    ev.parsedDate = parseLocalDate(ev.date);
-                    ev.parsedDate.setHours(0,0,0,0);
+                    const eventDate = parseEventDateSafe(ev.date);
+                    ev.parsedDate = eventDate;
+                    if (eventDate !== null && eventDate < heuteStart) {
+                        pastEvents.push(ev);
+                    } else {
+                        futureEvents.push(ev);
+                    }
                 });
 
-                let futureEvents = eventsList.filter(ev => isNaN(ev.parsedDate.getTime()) || ev.parsedDate >= today);
-                let pastEvents = eventsList.filter(ev => !isNaN(ev.parsedDate.getTime()) && ev.parsedDate < today);
-
-                futureEvents.sort((a, b) => a.parsedDate - b.parsedDate);
+                futureEvents.sort((a, b) => {
+                    if (!a.parsedDate && !b.parsedDate) return 0;
+                    if (!a.parsedDate) return 1;
+                    if (!b.parsedDate) return -1;
+                    return a.parsedDate - b.parsedDate;
+                });
                 pastEvents.sort((a, b) => b.parsedDate - a.parsedDate);
 
-                let sortedEvents = [...futureEvents, ...pastEvents];
-
-                let html = "";
-                let adminHtml = "";
-
-                if (sortedEvents.length === 0) {
+                if (futureEvents.length === 0 && pastEvents.length === 0) {
                     container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Termine eingetragen.</p>';
                     if(adminContainer) adminContainer.innerHTML = '<p class="admin-muted-text">Keine Termine eingetragen.</p>';
                     return;
                 }
 
-                sortedEvents.forEach((ev, idx) => {
-                    const isNext = (idx === 0 && (isNaN(ev.parsedDate.getTime()) || ev.parsedDate >= today));
-                    const votes = ev.votes || {};
-                    const dabeiNames = [];
-                    const absageSet = new Set();
+                let html = "";
+                let pastHtml = "";
+                let adminHtml = "";
 
-                    Object.keys(votes).forEach(name => {
-                        const statusVal = String(votes[name] || '').trim().toLowerCase();
-                        if (statusVal === 'absage') {
-                            absageSet.add(name);
-                        } else if (votes[name]) {
-                            dabeiNames.push(name);
+                if (futureEvents.length === 0) {
+                    html += '<p style="font-size:0.85em; color:var(--text-muted); margin-bottom:10px;">Aktuell stehen keine bevorstehenden Termine an.</p>';
+                } else {
+                    futureEvents.forEach((ev, idx) => {
+                        const isNext = (idx === 0);
+                        const rendered = buildEventCardHtml(ev, isNext, false);
+                        html += rendered.cardHtml;
+                        if (isNext && futureEvents.length > 1) {
+                            html += '<div style="margin: 20px 0 10px 0; font-size: 1.05rem; font-weight: 800; color: #0f172a;">🗓️ Weitere Termine</div>';
                         }
+                        adminHtml += `
+                            <div class="admin-list-row">
+                                <div style="flex:1; min-width:0;">
+                                    <strong style="color:#0f172a;">${rendered.safeEvDate}</strong> – <span style="color:#b91c1c; font-weight:700;">${rendered.safeEvTitle}</span><br>
+                                    <span style="color:#475569; font-size:0.86em;">✅ ${rendered.dabeiCount} Zusagen · ❓ ${rendered.maybeCount} Vielleicht · ✖ ${rendered.absageCount} Absagen</span>
+                                </div>
+                                <button type="button" class="btn admin-btn-delete" style="padding:6px 10px !important; font-size:0.78em !important; flex-shrink:0;" data-doc-id="${rendered.safeEvId}" onclick="deleteItem('events', this.dataset.docId)">🗑️</button>
+                            </div>
+                        `;
                     });
-                    if (Array.isArray(ev.absagen)) {
-                        ev.absagen.forEach(name => {
-                            const clean = String(name || '').trim();
-                            if (clean && !dabeiNames.includes(clean)) {
-                                absageSet.add(clean);
-                            }
-                        });
-                    }
-                    const absageNames = Array.from(absageSet);
+                }
 
-                    let votesHtml = "";
-                    if (dabeiNames.length > 0 || absageNames.length > 0) {
-                        if (dabeiNames.length > 0) {
-                            let dabeiBadges = "";
-                            dabeiNames.forEach(n => {
-                                dabeiBadges += `<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:6px; font-weight:700; font-size:0.75em; display:inline-block; margin:2px;">✅ ${escapeHtml(n)}</span>`;
-                            });
-                            votesHtml += `<div style="width:100%; margin-bottom:4px;"><span style="font-size:0.78em; font-weight:800; color:#065f46; margin-right:4px;">Dabei (${dabeiNames.length}):</span>${dabeiBadges}</div>`;
-                        }
-                        if (absageNames.length > 0) {
-                            let absageBadges = "";
-                            absageNames.forEach(n => {
-                                absageBadges += `<span style="background:#fee2e2; color:#dc2626; border:1px solid #fca5a5; padding:2px 8px; border-radius:6px; font-weight:700; font-size:0.75em; display:inline-block; margin:2px;">✖ ${escapeHtml(n)}</span>`;
-                            });
-                            votesHtml += `<div style="width:100%;"><span style="font-size:0.78em; font-weight:800; color:#dc2626; margin-right:4px;">Abgesagt (${absageNames.length}):</span>${absageBadges}</div>`;
-                        }
-                    } else {
-                        votesHtml = `<span style="font-size:0.8em; color:var(--text-muted);">Noch keine Rückmeldungen.</span>`;
-                    }
-
-                    const safeEvId = escapeHtml(ev.id);
-                    const safeEvDate = escapeHtml(ev.date);
-                    const safeEvTitle = escapeHtml(ev.title);
-                    const safeEvDesc = escapeHtml(ev.desc || 'Kein Ort angegeben');
+                if (pastEvents.length > 0) {
+                    pastEvents.forEach(ev => {
+                        const rendered = buildEventCardHtml(ev, false, true);
+                        pastHtml += rendered.cardHtml;
+                        adminHtml += `
+                            <div class="admin-list-row">
+                                <div style="flex:1; min-width:0;">
+                                    <strong style="color:#0f172a;">${rendered.safeEvDate}</strong> – <span style="color:#b91c1c; font-weight:700;">${rendered.safeEvTitle}</span><br>
+                                    <span style="color:#475569; font-size:0.86em;">✅ ${rendered.dabeiCount} Zusagen · ❓ ${rendered.maybeCount} Vielleicht · ✖ ${rendered.absageCount} Absagen</span>
+                                </div>
+                                <button type="button" class="btn admin-btn-delete" style="padding:6px 10px !important; font-size:0.78em !important; flex-shrink:0;" data-doc-id="${rendered.safeEvId}" onclick="deleteItem('events', this.dataset.docId)">🗑️</button>
+                            </div>
+                        `;
+                    });
 
                     html += `
-                        <div class="glass-card ${isNext ? 'next-duty-neon' : ''}" style="margin-bottom: 10px; padding: ${isNext ? '18px' : '12px'}; ${isNext ? '' : 'border-left: 4px solid #2563eb; opacity: 0.9;'}">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                <div style="font-size: ${isNext ? '1em' : '0.85em'}; font-weight: 800; color: #0f172a;">📅 ${safeEvDate} ${isNext ? '<span style="font-size:0.65em; background:#15803d; color:#fff; font-weight:800; padding:2px 6px; border-radius:4px; margin-left:6px;">NÄCHSTER TERMIN</span>' : ''}</div>
-                                ${isNext ? '<span style="font-size: 0.75em; background: #0f172a; color: #22c55e; font-weight: 800; padding: 3px 8px; border-radius: 6px;">● LIVE</span>' : ''}
+                        <details style="margin-top: 12px; background: rgba(248, 250, 252, 0.94); border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 10px 12px;">
+                            <summary style="cursor: pointer; font-weight: 800; font-size: 0.88em; color: #334155; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                                <span>📁 Vergangene Termine anzeigen (${pastEvents.length})</span>
+                                <span style="font-size: 0.85em; color: #64748b;">▼</span>
+                            </summary>
+                            <div style="margin-top: 10px;">
+                                ${pastHtml}
                             </div>
-                            <div style="font-size: ${isNext ? '1.1em' : '0.95em'}; font-weight: 800; color: #b91c1c; margin-bottom: 3px;">${safeEvTitle}</div>
-                            <div style="font-size: ${isNext ? '0.85em' : '0.75em'}; color: var(--text-muted); margin-bottom: 6px;">📍 ${safeEvDesc}</div>
-                            <div style="margin: 6px 0; display: flex; flex-direction: column; gap: 4px;">${votesHtml}</div>
-                            <div style="display: flex; gap: 8px; margin-top: 10px;">
-                                <button data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'dabei')" class="btn btn-green" style="flex: 1; padding: ${isNext ? '10px' : '8px'}; font-size: ${isNext ? '0.88em' : '0.78em'};">✋ Ich bin dabei</button>
-                                <button data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'absage')" class="btn" style="flex: 1; padding: ${isNext ? '10px' : '8px'}; font-size: ${isNext ? '0.88em' : '0.78em'}; background: #dc2626; color: #ffffff;">✖ Absage</button>
-                            </div>
-                        </div>
+                        </details>
                     `;
-
-                    adminHtml += `
-                        <div class="admin-list-row">
-                            <div style="flex:1; min-width:0;">
-                                <strong style="color:#0f172a;">${safeEvDate}</strong> – <span style="color:#b91c1c; font-weight:700;">${safeEvTitle}</span><br>
-                                <span style="color:#475569; font-size:0.86em;">✅ ${dabeiNames.length} Zusagen · ✖ ${absageNames.length} Absagen</span>
-                            </div>
-                            <button type="button" class="btn admin-btn-delete" style="padding:6px 10px !important; font-size:0.78em !important; flex-shrink:0;" data-doc-id="${safeEvId}" onclick="deleteItem('events', this.dataset.docId)">🗑️</button>
-                        </div>
-                    `;
-                });
+                }
 
                 container.innerHTML = html;
                 if(adminContainer) adminContainer.innerHTML = adminHtml;
@@ -4717,14 +5124,14 @@
             if (!btn) return;
             if (enabled) {
                 btn.innerText = '🔍 Große Schrift: An';
-                btn.style.background = '#dcfce7';
-                btn.style.color = '#14532d';
-                btn.style.borderColor = '#16a34a';
+                btn.style.background = '#fef9c3';
+                btn.style.color = '#15803d';
+                btn.style.borderColor = '#15803d';
             } else {
                 btn.innerText = '🔍 Große Schrift: Aus';
                 btn.style.background = '#ffffff';
-                btn.style.color = '#0f172a';
-                btn.style.borderColor = '#94a3b8';
+                btn.style.color = '#1e293b';
+                btn.style.borderColor = '#cbd5e1';
             }
         }
 
@@ -4746,6 +5153,120 @@
             document.documentElement.classList.toggle('large-font-mode', enabled);
             updateLargeFontToggleUI(enabled);
         }
+
+        let cachedSpeechVoices = [];
+        let speechVoicesListenerBound = false;
+
+        function refreshSpeechVoicesList() {
+            if (typeof window === 'undefined' || typeof window.speechSynthesis === 'undefined' || typeof window.speechSynthesis.getVoices !== 'function') {
+                return [];
+            }
+            try {
+                const voices = window.speechSynthesis.getVoices();
+                if (Array.isArray(voices) && voices.length > 0) {
+                    cachedSpeechVoices = voices;
+                }
+            } catch (e) {}
+            return cachedSpeechVoices;
+        }
+
+        function bindSpeechVoicesChangedListener() {
+            if (speechVoicesListenerBound || typeof window === 'undefined' || typeof window.speechSynthesis === 'undefined') {
+                return;
+            }
+            speechVoicesListenerBound = true;
+            const handleVoicesChanged = () => {
+                refreshSpeechVoicesList();
+            };
+            try {
+                if (typeof window.speechSynthesis.addEventListener === 'function') {
+                    window.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged);
+                } else {
+                    window.speechSynthesis.onvoiceschanged = handleVoicesChanged;
+                }
+            } catch (e) {}
+            refreshSpeechVoicesList();
+        }
+
+        function getBestGermanVoice() {
+            bindSpeechVoicesChangedListener();
+            const voices = refreshSpeechVoicesList();
+            if (!Array.isArray(voices) || voices.length === 0) return null;
+
+            const germanVoices = voices.filter(v => v && typeof v.lang === 'string' && v.lang.trim().toLowerCase().startsWith('de'));
+            if (germanVoices.length === 0) return null;
+
+            const scoreVoice = (voice) => {
+                const name = String(voice.name || '');
+                const lang = String(voice.lang || '').trim().toLowerCase();
+                let score = 0;
+
+                if (/google/i.test(name)) score += 120;
+                if (/premium|enhanced|natural|neural/i.test(name)) score += 100;
+                if (/\b(anna|helena|katja|stefan)\b/i.test(name)) score += 90;
+                else if (/anna|helena|katja|stefan/i.test(name)) score += 80;
+
+                if (lang === 'de-de' || lang === 'de_de') score += 20;
+                else if (lang === 'de-at' || lang === 'de_at') score += 15;
+                else score += 5;
+
+                if (voice.localService === false) score += 3;
+                if (voice.default) score += 2;
+                return score;
+            };
+
+            let bestVoice = germanVoices[0];
+            let bestScore = scoreVoice(bestVoice);
+            for (let i = 1; i < germanVoices.length; i++) {
+                const candidate = germanVoices[i];
+                const candidateScore = scoreVoice(candidate);
+                if (candidateScore > bestScore) {
+                    bestVoice = candidate;
+                    bestScore = candidateScore;
+                }
+            }
+            return bestVoice;
+        }
+
+        function prepareCleanGermanSpeechText(rawText) {
+            if (rawText === null || rawText === undefined) return '';
+            let text = String(rawText);
+            if (!text.trim()) return '';
+
+            // 1. Verbundene Emoji-Paare mit Schrägstrich (z. B. 🔔/🔕) vorab entfernen
+            text = text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}\uFE0E\uFE0F\u200D\u20E3]+(?:\s*\/\s*[\p{Emoji_Presentation}\p{Extended_Pictographic}\uFE0E\uFE0F\u200D\u20E3]+)+/gu, ' ');
+
+            // 2. Alle Emojis, Piktogramme, Pfeile, Trennpunkte und Anführungs-/Klammer-Symbole entfernen
+            text = text
+                .replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}\uFE0E\uFE0F\u200D\u20E3]/gu, ' ')
+                .replace(/[→⬆⬇⬅➡⋮·•✖✔❌]/g, ' ')
+                .replace(/[()\[\]{}„“”"«»]/g, ' ');
+
+            // 3. Abkürzungen und Zeichen durch sauber sprechbare deutsche Wörter ersetzen
+            text = text
+                .replace(/\bz\.\s*B\./gi, ' zum Beispiel ')
+                .replace(/\bbzw\./gi, ' beziehungsweise ')
+                .replace(/-?QR-Code/gi, ' Q R Code ')
+                .replace(/PDF-/gi, ' P D F ')
+                .replace(/\bPDF\b/gi, ' P D F ')
+                .replace(/&/g, ' und ')
+                .replace(/\//g, ' oder ');
+
+            // 4. Doppelte Leerzeichen & Interpunktion bereinigen und saubere Satzpunkte setzen
+            text = text
+                .replace(/\s+/g, ' ')
+                .replace(/\s+([.,!?;:])/g, '$1')
+                .replace(/\.{2,}/g, '.')
+                .replace(/([,;:])\./g, '.')
+                .trim();
+
+            if (text && !/[.!?]$/.test(text)) {
+                text += '.';
+            }
+            return text;
+        }
+
+        bindSpeechVoicesChangedListener();
 
         function resetAllNewsReadAloudButtons() {
             document.querySelectorAll('.news-read-aloud-btn').forEach(b => {
@@ -4772,6 +5293,9 @@
 
             const isSameActive = (activeSpeechNewsIdx === newsIdx && window.speechSynthesis.speaking);
             stopReadNewsAloud();
+            try {
+                if (typeof stopReadMemberHelpAloud === 'function') stopReadMemberHelpAloud();
+            } catch (e) {}
             if (isSameActive) {
                 return;
             }
@@ -4780,14 +5304,21 @@
             if (!item) return;
 
             const spokenParts = [];
-            if (item.title) spokenParts.push(item.title);
-            if (item.text) spokenParts.push(item.text);
-            const spokenText = spokenParts.join('. ').trim();
+            const cleanTitle = prepareCleanGermanSpeechText(item.title || '');
+            const cleanBody = prepareCleanGermanSpeechText(item.text || '');
+            if (cleanTitle) spokenParts.push(cleanTitle);
+            if (cleanBody) spokenParts.push(cleanBody);
+            const spokenText = spokenParts.join(' ').replace(/\s+/g, ' ').trim();
             if (!spokenText) return;
 
             const utterance = new SpeechSynthesisUtterance(spokenText);
             utterance.lang = 'de-DE';
-            utterance.rate = 0.95;
+            utterance.rate = 0.82;
+            utterance.pitch = 1.0;
+            const bestVoice = getBestGermanVoice();
+            if (bestVoice) {
+                utterance.voice = bestVoice;
+            }
 
             activeSpeechNewsIdx = newsIdx;
             if (btnEl) {
@@ -6605,7 +7136,15 @@
             const activeBadge = document.getElementById('active-tab-badge');
             const totalTabLabel = document.getElementById('total-tab-name');
             if (activeBadge) activeBadge.innerText = 'Aktiv: ' + (activeTab ? activeTab.name : DEFAULT_BAR_TAB_NAME);
-            if (totalTabLabel) totalTabLabel.innerText = activeTab ? activeTab.name : DEFAULT_BAR_TAB_NAME;
+            if (totalTabLabel) {
+                if (typeof activeTallyBillingMode !== 'undefined' && activeTallyBillingMode === 'invoice' && activeTab && (activeTab.isDefaultBar || activeTab.id === DEFAULT_BAR_TAB_DOC_ID)) {
+                    totalTabLabel.innerText = 'Firmen-Rechnung';
+                    totalTabLabel.style.color = '#2563eb';
+                } else {
+                    totalTabLabel.innerText = activeTab ? activeTab.name : DEFAULT_BAR_TAB_NAME;
+                    totalTabLabel.style.color = '#15803d';
+                }
+            }
             if (!bar) return;
 
             let html = '';
@@ -6825,7 +7364,8 @@
                         }
                     });
 
-                    if (nextList.length === 0) {
+                    const hasDefaultInList = nextList.some(t => t.isDefaultBar || t.id === DEFAULT_BAR_TAB_DOC_ID);
+                    if (nextList.length === 0 || (!hasDefaultInList && typeof activeTallyBillingMode !== 'undefined' && activeTallyBillingMode === 'invoice')) {
                         const prevDefault = prevById[DEFAULT_BAR_TAB_DOC_ID];
                         const keepCounts = createEmptyDrinkCounts();
                         const defaultDeltas = pendingTabDeltas[DEFAULT_BAR_TAB_DOC_ID];
@@ -7000,6 +7540,102 @@
             return total;
         }
 
+        let activeTallyBillingMode = 'cash';
+
+        function setTallyBillingMode(mode) {
+            const normalizedMode = (mode === 'invoice') ? 'invoice' : 'cash';
+            activeTallyBillingMode = normalizedMode;
+
+            const cashBtn = document.getElementById('tally-select-cash-btn');
+            const invoiceBtn = document.getElementById('tally-select-invoice-btn');
+            const banner = document.getElementById('tally-active-mode-banner');
+            const openTabsCard = document.getElementById('tally-open-tabs-card');
+            const cashSection = document.getElementById('tally-cash-checkout-section');
+            const invoiceSection = document.getElementById('tally-invoice-checkout-section');
+
+            const isCash = (normalizedMode === 'cash');
+
+            if (cashBtn) {
+                cashBtn.setAttribute('aria-pressed', isCash ? 'true' : 'false');
+                if (isCash) {
+                    cashBtn.style.background = 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)';
+                    cashBtn.style.color = '#ffffff';
+                    cashBtn.style.border = '2px solid #14532d';
+                    cashBtn.style.fontWeight = '800';
+                    cashBtn.style.boxShadow = '0 4px 12px rgba(22, 163, 74, 0.25)';
+                } else {
+                    cashBtn.style.background = '#ffffff';
+                    cashBtn.style.color = '#334155';
+                    cashBtn.style.border = '2px solid #cbd5e1';
+                    cashBtn.style.fontWeight = '700';
+                    cashBtn.style.boxShadow = 'none';
+                }
+            }
+
+            if (invoiceBtn) {
+                invoiceBtn.setAttribute('aria-pressed', !isCash ? 'true' : 'false');
+                if (!isCash) {
+                    invoiceBtn.style.background = 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)';
+                    invoiceBtn.style.color = '#ffffff';
+                    invoiceBtn.style.border = '2px solid #1e3a8a';
+                    invoiceBtn.style.fontWeight = '800';
+                    invoiceBtn.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.25)';
+                } else {
+                    invoiceBtn.style.background = '#ffffff';
+                    invoiceBtn.style.color = '#334155';
+                    invoiceBtn.style.border = '2px solid #cbd5e1';
+                    invoiceBtn.style.fontWeight = '700';
+                    invoiceBtn.style.boxShadow = 'none';
+                }
+            }
+
+            if (banner) {
+                if (isCash) {
+                    banner.innerText = '✅ Aktiver Modus: Bar-Abrechnung (Schankkassa)';
+                    banner.style.background = '#dcfce7';
+                    banner.style.border = '1.5px solid #86efac';
+                    banner.style.color = '#166534';
+                } else {
+                    banner.innerText = '🧾 Aktiver Modus: Firmen- / Feier-Rechnung erstellen';
+                    banner.style.background = '#dbeafe';
+                    banner.style.border = '1.5px solid #93c5fd';
+                    banner.style.color = '#1e40af';
+                }
+            }
+
+            if (openTabsCard) {
+                openTabsCard.style.display = isCash ? 'block' : 'none';
+            }
+
+            if (!isCash) {
+                const currentTab = getActiveOpenTab();
+                if (!currentTab || (!currentTab.isDefaultBar && currentTab.id !== DEFAULT_BAR_TAB_DOC_ID)) {
+                    let defaultTab = openTabsList.find(t => t.isDefaultBar || t.id === DEFAULT_BAR_TAB_DOC_ID);
+                    if (!defaultTab) {
+                        defaultTab = {
+                            id: DEFAULT_BAR_TAB_DOC_ID,
+                            name: DEFAULT_BAR_TAB_NAME,
+                            counts: createEmptyDrinkCounts(),
+                            isDefaultBar: true,
+                            isVirtualDefault: true,
+                            sortOrderMs: 0
+                        };
+                        openTabsList.unshift(defaultTab);
+                    }
+                    activeOpenTabId = defaultTab.id;
+                    applyCountsToDrinkUI(defaultTab.counts);
+                }
+            }
+            renderOpenTabsBar();
+
+            if (cashSection) {
+                cashSection.style.display = isCash ? 'block' : 'none';
+            }
+            if (invoiceSection) {
+                invoiceSection.style.display = isCash ? 'none' : 'block';
+            }
+        }
+
         function confirmResetDrinks() {
             const activeTab = getActiveOpenTab();
             const tabLabel = activeTab ? activeTab.name : DEFAULT_BAR_TAB_NAME;
@@ -7045,8 +7681,13 @@
             if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
 
             const itemsArray = buildItemsArrayFromCounts(countsCopy);
+            if (!itemsArray || itemsArray.length === 0) { alert("Bitte Produkte auswählen!"); return; }
             const typedCustName = document.getElementById('cust-name') ? document.getElementById('cust-name').value.trim() : '';
             const saleTabName = (activeTab.isDefaultBar && typedCustName) ? typedCustName : activeTab.name;
+            const deckelName = String(saleTabName || DEFAULT_BAR_TAB_NAME).trim() || DEFAULT_BAR_TAB_NAME;
+            const gesamtBetragFormatiert = total.toFixed(2).replace('.', ',');
+            if (!confirm("💶 Deckel „" + deckelName + "“ über " + gesamtBetragFormatiert + " € wirklich als BAR BEZAHLT in der Schankkassa speichern und den Deckel schließen?")) return;
+
             const currentMemberName = getBarServiceMemberName();
             const tabOpenedBy = String(activeTab && activeTab.openedBy ? activeTab.openedBy : currentMemberName).trim() || currentMemberName;
             const now = new Date();
@@ -8490,19 +9131,27 @@
         function updatePushButtonUI(customHint = null, isError = false, variant = null, useHtml = false) {
             const btn = document.getElementById('push-activate-btn');
             const hint = document.getElementById('push-status-hint');
+            const setupBannerBtn = document.getElementById('push-setup-banner-btn');
+
+            const isGranted = ((typeof Notification !== 'undefined') && Notification.permission === 'granted') || isOneSignalPermissionGranted();
+
+            if (setupBannerBtn) {
+                const shouldShowSetupBanner = (typeof Notification !== 'undefined' && Notification.permission === 'default');
+                setupBannerBtn.style.display = shouldShowSetupBanner ? 'flex' : 'none';
+            }
+
             if (!btn) return;
 
-            const isGranted = isOneSignalPermissionGranted();
             if (isGranted) {
-                btn.innerText = '✅ Push-Benachrichtigungen aktiv';
-                btn.style.background = '#ecfdf5';
-                btn.style.borderColor = '#86efac';
-                btn.style.color = '#166534';
+                btn.innerText = '✅ Push-Benachrichtigungen sind aktiv';
+                btn.style.background = '#dcfce7';
+                btn.style.borderColor = '#16a34a';
+                btn.style.color = '#15803d';
             } else {
                 btn.innerText = '🔔 Push-Benachrichtigungen aktivieren';
-                btn.style.background = 'rgba(255, 255, 255, 0.92)';
-                btn.style.borderColor = '#cbd5e1';
-                btn.style.color = '#1e293b';
+                btn.style.background = '#fef3c7';
+                btn.style.borderColor = '#f59e0b';
+                btn.style.color = '#92400e';
             }
 
             if (hint) {
@@ -9266,6 +9915,9 @@
         }
 
         function openInstallHelpModal() {
+            try {
+                if (typeof stopReadMemberHelpAloud === 'function') stopReadMemberHelpAloud();
+            } catch (e) {}
             const modal = document.getElementById('install-help-modal');
             if (modal) {
                 modal.style.display = 'flex';
@@ -9281,7 +9933,208 @@
             }
         }
 
+        let isMemberHelpSpeechActive = false;
+        let activeSingleHelpCard = null;
+        let memberHelpSpeechToken = 0;
+        let memberHelpPauseTimer = null;
+
+        function setMemberHelpCardHighlight(card, active) {
+            if (!card || !card.style) return;
+            if (!card.dataset) card.dataset = {};
+            if (!card.dataset.origCaptured) {
+                card.dataset.origBg = card.style.background || '#f8fafc';
+                card.dataset.origBorder = card.style.border || '1px solid #cbd5e1';
+                card.dataset.origBorderLeft = card.style.borderLeft || '';
+                card.dataset.origTransition = card.style.transition || 'all 0.25s';
+                card.dataset.origCaptured = '1';
+            }
+            card.style.transition = 'all 0.25s';
+            if (active) {
+                card.style.background = '#fef9c3';
+                card.style.border = '2px solid #eab308';
+            } else {
+                card.style.background = card.dataset.origBg;
+                card.style.border = card.dataset.origBorder;
+                if (card.dataset.origBorderLeft) {
+                    card.style.borderLeft = card.dataset.origBorderLeft;
+                }
+                card.style.transition = card.dataset.origTransition || 'all 0.25s';
+            }
+        }
+
+        function resetAllMemberHelpCardButtons() {
+            const modal = document.getElementById('member-help-modal');
+            if (!modal) return;
+            modal.querySelectorAll('.member-help-card-speak-btn').forEach(b => {
+                b.innerText = '🔊';
+                b.style.background = '#eff6ff';
+                b.style.color = '#1d4ed8';
+                b.style.borderColor = '#93c5fd';
+            });
+        }
+
+        function resetAllMemberHelpHighlights() {
+            const modal = document.getElementById('member-help-modal');
+            if (!modal) return;
+            modal.querySelectorAll('.member-help-card').forEach(card => {
+                setMemberHelpCardHighlight(card, false);
+            });
+            resetAllMemberHelpCardButtons();
+        }
+
+        function updateReadMemberHelpButtonUI(isReading) {
+            const btn = document.getElementById('read-member-help-btn');
+            if (!btn) return;
+            if (isReading) {
+                btn.innerText = '⏹️ Vorlesen stoppen';
+                btn.style.background = '#dc2626';
+            } else {
+                btn.innerText = '🔊 Anleitung laut vorlesen';
+                btn.style.background = '#16a34a';
+            }
+        }
+
+        function stopReadMemberHelpAloud() {
+            memberHelpSpeechToken += 1;
+            isMemberHelpSpeechActive = false;
+            activeSingleHelpCard = null;
+            if (memberHelpPauseTimer) {
+                try { clearTimeout(memberHelpPauseTimer); } catch (e) {}
+                memberHelpPauseTimer = null;
+            }
+            if (typeof window !== 'undefined' && typeof window.speechSynthesis !== 'undefined' && typeof window.speechSynthesis.cancel === 'function') {
+                try { window.speechSynthesis.cancel(); } catch (e) {}
+            }
+            resetAllMemberHelpHighlights();
+            updateReadMemberHelpButtonUI(false);
+        }
+
+        function speakSingleMemberHelpCard(btnEl) {
+            if (typeof window === 'undefined' || typeof window.speechSynthesis === 'undefined' || typeof SpeechSynthesisUtterance === 'undefined') {
+                alert('Vorlesen wird von diesem Browser leider nicht unterstützt.');
+                return;
+            }
+            const card = btnEl && typeof btnEl.closest === 'function' ? btnEl.closest('.member-help-card') : null;
+            if (!card) return;
+            const speechText = String(card.getAttribute('data-speech') || '').trim();
+            if (!speechText) return;
+
+            const isSameCardActive = (activeSingleHelpCard === card && window.speechSynthesis.speaking);
+            stopReadMemberHelpAloud();
+            try {
+                if (typeof stopReadNewsAloud === 'function') stopReadNewsAloud();
+            } catch (e) {}
+            if (isSameCardActive) {
+                return;
+            }
+
+            const currentToken = memberHelpSpeechToken;
+            activeSingleHelpCard = card;
+            setMemberHelpCardHighlight(card, true);
+            if (btnEl) {
+                btnEl.innerText = '⏹️';
+                btnEl.style.background = '#fee2e2';
+                btnEl.style.color = '#b91c1c';
+                btnEl.style.borderColor = '#fca5a5';
+            }
+
+            const utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.rate = 0.80;
+            utterance.pitch = 1.0;
+            utterance.lang = 'de-DE';
+            const bestVoice = getBestGermanVoice();
+            if (bestVoice) {
+                utterance.voice = bestVoice;
+            }
+
+            const handleFinish = () => {
+                if (memberHelpSpeechToken === currentToken && activeSingleHelpCard === card) {
+                    stopReadMemberHelpAloud();
+                }
+            };
+            utterance.onend = handleFinish;
+            utterance.onerror = handleFinish;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function toggleReadMemberHelpAloud() {
+            if (typeof window === 'undefined' || typeof window.speechSynthesis === 'undefined' || typeof SpeechSynthesisUtterance === 'undefined') {
+                alert('Vorlesen wird von diesem Browser leider nicht unterstützt.');
+                return;
+            }
+            if (isMemberHelpSpeechActive) {
+                stopReadMemberHelpAloud();
+                return;
+            }
+            try {
+                if (typeof stopReadNewsAloud === 'function') stopReadNewsAloud();
+            } catch (e) {}
+
+            const modal = document.getElementById('member-help-modal');
+            if (!modal) return;
+            const cards = Array.from(modal.querySelectorAll('.member-help-card'));
+            const entries = cards.map(card => ({
+                card,
+                text: String(card.getAttribute('data-speech') || '').trim()
+            })).filter(entry => entry.text.length > 0);
+            if (entries.length === 0) return;
+
+            stopReadMemberHelpAloud();
+            const currentToken = memberHelpSpeechToken;
+            isMemberHelpSpeechActive = true;
+            updateReadMemberHelpButtonUI(true);
+
+            function speakCardAt(index) {
+                if (!isMemberHelpSpeechActive || memberHelpSpeechToken !== currentToken) return;
+                if (index >= entries.length) {
+                    stopReadMemberHelpAloud();
+                    return;
+                }
+                const currentEntry = entries[index];
+                resetAllMemberHelpHighlights();
+                setMemberHelpCardHighlight(currentEntry.card, true);
+
+                const utterance = new SpeechSynthesisUtterance(currentEntry.text);
+                utterance.rate = 0.80;
+                utterance.pitch = 1.0;
+                utterance.lang = 'de-DE';
+                const bestVoice = getBestGermanVoice();
+                if (bestVoice) {
+                    utterance.voice = bestVoice;
+                }
+                utterance.onend = () => {
+                    if (!isMemberHelpSpeechActive || memberHelpSpeechToken !== currentToken) return;
+                    setMemberHelpCardHighlight(currentEntry.card, false);
+                    if (index + 1 >= entries.length) {
+                        stopReadMemberHelpAloud();
+                        return;
+                    }
+                    memberHelpPauseTimer = setTimeout(() => {
+                        memberHelpPauseTimer = null;
+                        if (isMemberHelpSpeechActive && memberHelpSpeechToken === currentToken) {
+                            speakCardAt(index + 1);
+                        }
+                    }, 700);
+                };
+                utterance.onerror = () => {
+                    if (isMemberHelpSpeechActive && memberHelpSpeechToken === currentToken) {
+                        stopReadMemberHelpAloud();
+                    }
+                };
+                window.speechSynthesis.speak(utterance);
+            }
+
+            speakCardAt(0);
+        }
+
         function openMemberHelpModal() {
+            stopReadMemberHelpAloud();
+            try {
+                updateLargeFontToggleUI(document.documentElement.classList.contains('large-font-mode'));
+            } catch (e) {}
+            try {
+                if (typeof updatePushButtonUI === 'function') updatePushButtonUI();
+            } catch (e) {}
             const modal = document.getElementById('member-help-modal');
             if (modal) {
                 modal.style.display = 'flex';
@@ -9290,6 +10143,7 @@
         }
 
         function closeMemberHelpModal() {
+            stopReadMemberHelpAloud();
             const modal = document.getElementById('member-help-modal');
             if (modal) {
                 modal.style.display = 'none';
@@ -10343,9 +11197,44 @@
             }
         }
 
+        let savedBodyOverflowBeforeChat = null;
+        let chatViewportListenersBound = false;
+
+        function syncChatDrawerWithViewport() {
+            const chatDrawer = document.getElementById('chat-drawer');
+            if (!chatDrawer) return;
+            const vv = (typeof window !== 'undefined' && window.visualViewport) ? window.visualViewport : null;
+            const isOpen = isChatDrawerOpen && chatDrawer.classList.contains('open');
+
+            if (isOpen && vv) {
+                chatDrawer.style.height = vv.height + 'px';
+                chatDrawer.style.top = vv.offsetTop + 'px';
+                const messagesList = document.getElementById('chat-messages-list');
+                if (messagesList) {
+                    messagesList.scrollTop = messagesList.scrollHeight;
+                }
+            } else {
+                chatDrawer.style.height = '100dvh';
+                chatDrawer.style.top = '0px';
+            }
+        }
+
+        function bindChatViewportListeners() {
+            if (chatViewportListenersBound) return;
+            if (typeof window !== 'undefined' && window.visualViewport) {
+                window.visualViewport.addEventListener('resize', syncChatDrawerWithViewport);
+                window.visualViewport.addEventListener('scroll', syncChatDrawerWithViewport);
+                chatViewportListenersBound = true;
+            }
+        }
+
         function openChatDrawer() {
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
             isChatDrawerOpen = true;
+            if (savedBodyOverflowBeforeChat === null) {
+                savedBodyOverflowBeforeChat = document.body.style.overflow || '';
+            }
+            document.body.style.overflow = 'hidden';
             document.body.classList.add('chat-drawer-open');
             hideIncomingChatToast();
             const overlay = document.getElementById('chat-drawer-overlay');
@@ -10358,6 +11247,8 @@
                 drawer.classList.add('open');
                 drawer.setAttribute('aria-hidden', 'false');
             }
+            bindChatViewportListeners();
+            syncChatDrawerWithViewport();
             updateChatMuteButtonUI();
             updateChatIdentityLabel();
             initClubChatListener();
@@ -10366,6 +11257,7 @@
             markChatAsRead();
             renderClubChatMessages();
             setTimeout(() => {
+                syncChatDrawerWithViewport();
                 const listEl = document.getElementById('chat-messages-list');
                 if (listEl) listEl.scrollTop = listEl.scrollHeight;
             }, 60);
@@ -10374,6 +11266,12 @@
         function closeChatDrawer() {
             isChatDrawerOpen = false;
             document.body.classList.remove('chat-drawer-open');
+            if (savedBodyOverflowBeforeChat !== null) {
+                document.body.style.overflow = savedBodyOverflowBeforeChat;
+                savedBodyOverflowBeforeChat = null;
+            } else {
+                document.body.style.overflow = '';
+            }
             try { cancelChatVoiceRecording(); } catch (e) {}
             markChatAsRead();
             const overlay = document.getElementById('chat-drawer-overlay');
@@ -10386,6 +11284,7 @@
                 drawer.classList.remove('open');
                 drawer.setAttribute('aria-hidden', 'true');
             }
+            syncChatDrawerWithViewport();
         }
 
         function renderClubChatMessages() {
@@ -10852,6 +11751,7 @@
 
         function onChatInputFocus() {
             setTimeout(() => {
+                syncChatDrawerWithViewport();
                 const listEl = document.getElementById('chat-messages-list');
                 if (listEl) {
                     listEl.scrollTop = listEl.scrollHeight;
@@ -11004,10 +11904,15 @@
                 });
             } catch(e) {}
             try { initLargeFontMode(); } catch(e) {}
+            try {
+                const newsPage = document.getElementById('page-news');
+                updateAppFooterVisibility((newsPage && newsPage.classList.contains('active')) ? 'news' : '');
+            } catch(e) {}
             try { updateFooterMemberIdentity(); } catch(e) {}
             try { populateWeaponMemberSelects(); } catch(e) {}
             try { updateChatMuteButtonUI(); } catch(e) {}
             try { updateChatIdentityLabel(); } catch(e) {}
+            try { bindChatViewportListeners(); } catch(e) {}
             try { renderOpenTabsBar(); } catch(e) {}
             try { initPushNotificationsUI(); } catch(e) {}
             try { initClubAccessGuard(); } catch(e) {}
