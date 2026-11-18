@@ -194,9 +194,10 @@
             font-size: 0.95em;
         }
         body.compact-bottom-tab {
-            padding-bottom: 82px !important;
+            padding-bottom: 108px !important;
         }
         #page-events > .glass-card:last-child,
+        #page-events #events-container > :last-child,
         #page-drinks > .glass-card:last-child,
         #page-weapons > .glass-card:last-child,
         #page-card > #admin-login-card {
@@ -1516,43 +1517,31 @@
             display: none !important;
             pointer-events: none !important;
         }
-        .next-event-hero-card {
-            background: #ffffff !important;
-            border: 1.5px solid #86efac !important;
-            border-radius: 18px !important;
-            padding: 18px !important;
-            box-shadow: 0 4px 14px rgba(22, 163, 74, 0.08) !important;
-            margin-bottom: 12px;
+        @keyframes eventLiveDotPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(0.82); }
         }
-        .next-event-hero-card .event-card-title {
-            font-size: 1.3rem !important;
-            font-weight: 900 !important;
-            color: #0f172a !important;
-            margin-bottom: 4px;
-            line-height: 1.25;
+        #page-events .event-live-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #4ade80;
+            animation: eventLiveDotPulse 1.4s ease-in-out infinite;
         }
-        .upcoming-event-compact-card {
-            background: #ffffff !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 14px !important;
-            padding: 13px 14px !important;
-            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04) !important;
-            margin-bottom: 10px;
+        #page-events .event-vote-btn {
+            padding: 6px 6px !important;
+            font-size: 0.80em !important;
+            border-radius: 9px !important;
+            min-width: 0 !important;
+            width: 100%;
+            white-space: nowrap;
         }
-        .upcoming-event-compact-card .event-card-title {
-            font-size: 1.02rem !important;
-            font-weight: 800 !important;
-            color: #0f172a !important;
-            margin-bottom: 3px;
-            line-height: 1.3;
-        }
-        .upcoming-event-compact-card .event-vote-btn {
-            padding: 7px 8px !important;
-            font-size: 0.84rem !important;
-        }
-        .upcoming-event-compact-card .event-ics-btn {
-            padding: 7px 10px !important;
-            font-size: 0.84rem !important;
+        #page-events .event-ics-btn {
+            padding: 6px 10px !important;
+            font-size: 0.82em !important;
+            border-radius: 9px !important;
+            margin-top: 6px !important;
         }
     </style>
 </head>
@@ -1675,10 +1664,7 @@
 
     <!-- 2. TERMINE -->
     <div id="page-events" class="page-content">
-        <div class="glass-card glass-card-blue">
-            <div class="card-title" style="color: #2563eb;">📅 Nächste Vereinstermine & Abstimmung</div>
-            <div id="events-container"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Termine...</p></div>
-        </div>
+        <div id="events-container"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Termine...</p></div>
     </div>
 
     <!-- 3. SCHANKBUCH -->
@@ -1985,6 +1971,21 @@
                                 </label>
                                 <button type="submit" class="btn admin-btn-save btn-block">💾 Termin speichern</button>
                             </form>
+                        </div>
+
+                        <div class="admin-glass-card admin-span-full" id="admin-manual-push-card">
+                            <div class="admin-glass-card-title"><span>📢 Push-Nachricht an alle senden</span></div>
+                            <p class="admin-muted-text" style="margin-bottom: 10px;">Sendet eine direkte Mitteilung auf die Smartphones aller Mitglieder (ohne News-Eintrag).</p>
+                            <div class="form-group">
+                                <label for="admin-custom-push-title">Titel der Push-Nachricht</label>
+                                <input type="text" class="form-control" id="admin-custom-push-title" value="📢 Schützenverein Gaschurn-Partenen" placeholder="Titel der Push-Nachricht...">
+                            </div>
+                            <div class="form-group">
+                                <label for="admin-custom-push-message">Nachricht (max. 240 Zeichen)</label>
+                                <textarea class="form-control" id="admin-custom-push-message" rows="3" maxlength="240" placeholder="Nachricht eingeben (z. B. Heute ab 19:30 Uhr Schießbetrieb)..."></textarea>
+                            </div>
+                            <div id="admin-custom-push-feedback" style="display: none; margin-bottom: 10px; padding: 10px 12px; border-radius: 10px; background: #dcfce7; border: 1.5px solid #86efac; color: #166534; font-size: 0.85em; font-weight: 700;"></div>
+                            <button type="button" id="admin-send-custom-push-btn" onclick="sendManualAdminPush()" class="btn admin-btn-save btn-block">📲 Push-Nachricht jetzt an alle senden</button>
                         </div>
 
                         <div class="admin-glass-card admin-span-full">
@@ -3079,13 +3080,15 @@
 
         function updateAppFooterVisibility(tabId) {
             const isNewsTab = (tabId === 'news');
+            const isCompactBottomTab = (tabId === 'events' || tabId === 'drinks' || tabId === 'weapons');
             const footerEl = document.getElementById('app-main-footer');
             if (footerEl) {
                 footerEl.style.display = isNewsTab ? 'block' : 'none';
             }
             if (document.body) {
-                document.body.classList.toggle('compact-bottom-tab', !isNewsTab);
-                document.body.style.setProperty('padding-bottom', isNewsTab ? '180px' : '82px', 'important');
+                document.body.classList.toggle('compact-bottom-tab', isCompactBottomTab);
+                const bottomPad = isNewsTab ? '180px' : (isCompactBottomTab ? '108px' : '82px');
+                document.body.style.setProperty('padding-bottom', bottomPad, 'important');
             }
         }
 
@@ -4937,33 +4940,43 @@
             const safeEvDate = escapeHtml(ev.date);
             const safeEvTitle = escapeHtml(ev.title);
             const safeEvDesc = escapeHtml(ev.desc || 'Kein Ort angegeben');
-            const cardClass = isNext ? 'next-event-hero-card' : 'upcoming-event-compact-card';
-            const cardInlineStyle = isPast ? ' style="opacity: 0.86;"' : '';
-            const nextHeaderHtml = isNext
-                ? `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <span style="background: #15803d; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em;">NÄCHSTER TERMIN</span>
-                        <span style="background: #0f172a; color: #4ade80; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em;">• LIVE</span>
-                   </div>`
+            const parsedDateTime = splitEventDateAndTime(ev.date, ev.time);
+            const safeDatePart = escapeHtml(parsedDateTime.datePart || ev.date || '');
+            const safeTimePart = parsedDateTime.timePart ? escapeHtml(parsedDateTime.timePart) : '';
+
+            const countsSummaryHtml = `<div style="font-size: 0.76rem; font-weight: 700; color: #475569; margin-bottom: 4px;">✅ ${dabeiNames.length} Zusagen · ❓ ${maybeNames.length} Vielleicht · ✖ ${absageNames.length} Absagen</div>`;
+            const actionsHtml = `
+                <div style="margin: 6px 0 4px 0; display: flex; flex-direction: column; gap: 4px;">${countsSummaryHtml}${votesHtml}</div>
+                <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; margin-top: 8px;">
+                    <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'dabei')" class="btn btn-green event-vote-btn">✋ Zusage</button>
+                    <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'maybe')" class="btn event-vote-btn" style="background: #fef3c7; color: #b45309; border: 1.5px solid #f59e0b; box-shadow: none;">❓ Vielleicht</button>
+                    <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'absage')" class="btn event-vote-btn" style="background: #dc2626; color: #ffffff;">✖ Absage</button>
+                </div>
+                <button type="button" data-ev-id="${safeEvId}" onclick="downloadEventIcs(this.dataset.evId)" class="btn event-ics-btn" style="width: 100%; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; box-shadow: none;">📅 In Kalender speichern</button>
+            `;
+
+            const subCardStyle = isNext
+                ? 'background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;'
+                : (isPast
+                    ? 'background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; opacity: 0.85;'
+                    : 'background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;');
+
+            const nextBadgeHtml = isNext
+                ? '<span style="background: #15803d; color: #ffffff; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle;">NÄCHSTER</span>'
                 : '';
-            const dateHtml = isNext
-                ? `<div style="color: #991b1b; font-weight: 800; font-size: 0.95rem; margin-bottom: 4px;">📅 ${safeEvDate}</div>`
-                : `<div style="font-size: 0.9rem; font-weight: 600; color: #334155; margin-bottom: 4px;">📅 ${safeEvDate}</div>`;
-            const titleAndDateHtml = isNext
-                ? `${dateHtml}<div class="event-card-title">${safeEvTitle}</div>`
-                : `<div class="event-card-title">${safeEvTitle}</div>${dateHtml}`;
+            const timeBadgeHtml = safeTimePart
+                ? `<span style="font-size: 0.84rem; font-weight: 700; color: #991b1b; margin-left: 5px;">(${safeTimePart})</span>`
+                : '';
+            const rightPillBg = isPast ? '#64748b' : '#2563eb';
 
             const cardHtml = `
-                <div class="${cardClass}"${cardInlineStyle}>
-                    ${nextHeaderHtml}
-                    ${titleAndDateHtml}
-                    <div style="font-size: ${isNext ? '0.88em' : '0.8em'}; color: var(--text-muted); margin-bottom: 6px;">📍 ${safeEvDesc}</div>
-                    <div style="margin: 6px 0; display: flex; flex-direction: column; gap: 4px;">${votesHtml}</div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;">
-                        <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'dabei')" class="btn btn-green event-vote-btn" style="flex: 1 1 30%; min-width: 94px; padding: 10px 8px; font-size: 0.84em;">✋ Zusage</button>
-                        <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'maybe')" class="btn event-vote-btn" style="flex: 1 1 30%; min-width: 94px; padding: 10px 8px; font-size: 0.84em; background: #fef3c7; color: #b45309; border: 1.5px solid #f59e0b; box-shadow: none;">❓ Vielleicht</button>
-                        <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'absage')" class="btn event-vote-btn" style="flex: 1 1 30%; min-width: 94px; padding: 10px 8px; font-size: 0.84em; background: #dc2626; color: #ffffff;">✖ Absage</button>
+                <div style="${subCardStyle}">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 5px;">
+                        <div style="font-weight: 800; color: #0f172a; font-size: 0.92rem; line-height: 1.3;">📅 ${safeDatePart}${nextBadgeHtml}${timeBadgeHtml}</div>
+                        <span style="background: ${rightPillBg}; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; flex-shrink: 0; max-width: 55%; text-align: right; line-height: 1.25;">${safeEvTitle}</span>
                     </div>
-                    <button type="button" data-ev-id="${safeEvId}" onclick="downloadEventIcs(this.dataset.evId)" class="btn event-ics-btn" style="width: 100%; margin-top: 8px; padding: 8px 12px; font-size: 0.84em; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; box-shadow: none;">📅 In Kalender speichern</button>
+                    <div style="font-size: 0.84rem; font-weight: 600; color: #334155; margin-bottom: 4px;">📍 ${safeEvDesc}</div>
+                    ${actionsHtml}
                 </div>
             `;
 
@@ -4974,8 +4987,50 @@
                 absageCount: absageNames.length,
                 safeEvId,
                 safeEvDate,
-                safeEvTitle
+                safeDatePart,
+                safeTimePart,
+                safeEvTitle,
+                safeEvDesc
             };
+        }
+
+        function splitEventDateAndTime(rawDateStr, fallbackTimeStr) {
+            const raw = String(rawDateStr || '').trim();
+            const fallbackTime = (fallbackTimeStr && String(fallbackTimeStr).trim() !== '—') ? String(fallbackTimeStr).trim() : '';
+            if (!raw) return { datePart: '', timePart: fallbackTime };
+
+            const timeMatch = raw.match(/(?:\s*[·,\-|–(]\s*|\s+)(\d{1,2}:\d{2}(?:\s*-\s*\d{1,2}:\d{2})?(?:\s*Uhr)?)\)?\s*$/i);
+            if (timeMatch) {
+                const timePart = timeMatch[1].trim();
+                const datePart = raw.slice(0, timeMatch.index).trim();
+                if (datePart) {
+                    return { datePart, timePart };
+                }
+            }
+            return { datePart: raw, timePart: fallbackTime };
+        }
+
+        function buildNextEventHeroHtml(ev) {
+            const parsedDateTime = splitEventDateAndTime(ev.date, ev.time);
+            const safeDatePart = escapeHtml(parsedDateTime.datePart || ev.date || '');
+            const safeTimePart = parsedDateTime.timePart ? escapeHtml(parsedDateTime.timePart) : '';
+            const safeEvTitle = escapeHtml(ev.title);
+            const safeEvDesc = escapeHtml(ev.desc || 'Kein Ort angegeben');
+            const timeInlineHtml = safeTimePart
+                ? ` <span style="color: #991b1b; font-weight: 800;">(${safeTimePart})</span>`
+                : '';
+
+            return `
+                <div style="background: #ffffff; border: 2px solid #22c55e; border-radius: 18px; padding: 18px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(34, 197, 94, 0.12);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px;">
+                        <span style="background: #15803d; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em;">NÄCHSTER TERMIN</span>
+                        <span style="background: #0f172a; color: #4ade80; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em; display: inline-flex; align-items: center; gap: 5px;"><span class="event-live-dot"></span>LIVE</span>
+                    </div>
+                    <div style="font-size: 1rem; font-weight: 800; color: #15803d; margin-bottom: 2px;">📅 ${safeDatePart}${timeInlineHtml}</div>
+                    <div style="font-size: 1.45rem; font-weight: 900; color: #0f172a; margin: 4px 0; line-height: 1.2;">${safeEvTitle}</div>
+                    <div style="font-size: 0.92rem; font-weight: 600; color: #334155;">📍 ${safeEvDesc}</div>
+                </div>
+            `;
         }
 
         function parseEventDateSafe(dateStr) {
@@ -5049,25 +5104,30 @@
                 pastEvents.sort((a, b) => b.parsedDate - a.parsedDate);
 
                 if (futureEvents.length === 0 && pastEvents.length === 0) {
-                    container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Termine eingetragen.</p>';
+                    container.innerHTML = `
+                        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #2563eb; border-radius: 18px; padding: 18px 16px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                <span style="font-size: 1.15rem; font-weight: 800; color: #991b1b;">🗓️ Gesamter Terminplan</span>
+                                <span style="background: #b91c1c; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 999px;">2026/2027</span>
+                            </div>
+                            <p style="font-size:0.85em; color:var(--text-muted); margin: 0;">Keine Termine eingetragen.</p>
+                        </div>
+                    `;
                     if(adminContainer) adminContainer.innerHTML = '<p class="admin-muted-text">Keine Termine eingetragen.</p>';
                     return;
                 }
 
-                let html = "";
+                let heroHtml = "";
+                let listItemsHtml = "";
                 let pastHtml = "";
                 let adminHtml = "";
 
-                if (futureEvents.length === 0) {
-                    html += '<p style="font-size:0.85em; color:var(--text-muted); margin-bottom:10px;">Aktuell stehen keine bevorstehenden Termine an.</p>';
-                } else {
+                if (futureEvents.length > 0) {
+                    heroHtml = buildNextEventHeroHtml(futureEvents[0]);
                     futureEvents.forEach((ev, idx) => {
                         const isNext = (idx === 0);
                         const rendered = buildEventCardHtml(ev, isNext, false);
-                        html += rendered.cardHtml;
-                        if (isNext && futureEvents.length > 1) {
-                            html += '<div style="margin: 20px 0 10px 0; font-size: 1.05rem; font-weight: 800; color: #0f172a;">🗓️ Weitere Termine</div>';
-                        }
+                        listItemsHtml += rendered.cardHtml;
                         adminHtml += `
                             <div class="admin-list-row">
                                 <div style="flex:1; min-width:0;">
@@ -5078,6 +5138,8 @@
                             </div>
                         `;
                     });
+                } else {
+                    listItemsHtml = '<p style="font-size:0.85em; color:var(--text-muted); margin: 0;">Aktuell stehen keine bevorstehenden Termine an.</p>';
                 }
 
                 if (pastEvents.length > 0) {
@@ -5094,24 +5156,33 @@
                             </div>
                         `;
                     });
-
-                    html += `
-                        <details style="margin-top: 12px; background: rgba(248, 250, 252, 0.94); border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 10px 12px;">
-                            <summary style="cursor: pointer; font-weight: 800; font-size: 0.88em; color: #334155; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                                <span>📁 Vergangene Termine anzeigen (${pastEvents.length})</span>
-                                <span style="font-size: 0.85em; color: #64748b;">▼</span>
-                            </summary>
-                            <div style="margin-top: 10px;">
-                                ${pastHtml}
-                            </div>
-                        </details>
-                    `;
                 }
+
+                let html = heroHtml;
+                const archiveBlockHtml = pastEvents.length > 0
+                    ? `
+                        <details style="margin-top: 16px; border-top: 1.5px dashed #cbd5e1; padding-top: 12px;">
+                            <summary style="font-size: 0.85em; font-weight: 700; color: var(--text-muted); cursor: pointer; user-select: none;">📁 Vergangene Termine (Archiv)</summary>
+                            <div style="margin-top: 10px;">${pastHtml}</div>
+                        </details>
+                    `
+                    : '';
+
+                html += `
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #2563eb; border-radius: 18px; padding: 18px 16px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 14px;">
+                            <span style="font-size: 1.15rem; font-weight: 800; color: #991b1b;">🗓️ Gesamter Terminplan</span>
+                            <span style="background: #b91c1c; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; flex-shrink: 0;">2026/2027</span>
+                        </div>
+                        <div>${listItemsHtml}</div>
+                        ${archiveBlockHtml}
+                    </div>
+                `;
 
                 container.innerHTML = html;
                 if(adminContainer) adminContainer.innerHTML = adminHtml;
             } catch (e) {
-                container.innerHTML = '<p style="font-size:0.85em; color:red;">Fehler beim Laden der Termine.</p>';
+                container.innerHTML = '<div style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid #2563eb; border-radius: 18px; padding: 18px 16px;"><p style="font-size:0.85em; color:red; margin: 0;">Fehler beim Laden der Termine.</p></div>';
             }
         }
 
@@ -9909,6 +9980,55 @@
                 } else {
                     alert("Push-Versand fehlgeschlagen: " + (res && res.error ? res.error : "Unbekannter Fehler"));
                 }
+            } finally {
+                if (btnEl) btnEl.disabled = false;
+            }
+        }
+
+        async function sendManualAdminPush() {
+            if (!auth.currentUser) { alert("Bitte zuerst als Admin anmelden."); return; }
+
+            const titleEl = document.getElementById('admin-custom-push-title');
+            const msgEl = document.getElementById('admin-custom-push-message');
+            const feedbackEl = document.getElementById('admin-custom-push-feedback');
+            const btnEl = document.getElementById('admin-send-custom-push-btn');
+
+            if (feedbackEl) {
+                feedbackEl.style.display = 'none';
+                feedbackEl.innerText = '';
+            }
+
+            const title = titleEl && titleEl.value ? titleEl.value.trim() : '';
+            const message = msgEl && msgEl.value ? msgEl.value.trim() : '';
+
+            if (!title) {
+                alert("Bitte gib einen Titel für die Push-Nachricht ein.");
+                if (titleEl) titleEl.focus();
+                return;
+            }
+            if (!message) {
+                alert("Bitte gib eine Nachricht für die Push-Nachricht ein.");
+                if (msgEl) msgEl.focus();
+                return;
+            }
+
+            if (!confirm("📲 Diese Push-Nachricht wirklich jetzt an alle Mitglieder-Smartphones senden?\n\nTitel: " + title + "\nNachricht: " + message)) return;
+
+            if (btnEl) btnEl.disabled = true;
+            try {
+                const res = await sendOneSignalPushToAll(title, message);
+                if (res && res.ok) {
+                    await logAdminAudit("Manuelle Push-Nachricht gesendet", title + ": " + message);
+                    if (msgEl) msgEl.value = '';
+                    if (feedbackEl) {
+                        feedbackEl.innerText = '✅ Push-Nachricht wurde erfolgreich an alle Mitglieder gesendet!';
+                        feedbackEl.style.display = 'block';
+                    }
+                } else {
+                    alert("Push-Versand fehlgeschlagen: " + (res && res.error ? res.error : "Unbekannter Fehler"));
+                }
+            } catch (err) {
+                alert("Fehler beim Push-Versand: " + (err && err.message ? err.message : String(err)));
             } finally {
                 if (btnEl) btnEl.disabled = false;
             }
