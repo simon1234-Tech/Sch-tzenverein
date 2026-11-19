@@ -207,19 +207,74 @@
 
         .app-header {
             position: relative;
-            background: linear-gradient(135deg, #7f1d1d, #b91c1c);
-            color: white;
-            padding: 20px 76px;
+            overflow: hidden;
+            background: linear-gradient(180deg, #8b1515 0%, #580b0b 100%);
+            color: #ffffff;
+            padding: 14px 16px 20px 16px;
             text-align: center;
-            border-radius: 20px;
+            border: none;
+            border-top: 4px solid #eab308;
+            border-radius: 0 0 24px 24px;
             margin-bottom: 16px;
-            box-shadow: 0 10px 25px rgba(185, 28, 28, 0.25);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 22px rgba(88, 11, 11, 0.28);
+            box-sizing: border-box;
         }
-        
-        .app-header h1 { font-size: 1.25em; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #fff; }
-        .app-header p { font-size: 0.85em; opacity: 0.95; margin-top: 4px; color: #fca5a5; font-weight: 700; }
+        .app-header-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .app-header-crest {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #0f172a;
+            border: 2.5px solid #fbbf24;
+            outline: 2px solid rgba(251, 191, 36, 0.45);
+            outline-offset: 2px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+            flex-shrink: 0;
+            display: block;
+            margin-left: 2px;
+        }
+        .app-header-title-wrap {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            margin-top: 8px;
+        }
+        .app-header h1 {
+            color: #ffffff;
+            font-size: 1.18rem;
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        .app-header p {
+            color: #eab308;
+            font-size: 1.08rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            margin: 3px 0 0 0;
+            opacity: 1;
+        }
+        .app-header-mountains {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 58px;
+            pointer-events: none;
+            opacity: 0.16;
+            z-index: 0;
+            display: block;
+        }
 
         .page-content { display: none; }
         .page-content.active { display: block; }
@@ -1140,41 +1195,62 @@
             box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
         }
         .open-tabs-inputs {
-            display: block;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin: 10px 0;
             width: 100%;
-            margin-bottom: 10px;
         }
         .open-tabs-bar {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 8px;
+            margin-top: 0;
         }
         .open-tab-btn {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 9px 13px;
+            padding: 8px 12px;
             border-radius: 12px;
-            border: 1.5px solid #cbd5e1;
-            background: #ffffff;
-            color: #1e293b;
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            color: #0f172a;
             font-family: inherit;
-            font-size: 0.84em;
+            font-size: 0.86rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.16s ease;
-            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+            box-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
         }
-        .open-tab-btn:hover {
-            border-color: #94a3b8;
-            background: #f8fafc;
+        .open-tab-btn:not(.active):hover {
+            filter: brightness(0.97);
         }
         .open-tab-btn.active {
-            background: #16a34a;
+            background: #15803d;
             color: #ffffff;
-            border-color: #15803d;
-            box-shadow: 0 6px 16px rgba(22, 163, 74, 0.28);
+            border: 2px solid #0f172a;
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.18);
+        }
+        .open-tab-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        #tally-order-list-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-left: 6px solid #15803d;
+            border-radius: 14px;
+            padding: 10px 12px 12px 12px;
+            margin-top: 2px;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+            transition: border-left-color 0.18s ease;
+        }
+        #tally-order-list-card > .strich-category-header:first-child {
+            margin-top: 2px;
         }
         .cash-summary-banner {
             display: flex;
@@ -1374,36 +1450,45 @@
             display: flex;
             flex-direction: column;
             gap: 9px;
-            background: #ffffff;
+            background: #efeae2;
         }
         .chat-msg-bubble {
-            max-width: 86%;
-            padding: 9px 11px;
+            max-width: 85%;
+            width: fit-content;
+            min-width: 150px;
+            padding: 9px 12px;
             border-radius: 14px;
             font-size: 0.86em;
             line-height: 1.42;
             word-break: break-word;
-            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+            box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+            box-sizing: border-box;
         }
         .chat-msg-bubble.own {
-            align-self: flex-end;
-            background: #dcfce7;
-            border: 1px solid #86efac;
-            color: #14532d;
+            margin-left: auto;
+            background: #e7ffdb;
+            border: 1px solid #bbf7d0;
+            color: #111b21;
             border-bottom-right-radius: 4px;
         }
         .chat-msg-bubble.other {
-            align-self: flex-start;
-            background: #f1f5f9;
+            margin-right: auto;
+            background: #ffffff;
             border: 1px solid #e2e8f0;
-            color: #1e293b;
+            color: #111b21;
             border-bottom-left-radius: 4px;
         }
         .chat-msg-bubble.obmann {
-            background: linear-gradient(145deg, #fffbeb 0%, #fef2f2 100%);
-            border: 2px solid #dc2626;
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.14);
-            color: #1e293b;
+            border-left: 4px solid #b91c1c;
+        }
+        .chat-msg-bubble.board-stv {
+            border-left: 4px solid #0284c7;
+        }
+        .chat-msg-bubble.board-kassier {
+            border-left: 4px solid #d97706;
+        }
+        .chat-msg-bubble.board-schrift {
+            border-left: 4px solid #9333ea;
         }
         .chat-msg-meta {
             display: flex;
@@ -1413,10 +1498,20 @@
             margin-bottom: 4px;
             font-size: 0.8em;
         }
+        .chat-msg-sender-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 6px;
+            min-width: 0;
+        }
         .chat-msg-sender {
             font-size: 13.5px !important;
             font-weight: 700 !important;
             line-height: 1.25 !important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .chat-msg-text {
             font-size: 15px !important;
@@ -1488,28 +1583,33 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            max-width: 86%;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
         .chat-msg-item.own {
-            align-self: flex-end;
             align-items: flex-end;
         }
         .chat-msg-item.other {
-            align-self: flex-start;
             align-items: flex-start;
-        }
-        .chat-msg-item .chat-msg-bubble {
-            max-width: 100%;
         }
         .chat-msg-footer {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            margin-top: 5px;
+            gap: 12px;
+            margin-top: 4px;
+        }
+        .chat-msg-footer-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
         }
         .chat-msg-footer .chat-msg-time {
             margin-top: 0;
+            margin-left: auto;
+            white-space: nowrap;
         }
         .chat-msg-react-trigger {
             background: rgba(255, 255, 255, 0.72);
@@ -1536,6 +1636,182 @@
         }
         .chat-msg-react-trigger:active {
             transform: scale(0.92);
+        }
+        .chat-msg-reply-trigger {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            border-radius: 999px;
+            padding: 2px 7px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            line-height: 1.25;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-family: inherit;
+            transition: background 0.14s ease, transform 0.12s ease, border-color 0.14s ease;
+        }
+        .chat-msg-reply-trigger:hover {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: #94a3b8;
+            color: #0f172a;
+        }
+        .chat-msg-reply-trigger:active {
+            transform: scale(0.92);
+        }
+        .chat-msg-reply-quote {
+            background: rgba(15, 23, 42, 0.05);
+            border-left: 3px solid #16a34a;
+            border-radius: 8px;
+            padding: 5px 8px;
+            margin-bottom: 6px;
+            box-sizing: border-box;
+        }
+        .chat-msg-reply-quote-sender {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #15803d;
+            line-height: 1.25;
+            margin-bottom: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chat-msg-reply-quote-text {
+            font-size: 0.8rem;
+            color: #475569;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-word;
+        }
+        #chat-reply-preview {
+            background: #f8fafc;
+            border-left: 4px solid #16a34a;
+            border-top: 1px solid #e2e8f0;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
+        .chat-reply-preview-body {
+            min-width: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .chat-reply-preview-sender {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #15803d;
+            line-height: 1.25;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chat-reply-preview-text {
+            font-size: 0.8rem;
+            color: #475569;
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chat-reply-preview-close {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #475569;
+            font-size: 0.9rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-family: inherit;
+            line-height: 1;
+            transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+        }
+        .chat-reply-preview-close:hover {
+            background: #fee2e2;
+            border-color: #fca5a5;
+            color: #b91c1c;
+        }
+        #chat-typing-bubble {
+            display: none;
+            margin-right: auto;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            border-bottom-left-radius: 4px;
+            padding: 8px 12px;
+            margin-top: 6px;
+            box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
+            max-width: 82%;
+            width: fit-content;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            animation: chatTypingFadeIn 0.18s ease-out;
+        }
+        @keyframes chatTypingFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .chat-typing-bubble-label {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #15803d;
+            margin-bottom: 3px;
+            line-height: 1.25;
+        }
+        .typing-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            height: 14px;
+            padding: 2px 0;
+        }
+        .typing-dots span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #64748b;
+            display: inline-block;
+            animation: typingBounce 1.2s infinite ease-in-out both;
+        }
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.16s;
+        }
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.32s;
+        }
+        @keyframes typingBounce {
+            0%, 80%, 100% {
+                transform: translateY(0);
+                opacity: 0.45;
+            }
+            40% {
+                transform: translateY(-4px);
+                opacity: 1;
+            }
         }
         .chat-reaction-picker {
             position: absolute;
@@ -1590,6 +1866,7 @@
             flex-wrap: wrap;
             gap: 4px;
             margin-top: 4px;
+            max-width: 85%;
         }
         .chat-msg-item.own .chat-msg-reactions {
             justify-content: flex-end;
@@ -1919,33 +2196,42 @@
     </script>
 
     <div class="app-header">
-        <h1>Kameradschaftsbund & Schützenverein</h1>
-        <p>Gaschurn-Partenen</p>
-        <button type="button" id="header-help-btn" onclick="openMemberHelpModal()" aria-label="App-Anleitung öffnen" title="App-Anleitung öffnen" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); z-index: 20; width: auto; min-width: 56px; padding: 7px 10px; background: #ffffff; color: #991b1b; border: none; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22); cursor: pointer; font-family: inherit; touch-action: manipulation;">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#991b1b" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="9.5"/>
-                <path d="M9.5 9.2a2.7 2.7 0 0 1 5.2.9c0 1.8-2.7 2.2-2.7 3.7"/>
-                <circle cx="12" cy="17.2" r="0.6" fill="#991b1b"/>
-            </svg>
-            <span style="font-size: 0.78rem; font-weight: 900; color: #991b1b; line-height: 1;">Hilfe</span>
-        </button>
+        <svg class="app-header-mountains" viewBox="0 0 600 80" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 80 L0 56 L68 34 L128 50 L205 18 L286 44 L365 22 L442 46 L526 26 L600 48 L600 80 Z" fill="#ffffff" fill-opacity="0.55"/>
+            <path d="M0 80 L0 64 L92 42 L166 58 L252 28 L334 54 L418 32 L505 56 L568 40 L600 54 L600 80 Z" fill="#ffffff"/>
+        </svg>
+        <div class="app-header-top-row">
+            <img src="vereinslogo.png" alt="Vereinswappen KB &amp; SV Gaschurn-Partenen" class="app-header-crest" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='logo.png';}else if(this.dataset.fb==='1'){this.dataset.fb='2';this.src='maskottchen.png';}else{this.onerror=null;}">
+            <button type="button" id="header-help-btn" onclick="openMemberHelpModal()" aria-label="App-Anleitung öffnen" title="App-Anleitung öffnen" style="min-width: 56px; padding: 8px 12px; background: #ffffff; color: #7f1d1d; border: none; border-radius: 14px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); flex-shrink: 0; cursor: pointer; font-family: inherit; touch-action: manipulation;">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#7f1d1d" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9.5"/>
+                    <path d="M9.5 9.2a2.7 2.7 0 0 1 5.2.9c0 1.8-2.7 2.2-2.7 3.7"/>
+                    <circle cx="12" cy="17.2" r="0.6" fill="#7f1d1d"/>
+                </svg>
+                <span style="font-size: 0.78rem; font-weight: 900; color: #7f1d1d; line-height: 1;">Hilfe</span>
+            </button>
+        </div>
+        <div class="app-header-title-wrap">
+            <h1>KAMERADSCHAFTSBUND &amp; SCHÜTZENVEREIN</h1>
+            <p>Gaschurn-Partenen</p>
+        </div>
     </div>
 
     <!-- 1. NEWS & STARTSEITE (AKTUELLER DIENSTPLAN) -->
     <div id="page-news" class="page-content active">
-        <button type="button" id="news-open-chat-banner-btn" onclick="openChatDrawer()" style="width: 100%; margin: 12px 0 14px 0; padding: 14px 16px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff; border: none; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 1rem; font-weight: 800; box-shadow: 0 6px 16px rgba(37, 99, 235, 0.28); cursor: pointer; font-family: inherit; text-align: left;">
-            <span style="display: flex; align-items: center; gap: 11px; min-width: 0;">
-                <svg viewBox="0 0 32 32" aria-hidden="true" style="width: 34px; height: 34px; border-radius: 10px; background: #25D366; padding: 6px; box-sizing: border-box; box-shadow: 0 2px 6px rgba(0,0,0,0.2); flex-shrink: 0; display: block;">
+        <button type="button" id="news-open-chat-banner-btn" onclick="openChatDrawer()" style="width: 100%; background: #ffffff; color: #0f172a; border: 1px solid #e2e8f0; border-left: 6px solid #25D366; border-radius: 16px; padding: 14px 16px; margin-top: 12px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06); cursor: pointer; text-align: left; font-family: inherit; box-sizing: border-box;">
+            <span style="display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;">
+                <svg viewBox="0 0 32 32" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 11px; background: #25D366; padding: 7px; box-sizing: border-box; flex-shrink: 0; display: block;">
                     <path fill="#ffffff" d="M16.01 3.2c-7.07 0-12.8 5.73-12.8 12.8 0 2.26.59 4.46 1.71 6.4L3.1 28.9l6.68-1.75c1.87 1.02 3.98 1.56 6.23 1.56 7.07 0 12.8-5.73 12.8-12.8 0-3.42-1.33-6.64-3.75-9.05A12.71 12.71 0 0 0 16.01 3.2zm0 23.35c-1.91 0-3.78-.51-5.41-1.48l-.39-.23-3.96 1.04 1.06-3.86-.25-.4a10.58 10.58 0 0 1-1.63-5.62c0-5.85 4.76-10.61 10.61-10.61 2.83 0 5.5 1.1 7.5 3.11a10.54 10.54 0 0 1 3.11 7.5c0 5.85-4.76 10.61-10.64 10.55zm5.82-7.93c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.89-1.78-2.21-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.98-2.37-.26-.62-.52-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.09-1.12 2.66s1.14 3.09 1.3 3.3c.16.21 2.25 3.43 5.44 4.81.76.33 1.35.52 1.81.67.76.24 1.46.21 2.01.13.61-.09 1.89-.77 2.15-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37z"/>
                 </svg>
-                <span style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0;">
-                    <span style="font-size: 1rem; font-weight: 800; line-height: 1.25;">Vereins-Chat öffnen</span>
-                    <span style="font-size: 0.78rem; font-weight: 600; color: #dbeafe; line-height: 1.25;">Nachrichten &amp; Fotos der Kameraden lesen</span>
+                <span style="display: flex; flex-direction: column; align-items: flex-start; min-width: 0; flex: 1;">
+                    <span style="font-size: 1.04rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Vereins-Chat öffnen</span>
+                    <span id="news-chat-last-msg-preview" style="font-size: 0.85rem; font-weight: 600; color: #475569; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 230px; display: block;">Nachrichten &amp; Fotos der Kameraden lesen</span>
                 </span>
             </span>
             <span style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
                 <span id="news-chat-new-badge" style="display: none; background: #dc2626; color: #ffffff; border: 1.5px solid #ffffff; border-radius: 999px; padding: 2px 8px; font-size: 0.74rem; font-weight: 800; line-height: 1.2;">Neu!</span>
-                <span aria-hidden="true" style="font-size: 1.25rem; font-weight: 900; color: #ffffff; line-height: 1;">→</span>
+                <span aria-hidden="true" style="color: #16a34a; font-size: 1.2rem; font-weight: 800; flex-shrink: 0; line-height: 1;">→</span>
             </span>
         </button>
 
@@ -2008,46 +2294,47 @@
 
             <!-- OFFENE DECKEL / PERSONEN IM SCHÜTZENHAUS -->
             <div id="tally-open-tabs-card" class="open-tabs-control-box" style="display: block;">
-                <div style="font-size: 0.92em; font-weight: 800; color: #0f172a; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                <div style="font-size: 0.92em; font-weight: 800; color: #0f172a; margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
                     <span>🍺 Offene Deckel / Personen im Schützenhaus</span>
-                    <span id="active-tab-badge" style="font-size: 0.8em; background: #16a34a; color: #ffffff; padding: 3px 9px; border-radius: 8px; font-weight: 800;">Aktiv: Direktabrechnung / Bar</span>
                 </div>
-                <div class="open-tabs-inputs">
-                    <input type="text" id="open-tab-guest-input" class="form-control" style="width: 100%; margin-bottom: 0;" placeholder="Name, Gast oder Tisch eingeben..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); createOpenTab(); }">
+                <div class="open-tabs-inputs" style="display: flex; gap: 8px; align-items: center; margin: 10px 0;">
+                    <input type="text" id="open-tab-guest-input" class="form-control" style="flex: 1; min-width: 0; width: auto; padding: 10px 12px; border-radius: 12px; font-size: 0.95rem; margin-bottom: 0; box-sizing: border-box;" placeholder="Name, Gast oder Tisch eingeben..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); createOpenTab(); }">
+                    <button type="button" id="open-tab-add-btn" onclick="createOpenTab()" class="btn btn-green" style="margin-top: 0; padding: 10px 14px; border-radius: 12px; font-size: 0.92rem; font-weight: 800; white-space: nowrap; flex-shrink: 0; color: #ffffff;">
+                        + Deckel
+                    </button>
                 </div>
-                <button type="button" id="open-tab-add-btn" onclick="createOpenTab()" class="btn btn-green btn-block" style="margin-top: 0; padding: 10px 14px; font-size: 0.9em;">
-                    ➕ Deckel öffnen
-                </button>
                 <div id="open-tabs-bar" class="open-tabs-bar"></div>
             </div>
 
-            <div class="strich-category-header">Speisen</div>
-            <div class="price-item"><span>🌭 Paar Hauswürste (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
-            <div class="price-item"><span>🌭 Paar Wienerle (€ 7,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
+            <div id="tally-order-list-card">
+                <div class="strich-category-header">Speisen</div>
+                <div class="price-item"><span>🌭 Paar Hauswürste (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
+                <div class="price-item"><span>🌭 Paar Wienerle (€ 7,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
 
-            <div class="strich-category-header">Getränke & Bier</div>
-            <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
-            <div class="price-item"><span>🍺 Radler 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
-            <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
-            <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein 1/4 lt. (€ 4,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein 1/8 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
-            <div class="price-item"><span>🍷 Wein gespritzt (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
-            <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
+                <div class="strich-category-header">Getränke & Bier</div>
+                <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
+                <div class="price-item"><span>🍺 Radler 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
+                <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
+                <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
+                <div class="price-item"><span>🍷 Wein 1/4 lt. (€ 4,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
+                <div class="price-item"><span>🍷 Wein 1/8 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
+                <div class="price-item"><span>🍷 Wein gespritzt (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
+                <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
 
-            <div class="strich-category-header">Heissgetränke & Sonstiges</div>
-            <div class="price-item"><span>☕ Kaffee (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
-            <div class="price-item"><span>🍵 Tee (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
+                <div class="strich-category-header">Heissgetränke & Sonstiges</div>
+                <div class="price-item"><span>☕ Kaffee (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
+                <div class="price-item"><span>🍵 Tee (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
 
-            <div class="strich-category-header">Luftgewehrschießen</div>
-            <div class="price-item" style="background: rgba(254, 242, 242, 0.9); padding: 10px 12px; border-radius: 10px;">
-                <span>🎯 Luftgewehrschießen (€ 8,00 / P.)</span>
-                <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
-            </div>
+                <div class="strich-category-header">Luftgewehrschießen</div>
+                <div class="price-item" style="background: rgba(254, 242, 242, 0.9); padding: 10px 12px; border-radius: 10px;">
+                    <span>🎯 Luftgewehrschießen (€ 8,00 / P.)</span>
+                    <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
+                </div>
 
-            <div style="margin-top: 14px; padding-top: 10px; border-top: 2px solid #cbd5e1; display: flex; justify-content: space-between; font-weight: 800; font-size: 1.15em;">
-                <span>Gesamtbetrag (<span id="total-tab-name" style="color: #15803d;">Direktabrechnung / Bar</span>):</span>
-                <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
+                <div style="margin-top: 14px; padding-top: 10px; border-top: 2px solid #cbd5e1; display: flex; justify-content: space-between; font-weight: 800; font-size: 1.15em;">
+                    <span>Gesamtbetrag (<span id="total-tab-name" style="color: #15803d;">Direktabrechnung / Bar</span>):</span>
+                    <span id="total-price" style="color: var(--primary-red);">€ 0,00</span>
+                </div>
             </div>
 
             <div id="schankbuch-save-feedback" style="display: none; margin-top: 12px; padding: 11px 14px; border-radius: 12px; background: #dcfce7; border: 1.5px solid #86efac; color: #166534; font-weight: 800; font-size: 0.9em; text-align: center;"></div>
@@ -3136,6 +3423,14 @@
             </div>
         </div>
 
+        <div id="chat-reply-preview" style="display: none;">
+            <div class="chat-reply-preview-body">
+                <div id="chat-reply-preview-sender" class="chat-reply-preview-sender"></div>
+                <div id="chat-reply-preview-text" class="chat-reply-preview-text"></div>
+            </div>
+            <button type="button" id="chat-reply-preview-close-btn" class="chat-reply-preview-close" onclick="clearChatReplyTarget()" title="Zitat entfernen" aria-label="Zitat entfernen">✕</button>
+        </div>
+
         <form id="chat-input-form" class="chat-input-bar" onsubmit="sendClubChatMessage(event)">
             <input type="file" id="chat-camera-input" accept="image/*" capture="environment" style="display: none;" onchange="handleChatImageSelect(this)">
             <input type="file" id="chat-image-input" accept="image/*" style="display: none;" onchange="handleChatImageSelect(this)">
@@ -3149,7 +3444,7 @@
                         <line x1="15" y1="9" x2="15.01" y2="9"/>
                     </svg>
                 </button>
-                <input type="text" id="chat-message-input" maxlength="500" placeholder="Nachricht" onfocus="if (!isInsertingChatEmoji) { closeChatAttachMenu(); } onChatInputFocus();" oninput="updateChatActionButtonUI()" autocomplete="off" style="flex: 1; min-width: 0; border: none !important; outline: none !important; box-shadow: none !important; background: transparent; font-size: 1rem; padding: 8px 4px; color: #0f172a; font-family: inherit;">
+                <input type="text" id="chat-message-input" maxlength="500" placeholder="Nachricht" onfocus="if (!isInsertingChatEmoji) { closeChatAttachMenu(); } onChatInputFocus();" oninput="updateChatActionButtonUI(); handleChatTypingInput();" autocomplete="off" style="flex: 1; min-width: 0; border: none !important; outline: none !important; box-shadow: none !important; background: transparent; font-size: 1rem; padding: 8px 4px; color: #0f172a; font-family: inherit;">
                 <button type="button" id="chat-attach-btn" onclick="toggleChatAttachMenu(event)" title="Anhang auswählen" aria-label="Anhang auswählen" aria-expanded="false" aria-controls="chat-attach-panel" style="padding: 6px; background: transparent; border: none; flex-shrink: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: #64748b;">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
@@ -5305,7 +5600,8 @@
             const safeEvId = escapeHtml(ev.id);
             const safeEvDate = escapeHtml(ev.date);
             const safeEvTitle = escapeHtml(ev.title);
-            const safeEvDesc = escapeHtml(ev.desc || 'Kein Ort angegeben');
+            const rawEvDesc = String(ev.desc || '').trim();
+            const safeEvDesc = escapeHtml(rawEvDesc || 'Kein Ort angegeben');
             const parsedDateTime = splitEventDateAndTime(ev.date, ev.time);
             const safeDatePart = escapeHtml(parsedDateTime.datePart || ev.date || '');
             const safeTimePart = parsedDateTime.timePart ? escapeHtml(parsedDateTime.timePart) : '';
@@ -5321,30 +5617,59 @@
                 <button type="button" data-ev-id="${safeEvId}" onclick="downloadEventIcs(this.dataset.evId)" class="btn event-ics-btn" style="width: 100%; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; box-shadow: none;">📅 In Kalender speichern</button>
             `;
 
-            const subCardStyle = isNext
-                ? 'background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;'
-                : (isPast
-                    ? 'background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; opacity: 0.85;'
-                    : 'background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;');
+            let cardHtml = '';
+            if (isNext) {
+                const subCardStyle = 'background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;';
+                const nextBadgeHtml = '<span style="background: #15803d; color: #ffffff; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle;">NÄCHSTER</span>';
+                const timeBadgeHtml = safeTimePart
+                    ? `<span style="font-size: 0.84rem; font-weight: 700; color: #991b1b; margin-left: 5px;">(${safeTimePart})</span>`
+                    : '';
 
-            const nextBadgeHtml = isNext
-                ? '<span style="background: #15803d; color: #ffffff; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle;">NÄCHSTER</span>'
-                : '';
-            const timeBadgeHtml = safeTimePart
-                ? `<span style="font-size: 0.84rem; font-weight: 700; color: #991b1b; margin-left: 5px;">(${safeTimePart})</span>`
-                : '';
-            const rightPillBg = isPast ? '#64748b' : '#2563eb';
-
-            const cardHtml = `
-                <div style="${subCardStyle}">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 5px;">
-                        <div style="font-weight: 800; color: #0f172a; font-size: 0.92rem; line-height: 1.3;">📅 ${safeDatePart}${nextBadgeHtml}${timeBadgeHtml}</div>
-                        <span style="background: ${rightPillBg}; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; flex-shrink: 0; max-width: 55%; text-align: right; line-height: 1.25;">${safeEvTitle}</span>
+                cardHtml = `
+                    <div style="${subCardStyle}">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 5px;">
+                            <div style="font-weight: 800; color: #0f172a; font-size: 0.92rem; line-height: 1.3;">📅 ${safeDatePart}${nextBadgeHtml}${timeBadgeHtml}</div>
+                            <span style="background: #2563eb; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; flex-shrink: 0; max-width: 55%; text-align: right; line-height: 1.25;">${safeEvTitle}</span>
+                        </div>
+                        <div style="font-size: 0.84rem; font-weight: 600; color: #334155; margin-bottom: 4px;">📍 ${safeEvDesc}</div>
+                        ${actionsHtml}
                     </div>
-                    <div style="font-size: 0.84rem; font-weight: 600; color: #334155; margin-bottom: 4px;">📍 ${safeEvDesc}</div>
-                    ${actionsHtml}
-                </div>
-            `;
+                `;
+            } else {
+                const calInfo = formatCalendarSheetEventInfo(ev, parsedDateTime);
+                const calendarCardStyle = `background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);${isPast ? ' opacity: 0.85;' : ''}`;
+                const descLineHtml = rawEvDesc
+                    ? `<div style="font-size: 0.82rem; color: #64748b; margin-top: 3px; line-height: 1.35; word-break: break-word;">${escapeHtml(rawEvDesc)}</div>`
+                    : '';
+                const calendarActionsHtml = `
+                    <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed #e2e8f0;">
+                        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px;">
+                            <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'dabei')" class="btn btn-green event-vote-btn">✋ Zusage</button>
+                            <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'maybe')" class="btn event-vote-btn" style="background: #fef3c7; color: #b45309; border: 1.5px solid #f59e0b; box-shadow: none;">❓ Vielleicht</button>
+                            <button type="button" data-ev-id="${safeEvId}" data-ev-title="${safeEvTitle}" onclick="openVoteModal(this.dataset.evId, this.dataset.evTitle, 'absage')" class="btn event-vote-btn" style="background: #dc2626; color: #ffffff;">✖ Absage</button>
+                        </div>
+                        <div style="margin: 8px 0 4px 0; display: flex; flex-direction: column; gap: 4px;">${countsSummaryHtml}${votesHtml}</div>
+                        <button type="button" data-ev-id="${safeEvId}" onclick="downloadEventIcs(this.dataset.evId)" class="btn event-ics-btn" style="width: 100%; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; box-shadow: none;">📅 In Kalender speichern</button>
+                    </div>
+                `;
+
+                cardHtml = `
+                    <div class="event-calendar-card" style="${calendarCardStyle}">
+                        <div style="display: flex; align-items: stretch;">
+                            <div style="width: 58px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1.5px solid #e2e8f0; padding-right: 12px; margin-right: 14px; box-sizing: border-box;">
+                                <span style="font-size: 0.72rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.1;">${escapeHtml(calInfo.monthShortUpper)}</span>
+                                <span style="font-size: 1.55rem; font-weight: 900; color: #0f172a; line-height: 1.1; margin-top: 2px;">${escapeHtml(calInfo.dayLabel)}</span>
+                            </div>
+                            <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center;">
+                                <div style="font-size: 1.02rem; font-weight: 800; color: #0f172a; line-height: 1.25; word-break: break-word;">${safeEvTitle}</div>
+                                <div style="font-size: 0.85rem; font-weight: 600; color: #334155; margin-top: 3px; line-height: 1.3;">${escapeHtml(calInfo.dateTimeLine)}</div>
+                                ${descLineHtml}
+                            </div>
+                        </div>
+                        ${calendarActionsHtml}
+                    </div>
+                `;
+            }
 
             return {
                 cardHtml,
@@ -5357,6 +5682,48 @@
                 safeTimePart,
                 safeEvTitle,
                 safeEvDesc
+            };
+        }
+
+        function formatCalendarSheetEventInfo(ev, parsedDateTime) {
+            const DE_MONTH_SHORT_UPPER = ['JAN.', 'FEB.', 'MÄR.', 'APR.', 'MAI', 'JUN.', 'JUL.', 'AUG.', 'SEP.', 'OKT.', 'NOV.', 'DEZ.'];
+            const DE_MONTH_SHORT_TITLE = ['Jan.', 'Feb.', 'Mär.', 'Apr.', 'Mai', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Okt.', 'Nov.', 'Dez.'];
+            const DE_WEEKDAYS = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+
+            const dt = (ev && ev.parsedDate && typeof ev.parsedDate.getTime === 'function' && !isNaN(ev.parsedDate.getTime()))
+                ? ev.parsedDate
+                : parseEventDateSafe(ev && ev.date);
+
+            const split = parsedDateTime || splitEventDateAndTime(ev && ev.date, ev && ev.time);
+            let formattedTime = '';
+            if (split && split.timePart) {
+                const rawT = String(split.timePart).trim();
+                if (rawT) {
+                    formattedTime = /uhr$/i.test(rawT) ? rawT : `${rawT} Uhr`;
+                }
+            }
+
+            if (dt && !isNaN(dt.getTime())) {
+                const monthIdx = dt.getMonth();
+                const dayNum = dt.getDate();
+                const weekday = DE_WEEKDAYS[dt.getDay()] || '';
+                const monthUpper = DE_MONTH_SHORT_UPPER[monthIdx] || '';
+                const monthTitle = DE_MONTH_SHORT_TITLE[monthIdx] || '';
+                const currentYear = new Date().getFullYear();
+                const yearSuffix = dt.getFullYear() !== currentYear ? ` ${dt.getFullYear()}` : '';
+                const baseDateStr = `${weekday}, ${dayNum}. ${monthTitle}${yearSuffix}`;
+                return {
+                    monthShortUpper: monthUpper,
+                    dayLabel: String(dayNum),
+                    dateTimeLine: formattedTime ? `${baseDateStr} · ${formattedTime}` : baseDateStr
+                };
+            }
+
+            const fallbackDate = String((split && split.datePart) || (ev && ev.date) || 'Termin').trim();
+            return {
+                monthShortUpper: 'TERMIN',
+                dayLabel: '📅',
+                dateTimeLine: formattedTime ? `${fallbackDate} · ${formattedTime}` : fallbackDate
             };
         }
 
@@ -7534,6 +7901,31 @@
 
         const DEFAULT_BAR_TAB_DOC_ID = 'default_bar';
         const DEFAULT_BAR_TAB_NAME = 'Direktabrechnung / Bar';
+        const DEFAULT_TAB_COLOR = { bg: '#15803d', light: '#f0fdf4', border: '#86efac' };
+        const TAB_COLORS = [
+            { bg: '#1d4ed8', light: '#eff6ff', border: '#93c5fd' },
+            { bg: '#7e22ce', light: '#faf5ff', border: '#d8b4fe' },
+            { bg: '#c2410c', light: '#fff7ed', border: '#fdba74' },
+            { bg: '#0f766e', light: '#f0fdfa', border: '#5eead4' },
+            { bg: '#be123c', light: '#fff1f2', border: '#fda4af' },
+            { bg: '#4338ca', light: '#eef2ff', border: '#a5b4fc' }
+        ];
+
+        function getOpenTabColor(tab) {
+            if (!tab) return DEFAULT_TAB_COLOR;
+            const tabName = String(tab.name || '').trim();
+            const isDefaultTab = !!(tab.isDefaultBar || tab.id === DEFAULT_BAR_TAB_DOC_ID || tabName === DEFAULT_BAR_TAB_NAME);
+            if (isDefaultTab) return DEFAULT_TAB_COLOR;
+            if (Number.isInteger(tab.colorIndex) && tab.colorIndex >= 0 && tab.colorIndex < TAB_COLORS.length) {
+                return TAB_COLORS[tab.colorIndex];
+            }
+            const normalized = tabName.toLowerCase().replace(/\s+/g, ' ');
+            let hash = 0;
+            for (let i = 0; i < normalized.length; i++) {
+                hash = ((hash * 31) + normalized.charCodeAt(i)) >>> 0;
+            }
+            return TAB_COLORS[hash % TAB_COLORS.length];
+        }
 
         const drinkCounts = createEmptyDrinkCounts();
         let openTabsList = [
@@ -7574,30 +7966,45 @@
         function renderOpenTabsBar() {
             const bar = document.getElementById('open-tabs-bar');
             const activeTab = getActiveOpenTab();
-            const activeBadge = document.getElementById('active-tab-badge');
+            const activeColor = getOpenTabColor(activeTab);
+            const isInvoiceDefaultMode = !!(typeof activeTallyBillingMode !== 'undefined' && activeTallyBillingMode === 'invoice' && activeTab && (activeTab.isDefaultBar || activeTab.id === DEFAULT_BAR_TAB_DOC_ID));
+            const activeAccentColor = isInvoiceDefaultMode ? '#2563eb' : activeColor.bg;
+
             const totalTabLabel = document.getElementById('total-tab-name');
-            if (activeBadge) activeBadge.innerText = 'Aktiv: ' + (activeTab ? activeTab.name : DEFAULT_BAR_TAB_NAME);
             if (totalTabLabel) {
-                if (typeof activeTallyBillingMode !== 'undefined' && activeTallyBillingMode === 'invoice' && activeTab && (activeTab.isDefaultBar || activeTab.id === DEFAULT_BAR_TAB_DOC_ID)) {
+                if (isInvoiceDefaultMode) {
                     totalTabLabel.innerText = 'Firmen-Rechnung';
                     totalTabLabel.style.color = '#2563eb';
                 } else {
                     totalTabLabel.innerText = activeTab ? activeTab.name : DEFAULT_BAR_TAB_NAME;
-                    totalTabLabel.style.color = '#15803d';
+                    totalTabLabel.style.color = activeColor.bg;
                 }
             }
+
+            const orderListCard = document.getElementById('tally-order-list-card');
+            if (orderListCard) {
+                orderListCard.style.borderLeft = `6px solid ${activeAccentColor}`;
+            }
+
             if (!bar) return;
 
             let html = '';
             openTabsList.forEach(tab => {
                 const isActive = tab.id === activeOpenTabId;
                 const isDefaultTab = !!(tab.isDefaultBar || tab.id === DEFAULT_BAR_TAB_DOC_ID || tab.name === DEFAULT_BAR_TAB_NAME);
+                const tabColor = getOpenTabColor(tab);
                 const tabTotal = computeCountsTotal(tab.counts);
                 const totalStr = '€ ' + tabTotal.toFixed(2).replace('.', ',');
+                const btnStyle = isActive
+                    ? `background: ${tabColor.bg}; color: #ffffff; border: 2px solid #0f172a; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.18);`
+                    : `background: ${tabColor.light}; color: #0f172a; border: 2px solid ${tabColor.bg};`;
+                const dotHtml = isActive
+                    ? ''
+                    : `<span class="open-tab-dot" style="background: ${tabColor.bg};"></span>`;
                 const labelText = isDefaultTab
-                    ? `🍺 ${escapeHtml(tab.name)}`
-                    : `🍺 ${escapeHtml(tab.name)} (${totalStr})`;
-                html += `<button type="button" class="open-tab-btn${isActive ? ' active' : ''}" data-tab-id="${escapeHtml(tab.id)}" onclick="switchOpenTab(this.dataset.tabId)">${labelText}</button>`;
+                    ? `${dotHtml}🍺 ${escapeHtml(tab.name)}`
+                    : `${dotHtml}${isActive ? '🍺 ' : ''}${escapeHtml(tab.name)} (${totalStr})`;
+                html += `<button type="button" class="open-tab-btn${isActive ? ' active' : ''}" style="${btnStyle}" data-tab-id="${escapeHtml(tab.id)}" onclick="switchOpenTab(this.dataset.tabId)">${labelText}</button>`;
             });
             bar.innerHTML = html;
         }
@@ -12305,28 +12712,36 @@
             if (norm === 'schweighofer simon' || norm === 'simon schweighofer') {
                 return {
                     isObmann: true,
-                    badgesHtml: `<span style="display: inline-block; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #ffffff; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; margin-left: 6px; vertical-align: middle;">🛡️ OBMANN</span><span style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; margin-left: 4px; vertical-align: middle;">⭐ APP-INHABER</span>`
+                    boardClass: 'obmann',
+                    nameColor: '#991b1b',
+                    badgesHtml: `<span style="display: inline-block; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #ffffff; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; white-space: nowrap; flex-shrink: 0;">🛡️ OBMANN</span>`
                 };
             }
             if (norm === 'stocker heimo' || norm === 'heimo stocker') {
                 return {
                     isObmann: false,
-                    badgesHtml: `<span style="display: inline-block; background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; margin-left: 6px; vertical-align: middle;">🛡️ OBMANN STV.</span>`
+                    boardClass: 'board-stv',
+                    nameColor: '#0369a1',
+                    badgesHtml: `<span style="display: inline-block; background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; white-space: nowrap; flex-shrink: 0;">🛡️ OBMANN STV.</span>`
                 };
             }
             if (norm === 'stocker karin' || norm === 'karin stocker') {
                 return {
                     isObmann: false,
-                    badgesHtml: `<span style="display: inline-block; background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; margin-left: 6px; vertical-align: middle;">💰 KASSIERIN</span>`
+                    boardClass: 'board-kassier',
+                    nameColor: '#b45309',
+                    badgesHtml: `<span style="display: inline-block; background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; white-space: nowrap; flex-shrink: 0;">💰 KASSIERIN</span>`
                 };
             }
             if (norm === 'kinzl sabrina' || norm === 'sabrina kinzl') {
                 return {
                     isObmann: false,
-                    badgesHtml: `<span style="display: inline-block; background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; margin-left: 6px; vertical-align: middle;">✍️ SCHRIFTFÜHRERIN</span>`
+                    boardClass: 'board-schrift',
+                    nameColor: '#7e22ce',
+                    badgesHtml: `<span style="display: inline-block; background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; white-space: nowrap; flex-shrink: 0;">✍️ SCHRIFTFÜHRERIN</span>`
                 };
             }
-            return { isObmann: false, badgesHtml: '' };
+            return { isObmann: false, boardClass: '', nameColor: '', badgesHtml: '' };
         }
 
         function getChatMessageTimestampMs(msg) {
@@ -12483,6 +12898,7 @@
             updateChatActionButtonUI();
             initClubChatListener();
             initPinnedChatListener();
+            initChatTypingListener();
             renderPinnedChatBanner();
             markChatAsRead();
             renderClubChatMessages();
@@ -12495,6 +12911,8 @@
 
         function closeChatDrawer() {
             isChatDrawerOpen = false;
+            clearOwnChatTypingStatus();
+            stopChatTypingListener();
             closeChatReactionPicker();
             closeChatAttachMenu();
             document.body.classList.remove('chat-drawer-open');
@@ -12729,7 +13147,6 @@
                 const sender = String(msg.sender || 'Mitglied').trim();
                 const isOwn = !!(ownName && sender === ownName);
                 const roleInfo = getChatBoardRoleInfo(sender);
-                const isObmann = roleInfo.isObmann;
                 const timeStr = formatChatTime(msg);
                 const rawMsgText = String(msg.text || '');
                 const matchedSticker = getClubStickerByMessageText(rawMsgText);
@@ -12754,14 +13171,11 @@
                     ? `<span class="chat-msg-actions">${pinBtnHtml}${delBtnHtml}</span>`
                     : '';
 
-                const nameStyle = isObmann
-                    ? 'color: #991b1b;'
+                const nameStyle = roleInfo.nameColor
+                    ? `color: ${roleInfo.nameColor};`
                     : `color: ${isOwn ? '#14532d' : '#0f172a'};`;
 
-                const bubbleClass = `chat-msg-bubble ${isOwn ? 'own' : 'other'}${isObmann ? ' obmann' : ''}`;
-                const bubbleStyleAttr = isObmann
-                    ? ' style="background: linear-gradient(145deg, #fffbeb 0%, #fef2f2 100%); border: 2px solid #dc2626; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.14);"'
-                    : '';
+                const bubbleClass = `chat-msg-bubble ${isOwn ? 'own' : 'other'}${roleInfo.boardClass ? ' ' + roleInfo.boardClass : ''}`;
 
                 const imageHtml = hasSafeImage
                     ? `<img src="${escapeHtml(msg.imageData)}" data-msg-id="${safeDocId}" onclick="openChatImageLightbox(this.dataset.msgId)" alt="Chat-Foto" style="max-width: 100%; max-height: 240px; border-radius: 10px; cursor: pointer; object-fit: cover; margin-top: 6px; display: block;">`
@@ -12773,7 +13187,14 @@
 
                 const reactTriggerHtml = safeDocId
                     ? `<button type="button" class="chat-msg-react-trigger${isPickerOpen ? ' active' : ''}" data-doc-id="${safeDocId}" onclick="toggleChatReactionPicker(event, this.dataset.docId)" title="Mit Emoji reagieren" aria-label="Mit Emoji reagieren" aria-expanded="${isPickerOpen ? 'true' : 'false'}">😊+</button>`
-                    : '<span></span>';
+                    : '';
+                const replyTriggerHtml = safeDocId
+                    ? `<button type="button" class="chat-msg-reply-trigger" data-doc-id="${safeDocId}" onclick="setChatReplyTarget(event, this.dataset.docId)" title="Auf diese Nachricht antworten" aria-label="Auf diese Nachricht antworten">↩️</button>`
+                    : '';
+                const replyToObj = normalizeChatReplyTo(msg.replyTo);
+                const replyQuoteHtml = replyToObj
+                    ? `<div class="chat-msg-reply-quote"><div class="chat-msg-reply-quote-sender">${escapeHtml(replyToObj.sender)}</div>${replyToObj.text ? `<div class="chat-msg-reply-quote-text">${escapeHtml(replyToObj.text)}</div>` : ''}</div>`
+                    : '';
 
                 const orderedReactionEmojis = [
                     ...CHAT_REACTION_EMOJIS.filter(e => Array.isArray(reactionsMap[e]) && reactionsMap[e].length > 0),
@@ -12795,19 +13216,23 @@
 
                 html += `
                     <div class="chat-msg-item ${isOwn ? 'own' : 'other'}" data-msg-id="${safeDocId}">
-                        <div class="${bubbleClass}"${bubbleStyleAttr}>
+                        <div class="${bubbleClass}">
                             <div class="chat-msg-meta">
-                                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 2px 0;">
+                                <div class="chat-msg-sender-row">
                                     <strong class="chat-msg-sender" style="${nameStyle}">${escapeHtml(sender)}</strong>${roleInfo.badgesHtml}
                                 </div>
                                 ${adminActionsHtml}
                             </div>
+                            ${replyQuoteHtml}
                             ${stickerHtml}
                             ${safeText ? `<div class="chat-msg-text${isSoloEmoji ? ' emoji-only' : ''}">${safeText}</div>` : ''}
                             ${imageHtml}
                             ${audioHtml}
                             <div class="chat-msg-footer">
-                                ${reactTriggerHtml}
+                                <div class="chat-msg-footer-actions">
+                                    ${reactTriggerHtml}
+                                    ${replyTriggerHtml}
+                                </div>
                                 ${timeStr ? `<span class="chat-msg-time">${escapeHtml(timeStr)}</span>` : ''}
                             </div>
                         </div>
@@ -12819,11 +13244,116 @@
 
             listEl.innerHTML = html;
             renderHighResEmojis(listEl);
+            renderChatTypingBubble({ autoScroll: false });
             if (preserveScroll) {
                 listEl.scrollTop = prevScrollTop;
             } else if (isChatDrawerOpen) {
                 listEl.scrollTop = listEl.scrollHeight;
             }
+        }
+
+        function updateNewsChatLastMsgPreview(messages) {
+            const previewEl = document.getElementById('news-chat-last-msg-preview');
+            if (!previewEl) return;
+            const defaultText = 'Nachrichten & Fotos der Kameraden lesen';
+            if (!Array.isArray(messages) || messages.length === 0) {
+                previewEl.textContent = defaultText;
+                return;
+            }
+            const lastMsg = messages[messages.length - 1];
+            if (!lastMsg) {
+                previewEl.textContent = defaultText;
+                return;
+            }
+            const sender = String(lastMsg.sender || 'Mitglied').trim() || 'Mitglied';
+            const rawText = String(lastMsg.text || '').trim().replace(/\s+/g, ' ');
+            const isSticker = /^\[STICKER:[^\]]+\]$/.test(rawText);
+            const hasAudio = typeof lastMsg.audioData === 'string' && lastMsg.audioData.startsWith('data:audio/');
+            const hasImage = typeof lastMsg.imageData === 'string' && lastMsg.imageData.startsWith('data:image/');
+
+            if (isSticker) {
+                previewEl.textContent = `${sender}: 🎯 Vereins-Sticker`;
+            } else if (hasAudio) {
+                previewEl.textContent = `${sender}: 🎤 Sprachnachricht`;
+            } else if (hasImage) {
+                previewEl.textContent = `${sender}: 📷 Foto`;
+            } else if (rawText) {
+                previewEl.textContent = `${sender}: ${rawText}`;
+            } else {
+                previewEl.textContent = defaultText;
+            }
+        }
+
+        let pendingChatReplyTarget = null;
+
+        function normalizeChatReplyTo(rawReplyTo) {
+            if (!rawReplyTo || typeof rawReplyTo !== 'object') return null;
+            const sender = String(rawReplyTo.sender || '').trim();
+            const text = String(rawReplyTo.text || '').trim();
+            if (!sender && !text) return null;
+            return {
+                sender: sender || 'Mitglied',
+                text: text
+            };
+        }
+
+        function buildChatReplyPreviewText(msg) {
+            if (!msg) return '';
+            const rawText = String(msg.text || '').trim().replace(/\s+/g, ' ');
+            const isSticker = /^\[STICKER:[^\]]+\]$/.test(rawText);
+            const hasAudio = typeof msg.audioData === 'string' && msg.audioData.startsWith('data:audio/');
+            const hasImage = typeof msg.imageData === 'string' && msg.imageData.startsWith('data:image/');
+
+            if (isSticker) return '🎯 Vereins-Sticker';
+            if (hasAudio) return '🎤 Sprachnachricht';
+            if (hasImage) return '📷 Foto';
+            if (rawText) {
+                return rawText.length > 80 ? (rawText.slice(0, 77) + '...') : rawText;
+            }
+            return 'Nachricht';
+        }
+
+        function renderChatReplyPreview() {
+            const previewEl = document.getElementById('chat-reply-preview');
+            const senderEl = document.getElementById('chat-reply-preview-sender');
+            const textEl = document.getElementById('chat-reply-preview-text');
+            if (!previewEl) return;
+
+            if (!pendingChatReplyTarget) {
+                previewEl.style.display = 'none';
+                if (senderEl) senderEl.textContent = '';
+                if (textEl) textEl.textContent = '';
+                return;
+            }
+
+            if (senderEl) senderEl.textContent = pendingChatReplyTarget.sender || 'Mitglied';
+            if (textEl) textEl.textContent = pendingChatReplyTarget.previewText || '';
+            previewEl.style.display = 'flex';
+        }
+
+        function setChatReplyTarget(event, docId) {
+            if (event) event.stopPropagation();
+            if (!docId || !Array.isArray(clubChatMessages)) return;
+            const targetMsg = clubChatMessages.find(m => m && m.id === docId);
+            if (!targetMsg) return;
+
+            try { closeChatReactionPicker(); } catch (e) {}
+            pendingChatReplyTarget = {
+                id: targetMsg.id,
+                sender: String(targetMsg.sender || 'Mitglied').trim() || 'Mitglied',
+                previewText: buildChatReplyPreviewText(targetMsg)
+            };
+            renderChatReplyPreview();
+
+            const inputEl = document.getElementById('chat-message-input');
+            if (inputEl) {
+                try { inputEl.focus(); } catch (e) {}
+            }
+        }
+
+        function clearChatReplyTarget() {
+            pendingChatReplyTarget = null;
+            renderChatReplyPreview();
         }
 
         function initClubChatListener() {
@@ -12851,6 +13381,7 @@
                                 clientTimeMs: msgMs,
                                 createdAt: d.createdAt,
                                 reactions: normalizeChatReactions(d.reactions),
+                                replyTo: normalizeChatReplyTo(d.replyTo),
                                 pushTriggered: !!d.pushTriggered,
                                 pushSentAtMs: typeof d.pushSentAtMs === 'number' ? d.pushSentAtMs : 0
                             });
@@ -12877,6 +13408,7 @@
                         const isInPlaceUpdateOnly = hadLoadedBefore && list.length === prevCount && nextLastMsgId === prevLastMsgId;
 
                         clubChatMessages = list;
+                        updateNewsChatLastMsgPreview(list);
                         renderClubChatMessages({ preserveScroll: isInPlaceUpdateOnly });
                         if (isChatDrawerOpen) {
                             markChatAsRead();
@@ -12902,7 +13434,194 @@
             initClubChatListener();
         }
 
+        const CHAT_TYPING_THROTTLE_MS = 2500;
+        const CHAT_TYPING_IDLE_CLEAR_MS = 4000;
+        const CHAT_TYPING_STALE_MS = 6000;
+        let chatTypingUnsubscribe = null;
+        let chatTypingLastWriteMs = 0;
+        let chatTypingIdleTimer = null;
+        let chatTypingExpiryTimer = null;
+        let chatTypingRawData = {};
+        let chatTypingActiveSelfName = '';
+        let hasPublishedChatTyping = false;
+
+        function ensureChatTypingBubbleElement(listEl) {
+            if (!listEl) return null;
+            let bubbleEl = document.getElementById('chat-typing-bubble');
+            if (!bubbleEl) {
+                bubbleEl = document.createElement('div');
+                bubbleEl.id = 'chat-typing-bubble';
+                bubbleEl.setAttribute('aria-live', 'polite');
+                bubbleEl.style.display = 'none';
+
+                const labelEl = document.createElement('div');
+                labelEl.id = 'chat-typing-bubble-label';
+                labelEl.className = 'chat-typing-bubble-label';
+
+                const dotsEl = document.createElement('span');
+                dotsEl.className = 'typing-dots';
+                dotsEl.setAttribute('aria-hidden', 'true');
+                dotsEl.innerHTML = '<span></span><span></span><span></span>';
+
+                bubbleEl.appendChild(labelEl);
+                bubbleEl.appendChild(dotsEl);
+            }
+            if (bubbleEl.parentNode !== listEl || listEl.lastElementChild !== bubbleEl) {
+                listEl.appendChild(bubbleEl);
+            }
+            return bubbleEl;
+        }
+
+        function formatChatTypingLabel(names) {
+            if (!Array.isArray(names) || names.length === 0) return '';
+            if (names.length === 1) return `${names[0]} schreibt gerade`;
+            if (names.length === 2) return `${names[0]} und ${names[1]} schreiben gerade`;
+            return `${names.slice(0, -1).join(', ')} und ${names[names.length - 1]} schreiben gerade`;
+        }
+
+        function getActiveChatTypingEntries(nowMs) {
+            const now = typeof nowMs === 'number' ? nowMs : Date.now();
+            const ownNorm = String(getSavedClubMemberName() || '').trim().toLowerCase();
+            const active = [];
+            if (!chatTypingRawData || typeof chatTypingRawData !== 'object') return active;
+
+            Object.keys(chatTypingRawData).forEach((rawName) => {
+                const cleanName = String(rawName || '').trim();
+                if (!cleanName) return;
+                if (ownNorm && cleanName.toLowerCase() === ownNorm) return;
+                const ts = chatTypingRawData[rawName];
+                if (typeof ts !== 'number' || !Number.isFinite(ts)) return;
+                const ageMs = now - ts;
+                if (ageMs < CHAT_TYPING_STALE_MS && (ts - now) < 30000) {
+                    active.push({ name: cleanName, ts: ts });
+                }
+            });
+            active.sort((a, b) => a.ts - b.ts);
+            return active;
+        }
+
+        function renderChatTypingBubble(options) {
+            if (chatTypingExpiryTimer) {
+                clearTimeout(chatTypingExpiryTimer);
+                chatTypingExpiryTimer = null;
+            }
+            const listEl = document.getElementById('chat-messages-list');
+            if (!listEl) return;
+
+            const now = Date.now();
+            const activeEntries = isChatDrawerOpen ? getActiveChatTypingEntries(now) : [];
+            const bubbleEl = ensureChatTypingBubbleElement(listEl);
+            if (!bubbleEl) return;
+
+            if (activeEntries.length === 0) {
+                bubbleEl.style.display = 'none';
+                const labelEl = document.getElementById('chat-typing-bubble-label');
+                if (labelEl) labelEl.textContent = '';
+                return;
+            }
+
+            const labelEl = document.getElementById('chat-typing-bubble-label');
+            if (labelEl) {
+                labelEl.textContent = formatChatTypingLabel(activeEntries.map(e => e.name));
+            }
+            bubbleEl.style.display = 'block';
+
+            let minRemainingMs = CHAT_TYPING_STALE_MS;
+            activeEntries.forEach((entry) => {
+                const rem = (entry.ts + CHAT_TYPING_STALE_MS) - now;
+                if (rem < minRemainingMs) minRemainingMs = rem;
+            });
+            chatTypingExpiryTimer = setTimeout(() => {
+                chatTypingExpiryTimer = null;
+                renderChatTypingBubble({ autoScroll: false });
+            }, Math.max(250, minRemainingMs + 60));
+
+            if (!options || options.autoScroll !== false) {
+                listEl.scrollTop = listEl.scrollHeight;
+            }
+        }
+
+        function handleChatTypingInput() {
+            if (!isChatDrawerOpen) return;
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+
+            const memberName = String(getSavedClubMemberName() || '').trim();
+            if (!memberName) return;
+
+            const inputEl = document.getElementById('chat-message-input');
+            const currentVal = inputEl ? inputEl.value.trim() : '';
+            if (!currentVal) {
+                clearOwnChatTypingStatus();
+                return;
+            }
+
+            if (chatTypingIdleTimer) {
+                clearTimeout(chatTypingIdleTimer);
+            }
+            chatTypingIdleTimer = setTimeout(() => {
+                chatTypingIdleTimer = null;
+                clearOwnChatTypingStatus();
+            }, CHAT_TYPING_IDLE_CLEAR_MS);
+
+            const now = Date.now();
+            if (now - chatTypingLastWriteMs >= CHAT_TYPING_THROTTLE_MS || chatTypingActiveSelfName !== memberName) {
+                chatTypingLastWriteMs = now;
+                chatTypingActiveSelfName = memberName;
+                hasPublishedChatTyping = true;
+                try {
+                    const payload = {};
+                    payload[memberName] = now;
+                    db.collection('settings').doc('chat_typing').set(payload, { merge: true }).catch(() => {});
+                } catch (e) {}
+            }
+        }
+
+        function clearOwnChatTypingStatus() {
+            if (chatTypingIdleTimer) {
+                clearTimeout(chatTypingIdleTimer);
+                chatTypingIdleTimer = null;
+            }
+            const targetName = String(chatTypingActiveSelfName || getSavedClubMemberName() || '').trim();
+            const shouldDelete = hasPublishedChatTyping;
+            chatTypingLastWriteMs = 0;
+            chatTypingActiveSelfName = '';
+            hasPublishedChatTyping = false;
+
+            if (!shouldDelete || !targetName) return;
+            try {
+                const payload = {};
+                payload[targetName] = firebase.firestore.FieldValue.delete();
+                db.collection('settings').doc('chat_typing').set(payload, { merge: true }).catch(() => {});
+            } catch (e) {}
+        }
+
+        function initChatTypingListener() {
+            if (chatTypingUnsubscribe) return;
+            try {
+                chatTypingUnsubscribe = db.collection('settings').doc('chat_typing').onSnapshot((doc) => {
+                    chatTypingRawData = (doc && doc.exists && doc.data()) ? doc.data() : {};
+                    renderChatTypingBubble({ autoScroll: true });
+                }, () => {});
+            } catch (e) {}
+        }
+
+        function stopChatTypingListener() {
+            if (chatTypingUnsubscribe) {
+                try { chatTypingUnsubscribe(); } catch (e) {}
+                chatTypingUnsubscribe = null;
+            }
+            if (chatTypingExpiryTimer) {
+                clearTimeout(chatTypingExpiryTimer);
+                chatTypingExpiryTimer = null;
+            }
+            chatTypingRawData = {};
+            const bubbleEl = document.getElementById('chat-typing-bubble');
+            if (bubbleEl) bubbleEl.style.display = 'none';
+        }
+
         function destroyClubChat() {
+            clearOwnChatTypingStatus();
+            stopChatTypingListener();
             if (clubChatUnsubscribe) {
                 try { clubChatUnsubscribe(); } catch (e) {}
                 clubChatUnsubscribe = null;
@@ -12920,6 +13639,7 @@
             hideIncomingChatToast();
             try { cancelChatVoiceRecording(); } catch (e) {}
             clearPendingChatImage();
+            clearChatReplyTarget();
             closeChatImageLightbox();
             closeChatDrawer();
             const listEl = document.getElementById('chat-messages-list');
@@ -12933,6 +13653,7 @@
             if (bannerBadgeEl) {
                 bannerBadgeEl.style.display = 'none';
             }
+            updateNewsChatLastMsgPreview([]);
             updateDeviceAppBadge(0);
         }
 
@@ -13155,7 +13876,7 @@
                         const nowMs = now.getTime();
                         const timeText = now.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
 
-                        await db.collection("club_chat").add({
+                        const voicePayload = {
                             sender: senderName,
                             text: '',
                             audioData: audioDataUrl,
@@ -13165,7 +13886,15 @@
                             pushTriggered: true,
                             pushSentAtMs: nowMs,
                             createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        });
+                        };
+                        if (pendingChatReplyTarget && (pendingChatReplyTarget.sender || pendingChatReplyTarget.previewText)) {
+                            voicePayload.replyTo = {
+                                sender: String(pendingChatReplyTarget.sender || 'Mitglied').slice(0, 100),
+                                text: String(pendingChatReplyTarget.previewText || '').slice(0, 120)
+                            };
+                        }
+                        await db.collection("club_chat").add(voicePayload);
+                        clearChatReplyTarget();
 
                         markChatAsRead();
                         const listEl = document.getElementById('chat-messages-list');
@@ -13279,8 +14008,16 @@
                 if (imageDataToSend) {
                     docPayload.imageData = imageDataToSend;
                 }
+                if (pendingChatReplyTarget && (pendingChatReplyTarget.sender || pendingChatReplyTarget.previewText)) {
+                    docPayload.replyTo = {
+                        sender: String(pendingChatReplyTarget.sender || 'Mitglied').slice(0, 100),
+                        text: String(pendingChatReplyTarget.previewText || '').slice(0, 120)
+                    };
+                }
 
                 await db.collection("club_chat").add(docPayload);
+                clearOwnChatTypingStatus();
+                clearChatReplyTarget();
 
                 if (!hasOverrideText) {
                     if (inputEl) {
