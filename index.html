@@ -421,20 +421,47 @@
             box-shadow: 0 14px 36px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
         #admin-login-card {
-            background: linear-gradient(155deg, #0f172a 0%, #0d261f 55%, #064e3b 100%) !important;
-            border: 1px solid rgba(255, 255, 255, 0.18) !important;
-            border-left: 1px solid rgba(255, 255, 255, 0.18) !important;
-            color: #f8fafc !important;
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
+            background: #ffffff !important;
+            color: #0f172a !important;
+            border: 1px solid #e2e8f0 !important;
+            border-left: 1px solid #e2e8f0 !important;
+            border-top: 5px solid #991b1b !important;
+            border-radius: 20px !important;
+            padding: 22px 18px !important;
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08) !important;
+            box-sizing: border-box;
         }
-        #admin-login-card .card-title { color: #f8fafc !important; }
-        #admin-login-card label { color: #cbd5e1 !important; }
+        #admin-login-card .card-title { color: #0f172a !important; }
+        #admin-login-card label {
+            color: #334155 !important;
+            font-size: 0.84rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
         #admin-login-card .form-control {
-            background: rgba(15, 23, 42, 0.72);
-            color: #f8fafc;
-            border: 1.5px solid rgba(255, 255, 255, 0.22);
+            background: #f8fafc;
+            color: #0f172a;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 1rem;
+            box-sizing: border-box;
         }
-        #admin-login-card .form-control option { background: #0f172a; color: #f8fafc; }
+        #admin-login-card .form-control:focus {
+            background: #ffffff;
+            border-color: #991b1b;
+            box-shadow: 0 0 0 3px rgba(153, 27, 27, 0.12);
+        }
+        #admin-login-card .form-control option { background: #ffffff; color: #0f172a; }
+        #admin-login-submit-btn:active:not(:disabled) {
+            transform: scale(0.99);
+        }
+        #admin-login-submit-btn:disabled {
+            opacity: 0.78;
+            cursor: wait;
+        }
 
         .admin-panel-topbar {
             display: flex;
@@ -2481,22 +2508,29 @@
     <!-- 6. ADMIN-BEREICH -->
     <div id="page-card" class="page-content">
         <div class="glass-card glass-card-red" id="admin-login-card">
-            <div class="card-title" style="color: #f8fafc !important;">🔐 Geschützter Admin-Bereich</div>
+            <div>
+                <span style="display: inline-flex; align-items: center; gap: 6px; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em; text-transform: uppercase;">🛡️ VORSTANDS-BEREICH</span>
+            </div>
+            <h2 style="font-size: 1.25rem; font-weight: 900; color: #0f172a; margin: 8px 0 4px 0; line-height: 1.25;">Geschützter Admin-Bereich</h2>
+            <p style="font-size: 0.84rem; color: #64748b; margin: 0 0 18px 0; line-height: 1.4; font-weight: 500;">Anmeldung ausschließlich für autorisierte Vorstandsmitglieder</p>
             <form onsubmit="handleAdminLogin(event)">
                 <div class="form-group">
-                    <label>Admin-Name</label>
-                    <select class="form-control" id="admin-user-select" required>
-                        <option value="simon">Simon</option>
-                        <option value="heimo">Heimo</option>
-                        <option value="karin">Karin</option>
-                        <option value="sabrina">Sabrina</option>
+                    <label for="admin-user-select">👤 Vorstandsmitglied</label>
+                    <select class="form-control" id="admin-user-select" required style="background: #f8fafc; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px 14px; font-size: 1rem; font-weight: 700; width: 100%;">
+                        <option value="simon">Schweighofer Simon (Obmann)</option>
+                        <option value="heimo">Stocker Heimo (Obmann Stv.)</option>
+                        <option value="karin">Stocker Karin (Kassierin)</option>
+                        <option value="sabrina">Kinzl Sabrina (Schriftführerin)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Dein persönliches Passwort</label>
-                    <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required autocomplete="off">
+                    <label for="admin-password-input">🔑 Dein persönliches Passwort</label>
+                    <div style="position: relative; width: 100%;">
+                        <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required autocomplete="off" style="background: #f8fafc; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px 44px 12px 14px; font-size: 1rem; width: 100%;">
+                        <button type="button" id="toggle-admin-pw-visibility" onclick="toggleAdminPasswordVisibility()" aria-label="Passwort anzeigen" aria-pressed="false" title="Passwort anzeigen / verbergen" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #64748b; cursor: pointer; padding: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.12rem; line-height: 1;">👁️</button>
+                    </div>
                 </div>
-                <button type="submit" class="btn admin-btn-save btn-block">Anmelden</button>
+                <button type="submit" id="admin-login-submit-btn" style="width: 100%; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: none; border-radius: 14px; padding: 14px; font-size: 1.02rem; font-weight: 800; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.28); margin-top: 14px; cursor: pointer; font-family: inherit;">🔐 Im Vorstandsbereich anmelden</button>
                 <button type="button" onclick="exitAdminDirectLogin()" class="btn admin-btn-delete btn-block admin-direct-back-btn" style="margin-top: 10px;">← Zurück zur Zugangscode-Eingabe</button>
             </form>
         </div>
@@ -2611,11 +2645,13 @@
                     </div>
                     <div class="admin-grid-2">
                         <div class="admin-glass-card admin-span-full">
-                            <div class="admin-glass-card-title"><span>➕ Neuen Dienst eintragen</span></div>
+                            <div class="admin-glass-card-title"><span id="duty-form-title">➕ Neuen Dienst eintragen</span></div>
                             <div class="form-group"><label>Datum</label><input type="date" class="form-control" id="duty-date"></div>
+                            <div class="form-group"><label>Beginn-Uhrzeit</label><input type="time" class="form-control" id="duty-start-time" value="19:00"></div>
                             <div class="form-group"><label>Team</label><input type="text" class="form-control" id="duty-team" placeholder="z. B. Team 1"></div>
                             <div class="form-group"><label>Mitglieder</label><input type="text" class="form-control" id="duty-names" placeholder="z. B. Name 1, Name 2, Name 3"></div>
-                            <button type="button" onclick="addDutyEntry()" class="btn admin-btn-save btn-block">💾 Dienst eintragen</button>
+                            <button type="button" id="duty-save-btn" onclick="addDutyEntry()" class="btn admin-btn-save btn-block">💾 Dienst eintragen</button>
+                            <button type="button" id="duty-cancel-edit-btn" onclick="cancelEditDutyEntry()" class="btn admin-btn-edit btn-block" style="display: none; margin-top: 8px;">✖️ Bearbeitung abbrechen</button>
                         </div>
 
                         <div class="admin-glass-card admin-span-full">
@@ -3133,71 +3169,77 @@
             </div>
             <div style="padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.86em; line-height: 1.5;">
                 <div style="display: flex; flex-direction: column;">
-                    <button type="button" id="read-member-help-btn" onclick="toggleReadMemberHelpAloud()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #16a34a; color: #ffffff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔊 Anleitung laut vorlesen</button>
+                    <button type="button" id="read-member-help-btn" onclick="toggleReadMemberHelpAloud()" style="width: 100%; margin-bottom: 8px; padding: 12px 14px; background: #16a34a; color: #ffffff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔊 Anleitung laut vorlesen</button>
+                    <div id="help-voice-select-row" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
+                        <label for="help-voice-select" style="font-size: 0.8rem; font-weight: 700; color: #475569; white-space: nowrap; flex-shrink: 0;">🎙️ Stimme:</label>
+                        <select id="help-voice-select" onchange="handleHelpVoiceSelectChange(this.value)" aria-label="Vorlesestimme auswählen" style="flex: 1; min-width: 0; font-size: 0.85rem; padding: 6px 10px; border-radius: 10px; border: 1px solid #cbd5e1; background: #f8fafc; color: #0f172a; font-family: inherit; font-weight: 600;">
+                            <option value="">Beste deutsche Stimme (automatisch)</option>
+                        </select>
+                        <button type="button" id="help-voice-test-btn" onclick="testSelectedHelpVoice()" title="Ausgewählte Stimme testen" aria-label="Ausgewählte Stimme testen" style="padding: 6px 10px; border-radius: 10px; background: #e2e8f0; color: #0f172a; border: none; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; font-family: inherit;">▶️ Test</button>
+                    </div>
                     <button type="button" id="push-activate-btn" onclick="enablePushNotifications()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #fef3c7; color: #92400e; border: 2px solid #f59e0b; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔔 Push-Benachrichtigungen aktivieren</button>
                     <div id="push-status-hint" style="display: none; margin: -2px 0 10px 0; padding: 9px 12px; border-radius: 10px; font-size: 0.85em; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
                     <button type="button" id="font-size-toggle-btn" onclick="toggleLargeFontMode()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #ffffff; color: #1e293b; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔍 Große Schrift: Aus</button>
                     <button type="button" id="install-help-btn" onclick="openInstallHelpModal()" style="width: 100%; margin-bottom: 16px; padding: 12px 14px; background: #eff6ff; color: #1d4ed8; border: 2px solid #93c5fd; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">📲 App auf dem Handy speichern</button>
                 </div>
 
-                <div class="member-help-card" data-speech="Punkt 1. Einstieg und Lesehilfe. Nach dem einmaligen Eingeben des Vereins-Zugangscodes wählst du deinen Namen aus. Unten auf der Startseite findest du die Knöpfe für Push-Benachrichtigungen, zum Speichern der App auf dem Handy-Bildschirm und für größere Schrift." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
-                        <div style="font-weight: 800; color: #0f172a;">👤 Einstieg, Name, Große Schrift &amp; App speichern</div>
+                <div class="member-help-card" data-speech="Einstieg, App Symbol und Push Nachrichten. Gib einmalig den Vereins Zugangscode ein und wähle anschließend deinen Namen aus der Mitgliederliste aus. Speichere die App am besten direkt auf deinem Handy Startbildschirm und erlaube Push Benachrichtigungen. So bekommst du neue Vereins Infos, Chat Nachrichten und automatische Dienst Erinnerungen sofort angezeigt, inklusive rotem Zähler direkt auf dem App Symbol." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">📲 Einstieg, App-Symbol &amp; Push-Nachrichten</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="color: #334155;">
-                        Nach der einmaligen Eingabe des Vereins-Zugangscodes wählst du einmalig deinen Namen aus – er wird dauerhaft auf deinem Gerät gespeichert und im Tab „News“ ganz unten als „Angemeldet als: [Name]“ angezeigt (Vorstands-Namen sind zusätzlich geschützt). Im Tab „News“ ganz unten findest du drei praktische Knöpfe untereinander: „🔔 Push-Benachrichtigungen aktivieren“, „📲 App auf dem Handy speichern“ (Anleitung für Android &amp; iPhone) und „🔍 Große Schrift: Aus / An“ für besonders gut lesbare größere Schrift.
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
+                        Gib einmalig den Vereins-Zugangscode ein und wähle deinen Namen aus der Mitgliederliste. Tipp: Speichere die App auf dem Handy-Startbildschirm und aktiviere Push-Nachrichten – so erhältst du neue Infos, Chat-Nachrichten und automatische Dienst-Erinnerungen direkt samt rotem Hinweis am App-Symbol.
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Punkt 2. News und Dienstplan. Ganz oben siehst du immer den nächsten Schankdienst. Deine eigenen Dienste sind mit einem Stern markiert. Über den Vorlesen-Knopf kannst du dir Vereins-News laut vorlesen lassen." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
-                        <div style="font-weight: 800; color: #0f172a;">📰 News, Dienstplan &amp; Vorlesefunktion</div>
+                <div class="member-help-card" data-speech="Startseite, News und Dienstplan. Auf der Startseite siehst du sofort alle aktuellen Vereins News mit Fotos, Vorlese Knopf und Gefällt mir Zähler. Direkt darunter findest du den gesamten Dienstplan für die nächsten Wochen. Dein eigener Dienst ist gelb hervorgehoben, und du wirst am Vortag um 18 Uhr sowie 2 Stunden vor Dienstbeginn automatisch erinnert." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">📰 Startseite, News &amp; Dienstplan</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="color: #334155;">
-                        Ganz oben auf „News“ siehst du den großen royalblauen Button zum Vereins-Chat und direkt darunter die Karte „NÄCHSTER DIENST“ mit grünem Puls-Rahmen (am Einsatztag rot mit „⚡ HEUTE“ und hervorgehobener Dienstzeit 19:00 – 21:00 Uhr). Im gesamten Dienstplan sind deine eigenen Dienste deutlich mit „⭐ Dein Dienst“ markiert. Vereins-News kannst du dir direkt über den Button „🔊 Vorlesen“ bequem laut vorlesen lassen und per „⏹️ Stopp“ jederzeit anhalten.
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
+                        Auf der Startseite siehst du sofort alle wichtigen Vereins-News (mit Vorlese-Funktion und 👍 Gefällt-mir-Knopf) sowie den kompletten Dienstplan für die nächsten Wochen. Dein eigener Dienst ist markiert – inklusive automatischer Erinnerung am Vortag um 18:00 Uhr und 2 Stunden vor Beginn.
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Punkt 3. Termine und Abstimmung. Der nächste Termin steht groß und grün ganz oben. Mit einem Tipp auf Zusage, Vielleicht oder Absage wird dein Name sofort eingetragen. Über In Kalender speichern übernimmst du den Termin in deinen Handy-Kalender." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
-                        <div style="font-weight: 800; color: #0f172a;">📅 Termine &amp; Direkt-Abstimmung</div>
+                <div class="member-help-card" data-speech="Termine und Zusagen. Unter Termine steht ganz oben immer die nächste anstehende Ausrückung in der grünen Live Karte, und darunter folgen alle weiteren Termine übersichtlich im Kalenderblatt. Mit einem Tipp auf Zusage, Vielleicht oder Absage gibst du dem Vorstand sofort Rückmeldung und kannst jeden Termin direkt in deinen Handy Kalender speichern." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #0f766e; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">📅 Termine &amp; Zu-/Absagen</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="color: #334155;">
-                        Unter „Termine“ genügt bei jeder Veranstaltung ein einziger Tipp auf „✋ Zusage“, „❓ Vielleicht“ oder „✖ Absage“ – dein gespeicherter Name wird sofort ohne erneute Auswahl eingetragen, und Zu- sowie Absagen werden live zusammengezählt.
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
+                        Unter Termine findest du ganz oben immer die nächste Ausrückung in der grünen Live-Karte und darunter alle weiteren Termine im Kalenderblatt. Mit einem Tipp auf Zusage, Vielleicht oder Absage gibst du dem Vorstand sofort Bescheid und kannst den Termin in deinen Handy-Kalender speichern.
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Punkt 4. Vereins-Chat. Tippe auf der Startseite auf den blauen Balken Vereins-Chat öffnen. Du kannst fertige Schnell-Antworten antippen, eine Sprachnachricht einsprechen, Fotos teilen oder selbst eine Nachricht schreiben. Tipp: Wenn du die App auf deinem Handy-Startbildschirm speicherst und Push-Benachrichtigungen aktivierst, erscheint bei neuen Nachrichten automatisch ein roter Hinweis direkt auf dem App-Symbol." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
-                        <div style="font-weight: 800; color: #0f172a;">💬 Vereins-Chat (Vollbild, Schnell-Antworten &amp; Sprachnachricht)</div>
+                <div class="member-help-card" data-speech="Vereins Chat und Schützen Sticker. Tippe auf der Startseite auf Vereins Chat öffnen. Dort schreibst du wie bei WhatsApp Nachrichten mit Datumstrennern und Live Schreibanzeige. Über das Smiley Symbol wählst du Emojis oder unsere acht eigenen Schützen Sticker aus, teilst Fotos über Kamera oder Büroklammer, schickst Sprachnachrichten per Mikrofon, reagierst mit Emojis und antwortest mit dem Pfeil direkt auf einzelne Beiträge." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #25D366; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">💬 Vereins-Chat &amp; Schützen-Sticker</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="color: #334155;">
-                        Über den großen royalblauen Button „💬 Vereins-Chat öffnen“ auf der Startseite „News“ gelangst du in den übersichtlichen Vollbild-Chat (bei neuen Nachrichten erscheint dort ein rotes „Neu!“-Zeichen). Du kannst mit einem Fingertipp eine der Schnell-Antworten („👍 Passt!“, „🍺 Bin im Schützenhaus!“, „🎯 Bin dabei!“, „⏰ Bin gleich da!“, „❌ Kann leider nicht“) senden, Text schreiben, über „📷“ direkt fotografieren, über „🖼️“ ein Foto aus der Galerie senden oder über „🎤“ eine Sprachnachricht (bis 45 Sekunden) aufnehmen. Oben siehst du wichtige angepinnte Obmann-Infos sowie Vorstands-Badges und kannst über „🔔/🔕“ den Chat-Ton stummschalten.
-                        <div style="margin-top: 8px; padding: 8px 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; color: #1e3a8a; font-weight: 600;">💡 Tipp: Wenn du die App auf deinem Handy-Startbildschirm speicherst und Push-Benachrichtigungen aktivierst, erscheint bei neuen Nachrichten automatisch ein roter Hinweis bzw. eine Zahl direkt auf dem App-Symbol.</div>
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
+                        Tippe auf der Startseite auf „Vereins-Chat öffnen“. Wie bei WhatsApp schreibst du Nachrichten (inkl. Live-Tippanzeige &amp; Datums-Trennern), wählst über das Smiley-Symbol Emojis oder unsere 8 eigenen Schützen-Sticker, teilst Fotos oder Sprachnachrichten, reagierst mit Emojis und antwortest per Pfeil direkt als Zitat.
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Punkt 5. Schankbuch im Schützenhaus. Lege oben für Gäste oder Tische einen Deckel an und tippe die Getränke ein. Abgerechnet wird entweder über Bar bezahlt oder als Rechnung." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #d97706; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
-                        <div style="font-weight: 800; color: #0f172a;">🍻 Schankbuch &amp; Deckel-System im Schützenhaus</div>
+                <div class="member-help-card" data-speech="Schankbuch und farbige Tisch Deckel. Im Schankbuch wählst du oben entweder Direktabrechnung oder öffnest einen eigenen Deckel für eine Person oder einen Tisch. Jeder Deckel bekommt automatisch seine eigene Farbe, damit nichts verwechselt wird. Über das Plus Symbol bei den Getränken buchst du alles mit einem Tipp und schließt den Deckel später als Bar Abrechnung oder Rechnung ab." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #d97706; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">🍻 Schankbuch &amp; farbige Tisch-Deckel</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="color: #334155;">
-                        Lege oben für anwesende Personen, Gäste oder Tische eigene Deckel an (Name eingeben → „➕ Deckel öffnen“) und tippe zwischen den Deckel-Tabs hin und her. Änderungen synchronisieren sich in Echtzeit auf mehreren Handys gleichzeitig. Beim Tippen auf „💶 Bar bezahlt (Schankkassa speichern)“ erscheint zur Sicherheit eine kurze Bestätigungsabfrage mit Deckelname und Betrag, bevor gebucht und der Deckel geschlossen wird; alternativ kannst du über die Adressfelder eine offizielle Firmen-/Feier-PDF-Rechnung erstellen.
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
+                        Im Schankbuch wählst du oben entweder Direktabrechnung oder öffnest einen eigenen Deckel für eine Person oder einen Tisch. Jeder Deckel erhält automatisch seine eigene Farbe, damit nichts verwechselt wird. Über das Plus-Symbol bei den Getränken buchst du alles mit einem Tipp und rechnest anschließend bar oder per Rechnung ab.
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Punkt 6. Digitales Waffenbuch. Scanne zuerst den Q R Code im Waffentresor. Danach wählst du den Übernehmer und die Waffen aus. Nach zwei Minuten ohne Eingabe sperrt sich das Waffenbuch aus Sicherheitsgründen automatisch wieder." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #b91c1c; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
-                        <div style="font-weight: 800; color: #0f172a;">🎯 Digitales Waffenbuch (Tresor-QR-Code &amp; 2-Minuten-Auto-Sperre)</div>
+                <div class="member-help-card" data-speech="Digitales Waffenbuch für Berechtigte. Autorisierte Waffenwarte öffnen das Waffenbuch per Kamera Scan des offiziellen Tresor QR Codes, wählen ihren Namen sowie die entnommenen Waffen und tragen später die Rückgabe mit einem Tipp ein. Nach 2 Minuten ohne Eingabe oder beim Wechseln des Tabs sperrt sich das Waffenbuch aus Sicherheitsgründen automatisch wieder." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #b91c1c; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">🎯 Digitales Waffenbuch (für Berechtigte)</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="color: #334155;">
-                        Das Waffenbuch ist durch ein großes rotes Warn-Schild geschützt, und der Tresor-QR-Scanner ist strikt auf die 4 berechtigten Waffenwarte (Simon Schweighofer, Heimo Stocker, Norbert Spettel, Manfred Wachter) beschränkt. Scanne zuerst mit dem Scanner-Button den offiziellen QR-Code am Waffentresor. Danach prüfst bzw. ergänzt du Übernehmer, optional Mitabholer, Salutwaffen, Anlass und Ort. Bei der Rückkehr wird erneut der Tresor-QR-Code gescannt; nach 2 Minuten Inaktivität oder einem Tab-Wechsel sperrt sich das Waffenbuch automatisch wieder.
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
+                        Autorisierte Personen öffnen das Waffenbuch per Kamera-Scan des Tresor-QR-Codes, wählen ihren Namen sowie die entnommenen Waffen und tragen später die Rückgabe mit einem Tipp ein. Nach 2 Minuten Inaktivität oder bei Tab-Wechsel sperrt sich das Formular automatisch wieder.
                     </div>
                 </div>
 
@@ -3219,57 +3261,61 @@
                     <button type="button" onclick="closeAdminHelpModal()" class="btn admin-btn-delete" style="padding: 7px 12px; font-size: 12.5px; margin-top: 0;">✖ Schließen</button>
                 </div>
             </div>
-            <div style="padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.85em; line-height: 1.52; color: #1e293b;">
-                <div style="background: #ecfdf5; border: 1px solid #86efac; border-radius: 12px; padding: 10px 13px; color: #065f46; font-weight: 600;">
-                    <strong>Grundbedienung:</strong> Alle Admin-Module starten eingeklappt als Kacheln und lassen sich per Klick einzeln auf- und zuklappen. Aus Sicherheitsgründen meldet sich der Admin-Modus nach <strong>5 Minuten Inaktivität</strong> automatisch ab.
-                </div>
-
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">🔐 Vorstands-Login, Session-Timeout &amp; dauerhafte Namens-Erkennung</div>
-                    <div>Nach dem Login mit einem der 4 autorisierten Vorstands-Accounts (Simon, Heimo, Karin, Sabrina) merkt sich dein Gerät deinen vollen Namen dauerhaft. Auch wenn sich der sensible Admin-Bereich nach 5 Minuten Inaktivität aus Sicherheitsgründen wieder sperrt, bleibt dein Name im Chat und in der App erhalten, ohne dass das Namens-Pop-up erneut erscheint.</div>
-                </div>
-
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">1. 📰 News &amp; Termine</div>
-                    <div>News-Beiträge mit Titel, Text und optionalem Foto veröffentlichen sowie Vereinstermine erstellen, Abstimmungsstände (Zusagen/Absagen) prüfen und alte Termine löschen.</div>
-                </div>
-
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">2. 🛡️ Dienstplan &amp; Push-Exklusivrecht für Simon</div>
-                    <div>Neue Dienste (Datum, Team, eingeteilte Mitglieder) eintragen – aktive Dienste erhalten automatisch die Dienstzeit <em>19:00 – 21:00 Uhr</em>. Alle Push-Funktionen (<strong>Freitext-Push</strong> an alle Geräte, Push-Häkchen bei News/Terminen und <strong>🔔 Erinnerung</strong> je Dienst) sind aus Sicherheitsgründen ausschließlich für Haupt-Admin <strong>Simon</strong> sichtbar und über OneSignal + Cloudflare Worker geschützt.</div>
-                </div>
-
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">3. 💬 Vereins-Chat Moderation &amp; Vorstands-Abzeichen</div>
-                    <div>Alle 4 Vorstandsmitglieder werden im Vereins-Chat automatisch mit ihrem offiziellen Rollen-Abzeichen (🛡️ OBMANN &amp; ⭐ APP-INHABER, 🛡️ OBMANN STV., 💰 KASSIERIN, ✍️ SCHRIFTFÜHRERIN) hervorgehoben. Alle 4 Admins können unpassende Nachrichten über das 🗑-Symbol löschen; Haupt-Admin Simon kann zudem wichtige Durchsagen mit 📌 dauerhaft ganz oben im Chat anpinnen (und per ✖ wieder lösen).</div>
-                </div>
-
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">4. 🔑 Schlüssel- &amp; Mitgliederverwaltung</div>
-                    <div>Zeigt alle aktiven Vereinsmitglieder (19er-Liste) sowie die 4 Waffenbuch-Berechtigten. Darunter pflegst du die vertrauliche <strong>Schlüsselliste &amp; Kontaktdaten</strong> (Name, Geburtsdatum, Adresse, Telefon, Schlüsselnummer) inklusive <strong>Querformat-A4-PDF-Export</strong>.</div>
-                </div>
-
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">5. 📦 Lagerbestand</div>
-                    <div>Verwaltet Hauswürste, Wienerle sowie Bier- und Limo-Kisten. Jede Buchung im Schankbuch zieht verkaufte Würste (stückgenau) und Getränke (anteilig je 24er-Kiste) automatisch vom Lagerbestand ab; Nachlieferungen werden über <code>+</code>/<code>-</code> oder <em>„✏️ Bearbeiten“</em> eingetragen.</div>
-                </div>
-
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">6. 🍻 Schankkassa-Vorschau, Rechnungen (§ 6 UStG) &amp; Jahresabschluss</div>
-                    <div>
-                        Unter „Schankbuch Verwaltung &amp; Exporte“ steht eine Live-Vorschau für den Kassenbericht sowie ein A4-PDF-Export bereit, auf dem automatisch das jeweilige Schankdienst-Mitglied vermerkt ist. Alle ausgestellten Firmen-/Feier-Rechnungen enthalten automatisch das Leistungsdatum sowie den gesetzlichen Kleinunternehmer-Hinweis (§ 6 Abs. 1 Z 27 UStG).<br>
-                        <strong>Zusätzlich:</strong> CSV-Kassenbericht-Export für die Schankkassa sowie automatische Gesamtsumme und Vereins-Bankverbindung (Raiffeisenbank Bludenz-Montafon) auf offiziellen PDF-Rechnungen.
+            <div style="padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.87em; line-height: 1.55; color: #1e293b;">
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #991b1b; border-radius: 12px; padding: 12px 14px; color: #1e293b;">
+                    <div style="font-weight: 800; color: #991b1b; margin-bottom: 5px;">🔐 Vorstands-Login &amp; Sicherheit</div>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div>Anmeldung über die Vorstands-Karte mit persönlichem Account (<strong>Schweighofer Simon</strong>, <strong>Stocker Heimo</strong>, <strong>Stocker Karin</strong>, <strong>Kinzl Sabrina</strong>) und eigenem Passwort (über <strong>👁️</strong> kurz einblendbar, automatischer Reset auf verdeckte Eingabe). Alle Admin-Module starten eingeklappt als Kacheln.</div>
+                        <div><strong>5-Minuten-Auto-Logout &amp; Speicherschutz:</strong> Nach <strong>5 Minuten Inaktivität</strong> sowie beim Abmelden oder App-Sperren wird der Vorstandsbereich automatisch abgemeldet und sämtliche sensiblen Daten (<em>Schlüsselliste, Waffen-PDFs, Kassenberichte, Rechnungen, Audit-Log</em>) werden sofort aus dem Arbeitsspeicher gelöscht. Der Vereins-Zugangscode wird ausschließlich verschlüsselt (<code>SHA-256</code>) gespeichert.</div>
                     </div>
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">7. 🎯 Waffenbuch-Sicherheit, Obmann-Alarme &amp; Audit-Log</div>
-                    <div>Der Tresor-QR-Code (<code>KBSV-TRESOR-GASCHURN</code>) lässt sich ausschließlich von den 4 berechtigten Personen (Simon, Heimo, Norbert, Manfred) entsperren und sperrt sich nach 2 Minuten Inaktivität selbstständig wieder. Haupt-Admin Simon erhält bei jedem Tresor-Scan, jeder Entnahme, jeder Rückgabe sowie bei unberechtigten Scan-Versuchen sofort eine private Push-Warnung. Zusätzlich werden alle kritischen Admin-Aktionen unter „System &amp; Sicherheit“ im unveränderlichen Sicherheits-Audit-Log protokolliert. Alle Protokolle stehen zudem mit getrennt ausgewiesener ZWR-Nummer und ZVR-Zahl als A4-PDF sowie der Tresor-QR-Code als PNG-Download bereit.</div>
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 12px 14px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">1. 📰 News &amp; Termine</div>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div><strong>News-Beiträge:</strong> Vereins-Neuigkeiten mit Text und optionalem Foto erstellen, verwalten und bei Bedarf direkt per Push an alle Mitglieder senden. Jeder Beitrag zeigt einen Live-<strong>👍 Gefällt-mir-Zähler</strong> inklusive kompakter Namensliste der Mitglieder.</div>
+                        <div><strong>Termine:</strong> Neue Ausrückungen und Veranstaltungen bequem über den Kalender-Wähler (<code>TT.MM.JJJJ</code>) eintragen. Alle <strong>Zusage-, Vielleicht- und Absage-Stimmen</strong> sind in Echtzeit sichtbar; vergangene Termine wandern automatisch ins Archiv.</div>
+                    </div>
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 11px 13px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 4px;">8. ⚙️ Master-PIN, Zugangscode &amp; Gesamt-Backup</div>
-                    <div>Unter <strong>„⚙️ System &amp; Sicherheit“</strong> sind Vereins-Zugangscode und optionaler OneSignal-Key durch einen separaten <strong>Master-PIN</strong> geschützt (SHA-256-Hash; nach dem Speichern des Vereins-Codes werden Geräte mit altem Code automatisch gesperrt). Über <strong>„📥 Gesamt-Backup“</strong> exportierst du alle Schankbuch-Abrechnungen, Waffenbuch-Protokolle und Termine gebündelt als Excel-kompatible CSV-Jahressicherung.</div>
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #0284c7; border-radius: 12px; padding: 12px 14px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">2. 🛡️ Dienstplan &amp; Push</div>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div><strong>Dienste mit Startzeit:</strong> Dienste mit Datum, Beginn-Uhrzeit (Standard <code>19:00</code>), Team und Mitgliedern anlegen, jederzeit per <strong>✏️</strong> bearbeiten oder löschen.</div>
+                        <div><strong>Automatische Erinnerungen:</strong> Zu jedem offenen Dienst werden in Wiener Zeit automatisch doppelsichere Push-Erinnerungen versendet – am <strong>Vortag ab 18:00 Uhr</strong> sowie <strong>2 Stunden vor Dienstbeginn</strong>. Zusätzlich stehen manuelle Dienst-Erinnerungen und individuelle Admin-Pushs bereit.</div>
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #25D366; border-radius: 12px; padding: 12px 14px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">3. 💬 Vereins-Chat &amp; Moderation</div>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div>Alle vier Vorstandsmitglieder sind im WhatsApp-ähnlichen Vereins-Chat klar an ihrem farbigen <strong>Rollen-Abzeichen</strong> erkennbar.</div>
+                        <div><strong>Obmann-Moderation (exklusiv Schweighofer Simon):</strong> Nur der Obmann-Account kann wichtige Infos ganz oben im Chat <strong>anpinnen (📌)</strong> oder unpassende bzw. fehlerhafte Beiträge dauerhaft <strong>löschen (🗑)</strong>.</div>
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #7c3aed; border-radius: 12px; padding: 12px 14px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">4. 🔑 Schlüssel- &amp; Mitgliederverwaltung</div>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div>Geschützte Verwaltung der aktiven und passiven Mitglieder- sowie Berechtigungslisten (inklusive Waffenbuch-Berechtigten).</div>
+                        <div>Vollständige <strong>Schützenhaus-Schlüsselliste</strong> mit Schlüsselnummern, Kontaktdaten, Bearbeitungsfunktion und direktem <strong>PDF-Export / Druck</strong> (ausschließlich für den Vorstand sichtbar).</div>
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #d97706; border-radius: 12px; padding: 12px 14px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">5. 🍻 Lager &amp; Schankbuch</div>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div><strong>Lagerbestand &amp; farbige Tisch-Deckel:</strong> Getränkelager verwalten (automatischer Abzug bei jeder Abrechnung) und offene Personen- oder Tisch-Deckel in jeweils eigener Erkennungsfarbe übersichtlich führen.</div>
+                        <div><strong>Live-Kassenbericht &amp; Firmen-PDF-Rechnungen:</strong> Sämtliche Bar-Abrechnungen der Schankkassa cent-genau in der Live-Vorschau prüfen oder als Kassenbericht-PDF exportieren sowie erstellte Firmen- und Feier-Rechnungen als PDF abrufen.</div>
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #b91c1c; border-radius: 12px; padding: 12px 14px;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">6. 🎯 Waffenbuch &amp; Audit-Log</div>
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <div><strong>Tresor-QR-Scan &amp; PDF-Export:</strong> Zugriff ausschließlich per Kamera-Scan des Tresor-QR-Codes (<code>KBSV-TRESOR-GASCHURN</code>) für die 4 autorisierten Waffenwarte (<strong>Simon, Heimo, Norbert, Manfred</strong>) mit 2-Minuten-Auto-Sperre und Tab-Wechsel-Sperre. Alle Entnahme- und Rückgabe-Protokolle stehen als <strong>PDF mit sauber getrennter ZWR-/ZVR-Ausweisung</strong> zur Vorschau und zum Download bereit.</div>
+                        <div><strong>Geschützte Protokoll-Löschung &amp; unveränderliches Audit-Log:</strong> Einzelne Waffenbuch-Protokolle können im Admin-Bereich nach Sicherheitsabfrage über <strong>🗑️ Löschen</strong> entfernt werden. Jede Löschung sowie alle sicherheitsrelevanten Vorstands-Aktionen (Logins, Code-Änderungen, Exporte) werden lückenlos im unveränderlichen <strong>Sicherheits-Audit-Log</strong> protokolliert.</div>
+                    </div>
                 </div>
 
                 <div class="no-print-in-modal" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;">
@@ -4035,6 +4081,7 @@
             try { renderPinnedChatBanner(); } catch (e) {}
             try { renderClubChatMessages(); } catch (e) {}
             try { updateChatUnreadDot(); } catch (e) {}
+            try { if (typeof refreshAllNewsLikeBarsDom === 'function') refreshAllNewsLikeBarsDom(); } catch (e) {}
             try { if (typeof syncOneSignalObmannRoleTag === 'function') syncOneSignalObmannRoleTag(); } catch (e) {}
         }
 
@@ -4079,10 +4126,12 @@
                 modal.style.pointerEvents = 'none';
             }
             pendingEventVoteAfterSetup = null;
+            pendingNewsLikeAfterSetup = null;
         }
 
         function openAdminLoginFromMemberSetup() {
             pendingEventVoteAfterSetup = null;
+            pendingNewsLikeAfterSetup = null;
             const modal = document.getElementById('member-name-setup-modal');
             if (modal) {
                 modal.style.display = 'none';
@@ -4112,11 +4161,16 @@
             if (errEl) errEl.style.display = 'none';
             try { localStorage.setItem(MEMBER_IDENTITY_STORAGE_KEY, chosen); } catch (e) {}
             const pendingVote = pendingEventVoteAfterSetup;
+            const pendingNewsLikeId = pendingNewsLikeAfterSetup;
             pendingEventVoteAfterSetup = null;
+            pendingNewsLikeAfterSetup = null;
             closeMemberNameSetupModal();
             refreshMemberIdentityViews();
             if (pendingVote && pendingVote.eventId) {
                 await toggleEventVote(pendingVote.eventId, pendingVote.voteMode, chosen);
+            }
+            if (pendingNewsLikeId && typeof toggleNewsLike === 'function') {
+                await toggleNewsLike(pendingNewsLikeId);
             }
         }
 
@@ -4923,11 +4977,116 @@
             return viennaDate;
         }
 
+        let editingDutyId = null;
+
+        function normalizeDutyStartTime(rawTime) {
+            const raw = String(rawTime || '').trim();
+            const m = raw.match(/(\d{1,2})\s*:\s*(\d{2})/);
+            if (!m) return '19:00';
+            const h = parseInt(m[1], 10);
+            const min = parseInt(m[2], 10);
+            if (isNaN(h) || isNaN(min) || h < 0 || h > 23 || min < 0 || min > 59) return '19:00';
+            return `${String(h).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+        }
+
+        function extractDutyStartTime(dutyObj) {
+            if (!dutyObj || typeof dutyObj !== 'object') return '19:00';
+            if (dutyObj.startTime && String(dutyObj.startTime).trim()) {
+                return normalizeDutyStartTime(dutyObj.startTime);
+            }
+            const fallbackTime = String(dutyObj.time || dutyObj.dienstzeit || '').trim();
+            if (fallbackTime && fallbackTime !== '—' && /\d{1,2}\s*:\s*\d{2}/.test(fallbackTime)) {
+                return normalizeDutyStartTime(fallbackTime);
+            }
+            return '19:00';
+        }
+
+        function parseDutyMembersList(rawMembers) {
+            if (Array.isArray(rawMembers)) {
+                return rawMembers.map(m => String(m || '').trim()).filter(Boolean);
+            }
+            const str = String(rawMembers || '').trim();
+            if (!str) return [];
+            return str
+                .split(/\s*(?:,|;|&|\/|\bund\b)\s*/i)
+                .map(m => m.trim())
+                .filter(Boolean);
+        }
+
+        function formatDutyDisplayTime(startTime, isClosed) {
+            if (isClosed) return '—';
+            const normalized = normalizeDutyStartTime(startTime);
+            return normalized === '19:00' ? '19:00 – 21:00 Uhr' : `ab ${normalized} Uhr`;
+        }
+
+        function dutyDateToIsoInput(dateStr) {
+            const clean = String(dateStr || '').trim();
+            if (!clean) return '';
+            if (/^\d{4}-\d{2}-\d{2}$/.test(clean)) return clean;
+            const m = clean.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+            if (m) {
+                return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+            }
+            return '';
+        }
+
+        function cancelEditDutyEntry() {
+            editingDutyId = null;
+            const dateEl = document.getElementById('duty-date');
+            const startTimeEl = document.getElementById('duty-start-time');
+            const teamEl = document.getElementById('duty-team');
+            const namesEl = document.getElementById('duty-names');
+            const titleEl = document.getElementById('duty-form-title');
+            const saveBtn = document.getElementById('duty-save-btn');
+            const cancelBtn = document.getElementById('duty-cancel-edit-btn');
+            if (dateEl) dateEl.value = '';
+            if (startTimeEl) startTimeEl.value = '19:00';
+            if (teamEl) teamEl.value = '';
+            if (namesEl) namesEl.value = '';
+            if (titleEl) titleEl.textContent = '➕ Neuen Dienst eintragen';
+            if (saveBtn) saveBtn.textContent = '💾 Dienst eintragen';
+            if (cancelBtn) cancelBtn.style.display = 'none';
+        }
+
+        function startEditDutyEntry(id) {
+            if (!auth || !auth.currentUser) return;
+            const duty = globalDutyList.find(d => d.id === id);
+            if (!duty) return;
+
+            editingDutyId = duty.id;
+            const dateEl = document.getElementById('duty-date');
+            const startTimeEl = document.getElementById('duty-start-time');
+            const teamEl = document.getElementById('duty-team');
+            const namesEl = document.getElementById('duty-names');
+            const titleEl = document.getElementById('duty-form-title');
+            const saveBtn = document.getElementById('duty-save-btn');
+            const cancelBtn = document.getElementById('duty-cancel-edit-btn');
+
+            if (dateEl) dateEl.value = dutyDateToIsoInput(duty.dateStr || duty.date);
+            if (startTimeEl) startTimeEl.value = extractDutyStartTime(duty);
+            if (teamEl) teamEl.value = duty.team || '';
+            if (namesEl) namesEl.value = duty.names || (Array.isArray(duty.members) ? duty.members.join(', ') : '');
+            if (titleEl) titleEl.textContent = '✏️ Dienst bearbeiten';
+            if (saveBtn) saveBtn.textContent = '💾 Änderungen speichern';
+            if (cancelBtn) cancelBtn.style.display = 'block';
+
+            const secEl = document.getElementById('admin-sec-duty');
+            if (secEl && typeof secEl.scrollIntoView === 'function') {
+                secEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
         async function addDutyEntry() {
             if (!auth.currentUser) return;
-            const dateVal = document.getElementById('duty-date').value;
-            const teamVal = document.getElementById('duty-team').value.trim();
-            const namesVal = document.getElementById('duty-names').value.trim();
+            const dateEl = document.getElementById('duty-date');
+            const startTimeEl = document.getElementById('duty-start-time');
+            const teamEl = document.getElementById('duty-team');
+            const namesEl = document.getElementById('duty-names');
+
+            const dateVal = dateEl ? dateEl.value : '';
+            const rawStartTime = startTimeEl ? startTimeEl.value.trim() : '';
+            const teamVal = teamEl ? teamEl.value.trim() : '';
+            const namesVal = namesEl ? namesEl.value.trim() : '';
 
             if (!dateVal || !teamVal || !namesVal) {
                 alert("Bitte fülle alle Felder für den Dienst aus!");
@@ -4941,23 +5100,43 @@
             }
 
             const isClosed = teamVal.toLowerCase().includes('geschlossen');
-            const dutyTime = isClosed ? '—' : '19:00 – 21:00 Uhr';
+            const startTimeVal = normalizeDutyStartTime(rawStartTime || '19:00');
+            const dutyTime = formatDutyDisplayTime(startTimeVal, isClosed);
+            const membersList = parseDutyMembersList(namesVal);
+
+            const payload = {
+                dateStr: formattedDate,
+                date: formattedDate,
+                team: teamVal,
+                names: namesVal,
+                members: membersList,
+                startTime: startTimeVal,
+                time: dutyTime,
+                dienstzeit: dutyTime,
+                status: isClosed ? 'closed' : 'open',
+                remindedDayBefore: false,
+                reminded2hBefore: false
+            };
 
             try {
-                await db.collection("duty_plan").add({
-                    dateStr: formattedDate,
-                    team: teamVal,
-                    names: namesVal,
-                    time: dutyTime,
-                    dienstzeit: dutyTime,
-                    status: isClosed ? 'closed' : 'open',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                document.getElementById('duty-date').value = '';
-                document.getElementById('duty-team').value = '';
-                document.getElementById('duty-names').value = '';
-                alert("Dienst erfolgreich eingetragen!");
+                if (editingDutyId) {
+                    const targetId = editingDutyId;
+                    await db.collection("duty_plan").doc(targetId).update({
+                        ...payload,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    dutyReminderSentMemory.delete(`${targetId}:remindedDayBefore`);
+                    dutyReminderSentMemory.delete(`${targetId}:reminded2hBefore`);
+                    cancelEditDutyEntry();
+                    alert("Dienst erfolgreich aktualisiert!");
+                } else {
+                    await db.collection("duty_plan").add({
+                        ...payload,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    cancelEditDutyEntry();
+                    alert("Dienst erfolgreich eingetragen!");
+                }
             } catch (err) {
                 alert("Fehler beim Speichern: " + err.message);
             }
@@ -4968,6 +5147,9 @@
             if (confirm("Diesen Dienst wirklich löschen?")) {
                 try {
                     await db.collection("duty_plan").doc(id).delete();
+                    if (editingDutyId === id) {
+                        cancelEditDutyEntry();
+                    }
                     alert("Dienst gelöscht!");
                 } catch (err) {
                     alert("Fehler beim Löschen: " + err.message);
@@ -5030,17 +5212,31 @@
             dutyPlanUnsubscribe = db.collection("duty_plan").orderBy("createdAt", "asc").onSnapshot((snapshot) => {
                 let dutyList = [];
                 snapshot.forEach(doc => {
-                    let d = doc.data();
+                    let d = doc.data() || {};
                     const teamStr = d.team || d.gruppe || "Team";
                     const statusStr = d.status || (String(teamStr).toLowerCase().includes('geschlossen') ? 'closed' : 'open');
-                    const timeStr = d.time || d.dienstzeit || (statusStr === 'closed' ? '—' : '19:00 – 21:00 Uhr');
+                    const startTimeStr = extractDutyStartTime(d);
+                    const timeStr = d.time || d.dienstzeit || formatDutyDisplayTime(startTimeStr, statusStr === 'closed');
+                    const rawDateStr = d.dateStr || d.datum || d.date || "";
+                    const rawNames = d.names || d.mitglieder || d.diensthabende || d.members || "";
+                    const namesStr = Array.isArray(rawNames)
+                        ? rawNames.map(m => String(m || '').trim()).filter(Boolean).join(', ')
+                        : String(rawNames || '').trim();
+                    const membersArr = (Array.isArray(d.members) && d.members.length > 0)
+                        ? d.members.map(m => String(m || '').trim()).filter(Boolean)
+                        : parseDutyMembersList(namesStr);
                     dutyList.push({
                         id: doc.id,
-                        dateStr: d.dateStr || d.datum || d.date || "",
+                        dateStr: rawDateStr,
+                        date: rawDateStr,
                         team: teamStr,
-                        names: d.names || d.members || d.mitglieder || d.diensthabende || "",
+                        names: namesStr,
+                        members: membersArr,
+                        startTime: startTimeStr,
                         time: timeStr,
-                        status: statusStr
+                        status: statusStr,
+                        remindedDayBefore: Boolean(d.remindedDayBefore),
+                        reminded2hBefore: Boolean(d.reminded2hBefore)
                     });
                 });
 
@@ -5057,6 +5253,9 @@
                 }
                 if (isFromFirebase) {
                     saveDutyPlanToCache(globalDutyList, isFromFirebase);
+                }
+                if (typeof auth !== 'undefined' && auth && auth.currentUser) {
+                    checkAndTriggerDutyReminders(globalDutyList);
                 }
             }, (error) => {
                 if (globalDutyList.length === 0) {
@@ -5126,7 +5325,10 @@
                             <div>
                                 <div class="admin-duty-card-top">
                                     <div class="admin-duty-card-date">${escapeHtml(d.dateStr)}</div>
-                                    <button type="button" class="btn admin-btn-delete admin-duty-del-btn" onclick="deleteDutyEntry('${escapeHtml(d.id)}')" title="Dienst löschen">🗑️</button>
+                                    <div style="display:flex; align-items:center; gap:6px;">
+                                        <button type="button" class="btn admin-btn-edit admin-duty-del-btn" onclick="startEditDutyEntry('${escapeHtml(d.id)}')" title="Dienst bearbeiten">✏️</button>
+                                        <button type="button" class="btn admin-btn-delete admin-duty-del-btn" onclick="deleteDutyEntry('${escapeHtml(d.id)}')" title="Dienst löschen">🗑️</button>
+                                    </div>
                                 </div>
                                 <div class="admin-duty-card-team">${escapeHtml(d.team)}${d.time && d.time !== '—' ? ` <span style="color:#64748b; font-weight:600; font-size:0.9em;">(${escapeHtml(d.time)})</span>` : ''}</div>
                                 <div class="admin-duty-card-names">${escapeHtml(d.names)}</div>
@@ -5233,11 +5435,294 @@
             }
         }
 
+        let isCheckingDutyReminders = false;
+        const dutyReminderSentMemory = new Set();
+
+        function getViennaNowParts(referenceDate) {
+            const now = referenceDate instanceof Date ? referenceDate : new Date();
+            const formatter = new Intl.DateTimeFormat('en-GB', {
+                timeZone: 'Europe/Vienna',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hourCycle: 'h23'
+            });
+            const map = {};
+            formatter.formatToParts(now).forEach(p => {
+                if (p.type !== 'literal') map[p.type] = parseInt(p.value, 10);
+            });
+            const hour = map.hour === 24 ? 0 : (map.hour || 0);
+            return {
+                year: map.year,
+                month: map.month,
+                day: map.day,
+                hour: hour,
+                minute: map.minute || 0,
+                second: map.second || 0
+            };
+        }
+
+        function parseDutyCalendarDateParts(rawDateStr) {
+            const clean = String(rawDateStr || '').trim();
+            if (!clean) return null;
+            let year, month, day;
+            const dotMatch = clean.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+            const isoMatch = clean.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+            const dashDeMatch = clean.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+            if (dotMatch) {
+                day = parseInt(dotMatch[1], 10);
+                month = parseInt(dotMatch[2], 10);
+                year = parseInt(dotMatch[3], 10);
+            } else if (isoMatch) {
+                year = parseInt(isoMatch[1], 10);
+                month = parseInt(isoMatch[2], 10);
+                day = parseInt(isoMatch[3], 10);
+            } else if (dashDeMatch) {
+                day = parseInt(dashDeMatch[1], 10);
+                month = parseInt(dashDeMatch[2], 10);
+                year = parseInt(dashDeMatch[3], 10);
+            } else {
+                return null;
+            }
+            if (!year || month < 1 || month > 12 || day < 1 || day > 31) return null;
+            const check = new Date(Date.UTC(year, month - 1, day));
+            if (check.getUTCFullYear() !== year || (check.getUTCMonth() + 1) !== month || check.getUTCDate() !== day) {
+                return null;
+            }
+            return { year, month, day };
+        }
+
+        async function sendDutyReminderViaEndpoint(title, message) {
+            const cleanTitle = String(title || 'KB & SV Gaschurn-Partenen').trim();
+            const cleanMessage = String(message || '').trim() || cleanTitle;
+            const targetUrl = "https://" + "kb-sv-push" + "." + "simonpoeschel33" + "." + "workers.dev";
+
+            try {
+                let rawKey = '';
+                try {
+                    const doc = await db.collection("settings").doc("push").get();
+                    rawKey = (doc.exists && doc.data() && doc.data().restApiKey) ? String(doc.data().restApiKey).trim() : '';
+                } catch (readErr) {
+                    rawKey = '';
+                }
+
+                const appUrl = (typeof window !== 'undefined' && window.location && /^https?:\/\//i.test(window.location.origin))
+                    ? (window.location.origin + window.location.pathname)
+                    : "https://github.io";
+
+                const payloadBody = {
+                    appId: ONESIGNAL_APP_ID,
+                    title: cleanTitle,
+                    message: cleanMessage,
+                    url: appUrl
+                };
+                if (rawKey) {
+                    payloadBody.restApiKey = rawKey;
+                }
+
+                const res = await fetch(targetUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payloadBody)
+                });
+
+                const rawText = await res.text();
+                let data = null;
+                try {
+                    data = JSON.parse(rawText);
+                } catch (parseErr) {
+                    return { ok: false, error: 'Ungültige JSON-Antwort' };
+                }
+
+                if (res.ok && data && data.id && !data.errors && !data.error && data.ok !== false) {
+                    return { ok: true, data };
+                }
+                return { ok: false, error: 'Push-Endpunkt lehnte Anfrage ab' };
+            } catch (err) {
+                return { ok: false, error: (err && err.message) ? err.message : String(err) };
+            }
+        }
+
+        async function checkAndTriggerDutyReminders(dutySourceList, referenceDate) {
+            if (isCheckingDutyReminders) return;
+            if (typeof auth === 'undefined' || !auth || !auth.currentUser) return;
+            if (typeof db === 'undefined' || !db) return;
+
+            isCheckingDutyReminders = true;
+            try {
+                let entries = [];
+                if (Array.isArray(dutySourceList)) {
+                    entries = dutySourceList;
+                } else if (Array.isArray(globalDutyList) && globalDutyList.length > 0) {
+                    entries = globalDutyList;
+                } else {
+                    const snap = await db.collection("duty_plan").get();
+                    snap.forEach(doc => {
+                        const d = doc.data() || {};
+                        const teamStr = d.team || d.gruppe || "Team";
+                        const statusStr = d.status || (String(teamStr).toLowerCase().includes('geschlossen') ? 'closed' : 'open');
+                        const rawDateStr = d.dateStr || d.datum || d.date || "";
+                        const rawNames = d.names || d.mitglieder || d.diensthabende || d.members || "";
+                        const namesStr = Array.isArray(rawNames)
+                            ? rawNames.map(m => String(m || '').trim()).filter(Boolean).join(', ')
+                            : String(rawNames || '').trim();
+                        const membersArr = (Array.isArray(d.members) && d.members.length > 0)
+                            ? d.members.map(m => String(m || '').trim()).filter(Boolean)
+                            : parseDutyMembersList(namesStr);
+                        entries.push({
+                            id: doc.id,
+                            dateStr: rawDateStr,
+                            date: rawDateStr,
+                            team: teamStr,
+                            names: namesStr,
+                            members: membersArr,
+                            startTime: extractDutyStartTime(d),
+                            status: statusStr,
+                            remindedDayBefore: Boolean(d.remindedDayBefore),
+                            reminded2hBefore: Boolean(d.reminded2hBefore)
+                        });
+                    });
+                }
+
+                if (!entries || entries.length === 0) return;
+
+                const viennaNow = getViennaNowParts(referenceDate);
+                const todaySerial = Math.floor(Date.UTC(viennaNow.year, viennaNow.month - 1, viennaNow.day) / 86400000);
+                const nowMinutesOfDay = viennaNow.hour * 60 + viennaNow.minute;
+
+                // Fall A: Nur offene, nicht abgelaufene Dienste berücksichtigen
+                const openDuties = [];
+                for (const rawDuty of entries) {
+                    if (!rawDuty || !rawDuty.id) continue;
+                    const teamStr = String(rawDuty.team || '').trim();
+                    const isClosed = rawDuty.status === 'closed' || teamStr.toLowerCase().includes('geschlossen');
+                    if (isClosed) continue;
+
+                    const dateText = String(rawDuty.date || rawDuty.dateStr || '').trim();
+                    const dateParts = parseDutyCalendarDateParts(dateText);
+                    if (!dateParts) continue;
+
+                    const startTimeStr = extractDutyStartTime(rawDuty);
+                    const timeParts = startTimeStr.split(':');
+                    const startMinutesOfDay = parseInt(timeParts[0], 10) * 60 + parseInt(timeParts[1], 10);
+
+                    const dutySerial = Math.floor(Date.UTC(dateParts.year, dateParts.month - 1, dateParts.day) / 86400000);
+                    const dayDiff = dutySerial - todaySerial;
+
+                    if (dayDiff < 0) continue;
+                    if (dayDiff === 0 && nowMinutesOfDay > startMinutesOfDay) continue;
+
+                    const membersArr = (Array.isArray(rawDuty.members) && rawDuty.members.length > 0)
+                        ? rawDuty.members.map(m => String(m || '').trim()).filter(Boolean)
+                        : parseDutyMembersList(rawDuty.names || '');
+
+                    openDuties.push({
+                        id: rawDuty.id,
+                        date: dateText,
+                        team: teamStr,
+                        members: membersArr,
+                        startTime: startTimeStr,
+                        startMinutesOfDay,
+                        dayDiff,
+                        remindedDayBefore: Boolean(rawDuty.remindedDayBefore),
+                        reminded2hBefore: Boolean(rawDuty.reminded2hBefore)
+                    });
+                }
+
+                // Fall A: Kein offener Dienst mehr vorhanden -> lautlos abbrechen
+                if (openDuties.length === 0) return;
+
+                async function claimDutyReminderAtomically(docRef, flagField) {
+                    if (typeof db.runTransaction === 'function') {
+                        return await db.runTransaction(async (tx) => {
+                            const snap = await tx.get(docRef);
+                            if (!snap || !snap.exists) return false;
+                            const d = snap.data() || {};
+                            if (d[flagField]) return false;
+                            tx.update(docRef, { [flagField]: true });
+                            return true;
+                        });
+                    }
+                    const freshSnap = await docRef.get();
+                    if (!freshSnap || !freshSnap.exists) return false;
+                    const d = freshSnap.data() || {};
+                    if (d[flagField]) return false;
+                    await docRef.update({ [flagField]: true });
+                    return true;
+                }
+
+                async function triggerSingleDutyReminder(duty, flagField, title, text) {
+                    const memKey = `${duty.id}:${flagField}`;
+                    if (dutyReminderSentMemory.has(memKey)) return;
+                    const docRef = db.collection("duty_plan").doc(duty.id);
+                    let claimed = false;
+                    try {
+                        claimed = await claimDutyReminderAtomically(docRef, flagField);
+                        if (!claimed) {
+                            dutyReminderSentMemory.add(memKey);
+                            const localAlready = globalDutyList.find(item => item.id === duty.id);
+                            if (localAlready) localAlready[flagField] = true;
+                            return;
+                        }
+                        dutyReminderSentMemory.add(memKey);
+                        const localItem = globalDutyList.find(item => item.id === duty.id);
+                        if (localItem) localItem[flagField] = true;
+
+                        const pushRes = await sendDutyReminderViaEndpoint(title, text);
+                        if (!pushRes || !pushRes.ok) {
+                            dutyReminderSentMemory.delete(memKey);
+                            if (localItem) localItem[flagField] = false;
+                            try { await docRef.update({ [flagField]: false }); } catch (rbErr) {}
+                        }
+                    } catch (e) {
+                        if (claimed) {
+                            dutyReminderSentMemory.delete(memKey);
+                            const localItem = globalDutyList.find(item => item.id === duty.id);
+                            if (localItem) localItem[flagField] = false;
+                            try { await docRef.update({ [flagField]: false }); } catch (rbErr) {}
+                        }
+                    }
+                }
+
+                for (const duty of openDuties) {
+                    const membersLabel = duty.members.length > 0
+                        ? duty.members.join(' & ')
+                        : (duty.team || 'das eingeteilte Team');
+                    const startDisplay = duty.startTime || '19:00';
+
+                    // Fall B: Erinnerung am Vortag ab 18:00 Uhr (Wiener Zeit)
+                    if (duty.dayDiff === 1 && nowMinutesOfDay >= 18 * 60 && !duty.remindedDayBefore) {
+                        const title = '🍺 Dienst-Erinnerung für morgen';
+                        const text = `Morgen (${duty.date} ab ${startDisplay} Uhr) haben ${membersLabel} Dienst im Schützenhaus.`;
+                        await triggerSingleDutyReminder(duty, 'remindedDayBefore', title, text);
+                    }
+
+                    // Fall C: Erinnerung 2 Stunden vor Dienstbeginn (125 Min. bis 15 Min. vor Startzeit am Diensttag)
+                    const minutesUntilStart = duty.startMinutesOfDay - nowMinutesOfDay;
+                    if (duty.dayDiff === 0 && minutesUntilStart <= 125 && minutesUntilStart >= 15 && !duty.reminded2hBefore) {
+                        const title = '⏰ Dienst beginnt in 2 Stunden';
+                        const text = `Heute ab ${startDisplay} Uhr haben ${membersLabel} Dienst im Schützenhaus.`;
+                        await triggerSingleDutyReminder(duty, 'reminded2hBefore', title, text);
+                    }
+                }
+            } catch (err) {
+                // Fehlertolerant: Hintergrundprüfung wirft keine sichtbaren Fehler
+            } finally {
+                isCheckingDutyReminders = false;
+            }
+        }
+
         function initMidnightAndMinuteChecker() {
             if (midnightCheckerInterval) return;
             midnightCheckerInterval = setInterval(() => {
                 if (globalDutyList.length > 0) {
                     renderDutyPlanViews(globalDutyList, globalDutyIsFromFirebase);
+                }
+                if (typeof auth !== 'undefined' && auth && auth.currentUser) {
+                    checkAndTriggerDutyReminders(globalDutyList);
                 }
             }, 60 * 1000);
         }
@@ -5491,41 +5976,60 @@
             }
         }
 
+        const eventVotePendingIds = new Set();
+
         async function toggleEventVote(eventId, voteMode, memberName) {
             if (!eventId || !memberName) return;
+            const cleanEventId = String(eventId).trim();
+            if (!cleanEventId || eventVotePendingIds.has(cleanEventId)) return;
             const mode = normalizeEventVoteMode(voteMode);
+            eventVotePendingIds.add(cleanEventId);
             try {
-                const docRef = db.collection("events").doc(eventId);
-                const doc = await docRef.get();
-                if (!doc.exists) return;
-                const data = doc.data() || {};
-                let votes = { ...(data.votes || {}) };
-                const currentStatus = String(votes[memberName] || '').trim().toLowerCase();
+                const docRef = db.collection("events").doc(cleanEventId);
+                const computeNextVotes = (rawVotes) => {
+                    const votes = { ...(rawVotes || {}) };
+                    const currentStatus = String(votes[memberName] || '').trim().toLowerCase();
 
-                if (mode === 'absage') {
-                    if (currentStatus === 'absage') {
-                        delete votes[memberName];
+                    if (mode === 'absage') {
+                        if (currentStatus === 'absage') {
+                            delete votes[memberName];
+                        } else {
+                            votes[memberName] = 'absage';
+                        }
+                    } else if (mode === 'maybe') {
+                        if (currentStatus === 'maybe' || currentStatus === 'vielleicht') {
+                            delete votes[memberName];
+                        } else {
+                            votes[memberName] = 'maybe';
+                        }
                     } else {
-                        votes[memberName] = 'absage';
+                        if (votes[memberName] === 'Dabei' || currentStatus === 'dabei') {
+                            delete votes[memberName];
+                        } else {
+                            votes[memberName] = 'Dabei';
+                        }
                     }
-                } else if (mode === 'maybe') {
-                    if (currentStatus === 'maybe' || currentStatus === 'vielleicht') {
-                        delete votes[memberName];
-                    } else {
-                        votes[memberName] = 'maybe';
-                    }
+                    return votes;
+                };
+
+                if (typeof db.runTransaction === 'function') {
+                    await db.runTransaction(async (tx) => {
+                        const doc = await tx.get(docRef);
+                        if (!doc.exists) return;
+                        const data = doc.data() || {};
+                        tx.update(docRef, { votes: computeNextVotes(data.votes) });
+                    });
                 } else {
-                    if (votes[memberName] === 'Dabei' || currentStatus === 'dabei') {
-                        delete votes[memberName];
-                    } else {
-                        votes[memberName] = 'Dabei';
-                    }
+                    const doc = await docRef.get();
+                    if (!doc.exists) return;
+                    const data = doc.data() || {};
+                    await docRef.update({ votes: computeNextVotes(data.votes) });
                 }
-
-                await docRef.update({ votes });
                 loadEvents();
             } catch (err) {
                 alert("Fehler bei der Abstimmung: " + err.message);
+            } finally {
+                eventVotePendingIds.delete(cleanEventId);
             }
         }
 
@@ -6146,35 +6650,243 @@
             window.speechSynthesis.speak(utterance);
         }
 
+        let newsUnsubscribe = null;
+        let pendingNewsLikeAfterSetup = null;
+        const newsLikePendingIds = new Set();
+
+        function normalizeNewsLikesArray(rawLikes) {
+            if (!Array.isArray(rawLikes)) return [];
+            const seen = new Set();
+            const result = [];
+            rawLikes.forEach(entry => {
+                const clean = String(entry || '').trim();
+                if (!clean) return;
+                const key = clean.toLowerCase();
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    result.push(clean);
+                }
+            });
+            return result;
+        }
+
+        function getCurrentNewsLikerName() {
+            let memberName = String(getSavedClubMemberName() || '').trim();
+            if (!memberName && typeof auth !== 'undefined' && auth && auth.currentUser) {
+                const resolvedKey = resolveAdminKeyFromUser(auth.currentUser, typeof activeAdminName !== 'undefined' ? activeAdminName : '');
+                if (resolvedKey && ADMIN_KEY_TO_MEMBER_NAME[resolvedKey]) {
+                    memberName = ADMIN_KEY_TO_MEMBER_NAME[resolvedKey];
+                }
+            }
+            return memberName;
+        }
+
+        function formatCompactNewsLikersHtml(likesArr) {
+            const cleanNames = normalizeNewsLikesArray(likesArr);
+            if (cleanNames.length === 0) return { html: '', title: '' };
+            const shortNames = cleanNames.map(full => {
+                if (full.startsWith('device:')) return 'Mitglied';
+                const parts = full.split(/\s+/).filter(Boolean);
+                return parts.length >= 2 ? parts[parts.length - 1] : full;
+            });
+            const fullTitle = cleanNames.map(n => n.startsWith('device:') ? 'Mitglied' : n).join(', ');
+            if (shortNames.length <= 3) {
+                return {
+                    html: shortNames.map(n => escapeHtml(n)).join(', '),
+                    title: fullTitle
+                };
+            }
+            const shown = shortNames.slice(0, 2).map(n => escapeHtml(n)).join(', ');
+            const restCount = shortNames.length - 2;
+            return {
+                html: `${shown} +${restCount}`,
+                title: fullTitle
+            };
+        }
+
+        function buildNewsLikeBarInnerHtml(newsId, likesArr) {
+            const cleanLikes = normalizeNewsLikesArray(likesArr);
+            const count = cleanLikes.length;
+            const currentLiker = getCurrentNewsLikerName();
+            const currentNorm = currentLiker.toLowerCase();
+            const isLiked = !!(currentNorm && cleanLikes.some(name => name.toLowerCase() === currentNorm));
+            const btnStyle = isLiked
+                ? 'background: #dcfce7; color: #15803d; border: 1.5px solid #16a34a; border-radius: 999px; padding: 7px 14px; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-family: inherit; flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s;'
+                : 'background: #f8fafc; color: #334155; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 7px 14px; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-family: inherit; flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s;';
+            const btnLabel = count > 0 ? `👍 Gefällt mir · ${count}` : '👍 Gefällt mir';
+            const likersInfo = formatCompactNewsLikersHtml(cleanLikes);
+            const likersHtml = count > 0
+                ? `<span class="news-like-names" style="font-size: 0.8rem; color: #64748b; text-align: right; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(likersInfo.title)}">${likersInfo.html}</span>`
+                : '';
+
+            return `
+                <button type="button" class="news-like-btn" data-news-id="${escapeHtml(newsId)}" onclick="toggleNewsLike(this.getAttribute('data-news-id'))" aria-pressed="${isLiked ? 'true' : 'false'}" style="${btnStyle}">${btnLabel}</button>
+                ${likersHtml}
+            `;
+        }
+
+        function updateNewsLikeBarDom(newsId, likesArr) {
+            const container = document.getElementById('news-container');
+            if (!container) return;
+            const bars = container.querySelectorAll('.news-like-bar');
+            bars.forEach(bar => {
+                if (bar.getAttribute('data-news-like-bar') === newsId) {
+                    bar.innerHTML = buildNewsLikeBarInnerHtml(newsId, likesArr);
+                }
+            });
+        }
+
+        function refreshAllNewsLikeBarsDom() {
+            if (!Array.isArray(loadedNewsItems) || loadedNewsItems.length === 0) return;
+            loadedNewsItems.forEach(item => {
+                if (item && item.id) {
+                    updateNewsLikeBarDom(item.id, item.likes || []);
+                }
+            });
+        }
+
+        async function toggleNewsLike(newsId) {
+            const cleanNewsId = String(newsId || '').trim();
+            if (!cleanNewsId) return;
+
+            const likerName = getCurrentNewsLikerName();
+            if (!likerName) {
+                pendingNewsLikeAfterSetup = cleanNewsId;
+                openMemberNameSetupModal(true);
+                return;
+            }
+
+            if (newsLikePendingIds.has(cleanNewsId)) return;
+            newsLikePendingIds.add(cleanNewsId);
+
+            const cachedItem = loadedNewsItems.find(item => item && item.id === cleanNewsId) || null;
+            const previousLikes = cachedItem ? normalizeNewsLikesArray(cachedItem.likes) : [];
+            const likerNorm = likerName.toLowerCase();
+            const alreadyLiked = previousLikes.some(name => name.toLowerCase() === likerNorm);
+            const optimisticLikes = alreadyLiked
+                ? previousLikes.filter(name => name.toLowerCase() !== likerNorm)
+                : [...previousLikes, likerName];
+
+            if (cachedItem) {
+                cachedItem.likes = optimisticLikes;
+            }
+            updateNewsLikeBarDom(cleanNewsId, optimisticLikes);
+
+            try {
+                const docRef = db.collection('news').doc(cleanNewsId);
+                const updatedLikes = await db.runTransaction(async (transaction) => {
+                    const docSnap = await transaction.get(docRef);
+                    if (!docSnap.exists) return null;
+                    const data = docSnap.data() || {};
+                    const currentLikes = normalizeNewsLikesArray(data.likes);
+                    const hasLike = currentLikes.some(name => name.toLowerCase() === likerNorm);
+                    const nextLikes = hasLike
+                        ? currentLikes.filter(name => name.toLowerCase() !== likerNorm)
+                        : [...currentLikes, likerName];
+                    transaction.update(docRef, { likes: nextLikes });
+                    return nextLikes;
+                });
+
+                if (Array.isArray(updatedLikes)) {
+                    if (cachedItem) cachedItem.likes = updatedLikes;
+                    updateNewsLikeBarDom(cleanNewsId, updatedLikes);
+                }
+            } catch (err) {
+                if (cachedItem) cachedItem.likes = previousLikes;
+                updateNewsLikeBarDom(cleanNewsId, previousLikes);
+                console.warn('News-Like konnte nicht gespeichert werden:', err);
+            } finally {
+                newsLikePendingIds.delete(cleanNewsId);
+            }
+        }
+
+        function renderNewsSnapshot(snapshot) {
+            const container = document.getElementById('news-container');
+            if (!container) return;
+
+            const nextItems = [];
+            snapshot.forEach(doc => {
+                const n = doc.data() || {};
+                const rawTitle = String(n.title || '').trim();
+                const rawText = String(n.text || '').trim();
+                const rawImg = String(n.imageUrl || '').trim();
+                const likes = normalizeNewsLikesArray(n.likes);
+                nextItems.push({
+                    id: doc.id,
+                    title: rawTitle,
+                    text: rawText,
+                    imageUrl: rawImg,
+                    likes
+                });
+            });
+
+            const existingCards = container.querySelectorAll('.news-card-item');
+            const canPatchLikesInPlace = (
+                existingCards.length === nextItems.length &&
+                loadedNewsItems.length === nextItems.length &&
+                nextItems.every((item, idx) => {
+                    const prev = loadedNewsItems[idx];
+                    return prev && prev.id === item.id && prev.title === item.title && prev.text === item.text && prev.imageUrl === item.imageUrl;
+                })
+            );
+
+            loadedNewsItems = nextItems;
+
+            if (canPatchLikesInPlace) {
+                nextItems.forEach(item => {
+                    updateNewsLikeBarDom(item.id, item.likes);
+                });
+                return;
+            }
+
+            let html = "";
+            nextItems.forEach((item, newsIdx) => {
+                const safeImgUrl = (/^(https?:\/\/|data:image\/(png|jpe?g|gif|webp);base64,)/i.test(item.imageUrl)) ? escapeHtml(item.imageUrl) : '';
+                html += `
+                    <div class="glass-card glass-card-red news-card-item" data-news-id="${escapeHtml(item.id)}" style="margin-top: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 10px;">
+                            <div class="card-title" style="margin-bottom: 0;">📢 ${escapeHtml(item.title)}</div>
+                            <button type="button" class="news-read-aloud-btn" data-news-idx="${newsIdx}" onclick="toggleReadNewsAloud(${newsIdx}, this)" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 10px; padding: 6px 11px; font-size: 0.82rem; font-weight: 800; font-family: inherit; cursor: pointer; white-space: nowrap;">🔊 Vorlesen</button>
+                        </div>
+                        <p style="font-size: 0.9em; line-height: 1.4; margin-bottom: 10px;">${escapeHtml(item.text)}</p>
+                        ${safeImgUrl ? `<img src="${safeImgUrl}" style="width: 100%; border-radius: 12px; margin-top: 8px;" />` : ''}
+                        <div class="news-like-bar" data-news-like-bar="${escapeHtml(item.id)}" style="border-top: 1px solid #f1f5f9; padding-top: 10px; margin-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                            ${buildNewsLikeBarInnerHtml(item.id, item.likes)}
+                        </div>
+                    </div>
+                `;
+            });
+
+            const prevScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
+            stopReadNewsAloud();
+            container.innerHTML = html;
+            if (typeof window !== 'undefined' && prevScrollY > 0 && Math.abs(window.scrollY - prevScrollY) > 4) {
+                try { window.scrollTo(0, prevScrollY); } catch (e) {}
+            }
+        }
+
         async function loadNews() {
             const container = document.getElementById('news-container');
             if (!container) return;
             try {
-                const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
-                loadedNewsItems = [];
-                let html = "";
-                snapshot.forEach(doc => {
-                    const n = doc.data() || {};
-                    const rawTitle = String(n.title || '').trim();
-                    const rawText = String(n.text || '').trim();
-                    const newsIdx = loadedNewsItems.length;
-                    loadedNewsItems.push({ title: rawTitle, text: rawText });
-                    const rawImg = String(n.imageUrl || '').trim();
-                    const safeImgUrl = (/^(https?:\/\/|data:image\/(png|jpe?g|gif|webp);base64,)/i.test(rawImg)) ? escapeHtml(rawImg) : '';
-                    html += `
-                        <div class="glass-card glass-card-red" style="margin-top: 16px;">
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 10px;">
-                                <div class="card-title" style="margin-bottom: 0;">📢 ${escapeHtml(rawTitle)}</div>
-                                <button type="button" class="news-read-aloud-btn" data-news-idx="${newsIdx}" onclick="toggleReadNewsAloud(${newsIdx}, this)" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 10px; padding: 6px 11px; font-size: 0.82rem; font-weight: 800; font-family: inherit; cursor: pointer; white-space: nowrap;">🔊 Vorlesen</button>
-                            </div>
-                            <p style="font-size: 0.9em; line-height: 1.4; margin-bottom: 10px;">${escapeHtml(rawText)}</p>
-                            ${safeImgUrl ? `<img src="${safeImgUrl}" style="width: 100%; border-radius: 12px; margin-top: 8px;" />` : ''}
-                        </div>
-                    `;
+                if (newsUnsubscribe) {
+                    try { newsUnsubscribe(); } catch (e) {}
+                    newsUnsubscribe = null;
+                }
+                newsUnsubscribe = db.collection("news").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+                    renderNewsSnapshot(snapshot);
+                }, async () => {
+                    try {
+                        const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
+                        renderNewsSnapshot(snapshot);
+                    } catch (e) {}
                 });
-                stopReadNewsAloud();
-                container.innerHTML = html;
-            } catch(e) {}
+            } catch(e) {
+                try {
+                    const snapshot = await db.collection("news").orderBy("createdAt", "desc").get();
+                    renderNewsSnapshot(snapshot);
+                } catch (err) {}
+            }
         }
 
         // --- SCHLÜSSELLISTE (AUSSCHLIESSLICH IM ADMIN-BEREICH AUS FIRESTORE settings/keys & settings/pdfKeys) ---
@@ -6681,6 +7393,18 @@
             }
         });
 
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                if (typeof stopQrScanner === 'function') {
+                    try { stopQrScanner(); } catch(e) {}
+                }
+                if (weaponSessionUnlocked) {
+                    resetWeaponScanState();
+                    lockWeaponFormUI();
+                }
+            }
+        });
+
         let qrVideoObserver = null;
 
         function enforceQrVideoInlineAttributes(readerDiv) {
@@ -6729,14 +7453,15 @@
             if (!savedName) return false;
 
             const authorizedList = Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [];
-            if (authorizedList.some(name => String(name || '').trim().toLowerCase() === savedName)) {
-                return true;
-            }
-
-            const allowedFirstNames = ['simon', 'heimo', 'norbert', 'manfred'];
-            return allowedFirstNames.some(first => {
-                const re = new RegExp(`(?:^|[^a-zäöüß])${first}(?:$|[^a-zäöüß])`, 'i');
-                return re.test(savedName);
+            return authorizedList.some(name => {
+                const clean = String(name || '').trim().replace(/\s+/g, ' ').toLowerCase();
+                if (!clean) return false;
+                if (clean === savedName) return true;
+                const parts = clean.split(' ');
+                if (parts.length === 2 && `${parts[1]} ${parts[0]}` === savedName) {
+                    return true;
+                }
+                return false;
             });
         }
 
@@ -7590,6 +8315,7 @@
                             <div style="display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; padding-top: 2px;">
                                 <button type="button" class="btn admin-btn-edit weapon-pdf-preview-btn" style="padding: 7px 12px !important; font-size: 13px !important;" data-doc-id="${safeDocId}">👁️ Ansehen</button>
                                 <button type="button" class="btn admin-btn-save weapon-pdf-download-btn" style="padding: 7px 12px !important; font-size: 13px !important;" data-doc-id="${safeDocId}">📥 Herunterladen</button>
+                                <button type="button" onclick="deleteAdminWeaponLog('${safeDocId}')" title="Protokoll endgültig löschen" style="background: #fef2f2; color: #b91c1c; border: 1.5px solid #fecaca; border-radius: 10px; padding: 7px 11px; font-size: 0.85rem; font-weight: 800; cursor: pointer;">🗑️ Löschen</button>
                             </div>
                         </div>
                     `;
@@ -7614,6 +8340,86 @@
                 });
             } catch(e) {
                 container.innerHTML = '<p style="font-size:0.85em; color:red;">Fehler beim Laden der Admin-Protokolle.</p>';
+            }
+        }
+
+        const deletingWeaponLogIds = new Set();
+
+        async function deleteAdminWeaponLog(logId) {
+            if (!auth || !auth.currentUser) { alert("Bitte zuerst im Admin-Bereich anmelden."); return; }
+            const cleanLogId = String(logId || '').trim();
+            if (!cleanLogId || deletingWeaponLogIds.has(cleanLogId)) return;
+
+            let record = (window.weaponPdfMap && window.weaponPdfMap[cleanLogId]) ? window.weaponPdfMap[cleanLogId] : null;
+            if (!record) {
+                try {
+                    const snap = await db.collection('weapon_log').doc(cleanLogId).get();
+                    if (snap && snap.exists) {
+                        record = { ...(snap.data() || {}), id: (snap.data() && snap.data().id) || cleanLogId };
+                    }
+                } catch (e) {}
+            }
+
+            const displayId = (record && record.id) ? String(record.id) : cleanLogId;
+            const issueDateStr = (record && record.issueTime) ? formatPdfTimestamp(record.issueTime) : 'k.A.';
+            let personStr = 'k.A.';
+            if (record) {
+                const p1 = String(record.primaryName || '').trim();
+                const p2 = String(record.secondaryName || '').trim();
+                if (p1) {
+                    personStr = p2 ? `${p1} (+ ${p2})` : p1;
+                } else if (record.collectorStr) {
+                    personStr = String(record.collectorStr).trim();
+                }
+            }
+            const weaponsArr = (record && Array.isArray(record.selectedWeapons)) ? record.selectedWeapons : [];
+            const weaponsText = weaponsArr.length > 0
+                ? weaponsArr.map(w => {
+                    try {
+                        const parsed = parseWeaponItemForPDF(w);
+                        return parsed && parsed.artModel ? parsed.artModel : String(w || '');
+                    } catch (e) {
+                        return String(w || '');
+                    }
+                }).filter(Boolean).join(', ')
+                : 'Keine Waffen';
+
+            const confirmMessage =
+                `⚠️ Möchtest du dieses Waffenbuch-Protokoll wirklich unwiderruflich löschen?\n\n` +
+                `Protokoll-ID: ${displayId}\n` +
+                `Datum: ${issueDateStr}\n` +
+                `Schütze / Waffenwart: ${personStr}\n` +
+                `Waffen: ${weaponsText}\n\n` +
+                `Hinweis: Dieser Löschvorgang wird im Sicherheits-Audit-Log protokolliert.`;
+
+            if (!confirm(confirmMessage)) return;
+
+            deletingWeaponLogIds.add(cleanLogId);
+            try {
+                await db.collection('weapon_log').doc(cleanLogId).delete();
+                if (window.weaponPdfMap && Object.prototype.hasOwnProperty.call(window.weaponPdfMap, cleanLogId)) {
+                    delete window.weaponPdfMap[cleanLogId];
+                }
+                if (typeof currentWeaponPdfDocId !== 'undefined' && currentWeaponPdfDocId === cleanLogId) {
+                    try { closeWeaponPDFModal(); } catch (e) {}
+                }
+
+                const adminLabel = String(
+                    (typeof activeAdminName !== 'undefined' && activeAdminName) ||
+                    (auth.currentUser && auth.currentUser.email) ||
+                    'Admin'
+                ).trim();
+                await logAdminAudit(
+                    'WEAPON_LOG_DELETED',
+                    `Admin: ${adminLabel} | Protokoll-ID: ${displayId} | Datum: ${issueDateStr} | Übernehmer: ${personStr} | Waffen: ${weaponsText}`
+                );
+
+                await loadAdminWeaponPDFs();
+                try { if (typeof loadWeaponHistory === 'function') loadWeaponHistory(); } catch (e) {}
+            } catch (err) {
+                alert("Fehler beim Löschen des Waffenbuch-Protokolls: " + (err && err.message ? err.message : String(err)));
+            } finally {
+                deletingWeaponLogIds.delete(cleanLogId);
             }
         }
 
@@ -8526,7 +9332,11 @@
             return serviceText ? `${baseName} (${serviceText})` : baseName;
         }
 
+        let isCashSaleInFlight = false;
+        let isTallyBillingInFlight = false;
+
         async function saveCashSale(btnEl) {
+            if (isCashSaleInFlight) return;
             const activeTab = getActiveOpenTab();
             const countsCopy = normalizeDrinkCounts(activeTab.counts);
             const total = computeCountsTotal(countsCopy);
@@ -8559,6 +9369,7 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
+            isCashSaleInFlight = true;
             if (btnEl) btnEl.disabled = true;
             try {
                 await db.collection("cash_sales").add(cashSaleObj);
@@ -8579,11 +9390,13 @@
             } catch (err) {
                 alert("Fehler beim Speichern der Bar-Abrechnung: " + err.message);
             } finally {
+                isCashSaleInFlight = false;
                 if (btnEl) btnEl.disabled = false;
             }
         }
 
         async function saveTallyBilling(btnEl) {
+            if (isTallyBillingInFlight) return;
             const activeTab = getActiveOpenTab();
             const countsCopy = normalizeDrinkCounts(activeTab.counts);
             const total = computeCountsTotal(countsCopy);
@@ -8616,6 +9429,7 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
 
+            isTallyBillingInFlight = true;
             if (btnEl) btnEl.disabled = true;
             try {
                 const docRef = await db.collection("tally_billings").add(invoiceObj);
@@ -8649,6 +9463,7 @@
             } catch (err) {
                 alert("Fehler beim Speichern: " + err.message);
             } finally {
+                isTallyBillingInFlight = false;
                 if (btnEl) btnEl.disabled = false;
             }
         }
@@ -8672,8 +9487,8 @@
                     if (typeof rawTotal === 'string') {
                         rawTotal = parseFloat(rawTotal.replace('€', '').replace(',', '.').trim());
                     }
-                    const totalNum = isNaN(rawTotal) ? 0 : Number(rawTotal);
-                    totalCashSum += totalNum;
+                    const totalNum = isNaN(rawTotal) ? 0 : Math.round(Number(rawTotal) * 100) / 100;
+                    totalCashSum = Math.round((totalCashSum + totalNum) * 100) / 100;
 
                     const itemsSummary = Array.isArray(sale.items)
                         ? sale.items.map(it => `${it.count || 0}x ${it.name || it.key || ''}`).join(', ')
@@ -8821,8 +9636,8 @@
                 const maxBodyY = 274;
 
                 list.forEach((sale, idx) => {
-                    const amountVal = Number(sale.totalNum || 0);
-                    totalCashSum += amountVal;
+                    const amountVal = Math.round(Number(sale.totalNum || 0) * 100) / 100;
+                    totalCashSum = Math.round((totalCashSum + amountVal) * 100) / 100;
 
                     const dateLines = doc.splitTextToSize(String(sale.dateDisplay || '–'), colWidths[0] - 4);
                     const fullTabLabel = formatCashSaleTabLabel(sale.tabName || DEFAULT_BAR_TAB_NAME, sale.openedBy, sale.cashier);
@@ -8917,7 +9732,10 @@
                 await loadCashSales();
                 const list = Array.isArray(window.cashSalesList) ? window.cashSalesList : [];
                 let totalCashSum = 0;
-                list.forEach(s => { totalCashSum += Number(s.totalNum || 0); });
+                list.forEach(s => {
+                    const amountVal = Math.round(Number(s.totalNum || 0) * 100) / 100;
+                    totalCashSum = Math.round((totalCashSum + amountVal) * 100) / 100;
+                });
 
                 const now = new Date();
                 const printDateStr = now.toLocaleDateString('de-AT');
@@ -9443,6 +10261,7 @@
             window.cashSalesList = [];
             try { lockSecuritySettingsFields(); } catch(e) {}
             try { stopAdminAuditLogListener(); } catch(e) {}
+            try { if (typeof cancelEditDutyEntry === 'function') cancelEditDutyEntry(); } catch(e) {}
             try { closeMasterPinModal(); } catch(e) {}
             try { closeAdminHelpModal(); } catch(e) {}
             try { closeCashReportPreviewModal(); } catch(e) {}
@@ -9477,6 +10296,13 @@
                 try { dutyPlanUnsubscribe(); } catch(e) {}
                 dutyPlanUnsubscribe = null;
             }
+            if (newsUnsubscribe) {
+                try { newsUnsubscribe(); } catch(e) {}
+                newsUnsubscribe = null;
+            }
+            loadedNewsItems = [];
+            pendingNewsLikeAfterSetup = null;
+            try { newsLikePendingIds.clear(); } catch(e) {}
             if (openTabsUnsubscribe) {
                 try { openTabsUnsubscribe(); } catch(e) {}
                 openTabsUnsubscribe = null;
@@ -9516,6 +10342,7 @@
             try { hideWeaponTimeoutNotice(); } catch(e) {}
             populateWeaponMemberSelects();
             try { stopReadNewsAloud(); } catch(e) {}
+            try { if (typeof stopReadMemberHelpAloud === 'function') stopReadMemberHelpAloud(); } catch(e) {}
             try { stopAdminAuditLogListener(); } catch(e) {}
             ['next-duty-widget', 'full-roster-list', 'archive-roster-list', 'events-container', 'news-container', 'public-members-list', 'weapon-checkboxes-container', 'weapon-history-list', 'admin-keys-list', 'admin-weapon-pdf-list', 'admin-cash-sales-list', 'admin-tally-history-list', 'admin-members-overview', 'admin-audit-logs-list'].forEach(id => {
                 const el = document.getElementById(id);
@@ -9746,9 +10573,12 @@
             }
         }
 
+        let clubAccessGuardUnsubscribe = null;
+
         function initClubAccessGuard() {
+            if (clubAccessGuardUnsubscribe) return;
             try {
-                db.collection("settings").doc("access").onSnapshot(async (doc) => {
+                clubAccessGuardUnsubscribe = db.collection("settings").doc("access").onSnapshot(async (doc) => {
                     let remoteHash = null;
                     if (doc.exists && doc.data()) {
                         remoteHash = await resolveClubPinHashFromData(doc.data(), !!auth.currentUser);
@@ -9828,11 +10658,42 @@
             }
         }
 
+        function toggleAdminPasswordVisibility() {
+            const pwdInput = document.getElementById('admin-password-input');
+            const toggleBtn = document.getElementById('toggle-admin-pw-visibility');
+            if (!pwdInput) return;
+            const willShow = pwdInput.type === 'password';
+            pwdInput.type = willShow ? 'text' : 'password';
+            if (toggleBtn) {
+                toggleBtn.textContent = willShow ? '🙈' : '👁️';
+                toggleBtn.setAttribute('aria-pressed', willShow ? 'true' : 'false');
+                toggleBtn.setAttribute('aria-label', willShow ? 'Passwort verbergen' : 'Passwort anzeigen');
+            }
+        }
+
+        function resetAdminPasswordVisibility() {
+            const pwdInput = document.getElementById('admin-password-input');
+            const toggleBtn = document.getElementById('toggle-admin-pw-visibility');
+            if (pwdInput) pwdInput.type = 'password';
+            if (toggleBtn) {
+                toggleBtn.textContent = '👁️';
+                toggleBtn.setAttribute('aria-pressed', 'false');
+                toggleBtn.setAttribute('aria-label', 'Passwort anzeigen');
+            }
+        }
+
         function handleAdminLogin(e) {
             e.preventDefault();
             const selectedUser = document.getElementById('admin-user-select').value;
             const password = document.getElementById('admin-password-input').value;
-            const adminEmail = `admin+${selectedUser}@kb-sv-gaschurn.at`; 
+            const adminEmail = `admin+${selectedUser}@kb-sv-gaschurn.at`;
+            const submitBtn = document.getElementById('admin-login-submit-btn');
+
+            resetAdminPasswordVisibility();
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = '⏳ Anmeldung läuft...';
+            }
 
             auth.signInWithEmailAndPassword(adminEmail, password)
                 .then((userCredential) => {
@@ -9860,6 +10721,7 @@
                     if (pageCard) pageCard.style.display = '';
                     document.getElementById('admin-login-card').style.display = 'none';
                     document.getElementById('admin-password-input').value = '';
+                    resetAdminPasswordVisibility();
                     
                     showAdminSuccessModal();
                     resetInactivityTimer();
@@ -9870,6 +10732,12 @@
                 })
                 .catch((error) => {
                     showAdminErrorModal();
+                })
+                .finally(() => {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '🔐 Im Vorstandsbereich anmelden';
+                    }
                 });
         }
 
@@ -9880,6 +10748,7 @@
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
                 if (pwdInput) pwdInput.value = '';
+                resetAdminPasswordVisibility();
                 clearAdminSensitiveData();
                 updateAdminPushVisibility();
                 refreshMemberIdentityViews();
@@ -9936,6 +10805,7 @@
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
                 if (pwdInput) pwdInput.value = '';
+                resetAdminPasswordVisibility();
                 clearAdminSensitiveData();
                 updateAdminPushVisibility();
                 refreshMemberIdentityViews();
@@ -10876,19 +11746,357 @@
             }
         }
 
+        const HELP_VOICE_STORAGE_KEY = 'kbsv_help_voice_uri';
+        const HELP_HEADING_PAUSE_MS = 420;
+        const HELP_SENTENCE_PAUSE_MS = 300;
+        const HELP_COMMA_PAUSE_MS = 140;
+        let memberHelpSentencePauseTimer = null;
+        let activeHelpSpeechUtterance = null;
+        let helpSpeechVoicesBound = false;
+        let isHelpVoiceTestActive = false;
+        let selectedHelpVoiceURI = '';
+
+        try {
+            selectedHelpVoiceURI = String(localStorage.getItem(HELP_VOICE_STORAGE_KEY) || '').trim();
+        } catch (e) {}
+
+        function scoreGermanHelpVoice(voice) {
+            if (!voice) return -999;
+            const lang = String(voice.lang || '').trim().toLowerCase();
+            if (!lang.startsWith('de')) return -999;
+            const name = String(voice.name || '').trim();
+            let score = 0;
+
+            if (/\b(natural|neural|online|wavenet|studio|siri|premium|enhanced)\b/i.test(name)) {
+                score += 150;
+            }
+            if (/google\s*deutsch/i.test(name) || /\b(katja|conrad|amala|killian|anna|helena|markus|petra|vicki|yannick)\b/i.test(name)) {
+                score += 90;
+            }
+            if (lang === 'de-at' || lang.startsWith('de-at-') || lang === 'de_at') {
+                score += 25;
+            } else if (lang === 'de-de' || lang.startsWith('de-de-') || lang === 'de_de') {
+                score += 10;
+            } else {
+                score += 5;
+            }
+            if (/\b(espeak|festival|pico|compact)\b/i.test(name)) {
+                score -= 100;
+            }
+            return score;
+        }
+
+        function getSortedGermanHelpVoices() {
+            if (typeof window === 'undefined' || typeof window.speechSynthesis === 'undefined' || typeof window.speechSynthesis.getVoices !== 'function') {
+                return [];
+            }
+            let voices = [];
+            try {
+                voices = window.speechSynthesis.getVoices() || [];
+            } catch (e) {
+                voices = [];
+            }
+            return voices
+                .filter(v => v && String(v.lang || '').trim().toLowerCase().startsWith('de'))
+                .sort((a, b) => {
+                    const diff = scoreGermanHelpVoice(b) - scoreGermanHelpVoice(a);
+                    if (diff !== 0) return diff;
+                    return String(a.name || '').localeCompare(String(b.name || ''), 'de');
+                });
+        }
+
+        function getHelpVoiceIdentifier(voice) {
+            if (!voice) return '';
+            return String(voice.voiceURI || (String(voice.name || '') + '||' + String(voice.lang || '')));
+        }
+
+        function pickBestGermanVoice() {
+            const germanVoices = getSortedGermanHelpVoices();
+            if (germanVoices.length === 0) return null;
+
+            const selectEl = document.getElementById('help-voice-select');
+            const chosenId = (selectEl && selectEl.value) ? String(selectEl.value) : selectedHelpVoiceURI;
+            if (chosenId) {
+                const matched = germanVoices.find(v => getHelpVoiceIdentifier(v) === chosenId);
+                if (matched) return matched;
+            }
+            return germanVoices[0];
+        }
+
+        function populateHelpVoiceSelect() {
+            const selectEl = document.getElementById('help-voice-select');
+            if (!selectEl) return;
+            const germanVoices = getSortedGermanHelpVoices();
+            selectEl.innerHTML = '';
+
+            if (germanVoices.length === 0) {
+                const fallbackOpt = document.createElement('option');
+                fallbackOpt.value = '';
+                fallbackOpt.textContent = 'Standard-Stimme (Deutsch)';
+                selectEl.appendChild(fallbackOpt);
+                return;
+            }
+
+            const bestId = getHelpVoiceIdentifier(germanVoices[0]);
+            const hasSavedMatch = !!(selectedHelpVoiceURI && germanVoices.some(v => getHelpVoiceIdentifier(v) === selectedHelpVoiceURI));
+            const targetId = hasSavedMatch ? selectedHelpVoiceURI : bestId;
+
+            germanVoices.forEach((voice, idx) => {
+                const opt = document.createElement('option');
+                const vId = getHelpVoiceIdentifier(voice);
+                opt.value = vId;
+                const langTag = String(voice.lang || 'de').trim();
+                const bestSuffix = idx === 0 ? ' ★' : '';
+                opt.textContent = `${String(voice.name || 'Deutsch').trim()} (${langTag})${bestSuffix}`;
+                selectEl.appendChild(opt);
+            });
+
+            selectEl.value = targetId;
+        }
+
+        function handleHelpVoiceSelectChange(voiceId) {
+            selectedHelpVoiceURI = String(voiceId || '').trim();
+            const selectEl = document.getElementById('help-voice-select');
+            if (selectEl && selectEl.value !== selectedHelpVoiceURI) {
+                selectEl.value = selectedHelpVoiceURI;
+            }
+            try {
+                if (selectedHelpVoiceURI) {
+                    localStorage.setItem(HELP_VOICE_STORAGE_KEY, selectedHelpVoiceURI);
+                } else {
+                    localStorage.removeItem(HELP_VOICE_STORAGE_KEY);
+                }
+            } catch (e) {}
+        }
+
+        function updateHelpVoiceTestButtonUI(isTesting) {
+            const testBtn = document.getElementById('help-voice-test-btn');
+            if (!testBtn) return;
+            if (isTesting) {
+                testBtn.innerText = '⏹️ Stopp';
+                testBtn.style.background = '#fee2e2';
+                testBtn.style.color = '#b91c1c';
+            } else {
+                testBtn.innerText = '▶️ Test';
+                testBtn.style.background = '#e2e8f0';
+                testBtn.style.color = '#0f172a';
+            }
+        }
+
+        function initHelpSpeechVoicesListener() {
+            populateHelpVoiceSelect();
+            if (helpSpeechVoicesBound || typeof window === 'undefined' || typeof window.speechSynthesis === 'undefined') {
+                return;
+            }
+            helpSpeechVoicesBound = true;
+            const onVoicesReady = () => {
+                try { populateHelpVoiceSelect(); } catch (e) {}
+            };
+            try {
+                if (typeof window.speechSynthesis.addEventListener === 'function') {
+                    window.speechSynthesis.addEventListener('voiceschanged', onVoicesReady);
+                } else {
+                    const prevHandler = window.speechSynthesis.onvoiceschanged;
+                    window.speechSynthesis.onvoiceschanged = function() {
+                        if (typeof prevHandler === 'function') {
+                            try { prevHandler.apply(this, arguments); } catch (e) {}
+                        }
+                        onVoicesReady();
+                    };
+                }
+            } catch (e) {}
+        }
+
+        function cleanHelpSpeechText(rawText) {
+            let text = String(rawText || '');
+            text = text
+                .replace(/\bKB\s*&\s*SV\b/gi, 'Kameradschaftsbund und Schützenverein')
+                .replace(/\bz\.\s*B\./gi, 'zum Beispiel')
+                .replace(/\bbzw\./gi, 'beziehungsweise')
+                .replace(/\binkl\./gi, 'inklusive')
+                .replace(/\bStv\./gi, 'Stellvertreter')
+                .replace(/\bu\.\s*a\./gi, 'unter anderem')
+                .replace(/\bca\./gi, 'zirka')
+                .replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0E}\u{FE0F}\u{200D}]/gu, ' ')
+                .replace(/[→•·▪■◆★☆►▶⏹🔊🔔📲🔍👤📰📅💬🍻🎯📖✖]/g, ' ')
+                .replace(/[„“”"«»]/g, '')
+                .replace(/\s+[–—-]\s+/g, ', ')
+                .replace(/[–—]/g, ', ')
+                .replace(/\s+/g, ' ')
+                .replace(/\s+([.,!?:;])/g, '$1')
+                .trim();
+            return text;
+        }
+
+        function splitHelpSpeechIntoSentences(rawText) {
+            const cleaned = cleanHelpSpeechText(rawText);
+            if (!cleaned) return [];
+            const protectedText = cleaned
+                .replace(/(\d):(\d)/g, '$1__COLON__$2')
+                .replace(/(\d)\.(\d)/g, '$1__DOT__$2');
+            const rawParts = protectedText.match(/[^.!?:]+[.!?:]*/g) || [protectedText];
+            return rawParts
+                .map(part => part
+                    .replace(/__COLON__/g, ':')
+                    .replace(/__DOT__/g, '.')
+                    .trim()
+                )
+                .filter(part => /[A-Za-zÄÖÜäöüß0-9]/.test(part));
+        }
+
+        function buildHelpSpeechSegments(rawText, treatFirstAsHeading = true) {
+            const sentences = splitHelpSpeechIntoSentences(rawText);
+            const segments = [];
+
+            sentences.forEach((sentence, sIdx) => {
+                const isHeading = treatFirstAsHeading && sIdx === 0 && sentences.length > 1;
+                if (isHeading) {
+                    segments.push({
+                        text: sentence,
+                        rate: 0.91,
+                        pitch: 0.99,
+                        pauseAfterMs: HELP_HEADING_PAUSE_MS
+                    });
+                    return;
+                }
+
+                const clauses = sentence
+                    .split(/,\s+/)
+                    .map(c => c.trim())
+                    .filter(c => /[A-Za-zÄÖÜäöüß0-9]/.test(c));
+
+                clauses.forEach((clause, cIdx) => {
+                    const isLastClause = (cIdx === clauses.length - 1);
+                    const isLastSentence = (sIdx === sentences.length - 1);
+                    const spokenClause = isLastClause ? clause : `${clause},`;
+                    let pauseAfterMs = 0;
+                    if (!isLastClause) {
+                        pauseAfterMs = HELP_COMMA_PAUSE_MS;
+                    } else if (!isLastSentence) {
+                        pauseAfterMs = HELP_SENTENCE_PAUSE_MS;
+                    }
+                    segments.push({
+                        text: spokenClause,
+                        rate: 0.94,
+                        pitch: 0.96,
+                        pauseAfterMs
+                    });
+                });
+            });
+
+            return segments;
+        }
+
+        function speakHelpSentencesSequentially(rawText, currentToken, onComplete, options = {}) {
+            const treatFirstAsHeading = options.treatFirstAsHeading !== false;
+            const segments = buildHelpSpeechSegments(rawText, treatFirstAsHeading);
+            if (segments.length === 0) {
+                if (typeof onComplete === 'function') onComplete();
+                return;
+            }
+
+            const chosenVoice = pickBestGermanVoice();
+
+            function speakSegmentAt(idx) {
+                if (memberHelpSpeechToken !== currentToken) return;
+                if (idx >= segments.length) {
+                    activeHelpSpeechUtterance = null;
+                    if (typeof onComplete === 'function') onComplete();
+                    return;
+                }
+
+                const seg = segments[idx];
+                const utterance = new SpeechSynthesisUtterance(seg.text);
+                utterance.rate = seg.rate;
+                utterance.pitch = seg.pitch;
+                utterance.volume = 1.0;
+                if (chosenVoice) {
+                    utterance.voice = chosenVoice;
+                    utterance.lang = chosenVoice.lang || 'de-AT';
+                } else {
+                    utterance.lang = 'de-AT';
+                }
+
+                activeHelpSpeechUtterance = utterance;
+
+                utterance.onend = () => {
+                    if (memberHelpSpeechToken !== currentToken) return;
+                    activeHelpSpeechUtterance = null;
+                    if (idx + 1 >= segments.length) {
+                        if (typeof onComplete === 'function') onComplete();
+                        return;
+                    }
+                    const delayMs = seg.pauseAfterMs > 0 ? seg.pauseAfterMs : HELP_SENTENCE_PAUSE_MS;
+                    memberHelpSentencePauseTimer = setTimeout(() => {
+                        memberHelpSentencePauseTimer = null;
+                        if (memberHelpSpeechToken === currentToken) {
+                            speakSegmentAt(idx + 1);
+                        }
+                    }, delayMs);
+                };
+
+                utterance.onerror = () => {
+                    activeHelpSpeechUtterance = null;
+                    if (memberHelpSpeechToken === currentToken) {
+                        stopReadMemberHelpAloud();
+                    }
+                };
+
+                window.speechSynthesis.speak(utterance);
+            }
+
+            speakSegmentAt(0);
+        }
+
+        function testSelectedHelpVoice() {
+            if (typeof window === 'undefined' || typeof window.speechSynthesis === 'undefined' || typeof SpeechSynthesisUtterance === 'undefined') {
+                alert('Vorlesen wird von diesem Browser leider nicht unterstützt.');
+                return;
+            }
+            const wasTesting = isHelpVoiceTestActive;
+            stopReadMemberHelpAloud();
+            try {
+                if (typeof stopReadNewsAloud === 'function') stopReadNewsAloud();
+            } catch (e) {}
+            if (wasTesting) return;
+
+            initHelpSpeechVoicesListener();
+            const currentToken = memberHelpSpeechToken;
+            isHelpVoiceTestActive = true;
+            updateHelpVoiceTestButtonUI(true);
+
+            speakHelpSentencesSequentially(
+                'Grüß Gott! So klingt die Vorlesestimme für unsere Vereins-App.',
+                currentToken,
+                () => {
+                    if (memberHelpSpeechToken === currentToken) {
+                        stopReadMemberHelpAloud();
+                    }
+                },
+                { treatFirstAsHeading: false }
+            );
+        }
+
         function stopReadMemberHelpAloud() {
             memberHelpSpeechToken += 1;
             isMemberHelpSpeechActive = false;
+            isHelpVoiceTestActive = false;
             activeSingleHelpCard = null;
+            activeHelpSpeechUtterance = null;
             if (memberHelpPauseTimer) {
                 try { clearTimeout(memberHelpPauseTimer); } catch (e) {}
                 memberHelpPauseTimer = null;
+            }
+            if (memberHelpSentencePauseTimer) {
+                try { clearTimeout(memberHelpSentencePauseTimer); } catch (e) {}
+                memberHelpSentencePauseTimer = null;
             }
             if (typeof window !== 'undefined' && typeof window.speechSynthesis !== 'undefined' && typeof window.speechSynthesis.cancel === 'function') {
                 try { window.speechSynthesis.cancel(); } catch (e) {}
             }
             resetAllMemberHelpHighlights();
             updateReadMemberHelpButtonUI(false);
+            updateHelpVoiceTestButtonUI(false);
         }
 
         function speakSingleMemberHelpCard(btnEl) {
@@ -10901,7 +12109,7 @@
             const speechText = String(card.getAttribute('data-speech') || '').trim();
             if (!speechText) return;
 
-            const isSameCardActive = (activeSingleHelpCard === card && window.speechSynthesis.speaking);
+            const isSameCardActive = (activeSingleHelpCard === card);
             stopReadMemberHelpAloud();
             try {
                 if (typeof stopReadNewsAloud === 'function') stopReadNewsAloud();
@@ -10910,6 +12118,7 @@
                 return;
             }
 
+            initHelpSpeechVoicesListener();
             const currentToken = memberHelpSpeechToken;
             activeSingleHelpCard = card;
             setMemberHelpCardHighlight(card, true);
@@ -10920,23 +12129,11 @@
                 btnEl.style.borderColor = '#fca5a5';
             }
 
-            const utterance = new SpeechSynthesisUtterance(speechText);
-            utterance.rate = 0.80;
-            utterance.pitch = 1.0;
-            utterance.lang = 'de-DE';
-            const bestVoice = getBestGermanVoice();
-            if (bestVoice) {
-                utterance.voice = bestVoice;
-            }
-
-            const handleFinish = () => {
+            speakHelpSentencesSequentially(speechText, currentToken, () => {
                 if (memberHelpSpeechToken === currentToken && activeSingleHelpCard === card) {
                     stopReadMemberHelpAloud();
                 }
-            };
-            utterance.onend = handleFinish;
-            utterance.onerror = handleFinish;
-            window.speechSynthesis.speak(utterance);
+            });
         }
 
         function toggleReadMemberHelpAloud() {
@@ -10961,6 +12158,7 @@
             })).filter(entry => entry.text.length > 0);
             if (entries.length === 0) return;
 
+            initHelpSpeechVoicesListener();
             stopReadMemberHelpAloud();
             const currentToken = memberHelpSpeechToken;
             isMemberHelpSpeechActive = true;
@@ -10976,15 +12174,7 @@
                 resetAllMemberHelpHighlights();
                 setMemberHelpCardHighlight(currentEntry.card, true);
 
-                const utterance = new SpeechSynthesisUtterance(currentEntry.text);
-                utterance.rate = 0.80;
-                utterance.pitch = 1.0;
-                utterance.lang = 'de-DE';
-                const bestVoice = getBestGermanVoice();
-                if (bestVoice) {
-                    utterance.voice = bestVoice;
-                }
-                utterance.onend = () => {
+                speakHelpSentencesSequentially(currentEntry.text, currentToken, () => {
                     if (!isMemberHelpSpeechActive || memberHelpSpeechToken !== currentToken) return;
                     setMemberHelpCardHighlight(currentEntry.card, false);
                     if (index + 1 >= entries.length) {
@@ -10996,14 +12186,8 @@
                         if (isMemberHelpSpeechActive && memberHelpSpeechToken === currentToken) {
                             speakCardAt(index + 1);
                         }
-                    }, 700);
-                };
-                utterance.onerror = () => {
-                    if (isMemberHelpSpeechActive && memberHelpSpeechToken === currentToken) {
-                        stopReadMemberHelpAloud();
-                    }
-                };
-                window.speechSynthesis.speak(utterance);
+                    }, 480);
+                });
             }
 
             speakCardAt(0);
@@ -11011,6 +12195,7 @@
 
         function openMemberHelpModal() {
             stopReadMemberHelpAloud();
+            initHelpSpeechVoicesListener();
             try {
                 updateLargeFontToggleUI(document.documentElement.classList.contains('large-font-mode'));
             } catch (e) {}
@@ -11032,6 +12217,8 @@
                 modal.style.pointerEvents = 'none';
             }
         }
+
+        initHelpSpeechVoicesListener();
 
         function openAdminHelpModal() {
             if (!auth.currentUser) return;
@@ -13045,6 +14232,8 @@
             if (pickerEl) renderHighResEmojis(pickerEl);
         }
 
+        const chatReactionPendingKeys = new Set();
+
         async function toggleChatReaction(event, docId, emoji) {
             if (event) event.stopPropagation();
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
@@ -13059,6 +14248,10 @@
                 openMemberNameSetupModal(true);
                 return;
             }
+
+            const pendingKey = `${targetId}::${chosenEmoji}`;
+            if (chatReactionPendingKeys.has(pendingKey)) return;
+            chatReactionPendingKeys.add(pendingKey);
 
             const computeNextReactions = (rawReactions) => {
                 const next = normalizeChatReactions(rawReactions);
@@ -13107,6 +14300,8 @@
                     renderClubChatMessages({ preserveScroll: true });
                 }
                 console.warn("Fehler beim Speichern der Chat-Reaktion:", err);
+            } finally {
+                chatReactionPendingKeys.delete(pendingKey);
             }
         }
 
@@ -13964,9 +15159,12 @@
             }, 250);
         }
 
+        let isChatSendInFlight = false;
+
         async function sendClubChatMessage(event, sendOptions) {
             if (event) event.preventDefault();
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (isChatSendInFlight) return;
             closeChatAttachMenu();
 
             const inputEl = document.getElementById('chat-message-input');
@@ -13994,6 +15192,7 @@
             const nowMs = now.getTime();
             const timeText = now.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
 
+            isChatSendInFlight = true;
             if (actionBtn) actionBtn.disabled = true;
             try {
                 const docPayload = {
@@ -14035,6 +15234,7 @@
             } catch (err) {
                 alert("Fehler beim Senden der Nachricht: " + (err && err.message ? err.message : String(err)));
             } finally {
+                isChatSendInFlight = false;
                 if (actionBtn) actionBtn.disabled = false;
                 updateChatActionButtonUI();
             }
