@@ -1310,6 +1310,8 @@
             box-shadow: 0 2px 10px rgba(15, 23, 42, 0.12);
         }
         .chat-drawer-title {
+            display: flex;
+            align-items: center;
             font-size: 1.05em;
             font-weight: 800;
             margin: 0;
@@ -1442,29 +1444,6 @@
             border-top: 1px solid #cbd5e1;
             flex-shrink: 0;
         }
-        .chat-quick-replies-bar {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding: 6px 10px;
-            background: #f1f5f9;
-            border-top: 1px solid #e2e8f0;
-            flex-shrink: 0;
-            -webkit-overflow-scrolling: touch;
-        }
-        .chat-quick-reply-btn {
-            border-radius: 999px;
-            border: 1px solid #cbd5e1;
-            padding: 5px 11px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            white-space: nowrap;
-            cursor: pointer;
-            background: #ffffff;
-            color: #1e293b;
-            flex-shrink: 0;
-            font-family: inherit;
-        }
         @keyframes chatVoicePulse {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.35; transform: scale(0.8); }
@@ -1489,6 +1468,7 @@
             flex-shrink: 0;
         }
         .chat-input-bar {
+            position: relative;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -1496,6 +1476,49 @@
             background: #f8fafc;
             border-top: 1px solid #e2e8f0;
             flex-shrink: 0;
+        }
+        #chat-attach-menu {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            right: 58px;
+            z-index: 30;
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+            gap: 8px;
+            flex-direction: row;
+            align-items: center;
+        }
+        #chat-attach-menu.open {
+            display: flex;
+        }
+        .chat-attach-menu-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            color: #0f172a;
+            font-size: 0.92rem;
+            font-weight: 800;
+            cursor: pointer;
+            font-family: inherit;
+            white-space: nowrap;
+            transition: background 0.15s ease, transform 0.12s ease;
+        }
+        .chat-attach-menu-btn:active {
+            transform: scale(0.97);
+            background: #e2e8f0;
+        }
+        #chat-action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         #chat-image-lightbox {
             display: none;
@@ -1618,9 +1641,14 @@
     <!-- 1. NEWS & STARTSEITE (AKTUELLER DIENSTPLAN) -->
     <div id="page-news" class="page-content active">
         <button type="button" id="news-open-chat-banner-btn" onclick="openChatDrawer()" style="width: 100%; margin: 12px 0 14px 0; padding: 14px 16px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff; border: none; border-radius: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 1rem; font-weight: 800; box-shadow: 0 6px 16px rgba(37, 99, 235, 0.28); cursor: pointer; font-family: inherit; text-align: left;">
-            <span style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0;">
-                <span style="font-size: 1rem; font-weight: 800; line-height: 1.25;">💬 Vereins-Chat öffnen</span>
-                <span style="font-size: 0.78rem; font-weight: 600; color: #dbeafe; line-height: 1.25;">Nachrichten &amp; Fotos der Kameraden lesen</span>
+            <span style="display: flex; align-items: center; gap: 11px; min-width: 0;">
+                <svg viewBox="0 0 32 32" aria-hidden="true" style="width: 34px; height: 34px; border-radius: 10px; background: #25D366; padding: 6px; box-sizing: border-box; box-shadow: 0 2px 6px rgba(0,0,0,0.2); flex-shrink: 0; display: block;">
+                    <path fill="#ffffff" d="M16.01 3.2c-7.07 0-12.8 5.73-12.8 12.8 0 2.26.59 4.46 1.71 6.4L3.1 28.9l6.68-1.75c1.87 1.02 3.98 1.56 6.23 1.56 7.07 0 12.8-5.73 12.8-12.8 0-3.42-1.33-6.64-3.75-9.05A12.71 12.71 0 0 0 16.01 3.2zm0 23.35c-1.91 0-3.78-.51-5.41-1.48l-.39-.23-3.96 1.04 1.06-3.86-.25-.4a10.58 10.58 0 0 1-1.63-5.62c0-5.85 4.76-10.61 10.61-10.61 2.83 0 5.5 1.1 7.5 3.11a10.54 10.54 0 0 1 3.11 7.5c0 5.85-4.76 10.61-10.64 10.55zm5.82-7.93c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.89-1.78-2.21-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.98-2.37-.26-.62-.52-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.09-1.12 2.66s1.14 3.09 1.3 3.3c.16.21 2.25 3.43 5.44 4.81.76.33 1.35.52 1.81.67.76.24 1.46.21 2.01.13.61-.09 1.89-.77 2.15-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37z"/>
+                </svg>
+                <span style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0;">
+                    <span style="font-size: 1rem; font-weight: 800; line-height: 1.25;">Vereins-Chat öffnen</span>
+                    <span style="font-size: 0.78rem; font-weight: 600; color: #dbeafe; line-height: 1.25;">Nachrichten &amp; Fotos der Kameraden lesen</span>
+                </span>
             </span>
             <span style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
                 <span id="news-chat-new-badge" style="display: none; background: #dc2626; color: #ffffff; border: 1.5px solid #ffffff; border-radius: 999px; padding: 2px 8px; font-size: 0.74rem; font-weight: 800; line-height: 1.2;">Neu!</span>
@@ -2562,13 +2590,14 @@
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Punkt 4. Vereins-Chat. Tippe auf der Startseite auf den blauen Balken Vereins-Chat öffnen. Du kannst fertige Schnell-Antworten antippen, eine Sprachnachricht einsprechen, Fotos teilen oder selbst eine Nachricht schreiben." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Punkt 4. Vereins-Chat. Tippe auf der Startseite auf den blauen Balken Vereins-Chat öffnen. Du kannst fertige Schnell-Antworten antippen, eine Sprachnachricht einsprechen, Fotos teilen oder selbst eine Nachricht schreiben. Tipp: Wenn du die App auf deinem Handy-Startbildschirm speicherst und Push-Benachrichtigungen aktivierst, erscheint bei neuen Nachrichten automatisch ein roter Hinweis direkt auf dem App-Symbol." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 11px 13px; transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
                         <div style="font-weight: 800; color: #0f172a;">💬 Vereins-Chat (Vollbild, Schnell-Antworten &amp; Sprachnachricht)</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
                     <div style="color: #334155;">
                         Über den großen royalblauen Button „💬 Vereins-Chat öffnen“ auf der Startseite „News“ gelangst du in den übersichtlichen Vollbild-Chat (bei neuen Nachrichten erscheint dort ein rotes „Neu!“-Zeichen). Du kannst mit einem Fingertipp eine der Schnell-Antworten („👍 Passt!“, „🍺 Bin im Schützenhaus!“, „🎯 Bin dabei!“, „⏰ Bin gleich da!“, „❌ Kann leider nicht“) senden, Text schreiben, über „📷“ direkt fotografieren, über „🖼️“ ein Foto aus der Galerie senden oder über „🎤“ eine Sprachnachricht (bis 45 Sekunden) aufnehmen. Oben siehst du wichtige angepinnte Obmann-Infos sowie Vorstands-Badges und kannst über „🔔/🔕“ den Chat-Ton stummschalten.
+                        <div style="margin-top: 8px; padding: 8px 10px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; color: #1e3a8a; font-weight: 600;">💡 Tipp: Wenn du die App auf deinem Handy-Startbildschirm speicherst und Push-Benachrichtigungen aktivierst, erscheint bei neuen Nachrichten automatisch ein roter Hinweis bzw. eine Zahl direkt auf dem App-Symbol.</div>
                     </div>
                 </div>
 
@@ -2777,7 +2806,7 @@
 
     <aside id="chat-drawer" role="dialog" aria-modal="true" aria-labelledby="chat-drawer-title-text" aria-hidden="true">
         <div class="chat-drawer-header">
-            <h3 id="chat-drawer-title-text" class="chat-drawer-title">💬 Vereins-Chat</h3>
+            <h3 id="chat-drawer-title-text" class="chat-drawer-title"><svg viewBox="0 0 32 32" aria-hidden="true" style="width: 32px; height: 32px; border-radius: 9px; background: #25D366; padding: 5px; box-sizing: border-box; box-shadow: 0 2px 6px rgba(0,0,0,0.22); margin-right: 8px; flex-shrink: 0; display: block;"><path fill="#ffffff" d="M16.01 3.2c-7.07 0-12.8 5.73-12.8 12.8 0 2.26.59 4.46 1.71 6.4L3.1 28.9l6.68-1.75c1.87 1.02 3.98 1.56 6.23 1.56 7.07 0 12.8-5.73 12.8-12.8 0-3.42-1.33-6.64-3.75-9.05A12.71 12.71 0 0 0 16.01 3.2zm0 23.35c-1.91 0-3.78-.51-5.41-1.48l-.39-.23-3.96 1.04 1.06-3.86-.25-.4a10.58 10.58 0 0 1-1.63-5.62c0-5.85 4.76-10.61 10.61-10.61 2.83 0 5.5 1.1 7.5 3.11a10.54 10.54 0 0 1 3.11 7.5c0 5.85-4.76 10.61-10.64 10.55zm5.82-7.93c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.89-1.78-2.21-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.98-2.37-.26-.62-.52-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.09-1.12 2.66s1.14 3.09 1.3 3.3c.16.21 2.25 3.43 5.44 4.81.76.33 1.35.52 1.81.67.76.24 1.46.21 2.01.13.61-.09 1.89-.77 2.15-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37z"/></svg><span>Vereins-Chat</span></h3>
             <div class="chat-drawer-header-actions">
                 <button type="button" id="chat-mute-toggle-btn" class="active" onclick="toggleChatMute()" title="Chat-Benachrichtigungen umschalten">🔔 Chat-Ton an</button>
                 <button type="button" id="chat-drawer-close-btn" class="chat-drawer-close-btn" onclick="closeChatDrawer()" aria-label="Chat schließen">✖</button>
@@ -2802,14 +2831,6 @@
             <button type="button" id="chat-image-preview-remove-btn" onclick="clearPendingChatImage()" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; border-radius: 8px; padding: 5px 9px; font-size: 0.82em; font-weight: 800; cursor: pointer; font-family: inherit;" aria-label="Foto entfernen">✖</button>
         </div>
 
-        <div id="chat-quick-replies-bar" class="chat-quick-replies-bar">
-            <button type="button" class="chat-quick-reply-btn" onclick="sendQuickChatReply('👍 Passt!', this)">👍 Passt!</button>
-            <button type="button" class="chat-quick-reply-btn" onclick="sendQuickChatReply('🍺 Bin im Schützenhaus!', this)">🍺 Bin im Schützenhaus!</button>
-            <button type="button" class="chat-quick-reply-btn" onclick="sendQuickChatReply('🎯 Bin dabei!', this)">🎯 Bin dabei!</button>
-            <button type="button" class="chat-quick-reply-btn" onclick="sendQuickChatReply('⏰ Bin gleich da!', this)">⏰ Bin gleich da!</button>
-            <button type="button" class="chat-quick-reply-btn" onclick="sendQuickChatReply('❌ Kann leider nicht', this)">❌ Kann leider nicht</button>
-        </div>
-
         <div id="chat-voice-recording-bar" class="chat-voice-recording-bar">
             <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                 <span class="chat-voice-pulse-dot" aria-hidden="true"></span>
@@ -2825,11 +2846,32 @@
         <form id="chat-input-form" class="chat-input-bar" onsubmit="sendClubChatMessage(event)">
             <input type="file" id="chat-camera-input" accept="image/*" capture="environment" style="display: none;" onchange="handleChatImageSelect(this)">
             <input type="file" id="chat-image-input" accept="image/*" style="display: none;" onchange="handleChatImageSelect(this)">
-            <button type="button" id="chat-camera-btn" onclick="triggerChatCameraPicker()" class="btn" style="background: #e2e8f0; color: #0f172a; padding: 10px 10px; border-radius: 12px; flex-shrink: 0; box-shadow: none; border: 1px solid #cbd5e1;" title="Foto direkt mit Kamera aufnehmen" aria-label="Foto direkt mit Kamera aufnehmen">📷</button>
-            <button type="button" id="chat-image-btn" onclick="triggerChatImagePicker()" class="btn" style="background: #e2e8f0; color: #0f172a; padding: 10px 10px; border-radius: 12px; flex-shrink: 0; box-shadow: none; border: 1px solid #cbd5e1;" title="Foto aus Galerie auswählen" aria-label="Foto aus Galerie auswählen">🖼️</button>
-            <input type="text" id="chat-message-input" class="form-control" maxlength="500" placeholder="Nachricht schreiben..." onfocus="onChatInputFocus()" autocomplete="off" style="flex: 1; min-width: 0; padding: 10px 12px; font-size: 0.9em; border-radius: 12px;">
-            <button type="submit" id="chat-send-btn" class="btn btn-green" style="padding: 10px 14px; border-radius: 12px; flex-shrink: 0;" title="Nachricht senden">📤</button>
-            <button type="button" id="chat-voice-btn" onclick="startChatVoiceRecording()" class="btn" style="background: #fee2e2; color: #b91c1c; padding: 10px 11px; border-radius: 12px; flex-shrink: 0; box-shadow: none; border: 1px solid #fca5a5;" title="Sprachnachricht aufnehmen" aria-label="Sprachnachricht aufnehmen">🎤</button>
+
+            <div id="chat-attach-menu" role="menu" aria-label="Anhang auswählen">
+                <button type="button" id="chat-attach-gallery-btn" class="chat-attach-menu-btn" role="menuitem" onclick="closeChatAttachMenu(); triggerChatImagePicker();">🖼️ Galerie</button>
+                <button type="button" id="chat-attach-camera-btn" class="chat-attach-menu-btn" role="menuitem" onclick="closeChatAttachMenu(); triggerChatCameraPicker();">📷 Kamera</button>
+            </div>
+
+            <div style="flex: 1; min-width: 0; display: flex; align-items: center; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 4px 10px 4px 14px;">
+                <input type="text" id="chat-message-input" maxlength="500" placeholder="Nachricht" onfocus="closeChatAttachMenu(); onChatInputFocus();" oninput="updateChatActionButtonUI()" autocomplete="off" style="flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-size: 1rem; padding: 8px 4px; color: #0f172a; font-family: inherit;">
+                <button type="button" id="chat-attach-btn" onclick="toggleChatAttachMenu(event)" title="Foto anhängen" aria-label="Foto anhängen" aria-expanded="false" aria-controls="chat-attach-menu" style="padding: 6px; background: transparent; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; color: #64748b;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                    </svg>
+                </button>
+            </div>
+
+            <button type="button" id="chat-action-btn" data-mode="mic" onclick="handleChatActionButtonClick(event)" title="Sprachnachricht aufnehmen" aria-label="Sprachnachricht aufnehmen" style="width: 46px; height: 46px; border-radius: 50%; background: #16a34a; color: #ffffff; border: none; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 3px 10px rgba(22, 163, 74, 0.28); cursor: pointer;">
+                <svg id="chat-action-icon-mic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: block;">
+                    <rect x="9" y="2.5" width="6" height="11" rx="3" fill="#ffffff" stroke="none"/>
+                    <path d="M5 10.5a7 7 0 0 0 14 0"/>
+                    <line x1="12" y1="17.5" x2="12" y2="21.5"/>
+                    <line x1="9" y1="21.5" x2="15" y2="21.5"/>
+                </svg>
+                <svg id="chat-action-icon-send" width="21" height="21" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true" style="display: none; margin-left: 2px;">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+            </button>
         </form>
     </aside>
 
@@ -8958,6 +9000,10 @@
             return String(activeAdminName || '').trim().toLowerCase() === 'simon';
         }
 
+        function isObmannSimonLoggedIn() {
+            return !!(typeof auth !== 'undefined' && auth && auth.currentUser && auth.currentUser.email === 'admin+simon@kb-sv-gaschurn.at');
+        }
+
         function updateAdminPushVisibility() {
             const isMain = isMainPushAdmin();
 
@@ -10927,7 +10973,7 @@
                 bannerEl.innerHTML = '';
                 return;
             }
-            const canUnpin = !!(typeof isMainPushAdmin === 'function' && isMainPushAdmin());
+            const canUnpin = isObmannSimonLoggedIn();
             const sender = pinnedChatData && pinnedChatData.sender ? String(pinnedChatData.sender).trim() : '';
             const unpinBtn = canUnpin
                 ? `<button type="button" id="chat-unpin-btn" onclick="unpinChatMessage()" style="background: rgba(255,255,255,0.85); color: #b91c1c; border: 1px solid #fca5a5; border-radius: 6px; padding: 2px 7px; font-size: 0.78em; font-weight: 800; cursor: pointer; flex-shrink: 0; font-family: inherit;" title="Angepinnte Info lösen">✖</button>`
@@ -10954,7 +11000,9 @@
                     if (doc && doc.exists && doc.data()) {
                         const d = doc.data();
                         const text = String(d.text || '').trim();
-                        pinnedChatData = text ? { text, sender: String(d.sender || '').trim(), timestamp: d.timestamp || null } : null;
+                        pinnedChatData = text
+                            ? { docId: String(d.docId || '').trim(), text, sender: String(d.sender || '').trim(), timestamp: d.timestamp || null }
+                            : null;
                     } else {
                         pinnedChatData = null;
                     }
@@ -10963,8 +11011,28 @@
             } catch (e) {}
         }
 
+        async function togglePinChatMessage(docId) {
+            if (!isObmannSimonLoggedIn()) { alert("Nur Obmann Simon darf Chat-Nachrichten anpinnen oder löschen."); return; }
+            if (!docId) return;
+            const msg = clubChatMessages.find(m => m.id === docId);
+            if (!msg) return;
+            const textToPin = String(msg.text || '').trim() || (msg.imageData ? '📷 Angepinntes Foto im Vereins-Chat' : '');
+            if (!textToPin) return;
+            const senderText = String(msg.sender || 'Obmann').trim();
+            const isAlreadyPinned = !!(
+                pinnedChatData &&
+                ((pinnedChatData.docId && pinnedChatData.docId === docId) ||
+                 (!pinnedChatData.docId && pinnedChatData.text === textToPin && pinnedChatData.sender === senderText))
+            );
+            if (isAlreadyPinned) {
+                await unpinChatMessage();
+            } else {
+                await pinChatMessage(docId);
+            }
+        }
+
         async function pinChatMessage(docId) {
-            if (!isMainPushAdmin()) return;
+            if (!isObmannSimonLoggedIn()) { alert("Nur Obmann Simon darf Chat-Nachrichten anpinnen oder löschen."); return; }
             if (!docId) return;
             const msg = clubChatMessages.find(m => m.id === docId);
             if (!msg) return;
@@ -10972,6 +11040,7 @@
             if (!textToPin) return;
             try {
                 await db.collection("settings").doc("pinned_chat").set({
+                    docId: String(docId),
                     text: textToPin,
                     sender: String(msg.sender || 'Obmann').trim(),
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -10982,16 +11051,64 @@
         }
 
         async function unpinChatMessage() {
-            if (!isMainPushAdmin()) return;
+            if (!isObmannSimonLoggedIn()) { alert("Nur Obmann Simon darf Chat-Nachrichten anpinnen oder löschen."); return; }
             try {
                 const ref = db.collection("settings").doc("pinned_chat");
                 try {
                     await ref.delete();
                 } catch (delErr) {
-                    await ref.set({ text: '', sender: '', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                    await ref.set({ docId: '', text: '', sender: '', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
                 }
             } catch (err) {
                 alert("Fehler beim Lösen der angepinnten Info: " + (err && err.message ? err.message : String(err)));
+            }
+        }
+
+        function closeChatAttachMenu() {
+            const menu = document.getElementById('chat-attach-menu');
+            const btn = document.getElementById('chat-attach-btn');
+            if (menu) menu.classList.remove('open');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleChatAttachMenu(event) {
+            if (event) event.stopPropagation();
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            const menu = document.getElementById('chat-attach-menu');
+            const btn = document.getElementById('chat-attach-btn');
+            if (!menu) return;
+            const willOpen = !menu.classList.contains('open');
+            menu.classList.toggle('open', willOpen);
+            if (btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+        }
+
+        function updateChatActionButtonUI() {
+            const inputEl = document.getElementById('chat-message-input');
+            const actionBtn = document.getElementById('chat-action-btn');
+            const micIcon = document.getElementById('chat-action-icon-mic');
+            const sendIcon = document.getElementById('chat-action-icon-send');
+            if (!actionBtn) return;
+
+            const hasText = !!(inputEl && inputEl.value.trim().length > 0);
+            const hasPendingImage = (typeof pendingChatImageData === 'string' && pendingChatImageData.startsWith('data:image/'));
+            const isSendMode = hasText || hasPendingImage;
+
+            actionBtn.dataset.mode = isSendMode ? 'send' : 'mic';
+            actionBtn.title = isSendMode ? 'Nachricht senden' : 'Sprachnachricht aufnehmen';
+            actionBtn.setAttribute('aria-label', isSendMode ? 'Nachricht senden' : 'Sprachnachricht aufnehmen');
+            if (micIcon) micIcon.style.display = isSendMode ? 'none' : 'block';
+            if (sendIcon) sendIcon.style.display = isSendMode ? 'block' : 'none';
+        }
+
+        function handleChatActionButtonClick(event) {
+            closeChatAttachMenu();
+            const inputEl = document.getElementById('chat-message-input');
+            const hasText = !!(inputEl && inputEl.value.trim().length > 0);
+            const hasPendingImage = (typeof pendingChatImageData === 'string' && pendingChatImageData.startsWith('data:image/'));
+            if (hasText || hasPendingImage) {
+                sendClubChatMessage(event);
+            } else {
+                startChatVoiceRecording();
             }
         }
 
@@ -11023,6 +11140,7 @@
             if (previewThumb) previewThumb.src = '';
             if (cameraInput) cameraInput.value = '';
             if (fileInput) fileInput.value = '';
+            updateChatActionButtonUI();
         }
 
         function compressChatImageFile(file) {
@@ -11093,6 +11211,7 @@
                 const previewBar = document.getElementById('chat-image-preview-bar');
                 if (previewThumb) previewThumb.src = compressedUrl;
                 if (previewBar) previewBar.style.display = 'flex';
+                updateChatActionButtonUI();
             } catch (err) {
                 alert("Foto konnte nicht verarbeitet werden: " + (err && err.message ? err.message : String(err)));
                 clearPendingChatImage();
@@ -11144,25 +11263,25 @@
             if (norm === 'schweighofer simon' || norm === 'simon schweighofer') {
                 return {
                     isObmann: true,
-                    badgesHtml: `<span style="display: inline-block; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle;">🛡️ OBMANN</span><span style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 999px; margin-left: 4px; vertical-align: middle;">⭐ APP-INHABER</span>`
+                    badgesHtml: `<span style="display: inline-block; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: #ffffff; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; margin-left: 6px; vertical-align: middle;">🛡️ OBMANN</span><span style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; margin-left: 4px; vertical-align: middle;">⭐ APP-INHABER</span>`
                 };
             }
             if (norm === 'stocker heimo' || norm === 'heimo stocker') {
                 return {
                     isObmann: false,
-                    badgesHtml: `<span style="display: inline-block; background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; font-size: 0.7rem; font-weight: 800; padding: 1px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle;">🛡️ OBMANN STV.</span>`
+                    badgesHtml: `<span style="display: inline-block; background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; margin-left: 6px; vertical-align: middle;">🛡️ OBMANN STV.</span>`
                 };
             }
             if (norm === 'stocker karin' || norm === 'karin stocker') {
                 return {
                     isObmann: false,
-                    badgesHtml: `<span style="display: inline-block; background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; font-size: 0.7rem; font-weight: 800; padding: 1px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle;">💰 KASSIERIN</span>`
+                    badgesHtml: `<span style="display: inline-block; background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; margin-left: 6px; vertical-align: middle;">💰 KASSIERIN</span>`
                 };
             }
             if (norm === 'kinzl sabrina' || norm === 'sabrina kinzl') {
                 return {
                     isObmann: false,
-                    badgesHtml: `<span style="display: inline-block; background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; font-size: 0.7rem; font-weight: 800; padding: 1px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle;">✍️ SCHRIFTFÜHRERIN</span>`
+                    badgesHtml: `<span style="display: inline-block; background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; font-size: 0.64rem; font-weight: 800; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.03em; line-height: 1.2; margin-left: 6px; vertical-align: middle;">✍️ SCHRIFTFÜHRERIN</span>`
                 };
             }
             return { isObmann: false, badgesHtml: '' };
@@ -11197,6 +11316,17 @@
             return latest;
         }
 
+        function updateDeviceAppBadge(unreadCount) {
+            try {
+                const count = Number(unreadCount) || 0;
+                if (count > 0 && typeof navigator !== 'undefined' && 'setAppBadge' in navigator && typeof navigator.setAppBadge === 'function') {
+                    Promise.resolve(navigator.setAppBadge(count)).catch(() => {});
+                } else if (count <= 0 && typeof navigator !== 'undefined' && 'clearAppBadge' in navigator && typeof navigator.clearAppBadge === 'function') {
+                    Promise.resolve(navigator.clearAppBadge()).catch(() => {});
+                }
+            } catch (e) {}
+        }
+
         function updateChatUnreadDot() {
             const dotEl = document.getElementById('chat-unread-dot');
             const bannerBadgeEl = document.getElementById('news-chat-new-badge');
@@ -11208,6 +11338,7 @@
                 if (bannerBadgeEl) {
                     bannerBadgeEl.style.display = 'none';
                 }
+                updateDeviceAppBadge(0);
                 return;
             }
             let lastSeenTs = 0;
@@ -11233,6 +11364,7 @@
             if (bannerBadgeEl) {
                 bannerBadgeEl.style.display = unreadCount > 0 ? 'inline-block' : 'none';
             }
+            updateDeviceAppBadge(unreadCount);
         }
 
         function markChatAsRead() {
@@ -11248,6 +11380,7 @@
             if (bannerBadgeEl) {
                 bannerBadgeEl.style.display = 'none';
             }
+            updateDeviceAppBadge(0);
         }
 
         let savedBodyOverflowBeforeChat = null;
@@ -11304,6 +11437,8 @@
             syncChatDrawerWithViewport();
             updateChatMuteButtonUI();
             updateChatIdentityLabel();
+            closeChatAttachMenu();
+            updateChatActionButtonUI();
             initClubChatListener();
             initPinnedChatListener();
             renderPinnedChatBanner();
@@ -11318,6 +11453,7 @@
 
         function closeChatDrawer() {
             isChatDrawerOpen = false;
+            closeChatAttachMenu();
             document.body.classList.remove('chat-drawer-open');
             if (savedBodyOverflowBeforeChat !== null) {
                 document.body.style.overflow = savedBodyOverflowBeforeChat;
@@ -11351,8 +11487,7 @@
                 return;
             }
 
-            const isAdmin = !!auth.currentUser;
-            const canPin = !!(typeof isMainPushAdmin === 'function' && isMainPushAdmin());
+            const canModerateChat = isObmannSimonLoggedIn();
             let html = '';
             clubChatMessages.forEach(msg => {
                 const sender = String(msg.sender || 'Mitglied').trim();
@@ -11366,10 +11501,10 @@
                 const hasSafeImage = typeof msg.imageData === 'string' && msg.imageData.startsWith('data:image/');
                 const hasSafeAudio = typeof msg.audioData === 'string' && msg.audioData.startsWith('data:audio/');
 
-                const pinBtnHtml = canPin
-                    ? `<button type="button" class="chat-msg-pin-btn" data-doc-id="${safeDocId}" onclick="pinChatMessage(this.dataset.docId)" title="Nachricht anpinnen">📌</button>`
+                const pinBtnHtml = canModerateChat
+                    ? `<button type="button" class="chat-msg-pin-btn" data-doc-id="${safeDocId}" onclick="togglePinChatMessage(this.dataset.docId)" title="Nachricht anpinnen / lösen">📌</button>`
                     : '';
-                const delBtnHtml = isAdmin
+                const delBtnHtml = canModerateChat
                     ? `<button type="button" class="chat-msg-del-btn" data-doc-id="${safeDocId}" onclick="deleteChatMessage(this.dataset.docId)" title="Nachricht löschen">🗑</button>`
                     : '';
                 const adminActionsHtml = (pinBtnHtml || delBtnHtml)
@@ -11377,8 +11512,8 @@
                     : '';
 
                 const nameStyle = isObmann
-                    ? 'color: #991b1b; font-weight: 900;'
-                    : `color: ${isOwn ? '#14532d' : '#0f172a'};`;
+                    ? 'color: #991b1b; font-size: 1.05rem; font-weight: 900; line-height: 1.2;'
+                    : `color: ${isOwn ? '#14532d' : '#0f172a'}; font-size: 1.05rem; font-weight: 900; line-height: 1.2;`;
 
                 const bubbleClass = `chat-msg-bubble ${isOwn ? 'own' : 'other'}${isObmann ? ' obmann' : ''}`;
                 const bubbleStyleAttr = isObmann
@@ -11513,6 +11648,7 @@
             if (bannerBadgeEl) {
                 bannerBadgeEl.style.display = 'none';
             }
+            updateDeviceAppBadge(0);
         }
 
         async function sendChatPushNotificationImmediately(senderName, messageText) {
@@ -11616,12 +11752,13 @@
             const inputForm = document.getElementById('chat-input-form');
             const timerEl = document.getElementById('chat-voice-timer');
             const sendVoiceBtn = document.getElementById('chat-voice-send-btn');
-            const voiceBtn = document.getElementById('chat-voice-btn');
+            const actionBtn = document.getElementById('chat-action-btn');
             if (recBar) recBar.style.display = 'none';
             if (inputForm) inputForm.style.display = 'flex';
             if (timerEl) timerEl.innerText = '0:00';
             if (sendVoiceBtn) sendVoiceBtn.disabled = false;
-            if (voiceBtn) voiceBtn.disabled = false;
+            if (actionBtn) actionBtn.disabled = false;
+            updateChatActionButtonUI();
         }
 
         function updateChatVoiceTimerDisplay() {
@@ -11655,8 +11792,9 @@
                 return;
             }
 
-            const voiceBtn = document.getElementById('chat-voice-btn');
-            if (voiceBtn) voiceBtn.disabled = true;
+            closeChatAttachMenu();
+            const actionBtn = document.getElementById('chat-action-btn');
+            if (actionBtn) actionBtn.disabled = true;
 
             let stream = null;
             try {
@@ -11812,50 +11950,13 @@
             }, 250);
         }
 
-        async function sendQuickChatReply(replyText, btnEl) {
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
-            const senderName = getSavedClubMemberName();
-            if (!senderName) {
-                openMemberNameSetupModal(true);
-                return;
-            }
-            const cleanMessage = String(replyText || '').trim().slice(0, 500);
-            if (!cleanMessage) return;
-
-            const now = new Date();
-            const nowMs = now.getTime();
-            const timeText = now.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
-
-            if (btnEl) btnEl.disabled = true;
-            try {
-                await db.collection("club_chat").add({
-                    sender: senderName,
-                    text: cleanMessage,
-                    timeText: timeText,
-                    clientTimeMs: nowMs,
-                    pushTriggered: true,
-                    pushSentAtMs: nowMs,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                markChatAsRead();
-                const listEl = document.getElementById('chat-messages-list');
-                if (listEl) {
-                    listEl.scrollTop = listEl.scrollHeight;
-                }
-                sendChatPushNotificationImmediately(senderName, cleanMessage);
-            } catch (err) {
-                alert("Fehler beim Senden der Schnell-Antwort: " + (err && err.message ? err.message : String(err)));
-            } finally {
-                if (btnEl) btnEl.disabled = false;
-            }
-        }
-
         async function sendClubChatMessage(event) {
             if (event) event.preventDefault();
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            closeChatAttachMenu();
 
             const inputEl = document.getElementById('chat-message-input');
-            const sendBtn = document.getElementById('chat-send-btn');
+            const actionBtn = document.getElementById('chat-action-btn');
 
             const senderName = getSavedClubMemberName();
             if (!senderName) {
@@ -11878,7 +11979,7 @@
             const nowMs = now.getTime();
             const timeText = now.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
 
-            if (sendBtn) sendBtn.disabled = true;
+            if (actionBtn) actionBtn.disabled = true;
             try {
                 const docPayload = {
                     sender: senderName,
@@ -11900,6 +12001,7 @@
                     inputEl.focus();
                 }
                 clearPendingChatImage();
+                updateChatActionButtonUI();
                 markChatAsRead();
 
                 const pushPreviewText = cleanMessage || '📷 Hat ein Foto gesendet';
@@ -11907,12 +12009,14 @@
             } catch (err) {
                 alert("Fehler beim Senden der Nachricht: " + (err && err.message ? err.message : String(err)));
             } finally {
-                if (sendBtn) sendBtn.disabled = false;
+                if (actionBtn) actionBtn.disabled = false;
+                updateChatActionButtonUI();
             }
         }
 
         async function deleteChatMessage(docId) {
-            if (!auth.currentUser || !docId) return;
+            if (!isObmannSimonLoggedIn()) { alert("Nur Obmann Simon darf Chat-Nachrichten anpinnen oder löschen."); return; }
+            if (!docId) return;
             if (!confirm("Möchtest du diese Chat-Nachricht wirklich löschen?")) return;
             try {
                 await db.collection("club_chat").doc(docId).delete();
@@ -11922,8 +12026,21 @@
             }
         }
 
+        document.addEventListener('click', (evt) => {
+            const menu = document.getElementById('chat-attach-menu');
+            const btn = document.getElementById('chat-attach-btn');
+            if (!menu || !menu.classList.contains('open')) return;
+            if (menu.contains(evt.target) || (btn && btn.contains(evt.target))) return;
+            closeChatAttachMenu();
+        });
+
         document.addEventListener('keydown', (evt) => {
             if (evt.key === 'Escape') {
+                const attachMenu = document.getElementById('chat-attach-menu');
+                if (attachMenu && attachMenu.classList.contains('open')) {
+                    closeChatAttachMenu();
+                    return;
+                }
                 const lightbox = document.getElementById('chat-image-lightbox');
                 if (lightbox && lightbox.style.display === 'flex') {
                     closeChatImageLightbox();
@@ -11965,6 +12082,7 @@
             try { populateWeaponMemberSelects(); } catch(e) {}
             try { updateChatMuteButtonUI(); } catch(e) {}
             try { updateChatIdentityLabel(); } catch(e) {}
+            try { updateChatActionButtonUI(); } catch(e) {}
             try { bindChatViewportListeners(); } catch(e) {}
             try { renderOpenTabsBar(); } catch(e) {}
             try { initPushNotificationsUI(); } catch(e) {}
