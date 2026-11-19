@@ -12,6 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1409,8 +1410,37 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
             font-size: 0.8em;
+        }
+        .chat-msg-sender {
+            font-size: 13.5px !important;
+            font-weight: 700 !important;
+            line-height: 1.25 !important;
+        }
+        .chat-msg-text {
+            font-size: 15px !important;
+            line-height: 1.4 !important;
+            color: #111b21;
+            word-break: break-word;
+        }
+        .chat-msg-time {
+            display: block;
+            text-align: right;
+            margin-top: 4px;
+            font-size: 11px !important;
+            font-weight: 600;
+            color: #667781 !important;
+            line-height: 1 !important;
+        }
+        html.large-font-mode .chat-msg-sender {
+            font-size: 15.93px !important;
+        }
+        html.large-font-mode .chat-msg-text {
+            font-size: 17.7px !important;
+        }
+        html.large-font-mode .chat-msg-time {
+            font-size: 13px !important;
         }
         .chat-msg-actions {
             display: inline-flex;
@@ -1433,6 +1463,164 @@
         }
         .chat-msg-del-btn:hover {
             color: #dc2626;
+        }
+        .chat-date-divider-wrap {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .chat-date-divider-pill {
+            background: #e2e8f0;
+            color: #334155;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 999px;
+            margin: 10px auto;
+            display: inline-block;
+            line-height: 1.25;
+            letter-spacing: 0.01em;
+        }
+        .chat-msg-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            max-width: 86%;
+        }
+        .chat-msg-item.own {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+        .chat-msg-item.other {
+            align-self: flex-start;
+            align-items: flex-start;
+        }
+        .chat-msg-item .chat-msg-bubble {
+            max-width: 100%;
+        }
+        .chat-msg-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .chat-msg-footer .chat-msg-time {
+            margin-top: 0;
+        }
+        .chat-msg-react-trigger {
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(148, 163, 184, 0.45);
+            color: #475569;
+            border-radius: 999px;
+            padding: 1px 6px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            line-height: 1.25;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-family: inherit;
+            transition: background 0.14s ease, transform 0.12s ease, border-color 0.14s ease;
+        }
+        .chat-msg-react-trigger:hover,
+        .chat-msg-react-trigger.active {
+            background: #ffffff;
+            border-color: #94a3b8;
+            color: #0f172a;
+        }
+        .chat-msg-react-trigger:active {
+            transform: scale(0.92);
+        }
+        .chat-reaction-picker {
+            position: absolute;
+            bottom: calc(100% + 4px);
+            z-index: 45;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            padding: 4px 7px;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+        }
+        .chat-msg-item.own .chat-reaction-picker {
+            right: 0;
+        }
+        .chat-msg-item.other .chat-reaction-picker {
+            left: 0;
+        }
+        .chat-reaction-picker.flip-below {
+            bottom: auto;
+            top: calc(100% + 4px);
+        }
+        .chat-reaction-picker-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 999px;
+            width: 34px;
+            height: 34px;
+            font-size: 1.22rem;
+            line-height: 1;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s ease;
+        }
+        .chat-reaction-picker-btn:hover {
+            background: #f1f5f9;
+            transform: scale(1.12);
+        }
+        .chat-reaction-picker-btn.selected {
+            background: #dcfce7;
+            border-color: #4ade80;
+        }
+        .chat-reaction-picker-btn:active {
+            transform: scale(0.92);
+        }
+        .chat-msg-reactions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 4px;
+        }
+        .chat-msg-item.own .chat-msg-reactions {
+            justify-content: flex-end;
+        }
+        .chat-msg-item.other .chat-msg-reactions {
+            justify-content: flex-start;
+        }
+        .chat-reaction-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            padding: 2px 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #334155;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+            line-height: 1.25;
+            font-family: inherit;
+            transition: transform 0.12s ease, background 0.14s ease, border-color 0.14s ease;
+        }
+        .chat-reaction-pill.mine {
+            background: #dcfce7;
+            border-color: #4ade80;
+            color: #166534;
+        }
+        .chat-reaction-pill:active {
+            transform: scale(0.92);
         }
         .chat-image-preview-bar {
             display: none;
@@ -1477,44 +1665,149 @@
             border-top: 1px solid #e2e8f0;
             flex-shrink: 0;
         }
-        #chat-attach-menu {
+        #chat-attach-panel {
             display: none;
-            position: absolute;
-            bottom: calc(100% + 8px);
-            right: 58px;
-            z-index: 30;
-            background: #ffffff;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
-            gap: 8px;
-            flex-direction: row;
-            align-items: center;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 16px 20px calc(16px + env(safe-area-inset-bottom, 0px)) 20px;
+            flex-shrink: 0;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 32px;
         }
-        #chat-attach-menu.open {
+        #chat-attach-panel.open {
             display: flex;
         }
-        .chat-attach-menu-btn {
+        .chat-attach-tile-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: none;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: transform 0.14s ease;
+        }
+        .chat-attach-tile-btn:active {
+            transform: scale(0.94);
+        }
+        .chat-attach-tile-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            padding: 10px 14px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            background: #f8fafc;
-            color: #0f172a;
-            font-size: 0.92rem;
-            font-weight: 800;
-            cursor: pointer;
-            font-family: inherit;
-            white-space: nowrap;
-            transition: background 0.15s ease, transform 0.12s ease;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
         }
-        .chat-attach-menu-btn:active {
-            transform: scale(0.97);
+        .chat-attach-tile-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #334155;
+            line-height: 1.2;
+        }
+        #chat-emoji-panel {
+            display: none;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px)) 12px;
+            flex-shrink: 0;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+            max-height: 52vh;
+            overflow-y: auto;
+        }
+        #chat-emoji-panel.open {
+            display: grid;
+        }
+        .chat-sticker-section {
+            grid-column: 1 / -1;
+            padding-bottom: 10px;
+            margin-bottom: 2px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .chat-sticker-heading {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: #475569;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        .chat-sticker-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            justify-items: center;
+            align-items: center;
+        }
+        .chat-sticker-btn {
+            width: 64px;
+            height: 64px;
+            padding: 4px;
+            border-radius: 14px;
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            transition: transform 0.12s ease, border-color 0.14s ease, background 0.14s ease;
+        }
+        .chat-sticker-btn:hover {
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+        .chat-sticker-btn:active {
+            transform: scale(0.92);
+        }
+        .chat-msg-sticker-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 2px 2px 2px;
+        }
+        .chat-emoji-item-btn {
+            font-size: 1.55rem;
+            padding: 8px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            line-height: 1.1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.12s ease, background 0.12s ease;
+        }
+        .chat-emoji-item-btn:active {
+            transform: scale(0.92);
             background: #e2e8f0;
+        }
+        #chat-drawer img.emoji {
+            height: 1.25em;
+            width: 1.25em;
+            margin: 0 0.08em;
+            vertical-align: -0.22em;
+            display: inline-block;
+            pointer-events: none;
+        }
+        #chat-drawer .chat-msg-text.emoji-only {
+            font-size: 2.15rem !important;
+            line-height: 1.22 !important;
+            padding: 2px 0;
+        }
+        #chat-emoji-panel img.emoji {
+            height: 1.65rem;
+            width: 1.65rem;
+        }
+        #chat-emoji-panel .chat-sticker-heading img.emoji {
+            height: 1.15em;
+            width: 1.15em;
+            vertical-align: -0.2em;
         }
         #chat-action-btn:disabled {
             opacity: 0.6;
@@ -2847,16 +3140,25 @@
             <input type="file" id="chat-camera-input" accept="image/*" capture="environment" style="display: none;" onchange="handleChatImageSelect(this)">
             <input type="file" id="chat-image-input" accept="image/*" style="display: none;" onchange="handleChatImageSelect(this)">
 
-            <div id="chat-attach-menu" role="menu" aria-label="Anhang auswählen">
-                <button type="button" id="chat-attach-gallery-btn" class="chat-attach-menu-btn" role="menuitem" onclick="closeChatAttachMenu(); triggerChatImagePicker();">🖼️ Galerie</button>
-                <button type="button" id="chat-attach-camera-btn" class="chat-attach-menu-btn" role="menuitem" onclick="closeChatAttachMenu(); triggerChatCameraPicker();">📷 Kamera</button>
-            </div>
-
-            <div style="flex: 1; min-width: 0; display: flex; align-items: center; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 4px 10px 4px 14px;">
-                <input type="text" id="chat-message-input" maxlength="500" placeholder="Nachricht" onfocus="closeChatAttachMenu(); onChatInputFocus();" oninput="updateChatActionButtonUI()" autocomplete="off" style="flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-size: 1rem; padding: 8px 4px; color: #0f172a; font-family: inherit;">
-                <button type="button" id="chat-attach-btn" onclick="toggleChatAttachMenu(event)" title="Foto anhängen" aria-label="Foto anhängen" aria-expanded="false" aria-controls="chat-attach-menu" style="padding: 6px; background: transparent; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; color: #64748b;">
+            <div style="flex: 1; min-width: 0; display: flex; align-items: center; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 2px 8px; box-sizing: border-box;">
+                <button type="button" id="chat-emoji-btn" onclick="toggleChatEmojiPanel(event)" title="Emoji auswählen" aria-label="Emoji auswählen" aria-expanded="false" aria-controls="chat-emoji-panel" style="padding: 6px; background: transparent; border: none; flex-shrink: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: #64748b;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                        <line x1="9" y1="9" x2="9.01" y2="9"/>
+                        <line x1="15" y1="9" x2="15.01" y2="9"/>
+                    </svg>
+                </button>
+                <input type="text" id="chat-message-input" maxlength="500" placeholder="Nachricht" onfocus="if (!isInsertingChatEmoji) { closeChatAttachMenu(); } onChatInputFocus();" oninput="updateChatActionButtonUI()" autocomplete="off" style="flex: 1; min-width: 0; border: none !important; outline: none !important; box-shadow: none !important; background: transparent; font-size: 1rem; padding: 8px 4px; color: #0f172a; font-family: inherit;">
+                <button type="button" id="chat-attach-btn" onclick="toggleChatAttachMenu(event)" title="Anhang auswählen" aria-label="Anhang auswählen" aria-expanded="false" aria-controls="chat-attach-panel" style="padding: 6px; background: transparent; border: none; flex-shrink: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: #64748b;">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                    </svg>
+                </button>
+                <button type="button" id="chat-direct-camera-btn" onclick="closeChatAttachMenu(); triggerChatCameraPicker();" title="Foto mit Kamera aufnehmen" aria-label="Foto mit Kamera aufnehmen" style="padding: 6px; background: transparent; border: none; flex-shrink: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: #64748b;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
                     </svg>
                 </button>
             </div>
@@ -2873,6 +3175,55 @@
                 </svg>
             </button>
         </form>
+
+        <div id="chat-emoji-panel" role="region" aria-label="Emoji auswählen" aria-hidden="true">
+            <div class="chat-sticker-section">
+                <div class="chat-sticker-heading">🎯 Vereins-Sticker (antippen zum Senden)</div>
+                <div id="chat-sticker-bar" class="chat-sticker-bar"></div>
+            </div>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('👍')">👍</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('❤️')">❤️</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('🍻')">🍻</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('🎯')">🎯</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('😂')">😂</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('👏')">👏</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('🙏')">🙏</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('🎉')">🎉</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('👌')">👌</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('😊')">😊</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('🙌')">🙌</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('🥳')">🥳</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('🤝')">🤝</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('⏰')">⏰</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('⛰️')">⛰️</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('🇦🇹')">🇦🇹</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('🔥')">🔥</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('💪')">💪</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('😅')">😅</button>
+            <button type="button" class="chat-emoji-item-btn" onclick="insertChatEmoji('🫡')">🫡</button>
+        </div>
+
+        <div id="chat-attach-panel" role="region" aria-label="Anhang auswählen" aria-hidden="true">
+            <button type="button" id="chat-attach-gallery-btn" class="chat-attach-tile-btn" onclick="closeChatAttachMenu(); triggerChatImagePicker();">
+                <span class="chat-attach-tile-icon" style="background: #0284c7;">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="3" width="18" height="18" rx="3" ry="3"/>
+                        <circle cx="8.5" cy="8.5" r="1.6" fill="#ffffff" stroke="none"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                </span>
+                <span class="chat-attach-tile-label">Galerie</span>
+            </button>
+            <button type="button" id="chat-attach-camera-btn" class="chat-attach-tile-btn" onclick="closeChatAttachMenu(); triggerChatCameraPicker();">
+                <span class="chat-attach-tile-icon" style="background: #e11d48;">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                </span>
+                <span class="chat-attach-tile-label">Kamera</span>
+            </button>
+        </div>
     </aside>
 
     <!-- DEZENTER IN-APP CHAT-TOAST (NUR WENN NICHT STUMMGESCHALTET) -->
@@ -3651,7 +4002,7 @@
                 let zuwBadge = isReserve
                     ? `<span style="display:inline-block; background:#fef3c7; color:#92400e; border:1px solid #f59e0b; padding:1px 6px; border-radius:6px; font-weight:800; font-size:0.82em;">${escapeHtml(zuwText.toUpperCase())}</span>`
                     : `<span style="display:inline-block; background:#e0f2fe; color:#075985; border:1px solid #7dd3fc; padding:1px 6px; border-radius:6px; font-weight:800; font-size:0.82em;">👤 ${escapeHtml(zuwText)}</span>`;
-                let labelText = `${escapeHtml(w.hersteller)} ${escapeHtml(w.modell)} (${escapeHtml(w.kaliber)}) – ZWR: ${maskedNum} | ZVR: ${maskedZvr} ${zuwBadge}`;
+                let labelText = `${escapeHtml(w.hersteller)} ${escapeHtml(w.modell)} (${escapeHtml(w.kaliber)}) – ZWR: ${escapeHtml(maskedNum)} | ZVR: ${escapeHtml(maskedZvr)} ${zuwBadge}`;
                 let weaponInternalId = String(w.id || w.docId || '').trim();
                 html += `
                     <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer; flex-wrap: wrap;">
@@ -5574,6 +5925,7 @@
         }
 
         async function persistKeyListToFirestore() {
+            if (!auth.currentUser) return;
             const payload = {
                 items: exactPdfKeyList,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -5611,6 +5963,7 @@
         }
 
         function startEditKeyListItem(index) {
+            if (!auth.currentUser) return;
             const item = exactPdfKeyList[index];
             if (!item) return;
             const editIdx = document.getElementById('key-edit-index');
@@ -8674,6 +9027,42 @@
             try { loadAdminAuditLogs(); } catch(e) {}
         }
 
+        function clearAdminSensitiveData() {
+            loadedClubPinValue = '';
+            loadedOneSignalKeyValue = '';
+            exactPdfKeyList = [];
+            window.weaponPdfMap = {};
+            window.invoicesMap = {};
+            window.cashSalesList = [];
+            try { lockSecuritySettingsFields(); } catch(e) {}
+            try { stopAdminAuditLogListener(); } catch(e) {}
+            try { closeMasterPinModal(); } catch(e) {}
+            try { closeAdminHelpModal(); } catch(e) {}
+            try { closeCashReportPreviewModal(); } catch(e) {}
+            try { closeAnnualBackupPreviewModal(); } catch(e) {}
+            try { closeWeaponPDFModal(); } catch(e) {}
+            try { closeInvoiceModal(); } catch(e) {}
+            try { closeMemberAppQrModal(); } catch(e) {}
+            try { closeTresorQrModal(); } catch(e) {}
+            [
+                'admin-keys-list',
+                'admin-weapon-pdf-list',
+                'admin-cash-sales-list',
+                'admin-tally-history-list',
+                'admin-members-overview',
+                'admin-audit-logs-list',
+                'admin-news-list',
+                'admin-events-list'
+            ].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = '';
+            });
+            const cashSumEl = document.getElementById('admin-cash-sales-sum-value');
+            if (cashSumEl) cashSumEl.innerText = '€ 0,00';
+            const cashCountEl = document.getElementById('admin-cash-sales-count');
+            if (cashCountEl) cashCountEl.innerText = '0 Buchungen';
+        }
+
         function clearSensitiveAppData() {
             appDataLoadedAfterUnlock = false;
             try { closeMemberNameSetupModal(); } catch(e) {}
@@ -9084,15 +9473,7 @@
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
                 if (pwdInput) pwdInput.value = '';
-                loadedClubPinValue = '';
-                loadedOneSignalKeyValue = '';
-                try { lockSecuritySettingsFields(); } catch(e) {}
-                try { stopAdminAuditLogListener(); } catch(e) {}
-                try { closeAdminHelpModal(); } catch(e) {}
-                try { closeCashReportPreviewModal(); } catch(e) {}
-                try { closeAnnualBackupPreviewModal(); } catch(e) {}
-                try { closeMemberAppQrModal(); } catch(e) {}
-                try { closeTresorQrModal(); } catch(e) {}
+                clearAdminSensitiveData();
                 updateAdminPushVisibility();
                 refreshMemberIdentityViews();
                 
@@ -9148,12 +9529,7 @@
                 clearTimeout(inactivityTimer);
                 const pwdInput = document.getElementById('admin-password-input');
                 if (pwdInput) pwdInput.value = '';
-                loadedClubPinValue = '';
-                loadedOneSignalKeyValue = '';
-                try { lockSecuritySettingsFields(); } catch(e) {}
-                try { closeAdminHelpModal(); } catch(e) {}
-                try { closeMemberAppQrModal(); } catch(e) {}
-                try { closeTresorQrModal(); } catch(e) {}
+                clearAdminSensitiveData();
                 updateAdminPushVisibility();
                 refreshMemberIdentityViews();
                 
@@ -10949,7 +11325,10 @@
             const bodyEl = document.getElementById('chat-popup-toast-body');
             if (!toast || !titleEl || !bodyEl || !msg) return false;
             const sender = String(msg.sender || 'Mitglied').trim();
-            const textPreview = String(msg.text || '').trim() || (msg.audioData ? '🎙️ Hat eine Sprachnachricht gesendet' : '📷 Hat ein Foto gesendet');
+            const matchedSticker = getClubStickerByMessageText(msg.text);
+            const textPreview = matchedSticker
+                ? matchedSticker.pushText
+                : (String(msg.text || '').trim() || (msg.audioData ? '🎙️ Hat eine Sprachnachricht gesendet' : '📷 Hat ein Foto gesendet'));
             titleEl.innerText = `💬 Vereins-Chat: ${sender}`;
             bodyEl.innerText = textPreview;
             toast.style.display = 'block';
@@ -11064,22 +11443,685 @@
             }
         }
 
-        function closeChatAttachMenu() {
-            const menu = document.getElementById('chat-attach-menu');
-            const btn = document.getElementById('chat-attach-btn');
-            if (menu) menu.classList.remove('open');
+        let isInsertingChatEmoji = false;
+
+        function closeChatEmojiPanel() {
+            const panel = document.getElementById('chat-emoji-panel');
+            const btn = document.getElementById('chat-emoji-btn');
+            if (panel) {
+                panel.classList.remove('open');
+                panel.setAttribute('aria-hidden', 'true');
+            }
             if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+
+        function closeChatAttachOnly() {
+            const panel = document.getElementById('chat-attach-panel');
+            const btn = document.getElementById('chat-attach-btn');
+            if (panel) {
+                panel.classList.remove('open');
+                panel.setAttribute('aria-hidden', 'true');
+            }
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+
+        function closeChatAttachMenu() {
+            closeChatAttachOnly();
+            closeChatEmojiPanel();
+        }
+
+        const CLUB_STICKERS = {
+            schuetze: {
+                key: 'schuetze',
+                marker: '[STICKER:schuetze]',
+                label: 'Passt!',
+                pushText: '🎯 Sticker: Passt!',
+                svgBody: `
+                    <g stroke="#ffffff" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" fill="#ffffff">
+                        <circle cx="52" cy="74" r="31"/>
+                        <path d="M18 52 C26 42 78 38 88 50 L80 56 C62 50 38 52 24 58 Z"/>
+                        <path d="M29 48 L36 22 C44 17 62 17 70 24 L76 47 Z"/>
+                        <path d="M70 37 C81 24 91 16 98 11 C94 22 86 32 76 41 Z"/>
+                        <path d="M84 74 C84 64 90 54 94 54 C99 54 98 64 97 68 L106 68 C110 68 111 73 108 75 C111 77 110 82 106 83 C109 85 107 90 103 91 C104 94 101 97 96 97 L84 97 Z"/>
+                    </g>
+                    <path d="M70 37 C81 24 91 16 98 11 C94 22 86 32 76 41 Z" fill="#92400e" stroke="#78350f" stroke-width="1.6" stroke-linejoin="round"/>
+                    <path d="M75 34 L94 15" stroke="#fef3c7" stroke-width="1.3" stroke-linecap="round"/>
+                    <path d="M80 28 L86 27 M85 23 L90 22 M89 19 L93 18" stroke="#78350f" stroke-width="1.1" stroke-linecap="round"/>
+                    <circle cx="52" cy="74" r="30" fill="#facc15" stroke="#ca8a04" stroke-width="2.2"/>
+                    <ellipse cx="42" cy="61" rx="9" ry="5" fill="#fef08a" opacity="0.65" transform="rotate(-18 42 61)"/>
+                    <circle cx="34" cy="77" r="5" fill="#fca5a5" opacity="0.7"/>
+                    <circle cx="70" cy="77" r="5" fill="#fca5a5" opacity="0.7"/>
+                    <path d="M36 69 Q41 63 46 69" fill="none" stroke="#451a03" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M58 69 Q63 63 68 69" fill="none" stroke="#451a03" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M37 80 Q52 95 67 80 Z" fill="#991b1b" stroke="#451a03" stroke-width="2.2" stroke-linejoin="round"/>
+                    <path d="M40 81 Q52 85 64 81" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>
+                    <ellipse cx="52" cy="87" rx="6" ry="3.2" fill="#f87171"/>
+                    <path d="M29 48 L36 22 C44 17 62 17 70 24 L76 47 Z" fill="#166534" stroke="#14532d" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M31 44 C46 39 62 39 75 43 L76 48 C62 44 45 45 29 49 Z" fill="#dc2626"/>
+                    <path d="M18 52 C28 42 76 38 88 50 C85 55 78 56 72 54 C56 49 38 51 24 58 C19 58 17 55 18 52 Z" fill="#15803d" stroke="#14532d" stroke-width="2" stroke-linejoin="round"/>
+                    <g transform="translate(59 42)">
+                        <ellipse cx="0" cy="-5.5" rx="2.1" ry="4.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6"/>
+                        <ellipse cx="0" cy="5.5" rx="2.1" ry="4.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6"/>
+                        <ellipse cx="-5.2" cy="-2" rx="4.5" ry="2.1" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(25 -5.2 -2)"/>
+                        <ellipse cx="5.2" cy="-2" rx="4.5" ry="2.1" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(-25 5.2 -2)"/>
+                        <ellipse cx="-4" cy="4" rx="4.2" ry="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(-38 -4 4)"/>
+                        <ellipse cx="4" cy="4" rx="4.2" ry="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(38 4 4)"/>
+                        <circle cx="0" cy="0" r="2.7" fill="#facc15" stroke="#d97706" stroke-width="0.8"/>
+                    </g>
+                    <g>
+                        <rect x="76" y="74" width="11" height="23" rx="3.5" fill="#15803d" stroke="#14532d" stroke-width="1.8"/>
+                        <path d="M85 75 C86 67 90 54 94 54 C99 54 98 63 97 68 L106 68 C110 68 111 73 107 75 C110 77 110 82 106 83 C108 85 107 90 103 91 C104 94 101 97 96 97 L85 97 Z" fill="#fde047" stroke="#a16207" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M97 75 L106 75 M97 83 L105 83 M96 90 L102 90" stroke="#ca8a04" stroke-width="1.6" stroke-linecap="round"/>
+                    </g>
+                `
+            },
+            prost: {
+                key: 'prost',
+                marker: '[STICKER:prost]',
+                label: 'Prost!',
+                pushText: '🍻 Sticker: Prost!',
+                svgBody: `
+                    <g stroke="#ffffff" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" fill="#ffffff">
+                        <g transform="rotate(-11 40 72)">
+                            <path d="M18 54 C8 54 8 86 20 86"/>
+                            <rect x="20" y="42" width="38" height="58" rx="7"/>
+                            <path d="M17 44 C15 33 27 28 33 33 C37 25 50 26 52 34 C60 32 63 42 57 47 Z"/>
+                        </g>
+                        <g transform="rotate(11 80 72)">
+                            <path d="M102 54 C112 54 112 86 100 86"/>
+                            <rect x="62" y="42" width="38" height="58" rx="7"/>
+                            <path d="M63 47 C57 42 60 32 68 34 C70 26 83 25 87 33 C93 28 105 33 103 44 Z"/>
+                        </g>
+                    </g>
+                    <g stroke="#f59e0b" stroke-width="2.8" stroke-linecap="round">
+                        <line x1="60" y1="10" x2="60" y2="21"/>
+                        <line x1="47" y1="15" x2="53" y2="23"/>
+                        <line x1="73" y1="15" x2="67" y2="23"/>
+                    </g>
+                    <g transform="rotate(-11 40 72)">
+                        <path d="M21 55 C10 55 10 85 22 85" fill="none" stroke="#94a3b8" stroke-width="6.5" stroke-linecap="round"/>
+                        <path d="M21 55 C10 55 10 85 22 85" fill="none" stroke="#f8fafc" stroke-width="3" stroke-linecap="round"/>
+                        <rect x="20" y="42" width="38" height="58" rx="7" fill="#f59e0b" stroke="#64748b" stroke-width="2.2"/>
+                        <rect x="20" y="90" width="38" height="10" rx="4" fill="#e2e8f0" stroke="#64748b" stroke-width="1.8"/>
+                        <rect x="25" y="49" width="6" height="37" rx="3" fill="#fef3c7" opacity="0.65"/>
+                        <rect x="49" y="49" width="4" height="37" rx="2" fill="#d97706" opacity="0.45"/>
+                        <path d="M18 45 C15 34 26 28 33 34 C37 25 50 26 52 34 C59 32 63 42 56 47 L52 54 C48 56 46 50 45 47 L22 47 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8" stroke-linejoin="round"/>
+                        <g transform="translate(39 69)">
+                            <ellipse cx="0" cy="-7" rx="2.6" ry="5.5" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8"/>
+                            <ellipse cx="0" cy="7" rx="2.6" ry="5.5" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8"/>
+                            <ellipse cx="-6.5" cy="-2.5" rx="5.5" ry="2.6" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(24 -6.5 -2.5)"/>
+                            <ellipse cx="6.5" cy="-2.5" rx="5.5" ry="2.6" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(-24 6.5 -2.5)"/>
+                            <ellipse cx="-5" cy="5" rx="5.2" ry="2.4" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(-38 -5 5)"/>
+                            <ellipse cx="5" cy="5" rx="5.2" ry="2.4" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(38 5 5)"/>
+                            <circle cx="0" cy="0" r="3.4" fill="#facc15" stroke="#d97706" stroke-width="1"/>
+                        </g>
+                    </g>
+                    <g transform="rotate(11 80 72)">
+                        <path d="M99 55 C110 55 110 85 98 85" fill="none" stroke="#94a3b8" stroke-width="6.5" stroke-linecap="round"/>
+                        <path d="M99 55 C110 55 110 85 98 85" fill="none" stroke="#f8fafc" stroke-width="3" stroke-linecap="round"/>
+                        <rect x="62" y="42" width="38" height="58" rx="7" fill="#fbbf24" stroke="#64748b" stroke-width="2.2"/>
+                        <rect x="62" y="90" width="38" height="10" rx="4" fill="#e2e8f0" stroke="#64748b" stroke-width="1.8"/>
+                        <rect x="67" y="49" width="6" height="37" rx="3" fill="#fef3c7" opacity="0.65"/>
+                        <rect x="91" y="49" width="4" height="37" rx="2" fill="#d97706" opacity="0.4"/>
+                        <path d="M64 47 C57 42 61 32 68 34 C70 26 83 25 87 34 C94 28 105 34 102 45 L98 47 L75 47 C74 50 72 56 68 54 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8" stroke-linejoin="round"/>
+                        <g transform="translate(81 69)">
+                            <ellipse cx="0" cy="-7" rx="2.6" ry="5.5" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8"/>
+                            <ellipse cx="0" cy="7" rx="2.6" ry="5.5" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8"/>
+                            <ellipse cx="-6.5" cy="-2.5" rx="5.5" ry="2.6" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(24 -6.5 -2.5)"/>
+                            <ellipse cx="6.5" cy="-2.5" rx="5.5" ry="2.6" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(-24 6.5 -2.5)"/>
+                            <ellipse cx="-5" cy="5" rx="5.2" ry="2.4" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(-38 -5 5)"/>
+                            <ellipse cx="5" cy="5" rx="5.2" ry="2.4" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(38 5 5)"/>
+                            <circle cx="0" cy="0" r="3.4" fill="#facc15" stroke="#d97706" stroke-width="1"/>
+                        </g>
+                    </g>
+                `
+            },
+            gutschuss: {
+                key: 'gutschuss',
+                marker: '[STICKER:gutschuss]',
+                label: 'GUT SCHUSS!',
+                pushText: '🎯 Sticker: GUT SCHUSS!',
+                svgBody: `
+                    <g stroke="#ffffff" stroke-width="6" stroke-linejoin="round" fill="#ffffff">
+                        <circle cx="58" cy="50" r="38"/>
+                        <rect x="8" y="88" width="104" height="23" rx="11.5"/>
+                        <path d="M58 50 L98 14 L106 16 L98 24 Z"/>
+                    </g>
+                    <circle cx="58" cy="50" r="37" fill="#ffffff" stroke="#1e293b" stroke-width="2.6"/>
+                    <circle cx="58" cy="50" r="29" fill="#ffffff" stroke="#1e293b" stroke-width="2.2"/>
+                    <circle cx="58" cy="50" r="21" fill="#111827"/>
+                    <circle cx="58" cy="50" r="13.5" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+                    <circle cx="58" cy="50" r="7" fill="none" stroke="#ffffff" stroke-width="1.4"/>
+                    <circle cx="58" cy="50" r="3.4" fill="#facc15"/>
+                    <polygon points="18,22 20,27 25,27 21,30 22.5,35 18,32 13.5,35 15,30 11,27 16,27" fill="#facc15" stroke="#b45309" stroke-width="1"/>
+                    <polygon points="103,56 104.8,60 109,60 105.6,62.5 106.8,66.5 103,64 99.2,66.5 100.4,62.5 97,60 101.2,60" fill="#facc15" stroke="#b45309" stroke-width="1"/>
+                    <polygon points="22,74 23.4,77.2 27,77.2 24.2,79.2 25.2,82.5 22,80.5 18.8,82.5 19.8,79.2 17,77.2 20.6,77.2" fill="#facc15" stroke="#b45309" stroke-width="0.9"/>
+                    <g>
+                        <line x1="60" y1="48" x2="98" y2="14" stroke="#475569" stroke-width="3.6" stroke-linecap="round"/>
+                        <line x1="60" y1="48" x2="98" y2="14" stroke="#cbd5e1" stroke-width="1.2" stroke-linecap="round"/>
+                        <polygon points="88,23 96,10 104,11 96,20" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.1" stroke-linejoin="round"/>
+                        <polygon points="90,25 105,18 104,26 95,28" fill="#16a34a" stroke="#14532d" stroke-width="1.1" stroke-linejoin="round"/>
+                        <circle cx="58" cy="50" r="2.2" fill="#ffffff"/>
+                    </g>
+                    <rect x="9" y="89" width="102" height="22" rx="11" fill="#166534" stroke="#14532d" stroke-width="2"/>
+                    <text x="60" y="104.2" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13.2" font-weight="900" letter-spacing="0.4" fill="#ffffff">GUT SCHUSS!</text>
+                `
+            },
+            kameradschaft: {
+                key: 'kameradschaft',
+                marker: '[STICKER:kameradschaft]',
+                label: 'Kameradschaft',
+                pushText: '🤝 Sticker: Kameradschaft',
+                svgBody: `
+                    <g stroke="#ffffff" stroke-width="6" stroke-linejoin="round" fill="#ffffff">
+                        <circle cx="60" cy="53" r="41"/>
+                        <path d="M12 86 Q60 104 108 86 L104 105 Q60 121 16 105 Z"/>
+                    </g>
+                    <circle cx="60" cy="53" r="40" fill="#e0f2fe" stroke="#15803d" stroke-width="2.4"/>
+                    <path d="M21 63 L43 29 L63 59 L79 34 L99 63 A40 40 0 0 1 21 63 Z" fill="#15803d"/>
+                    <path d="M35 66 L58 26 L83 66 Z" fill="#166534"/>
+                    <polygon points="43,29 37,39 43,36 48,40" fill="#ffffff"/>
+                    <polygon points="58,26 51,38 56,35 60,39 65,37" fill="#ffffff"/>
+                    <polygon points="79,34 73,43 78,41 84,43" fill="#ffffff"/>
+                    <path d="M24 72 Q60 65 96 72 A40 40 0 0 1 24 72 Z" fill="#22c55e"/>
+                    <g>
+                        <path d="M16 58 L37 52 L42 73 L21 79 Z" fill="#166534" stroke="#14532d" stroke-width="1.8" stroke-linejoin="round"/>
+                        <circle cx="33" cy="67" r="2.2" fill="#facc15"/>
+                        <path d="M104 58 L83 52 L78 73 L99 79 Z" fill="#334155" stroke="#1e293b" stroke-width="1.8" stroke-linejoin="round"/>
+                        <circle cx="87" cy="67" r="2.2" fill="#cbd5e1"/>
+                        <path d="M37 54 L53 52 C57 52 60 54 63 57 L74 68 C76 70 74 74 71 74 C72 77 69 80 66 79 C66 82 62 84 59 82 L44 74 L39 71 Z" fill="#fed7aa" stroke="#9a3412" stroke-width="1.9" stroke-linejoin="round"/>
+                        <path d="M82 54 L67 51 C63 50 58 52 54 56 L47 62 C45 64 47 68 51 67 L58 62 L71 73 C74 75 78 73 78 70 L81 68 Z" fill="#fdba74" stroke="#9a3412" stroke-width="1.9" stroke-linejoin="round"/>
+                        <path d="M56 76 L62 71 M61 79 L67 74 M66 80 L71 75" stroke="#9a3412" stroke-width="1.5" stroke-linecap="round"/>
+                    </g>
+                    <g>
+                        <path d="M13 86 Q60 103 107 86 L104 104 Q60 120 16 104 Z" fill="#dc2626" stroke="#991b1b" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="M14.2 92 Q60 108.5 105.8 92 L104.8 98 Q60 114.5 15.2 98 Z" fill="#ffffff"/>
+                    </g>
+                `
+            },
+            salut: {
+                key: 'salut',
+                marker: '[STICKER:salut]',
+                label: 'Bereit!',
+                pushText: '🫡 Sticker: Bereit!',
+                svgBody: `
+                    <defs>
+                        <radialGradient id="__UID__face" cx="38%" cy="32%" r="68%">
+                            <stop offset="0%" stop-color="#fef9c3"/>
+                            <stop offset="42%" stop-color="#facc15"/>
+                            <stop offset="85%" stop-color="#f59e0b"/>
+                            <stop offset="100%" stop-color="#d97706"/>
+                        </radialGradient>
+                        <linearGradient id="__UID__hat" x1="20%" y1="0%" x2="80%" y2="100%">
+                            <stop offset="0%" stop-color="#22c55e"/>
+                            <stop offset="48%" stop-color="#15803d"/>
+                            <stop offset="100%" stop-color="#0f3f21"/>
+                        </linearGradient>
+                        <linearGradient id="__UID__feather" x1="0%" y1="100%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#78350f"/>
+                            <stop offset="55%" stop-color="#b45309"/>
+                            <stop offset="100%" stop-color="#f59e0b"/>
+                        </linearGradient>
+                        <linearGradient id="__UID__hand" x1="20%" y1="0%" x2="85%" y2="100%">
+                            <stop offset="0%" stop-color="#fef08a"/>
+                            <stop offset="55%" stop-color="#facc15"/>
+                            <stop offset="100%" stop-color="#d97706"/>
+                        </linearGradient>
+                        <radialGradient id="__UID__cheek" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#fb7185" stop-opacity="0.72"/>
+                            <stop offset="100%" stop-color="#fb7185" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <g stroke="#ffffff" stroke-width="6.5" stroke-linejoin="round" stroke-linecap="round" fill="#ffffff">
+                        <circle cx="54" cy="74" r="32"/>
+                        <path d="M18 52 C30 41 78 39 90 50 L82 57 C64 51 38 52 24 58 Z"/>
+                        <path d="M30 47 L37 20 C46 14 64 14 72 22 L78 46 Z"/>
+                        <path d="M72 36 C83 23 93 15 101 10 C96 22 88 32 77 41 Z"/>
+                        <path d="M71 58 L98 48 C103 46 107 50 105 55 L97 72 C94 79 86 81 80 77 L70 67 C67 64 68 59 71 58 Z"/>
+                    </g>
+                    <path d="M72 36 C83 23 93 15 101 10 C96 22 88 32 77 41 Z" fill="url(#__UID__feather)" stroke="#78350f" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M76 34 L96 14" stroke="#fef3c7" stroke-width="1.3" stroke-linecap="round"/>
+                    <circle cx="54" cy="74" r="31.5" fill="url(#__UID__face)" stroke="#b45309" stroke-width="1.9"/>
+                    <ellipse cx="43" cy="60" rx="13" ry="6.5" fill="#ffffff" opacity="0.42" transform="rotate(-22 43 60)"/>
+                    <circle cx="35" cy="79" r="7.5" fill="url(#__UID__cheek)"/>
+                    <circle cx="72" cy="79" r="7.5" fill="url(#__UID__cheek)"/>
+                    <ellipse cx="42" cy="71" rx="3.4" ry="4.4" fill="#291507"/>
+                    <circle cx="40.8" cy="69.3" r="1.35" fill="#ffffff"/>
+                    <ellipse cx="62" cy="71" rx="3.4" ry="4.4" fill="#291507"/>
+                    <circle cx="60.8" cy="69.3" r="1.35" fill="#ffffff"/>
+                    <path d="M42 83 Q53 91 65 82" fill="none" stroke="#451a03" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M30 47 L37 20 C46 14 64 14 72 22 L78 46 Z" fill="url(#__UID__hat)" stroke="#0f3f21" stroke-width="1.9" stroke-linejoin="round"/>
+                    <ellipse cx="49" cy="27" rx="11" ry="4" fill="#86efac" opacity="0.28" transform="rotate(-12 49 27)"/>
+                    <path d="M31.5 43 C47 38 64 38 77 42.5 L78 47.5 C64 43.5 46 44 30 48.5 Z" fill="#dc2626"/>
+                    <path d="M18 52 C30 41 78 39 90 50 C87 55 80 56 73 54 C56 49 38 51 24 58 C19 58 17 55 18 52 Z" fill="url(#__UID__hat)" stroke="#0f3f21" stroke-width="1.9" stroke-linejoin="round"/>
+                    <g transform="translate(56 41)">
+                        <ellipse cx="0" cy="-5.6" rx="2.1" ry="4.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6"/>
+                        <ellipse cx="0" cy="5.6" rx="2.1" ry="4.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6"/>
+                        <ellipse cx="-5.2" cy="-2" rx="4.5" ry="2.1" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(24 -5.2 -2)"/>
+                        <ellipse cx="5.2" cy="-2" rx="4.5" ry="2.1" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(-24 5.2 -2)"/>
+                        <ellipse cx="-4" cy="4.1" rx="4.2" ry="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(-38 -4 4.1)"/>
+                        <ellipse cx="4" cy="4.1" rx="4.2" ry="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(38 4 4.1)"/>
+                        <circle cx="0" cy="0" r="2.8" fill="#facc15" stroke="#d97706" stroke-width="0.8"/>
+                    </g>
+                    <g>
+                        <path d="M71 58 L98 48 C103 46.5 107 50.5 104.5 55.5 L96.5 72.5 C93.5 78.5 85.5 80 80 76 L70.5 66.5 C67.5 63.5 68 59.2 71 58 Z" fill="url(#__UID__hand)" stroke="#92400e" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M77 61 L99 53 M80 66 L97 60 M84 71 L95 67" stroke="#b45309" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M74 59.5 L92 52.8" stroke="#fef9c3" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+                    </g>
+                `
+            },
+            pokal: {
+                key: 'pokal',
+                marker: '[STICKER:pokal]',
+                label: 'Meister!',
+                pushText: '🏆 Sticker: Meister!',
+                svgBody: `
+                    <defs>
+                        <radialGradient id="__UID__face" cx="36%" cy="30%" r="68%">
+                            <stop offset="0%" stop-color="#fef9c3"/>
+                            <stop offset="44%" stop-color="#facc15"/>
+                            <stop offset="86%" stop-color="#f59e0b"/>
+                            <stop offset="100%" stop-color="#d97706"/>
+                        </radialGradient>
+                        <linearGradient id="__UID__hat" x1="15%" y1="0%" x2="85%" y2="100%">
+                            <stop offset="0%" stop-color="#22c55e"/>
+                            <stop offset="50%" stop-color="#15803d"/>
+                            <stop offset="100%" stop-color="#0f3f21"/>
+                        </linearGradient>
+                        <linearGradient id="__UID__gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fef9c3"/>
+                            <stop offset="32%" stop-color="#facc15"/>
+                            <stop offset="70%" stop-color="#eab308"/>
+                            <stop offset="100%" stop-color="#a16207"/>
+                        </linearGradient>
+                        <linearGradient id="__UID__base" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#78350f"/>
+                            <stop offset="50%" stop-color="#b45309"/>
+                            <stop offset="100%" stop-color="#451a03"/>
+                        </linearGradient>
+                        <radialGradient id="__UID__cheek" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#fb7185" stop-opacity="0.7"/>
+                            <stop offset="100%" stop-color="#fb7185" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <g stroke="#ffffff" stroke-width="6.5" stroke-linejoin="round" stroke-linecap="round" fill="#ffffff">
+                        <circle cx="44" cy="76" r="29"/>
+                        <path d="M12 56 C22 46 66 44 76 54 L68 60 C52 55 30 56 18 61 Z"/>
+                        <path d="M22 52 L28 28 C36 23 52 23 60 29 L65 51 Z"/>
+                        <path d="M60 40 C69 29 77 22 83 18 C79 28 73 36 64 44 Z"/>
+                        <path d="M74 34 L106 34 C106 54 100 66 90 68 L90 80 L102 80 L104 92 L76 92 L78 80 L90 80 L90 68 C80 66 74 54 74 34 Z"/>
+                        <path d="M74 40 C65 40 65 55 75 56 M106 40 C115 40 115 55 105 56"/>
+                    </g>
+                    <path d="M60 40 C69 29 77 22 83 18 C79 28 73 36 64 44 Z" fill="#92400e" stroke="#78350f" stroke-width="1.4"/>
+                    <circle cx="44" cy="76" r="28.5" fill="url(#__UID__face)" stroke="#b45309" stroke-width="1.9"/>
+                    <ellipse cx="34" cy="64" rx="11" ry="5.5" fill="#ffffff" opacity="0.42" transform="rotate(-20 34 64)"/>
+                    <circle cx="28" cy="80" r="6.5" fill="url(#__UID__cheek)"/>
+                    <circle cx="60" cy="80" r="6.5" fill="url(#__UID__cheek)"/>
+                    <path d="M30 73 Q34.5 67.5 39 73" fill="none" stroke="#3b1806" stroke-width="2.8" stroke-linecap="round"/>
+                    <path d="M48 73 Q52.5 67.5 57 73" fill="none" stroke="#3b1806" stroke-width="2.8" stroke-linecap="round"/>
+                    <path d="M31 82 Q44 95 57 82 Z" fill="#991b1b" stroke="#451a03" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M34 83 Q44 86.5 54 83" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+                    <path d="M22 52 L28 28 C36 23 52 23 60 29 L65 51 Z" fill="url(#__UID__hat)" stroke="#0f3f21" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M23.5 48 C37 43.5 52 43.5 64 47.5 L65 52 C52 48.5 37 49 22 53 Z" fill="#dc2626"/>
+                    <path d="M12 56 C22 46 66 44 76 54 C73 59 67 59.5 61 58 C46 53.5 30 55.5 18 61 C13 61 11 58.5 12 56 Z" fill="url(#__UID__hat)" stroke="#0f3f21" stroke-width="1.8" stroke-linejoin="round"/>
+                    <g transform="translate(49 46) scale(0.86)">
+                        <ellipse cx="0" cy="-5.5" rx="2.1" ry="4.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6"/>
+                        <ellipse cx="0" cy="5.5" rx="2.1" ry="4.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6"/>
+                        <ellipse cx="-5.2" cy="-2" rx="4.5" ry="2.1" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(24 -5.2 -2)"/>
+                        <ellipse cx="5.2" cy="-2" rx="4.5" ry="2.1" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(-24 5.2 -2)"/>
+                        <ellipse cx="-4" cy="4" rx="4.2" ry="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(-38 -4 4)"/>
+                        <ellipse cx="4" cy="4" rx="4.2" ry="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(38 4 4)"/>
+                        <circle cx="0" cy="0" r="2.7" fill="#facc15" stroke="#d97706" stroke-width="0.8"/>
+                    </g>
+                    <g>
+                        <path d="M75 40 C65 40 65 55 76 56" fill="none" stroke="#d97706" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M105 40 C115 40 115 55 104 56" fill="none" stroke="#d97706" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M74 34 L106 34 C106 54 100 66 90 68 C80 66 74 54 74 34 Z" fill="url(#__UID__gold)" stroke="#92400e" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="M79 38 C79 50 82 59 86 63" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity="0.65"/>
+                        <rect x="86.5" y="67" width="7" height="14" rx="2" fill="url(#__UID__gold)" stroke="#92400e" stroke-width="1.5"/>
+                        <path d="M77 81 L103 81 L105 92 L75 92 Z" fill="url(#__UID__base)" stroke="#451a03" stroke-width="1.6" stroke-linejoin="round"/>
+                        <rect x="82" y="84" width="16" height="5" rx="1.5" fill="#fde047"/>
+                        <circle cx="90" cy="50" r="8.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.4"/>
+                        <circle cx="90" cy="50" r="5.2" fill="#111827"/>
+                        <circle cx="90" cy="50" r="2" fill="#facc15"/>
+                        <path d="M84 72 L75 84 L81 84 L87 75 Z" fill="#dc2626" stroke="#7f1d1d" stroke-width="1"/>
+                        <path d="M96 72 L105 84 L99 84 L93 75 Z" fill="#dc2626" stroke="#7f1d1d" stroke-width="1"/>
+                        <path d="M84 73.5 L77 84 L79.5 84 L86 75 Z" fill="#ffffff"/>
+                        <path d="M96 73.5 L103 84 L100.5 84 L94 75 Z" fill="#ffffff"/>
+                        <circle cx="90" cy="73" r="3.4" fill="#dc2626" stroke="#ffffff" stroke-width="1.2"/>
+                    </g>
+                    <circle cx="71" cy="77" r="7.5" fill="url(#__UID__face)" stroke="#92400e" stroke-width="1.8"/>
+                    <polygon points="90,14 92,19 97,19 93,22 94.5,27 90,24 85.5,27 87,22 83,19 88,19" fill="#fde047" stroke="#b45309" stroke-width="1"/>
+                    <polygon points="108,21 109.2,24 112.5,24 109.8,25.8 110.8,28.8 108,27 105.2,28.8 106.2,25.8 103.5,24 106.8,24" fill="#fde047" stroke="#b45309" stroke-width="0.9"/>
+                `
+            },
+            schank: {
+                key: 'schank',
+                marker: '[STICKER:schank]',
+                label: 'Schützenhaus!',
+                pushText: '🍺 Sticker: Schützenhaus!',
+                svgBody: `
+                    <defs>
+                        <radialGradient id="__UID__face" cx="36%" cy="30%" r="68%">
+                            <stop offset="0%" stop-color="#fef9c3"/>
+                            <stop offset="44%" stop-color="#facc15"/>
+                            <stop offset="86%" stop-color="#f59e0b"/>
+                            <stop offset="100%" stop-color="#d97706"/>
+                        </radialGradient>
+                        <linearGradient id="__UID__hat" x1="15%" y1="0%" x2="85%" y2="100%">
+                            <stop offset="0%" stop-color="#22c55e"/>
+                            <stop offset="50%" stop-color="#15803d"/>
+                            <stop offset="100%" stop-color="#0f3f21"/>
+                        </linearGradient>
+                        <linearGradient id="__UID__beer" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fde047"/>
+                            <stop offset="45%" stop-color="#f59e0b"/>
+                            <stop offset="100%" stop-color="#b45309"/>
+                        </linearGradient>
+                        <radialGradient id="__UID__cheek" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#fb7185" stop-opacity="0.72"/>
+                            <stop offset="100%" stop-color="#fb7185" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <g stroke="#ffffff" stroke-width="6.5" stroke-linejoin="round" stroke-linecap="round" fill="#ffffff">
+                        <circle cx="43" cy="76" r="29"/>
+                        <path d="M12 56 C22 46 66 44 76 54 L68 60 C52 55 30 56 18 61 Z"/>
+                        <path d="M22 52 L28 28 C36 23 52 23 60 29 L65 51 Z"/>
+                        <path d="M60 40 C69 29 77 22 83 18 C79 28 73 36 64 44 Z"/>
+                        <g transform="rotate(8 90 66)">
+                            <path d="M104 54 C115 54 115 80 103 80"/>
+                            <rect x="72" y="42" width="33" height="50" rx="6"/>
+                            <path d="M70 44 C68 34 78 29 84 34 C88 26 99 27 101 35 C108 33 111 42 105 46 Z"/>
+                        </g>
+                    </g>
+                    <path d="M60 40 C69 29 77 22 83 18 C79 28 73 36 64 44 Z" fill="#92400e" stroke="#78350f" stroke-width="1.4"/>
+                    <circle cx="43" cy="76" r="28.5" fill="url(#__UID__face)" stroke="#b45309" stroke-width="1.9"/>
+                    <ellipse cx="33" cy="64" rx="11" ry="5.5" fill="#ffffff" opacity="0.42" transform="rotate(-20 33 64)"/>
+                    <circle cx="27" cy="80" r="6.5" fill="url(#__UID__cheek)"/>
+                    <circle cx="59" cy="80" r="6.5" fill="url(#__UID__cheek)"/>
+                    <ellipse cx="34" cy="72" rx="3.2" ry="4.1" fill="#291507"/>
+                    <circle cx="32.9" cy="70.5" r="1.25" fill="#ffffff"/>
+                    <path d="M47 72 Q52 67 57 72" fill="none" stroke="#3b1806" stroke-width="2.8" stroke-linecap="round"/>
+                    <path d="M31 83 Q43 94 56 82" fill="none" stroke="#451a03" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M22 52 L28 28 C36 23 52 23 60 29 L65 51 Z" fill="url(#__UID__hat)" stroke="#0f3f21" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M23.5 48 C37 43.5 52 43.5 64 47.5 L65 52 C52 48.5 37 49 22 53 Z" fill="#dc2626"/>
+                    <path d="M12 56 C22 46 66 44 76 54 C73 59 67 59.5 61 58 C46 53.5 30 55.5 18 61 C13 61 11 58.5 12 56 Z" fill="url(#__UID__hat)" stroke="#0f3f21" stroke-width="1.8" stroke-linejoin="round"/>
+                    <g transform="translate(48 46) scale(0.86)">
+                        <ellipse cx="0" cy="-5.5" rx="2.1" ry="4.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6"/>
+                        <ellipse cx="0" cy="5.5" rx="2.1" ry="4.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6"/>
+                        <ellipse cx="-5.2" cy="-2" rx="4.5" ry="2.1" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(24 -5.2 -2)"/>
+                        <ellipse cx="5.2" cy="-2" rx="4.5" ry="2.1" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(-24 5.2 -2)"/>
+                        <ellipse cx="-4" cy="4" rx="4.2" ry="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(-38 -4 4)"/>
+                        <ellipse cx="4" cy="4" rx="4.2" ry="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(38 4 4)"/>
+                        <circle cx="0" cy="0" r="2.7" fill="#facc15" stroke="#d97706" stroke-width="0.8"/>
+                    </g>
+                    <g transform="rotate(8 90 66)">
+                        <path d="M103 55 C113 55 113 79 102 79" fill="none" stroke="#64748b" stroke-width="5.8" stroke-linecap="round"/>
+                        <path d="M103 55 C113 55 113 79 102 79" fill="none" stroke="#f8fafc" stroke-width="2.6" stroke-linecap="round"/>
+                        <rect x="72" y="42" width="33" height="50" rx="6" fill="url(#__UID__beer)" stroke="#64748b" stroke-width="2"/>
+                        <rect x="72" y="83" width="33" height="9" rx="3.5" fill="#e2e8f0" stroke="#64748b" stroke-width="1.6"/>
+                        <rect x="76.5" y="48" width="5" height="31" rx="2.5" fill="#fef9c3" opacity="0.65"/>
+                        <path d="M70 44 C68 34 78 29 84 34 C88 26 99 27 101 35 C107 33 111 42 104 46 L101 52 C98 54 96 49 95 46 L73 46 Z" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.6" stroke-linejoin="round"/>
+                        <g transform="translate(88.5 64) scale(0.9)">
+                            <ellipse cx="0" cy="-6.5" rx="2.4" ry="5" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8"/>
+                            <ellipse cx="0" cy="6.5" rx="2.4" ry="5" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8"/>
+                            <ellipse cx="-6" cy="-2.2" rx="5" ry="2.4" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(24 -6 -2.2)"/>
+                            <ellipse cx="6" cy="-2.2" rx="5" ry="2.4" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(-24 6 -2.2)"/>
+                            <ellipse cx="-4.6" cy="4.6" rx="4.6" ry="2.2" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(-38 -4.6 4.6)"/>
+                            <ellipse cx="4.6" cy="4.6" rx="4.6" ry="2.2" fill="#ffffff" stroke="#94a3b8" stroke-width="0.8" transform="rotate(38 4.6 4.6)"/>
+                            <circle cx="0" cy="0" r="3.1" fill="#facc15" stroke="#d97706" stroke-width="0.9"/>
+                        </g>
+                    </g>
+                    <g stroke="#f59e0b" stroke-width="2.4" stroke-linecap="round">
+                        <line x1="94" y1="12" x2="94" y2="21"/>
+                        <line x1="83" y1="16" x2="88" y2="23"/>
+                        <line x1="105" y1="17" x2="100" y2="23"/>
+                    </g>
+                    <polygon points="75,16 76.5,19.5 80,19.5 77.2,21.5 78.2,25 75,23 71.8,25 72.8,21.5 70,19.5 73.5,19.5" fill="#fde047" stroke="#d97706" stroke-width="0.8"/>
+                `
+            },
+            musik: {
+                key: 'musik',
+                marker: '[STICKER:musik]',
+                label: 'Ausrückung!',
+                pushText: '🎺 Sticker: Ausrückung!',
+                svgBody: `
+                    <defs>
+                        <radialGradient id="__UID__face" cx="36%" cy="30%" r="68%">
+                            <stop offset="0%" stop-color="#fef9c3"/>
+                            <stop offset="44%" stop-color="#facc15"/>
+                            <stop offset="86%" stop-color="#f59e0b"/>
+                            <stop offset="100%" stop-color="#d97706"/>
+                        </radialGradient>
+                        <linearGradient id="__UID__hat" x1="15%" y1="0%" x2="85%" y2="100%">
+                            <stop offset="0%" stop-color="#22c55e"/>
+                            <stop offset="50%" stop-color="#15803d"/>
+                            <stop offset="100%" stop-color="#0f3f21"/>
+                        </linearGradient>
+                        <linearGradient id="__UID__brass" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fef9c3"/>
+                            <stop offset="40%" stop-color="#facc15"/>
+                            <stop offset="80%" stop-color="#d97706"/>
+                            <stop offset="100%" stop-color="#92400e"/>
+                        </linearGradient>
+                        <radialGradient id="__UID__cheek" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#fb7185" stop-opacity="0.72"/>
+                            <stop offset="100%" stop-color="#fb7185" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <g stroke="#ffffff" stroke-width="6.5" stroke-linejoin="round" stroke-linecap="round" fill="#ffffff">
+                        <circle cx="43" cy="76" r="29"/>
+                        <path d="M12 56 C22 46 66 44 76 54 L68 60 C52 55 30 56 18 61 Z"/>
+                        <path d="M22 52 L28 28 C36 23 52 23 60 29 L65 51 Z"/>
+                        <path d="M60 40 C69 29 77 22 83 18 C79 28 73 36 64 44 Z"/>
+                        <path d="M55 83 L98 63 L111 49 L114 78 L99 71 L58 88 Z"/>
+                        <circle cx="88" cy="24" r="7"/>
+                        <circle cx="105" cy="30" r="6"/>
+                    </g>
+                    <path d="M60 40 C69 29 77 22 83 18 C79 28 73 36 64 44 Z" fill="#92400e" stroke="#78350f" stroke-width="1.4"/>
+                    <circle cx="43" cy="76" r="28.5" fill="url(#__UID__face)" stroke="#b45309" stroke-width="1.9"/>
+                    <ellipse cx="33" cy="64" rx="11" ry="5.5" fill="#ffffff" opacity="0.42" transform="rotate(-20 33 64)"/>
+                    <circle cx="27" cy="80" r="6.5" fill="url(#__UID__cheek)"/>
+                    <circle cx="57" cy="80" r="6.5" fill="url(#__UID__cheek)"/>
+                    <path d="M29 72 Q33.5 66.5 38 72" fill="none" stroke="#3b1806" stroke-width="2.8" stroke-linecap="round"/>
+                    <path d="M47 72 Q51.5 66.5 56 72" fill="none" stroke="#3b1806" stroke-width="2.8" stroke-linecap="round"/>
+                    <path d="M31 82 Q43 94 55 82 Z" fill="#991b1b" stroke="#451a03" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M34 83 Q43 86 52 83" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"/>
+                    <path d="M22 52 L28 28 C36 23 52 23 60 29 L65 51 Z" fill="url(#__UID__hat)" stroke="#0f3f21" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M23.5 48 C37 43.5 52 43.5 64 47.5 L65 52 C52 48.5 37 49 22 53 Z" fill="#dc2626"/>
+                    <path d="M12 56 C22 46 66 44 76 54 C73 59 67 59.5 61 58 C46 53.5 30 55.5 18 61 C13 61 11 58.5 12 56 Z" fill="url(#__UID__hat)" stroke="#0f3f21" stroke-width="1.8" stroke-linejoin="round"/>
+                    <g transform="translate(48 46) scale(0.86)">
+                        <ellipse cx="0" cy="-5.5" rx="2.1" ry="4.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6"/>
+                        <ellipse cx="0" cy="5.5" rx="2.1" ry="4.5" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6"/>
+                        <ellipse cx="-5.2" cy="-2" rx="4.5" ry="2.1" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(24 -5.2 -2)"/>
+                        <ellipse cx="5.2" cy="-2" rx="4.5" ry="2.1" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(-24 5.2 -2)"/>
+                        <ellipse cx="-4" cy="4" rx="4.2" ry="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(-38 -4 4)"/>
+                        <ellipse cx="4" cy="4" rx="4.2" ry="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="0.6" transform="rotate(38 4 4)"/>
+                        <circle cx="0" cy="0" r="2.7" fill="#facc15" stroke="#d97706" stroke-width="0.8"/>
+                    </g>
+                    <g>
+                        <path d="M68 85 C72 91 84 87 89 81" fill="none" stroke="#b45309" stroke-width="3.4" stroke-linecap="round"/>
+                        <path d="M55 83 L95 65 C101 62 106 56 109 49 L114 77 C107 74 101 72 95 73 L57 88 Z" fill="url(#__UID__brass)" stroke="#92400e" stroke-width="1.9" stroke-linejoin="round"/>
+                        <ellipse cx="111.5" cy="63" rx="3.4" ry="13.5" fill="#78350f" stroke="#92400e" stroke-width="1.6" transform="rotate(-11 111.5 63)"/>
+                        <line x1="63" y1="81" x2="96" y2="66" stroke="#fef9c3" stroke-width="1.8" stroke-linecap="round" opacity="0.78"/>
+                        <line x1="74" y1="73" x2="72" y2="67" stroke="#b45309" stroke-width="2.6" stroke-linecap="round"/>
+                        <line x1="80" y1="70" x2="78" y2="64" stroke="#b45309" stroke-width="2.6" stroke-linecap="round"/>
+                        <line x1="86" y1="67" x2="84" y2="61" stroke="#b45309" stroke-width="2.6" stroke-linecap="round"/>
+                        <circle cx="72" cy="66.5" r="2" fill="#fef08a" stroke="#92400e" stroke-width="0.9"/>
+                        <circle cx="78" cy="63.5" r="2" fill="#fef08a" stroke="#92400e" stroke-width="0.9"/>
+                        <circle cx="84" cy="60.5" r="2" fill="#fef08a" stroke="#92400e" stroke-width="0.9"/>
+                    </g>
+                    <g fill="#15803d" stroke="#ffffff" stroke-width="1.2" paint-order="stroke">
+                        <ellipse cx="83" cy="30" rx="4.2" ry="3.2" transform="rotate(-18 83 30)"/>
+                        <path d="M86.5 29 L86.5 14 L96 12 L96 25" fill="none" stroke="#15803d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <ellipse cx="92.5" cy="26.5" rx="4.2" ry="3.2" transform="rotate(-18 92.5 26.5)"/>
+                    </g>
+                    <g fill="#dc2626" stroke="#ffffff" stroke-width="1.2" paint-order="stroke">
+                        <ellipse cx="104" cy="37" rx="3.8" ry="2.9" transform="rotate(-18 104 37)"/>
+                        <path d="M107.2 36 L107.2 22 C111 23 113 26 112 29" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+                `
+            }
+        };
+
+        const CLUB_STICKER_ORDER = ['schuetze', 'prost', 'gutschuss', 'kameradschaft', 'salut', 'pokal', 'schank', 'musik'];
+        let clubStickerSvgUidCounter = 0;
+
+        function getClubStickerByMessageText(text) {
+            const trimmed = String(text || '').trim();
+            if (!trimmed.startsWith('[STICKER:') || !trimmed.endsWith(']')) return null;
+            const key = trimmed.slice(9, -1);
+            return Object.prototype.hasOwnProperty.call(CLUB_STICKERS, key) ? CLUB_STICKERS[key] : null;
+        }
+
+        function buildClubStickerSvg(sticker, sizePx) {
+            if (!sticker || !sticker.svgBody) return '';
+            const size = Number(sizePx) || 112;
+            const uid = 'cs' + (++clubStickerSvgUidCounter) + '_';
+            const body = sticker.svgBody.includes('__UID__')
+                ? sticker.svgBody.replace(/__UID__/g, uid)
+                : sticker.svgBody;
+            return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="${size}" height="${size}" shape-rendering="geometricPrecision" class="club-sticker-svg" role="img" aria-label="${escapeHtml(sticker.label || 'Vereins-Sticker')}" style="width: ${size}px; height: ${size}px; display: block; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.22));">${body}</svg>`;
+        }
+
+        function renderClubStickerBar() {
+            const barEl = document.getElementById('chat-sticker-bar');
+            if (!barEl || barEl.dataset.rendered === 'true') return;
+            barEl.innerHTML = CLUB_STICKER_ORDER.map(key => {
+                const st = CLUB_STICKERS[key];
+                if (!st) return '';
+                return `<button type="button" class="chat-sticker-btn" data-sticker-key="${escapeHtml(st.key)}" onclick="sendClubSticker(this.dataset.stickerKey)" title="Sticker senden: ${escapeHtml(st.label)}" aria-label="Sticker senden: ${escapeHtml(st.label)}">${buildClubStickerSvg(st, 52)}</button>`;
+            }).join('');
+            barEl.dataset.rendered = 'true';
+        }
+
+        async function sendClubSticker(stickerKey) {
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            const key = String(stickerKey || '').trim();
+            if (!Object.prototype.hasOwnProperty.call(CLUB_STICKERS, key)) return;
+            const sticker = CLUB_STICKERS[key];
+            closeChatAttachMenu();
+            await sendClubChatMessage(null, { overrideText: sticker.marker });
+        }
+
+        function renderHighResEmojis(el) {
+            try {
+                if (el && typeof window !== 'undefined' && window.twemoji && typeof window.twemoji.parse === 'function') {
+                    window.twemoji.parse(el, {
+                        folder: 'svg',
+                        ext: '.svg',
+                        base: 'https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/'
+                    });
+                    if (typeof el.querySelectorAll === 'function') {
+                        el.querySelectorAll('img.emoji').forEach(img => {
+                            if (img.dataset && img.dataset.fallbackBound === 'true') return;
+                            if (img.dataset) img.dataset.fallbackBound = 'true';
+                            if (typeof img.addEventListener === 'function') {
+                                img.addEventListener('error', () => {
+                                    try {
+                                        if (img.parentNode && img.alt) {
+                                            img.parentNode.replaceChild(document.createTextNode(img.alt), img);
+                                        }
+                                    } catch (err) {}
+                                }, { once: true });
+                            }
+                        });
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function isSoloEmojiChatText(text) {
+            const trimmed = String(text || '').trim();
+            if (!trimmed || trimmed.length > 32) return false;
+            const withoutSpaces = trimmed.replace(/\s+/g, '');
+            if (!withoutSpaces) return false;
+            try {
+                if (/[0-9a-zA-ZäöüÄÖÜß.,!?;:()\[\]{}"'\/\\\-_+=<>@#$%^&*|~`]/.test(withoutSpaces)) {
+                    return false;
+                }
+                if (typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function') {
+                    const segs = Array.from(new Intl.Segmenter('de', { granularity: 'grapheme' }).segment(withoutSpaces)).map(s => s.segment);
+                    if (segs.length < 1 || segs.length > 3) return false;
+                    return segs.every(g => /\p{Extended_Pictographic}|\p{Regional_Indicator}/u.test(g));
+                }
+                const stripped = withoutSpaces.replace(/(?:\p{Extended_Pictographic}|\p{Regional_Indicator}|\uFE0F|\u200D|\u20E3|\p{Emoji_Modifier})/gu, '');
+                if (stripped.length > 0) return false;
+                const matches = withoutSpaces.match(/(?:\p{Regional_Indicator}{2}|\p{Extended_Pictographic}(?:\uFE0F|\p{Emoji_Modifier})?(?:\u200D\p{Extended_Pictographic}(?:\uFE0F|\p{Emoji_Modifier})?)*)/gu) || [];
+                return matches.length >= 1 && matches.length <= 3;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function toggleChatEmojiPanel(event) {
+            if (event) event.stopPropagation();
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            renderClubStickerBar();
+            closeChatReactionPicker();
+            closeChatAttachOnly();
+            const panel = document.getElementById('chat-emoji-panel');
+            const btn = document.getElementById('chat-emoji-btn');
+            if (!panel) return;
+            const willOpen = !panel.classList.contains('open');
+            panel.classList.toggle('open', willOpen);
+            panel.setAttribute('aria-hidden', willOpen ? 'false' : 'true');
+            if (btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+            if (willOpen) {
+                renderHighResEmojis(panel);
+                const inputEl = document.getElementById('chat-message-input');
+                if (inputEl && document.activeElement === inputEl) {
+                    try { inputEl.blur(); } catch (e) {}
+                }
+                const listEl = document.getElementById('chat-messages-list');
+                if (listEl) listEl.scrollTop = listEl.scrollHeight;
+            }
+        }
+
+        function insertChatEmoji(emoji) {
+            const inputEl = document.getElementById('chat-message-input');
+            if (!inputEl || !emoji) return;
+            const currentVal = String(inputEl.value || '');
+            const maxLen = Number(inputEl.getAttribute('maxlength')) || 500;
+            const start = typeof inputEl.selectionStart === 'number' ? inputEl.selectionStart : currentVal.length;
+            const end = typeof inputEl.selectionEnd === 'number' ? inputEl.selectionEnd : currentVal.length;
+            const nextVal = (currentVal.slice(0, start) + emoji + currentVal.slice(end)).slice(0, maxLen);
+            inputEl.value = nextVal;
+            const nextPos = Math.min(nextVal.length, start + emoji.length);
+            isInsertingChatEmoji = true;
+            try {
+                inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+            } catch (e) {}
+            updateChatActionButtonUI();
+            try {
+                inputEl.focus();
+                if (typeof inputEl.setSelectionRange === 'function') {
+                    inputEl.setSelectionRange(nextPos, nextPos);
+                }
+            } catch (e) {}
+            isInsertingChatEmoji = false;
         }
 
         function toggleChatAttachMenu(event) {
             if (event) event.stopPropagation();
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
-            const menu = document.getElementById('chat-attach-menu');
+            closeChatReactionPicker();
+            closeChatEmojiPanel();
+            const panel = document.getElementById('chat-attach-panel');
             const btn = document.getElementById('chat-attach-btn');
-            if (!menu) return;
-            const willOpen = !menu.classList.contains('open');
-            menu.classList.toggle('open', willOpen);
+            if (!panel) return;
+            const willOpen = !panel.classList.contains('open');
+            panel.classList.toggle('open', willOpen);
+            panel.setAttribute('aria-hidden', willOpen ? 'false' : 'true');
             if (btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+            if (willOpen) {
+                const inputEl = document.getElementById('chat-message-input');
+                if (inputEl && document.activeElement === inputEl) {
+                    try { inputEl.blur(); } catch (e) {}
+                }
+                const listEl = document.getElementById('chat-messages-list');
+                if (listEl) listEl.scrollTop = listEl.scrollHeight;
+            }
         }
 
         function updateChatActionButtonUI() {
@@ -11453,6 +12495,7 @@
 
         function closeChatDrawer() {
             isChatDrawerOpen = false;
+            closeChatReactionPicker();
             closeChatAttachMenu();
             document.body.classList.remove('chat-drawer-open');
             if (savedBodyOverflowBeforeChat !== null) {
@@ -11476,30 +12519,230 @@
             syncChatDrawerWithViewport();
         }
 
-        function renderClubChatMessages() {
+        const CHAT_REACTION_EMOJIS = ['👍', '❤️', '😂', '🍻', '🎯'];
+        let openChatReactionPickerMsgId = '';
+
+        function getChatMessageDateKeyAndLabel(msg, nowDate) {
+            if (!msg) return null;
+            const serverMs = getFirestoreTimestampMillis(msg.createdAt);
+            const ms = serverMs !== null ? serverMs : getChatMessageTimestampMs(msg);
+            if (!ms || isNaN(ms)) return null;
+            const d = new Date(ms);
+            if (isNaN(d.getTime())) return null;
+
+            const y = d.getFullYear();
+            const m = d.getMonth();
+            const day = d.getDate();
+            const key = `${y}-${String(m + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            const now = (nowDate && typeof nowDate.getTime === 'function' && !isNaN(nowDate.getTime())) ? nowDate : new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+
+            let label = `${String(day).padStart(2, '0')}.${String(m + 1).padStart(2, '0')}.${y}`;
+            if (y === today.getFullYear() && m === today.getMonth() && day === today.getDate()) {
+                label = 'Heute';
+            } else if (y === yesterday.getFullYear() && m === yesterday.getMonth() && day === yesterday.getDate()) {
+                label = 'Gestern';
+            }
+            return { key, label };
+        }
+
+        function normalizeChatReactions(rawReactions) {
+            const normalized = {};
+            if (!rawReactions || typeof rawReactions !== 'object' || Array.isArray(rawReactions)) {
+                return normalized;
+            }
+            Object.keys(rawReactions).forEach(emoji => {
+                const cleanEmoji = String(emoji || '').trim();
+                if (!cleanEmoji) return;
+                const rawList = rawReactions[emoji];
+                if (!Array.isArray(rawList)) return;
+                const uniqueUsers = [];
+                rawList.forEach(name => {
+                    const cleanName = String(name || '').trim();
+                    if (cleanName && !uniqueUsers.includes(cleanName)) {
+                        uniqueUsers.push(cleanName);
+                    }
+                });
+                if (uniqueUsers.length > 0) {
+                    normalized[cleanEmoji] = uniqueUsers;
+                }
+            });
+            return normalized;
+        }
+
+        function closeChatReactionPicker() {
+            if (!openChatReactionPickerMsgId) return;
+            openChatReactionPickerMsgId = '';
+            const listEl = document.getElementById('chat-messages-list');
+            if (!listEl) return;
+            listEl.querySelectorAll('.chat-reaction-picker').forEach(el => el.remove());
+            listEl.querySelectorAll('.chat-msg-react-trigger.active').forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-expanded', 'false');
+            });
+        }
+
+        function buildChatReactionPickerHtml(safeDocId, reactionsMap, ownName, flipBelow) {
+            const buttonsHtml = CHAT_REACTION_EMOJIS.map(emoji => {
+                const users = Array.isArray(reactionsMap[emoji]) ? reactionsMap[emoji] : [];
+                const isSelected = !!(ownName && users.includes(ownName));
+                return `<button type="button" class="chat-reaction-picker-btn${isSelected ? ' selected' : ''}" data-doc-id="${safeDocId}" data-emoji="${escapeHtml(emoji)}" onclick="toggleChatReaction(event, this.dataset.docId, this.dataset.emoji)" aria-label="Mit ${escapeHtml(emoji)} reagieren" aria-pressed="${isSelected ? 'true' : 'false'}">${escapeHtml(emoji)}</button>`;
+            }).join('');
+            return `<div class="chat-reaction-picker${flipBelow ? ' flip-below' : ''}" role="toolbar" aria-label="Emoji-Reaktion auswählen">${buttonsHtml}</div>`;
+        }
+
+        function toggleChatReactionPicker(event, docId) {
+            if (event) event.stopPropagation();
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            const targetId = String(docId || '').trim();
+            if (!targetId) return;
+
+            const wasSame = openChatReactionPickerMsgId === targetId;
+            closeChatReactionPicker();
+            if (wasSame) return;
+
+            const listEl = document.getElementById('chat-messages-list');
+            if (!listEl) return;
+            const msg = clubChatMessages.find(m => m.id === targetId);
+            if (!msg) return;
+
+            const itemEl = Array.from(listEl.querySelectorAll('.chat-msg-item')).find(el => el.dataset.msgId === targetId);
+            if (!itemEl) return;
+
+            openChatReactionPickerMsgId = targetId;
+            const triggerBtn = itemEl.querySelector('.chat-msg-react-trigger');
+            if (triggerBtn) {
+                triggerBtn.classList.add('active');
+                triggerBtn.setAttribute('aria-expanded', 'true');
+            }
+
+            const ownName = getSavedClubMemberName();
+            const reactionsMap = normalizeChatReactions(msg.reactions);
+            const relativeTop = itemEl.offsetTop - listEl.scrollTop;
+            const flipBelow = relativeTop < 56;
+            itemEl.insertAdjacentHTML('beforeend', buildChatReactionPickerHtml(escapeHtml(targetId), reactionsMap, ownName, flipBelow));
+            const pickerEl = itemEl.querySelector('.chat-reaction-picker');
+            if (pickerEl) renderHighResEmojis(pickerEl);
+        }
+
+        async function toggleChatReaction(event, docId, emoji) {
+            if (event) event.stopPropagation();
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+
+            const targetId = String(docId || '').trim();
+            const chosenEmoji = String(emoji || '').trim();
+            closeChatReactionPicker();
+            if (!targetId || !chosenEmoji) return;
+
+            const memberName = getSavedClubMemberName();
+            if (!memberName) {
+                openMemberNameSetupModal(true);
+                return;
+            }
+
+            const computeNextReactions = (rawReactions) => {
+                const next = normalizeChatReactions(rawReactions);
+                const list = Array.isArray(next[chosenEmoji]) ? [...next[chosenEmoji]] : [];
+                const idx = list.indexOf(memberName);
+                if (idx >= 0) {
+                    list.splice(idx, 1);
+                } else {
+                    list.push(memberName);
+                }
+                if (list.length > 0) {
+                    next[chosenEmoji] = list;
+                } else {
+                    delete next[chosenEmoji];
+                }
+                return next;
+            };
+
+            const localMsg = clubChatMessages.find(m => m.id === targetId);
+            const previousReactions = localMsg ? normalizeChatReactions(localMsg.reactions) : null;
+            if (localMsg) {
+                localMsg.reactions = computeNextReactions(localMsg.reactions);
+                renderClubChatMessages({ preserveScroll: true });
+            }
+
+            try {
+                const docRef = db.collection("club_chat").doc(targetId);
+                if (typeof db.runTransaction === 'function') {
+                    await db.runTransaction(async (tx) => {
+                        const snap = await tx.get(docRef);
+                        if (!snap || !snap.exists) return;
+                        const data = snap.data() || {};
+                        const nextReactions = computeNextReactions(data.reactions);
+                        tx.update(docRef, { reactions: nextReactions });
+                    });
+                } else {
+                    const snap = await docRef.get();
+                    if (!snap || !snap.exists) return;
+                    const data = snap.data() || {};
+                    const nextReactions = computeNextReactions(data.reactions);
+                    await docRef.update({ reactions: nextReactions });
+                }
+            } catch (err) {
+                if (localMsg && previousReactions !== null) {
+                    localMsg.reactions = previousReactions;
+                    renderClubChatMessages({ preserveScroll: true });
+                }
+                console.warn("Fehler beim Speichern der Chat-Reaktion:", err);
+            }
+        }
+
+        function renderClubChatMessages(options) {
             const listEl = document.getElementById('chat-messages-list');
             if (!listEl) return;
 
+            const preserveScroll = !!(options && options.preserveScroll);
+            const prevScrollTop = listEl.scrollTop;
             const ownName = getSavedClubMemberName();
 
             if (!clubChatMessages || clubChatMessages.length === 0) {
+                openChatReactionPickerMsgId = '';
                 listEl.innerHTML = '<p style="font-size: 0.84em; color: #64748b; text-align: center; margin-top: 24px;">Noch keine Nachrichten im Vereins-Chat. Schreib die erste Nachricht!</p>';
                 return;
             }
 
+            if (openChatReactionPickerMsgId && !clubChatMessages.some(m => m.id === openChatReactionPickerMsgId)) {
+                openChatReactionPickerMsgId = '';
+            }
+
             const canModerateChat = isObmannSimonLoggedIn();
+            const nowForDates = new Date();
+            let lastDateKey = '';
             let html = '';
-            clubChatMessages.forEach(msg => {
+
+            clubChatMessages.forEach((msg, index) => {
+                const dateInfo = getChatMessageDateKeyAndLabel(msg, nowForDates);
+                if (dateInfo && dateInfo.key !== lastDateKey) {
+                    lastDateKey = dateInfo.key;
+                    html += `
+                        <div class="chat-date-divider-wrap">
+                            <span class="chat-date-divider-pill">${escapeHtml(dateInfo.label)}</span>
+                        </div>
+                    `;
+                }
+
                 const sender = String(msg.sender || 'Mitglied').trim();
                 const isOwn = !!(ownName && sender === ownName);
                 const roleInfo = getChatBoardRoleInfo(sender);
                 const isObmann = roleInfo.isObmann;
                 const timeStr = formatChatTime(msg);
                 const rawMsgText = String(msg.text || '');
-                const safeText = rawMsgText ? escapeHtml(rawMsgText).replace(/\r?\n/g, '<br>') : '';
+                const matchedSticker = getClubStickerByMessageText(rawMsgText);
+                const safeText = (!matchedSticker && rawMsgText) ? escapeHtml(rawMsgText).replace(/\r?\n/g, '<br>') : '';
+                const stickerHtml = matchedSticker
+                    ? `<div class="chat-msg-sticker-wrap" title="${escapeHtml(matchedSticker.label)}">${buildClubStickerSvg(matchedSticker, 112)}</div>`
+                    : '';
                 const safeDocId = escapeHtml(msg.id || '');
                 const hasSafeImage = typeof msg.imageData === 'string' && msg.imageData.startsWith('data:image/');
                 const hasSafeAudio = typeof msg.audioData === 'string' && msg.audioData.startsWith('data:audio/');
+                const isSoloEmoji = (!matchedSticker && !hasSafeImage && !hasSafeAudio && rawMsgText) ? isSoloEmojiChatText(rawMsgText) : false;
+                const reactionsMap = normalizeChatReactions(msg.reactions);
+                const isPickerOpen = !!(openChatReactionPickerMsgId && openChatReactionPickerMsgId === msg.id);
 
                 const pinBtnHtml = canModerateChat
                     ? `<button type="button" class="chat-msg-pin-btn" data-doc-id="${safeDocId}" onclick="togglePinChatMessage(this.dataset.docId)" title="Nachricht anpinnen / lösen">📌</button>`
@@ -11512,8 +12755,8 @@
                     : '';
 
                 const nameStyle = isObmann
-                    ? 'color: #991b1b; font-size: 1.05rem; font-weight: 900; line-height: 1.2;'
-                    : `color: ${isOwn ? '#14532d' : '#0f172a'}; font-size: 1.05rem; font-weight: 900; line-height: 1.2;`;
+                    ? 'color: #991b1b;'
+                    : `color: ${isOwn ? '#14532d' : '#0f172a'};`;
 
                 const bubbleClass = `chat-msg-bubble ${isOwn ? 'own' : 'other'}${isObmann ? ' obmann' : ''}`;
                 const bubbleStyleAttr = isObmann
@@ -11528,24 +12771,57 @@
                     ? `<div style="margin-top: 6px;"><div style="font-size: 0.78em; font-weight: 800; color: #334155;">🎙️ Sprachnachricht (${escapeHtml(msg.audioDuration || '')})</div><audio controls preload="metadata" src="${escapeHtml(msg.audioData)}" style="width: 100%; max-width: 250px; height: 36px; margin-top: 4px;"></audio></div>`
                     : '';
 
+                const reactTriggerHtml = safeDocId
+                    ? `<button type="button" class="chat-msg-react-trigger${isPickerOpen ? ' active' : ''}" data-doc-id="${safeDocId}" onclick="toggleChatReactionPicker(event, this.dataset.docId)" title="Mit Emoji reagieren" aria-label="Mit Emoji reagieren" aria-expanded="${isPickerOpen ? 'true' : 'false'}">😊+</button>`
+                    : '<span></span>';
+
+                const orderedReactionEmojis = [
+                    ...CHAT_REACTION_EMOJIS.filter(e => Array.isArray(reactionsMap[e]) && reactionsMap[e].length > 0),
+                    ...Object.keys(reactionsMap).filter(e => !CHAT_REACTION_EMOJIS.includes(e) && Array.isArray(reactionsMap[e]) && reactionsMap[e].length > 0)
+                ];
+
+                const reactionPillsHtml = orderedReactionEmojis.length > 0
+                    ? `<div class="chat-msg-reactions">${orderedReactionEmojis.map(emoji => {
+                        const users = reactionsMap[emoji];
+                        const hasReacted = !!(ownName && users.includes(ownName));
+                        const titleText = users.join(', ');
+                        return `<button type="button" class="chat-reaction-pill${hasReacted ? ' mine' : ''}" data-doc-id="${safeDocId}" data-emoji="${escapeHtml(emoji)}" onclick="toggleChatReaction(event, this.dataset.docId, this.dataset.emoji)" title="${escapeHtml(titleText)}" aria-label="${escapeHtml(emoji)} ${users.length}">${escapeHtml(emoji)} <span>${users.length}</span></button>`;
+                    }).join('')}</div>`
+                    : '';
+
+                const pickerHtml = isPickerOpen
+                    ? buildChatReactionPickerHtml(safeDocId, reactionsMap, ownName, index === 0)
+                    : '';
+
                 html += `
-                    <div class="${bubbleClass}"${bubbleStyleAttr}>
-                        <div class="chat-msg-meta">
-                            <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 2px 0;">
-                                <strong style="${nameStyle}">${escapeHtml(sender)}</strong>${roleInfo.badgesHtml}
-                                ${timeStr ? `<span style="color: #64748b; margin-left: 6px; font-weight: 600;">${escapeHtml(timeStr)}</span>` : ''}
+                    <div class="chat-msg-item ${isOwn ? 'own' : 'other'}" data-msg-id="${safeDocId}">
+                        <div class="${bubbleClass}"${bubbleStyleAttr}>
+                            <div class="chat-msg-meta">
+                                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 2px 0;">
+                                    <strong class="chat-msg-sender" style="${nameStyle}">${escapeHtml(sender)}</strong>${roleInfo.badgesHtml}
+                                </div>
+                                ${adminActionsHtml}
                             </div>
-                            ${adminActionsHtml}
+                            ${stickerHtml}
+                            ${safeText ? `<div class="chat-msg-text${isSoloEmoji ? ' emoji-only' : ''}">${safeText}</div>` : ''}
+                            ${imageHtml}
+                            ${audioHtml}
+                            <div class="chat-msg-footer">
+                                ${reactTriggerHtml}
+                                ${timeStr ? `<span class="chat-msg-time">${escapeHtml(timeStr)}</span>` : ''}
+                            </div>
                         </div>
-                        ${safeText ? `<div>${safeText}</div>` : ''}
-                        ${imageHtml}
-                        ${audioHtml}
+                        ${reactionPillsHtml}
+                        ${pickerHtml}
                     </div>
                 `;
             });
 
             listEl.innerHTML = html;
-            if (isChatDrawerOpen) {
+            renderHighResEmojis(listEl);
+            if (preserveScroll) {
+                listEl.scrollTop = prevScrollTop;
+            } else if (isChatDrawerOpen) {
                 listEl.scrollTop = listEl.scrollHeight;
             }
         }
@@ -11557,6 +12833,8 @@
                     .orderBy("createdAt", "asc")
                     .limitToLast(60)
                     .onSnapshot((snapshot) => {
+                        const prevLastMsgId = clubChatMessages.length > 0 ? clubChatMessages[clubChatMessages.length - 1].id : '';
+                        const prevCount = clubChatMessages.length;
                         const list = [];
                         snapshot.forEach(doc => {
                             const d = doc.data() || {};
@@ -11572,6 +12850,7 @@
                                 timeText: String(d.timeText || ''),
                                 clientTimeMs: msgMs,
                                 createdAt: d.createdAt,
+                                reactions: normalizeChatReactions(d.reactions),
                                 pushTriggered: !!d.pushTriggered,
                                 pushSentAtMs: typeof d.pushSentAtMs === 'number' ? d.pushSentAtMs : 0
                             });
@@ -11591,10 +12870,14 @@
                         list.forEach(m => {
                             if (m.id) seenChatMessageIds.add(m.id);
                         });
+                        const hadLoadedBefore = hasInitialChatSnapshotLoaded;
                         hasInitialChatSnapshotLoaded = true;
 
+                        const nextLastMsgId = list.length > 0 ? list[list.length - 1].id : '';
+                        const isInPlaceUpdateOnly = hadLoadedBefore && list.length === prevCount && nextLastMsgId === prevLastMsgId;
+
                         clubChatMessages = list;
-                        renderClubChatMessages();
+                        renderClubChatMessages({ preserveScroll: isInPlaceUpdateOnly });
                         if (isChatDrawerOpen) {
                             markChatAsRead();
                         } else {
@@ -11614,6 +12897,7 @@
         function initClubChat() {
             updateChatMuteButtonUI();
             updateChatIdentityLabel();
+            renderClubStickerBar();
             initPinnedChatListener();
             initClubChatListener();
         }
@@ -11629,6 +12913,7 @@
             }
             clubChatMessages = [];
             pinnedChatData = null;
+            openChatReactionPickerMsgId = '';
             hasInitialChatSnapshotLoaded = false;
             seenChatMessageIds.clear();
             renderPinnedChatBanner();
@@ -11950,7 +13235,7 @@
             }, 250);
         }
 
-        async function sendClubChatMessage(event) {
+        async function sendClubChatMessage(event, sendOptions) {
             if (event) event.preventDefault();
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
             closeChatAttachMenu();
@@ -11964,9 +13249,10 @@
                 return;
             }
 
-            const rawMessage = inputEl ? inputEl.value.trim() : '';
+            const hasOverrideText = !!(sendOptions && typeof sendOptions.overrideText === 'string' && sendOptions.overrideText.trim().length > 0);
+            const rawMessage = hasOverrideText ? sendOptions.overrideText.trim() : (inputEl ? inputEl.value.trim() : '');
             const cleanMessage = rawMessage.slice(0, 500);
-            const imageDataToSend = (typeof pendingChatImageData === 'string' && pendingChatImageData.startsWith('data:image/'))
+            const imageDataToSend = (!hasOverrideText && typeof pendingChatImageData === 'string' && pendingChatImageData.startsWith('data:image/'))
                 ? pendingChatImageData
                 : '';
 
@@ -11996,15 +13282,18 @@
 
                 await db.collection("club_chat").add(docPayload);
 
-                if (inputEl) {
-                    inputEl.value = '';
-                    inputEl.focus();
+                if (!hasOverrideText) {
+                    if (inputEl) {
+                        inputEl.value = '';
+                        inputEl.focus();
+                    }
+                    clearPendingChatImage();
                 }
-                clearPendingChatImage();
                 updateChatActionButtonUI();
                 markChatAsRead();
 
-                const pushPreviewText = cleanMessage || '📷 Hat ein Foto gesendet';
+                const sentSticker = getClubStickerByMessageText(cleanMessage);
+                const pushPreviewText = sentSticker ? sentSticker.pushText : (cleanMessage || '📷 Hat ein Foto gesendet');
                 sendChatPushNotificationImmediately(senderName, pushPreviewText);
             } catch (err) {
                 alert("Fehler beim Senden der Nachricht: " + (err && err.message ? err.message : String(err)));
@@ -12027,17 +13316,42 @@
         }
 
         document.addEventListener('click', (evt) => {
-            const menu = document.getElementById('chat-attach-menu');
-            const btn = document.getElementById('chat-attach-btn');
-            if (!menu || !menu.classList.contains('open')) return;
-            if (menu.contains(evt.target) || (btn && btn.contains(evt.target))) return;
+            if (openChatReactionPickerMsgId) {
+                const targetEl = evt.target;
+                const insideReactionUI = !!(
+                    targetEl &&
+                    typeof targetEl.closest === 'function' &&
+                    (targetEl.closest('.chat-reaction-picker') || targetEl.closest('.chat-msg-react-trigger'))
+                );
+                if (!insideReactionUI) {
+                    closeChatReactionPicker();
+                }
+            }
+            const attachPanel = document.getElementById('chat-attach-panel');
+            const attachBtn = document.getElementById('chat-attach-btn');
+            const emojiPanel = document.getElementById('chat-emoji-panel');
+            const emojiBtn = document.getElementById('chat-emoji-btn');
+            const attachOpen = !!(attachPanel && attachPanel.classList.contains('open'));
+            const emojiOpen = !!(emojiPanel && emojiPanel.classList.contains('open'));
+            if (!attachOpen && !emojiOpen) return;
+            if (
+                (attachPanel && attachPanel.contains(evt.target)) ||
+                (attachBtn && attachBtn.contains(evt.target)) ||
+                (emojiPanel && emojiPanel.contains(evt.target)) ||
+                (emojiBtn && emojiBtn.contains(evt.target))
+            ) return;
             closeChatAttachMenu();
         });
 
         document.addEventListener('keydown', (evt) => {
             if (evt.key === 'Escape') {
-                const attachMenu = document.getElementById('chat-attach-menu');
-                if (attachMenu && attachMenu.classList.contains('open')) {
+                if (openChatReactionPickerMsgId) {
+                    closeChatReactionPicker();
+                    return;
+                }
+                const attachPanel = document.getElementById('chat-attach-panel');
+                const emojiPanel = document.getElementById('chat-emoji-panel');
+                if ((attachPanel && attachPanel.classList.contains('open')) || (emojiPanel && emojiPanel.classList.contains('open'))) {
                     closeChatAttachMenu();
                     return;
                 }
