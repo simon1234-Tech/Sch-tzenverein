@@ -1633,9 +1633,16 @@
             gap: 6px;
             flex-shrink: 0;
         }
+        .chat-msg-footer-meta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-left: auto;
+        }
         .chat-msg-footer .chat-msg-time {
             margin-top: 0;
-            margin-left: auto;
             white-space: nowrap;
         }
         .chat-msg-react-trigger {
@@ -1973,11 +1980,13 @@
             display: none;
             background: #f8fafc;
             border-top: 1px solid #e2e8f0;
-            padding: 16px 20px calc(16px + env(safe-area-inset-bottom, 0px)) 20px;
+            padding: 10px 12px 12px 12px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
             flex-shrink: 0;
             justify-content: center;
             align-items: flex-start;
-            gap: 32px;
+            flex-wrap: wrap;
+            gap: 18px;
         }
         #chat-attach-panel.open {
             display: flex;
@@ -1986,10 +1995,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 0;
             background: transparent;
             border: none;
-            padding: 4px 8px;
+            padding: 4px 6px;
             cursor: pointer;
             font-family: inherit;
             transition: transform 0.14s ease;
@@ -1998,19 +2007,226 @@
             transform: scale(0.94);
         }
         .chat-attach-tile-icon {
-            width: 54px;
-            height: 54px;
-            border-radius: 16px;
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
         }
         .chat-attach-tile-label {
-            font-size: 0.82rem;
+            margin-top: 5px;
+            font-size: 0.76rem;
             font-weight: 700;
             color: #334155;
             line-height: 1.2;
+        }
+        .chat-header-icon-btn {
+            background: rgba(255, 255, 255, 0.16);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 10px;
+            width: 32px;
+            height: 30px;
+            padding: 0;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.15s ease, transform 0.12s ease;
+        }
+        .chat-header-icon-btn.active {
+            background: rgba(255, 255, 255, 0.34);
+            border-color: #ffffff;
+        }
+        .chat-header-icon-btn:active {
+            transform: scale(0.93);
+        }
+        #chat-search-bar {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 12px;
+            background: #f0fdf4;
+            border-bottom: 1px solid #bbf7d0;
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
+        #chat-search-input {
+            flex: 1;
+            min-width: 0;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 999px;
+            background: #ffffff;
+            padding: 6px 12px;
+            font-size: 0.88rem;
+            color: #0f172a;
+            font-family: inherit;
+            outline: none;
+        }
+        #chat-search-input:focus {
+            border-color: #16a34a;
+        }
+        .chat-search-count {
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: #15803d;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        #chat-search-clear-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #475569;
+            font-size: 0.85rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-family: inherit;
+        }
+        #chat-poll-creator {
+            display: none;
+            position: relative;
+            z-index: 26;
+            background: #ffffff;
+            border-top: 2px solid #7c3aed;
+            padding: 12px 14px;
+            flex-shrink: 0;
+            max-height: 55vh;
+            overflow-y: auto;
+            box-shadow: 0 -6px 18px rgba(15, 23, 42, 0.12);
+            box-sizing: border-box;
+        }
+        .chat-poll-creator-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #5b21b6;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .chat-poll-input {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.9rem;
+            color: #0f172a;
+            font-family: inherit;
+            background: #f8fafc;
+            outline: none;
+        }
+        .chat-poll-input:focus {
+            border-color: #7c3aed;
+            background: #ffffff;
+        }
+        .chat-poll-option-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .chat-poll-remove-opt-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            color: #64748b;
+            font-weight: 800;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-family: inherit;
+        }
+        .chat-poll-box {
+            margin-top: 4px;
+            min-width: 210px;
+        }
+        .chat-poll-question {
+            font-size: 0.96rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 8px;
+            line-height: 1.32;
+            word-break: break-word;
+        }
+        .chat-poll-options {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+        .chat-poll-option-btn {
+            width: 100%;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.82);
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 7px 9px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+            box-sizing: border-box;
+        }
+        .chat-poll-option-btn.selected {
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+        .chat-poll-option-btn:active {
+            transform: scale(0.98);
+        }
+        .chat-poll-option-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+        .chat-poll-option-label {
+            font-size: 0.86rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+        .chat-poll-option-count {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: #15803d;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .chat-poll-bar-track {
+            width: 100%;
+            height: 6px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+        .chat-poll-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: #22c55e;
+            transition: width 0.22s ease;
+        }
+        .chat-poll-option-btn.selected .chat-poll-bar-fill {
+            background: #15803d;
+        }
+        .chat-poll-total {
+            margin-top: 6px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #64748b;
         }
         #chat-emoji-panel {
             display: none;
@@ -2325,7 +2541,7 @@
                     <span>🍺 Offene Deckel / Personen im Schützenhaus</span>
                 </div>
                 <div class="open-tabs-inputs" style="display: flex; gap: 8px; align-items: center; margin: 10px 0;">
-                    <input type="text" id="open-tab-guest-input" class="form-control" style="flex: 1; min-width: 0; width: auto; padding: 10px 12px; border-radius: 12px; font-size: 0.95rem; margin-bottom: 0; box-sizing: border-box;" placeholder="Name, Gast oder Tisch eingeben..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); createOpenTab(); }">
+                    <input type="text" id="open-tab-guest-input" class="form-control" style="flex: 1; min-width: 0; width: auto; padding: 10px 12px; border-radius: 12px; font-size: 0.95rem; margin-bottom: 0; box-sizing: border-box; text-overflow: ellipsis;" placeholder="Name oder Tisch..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); createOpenTab(); }">
                     <button type="button" id="open-tab-add-btn" onclick="createOpenTab()" class="btn btn-green" style="margin-top: 0; padding: 10px 14px; border-radius: 12px; font-size: 0.92rem; font-weight: 800; white-space: nowrap; flex-shrink: 0; color: #ffffff;">
                         + Deckel
                     </button>
@@ -2599,17 +2815,19 @@
                             </form>
                         </div>
 
-                        <div class="admin-glass-card">
-                            <div class="admin-glass-card-title"><span>📅 Neuen Termin erstellen</span></div>
+                        <div class="admin-glass-card" id="admin-event-form-card">
+                            <div class="admin-glass-card-title"><span id="admin-event-form-title">📅 Neuen Termin erstellen</span></div>
                             <form onsubmit="addEvent(event)">
                                 <div class="form-group"><label>Veranstaltung</label><input type="text" class="form-control" id="new-event-title" required placeholder="Generalversammlung"></div>
                                 <div class="form-group"><label>Datum</label><input type="date" class="form-control" id="new-event-date" required></div>
+                                <div class="form-group"><label for="event-time">Uhrzeit (z. B. 19:00)</label><input type="time" class="form-control" id="event-time" value="19:00"></div>
                                 <div class="form-group"><label>Ort / Details</label><input type="text" class="form-control" id="new-event-desc" placeholder="Schützenhaus Partenen"></div>
                                 <label id="event-send-push-wrap" style="display: none; align-items: center; gap: 8px; font-size: 0.8em; font-weight: 700; color: #1e293b; margin-bottom: 10px; cursor: pointer;">
                                     <input type="checkbox" id="event-send-push" checked style="width: 17px; height: 17px; accent-color: #16a34a; cursor: pointer;">
                                     <span>📲 Push-Nachricht an alle senden</span>
                                 </label>
-                                <button type="submit" class="btn admin-btn-save btn-block">💾 Termin speichern</button>
+                                <button type="submit" id="admin-event-save-btn" class="btn admin-btn-save btn-block">💾 Termin speichern</button>
+                                <button type="button" id="admin-event-cancel-edit-btn" onclick="cancelEditAdminEvent()" class="btn admin-btn-edit btn-block" style="display: none; margin-top: 8px;">✖ Bearbeitung abbrechen</button>
                             </form>
                         </div>
 
@@ -3434,9 +3652,21 @@
         <div class="chat-drawer-header">
             <h3 id="chat-drawer-title-text" class="chat-drawer-title"><svg viewBox="0 0 32 32" aria-hidden="true" style="width: 32px; height: 32px; border-radius: 9px; background: #25D366; padding: 5px; box-sizing: border-box; box-shadow: 0 2px 6px rgba(0,0,0,0.22); margin-right: 8px; flex-shrink: 0; display: block;"><path fill="#ffffff" d="M16.01 3.2c-7.07 0-12.8 5.73-12.8 12.8 0 2.26.59 4.46 1.71 6.4L3.1 28.9l6.68-1.75c1.87 1.02 3.98 1.56 6.23 1.56 7.07 0 12.8-5.73 12.8-12.8 0-3.42-1.33-6.64-3.75-9.05A12.71 12.71 0 0 0 16.01 3.2zm0 23.35c-1.91 0-3.78-.51-5.41-1.48l-.39-.23-3.96 1.04 1.06-3.86-.25-.4a10.58 10.58 0 0 1-1.63-5.62c0-5.85 4.76-10.61 10.61-10.61 2.83 0 5.5 1.1 7.5 3.11a10.54 10.54 0 0 1 3.11 7.5c0 5.85-4.76 10.61-10.64 10.55zm5.82-7.93c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.89-1.78-2.21-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.98-2.37-.26-.62-.52-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.29.32-1.12 1.09-1.12 2.66s1.14 3.09 1.3 3.3c.16.21 2.25 3.43 5.44 4.81.76.33 1.35.52 1.81.67.76.24 1.46.21 2.01.13.61-.09 1.89-.77 2.15-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37z"/></svg><span>Vereins-Chat</span></h3>
             <div class="chat-drawer-header-actions">
+                <button type="button" id="chat-search-toggle-btn" class="chat-header-icon-btn" onclick="toggleChatSearchBar()" title="Im Chat suchen" aria-label="Im Chat suchen" aria-expanded="false" aria-controls="chat-search-bar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </button>
                 <button type="button" id="chat-mute-toggle-btn" class="active" onclick="toggleChatMute()" title="Chat-Benachrichtigungen umschalten">🔔 Chat-Ton an</button>
                 <button type="button" id="chat-drawer-close-btn" class="chat-drawer-close-btn" onclick="closeChatDrawer()" aria-label="Chat schließen">✖</button>
             </div>
+        </div>
+
+        <div id="chat-search-bar" role="search" aria-label="Im Chat suchen">
+            <input type="search" id="chat-search-input" placeholder="Stichwort oder Name suchen..." oninput="handleChatSearchInput(this.value)" onkeydown="if (event.key === 'Escape') { closeChatSearchBar(); }" autocomplete="off">
+            <span id="chat-search-count" class="chat-search-count"></span>
+            <button type="button" id="chat-search-clear-btn" onclick="closeChatSearchBar()" title="Suche schließen" aria-label="Suche schließen">✕</button>
         </div>
 
         <div class="chat-sender-bar">
@@ -3448,6 +3678,14 @@
         <div id="chat-messages-list">
             <p style="font-size: 0.84em; color: #64748b; text-align: center; margin-top: 20px;">Lade Vereins-Chat...</p>
         </div>
+
+        <button type="button" id="chat-scroll-bottom-btn" onclick="scrollChatToBottom(true)" title="Nach unten springen" aria-label="Nach unten springen" style="position: absolute; right: 14px; bottom: 74px; z-index: 25; width: 38px; height: 38px; border-radius: 50%; background: #ffffff; color: #475569; border: 1px solid #cbd5e1; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.16); display: none; align-items: center; justify-content: center; cursor: pointer; padding: 0;">
+            <span id="chat-scroll-bottom-dot" aria-hidden="true" style="position: absolute; top: -2px; right: -2px; width: 11px; height: 11px; border-radius: 50%; background: #22c55e; border: 2px solid #ffffff; display: none; box-sizing: border-box; pointer-events: none;"></span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="7 7 12 12 17 7"/>
+                <polyline points="7 13 12 18 17 13"/>
+            </svg>
+        </button>
 
         <div id="chat-image-preview-bar" class="chat-image-preview-bar">
             <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
@@ -3477,9 +3715,23 @@
             <button type="button" id="chat-reply-preview-close-btn" class="chat-reply-preview-close" onclick="clearChatReplyTarget()" title="Zitat entfernen" aria-label="Zitat entfernen">✕</button>
         </div>
 
+        <div id="chat-poll-creator" role="region" aria-label="Umfrage erstellen" aria-hidden="true">
+            <div class="chat-poll-creator-title">
+                <span>📊 Schnelle Vereins-Umfrage</span>
+            </div>
+            <input type="text" id="chat-poll-question" class="chat-poll-input" maxlength="180" placeholder="Frage an den Verein stellen..." autocomplete="off">
+            <div id="chat-poll-options-list"></div>
+            <button type="button" id="chat-poll-add-option-btn" onclick="addChatPollOptionInput()" style="margin-top: 7px; background: #f5f3ff; color: #6d28d9; border: 1px dashed #c4b5fd; border-radius: 8px; padding: 5px 10px; font-size: 0.78rem; font-weight: 800; cursor: pointer; font-family: inherit;">+ Weitere Option</button>
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+                <button type="button" id="chat-poll-send-btn" onclick="submitClubChatPoll()" style="flex: 1; background: #7c3aed; color: #ffffff; border: none; border-radius: 10px; padding: 9px 12px; font-size: 0.85rem; font-weight: 800; cursor: pointer; font-family: inherit;">📊 Umfrage senden</button>
+                <button type="button" id="chat-poll-cancel-btn" onclick="closeChatPollCreator()" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 10px; padding: 9px 12px; font-size: 0.85rem; font-weight: 800; cursor: pointer; font-family: inherit;">✕ Abbrechen</button>
+            </div>
+        </div>
+
         <form id="chat-input-form" class="chat-input-bar" onsubmit="sendClubChatMessage(event)">
             <input type="file" id="chat-camera-input" accept="image/*" capture="environment" style="display: none;" onchange="handleChatImageSelect(this)">
             <input type="file" id="chat-image-input" accept="image/*" style="display: none;" onchange="handleChatImageSelect(this)">
+            <input type="file" id="chat-pdf-input" accept="application/pdf" style="display: none;" onchange="handleChatPdfInputChange(this)">
 
             <div style="flex: 1; min-width: 0; display: flex; align-items: center; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 999px; padding: 2px 8px; box-sizing: border-box;">
                 <button type="button" id="chat-emoji-btn" onclick="toggleChatEmojiPanel(event)" title="Emoji auswählen" aria-label="Emoji auswählen" aria-expanded="false" aria-controls="chat-emoji-panel" style="padding: 6px; background: transparent; border: none; flex-shrink: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: #64748b;">
@@ -3547,7 +3799,7 @@
         <div id="chat-attach-panel" role="region" aria-label="Anhang auswählen" aria-hidden="true">
             <button type="button" id="chat-attach-gallery-btn" class="chat-attach-tile-btn" onclick="closeChatAttachMenu(); triggerChatImagePicker();">
                 <span class="chat-attach-tile-icon" style="background: #0284c7;">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="3" y="3" width="18" height="18" rx="3" ry="3"/>
                         <circle cx="8.5" cy="8.5" r="1.6" fill="#ffffff" stroke="none"/>
                         <polyline points="21 15 16 10 5 21"/>
@@ -3557,12 +3809,44 @@
             </button>
             <button type="button" id="chat-attach-camera-btn" class="chat-attach-tile-btn" onclick="closeChatAttachMenu(); triggerChatCameraPicker();">
                 <span class="chat-attach-tile-icon" style="background: #e11d48;">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                         <circle cx="12" cy="13" r="4"/>
                     </svg>
                 </span>
                 <span class="chat-attach-tile-label">Kamera</span>
+            </button>
+            <button type="button" id="chat-attach-event-btn" class="chat-attach-tile-btn" onclick="insertNextEventIntoChat()">
+                <span class="chat-attach-tile-icon" style="background: #16a34a;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="4" width="18" height="18" rx="2.5" ry="2.5"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                </span>
+                <span class="chat-attach-tile-label">Termin</span>
+            </button>
+            <button type="button" id="chat-attach-poll-btn" class="chat-attach-tile-btn" onclick="openChatPollCreator()">
+                <span class="chat-attach-tile-icon" style="background: #7c3aed;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="18" y1="20" x2="18" y2="10"/>
+                        <line x1="12" y1="20" x2="12" y2="4"/>
+                        <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                </span>
+                <span class="chat-attach-tile-label">Umfrage</span>
+            </button>
+            <button type="button" id="chat-attach-pdf-btn" class="chat-attach-tile-btn" onclick="closeChatAttachMenu(); triggerChatPdfPicker();">
+                <span class="chat-attach-tile-icon" style="background: #ea580c;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="8" y1="13" x2="16" y2="13"/>
+                        <line x1="8" y1="17" x2="13" y2="17"/>
+                    </svg>
+                </span>
+                <span class="chat-attach-tile-label">PDF</span>
             </button>
         </div>
     </aside>
@@ -3577,6 +3861,20 @@
     <div id="chat-image-lightbox" onclick="if (event.target === this) closeChatImageLightbox()" aria-hidden="true">
         <button type="button" id="chat-image-lightbox-close-btn" onclick="closeChatImageLightbox()" style="position: fixed; top: 16px; right: 16px; background: rgba(255, 255, 255, 0.92); color: #0f172a; border: none; border-radius: 999px; width: 40px; height: 40px; font-size: 1.05em; font-weight: 900; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.35); z-index: 2;" aria-label="Großansicht schließen">✖</button>
         <img id="chat-image-lightbox-img" src="" alt="Chat-Foto Großansicht" style="max-width: 96vw; max-height: 88vh; border-radius: 12px; object-fit: contain; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55); background: #ffffff;">
+    </div>
+
+    <!-- MODAL FÜR CHAT-LESEBESTÄTIGUNGEN -->
+    <div id="chat-readby-modal" role="dialog" aria-modal="true" aria-labelledby="chat-readby-modal-title" onclick="if (event.target === this) closeChatReadByModal()" aria-hidden="true" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.56); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); z-index: 10000000; align-items: center; justify-content: center; padding: 18px; box-sizing: border-box;">
+        <div style="width: min(340px, 100%); max-height: 75vh; background: #ffffff; border-radius: 16px; box-shadow: 0 18px 42px rgba(15, 23, 42, 0.28); overflow: hidden; display: flex; flex-direction: column;">
+            <div style="padding: 13px 16px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <h4 id="chat-readby-modal-title" style="margin: 0; font-size: 0.96rem; font-weight: 800; color: #0f172a;">👁️ Gelesen von (0)</h4>
+                <button type="button" onclick="closeChatReadByModal()" aria-label="Schließen" style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; font-weight: 800; cursor: pointer; font-family: inherit;">✕</button>
+            </div>
+            <div id="chat-readby-modal-list" style="padding: 12px 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; color: #1e293b;"></div>
+            <div style="padding: 10px 16px 14px 16px; border-top: 1px solid #f1f5f9;">
+                <button type="button" id="chat-readby-modal-close-btn" onclick="closeChatReadByModal()" style="width: 100%; background: #0f172a; color: #ffffff; border: none; border-radius: 10px; padding: 9px 14px; font-size: 0.86rem; font-weight: 800; cursor: pointer; font-family: inherit;">Schließen</button>
+            </div>
+        </div>
     </div>
 
     <!-- SCHWEBENDE NAVIGATION UNTEN -->
@@ -5759,13 +6057,98 @@
             return trimmed;
         }
 
+        let editingEventId = null;
+
+        function eventDateToIsoInput(rawDate) {
+            const clean = String(rawDate || '').trim();
+            if (!clean) return '';
+            const isoMatch = clean.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+            if (isoMatch) {
+                return `${isoMatch[1]}-${String(Number(isoMatch[2])).padStart(2, '0')}-${String(Number(isoMatch[3])).padStart(2, '0')}`;
+            }
+            const deMatch = clean.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/);
+            if (deMatch) {
+                return `${deMatch[3]}-${String(Number(deMatch[2])).padStart(2, '0')}-${String(Number(deMatch[1])).padStart(2, '0')}`;
+            }
+            return '';
+        }
+
+        function normalizeEventTimeInput(rawTime) {
+            const clean = String(rawTime || '').trim();
+            if (!clean) return '';
+            const match = clean.match(/^(\d{1,2})[:.](\d{2})(?:\s*Uhr)?$/i);
+            if (!match) return '';
+            const hh = parseInt(match[1], 10);
+            const mm = parseInt(match[2], 10);
+            if (isNaN(hh) || isNaN(mm) || hh < 0 || hh > 23 || mm < 0 || mm > 59) return '';
+            return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+        }
+
+        function cancelEditAdminEvent() {
+            editingEventId = null;
+            const titleInput = document.getElementById('new-event-title');
+            const timeInput = document.getElementById('event-time');
+            const descInput = document.getElementById('new-event-desc');
+            const formTitleEl = document.getElementById('admin-event-form-title');
+            const saveBtn = document.getElementById('admin-event-save-btn');
+            const cancelBtn = document.getElementById('admin-event-cancel-edit-btn');
+            const sendPushEl = document.getElementById('event-send-push');
+
+            if (titleInput) titleInput.value = '';
+            setDefaultNewEventDate();
+            if (timeInput) timeInput.value = '19:00';
+            if (descInput) descInput.value = '';
+            if (sendPushEl) sendPushEl.checked = isMainPushAdmin();
+            if (formTitleEl) formTitleEl.textContent = '📅 Neuen Termin erstellen';
+            if (saveBtn) saveBtn.textContent = '💾 Termin speichern';
+            if (cancelBtn) cancelBtn.style.display = 'none';
+        }
+
+        function startEditAdminEvent(eventId) {
+            if (!auth || !auth.currentUser) return;
+            const ev = loadedEventsById[String(eventId || '')];
+            if (!ev) return;
+
+            editingEventId = ev.id;
+            const parsedDateTime = splitEventDateAndTime(ev.date, ev.time);
+            const isoDate = eventDateToIsoInput(parsedDateTime.datePart || ev.date);
+            const normalizedTime = normalizeEventTimeInput(ev.time || parsedDateTime.timePart || '');
+
+            const titleInput = document.getElementById('new-event-title');
+            const dateInput = document.getElementById('new-event-date');
+            const timeInput = document.getElementById('event-time');
+            const descInput = document.getElementById('new-event-desc');
+            const formTitleEl = document.getElementById('admin-event-form-title');
+            const saveBtn = document.getElementById('admin-event-save-btn');
+            const cancelBtn = document.getElementById('admin-event-cancel-edit-btn');
+
+            if (titleInput) titleInput.value = ev.title || '';
+            if (dateInput) dateInput.value = isoDate;
+            if (timeInput) timeInput.value = normalizedTime;
+            if (descInput) descInput.value = ev.desc || '';
+            if (formTitleEl) formTitleEl.textContent = '✏️ Termin bearbeiten';
+            if (saveBtn) saveBtn.textContent = '💾 Änderungen speichern';
+            if (cancelBtn) cancelBtn.style.display = 'block';
+
+            const formCard = document.getElementById('admin-event-form-card');
+            if (formCard && typeof formCard.scrollIntoView === 'function') {
+                formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
         async function addEvent(e) {
             e.preventDefault();
-            if (!auth.currentUser) return;
-            const title = document.getElementById('new-event-title').value.trim();
-            const rawDate = document.getElementById('new-event-date').value.trim();
+            if (!auth || !auth.currentUser) return;
+            const titleEl = document.getElementById('new-event-title');
+            const dateEl = document.getElementById('new-event-date');
+            const timeEl = document.getElementById('event-time');
+            const descEl = document.getElementById('new-event-desc');
+
+            const title = titleEl ? titleEl.value.trim() : '';
+            const rawDate = dateEl ? dateEl.value.trim() : '';
             const date = formatEventDateToGerman(rawDate);
-            const desc = document.getElementById('new-event-desc').value.trim();
+            const time = normalizeEventTimeInput(timeEl ? timeEl.value : '');
+            const desc = descEl ? descEl.value.trim() : '';
             const sendPushEl = document.getElementById('event-send-push');
             const sendPush = isMainPushAdmin() && !!(sendPushEl && sendPushEl.checked);
 
@@ -5775,9 +6158,27 @@
             }
 
             try {
+                if (editingEventId) {
+                    const targetId = editingEventId;
+                    await db.collection("events").doc(targetId).update({
+                        title,
+                        date,
+                        time,
+                        desc,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    const auditDetails = `${title} (${date}${time ? `, ${time} Uhr` : ''}${desc ? ` · ${desc}` : ''})`;
+                    await logAdminAudit('EVENT_UPDATED', auditDetails);
+                    cancelEditAdminEvent();
+                    alert("Termin erfolgreich aktualisiert!");
+                    loadEvents();
+                    return;
+                }
+
                 await db.collection("events").add({
                     title,
                     date,
+                    time,
                     desc,
                     sendPush,
                     votes: {},
@@ -5791,9 +6192,10 @@
                         pushNotice = "\n\n⚠️ Push-Hinweis: " + pushRes.error;
                     }
                 }
-                document.getElementById('new-event-title').value = '';
+                if (titleEl) titleEl.value = '';
                 setDefaultNewEventDate();
-                document.getElementById('new-event-desc').value = '';
+                if (timeEl) timeEl.value = '19:00';
+                if (descEl) descEl.value = '';
                 if (sendPushEl) sendPushEl.checked = isMainPushAdmin();
                 alert("Termin erfolgreich gespeichert!" + pushNotice);
                 loadEvents();
@@ -5838,36 +6240,49 @@
         }
 
         function extractEventTimeWindow(ev) {
-            const sources = [
-                ev && ev.time ? String(ev.time) : '',
+            const parseTimeFromSource = (sourceText) => {
+                const text = String(sourceText || '').trim();
+                if (!text) return null;
+                const rangeMatch = text.match(/(\d{1,2})[:.](\d{2})\s*(?:Uhr)?\s*(?:-|–|bis)\s*(\d{1,2})[:.](\d{2})/i);
+                if (rangeMatch) {
+                    const sh = parseInt(rangeMatch[1], 10);
+                    const sm = parseInt(rangeMatch[2], 10);
+                    const eh = parseInt(rangeMatch[3], 10);
+                    const em = parseInt(rangeMatch[4], 10);
+                    if (sh >= 0 && sh <= 23 && sm >= 0 && sm <= 59 && eh >= 0 && eh <= 23 && em >= 0 && em <= 59) {
+                        return { startHour: sh, startMin: sm, endHour: eh, endMin: em };
+                    }
+                }
+                const singleMatch = text.match(/(?:^|\s)(\d{1,2})[:.](\d{2})(?:\s*Uhr)?(?=\s|$|[.,;)])/i);
+                if (singleMatch) {
+                    const sh = parseInt(singleMatch[1], 10);
+                    const sm = parseInt(singleMatch[2], 10);
+                    if (sh >= 0 && sh <= 23 && sm >= 0 && sm <= 59) {
+                        const totalEndMin = Math.min(23 * 60 + 59, sh * 60 + sm + 120);
+                        return {
+                            startHour: sh,
+                            startMin: sm,
+                            endHour: Math.floor(totalEndMin / 60),
+                            endMin: totalEndMin % 60
+                        };
+                    }
+                }
+                return null;
+            };
+
+            if (ev && ev.time) {
+                const explicitWindow = parseTimeFromSource(ev.time);
+                if (explicitWindow) return explicitWindow;
+            }
+            const embeddedDateTime = (ev && ev.date && typeof splitEventDateAndTime === 'function')
+                ? splitEventDateAndTime(ev.date, '').timePart
+                : '';
+            const fallbackSources = [
+                embeddedDateTime,
                 ev && ev.desc ? String(ev.desc) : '',
                 ev && ev.title ? String(ev.title) : ''
             ].join(' ');
-            const rangeMatch = sources.match(/(\d{1,2})[:.](\d{2})\s*(?:Uhr)?\s*(?:-|–|bis)\s*(\d{1,2})[:.](\d{2})/i);
-            if (rangeMatch) {
-                const sh = parseInt(rangeMatch[1], 10);
-                const sm = parseInt(rangeMatch[2], 10);
-                const eh = parseInt(rangeMatch[3], 10);
-                const em = parseInt(rangeMatch[4], 10);
-                if (sh >= 0 && sh <= 23 && sm >= 0 && sm <= 59 && eh >= 0 && eh <= 23 && em >= 0 && em <= 59) {
-                    return { startHour: sh, startMin: sm, endHour: eh, endMin: em };
-                }
-            }
-            const singleMatch = sources.match(/(?:^|\s)(\d{1,2})[:.](\d{2})(?:\s*Uhr)?(?=\s|$|[.,;)])/i);
-            if (singleMatch) {
-                const sh = parseInt(singleMatch[1], 10);
-                const sm = parseInt(singleMatch[2], 10);
-                if (sh >= 0 && sh <= 23 && sm >= 0 && sm <= 59) {
-                    const totalEndMin = Math.min(23 * 60 + 59, sh * 60 + sm + 120);
-                    return {
-                        startHour: sh,
-                        startMin: sm,
-                        endHour: Math.floor(totalEndMin / 60),
-                        endMin: totalEndMin % 60
-                    };
-                }
-            }
-            return null;
+            return parseTimeFromSource(fallbackSources);
         }
 
         function buildEventIcsContent(ev) {
@@ -6361,21 +6776,35 @@
                 let pastHtml = "";
                 let adminHtml = "";
 
+                if (editingEventId && !loadedEventsById[String(editingEventId)]) {
+                    cancelEditAdminEvent();
+                }
+
+                const buildAdminEventRowHtml = (rendered) => {
+                    const adminTimeBadge = rendered.safeTimePart
+                        ? ` <span style="color:#475569; font-weight:700; font-size:0.88em;">· ${rendered.safeTimePart}${/uhr$/i.test(rendered.safeTimePart) ? '' : ' Uhr'}</span>`
+                        : '';
+                    return `
+                            <div class="admin-list-row">
+                                <div style="flex:1; min-width:0;">
+                                    <strong style="color:#0f172a;">${rendered.safeDatePart || rendered.safeEvDate}</strong>${adminTimeBadge} – <span style="color:#b91c1c; font-weight:700;">${rendered.safeEvTitle}</span><br>
+                                    <span style="color:#475569; font-size:0.86em;">✅ ${rendered.dabeiCount} Zusagen · ❓ ${rendered.maybeCount} Vielleicht · ✖ ${rendered.absageCount} Absagen</span>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:6px; flex-shrink:0;">
+                                    <button type="button" class="btn admin-btn-edit" style="padding:6px 10px !important; font-size:0.78em !important; flex-shrink:0;" onclick="startEditAdminEvent('${rendered.safeEvId}')" title="Termin bearbeiten">✏️ Bearbeiten</button>
+                                    <button type="button" class="btn admin-btn-delete" style="padding:6px 10px !important; font-size:0.78em !important; flex-shrink:0;" data-doc-id="${rendered.safeEvId}" onclick="deleteItem('events', this.dataset.docId)">🗑️</button>
+                                </div>
+                            </div>
+                        `;
+                };
+
                 if (futureEvents.length > 0) {
                     heroHtml = buildNextEventHeroHtml(futureEvents[0]);
                     futureEvents.forEach((ev, idx) => {
                         const isNext = (idx === 0);
                         const rendered = buildEventCardHtml(ev, isNext, false);
                         listItemsHtml += rendered.cardHtml;
-                        adminHtml += `
-                            <div class="admin-list-row">
-                                <div style="flex:1; min-width:0;">
-                                    <strong style="color:#0f172a;">${rendered.safeEvDate}</strong> – <span style="color:#b91c1c; font-weight:700;">${rendered.safeEvTitle}</span><br>
-                                    <span style="color:#475569; font-size:0.86em;">✅ ${rendered.dabeiCount} Zusagen · ❓ ${rendered.maybeCount} Vielleicht · ✖ ${rendered.absageCount} Absagen</span>
-                                </div>
-                                <button type="button" class="btn admin-btn-delete" style="padding:6px 10px !important; font-size:0.78em !important; flex-shrink:0;" data-doc-id="${rendered.safeEvId}" onclick="deleteItem('events', this.dataset.docId)">🗑️</button>
-                            </div>
-                        `;
+                        adminHtml += buildAdminEventRowHtml(rendered);
                     });
                 } else {
                     listItemsHtml = '<p style="font-size:0.85em; color:var(--text-muted); margin: 0;">Aktuell stehen keine bevorstehenden Termine an.</p>';
@@ -6385,15 +6814,7 @@
                     pastEvents.forEach(ev => {
                         const rendered = buildEventCardHtml(ev, false, true);
                         pastHtml += rendered.cardHtml;
-                        adminHtml += `
-                            <div class="admin-list-row">
-                                <div style="flex:1; min-width:0;">
-                                    <strong style="color:#0f172a;">${rendered.safeEvDate}</strong> – <span style="color:#b91c1c; font-weight:700;">${rendered.safeEvTitle}</span><br>
-                                    <span style="color:#475569; font-size:0.86em;">✅ ${rendered.dabeiCount} Zusagen · ❓ ${rendered.maybeCount} Vielleicht · ✖ ${rendered.absageCount} Absagen</span>
-                                </div>
-                                <button type="button" class="btn admin-btn-delete" style="padding:6px 10px !important; font-size:0.78em !important; flex-shrink:0;" data-doc-id="${rendered.safeEvId}" onclick="deleteItem('events', this.dataset.docId)">🗑️</button>
-                            </div>
-                        `;
+                        adminHtml += buildAdminEventRowHtml(rendered);
                     });
                 }
 
@@ -13766,6 +14187,168 @@
             }
         }
 
+        const CHAT_PDF_MAX_BYTES = 532480;
+        let isChatPdfUploadInFlight = false;
+
+        function triggerChatPdfPicker() {
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            const senderName = getSavedClubMemberName();
+            if (!senderName) {
+                openMemberNameSetupModal(true);
+                return;
+            }
+            const pdfInput = document.getElementById('chat-pdf-input');
+            if (pdfInput) {
+                pdfInput.value = '';
+                pdfInput.click();
+            }
+        }
+
+        function sanitizeChatPdfFileName(rawName) {
+            const base = String(rawName || 'Vereinsdokument.pdf')
+                .replace(/[\\/:*?"<>|\u0000-\u001f]+/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+            if (!base) return 'Vereinsdokument.pdf';
+            const trimmed = base.slice(0, 120);
+            return /\.pdf$/i.test(trimmed) ? trimmed : (trimmed + '.pdf');
+        }
+
+        function handleChatPdfInputChange(inputEl) {
+            const file = inputEl && inputEl.files && inputEl.files[0] ? inputEl.files[0] : null;
+            if (inputEl) inputEl.value = '';
+            if (file) {
+                handleChatPdfUpload(file);
+            }
+        }
+
+        function readChatFileAsDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+                reader.onerror = () => reject(new Error('PDF-Datei konnte nicht gelesen werden.'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function handleChatPdfUpload(file) {
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (!file || isChatPdfUploadInFlight) return;
+
+            const senderName = getSavedClubMemberName();
+            if (!senderName) {
+                openMemberNameSetupModal(true);
+                return;
+            }
+
+            const rawName = String(file.name || '').trim();
+            const isPdfType = file.type === 'application/pdf' || rawName.toLowerCase().endsWith('.pdf');
+            if (!isPdfType) {
+                alert("Bitte wähle eine gültige PDF-Datei (.pdf) aus.");
+                return;
+            }
+
+            if (typeof file.size === 'number' && file.size > CHAT_PDF_MAX_BYTES) {
+                alert("⚠️ Dieses PDF ist leider zu groß (max. 500 KB). Tipp: Bitte das PDF vorher komprimieren.");
+                return;
+            }
+
+            const cleanFileName = sanitizeChatPdfFileName(rawName);
+            isChatPdfUploadInFlight = true;
+            try {
+                let dataUrl = await readChatFileAsDataUrl(file);
+                if (!dataUrl.startsWith('data:application/pdf;base64,')) {
+                    const b64Match = dataUrl.match(/^data:[^;]+;base64,([A-Za-z0-9+/=\s]+)$/);
+                    if (b64Match && rawName.toLowerCase().endsWith('.pdf')) {
+                        const cleanB64 = b64Match[1].replace(/\s+/g, '');
+                        let headerProbe = '';
+                        try { headerProbe = atob(cleanB64.slice(0, 16)); } catch (e) {}
+                        if (headerProbe.startsWith('%PDF-')) {
+                            dataUrl = 'data:application/pdf;base64,' + cleanB64;
+                        }
+                    }
+                }
+
+                if (!dataUrl.startsWith('data:application/pdf;base64,')) {
+                    alert("Diese Datei konnte nicht als gültiges PDF verarbeitet werden.");
+                    return;
+                }
+                if (dataUrl.length > 760000) {
+                    alert("⚠️ Dieses PDF ist leider zu groß (max. 500 KB). Tipp: Bitte das PDF vorher komprimieren.");
+                    return;
+                }
+
+                const now = new Date();
+                const nowMs = now.getTime();
+                const timeText = now.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
+                const pdfPreviewText = '📄 PDF: ' + cleanFileName;
+
+                const pdfPayload = {
+                    sender: senderName,
+                    text: pdfPreviewText,
+                    pdfName: cleanFileName,
+                    pdfData: dataUrl,
+                    timeText: timeText,
+                    clientTimeMs: nowMs,
+                    pushTriggered: true,
+                    pushSentAtMs: nowMs,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                if (pendingChatReplyTarget && (pendingChatReplyTarget.sender || pendingChatReplyTarget.previewText)) {
+                    pdfPayload.replyTo = {
+                        sender: String(pendingChatReplyTarget.sender || 'Mitglied').slice(0, 100),
+                        text: String(pendingChatReplyTarget.previewText || '').slice(0, 120)
+                    };
+                }
+
+                await db.collection("club_chat").add(pdfPayload);
+                clearChatReplyTarget();
+                markChatAsRead();
+                const msgListEl = document.getElementById('chat-messages-list');
+                if (msgListEl) msgListEl.scrollTop = msgListEl.scrollHeight;
+                sendChatPushNotificationImmediately(senderName, pdfPreviewText);
+            } catch (err) {
+                alert("Fehler beim Senden des PDFs: " + (err && err.message ? err.message : String(err)));
+            } finally {
+                isChatPdfUploadInFlight = false;
+            }
+        }
+
+        function openChatPdfDocument(msgId) {
+            const targetId = String(msgId || '').trim();
+            if (!targetId || !Array.isArray(clubChatMessages)) return;
+            const msg = clubChatMessages.find(m => m && m.id === targetId);
+            if (!msg || typeof msg.pdfData !== 'string' || !msg.pdfData.startsWith('data:application/pdf;base64,')) {
+                alert("PDF-Dokument konnte nicht geladen werden.");
+                return;
+            }
+            try {
+                const base64Part = msg.pdfData.slice('data:application/pdf;base64,'.length);
+                const binaryStr = atob(base64Part);
+                const bytes = new Uint8Array(binaryStr.length);
+                for (let i = 0; i < binaryStr.length; i++) {
+                    bytes[i] = binaryStr.charCodeAt(i);
+                }
+                const blob = new Blob([bytes], { type: 'application/pdf' });
+                const blobUrl = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                setTimeout(() => {
+                    try { document.body.removeChild(link); } catch (e) {}
+                }, 500);
+                setTimeout(() => {
+                    try { URL.revokeObjectURL(blobUrl); } catch (e) {}
+                }, 60000);
+            } catch (err) {
+                alert("Das PDF konnte leider nicht geöffnet werden.");
+            }
+        }
+
         function clearPendingChatImage() {
             pendingChatImageData = '';
             const previewBar = document.getElementById('chat-image-preview-bar');
@@ -14058,6 +14641,128 @@
             }
         }
 
+        let chatScrollBottomListenerBound = false;
+
+        function hideChatScrollBottomDot() {
+            const dotEl = document.getElementById('chat-scroll-bottom-dot');
+            if (dotEl) dotEl.style.display = 'none';
+        }
+
+        function updateChatScrollBottomButtonVisibility() {
+            const btnEl = document.getElementById('chat-scroll-bottom-btn');
+            const listEl = document.getElementById('chat-messages-list');
+            if (!btnEl) return;
+            if (!isChatDrawerOpen || !listEl) {
+                btnEl.style.display = 'none';
+                hideChatScrollBottomDot();
+                return;
+            }
+            const distanceFromBottom = listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight;
+            const shouldShow = distanceFromBottom > 160;
+            btnEl.style.display = shouldShow ? 'flex' : 'none';
+            if (!shouldShow) {
+                hideChatScrollBottomDot();
+            }
+        }
+
+        function bindChatScrollBottomListener() {
+            if (chatScrollBottomListenerBound) return;
+            const listEl = document.getElementById('chat-messages-list');
+            if (!listEl) return;
+            listEl.addEventListener('scroll', updateChatScrollBottomButtonVisibility, { passive: true });
+            chatScrollBottomListenerBound = true;
+        }
+
+        function scrollChatToBottom(smooth = true) {
+            const listEl = document.getElementById('chat-messages-list');
+            const btnEl = document.getElementById('chat-scroll-bottom-btn');
+            if (listEl) {
+                try {
+                    if (typeof listEl.scrollTo === 'function') {
+                        listEl.scrollTo({ top: listEl.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
+                    } else {
+                        listEl.scrollTop = listEl.scrollHeight;
+                    }
+                } catch (e) {
+                    listEl.scrollTop = listEl.scrollHeight;
+                }
+            }
+            if (btnEl) {
+                btnEl.style.display = 'none';
+            }
+            hideChatScrollBottomDot();
+        }
+
+        async function insertNextEventIntoChat() {
+            closeChatAttachMenu();
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+
+            let eventsArr = [];
+            try {
+                if (typeof loadedEventsById === 'object' && loadedEventsById) {
+                    eventsArr = Object.values(loadedEventsById).filter(Boolean);
+                }
+            } catch (e) {}
+
+            if (eventsArr.length === 0 && typeof db !== 'undefined' && db) {
+                try {
+                    const snap = await db.collection("events").orderBy("createdAt", "asc").get();
+                    snap.forEach(doc => {
+                        const evObj = { id: doc.id, ...(doc.data() || {}) };
+                        eventsArr.push(evObj);
+                        if (typeof loadedEventsById === 'object' && loadedEventsById) {
+                            loadedEventsById[String(doc.id)] = evObj;
+                        }
+                    });
+                } catch (e) {}
+            }
+
+            const heuteStart = new Date();
+            heuteStart.setHours(0, 0, 0, 0);
+
+            const futureEvents = [];
+            eventsArr.forEach(ev => {
+                if (!ev) return;
+                const parsed = typeof parseEventDateSafe === 'function' ? parseEventDateSafe(ev.date) : null;
+                if (parsed === null || parsed >= heuteStart) {
+                    futureEvents.push({ ev, parsed });
+                }
+            });
+
+            futureEvents.sort((a, b) => {
+                if (!a.parsed && !b.parsed) return 0;
+                if (!a.parsed) return 1;
+                if (!b.parsed) return -1;
+                return a.parsed - b.parsed;
+            });
+
+            if (futureEvents.length === 0) {
+                alert("Aktuell ist leider kein bevorstehender Vereins-Termin eingetragen.");
+                return;
+            }
+
+            const nextEv = futureEvents[0].ev;
+            const title = String(nextEv.title || 'Vereins-Termin').trim() || 'Vereins-Termin';
+            const dateStr = String(nextEv.date || '').trim();
+            const timeStr = String(nextEv.time || '').trim().replace(/\s*uhr\s*$/i, '').trim();
+            const place = String(nextEv.location || nextEv.desc || '').trim();
+            const datePart = dateStr ? ` am ${dateStr}` : '';
+            const timePart = timeStr ? ` ab ${timeStr} Uhr` : '';
+            const placePart = place ? ` (${place})` : '';
+            const eventMessage = `📅 Nächster Vereins-Termin: ${title}${datePart}${timePart}${placePart}`;
+
+            const inputEl = document.getElementById('chat-message-input');
+            if (!inputEl) return;
+
+            const existing = String(inputEl.value || '').trim();
+            const combined = existing ? `${existing} ${eventMessage}` : eventMessage;
+            inputEl.value = combined.slice(0, 500);
+
+            try { updateChatActionButtonUI(); } catch (e) {}
+            try { handleChatTypingInput(); } catch (e) {}
+            try { inputEl.focus(); } catch (e) {}
+        }
+
         function openChatDrawer() {
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
             isChatDrawerOpen = true;
@@ -14078,6 +14783,7 @@
                 drawer.setAttribute('aria-hidden', 'false');
             }
             bindChatViewportListeners();
+            bindChatScrollBottomListener();
             syncChatDrawerWithViewport();
             updateChatMuteButtonUI();
             updateChatIdentityLabel();
@@ -14089,10 +14795,12 @@
             renderPinnedChatBanner();
             markChatAsRead();
             renderClubChatMessages();
+            markVisibleChatMessagesAsRead();
             setTimeout(() => {
                 syncChatDrawerWithViewport();
                 const listEl = document.getElementById('chat-messages-list');
                 if (listEl) listEl.scrollTop = listEl.scrollHeight;
+                updateChatScrollBottomButtonVisibility();
             }, 60);
         }
 
@@ -14102,6 +14810,10 @@
             stopChatTypingListener();
             closeChatReactionPicker();
             closeChatAttachMenu();
+            closeChatPollCreator();
+            closeChatSearchBar();
+            closeChatReadByModal();
+            updateChatScrollBottomButtonVisibility();
             document.body.classList.remove('chat-drawer-open');
             if (savedBodyOverflowBeforeChat !== null) {
                 document.body.style.overflow = savedBodyOverflowBeforeChat;
@@ -14305,6 +15017,380 @@
             }
         }
 
+        let chatSearchQuery = '';
+        let isChatSearchOpen = false;
+        let isChatPollSendInFlight = false;
+        const chatPollVotePendingIds = new Set();
+
+        function formatChatTextWithLinks(rawText) {
+            const escaped = escapeHtml(String(rawText === undefined || rawText === null ? '' : rawText));
+            if (!escaped) return '';
+            const linked = escaped.replace(
+                /(^|[\s(])((?:https?:\/\/|www\.)(?:(?!&lt;|&gt;|&quot;|&#39;)[^\s])+)/gi,
+                (fullMatch, prefix, matchedUrl) => {
+                    let urlPart = matchedUrl;
+                    let trailing = '';
+                    while (/[.,!?;:)]$/.test(urlPart)) {
+                        if (urlPart.endsWith(')')) {
+                            const opens = (urlPart.match(/\(/g) || []).length;
+                            const closes = (urlPart.match(/\)/g) || []).length;
+                            if (closes <= opens) break;
+                        }
+                        trailing = urlPart.slice(-1) + trailing;
+                        urlPart = urlPart.slice(0, -1);
+                    }
+                    if (!urlPart || /^(?:https?:\/\/|www\.)$/i.test(urlPart)) {
+                        return fullMatch;
+                    }
+                    const href = /^https?:\/\//i.test(urlPart) ? urlPart : ('https://' + urlPart);
+                    if (!/^https?:\/\//i.test(href)) {
+                        return fullMatch;
+                    }
+                    return `${prefix}<a href="${href}" target="_blank" rel="noopener noreferrer" style="color: #0284c7; text-decoration: underline; word-break: break-all;">${urlPart}</a>${trailing}`;
+                }
+            );
+            return linked.replace(/\r?\n/g, '<br>');
+        }
+
+        function normalizeChatPoll(rawPoll) {
+            if (!rawPoll || typeof rawPoll !== 'object') return null;
+            const question = String(rawPoll.question || '').trim();
+            if (!question || !Array.isArray(rawPoll.options)) return null;
+            const options = [];
+            rawPoll.options.forEach(opt => {
+                if (!opt || typeof opt !== 'object') return;
+                const text = String(opt.text || '').trim();
+                if (!text) return;
+                const votes = [];
+                if (Array.isArray(opt.votes)) {
+                    opt.votes.forEach(v => {
+                        const cleanVoter = String(v || '').trim();
+                        if (cleanVoter && !votes.includes(cleanVoter)) {
+                            votes.push(cleanVoter);
+                        }
+                    });
+                }
+                options.push({ text, votes });
+            });
+            if (options.length < 2) return null;
+            return { question, options: options.slice(0, 4) };
+        }
+
+        function buildChatPollHtml(safeDocId, pollObj, ownName) {
+            if (!pollObj || !Array.isArray(pollObj.options) || pollObj.options.length < 2) return '';
+            let totalVotes = 0;
+            pollObj.options.forEach(opt => {
+                totalVotes += Array.isArray(opt.votes) ? opt.votes.length : 0;
+            });
+
+            const optionsHtml = pollObj.options.map((opt, idx) => {
+                const votes = Array.isArray(opt.votes) ? opt.votes : [];
+                const count = votes.length;
+                const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+                const isSelected = !!(ownName && votes.includes(ownName));
+                const titleAttr = votes.length > 0 ? ` title="${escapeHtml(votes.join(', '))}"` : '';
+                const countLabel = totalVotes > 0 ? `${count} (${pct}%)` : `${count}`;
+                return `
+                    <button type="button" class="chat-poll-option-btn${isSelected ? ' selected' : ''}" data-doc-id="${safeDocId}" data-opt-idx="${idx}" onclick="voteClubChatPoll(event, this.dataset.docId, Number(this.dataset.optIdx))" aria-pressed="${isSelected ? 'true' : 'false'}"${titleAttr}>
+                        <div class="chat-poll-option-top">
+                            <span class="chat-poll-option-label">${isSelected ? '✓ ' : ''}${escapeHtml(opt.text)}</span>
+                            <span class="chat-poll-option-count">${escapeHtml(countLabel)}</span>
+                        </div>
+                        <div class="chat-poll-bar-track">
+                            <div class="chat-poll-bar-fill" style="width: ${pct}%;"></div>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+
+            const totalLabel = totalVotes === 1 ? '1 Stimme' : `${totalVotes} Stimmen`;
+            return `
+                <div class="chat-poll-box">
+                    <div class="chat-poll-question">📊 ${escapeHtml(pollObj.question)}</div>
+                    <div class="chat-poll-options">${optionsHtml}</div>
+                    <div class="chat-poll-total">${escapeHtml(totalLabel)} · Antippen zum Abstimmen</div>
+                </div>
+            `;
+        }
+
+        function updateChatPollAddButtonVisibility() {
+            const listEl = document.getElementById('chat-poll-options-list');
+            const addBtn = document.getElementById('chat-poll-add-option-btn');
+            if (!listEl || !addBtn) return;
+            const currentCount = listEl.querySelectorAll('.chat-poll-option-input').length;
+            addBtn.style.display = currentCount < 4 ? 'inline-block' : 'none';
+        }
+
+        function createChatPollOptionRowEl(index, initialValue) {
+            const row = document.createElement('div');
+            row.className = 'chat-poll-option-row';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'chat-poll-input chat-poll-option-input';
+            input.maxLength = 80;
+            input.placeholder = `Option ${index + 1}`;
+            input.autocomplete = 'off';
+            input.value = String(initialValue || '');
+            row.appendChild(input);
+
+            if (index >= 2) {
+                const rmBtn = document.createElement('button');
+                rmBtn.type = 'button';
+                rmBtn.className = 'chat-poll-remove-opt-btn';
+                rmBtn.textContent = '✕';
+                rmBtn.title = 'Option entfernen';
+                rmBtn.setAttribute('aria-label', 'Option entfernen');
+                rmBtn.onclick = () => {
+                    row.remove();
+                    const listEl = document.getElementById('chat-poll-options-list');
+                    if (listEl) {
+                        listEl.querySelectorAll('.chat-poll-option-input').forEach((el, idx) => {
+                            el.placeholder = `Option ${idx + 1}`;
+                        });
+                    }
+                    updateChatPollAddButtonVisibility();
+                };
+                row.appendChild(rmBtn);
+            }
+            return row;
+        }
+
+        function resetChatPollCreatorFields() {
+            const qEl = document.getElementById('chat-poll-question');
+            const listEl = document.getElementById('chat-poll-options-list');
+            if (qEl) qEl.value = '';
+            if (listEl) {
+                listEl.innerHTML = '';
+                listEl.appendChild(createChatPollOptionRowEl(0, ''));
+                listEl.appendChild(createChatPollOptionRowEl(1, ''));
+            }
+            updateChatPollAddButtonVisibility();
+        }
+
+        function addChatPollOptionInput() {
+            const listEl = document.getElementById('chat-poll-options-list');
+            if (!listEl) return;
+            const currentCount = listEl.querySelectorAll('.chat-poll-option-input').length;
+            if (currentCount >= 4) return;
+            const row = createChatPollOptionRowEl(currentCount, '');
+            listEl.appendChild(row);
+            updateChatPollAddButtonVisibility();
+            const newInput = row.querySelector('input');
+            if (newInput) {
+                try { newInput.focus(); } catch (e) {}
+            }
+        }
+
+        function openChatPollCreator() {
+            closeChatAttachMenu();
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            const senderName = getSavedClubMemberName();
+            if (!senderName) {
+                openMemberNameSetupModal(true);
+                return;
+            }
+            const panel = document.getElementById('chat-poll-creator');
+            if (!panel) return;
+            resetChatPollCreatorFields();
+            panel.style.display = 'block';
+            panel.setAttribute('aria-hidden', 'false');
+            const qEl = document.getElementById('chat-poll-question');
+            if (qEl) {
+                setTimeout(() => { try { qEl.focus(); } catch (e) {} }, 40);
+            }
+        }
+
+        function closeChatPollCreator() {
+            const panel = document.getElementById('chat-poll-creator');
+            if (!panel) return;
+            panel.style.display = 'none';
+            panel.setAttribute('aria-hidden', 'true');
+            resetChatPollCreatorFields();
+        }
+
+        async function submitClubChatPoll() {
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (isChatPollSendInFlight) return;
+
+            const senderName = getSavedClubMemberName();
+            if (!senderName) {
+                openMemberNameSetupModal(true);
+                return;
+            }
+
+            const qEl = document.getElementById('chat-poll-question');
+            const listEl = document.getElementById('chat-poll-options-list');
+            const sendBtn = document.getElementById('chat-poll-send-btn');
+
+            const question = qEl ? qEl.value.trim().slice(0, 180) : '';
+            const optionInputs = listEl ? Array.from(listEl.querySelectorAll('.chat-poll-option-input')) : [];
+            const options = optionInputs
+                .map(inp => String(inp.value || '').trim().slice(0, 80))
+                .filter(Boolean)
+                .slice(0, 4);
+
+            if (!question) {
+                alert("Bitte gib zuerst eine Frage für die Umfrage ein.");
+                if (qEl) { try { qEl.focus(); } catch (e) {} }
+                return;
+            }
+            if (options.length < 2) {
+                alert("Bitte gib mindestens 2 Antwort-Optionen ein.");
+                return;
+            }
+
+            const now = new Date();
+            const nowMs = now.getTime();
+            const timeText = now.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' });
+            const pollPreviewText = '📊 Umfrage: ' + question;
+
+            isChatPollSendInFlight = true;
+            if (sendBtn) sendBtn.disabled = true;
+            try {
+                const pollPayload = {
+                    sender: senderName,
+                    text: pollPreviewText,
+                    poll: {
+                        question: question,
+                        options: options.map(optText => ({ text: optText, votes: [] }))
+                    },
+                    timeText: timeText,
+                    clientTimeMs: nowMs,
+                    pushTriggered: true,
+                    pushSentAtMs: nowMs,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                await db.collection("club_chat").add(pollPayload);
+                closeChatPollCreator();
+                markChatAsRead();
+                const msgListEl = document.getElementById('chat-messages-list');
+                if (msgListEl) msgListEl.scrollTop = msgListEl.scrollHeight;
+                sendChatPushNotificationImmediately(senderName, pollPreviewText);
+            } catch (err) {
+                alert("Fehler beim Senden der Umfrage: " + (err && err.message ? err.message : String(err)));
+            } finally {
+                isChatPollSendInFlight = false;
+                if (sendBtn) sendBtn.disabled = false;
+            }
+        }
+
+        async function voteClubChatPoll(event, docId, optionIndex) {
+            if (event) event.stopPropagation();
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+
+            const targetId = String(docId || '').trim();
+            const optIdx = Number(optionIndex);
+            if (!targetId || !Number.isInteger(optIdx) || optIdx < 0) return;
+
+            const memberName = getSavedClubMemberName();
+            if (!memberName) {
+                openMemberNameSetupModal(true);
+                return;
+            }
+
+            if (chatPollVotePendingIds.has(targetId)) return;
+            chatPollVotePendingIds.add(targetId);
+
+            const computeNextPoll = (rawPoll) => {
+                const normalized = normalizeChatPoll(rawPoll);
+                if (!normalized || optIdx >= normalized.options.length) return null;
+                const alreadySelected = normalized.options[optIdx].votes.includes(memberName);
+                const nextOptions = normalized.options.map((opt, idx) => {
+                    const filteredVotes = opt.votes.filter(v => v !== memberName);
+                    if (idx === optIdx && !alreadySelected) {
+                        filteredVotes.push(memberName);
+                    }
+                    return { text: opt.text, votes: filteredVotes };
+                });
+                return { question: normalized.question, options: nextOptions };
+            };
+
+            const localMsg = clubChatMessages.find(m => m.id === targetId);
+            const previousPoll = localMsg && localMsg.poll ? normalizeChatPoll(localMsg.poll) : null;
+            if (localMsg && localMsg.poll) {
+                const optimisticPoll = computeNextPoll(localMsg.poll);
+                if (optimisticPoll) {
+                    localMsg.poll = optimisticPoll;
+                    renderClubChatMessages({ preserveScroll: true });
+                }
+            }
+
+            try {
+                const docRef = db.collection("club_chat").doc(targetId);
+                if (typeof db.runTransaction === 'function') {
+                    await db.runTransaction(async (tx) => {
+                        const snap = await tx.get(docRef);
+                        if (!snap || !snap.exists) return;
+                        const data = snap.data() || {};
+                        const nextPoll = computeNextPoll(data.poll);
+                        if (!nextPoll) return;
+                        tx.update(docRef, { poll: nextPoll });
+                    });
+                } else {
+                    const snap = await docRef.get();
+                    if (!snap || !snap.exists) return;
+                    const data = snap.data() || {};
+                    const nextPoll = computeNextPoll(data.poll);
+                    if (!nextPoll) return;
+                    await docRef.update({ poll: nextPoll });
+                }
+            } catch (err) {
+                if (localMsg && previousPoll) {
+                    localMsg.poll = previousPoll;
+                    renderClubChatMessages({ preserveScroll: true });
+                }
+                console.warn("Fehler beim Abstimmen in der Vereins-Umfrage:", err);
+            } finally {
+                chatPollVotePendingIds.delete(targetId);
+            }
+        }
+
+        function toggleChatSearchBar() {
+            if (isChatSearchOpen) {
+                closeChatSearchBar();
+                return;
+            }
+            const bar = document.getElementById('chat-search-bar');
+            const input = document.getElementById('chat-search-input');
+            const toggleBtn = document.getElementById('chat-search-toggle-btn');
+            if (!bar) return;
+            isChatSearchOpen = true;
+            bar.style.display = 'flex';
+            if (toggleBtn) {
+                toggleBtn.classList.add('active');
+                toggleBtn.setAttribute('aria-expanded', 'true');
+            }
+            if (input) {
+                setTimeout(() => { try { input.focus(); } catch (e) {} }, 30);
+            }
+        }
+
+        function closeChatSearchBar() {
+            const wasSearching = !!(isChatSearchOpen || chatSearchQuery);
+            isChatSearchOpen = false;
+            chatSearchQuery = '';
+            const bar = document.getElementById('chat-search-bar');
+            const input = document.getElementById('chat-search-input');
+            const countEl = document.getElementById('chat-search-count');
+            const toggleBtn = document.getElementById('chat-search-toggle-btn');
+            if (bar) bar.style.display = 'none';
+            if (input) input.value = '';
+            if (countEl) countEl.textContent = '';
+            if (toggleBtn) {
+                toggleBtn.classList.remove('active');
+                toggleBtn.setAttribute('aria-expanded', 'false');
+            }
+            if (wasSearching && isChatDrawerOpen) {
+                renderClubChatMessages();
+            }
+        }
+
+        function handleChatSearchInput(rawVal) {
+            chatSearchQuery = String(rawVal || '').trim();
+            renderClubChatMessages({ preserveScroll: false });
+        }
+
         function renderClubChatMessages(options) {
             const listEl = document.getElementById('chat-messages-list');
             if (!listEl) return;
@@ -14312,14 +15398,41 @@
             const preserveScroll = !!(options && options.preserveScroll);
             const prevScrollTop = listEl.scrollTop;
             const ownName = getSavedClubMemberName();
+            const searchTerm = String(chatSearchQuery || '').trim().toLowerCase();
+            const searchCountEl = document.getElementById('chat-search-count');
 
             if (!clubChatMessages || clubChatMessages.length === 0) {
                 openChatReactionPickerMsgId = '';
+                if (searchCountEl) searchCountEl.textContent = searchTerm ? '0 Treffer' : '';
                 listEl.innerHTML = '<p style="font-size: 0.84em; color: #64748b; text-align: center; margin-top: 24px;">Noch keine Nachrichten im Vereins-Chat. Schreib die erste Nachricht!</p>';
                 return;
             }
 
-            if (openChatReactionPickerMsgId && !clubChatMessages.some(m => m.id === openChatReactionPickerMsgId)) {
+            const visibleMessages = searchTerm
+                ? clubChatMessages.filter(msg => {
+                    if (!msg) return false;
+                    const senderMatch = String(msg.sender || '').toLowerCase().includes(searchTerm);
+                    const textMatch = String(msg.text || '').toLowerCase().includes(searchTerm);
+                    const pollQuestionMatch = !!(msg.poll && String(msg.poll.question || '').toLowerCase().includes(searchTerm));
+                    const pollOptionsMatch = !!(msg.poll && Array.isArray(msg.poll.options) && msg.poll.options.some(o => String(o && o.text || '').toLowerCase().includes(searchTerm)));
+                    return senderMatch || textMatch || pollQuestionMatch || pollOptionsMatch;
+                })
+                : clubChatMessages;
+
+            if (searchCountEl) {
+                searchCountEl.textContent = searchTerm
+                    ? (visibleMessages.length === 1 ? '1 Treffer' : `${visibleMessages.length} Treffer`)
+                    : '';
+            }
+
+            if (searchTerm && visibleMessages.length === 0) {
+                openChatReactionPickerMsgId = '';
+                listEl.innerHTML = `<p style="font-size: 0.86em; color: #64748b; text-align: center; margin-top: 28px;">Keine Treffer für „${escapeHtml(chatSearchQuery)}“.</p>`;
+                updateChatScrollBottomButtonVisibility();
+                return;
+            }
+
+            if (openChatReactionPickerMsgId && !visibleMessages.some(m => m.id === openChatReactionPickerMsgId)) {
                 openChatReactionPickerMsgId = '';
             }
 
@@ -14328,7 +15441,7 @@
             let lastDateKey = '';
             let html = '';
 
-            clubChatMessages.forEach((msg, index) => {
+            visibleMessages.forEach((msg, index) => {
                 const dateInfo = getChatMessageDateKeyAndLabel(msg, nowForDates);
                 if (dateInfo && dateInfo.key !== lastDateKey) {
                     lastDateKey = dateInfo.key;
@@ -14344,15 +15457,22 @@
                 const roleInfo = getChatBoardRoleInfo(sender);
                 const timeStr = formatChatTime(msg);
                 const rawMsgText = String(msg.text || '');
-                const matchedSticker = getClubStickerByMessageText(rawMsgText);
-                const safeText = (!matchedSticker && rawMsgText) ? escapeHtml(rawMsgText).replace(/\r?\n/g, '<br>') : '';
+                const normalizedPoll = normalizeChatPoll(msg.poll);
+                const hasSafePdf = typeof msg.pdfData === 'string' && msg.pdfData.startsWith('data:application/pdf;base64,');
+                const safePdfName = hasSafePdf ? sanitizeChatPdfFileName(msg.pdfName || 'Vereinsdokument.pdf') : '';
+                const matchedSticker = (!normalizedPoll && !hasSafePdf) ? getClubStickerByMessageText(rawMsgText) : null;
+                const safeText = (!normalizedPoll && !hasSafePdf && !matchedSticker && rawMsgText) ? formatChatTextWithLinks(rawMsgText) : '';
                 const stickerHtml = matchedSticker
                     ? `<div class="chat-msg-sticker-wrap" title="${escapeHtml(matchedSticker.label)}">${buildClubStickerSvg(matchedSticker, 112)}</div>`
                     : '';
                 const safeDocId = escapeHtml(msg.id || '');
+                const pollHtml = normalizedPoll ? buildChatPollHtml(safeDocId, normalizedPoll, ownName) : '';
+                const pdfCardHtml = hasSafePdf
+                    ? `<div class="chat-pdf-card" style="background: rgba(255,255,255,0.92); border: 1px solid #cbd5e1; border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; margin-top: 4px; max-width: 100%; box-sizing: border-box;"><span style="background: #dc2626; color: #ffffff; font-weight: 900; font-size: 0.72rem; padding: 6px 8px; border-radius: 8px; flex-shrink: 0; letter-spacing: 0.03em; line-height: 1;">PDF</span><div style="flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 800; color: #0f172a; line-height: 1.28; overflow: hidden; text-overflow: ellipsis; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;" title="${escapeHtml(safePdfName)}">${escapeHtml(safePdfName)}</div><button type="button" data-msg-id="${safeDocId}" onclick="openChatPdfDocument(this.dataset.msgId)" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 9px; padding: 6px 10px; font-size: 0.78rem; font-weight: 800; cursor: pointer; flex-shrink: 0; white-space: nowrap; font-family: inherit;">📥 Öffnen</button></div>`
+                    : '';
                 const hasSafeImage = typeof msg.imageData === 'string' && msg.imageData.startsWith('data:image/');
                 const hasSafeAudio = typeof msg.audioData === 'string' && msg.audioData.startsWith('data:audio/');
-                const isSoloEmoji = (!matchedSticker && !hasSafeImage && !hasSafeAudio && rawMsgText) ? isSoloEmojiChatText(rawMsgText) : false;
+                const isSoloEmoji = (!normalizedPoll && !hasSafePdf && !matchedSticker && !hasSafeImage && !hasSafeAudio && rawMsgText) ? isSoloEmojiChatText(rawMsgText) : false;
                 const reactionsMap = normalizeChatReactions(msg.reactions);
                 const isPickerOpen = !!(openChatReactionPickerMsgId && openChatReactionPickerMsgId === msg.id);
 
@@ -14409,6 +15529,13 @@
                     ? buildChatReactionPickerHtml(safeDocId, reactionsMap, ownName, index === 0)
                     : '';
 
+                const otherReaders = isOwn ? getOtherChatReaders(msg, ownName) : [];
+                const readReceiptHtml = (isOwn && safeDocId)
+                    ? (otherReaders.length > 0
+                        ? `<button type="button" class="chat-msg-read-btn" data-msg-id="${safeDocId}" onclick="showChatReadByModal(this.dataset.msgId)" style="background: transparent; border: none; padding: 0; font-size: 0.72rem; font-weight: 700; color: #0284c7; cursor: pointer; font-family: inherit; white-space: nowrap;">✓✓ Gelesen von ${otherReaders.length}</button>`
+                        : `<span class="chat-msg-read-status" style="font-size: 0.72rem; color: #64748b; white-space: nowrap;">✓ Gesendet</span>`)
+                    : '';
+
                 html += `
                     <div class="chat-msg-item ${isOwn ? 'own' : 'other'}" data-msg-id="${safeDocId}">
                         <div class="${bubbleClass}">
@@ -14420,6 +15547,8 @@
                             </div>
                             ${replyQuoteHtml}
                             ${stickerHtml}
+                            ${pollHtml}
+                            ${pdfCardHtml}
                             ${safeText ? `<div class="chat-msg-text${isSoloEmoji ? ' emoji-only' : ''}">${safeText}</div>` : ''}
                             ${imageHtml}
                             ${audioHtml}
@@ -14428,7 +15557,10 @@
                                     ${reactTriggerHtml}
                                     ${replyTriggerHtml}
                                 </div>
-                                ${timeStr ? `<span class="chat-msg-time">${escapeHtml(timeStr)}</span>` : ''}
+                                <div class="chat-msg-footer-meta">
+                                    ${readReceiptHtml}
+                                    ${timeStr ? `<span class="chat-msg-time">${escapeHtml(timeStr)}</span>` : ''}
+                                </div>
                             </div>
                         </div>
                         ${reactionPillsHtml}
@@ -14445,6 +15577,108 @@
             } else if (isChatDrawerOpen) {
                 listEl.scrollTop = listEl.scrollHeight;
             }
+            updateChatScrollBottomButtonVisibility();
+        }
+
+        const chatReadReceiptMarkedKeys = new Set();
+
+        function normalizeChatReadBy(rawReadBy) {
+            if (!Array.isArray(rawReadBy)) return [];
+            const unique = [];
+            rawReadBy.forEach(name => {
+                const clean = String(name || '').trim();
+                if (clean && !unique.includes(clean)) {
+                    unique.push(clean);
+                }
+            });
+            return unique;
+        }
+
+        function getOtherChatReaders(msg, ownName) {
+            if (!msg) return [];
+            const senderClean = String(msg.sender || '').trim();
+            const selfClean = String(ownName || '').trim();
+            return normalizeChatReadBy(msg.readBy).filter(name => name !== senderClean && (!selfClean || name !== selfClean));
+        }
+
+        async function markVisibleChatMessagesAsRead() {
+            if (!isChatDrawerOpen) return;
+            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            const memberName = String(getSavedClubMemberName() || '').trim();
+            if (!memberName) return;
+            if (!Array.isArray(clubChatMessages) || clubChatMessages.length === 0) return;
+            if (typeof db === 'undefined' || !db || typeof firebase === 'undefined' || !firebase.firestore || !firebase.firestore.FieldValue) return;
+
+            const recentMessages = clubChatMessages.slice(-25);
+            const toMark = [];
+            recentMessages.forEach(msg => {
+                if (!msg || !msg.id) return;
+                const senderName = String(msg.sender || '').trim();
+                if (senderName === memberName) return;
+                const readByList = Array.isArray(msg.readBy) ? msg.readBy : [];
+                if (readByList.includes(memberName)) return;
+                const dedupeKey = `${msg.id}::${memberName}`;
+                if (chatReadReceiptMarkedKeys.has(dedupeKey)) return;
+                toMark.push({ id: msg.id, key: dedupeKey });
+            });
+
+            if (toMark.length === 0) return;
+            toMark.forEach(item => chatReadReceiptMarkedKeys.add(item.key));
+
+            try {
+                const unionVal = firebase.firestore.FieldValue.arrayUnion(memberName);
+                if (typeof db.batch === 'function') {
+                    const batch = db.batch();
+                    toMark.forEach(item => {
+                        const docRef = db.collection("club_chat").doc(item.id);
+                        batch.update(docRef, { readBy: unionVal });
+                    });
+                    await batch.commit();
+                } else {
+                    await Promise.all(toMark.map(item =>
+                        db.collection("club_chat").doc(item.id).update({ readBy: unionVal })
+                    ));
+                }
+            } catch (err) {
+                toMark.forEach(item => chatReadReceiptMarkedKeys.delete(item.key));
+                console.warn("Lesebestätigung konnte nicht gespeichert werden:", err);
+            }
+        }
+
+        function showChatReadByModal(msgId) {
+            const targetId = String(msgId || '').trim();
+            if (!targetId || !Array.isArray(clubChatMessages)) return;
+            const msg = clubChatMessages.find(m => m && m.id === targetId);
+            if (!msg) return;
+
+            const ownName = getSavedClubMemberName();
+            const readers = getOtherChatReaders(msg, ownName);
+            if (readers.length === 0) return;
+
+            const modal = document.getElementById('chat-readby-modal');
+            const titleEl = document.getElementById('chat-readby-modal-title');
+            const listEl = document.getElementById('chat-readby-modal-list');
+            if (!modal || !listEl) return;
+
+            if (titleEl) {
+                titleEl.textContent = `👁️ Gelesen von (${readers.length})`;
+            }
+            listEl.innerHTML = readers.map(name => `
+                <div style="display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; font-weight: 700; color: #0f172a;">
+                    <span style="color: #0284c7; font-weight: 900;">✓✓</span>
+                    <span>${escapeHtml(name)}</span>
+                </div>
+            `).join('');
+
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeChatReadByModal() {
+            const modal = document.getElementById('chat-readby-modal');
+            if (!modal) return;
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
         }
 
         function updateNewsChatLastMsgPreview(messages) {
@@ -14465,9 +15699,12 @@
             const isSticker = /^\[STICKER:[^\]]+\]$/.test(rawText);
             const hasAudio = typeof lastMsg.audioData === 'string' && lastMsg.audioData.startsWith('data:audio/');
             const hasImage = typeof lastMsg.imageData === 'string' && lastMsg.imageData.startsWith('data:image/');
+            const hasPdf = typeof lastMsg.pdfData === 'string' && lastMsg.pdfData.startsWith('data:application/pdf;base64,');
 
             if (isSticker) {
                 previewEl.textContent = `${sender}: 🎯 Vereins-Sticker`;
+            } else if (hasPdf) {
+                previewEl.textContent = `${sender}: 📄 PDF: ${sanitizeChatPdfFileName(lastMsg.pdfName || 'Vereinsdokument.pdf')}`;
             } else if (hasAudio) {
                 previewEl.textContent = `${sender}: 🎤 Sprachnachricht`;
             } else if (hasImage) {
@@ -14572,11 +15809,15 @@
                                 imageData: typeof d.imageData === 'string' ? d.imageData : '',
                                 audioData: typeof d.audioData === 'string' ? d.audioData : '',
                                 audioDuration: String(d.audioDuration || ''),
+                                pdfName: typeof d.pdfName === 'string' ? d.pdfName : '',
+                                pdfData: typeof d.pdfData === 'string' ? d.pdfData : '',
                                 timeText: String(d.timeText || ''),
                                 clientTimeMs: msgMs,
                                 createdAt: d.createdAt,
                                 reactions: normalizeChatReactions(d.reactions),
                                 replyTo: normalizeChatReplyTo(d.replyTo),
+                                poll: normalizeChatPoll(d.poll),
+                                readBy: normalizeChatReadBy(d.readBy),
                                 pushTriggered: !!d.pushTriggered,
                                 pushSentAtMs: typeof d.pushSentAtMs === 'number' ? d.pushSentAtMs : 0
                             });
@@ -14601,12 +15842,20 @@
 
                         const nextLastMsgId = list.length > 0 ? list[list.length - 1].id : '';
                         const isInPlaceUpdateOnly = hadLoadedBefore && list.length === prevCount && nextLastMsgId === prevLastMsgId;
+                        const scrollBtnEl = document.getElementById('chat-scroll-bottom-btn');
+                        const isScrollBottomBtnVisible = !!(isChatDrawerOpen && scrollBtnEl && scrollBtnEl.style.display && scrollBtnEl.style.display !== 'none');
+                        const hasNewIncomingWhileScrolledUp = hadLoadedBefore && newlyArrivedFromOthers.length > 0 && isScrollBottomBtnVisible;
 
                         clubChatMessages = list;
                         updateNewsChatLastMsgPreview(list);
-                        renderClubChatMessages({ preserveScroll: isInPlaceUpdateOnly });
+                        renderClubChatMessages({ preserveScroll: isInPlaceUpdateOnly || hasNewIncomingWhileScrolledUp });
+                        if (hasNewIncomingWhileScrolledUp) {
+                            const dotEl = document.getElementById('chat-scroll-bottom-dot');
+                            if (dotEl) dotEl.style.display = 'block';
+                        }
                         if (isChatDrawerOpen) {
                             markChatAsRead();
+                            markVisibleChatMessagesAsRead();
                         } else {
                             updateChatUnreadDot();
                             if (newlyArrivedFromOthers.length > 0 && !isChatMuted()) {
@@ -14830,11 +16079,15 @@
             openChatReactionPickerMsgId = '';
             hasInitialChatSnapshotLoaded = false;
             seenChatMessageIds.clear();
+            chatReadReceiptMarkedKeys.clear();
             renderPinnedChatBanner();
             hideIncomingChatToast();
             try { cancelChatVoiceRecording(); } catch (e) {}
             clearPendingChatImage();
             clearChatReplyTarget();
+            closeChatPollCreator();
+            closeChatSearchBar();
+            closeChatReadByModal();
             closeChatImageLightbox();
             closeChatDrawer();
             const listEl = document.getElementById('chat-messages-list');
