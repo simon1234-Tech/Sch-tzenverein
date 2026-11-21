@@ -113,8 +113,8 @@
           }
           await OneSignal.init({
             appId: "97c2c2ee-175b-4e7f-876a-f86f1ab04ace",
-            serviceWorkerParam: { scope: "/Sch-tzenverein/" },
-            serviceWorkerPath: "OneSignalSDKWorker.js",
+            serviceWorkerParam: { scope: '/Sch-tzenverein/' },
+            serviceWorkerPath: 'Sch-tzenverein/OneSignalSDKWorker.js',
             allowLocalhostAsSecureOrigin: true
           });
           window.__oneSignalReady = true;
@@ -323,6 +323,68 @@
         .live-pulse-badge {
             animation: none;
         }
+        @keyframes sealGoldPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.65), 0 4px 12px rgba(0, 0, 0, 0.25);
+            }
+            50% {
+                transform: scale(1.045);
+                box-shadow: 0 0 18px 6px rgba(234, 179, 8, 0.35), 0 6px 16px rgba(0, 0, 0, 0.3);
+            }
+        }
+        .club-seal-pulse {
+            animation: sealGoldPulse 2.6s ease-in-out infinite;
+            will-change: transform, box-shadow;
+        }
+
+        @keyframes chatBlueLightFlash {
+            0%, 100% {
+                border-left-color: #2563eb;
+                box-shadow: 0 4px 12px rgba(37, 99, 235, 0.18), 0 0 0 0 rgba(59, 130, 246, 0.65);
+                background-color: #ffffff;
+            }
+            35% {
+                border-left-color: #3b82f6;
+                box-shadow: 0 6px 22px rgba(37, 99, 235, 0.48), 0 0 18px 4px rgba(59, 130, 246, 0.55);
+                background-color: #eff6ff;
+            }
+            65% {
+                border-left-color: #1d4ed8;
+                box-shadow: 0 4px 14px rgba(29, 78, 216, 0.25), 0 0 6px 1px rgba(59, 130, 246, 0.25);
+                background-color: #ffffff;
+            }
+        }
+
+        @keyframes badgeBlueLightFlash {
+            0%, 100% {
+                background-color: #1d4ed8;
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+                transform: scale(1);
+            }
+            40% {
+                background-color: #3b82f6;
+                box-shadow: 0 0 12px 3px rgba(59, 130, 246, 0.85);
+                transform: scale(1.05);
+            }
+        }
+
+        .chat-card-bluelight {
+            animation: chatBlueLightFlash 1.3s ease-in-out infinite !important;
+            border-top-color: #93c5fd !important;
+            border-right-color: #93c5fd !important;
+            border-bottom-color: #93c5fd !important;
+        }
+
+        .chat-card-bluelight .chat-neu-badge,
+        .chat-card-bluelight [id*="chat-unread"],
+        .chat-card-bluelight .badge-new {
+            animation: badgeBlueLightFlash 1.3s ease-in-out infinite !important;
+            color: #ffffff !important;
+            white-space: nowrap !important;
+            font-size: 0.72rem !important;
+            padding: 4px 9px !important;
+        }
 
         .dark-event-item {
             background: rgba(255, 255, 255, 0.9);
@@ -420,41 +482,226 @@
             border: 1px solid rgba(255, 255, 255, 0.95);
             box-shadow: 0 14px 36px rgba(15, 23, 42, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
-        #admin-login-card {
-            background: #ffffff !important;
-            color: #0f172a !important;
-            border: 1px solid #e2e8f0 !important;
-            border-left: 1px solid #e2e8f0 !important;
-            border-top: 5px solid #991b1b !important;
-            border-radius: 20px !important;
-            padding: 22px 18px !important;
-            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08) !important;
+        .admin-glass-stage {
+            background:
+                radial-gradient(circle at 15% 20%, rgba(34, 197, 94, 0.24), transparent 48%),
+                radial-gradient(circle at 85% 25%, rgba(234, 179, 8, 0.24), transparent 48%),
+                radial-gradient(circle at 50% 85%, rgba(59, 130, 246, 0.20), transparent 52%),
+                #f1f5f9;
+            border-radius: 28px;
+            padding: 18px 14px;
             box-sizing: border-box;
+        }
+        @keyframes adminGlassShimmer {
+            0%, 62% {
+                transform: translateX(-140%) skewX(-22deg);
+                opacity: 0;
+            }
+            74% {
+                opacity: 0.55;
+            }
+            88%, 100% {
+                transform: translateX(240%) skewX(-22deg);
+                opacity: 0;
+            }
+        }
+        .admin-light-glass-card {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(20px) saturate(165%);
+            -webkit-backdrop-filter: blur(20px) saturate(165%);
+            border: 1.5px solid rgba(255, 255, 255, 0.88);
+            border-top: 3px solid rgba(234, 179, 8, 0.75);
+            border-radius: 24px;
+            padding: 26px 22px;
+            box-shadow:
+                0 20px 45px rgba(15, 23, 42, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.95);
+            color: #0f172a;
+            box-sizing: border-box;
+        }
+        .admin-light-glass-card::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 45%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.55) 50%,
+                rgba(254, 249, 195, 0.25) 100%
+            );
+            pointer-events: none;
+            animation: adminGlassShimmer 6s ease-in-out infinite;
+        }
+        .admin-back-overview-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            padding: 9px 18px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255, 255, 255, 0.95);
+            color: #334155;
+            font-size: 0.84rem;
+            font-weight: 700;
+            font-family: inherit;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .admin-back-overview-pill:hover {
+            background: rgba(255, 255, 255, 0.94);
+            color: #0f172a;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+        }
+        .admin-back-overview-pill:active {
+            transform: scale(0.98);
+        }
+        .admin-light-glass-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(234, 179, 8, 0.16);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(234, 179, 8, 0.45);
+            color: #854d0e;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 5px 12px;
+            border-radius: 999px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
         }
         #admin-login-card .card-title { color: #0f172a !important; }
         #admin-login-card label {
-            color: #334155 !important;
-            font-size: 0.84rem;
-            font-weight: 800;
-            margin-bottom: 6px;
+            color: #1e293b !important;
+            font-size: 0.86rem;
+            font-weight: 700;
+            margin-bottom: 7px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
-        #admin-login-card .form-control {
-            background: #f8fafc;
+        #admin-login-card .admin-light-glass-input,
+        .admin-light-glass-input {
+            background: rgba(255, 255, 255, 0.62);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05), inset 0 1px 2px rgba(15, 23, 42, 0.04);
             color: #0f172a;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 12px;
+            border-radius: 14px;
+            padding: 13px 16px;
             font-size: 1rem;
+            font-weight: 600;
+            color-scheme: light;
             box-sizing: border-box;
+            transition: all 0.2s ease;
         }
-        #admin-login-card .form-control:focus {
+        #admin-login-card .admin-light-glass-input::placeholder,
+        .admin-light-glass-input::placeholder {
+            color: #64748b;
+            font-weight: 500;
+        }
+        #admin-login-card .admin-light-glass-input:focus,
+        .admin-light-glass-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.92);
+            border-color: rgba(234, 179, 8, 0.85);
+            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.22);
+        }
+        #admin-login-card .admin-light-glass-input option { background: #ffffff; color: #0f172a; }
+        #admin-human-check-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 16px;
+            margin-top: 4px;
+            margin-bottom: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+        #admin-human-check-box:hover:not(.is-verified) {
+            background: rgba(255, 255, 255, 0.82);
+            border-color: rgba(234, 179, 8, 0.45);
+        }
+        #admin-human-check-box.is-verified {
+            border-color: rgba(34, 197, 94, 0.6);
+            background: rgba(240, 253, 244, 0.84);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+            cursor: default;
+        }
+        #admin-human-check-box.is-highlight {
+            border-color: rgba(234, 179, 8, 0.9);
+            box-shadow: 0 0 0 4px rgba(234, 179, 8, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+            animation: adminHumanPulse 0.45s ease;
+        }
+        #admin-human-checkbox {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            border-radius: 7px;
+            border: 2px solid #94a3b8;
             background: #ffffff;
-            border-color: #991b1b;
-            box-shadow: 0 0 0 3px rgba(153, 27, 27, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 0.92rem;
+            font-weight: 900;
+            line-height: 1;
+            box-sizing: border-box;
+            transition: all 0.25s ease;
         }
-        #admin-login-card .form-control option { background: #ffffff; color: #0f172a; }
+        #admin-human-checkbox.is-verified {
+            background: #16a34a;
+            border-color: #22c55e;
+            color: #ffffff;
+        }
+        .admin-human-spinner {
+            width: 14px;
+            height: 14px;
+            border: 2.2px solid rgba(22, 163, 74, 0.22);
+            border-top-color: #16a34a;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: adminHumanSpin 0.6s linear infinite;
+        }
+        @keyframes adminHumanSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes adminHumanPulse {
+            0%, 100% { transform: scale(1); }
+            40% { transform: scale(1.018); }
+        }
+        .glass-btn {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.85), rgba(22, 163, 74, 0.95));
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(22, 163, 74, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            margin-top: 2px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        }
         #admin-login-submit-btn:active:not(:disabled) {
             transform: scale(0.99);
         }
@@ -2412,6 +2659,10 @@
                     🔓 App entsperren
                 </button>
             </form>
+            <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px; gap: 6px;">
+                <img src="siegel.png" alt="Powered by Simon Schweighofer" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid #eab308; animation: sealGoldPulse 2.6s ease-in-out infinite;" onerror="this.style.display='none';">
+                <span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; letter-spacing: 0.05em; text-transform: uppercase;">Powered by Simon Schweighofer</span>
+            </div>
         </div>
 
         <div style="padding: 18px 0 8px 0; text-align: center; position: relative; z-index: 5; pointer-events: auto;">
@@ -2473,7 +2724,7 @@
                 </span>
             </span>
             <span style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
-                <span id="news-chat-new-badge" style="display: none; background: #dc2626; color: #ffffff; border: 1.5px solid #ffffff; border-radius: 999px; padding: 2px 8px; font-size: 0.74rem; font-weight: 800; line-height: 1.2;">Neu!</span>
+                <span id="news-chat-new-badge" class="chat-neu-badge" style="display: none; background: #1d4ed8; color: #ffffff; border: 1.5px solid #ffffff; border-radius: 999px; padding: 4px 9px; font-size: 0.72rem; font-weight: 800; line-height: 1.2; white-space: nowrap;">Neue Nachricht</span>
                 <span aria-hidden="true" style="color: #16a34a; font-size: 1.2rem; font-weight: 800; flex-shrink: 0; line-height: 1;">→</span>
             </span>
         </button>
@@ -2723,32 +2974,48 @@
 
     <!-- 6. ADMIN-BEREICH -->
     <div id="page-card" class="page-content">
-        <div class="glass-card glass-card-red" id="admin-login-card">
-            <div>
-                <span style="display: inline-flex; align-items: center; gap: 6px; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 999px; letter-spacing: 0.04em; text-transform: uppercase;">🛡️ VORSTANDS-BEREICH</span>
-            </div>
-            <h2 style="font-size: 1.25rem; font-weight: 900; color: #0f172a; margin: 8px 0 4px 0; line-height: 1.25;">Geschützter Admin-Bereich</h2>
-            <p style="font-size: 0.84rem; color: #64748b; margin: 0 0 18px 0; line-height: 1.4; font-weight: 500;">Anmeldung ausschließlich für autorisierte Vorstandsmitglieder</p>
-            <form onsubmit="handleAdminLogin(event)">
-                <div class="form-group">
-                    <label for="admin-user-select">👤 Vorstandsmitglied</label>
-                    <select class="form-control" id="admin-user-select" required style="background: #f8fafc; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px 14px; font-size: 1rem; font-weight: 700; width: 100%;">
-                        <option value="simon">Schweighofer Simon (Obmann)</option>
-                        <option value="heimo">Stocker Heimo (Obmann Stv.)</option>
-                        <option value="karin">Stocker Karin (Kassierin)</option>
-                        <option value="sabrina">Kinzl Sabrina (Schriftführerin)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="admin-password-input">🔑 Dein persönliches Passwort</label>
-                    <div style="position: relative; width: 100%;">
-                        <input type="password" class="form-control" id="admin-password-input" placeholder="Passwort eingeben" required autocomplete="off" style="background: #f8fafc; color: #0f172a; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px 44px 12px 14px; font-size: 1rem; width: 100%;">
-                        <button type="button" id="toggle-admin-pw-visibility" onclick="toggleAdminPasswordVisibility()" aria-label="Passwort anzeigen" aria-pressed="false" title="Passwort anzeigen / verbergen" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #64748b; cursor: pointer; padding: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.12rem; line-height: 1;">👁️</button>
+        <div id="admin-login-card" class="admin-glass-stage">
+            <div class="admin-light-glass-card">
+                <div style="text-align: center;">
+                    <img src="siegel.png" alt="Vereins-Siegel" onerror="this.style.display='none';" style="width: 54px; height: 54px; border-radius: 50%; object-fit: cover; border: 2px solid #eab308; margin: 0 auto 12px auto; display: block; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.14);">
+                    <div>
+                        <span class="admin-light-glass-badge">🛡️ VORSTANDS-BEREICH</span>
                     </div>
+                    <h2 style="font-size: 1.28rem; font-weight: 900; color: #0f172a; margin: 10px 0 6px 0; line-height: 1.25;">Geschützter Admin-Bereich</h2>
+                    <p style="font-size: 0.84rem; color: #475569; margin: 0 0 22px 0; line-height: 1.45; font-weight: 500;">Anmeldung ausschließlich für autorisierte Vorstandsmitglieder</p>
                 </div>
-                <button type="submit" id="admin-login-submit-btn" style="width: 100%; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: none; border-radius: 14px; padding: 14px; font-size: 1.02rem; font-weight: 800; box-shadow: 0 4px 14px rgba(22, 163, 74, 0.28); margin-top: 14px; cursor: pointer; font-family: inherit;">🔐 Im Vorstandsbereich anmelden</button>
-                <button type="button" onclick="exitAdminDirectLogin()" class="btn admin-btn-delete btn-block admin-direct-back-btn" style="margin-top: 10px;">← Zurück zur Zugangscode-Eingabe</button>
-            </form>
+                <form onsubmit="handleAdminLogin(event)">
+                    <div class="form-group">
+                        <label for="admin-user-select">👤 Vorstandsmitglied</label>
+                        <select class="form-control admin-light-glass-input" id="admin-user-select" required style="width: 100%;">
+                            <option value="simon">Schweighofer Simon (Obmann)</option>
+                            <option value="heimo">Stocker Heimo (Obmann Stv.)</option>
+                            <option value="karin">Stocker Karin (Kassierin)</option>
+                            <option value="sabrina">Kinzl Sabrina (Schriftführerin)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-password-input">🔑 Dein persönliches Passwort</label>
+                        <div style="position: relative; width: 100%;">
+                            <input type="password" class="form-control admin-light-glass-input" id="admin-password-input" placeholder="Passwort eingeben" required autocomplete="off" style="padding-right: 46px; width: 100%;">
+                            <button type="button" id="toggle-admin-pw-visibility" onclick="toggleAdminPasswordVisibility()" aria-label="Passwort anzeigen" aria-pressed="false" title="Passwort anzeigen / verbergen" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #1e293b; cursor: pointer; padding: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.12rem; line-height: 1;">👁️</button>
+                        </div>
+                    </div>
+                    <div id="admin-human-check-box" class="admin-light-glass-input" role="checkbox" tabindex="0" aria-checked="false" aria-labelledby="admin-human-label" onclick="verifyAdminHumanCheck()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();verifyAdminHumanCheck();}">
+                        <div style="display: flex; align-items: center; gap: 11px;">
+                            <span id="admin-human-checkbox" aria-hidden="true"></span>
+                            <span id="admin-human-label" style="color: #0f172a; font-weight: 700; font-size: 0.92rem;">Ich bin ein Mensch</span>
+                        </div>
+                        <span style="font-size: 0.72rem; color: #64748b; font-weight: 600; white-space: nowrap;">🛡️ Vereins-Schutz</span>
+                    </div>
+                    <div id="admin-human-check-hint" role="alert" style="display: none; font-size: 0.8rem; font-weight: 700; color: #b91c1c; background: rgba(254, 226, 226, 0.88); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 10px; padding: 8px 12px; margin: -6px 0 12px 0; text-align: center;">Bitte bestätige zuerst das Feld „Ich bin ein Mensch“.</div>
+                    <button type="submit" id="admin-login-submit-btn" class="glass-btn">🔐 Im Vorstandsbereich anmelden</button>
+                    <button type="button" onclick="exitAdminDirectLogin()" class="btn admin-btn-delete btn-block admin-direct-back-btn" style="margin-top: 10px;">← Zurück zur Zugangscode-Eingabe</button>
+                </form>
+            </div>
+            <div style="text-align: center;">
+                <button type="button" id="admin-back-overview-btn" class="admin-back-overview-pill" onclick="resetAdminPasswordVisibility(); if (document.body.classList.contains('app-locked')) { exitAdminDirectLogin(); } else { switchTab('news'); }">← Zurück zur Übersicht</button>
+            </div>
         </div>
 
         <div class="admin-delete-btn">
@@ -3387,14 +3654,7 @@
             </div>
             <div style="padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.86em; line-height: 1.5;">
                 <div style="display: flex; flex-direction: column;">
-                    <button type="button" id="read-member-help-btn" onclick="toggleReadMemberHelpAloud()" style="width: 100%; margin-bottom: 8px; padding: 12px 14px; background: #16a34a; color: #ffffff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔊 Anleitung laut vorlesen</button>
-                    <div id="help-voice-select-row" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
-                        <label for="help-voice-select" style="font-size: 0.8rem; font-weight: 700; color: #475569; white-space: nowrap; flex-shrink: 0;">🎙️ Stimme:</label>
-                        <select id="help-voice-select" onchange="handleHelpVoiceSelectChange(this.value)" aria-label="Vorlesestimme auswählen" style="flex: 1; min-width: 0; font-size: 0.85rem; padding: 6px 10px; border-radius: 10px; border: 1px solid #cbd5e1; background: #f8fafc; color: #0f172a; font-family: inherit; font-weight: 600;">
-                            <option value="">Beste deutsche Stimme (automatisch)</option>
-                        </select>
-                        <button type="button" id="help-voice-test-btn" onclick="testSelectedHelpVoice()" title="Ausgewählte Stimme testen" aria-label="Ausgewählte Stimme testen" style="padding: 6px 10px; border-radius: 10px; background: #e2e8f0; color: #0f172a; border: none; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; flex-shrink: 0; font-family: inherit;">▶️ Test</button>
-                    </div>
+                    <button type="button" id="read-member-help-btn" onclick="toggleReadMemberHelpAloud()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #16a34a; color: #ffffff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔊 Anleitung laut vorlesen</button>
                     <button type="button" id="push-activate-btn" onclick="enablePushNotifications()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #fef3c7; color: #92400e; border: 2px solid #f59e0b; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔔 Push-Benachrichtigungen aktivieren</button>
                     <div id="push-status-hint" style="display: none; margin: -2px 0 10px 0; padding: 9px 12px; border-radius: 10px; font-size: 0.85em; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
                     <button type="button" id="font-size-toggle-btn" onclick="toggleLargeFontMode()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #ffffff; color: #1e293b; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔍 Große Schrift: Aus</button>
@@ -3459,6 +3719,11 @@
                     <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
                         Autorisierte Personen öffnen das Waffenbuch per Kamera-Scan des Tresor-QR-Codes, wählen ihren Namen sowie die entnommenen Waffen und tragen später die Rückgabe mit einem Tipp ein. Nach 2 Minuten Inaktivität oder bei Tab-Wechsel sperrt sich das Formular automatisch wieder.
                     </div>
+                </div>
+
+                <div style="border-top: 1px solid #e2e8f0; margin-top: 18px; padding-top: 16px; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                    <img src="siegel.png" alt="Powered by Simon Schweighofer" style="width: 68px; height: 68px; border-radius: 50%; object-fit: cover; border: 2px solid #eab308; animation: sealGoldPulse 2.6s ease-in-out infinite;" onerror="this.style.display='none';">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #475569;">App-Entwicklung &amp; Verwaltung: Simon Schweighofer</span>
                 </div>
 
                 <button type="button" onclick="closeMemberHelpModal()" class="btn btn-primary btn-block" style="margin-top: 4px;">Verstanden</button>
@@ -4003,22 +4268,34 @@
 
         function showCustomConfirm(titleText, messageText, onConfirm) {
             const modal = document.getElementById('customConfirm');
-            document.getElementById('customConfirmTitle').innerHTML = '<span style="font-size: 2em; vertical-align: middle;">⚠️</span><br>' + titleText;
-            document.getElementById('customConfirmMessage').innerText = messageText;
+            const titleEl = document.getElementById('customConfirmTitle');
+            const msgEl = document.getElementById('customConfirmMessage');
+            const yesBtn = document.getElementById('customConfirmYes');
+            const noBtn = document.getElementById('customConfirmNo');
+            if (!modal) {
+                if (typeof onConfirm === 'function') onConfirm(false);
+                return;
+            }
+            if (titleEl) titleEl.innerHTML = '<span style="font-size: 2em; vertical-align: middle;">⚠️</span><br>' + titleText;
+            if (msgEl) msgEl.innerText = messageText;
             modal.style.display = 'flex';
             modal.style.pointerEvents = 'auto';
 
-            document.getElementById('customConfirmYes').onclick = function() {
-                modal.style.display = 'none';
-                modal.style.pointerEvents = 'none';
-                onConfirm(true);
-            };
+            if (yesBtn) {
+                yesBtn.onclick = function() {
+                    modal.style.display = 'none';
+                    modal.style.pointerEvents = 'none';
+                    onConfirm(true);
+                };
+            }
 
-            document.getElementById('customConfirmNo').onclick = function() {
-                modal.style.display = 'none';
-                modal.style.pointerEvents = 'none';
-                onConfirm(false);
-            };
+            if (noBtn) {
+                noBtn.onclick = function() {
+                    modal.style.display = 'none';
+                    modal.style.pointerEvents = 'none';
+                    onConfirm(false);
+                };
+            }
         }
 
         function showAdminSuccessModal() {
@@ -4566,6 +4843,10 @@
         function renderAdminMembersOverview() {
             const container = document.getElementById('admin-members-overview');
             if (!container) return;
+            if (typeof auth === 'undefined' || !auth || !auth.currentUser) {
+                container.innerHTML = '';
+                return;
+            }
             const cleanedActive = sanitizeActiveMembersList(officialActiveMembers);
             const activeList = cleanedActive.length > 0 ? cleanedActive : DEFAULT_ACTIVE_MEMBERS;
             const weaponList = Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [];
@@ -5793,26 +6074,167 @@
             return { year, month, day };
         }
 
+        function getOneSignalPushAppId() {
+            try {
+                if (typeof ONESIGNAL_APP_ID === 'string' && ONESIGNAL_APP_ID.trim()) {
+                    return ONESIGNAL_APP_ID.trim();
+                }
+            } catch (e) {}
+            return '97c2c2ee-175b-4e7f-876a-f86f1ab04ace';
+        }
+
+        async function getOptionalStoredOneSignalRestKey() {
+            try {
+                if (typeof auth === 'undefined' || !auth || !auth.currentUser) return '';
+                if (typeof db === 'undefined' || !db) return '';
+                const doc = await db.collection("settings").doc("push").get();
+                const rawKey = (doc && doc.exists && doc.data() && doc.data().restApiKey)
+                    ? String(doc.data().restApiKey).trim()
+                    : '';
+                if (!rawKey || /^•+$/.test(rawKey)) return '';
+                return rawKey;
+            } catch (readErr) {
+                return '';
+            }
+        }
+
+        function parseOneSignalWorkerResponse(res, rawText) {
+            const status = (res && typeof res.status === 'number') ? res.status : 0;
+            const isHttpOk = !!(res && res.ok);
+            const trimmedRaw = String(rawText || '').trim();
+
+            let data = null;
+            try {
+                data = trimmedRaw ? JSON.parse(trimmedRaw) : null;
+            } catch (parseErr) {
+                if (isHttpOk) {
+                    return {
+                        ok: true,
+                        status,
+                        data: { raw: trimmedRaw },
+                        recipients: 'OK',
+                        error: ''
+                    };
+                }
+                return {
+                    ok: false,
+                    status,
+                    data: null,
+                    recipients: null,
+                    error: `Ungültige Antwort vom Push-Worker (HTTP ${status || '?'}): ${trimmedRaw.slice(0, 280) || 'Leere Antwort'}`
+                };
+            }
+
+            const extractErrorText = (obj) => {
+                if (!obj || typeof obj !== 'object') return '';
+                const parts = [];
+                if (typeof obj.error === 'string' && obj.error.trim()) {
+                    parts.push(obj.error.trim());
+                } else if (obj.error && typeof obj.error === 'object') {
+                    parts.push(JSON.stringify(obj.error));
+                }
+                if (Array.isArray(obj.errors) && obj.errors.length > 0) {
+                    parts.push(obj.errors.map(item => typeof item === 'string' ? item : JSON.stringify(item)).join(' | '));
+                } else if (typeof obj.errors === 'string' && obj.errors.trim()) {
+                    parts.push(obj.errors.trim());
+                } else if (obj.errors && typeof obj.errors === 'object' && !Array.isArray(obj.errors) && Object.keys(obj.errors).length > 0) {
+                    parts.push(JSON.stringify(obj.errors));
+                }
+                if (typeof obj.details === 'string' && obj.details.trim()) {
+                    parts.push(obj.details.trim());
+                } else if (obj.details && typeof obj.details === 'object') {
+                    parts.push(JSON.stringify(obj.details));
+                }
+                if ((!isHttpOk || obj.ok === false || obj.success === false) && typeof obj.message === 'string' && obj.message.trim()) {
+                    if (!parts.includes(obj.message.trim())) parts.push(obj.message.trim());
+                }
+                const nested = obj.onesignal || obj.result || obj.response || obj.data;
+                if (nested && typeof nested === 'object') {
+                    const nestedErr = extractErrorText(nested);
+                    if (nestedErr && !parts.includes(nestedErr)) parts.push(nestedErr);
+                }
+                return parts.join(' – ');
+            };
+
+            const errorDetail = extractErrorText(data);
+            const hasExplicitError = Boolean(errorDetail) || !!(data && (data.ok === false || data.success === false));
+            const nestedObj = (data && typeof data === 'object') ? (data.onesignal || data.result || data.response || data.data) : null;
+            const hasEmptyOneSignalId = !!(data && Object.prototype.hasOwnProperty.call(data, 'id') && !data.id && data.ok !== true && data.success !== true);
+            const resolvedRecipients = (data && data.recipients !== undefined)
+                ? data.recipients
+                : ((nestedObj && nestedObj.recipients !== undefined) ? nestedObj.recipients : null);
+
+            if (isHttpOk && !hasExplicitError && !hasEmptyOneSignalId) {
+                return {
+                    ok: true,
+                    status,
+                    data,
+                    recipients: resolvedRecipients !== null ? resolvedRecipients : 'OK',
+                    error: ''
+                };
+            }
+
+            const fallbackMsg = data ? JSON.stringify(data).slice(0, 320) : (trimmedRaw.slice(0, 280) || 'Leere Antwort');
+            const formattedErr = errorDetail
+                ? (isHttpOk ? errorDetail : `HTTP ${status}: ${errorDetail}`)
+                : `Push-Worker / OneSignal Fehler (HTTP ${status || '?'}): ${fallbackMsg}`;
+
+            return {
+                ok: false,
+                status,
+                data,
+                recipients: resolvedRecipients,
+                error: formattedErr
+            };
+        }
+
+        function showAdminPushFeedback(isSuccess, messageText) {
+            const feedbackEl = document.getElementById('admin-custom-push-feedback');
+            if (!feedbackEl) return;
+            if (isSuccess) {
+                feedbackEl.style.background = '#dcfce7';
+                feedbackEl.style.border = '1.5px solid #86efac';
+                feedbackEl.style.color = '#166534';
+            } else {
+                feedbackEl.style.background = '#fee2e2';
+                feedbackEl.style.border = '1.5px solid #fca5a5';
+                feedbackEl.style.color = '#991b1b';
+            }
+            feedbackEl.innerText = String(messageText || '');
+            feedbackEl.style.display = messageText ? 'block' : 'none';
+        }
+
+        function showPushStatusToast(isSuccess, messageText) {
+            try {
+                const existingSuccess = document.getElementById('push-success-toast');
+                if (existingSuccess) existingSuccess.remove();
+                const existingError = document.getElementById('push-error-toast');
+                if (existingError) existingError.remove();
+                const toast = document.createElement('div');
+                toast.id = isSuccess ? 'push-success-toast' : 'push-error-toast';
+                toast.innerText = String(messageText || '');
+                toast.style.cssText = isSuccess
+                    ? 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99999999;background:#16a34a;color:#ffffff;padding:12px 18px;border-radius:14px;font-weight:800;font-size:0.9em;box-shadow:0 10px 25px rgba(22,163,74,0.35);border:2px solid #86efac;max-width:92%;text-align:center;'
+                    : 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99999999;background:#dc2626;color:#ffffff;padding:12px 18px;border-radius:14px;font-weight:800;font-size:0.88em;box-shadow:0 10px 25px rgba(220,38,38,0.4);border:2px solid #fca5a5;max-width:92%;text-align:center;word-break:break-word;';
+                document.body.appendChild(toast);
+                setTimeout(() => { try { toast.remove(); } catch (e) {} }, isSuccess ? 4000 : 7500);
+            } catch (toastErr) {}
+        }
+
         async function sendDutyReminderViaEndpoint(title, message) {
             const cleanTitle = String(title || 'KB & SV Gaschurn-Partenen').trim();
             const cleanMessage = String(message || '').trim() || cleanTitle;
             const targetUrl = "https://" + "kb-sv-push" + "." + "simonpoeschel33" + "." + "workers.dev";
 
             try {
-                let rawKey = '';
-                try {
-                    const doc = await db.collection("settings").doc("push").get();
-                    rawKey = (doc.exists && doc.data() && doc.data().restApiKey) ? String(doc.data().restApiKey).trim() : '';
-                } catch (readErr) {
-                    rawKey = '';
-                }
+                const rawKey = await getOptionalStoredOneSignalRestKey();
 
                 const appUrl = (typeof window !== 'undefined' && window.location && /^https?:\/\//i.test(window.location.origin))
                     ? (window.location.origin + window.location.pathname)
                     : "https://github.io";
 
                 const payloadBody = {
-                    appId: ONESIGNAL_APP_ID,
+                    appId: getOneSignalPushAppId(),
                     title: cleanTitle,
                     message: cleanMessage,
                     url: appUrl
@@ -5828,19 +6250,15 @@
                 });
 
                 const rawText = await res.text();
-                let data = null;
-                try {
-                    data = JSON.parse(rawText);
-                } catch (parseErr) {
-                    return { ok: false, error: 'Ungültige JSON-Antwort' };
+                const parsed = parseOneSignalWorkerResponse(res, rawText);
+                if (!parsed.ok) {
+                    try { console.warn('[Dienst-Push Fehler]', parsed.error); } catch (logErr) {}
                 }
-
-                if (res.ok && data && data.id && !data.errors && !data.error && data.ok !== false) {
-                    return { ok: true, data };
-                }
-                return { ok: false, error: 'Push-Endpunkt lehnte Anfrage ab' };
+                return parsed;
             } catch (err) {
-                return { ok: false, error: (err && err.message) ? err.message : String(err) };
+                const errMsg = (err && err.message) ? err.message : String(err);
+                try { console.warn('[Dienst-Push Netzwerkfehler]', errMsg); } catch (logErr) {}
+                return { ok: false, error: errMsg };
             }
         }
 
@@ -6189,7 +6607,7 @@
                     const pushBody = desc ? `${date} – ${desc}` : date;
                     const pushRes = await sendOneSignalPushToAll(`📆 Neuer Termin: ${title}`, pushBody);
                     if (!pushRes.ok) {
-                        pushNotice = "\n\n⚠️ Push-Hinweis: " + pushRes.error;
+                        pushNotice = "\n\n⚠️ Push-Fehler: " + pushRes.error;
                     }
                 }
                 if (titleEl) titleEl.value = '';
@@ -7475,22 +7893,27 @@
             const cancelBtn = document.getElementById('key-cancel-btn');
 
             if (editIdx) editIdx.value = String(index);
+            const keyNameEl = document.getElementById('key-name');
+            const keyDobEl = document.getElementById('key-dob');
+            const keyAddrEl = document.getElementById('key-addr');
+            const keyTelEl = document.getElementById('key-tel');
+            const keyRoleEl = document.getElementById('key-role');
             if (item.header) {
                 if (isHeaderEl) isHeaderEl.value = '1';
                 if (titleEl) titleEl.innerText = '✏️ Abschnittstitel bearbeiten';
                 if (nameLabel) nameLabel.innerText = 'Abschnittstitel';
                 if (personFields) personFields.style.display = 'none';
-                document.getElementById('key-name').value = item.header || '';
+                if (keyNameEl) keyNameEl.value = item.header || '';
             } else {
                 if (isHeaderEl) isHeaderEl.value = '0';
                 if (titleEl) titleEl.innerText = '✏️ Schlüsselinhaber bearbeiten';
                 if (nameLabel) nameLabel.innerText = 'Name (Vorname Nachname)';
                 if (personFields) personFields.style.display = 'block';
-                document.getElementById('key-name').value = item.name || '';
-                document.getElementById('key-dob').value = item.dob || '';
-                document.getElementById('key-addr').value = item.addr || '';
-                document.getElementById('key-tel').value = item.tel || '';
-                document.getElementById('key-role').value = item.role || '';
+                if (keyNameEl) keyNameEl.value = item.name || '';
+                if (keyDobEl) keyDobEl.value = item.dob || '';
+                if (keyAddrEl) keyAddrEl.value = item.addr || '';
+                if (keyTelEl) keyTelEl.value = item.tel || '';
+                if (keyRoleEl) keyRoleEl.value = item.role || '';
             }
             if (saveBtn) saveBtn.innerText = '💾 Änderungen speichern';
             if (cancelBtn) cancelBtn.style.display = 'inline-block';
@@ -7501,19 +7924,26 @@
         async function saveKeyListItem(e) {
             e.preventDefault();
             if (!auth.currentUser) return;
-            const editIdxRaw = document.getElementById('key-edit-index').value;
-            const isHeader = document.getElementById('key-edit-is-header').value === '1';
-            const name = (document.getElementById('key-name').value || '').trim();
+            const editIdxEl = document.getElementById('key-edit-index');
+            const isHeaderEl = document.getElementById('key-edit-is-header');
+            const keyNameEl = document.getElementById('key-name');
+            const keyDobEl = document.getElementById('key-dob');
+            const keyAddrEl = document.getElementById('key-addr');
+            const keyTelEl = document.getElementById('key-tel');
+            const keyRoleEl = document.getElementById('key-role');
+            const editIdxRaw = editIdxEl ? editIdxEl.value : '';
+            const isHeader = !!(isHeaderEl && isHeaderEl.value === '1');
+            const name = (keyNameEl && keyNameEl.value ? keyNameEl.value : '').trim();
             if (!name) return;
 
             const updatedEntry = isHeader
                 ? { header: name }
                 : {
                     name,
-                    dob: (document.getElementById('key-dob').value || '').trim(),
-                    addr: (document.getElementById('key-addr').value || '').trim(),
-                    tel: (document.getElementById('key-tel').value || '').trim(),
-                    role: (document.getElementById('key-role').value || '').trim()
+                    dob: (keyDobEl && keyDobEl.value ? keyDobEl.value : '').trim(),
+                    addr: (keyAddrEl && keyAddrEl.value ? keyAddrEl.value : '').trim(),
+                    tel: (keyTelEl && keyTelEl.value ? keyTelEl.value : '').trim(),
+                    role: (keyRoleEl && keyRoleEl.value ? keyRoleEl.value : '').trim()
                 };
 
             const previousCopy = [...exactPdfKeyList];
@@ -7547,7 +7977,8 @@
             exactPdfKeyList.splice(index, 1);
             try {
                 await persistKeyListToFirestore();
-                if (document.getElementById('key-edit-index').value === String(index)) {
+                const editIdxEl = document.getElementById('key-edit-index');
+                if (editIdxEl && editIdxEl.value === String(index)) {
                     resetKeyListForm();
                 }
                 renderKeyList();
@@ -7622,9 +8053,86 @@
                 }
             });
 
+            drawClubSealStampOnPdf(pdf, 261, 8, 22);
             pdf.save(`Schluesselliste_KBSV_Gaschurn_Partenen_${dateStr.replace(/\./g, '-')}.pdf`);
             logAdminAudit('PDF-Export: Schlüsselliste', 'Vertrauliche Schlüsselliste als PDF exportiert');
         }
+
+        let cachedClubSealDataUrl = '';
+        let cachedClubSealLoadPromise = null;
+
+        function loadSealImageBase64() {
+            if (cachedClubSealDataUrl) {
+                return Promise.resolve(cachedClubSealDataUrl);
+            }
+            if (cachedClubSealLoadPromise) {
+                return cachedClubSealLoadPromise;
+            }
+            cachedClubSealLoadPromise = new Promise((resolve) => {
+                let settled = false;
+                const finish = (val) => {
+                    if (settled) return;
+                    settled = true;
+                    if (!val) cachedClubSealLoadPromise = null;
+                    resolve(val || null);
+                };
+                try {
+                    const timer = setTimeout(() => finish(null), 4000);
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    img.onload = function() {
+                        clearTimeout(timer);
+                        try {
+                            const natW = img.naturalWidth || img.width || 256;
+                            const natH = img.naturalHeight || img.height || 256;
+                            const size = Math.min(natW, natH) || 256;
+                            const sx = Math.floor((natW - size) / 2);
+                            const sy = Math.floor((natH - size) / 2);
+                            const canvas = document.createElement('canvas');
+                            canvas.width = size;
+                            canvas.height = size;
+                            const ctx = canvas.getContext('2d');
+                            if (!ctx) {
+                                finish(null);
+                                return;
+                            }
+                            ctx.clearRect(0, 0, size, size);
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+                            ctx.closePath();
+                            ctx.clip();
+                            ctx.drawImage(img, sx, sy, size, size, 0, 0, size, size);
+                            ctx.restore();
+                            const dataUrl = canvas.toDataURL('image/png');
+                            cachedClubSealDataUrl = dataUrl;
+                            finish(dataUrl);
+                        } catch (e) {
+                            finish(null);
+                        }
+                    };
+                    img.onerror = function() {
+                        clearTimeout(timer);
+                        finish(null);
+                    };
+                    img.src = 'siegel.png';
+                } catch (e) {
+                    finish(null);
+                }
+            });
+            return cachedClubSealLoadPromise;
+        }
+
+        function drawClubSealStampOnPdf(pdfDoc, x, y, size = 22, sealBase64 = '') {
+            if (!pdfDoc) return;
+            const imgData = sealBase64 || cachedClubSealDataUrl;
+            if (!imgData) return;
+            try {
+                pdfDoc.addImage(imgData, 'PNG', x, y, size, size);
+            } catch (e) {}
+        }
+
+        try { loadSealImageBase64(); } catch (e) {}
 
         // --- WAFFENBUCH QR SCANNER & LOGIK (GESICHERT MIT SCAN-SPERRE) ---
         let html5QrCode = null;
@@ -8452,6 +8960,7 @@
             pdf.setFontSize(12);
             pdf.setTextColor(51, 65, 85);
             pdf.text(`Protokoll-ID: ${data.id || "-"}   |   Aktueller Status: ${statusText}`, margin, footerY);
+            drawClubSealStampOnPdf(pdf, pageWidth - margin - 22, Math.max(14, Math.min(footerY - 10, pageHeight - 28)), 22, data && data._sealBase64 ? data._sealBase64 : '');
 
             return pdf;
         }
@@ -8460,10 +8969,14 @@
             e.preventDefault();
             if (!weaponSessionUnlocked) { alert('Bitte zuerst QR-Code scannen!'); return; }
             try {
-                const primaryName = document.getElementById('weapon-member-primary').value;
-                const secondaryName = document.getElementById('weapon-member-secondary').value;
-                const occasion = document.getElementById('weapon-occasion').value;
-                const location = document.getElementById('weapon-location').value;
+                const primaryEl = document.getElementById('weapon-member-primary');
+                const secondaryEl = document.getElementById('weapon-member-secondary');
+                const occasionEl = document.getElementById('weapon-occasion');
+                const locationEl = document.getElementById('weapon-location');
+                const primaryName = primaryEl ? primaryEl.value : '';
+                const secondaryName = secondaryEl ? secondaryEl.value : '';
+                const occasion = occasionEl ? occasionEl.value : '';
+                const location = locationEl ? locationEl.value : '';
 
                 const checkboxes = document.querySelectorAll('input[name="weapons"]:checked');
                 if (!checkboxes || checkboxes.length === 0) {
@@ -8516,7 +9029,8 @@
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
 
-                const pdf = buildWeaponProtocolPDF(weaponLogObj);
+                const sealBase64 = await loadSealImageBase64();
+                const pdf = buildWeaponProtocolPDF({ ...weaponLogObj, _sealBase64: sealBase64 });
                 weaponLogObj.pdfData = pdf.output('datauristring');
 
                 await db.collection("weapon_log").doc(recordId).set(weaponLogObj);
@@ -8570,7 +9084,8 @@
                     status: "Zurückgebracht"
                 };
 
-                const pdf = buildWeaponProtocolPDF(updatedData);
+                const sealBase64 = await loadSealImageBase64();
+                const pdf = buildWeaponProtocolPDF({ ...updatedData, _sealBase64: sealBase64 });
                 const pdfBase64 = pdf.output('datauristring');
 
                 await docRef.update({
@@ -8736,7 +9251,7 @@
                             <div style="display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; padding-top: 2px;">
                                 <button type="button" class="btn admin-btn-edit weapon-pdf-preview-btn" style="padding: 7px 12px !important; font-size: 13px !important;" data-doc-id="${safeDocId}">👁️ Ansehen</button>
                                 <button type="button" class="btn admin-btn-save weapon-pdf-download-btn" style="padding: 7px 12px !important; font-size: 13px !important;" data-doc-id="${safeDocId}">📥 Herunterladen</button>
-                                <button type="button" onclick="deleteAdminWeaponLog('${safeDocId}')" title="Protokoll endgültig löschen" style="background: #fef2f2; color: #b91c1c; border: 1.5px solid #fecaca; border-radius: 10px; padding: 7px 11px; font-size: 0.85rem; font-weight: 800; cursor: pointer;">🗑️ Löschen</button>
+                                <button type="button" data-doc-id="${safeDocId}" onclick="deleteAdminWeaponLog(this.dataset.docId)" title="Protokoll endgültig löschen" style="background: #fef2f2; color: #b91c1c; border: 1.5px solid #fecaca; border-radius: 10px; padding: 7px 11px; font-size: 0.85rem; font-weight: 800; cursor: pointer;">🗑️ Löschen</button>
                             </div>
                         </div>
                     `;
@@ -8989,7 +9504,8 @@
                 let pdfSrc = "";
                 const hasWeapons = Array.isArray(data.selectedWeapons) && data.selectedWeapons.length > 0;
                 if (!data.pdfData || hasWeapons) {
-                    const pdf = buildWeaponProtocolPDF({ ...data, id: protoId });
+                    const sealBase64 = await loadSealImageBase64();
+                    const pdf = buildWeaponProtocolPDF({ ...data, id: protoId, _sealBase64: sealBase64 });
                     try {
                         const blob = pdf.output('blob');
                         pdfSrc = URL.createObjectURL(blob);
@@ -9049,7 +9565,8 @@
                 const protoId = data.id || docId;
                 const hasWeapons = Array.isArray(data.selectedWeapons) && data.selectedWeapons.length > 0;
                 if (!data.pdfData || hasWeapons) {
-                    const pdf = buildWeaponProtocolPDF({ ...data, id: protoId });
+                    const sealBase64 = await loadSealImageBase64();
+                    const pdf = buildWeaponProtocolPDF({ ...data, id: protoId, _sealBase64: sealBase64 });
                     pdf.save(`${protoId}_Protokoll.pdf`);
                     return;
                 }
@@ -10134,6 +10651,7 @@
                 doc.setTextColor(71, 85, 105);
                 doc.text("Ort, Datum", marginLeft, y + 4.5);
                 doc.text("Kassier / Schankwart", pageWidth - marginRight - 75, y + 4.5);
+                drawClubSealStampOnPdf(doc, (pageWidth / 2) - 12, Math.max(14, y - 16), 24);
 
                 const fileName = `Kassenbericht_Schankkassa_${yyyy}-${mm}-${dd}.pdf`;
                 doc.save(fileName);
@@ -10322,7 +10840,8 @@
                     <strong>Zahlungsbedingungen:</strong><br>Bitte überweisen innerhalb von 14 Tagen ohne Abzug:<br><strong>IBAN:</strong> AT86 3746 8000 0451 3511<br><strong>BIC:</strong> RVVGAT2B468<br><strong>Bank:</strong> Raiffeisenbank Bludenz-Montafon<br><strong>Verwendungszweck:</strong> ${safeInvoiceNum}
                 </div>
             `;
-            document.getElementById('invoice-modal-content').innerHTML = content;
+            const invContentEl = document.getElementById('invoice-modal-content');
+            if (invContentEl) invContentEl.innerHTML = content;
             const invModal = document.getElementById('invoice-modal');
             if (invModal) { invModal.style.display = 'flex'; invModal.style.pointerEvents = 'auto'; }
             window.currentModalDocId = docId;
@@ -10339,10 +10858,11 @@
             }
         }
 
-        function generateInvoicePDF(docId) {
+        async function generateInvoicePDF(docId) {
             if (!auth.currentUser) return;
             const invoiceData = window.invoicesMap[docId];
             if (!invoiceData) return;
+            const sealBase64 = await loadSealImageBase64();
 
             let invoiceDateStr = String(invoiceData.date || '').trim();
             if (!invoiceDateStr && invoiceData.createdAt) {
@@ -10437,6 +10957,9 @@
 
             doc.setFont("helvetica", "bold"); doc.text("Verwendungszweck:", 14, finalY + 27);
             doc.setFont("helvetica", "normal"); doc.text(`${invoiceData.invoiceNum} / ${invoiceData.recipientName || 'Kunde'}`, 46, finalY + 27);
+            if (sealBase64) {
+                try { doc.addImage(sealBase64, 'PNG', 174, Math.min(finalY + 5, 266), 22, 22); } catch (e) {}
+            }
 
             doc.save(`${invoiceData.invoiceNum}.pdf`);
         }
@@ -10445,13 +10968,16 @@
 
         async function addNewsItem(e) {
             e.preventDefault();
-            const title = document.getElementById('news-title').value;
-            const text = document.getElementById('news-text').value;
+            if (typeof auth === 'undefined' || !auth || !auth.currentUser) return;
+            const titleEl = document.getElementById('news-title');
+            const textEl = document.getElementById('news-text');
+            const title = titleEl ? titleEl.value : '';
+            const text = textEl ? textEl.value : '';
             const fileInput = document.getElementById('news-photo-input');
             const sendPushEl = document.getElementById('news-send-push');
             const sendPush = isMainPushAdmin() && !!(sendPushEl && sendPushEl.checked);
 
-            if (fileInput.files && fileInput.files[0]) {
+            if (fileInput && fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = async function(uploadEvent) {
                     await saveNewsToFirestore(title, text, uploadEvent.target.result, sendPush);
@@ -10476,13 +11002,16 @@
                 if (sendPush) {
                     const pushRes = await sendOneSignalPushToAll(`📢 Neue Vereins-News: ${title}`, text);
                     if (!pushRes.ok) {
-                        pushNotice = "\n\n⚠️ Push-Hinweis: " + pushRes.error;
+                        pushNotice = "\n\n⚠️ Push-Fehler: " + pushRes.error;
                     }
                 }
                 alert("News veröffentlicht!" + pushNotice);
-                document.getElementById('news-title').value = '';
-                document.getElementById('news-text').value = '';
-                document.getElementById('news-photo-input').value = '';
+                const newsTitleEl = document.getElementById('news-title');
+                const newsTextEl = document.getElementById('news-text');
+                const newsPhotoEl = document.getElementById('news-photo-input');
+                if (newsTitleEl) newsTitleEl.value = '';
+                if (newsTextEl) newsTextEl.value = '';
+                if (newsPhotoEl) newsPhotoEl.value = '';
                 const sendPushEl = document.getElementById('news-send-push');
                 if (sendPushEl) sendPushEl.checked = isMainPushAdmin();
                 loadNews();
@@ -10699,7 +11228,8 @@
                 'admin-members-overview',
                 'admin-audit-logs-list',
                 'admin-news-list',
-                'admin-events-list'
+                'admin-events-list',
+                'admin-duty-list'
             ].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.innerHTML = '';
@@ -10708,6 +11238,10 @@
             if (cashSumEl) cashSumEl.innerText = '€ 0,00';
             const cashCountEl = document.getElementById('admin-cash-sales-count');
             if (cashCountEl) cashCountEl.innerText = '0 Buchungen';
+            const adminPwdInput = document.getElementById('admin-password-input');
+            if (adminPwdInput) adminPwdInput.value = '';
+            try { resetAdminPasswordVisibility(); } catch(e) {}
+            try { resetAdminHumanCheck(); } catch(e) {}
         }
 
         function clearSensitiveAppData() {
@@ -10869,6 +11403,7 @@
                 }
             }
             clearSensitiveAppData();
+            try { if (typeof updateDeviceAppBadge === 'function') updateDeviceAppBadge(0); } catch (e) {}
         }
 
         function openAdminDirectLogin() {
@@ -11103,10 +11638,103 @@
             }
         }
 
+        let adminHumanVerified = false;
+        let adminHumanVerifying = false;
+        let adminHumanVerifyTimer = null;
+        let adminHumanHighlightTimer = null;
+
+        function resetAdminHumanCheck() {
+            if (adminHumanVerifyTimer) {
+                clearTimeout(adminHumanVerifyTimer);
+                adminHumanVerifyTimer = null;
+            }
+            if (adminHumanHighlightTimer) {
+                clearTimeout(adminHumanHighlightTimer);
+                adminHumanHighlightTimer = null;
+            }
+            adminHumanVerified = false;
+            adminHumanVerifying = false;
+            const box = document.getElementById('admin-human-check-box');
+            const checkbox = document.getElementById('admin-human-checkbox');
+            const label = document.getElementById('admin-human-label');
+            const hint = document.getElementById('admin-human-check-hint');
+            if (box) {
+                box.classList.remove('is-verified', 'is-highlight');
+                box.setAttribute('aria-checked', 'false');
+            }
+            if (checkbox) {
+                checkbox.classList.remove('is-verified');
+                checkbox.innerHTML = '';
+            }
+            if (label) {
+                label.textContent = 'Ich bin ein Mensch';
+            }
+            if (hint) {
+                hint.style.display = 'none';
+            }
+        }
+
+        function highlightAdminHumanCheck() {
+            const box = document.getElementById('admin-human-check-box');
+            const hint = document.getElementById('admin-human-check-hint');
+            if (hint) {
+                hint.style.display = 'block';
+            }
+            if (box) {
+                box.classList.remove('is-highlight');
+                void box.offsetWidth;
+                box.classList.add('is-highlight');
+                if (adminHumanHighlightTimer) clearTimeout(adminHumanHighlightTimer);
+                adminHumanHighlightTimer = setTimeout(() => {
+                    box.classList.remove('is-highlight');
+                    adminHumanHighlightTimer = null;
+                }, 900);
+            }
+        }
+
+        function verifyAdminHumanCheck() {
+            if (adminHumanVerified || adminHumanVerifying) return;
+            const box = document.getElementById('admin-human-check-box');
+            const checkbox = document.getElementById('admin-human-checkbox');
+            const label = document.getElementById('admin-human-label');
+            const hint = document.getElementById('admin-human-check-hint');
+            if (hint) hint.style.display = 'none';
+            if (box) box.classList.remove('is-highlight');
+            adminHumanVerifying = true;
+            if (checkbox) {
+                checkbox.innerHTML = '<span class="admin-human-spinner"></span>';
+            }
+            if (label) {
+                label.textContent = 'Prüfung läuft...';
+            }
+            adminHumanVerifyTimer = setTimeout(() => {
+                adminHumanVerifyTimer = null;
+                adminHumanVerifying = false;
+                adminHumanVerified = true;
+                if (box) {
+                    box.classList.add('is-verified');
+                    box.setAttribute('aria-checked', 'true');
+                }
+                if (checkbox) {
+                    checkbox.classList.add('is-verified');
+                    checkbox.textContent = '✓';
+                }
+                if (label) {
+                    label.textContent = 'Bestätigt · Ich bin ein Mensch';
+                }
+            }, 500);
+        }
+
         function handleAdminLogin(e) {
             e.preventDefault();
-            const selectedUser = document.getElementById('admin-user-select').value;
-            const password = document.getElementById('admin-password-input').value;
+            if (!adminHumanVerified) {
+                highlightAdminHumanCheck();
+                return;
+            }
+            const userSelectEl = document.getElementById('admin-user-select');
+            const pwdInputEl = document.getElementById('admin-password-input');
+            const selectedUser = userSelectEl ? userSelectEl.value : '';
+            const password = pwdInputEl ? pwdInputEl.value : '';
             const adminEmail = `admin+${selectedUser}@kb-sv-gaschurn.at`;
             const submitBtn = document.getElementById('admin-login-submit-btn');
 
@@ -11140,9 +11768,11 @@
                     }
                     const pageCard = document.getElementById('page-card');
                     if (pageCard) pageCard.style.display = '';
-                    document.getElementById('admin-login-card').style.display = 'none';
-                    document.getElementById('admin-password-input').value = '';
+                    const loginCardEl = document.getElementById('admin-login-card');
+                    if (loginCardEl) loginCardEl.style.display = 'none';
+                    if (pwdInputEl) pwdInputEl.value = '';
                     resetAdminPasswordVisibility();
+                    resetAdminHumanCheck();
                     
                     showAdminSuccessModal();
                     resetInactivityTimer();
@@ -11152,6 +11782,7 @@
                     refreshMemberIdentityViews();
                 })
                 .catch((error) => {
+                    resetAdminHumanCheck();
                     showAdminErrorModal();
                 })
                 .finally(() => {
@@ -11175,7 +11806,8 @@
                 refreshMemberIdentityViews();
                 
                 document.body.classList.remove('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'block';
+                const loginCardEl = document.getElementById('admin-login-card');
+                if (loginCardEl) loginCardEl.style.display = 'block';
 
                 const savedToken = await getNormalizedSavedClubToken();
                 if (!savedToken || !currentFirestoreClubPinHash || savedToken !== currentFirestoreClubPinHash) {
@@ -11216,7 +11848,8 @@
                 }
                 const pageCard = document.getElementById('page-card');
                 if (pageCard) pageCard.style.display = '';
-                document.getElementById('admin-login-card').style.display = 'none';
+                const loginCardEl = document.getElementById('admin-login-card');
+                if (loginCardEl) loginCardEl.style.display = 'none';
                 resetInactivityTimer();
                 loadAdminProtectedData();
                 updateAdminPushVisibility();
@@ -11232,7 +11865,8 @@
                 refreshMemberIdentityViews();
                 
                 document.body.classList.remove('admin-mode');
-                document.getElementById('admin-login-card').style.display = 'block';
+                const loginCardEl = document.getElementById('admin-login-card');
+                if (loginCardEl) loginCardEl.style.display = 'block';
 
                 const savedToken = await getNormalizedSavedClubToken();
                 if (!savedToken || (currentFirestoreClubPinHash && savedToken !== currentFirestoreClubPinHash)) {
@@ -11918,22 +12552,14 @@
             const targetUrl = "https://" + "kb-sv-push" + "." + "simonpoeschel33" + "." + "workers.dev";
 
             try {
-                let rawKey = '';
-                if (typeof auth !== 'undefined' && auth && auth.currentUser) {
-                    try {
-                        const doc = await db.collection("settings").doc("push").get();
-                        rawKey = (doc.exists && doc.data() && doc.data().restApiKey) ? String(doc.data().restApiKey).trim() : '';
-                    } catch (readErr) {
-                        rawKey = '';
-                    }
-                }
+                const rawKey = await getOptionalStoredOneSignalRestKey();
 
                 const appUrl = (typeof window !== 'undefined' && window.location && /^https?:\/\//i.test(window.location.origin))
                     ? (window.location.origin + window.location.pathname)
                     : "https://github.io";
 
                 const payloadBody = {
-                    appId: ONESIGNAL_APP_ID,
+                    appId: getOneSignalPushAppId(),
                     title: cleanTitle,
                     message: cleanMessage,
                     url: appUrl,
@@ -11943,17 +12569,30 @@
                     payloadBody.restApiKey = rawKey;
                 }
 
-                await fetch(targetUrl, {
+                const res = await fetch(targetUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payloadBody)
                 });
-            } catch (e) {}
+
+                const rawText = await res.text();
+                const parsed = parseOneSignalWorkerResponse(res, rawText);
+                if (!parsed.ok) {
+                    try { console.warn('[Obmann-Push Fehler]', parsed.error); } catch (logErr) {}
+                }
+                return parsed;
+            } catch (e) {
+                const errMsg = (e && e.message) ? e.message : String(e);
+                try { console.warn('[Obmann-Push Netzwerkfehler]', errMsg); } catch (logErr) {}
+                return { ok: false, error: errMsg };
+            }
         }
 
         async function sendOneSignalPushToAll(title, message) {
             if (!isMainPushAdmin()) {
-                return { ok: false, error: 'Push-Versand ist nur für den Haupt-Admin (Simon) freigeschaltet.' };
+                const errMsg = 'Push-Versand ist nur für den Haupt-Admin (Simon) freigeschaltet.';
+                showAdminPushFeedback(false, '❌ ' + errMsg);
+                return { ok: false, error: errMsg };
             }
 
             const cleanTitle = String(title || 'KB & SV Gaschurn-Partenen').trim();
@@ -11961,20 +12600,14 @@
             const targetUrl = "https://" + "kb-sv-push" + "." + "simonpoeschel33" + "." + "workers.dev";
 
             try {
-                let rawKey = '';
-                try {
-                    const doc = await db.collection("settings").doc("push").get();
-                    rawKey = (doc.exists && doc.data() && doc.data().restApiKey) ? String(doc.data().restApiKey).trim() : '';
-                } catch (readErr) {
-                    rawKey = '';
-                }
+                const rawKey = await getOptionalStoredOneSignalRestKey();
 
                 const appUrl = (typeof window !== 'undefined' && window.location && /^https?:\/\//i.test(window.location.origin))
                     ? (window.location.origin + window.location.pathname)
                     : "https://github.io";
 
                 const payloadBody = {
-                    appId: ONESIGNAL_APP_ID,
+                    appId: getOneSignalPushAppId(),
                     title: cleanTitle,
                     message: cleanMessage,
                     url: appUrl
@@ -11990,34 +12623,23 @@
                 });
 
                 const rawText = await res.text();
-                let data;
-                try {
-                    data = JSON.parse(rawText);
-                } catch (parseErr) {
-                    alert("URL: " + targetUrl + " | Status: " + res.status + " | Antwort: " + rawText.slice(0, 250));
-                    return { ok: false, error: "Ungültige JSON-Antwort (" + res.status + "): " + rawText.slice(0, 250) };
+                const parsed = parseOneSignalWorkerResponse(res, rawText);
+
+                if (parsed.ok) {
+                    const recipientCount = parsed.recipients ?? 'OK';
+                    showPushStatusToast(true, '✅ Push-Nachricht wurde erfolgreich an alle Mitglieder gesendet.');
+                    return { ok: true, data: parsed.data, recipients: recipientCount };
                 }
 
-                if (res.ok && data && data.id && !data.errors && !data.error && data.ok !== false) {
-                    const recipientCount = data.recipients ?? 'OK';
-                    try {
-                        const existingToast = document.getElementById('push-success-toast');
-                        if (existingToast) existingToast.remove();
-                        const toast = document.createElement('div');
-                        toast.id = 'push-success-toast';
-                        toast.innerText = `✅ Push-Nachricht erfolgreich an alle Mitglieder gesendet! (Empfänger: ${recipientCount})`;
-                        toast.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99999999;background:#16a34a;color:#ffffff;padding:12px 18px;border-radius:14px;font-weight:800;font-size:0.9em;box-shadow:0 10px 25px rgba(22,163,74,0.35);border:2px solid #86efac;max-width:92%;text-align:center;';
-                        document.body.appendChild(toast);
-                        setTimeout(() => { try { toast.remove(); } catch (e) {} }, 4000);
-                    } catch (toastErr) {}
-
-                    return { ok: true, data: data };
-                }
-
-                alert("OneSignal-Rückmeldung: " + JSON.stringify(data));
-                return { ok: false, error: JSON.stringify(data) };
+                try { console.error('[Push-Worker Fehler]', parsed.error, parsed.data || ''); } catch (logErr) {}
+                showAdminPushFeedback(false, '❌ Push-Fehler (Worker/OneSignal): ' + parsed.error);
+                showPushStatusToast(false, '❌ Push-Fehler: ' + parsed.error);
+                return { ok: false, error: parsed.error, data: parsed.data, status: parsed.status };
             } catch (err) {
                 const errorText = (err && err.message) ? err.message : String(err);
+                try { console.error('[Push-Worker Netzwerkfehler]', errorText); } catch (logErr) {}
+                showAdminPushFeedback(false, '❌ Push-Netzwerkfehler: ' + errorText);
+                showPushStatusToast(false, '❌ Push-Netzwerkfehler: ' + errorText);
                 return { ok: false, error: errorText };
             }
         }
@@ -12028,10 +12650,8 @@
             if (btnEl) btnEl.disabled = true;
             try {
                 const res = await sendOneSignalPushToAll('⏰ Dienst-Erinnerung', reminderText);
-                if (res.ok) {
-                    alert("Dienst-Erinnerung per Push gesendet!\n\n" + reminderText);
-                } else {
-                    alert("Push-Versand fehlgeschlagen: " + res.error);
+                if (res && res.ok) {
+                    showAdminPushFeedback(true, '✅ Push-Nachricht wurde erfolgreich an alle Mitglieder gesendet.');
                 }
             } finally {
                 if (btnEl) btnEl.disabled = false;
@@ -12073,15 +12693,14 @@
                 if (res && res.ok) {
                     await logAdminAudit("Manuelle Push-Nachricht gesendet", title + ": " + message);
                     if (msgEl) msgEl.value = '';
-                    if (feedbackEl) {
-                        feedbackEl.innerText = '✅ Push-Nachricht wurde erfolgreich an alle Mitglieder gesendet!';
-                        feedbackEl.style.display = 'block';
-                    }
+                    showAdminPushFeedback(true, '✅ Push-Nachricht wurde erfolgreich an alle Mitglieder gesendet.');
                 } else {
-                    alert("Push-Versand fehlgeschlagen: " + (res && res.error ? res.error : "Unbekannter Fehler"));
+                    const errMsg = (res && res.error) ? res.error : "Unbekannter Fehler";
+                    showAdminPushFeedback(false, '❌ Push-Versand fehlgeschlagen: ' + errMsg);
                 }
             } catch (err) {
-                alert("Fehler beim Push-Versand: " + (err && err.message ? err.message : String(err)));
+                const errMsg = (err && err.message) ? err.message : String(err);
+                showAdminPushFeedback(false, '❌ Fehler beim Push-Versand: ' + errMsg);
             } finally {
                 if (btnEl) btnEl.disabled = false;
             }
@@ -12236,10 +12855,12 @@
             if (germanVoices.length === 0) return null;
 
             const selectEl = document.getElementById('help-voice-select');
-            const chosenId = (selectEl && selectEl.value) ? String(selectEl.value) : selectedHelpVoiceURI;
-            if (chosenId) {
-                const matched = germanVoices.find(v => getHelpVoiceIdentifier(v) === chosenId);
-                if (matched) return matched;
+            if (selectEl) {
+                const chosenId = selectEl.value ? String(selectEl.value) : selectedHelpVoiceURI;
+                if (chosenId) {
+                    const matched = germanVoices.find(v => getHelpVoiceIdentifier(v) === chosenId);
+                    if (matched) return matched;
+                }
             }
             return germanVoices[0];
         }
@@ -12730,8 +13351,8 @@
                 if (typeof rawTotal === 'string') {
                     rawTotal = parseFloat(rawTotal.replace('€', '').replace(',', '.').trim());
                 }
-                const totalNum = isNaN(rawTotal) ? 0 : Number(rawTotal);
-                cashSum += totalNum;
+                const totalNum = isNaN(rawTotal) ? 0 : Math.round(Number(rawTotal) * 100) / 100;
+                cashSum = Math.round((cashSum + totalNum) * 100) / 100;
                 const itemsSummary = Array.isArray(s.items)
                     ? s.items.map(it => `${it && it.count ? it.count : 0}x ${it && (it.name || it.key) ? (it.name || it.key) : ''}`).join(', ')
                     : '';
@@ -12752,8 +13373,8 @@
                 if (typeof rawTotal === 'string') {
                     rawTotal = parseFloat(rawTotal.replace('€', '').replace(',', '.').trim());
                 }
-                const totalNum = isNaN(rawTotal) ? 0 : Number(rawTotal);
-                invoiceSum += totalNum;
+                const totalNum = isNaN(rawTotal) ? 0 : Math.round(Number(rawTotal) * 100) / 100;
+                invoiceSum = Math.round((invoiceSum + totalNum) * 100) / 100;
                 const recipient = [inv.recipientName, inv.recipientAttn, inv.recipientAddress, inv.recipientZipCity]
                     .map(v => String(v || '').trim())
                     .filter(Boolean)
@@ -12828,7 +13449,7 @@
                 cashSum,
                 invoices,
                 invoiceSum,
-                totalDrinkRevenue: cashSum + invoiceSum,
+                totalDrinkRevenue: Math.round((cashSum + invoiceSum) * 100) / 100,
                 weapons,
                 events
             };
@@ -13230,6 +13851,7 @@
                 doc.setTextColor(71, 85, 105);
                 doc.text("Obmann (Schweighofer Simon)", marginLeft, y + 4.5);
                 doc.text("Kassierin (Stocker Karin)", pageWidth - marginRight - 76, y + 4.5);
+                drawClubSealStampOnPdf(doc, (pageWidth / 2) - 12, Math.max(14, y - 16), 24);
 
                 const fileName = `KBSV_Jahresabschluss_Backup_${yyyy}-${mm}-${dd}.pdf`;
                 doc.save(fileName);
@@ -14437,9 +15059,17 @@
             }
         }
 
+        function isSafeChatImageDataUrl(val) {
+            return typeof val === 'string' && /^data:image\/(png|jpe?g|gif|webp);base64,/i.test(val);
+        }
+
+        function isSafeChatAudioDataUrl(val) {
+            return typeof val === 'string' && /^data:audio\/(webm|ogg|mp4|mpeg|wav|aac|x-m4a|mp3)(?:;\s*codecs=[^;,]+)?;base64,/i.test(val);
+        }
+
         function openChatImageLightbox(msgId) {
             const msg = clubChatMessages.find(m => m.id === msgId);
-            const imgSrc = msg && typeof msg.imageData === 'string' && msg.imageData.startsWith('data:image/')
+            const imgSrc = msg && isSafeChatImageDataUrl(msg.imageData)
                 ? msg.imageData
                 : '';
             if (!imgSrc) return;
@@ -14545,10 +15175,10 @@
 
         function updateDeviceAppBadge(unreadCount) {
             try {
-                const count = Number(unreadCount) || 0;
-                if (count > 0 && typeof navigator !== 'undefined' && 'setAppBadge' in navigator && typeof navigator.setAppBadge === 'function') {
-                    Promise.resolve(navigator.setAppBadge(count)).catch(() => {});
-                } else if (count <= 0 && typeof navigator !== 'undefined' && 'clearAppBadge' in navigator && typeof navigator.clearAppBadge === 'function') {
+                const count = Math.max(0, Math.floor(Number(unreadCount) || 0));
+                if (count > 0 && typeof navigator !== 'undefined' && typeof navigator.setAppBadge === 'function') {
+                    Promise.resolve(navigator.setAppBadge(Number(count))).catch(() => {});
+                } else if (count <= 0 && typeof navigator !== 'undefined' && typeof navigator.clearAppBadge === 'function') {
                     Promise.resolve(navigator.clearAppBadge()).catch(() => {});
                 }
             } catch (e) {}
@@ -14557,6 +15187,7 @@
         function updateChatUnreadDot() {
             const dotEl = document.getElementById('chat-unread-dot');
             const bannerBadgeEl = document.getElementById('news-chat-new-badge');
+            const bannerCardEl = document.getElementById('news-open-chat-banner-btn');
             if (isChatDrawerOpen) {
                 if (dotEl) {
                     dotEl.innerText = '';
@@ -14564,6 +15195,9 @@
                 }
                 if (bannerBadgeEl) {
                     bannerBadgeEl.style.display = 'none';
+                }
+                if (bannerCardEl) {
+                    bannerCardEl.classList.remove('chat-card-bluelight');
                 }
                 updateDeviceAppBadge(0);
                 return;
@@ -14589,7 +15223,15 @@
                 }
             }
             if (bannerBadgeEl) {
-                bannerBadgeEl.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+                if (unreadCount > 0) {
+                    bannerBadgeEl.textContent = unreadCount === 1 ? 'Neue Nachricht' : `${unreadCount} Neue Nachrichten`;
+                    bannerBadgeEl.style.display = 'inline-block';
+                } else {
+                    bannerBadgeEl.style.display = 'none';
+                }
+            }
+            if (bannerCardEl) {
+                bannerCardEl.classList.toggle('chat-card-bluelight', unreadCount > 0);
             }
             updateDeviceAppBadge(unreadCount);
         }
@@ -14606,6 +15248,10 @@
             const bannerBadgeEl = document.getElementById('news-chat-new-badge');
             if (bannerBadgeEl) {
                 bannerBadgeEl.style.display = 'none';
+            }
+            const bannerCardEl = document.getElementById('news-open-chat-banner-btn');
+            if (bannerCardEl) {
+                bannerCardEl.classList.remove('chat-card-bluelight');
             }
             updateDeviceAppBadge(0);
         }
@@ -15470,8 +16116,8 @@
                 const pdfCardHtml = hasSafePdf
                     ? `<div class="chat-pdf-card" style="background: rgba(255,255,255,0.92); border: 1px solid #cbd5e1; border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; margin-top: 4px; max-width: 100%; box-sizing: border-box;"><span style="background: #dc2626; color: #ffffff; font-weight: 900; font-size: 0.72rem; padding: 6px 8px; border-radius: 8px; flex-shrink: 0; letter-spacing: 0.03em; line-height: 1;">PDF</span><div style="flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 800; color: #0f172a; line-height: 1.28; overflow: hidden; text-overflow: ellipsis; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;" title="${escapeHtml(safePdfName)}">${escapeHtml(safePdfName)}</div><button type="button" data-msg-id="${safeDocId}" onclick="openChatPdfDocument(this.dataset.msgId)" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 9px; padding: 6px 10px; font-size: 0.78rem; font-weight: 800; cursor: pointer; flex-shrink: 0; white-space: nowrap; font-family: inherit;">📥 Öffnen</button></div>`
                     : '';
-                const hasSafeImage = typeof msg.imageData === 'string' && msg.imageData.startsWith('data:image/');
-                const hasSafeAudio = typeof msg.audioData === 'string' && msg.audioData.startsWith('data:audio/');
+                const hasSafeImage = isSafeChatImageDataUrl(msg.imageData);
+                const hasSafeAudio = isSafeChatAudioDataUrl(msg.audioData);
                 const isSoloEmoji = (!normalizedPoll && !hasSafePdf && !matchedSticker && !hasSafeImage && !hasSafeAudio && rawMsgText) ? isSoloEmojiChatText(rawMsgText) : false;
                 const reactionsMap = normalizeChatReactions(msg.reactions);
                 const isPickerOpen = !!(openChatReactionPickerMsgId && openChatReactionPickerMsgId === msg.id);
@@ -16101,6 +16747,10 @@
             if (bannerBadgeEl) {
                 bannerBadgeEl.style.display = 'none';
             }
+            const bannerCardEl = document.getElementById('news-open-chat-banner-btn');
+            if (bannerCardEl) {
+                bannerCardEl.classList.remove('chat-card-bluelight');
+            }
             updateNewsChatLastMsgPreview([]);
             updateDeviceAppBadge(0);
         }
@@ -16112,36 +16762,42 @@
             const cleanMessage = rawText.length > 140 ? rawText.slice(0, 137) + '...' : rawText;
 
             try {
-                let rawKey = '';
-                if (auth.currentUser) {
-                    try {
-                        const doc = await db.collection("settings").doc("push").get();
-                        rawKey = (doc.exists && doc.data() && doc.data().restApiKey) ? String(doc.data().restApiKey).trim() : '';
-                    } catch (readErr) {
-                        rawKey = '';
-                    }
-                }
+                const rawKey = await getOptionalStoredOneSignalRestKey();
 
                 const appUrl = (typeof window !== 'undefined' && window.location && /^https?:\/\//i.test(window.location.origin))
                     ? (window.location.origin + window.location.pathname)
                     : "https://github.io";
 
                 const payloadBody = {
-                    appId: ONESIGNAL_APP_ID,
+                    appId: getOneSignalPushAppId(),
                     title: cleanTitle,
                     message: cleanMessage || cleanTitle,
-                    url: appUrl
+                    url: appUrl,
+                    filters: [
+                        { field: "tag", key: "chat_muted", relation: "!=", value: "true" }
+                    ]
                 };
                 if (rawKey) {
                     payloadBody.restApiKey = rawKey;
                 }
 
-                await fetch(targetUrl, {
+                const res = await fetch(targetUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payloadBody)
                 });
-            } catch (e) {}
+
+                const rawTextResp = await res.text();
+                const parsed = parseOneSignalWorkerResponse(res, rawTextResp);
+                if (!parsed.ok) {
+                    try { console.warn('[Chat-Push Fehler]', parsed.error); } catch (logErr) {}
+                }
+                return parsed;
+            } catch (e) {
+                const errMsg = (e && e.message) ? e.message : String(e);
+                try { console.warn('[Chat-Push Netzwerkfehler]', errMsg); } catch (logErr) {}
+                return { ok: false, error: errMsg };
+            }
         }
 
         const CHAT_VOICE_MAX_SECONDS = 45;
