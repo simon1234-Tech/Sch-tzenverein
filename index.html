@@ -174,6 +174,9 @@
             --accent-green-bright: #22c55e;
             --danger: #dc2626;
             --admin-blue: #2563eb;
+            --app-primary: #16a34a;
+            --app-primary-dark: #064e3b;
+            --app-accent: #eab308;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -2624,6 +2627,431 @@
             border-radius: 9px !important;
             margin-top: 6px !important;
         }
+
+        /* --- OBMANN-FARBWELTEN (ECHTZEIT-AKZENTE ÜBER CSS-VARIABLEN) --- */
+        html[data-club-theme] .app-header {
+            background: linear-gradient(180deg, var(--app-primary) 0%, var(--app-primary-dark) 100%);
+            border-top-color: var(--app-accent);
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.28);
+        }
+        html[data-club-theme] .app-header p {
+            color: var(--app-accent);
+        }
+        html[data-club-theme] .app-header-crest {
+            border-color: var(--app-accent);
+        }
+        html[data-club-theme] .chat-drawer-header {
+            background: linear-gradient(135deg, var(--app-primary-dark), var(--app-primary));
+            border-bottom: 2px solid var(--app-accent);
+        }
+        html[data-club-theme] .nav-item:hover {
+            color: var(--app-primary) !important;
+        }
+        html[data-club-theme] .nav-item.active {
+            background: linear-gradient(135deg, var(--app-primary-dark), var(--app-primary)) !important;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.30), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+        }
+        html[data-club-theme] .btn-primary {
+            background: linear-gradient(135deg, var(--app-primary), var(--app-primary-dark));
+            color: #ffffff;
+        }
+        html[data-club-theme] .dark-event-item {
+            border-left-color: var(--app-primary);
+        }
+        html[data-club-theme] .chat-header-trigger-label {
+            color: var(--app-primary-dark);
+        }
+        .admin-theme-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .admin-theme-tile {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            width: 100%;
+            padding: 10px 11px;
+            border-radius: 13px;
+            border: 1.5px solid #cbd5e1;
+            background: rgba(255, 255, 255, 0.94);
+            color: #0f172a;
+            text-align: left;
+            cursor: pointer;
+            font-family: inherit;
+            transition: transform 0.14s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+        }
+        .admin-theme-tile:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(15, 23, 42, 0.1);
+        }
+        .admin-theme-tile:active {
+            transform: scale(0.98);
+        }
+        .admin-theme-tile.selected {
+            border: 2px solid #eab308;
+            background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+            box-shadow: 0 6px 16px rgba(234, 179, 8, 0.24);
+        }
+        .admin-theme-swatch-bar {
+            width: 100%;
+            height: 22px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 6px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+        }
+        .admin-theme-accent-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 999px;
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+        }
+        .admin-theme-tile-name {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.25;
+            padding-right: 18px;
+        }
+        .admin-theme-tile-sub {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #64748b;
+            line-height: 1.15;
+        }
+        .admin-theme-check {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            width: 21px;
+            height: 21px;
+            border-radius: 999px;
+            background: #eab308;
+            color: #0f172a;
+            font-size: 0.78rem;
+            font-weight: 900;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.22);
+        }
+        .admin-theme-tile.selected .admin-theme-check {
+            display: inline-flex;
+        }
+
+        /* --- OBMANN-STEUERZENTRALE & LIVE-BANNER / CHAT-SPERRE --- */
+        #home-emergency-banner {
+            display: none;
+            width: 100%;
+            margin: 12px 0 14px 0;
+            padding: 13px 16px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #991b1b 0%, #b91c1c 62%, #d97706 100%);
+            color: #ffffff;
+            border: 2px solid #eab308;
+            box-shadow: 0 8px 22px rgba(153, 27, 27, 0.28);
+            box-sizing: border-box;
+        }
+        .home-emergency-banner-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #eab308;
+            color: #0f172a;
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 3px 9px;
+            border-radius: 999px;
+            margin-bottom: 6px;
+        }
+        .home-emergency-banner-text {
+            font-size: 0.94rem;
+            font-weight: 700;
+            line-height: 1.45;
+            color: #ffffff;
+            word-break: break-word;
+        }
+        #chat-locked-notice-bar {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 8px;
+            padding: 13px 16px;
+            background: linear-gradient(135deg, #fefce8 0%, #fef2f2 100%);
+            border-top: 2px solid #eab308;
+            color: #7f1d1d;
+            font-size: 0.86rem;
+            font-weight: 800;
+            line-height: 1.4;
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
+        #chairman-command-center {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-top: 4px solid #eab308;
+            border-radius: 22px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .chairman-cc-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            padding: 18px;
+        }
+        .chairman-cc-hero-title {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #facc15;
+            letter-spacing: 0.01em;
+            line-height: 1.25;
+        }
+        .chairman-cc-hero-sub {
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            margin-top: 4px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .chairman-quick-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            padding: 14px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .chairman-quick-tile {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            min-height: 44px;
+            padding: 9px 11px;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            color: #0f172a;
+            font-size: 0.8rem;
+            font-weight: 800;
+            font-family: inherit;
+            text-align: left;
+            line-height: 1.2;
+            cursor: pointer;
+            transition: border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+        }
+        .chairman-quick-tile:hover {
+            border-color: #cbd5e1;
+            background: #fefce8;
+        }
+        .chairman-quick-tile:active {
+            transform: scale(0.985);
+        }
+        .chairman-quick-tile.active {
+            background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+            border-color: #eab308;
+            color: #713f12;
+            box-shadow: 0 4px 12px rgba(234, 179, 8, 0.18);
+        }
+        .chairman-acc-section {
+            border-bottom: 1px solid #e2e8f0;
+            background: #ffffff;
+        }
+        .chairman-acc-header {
+            width: 100%;
+            background: #ffffff;
+            border: none;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #0f172a;
+            cursor: pointer;
+            text-align: left;
+            font-family: inherit;
+            transition: background 0.18s ease;
+        }
+        .chairman-acc-header:hover {
+            background: #f8fafc;
+        }
+        .chairman-acc-section.open > .chairman-acc-header {
+            background: #fefce8;
+            color: #0f172a;
+        }
+        .chairman-acc-arrow {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            transition: transform 0.22s ease, background 0.18s ease, color 0.18s ease;
+        }
+        .chairman-acc-section.open > .chairman-acc-header .chairman-acc-arrow {
+            transform: rotate(180deg);
+            background: #eab308;
+            color: #0f172a;
+        }
+        .chairman-acc-body {
+            display: none;
+            padding: 14px 18px 18px 18px;
+            background: #ffffff;
+            border-top: 1px solid #f1f5f9;
+        }
+        .chairman-acc-section.open > .chairman-acc-body {
+            display: block;
+        }
+        #chairman-command-center .chairman-sub-block {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            margin: 0;
+            border-radius: 0;
+        }
+        #chairman-command-center .chairman-sub-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        #chairman-command-center .chairman-sub-divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 16px 0;
+        }
+        #chairman-command-center .form-control,
+        #chairman-command-center .btn,
+        #chairman-command-center .chairman-toggle-row {
+            min-height: 44px;
+            border-radius: 12px;
+            box-sizing: border-box;
+        }
+        #chairman-command-center textarea.form-control {
+            min-height: 68px;
+        }
+        #chairman-command-center .chairman-cc-footer {
+            padding: 12px 18px;
+            background: #f8fafc;
+            text-align: center;
+        }
+        #chairman-command-center .chairman-collapse-all-btn {
+            background: transparent;
+            border: none;
+            color: #64748b;
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 10px;
+            transition: color 0.16s ease, background 0.16s ease;
+        }
+        #chairman-command-center .chairman-collapse-all-btn:hover {
+            color: #0f172a;
+            background: #e2e8f0;
+        }
+        .chairman-chip-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .chairman-member-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8fafc;
+            color: #0f172a;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            padding: 4px 6px 4px 11px;
+            font-size: 0.79rem;
+            font-weight: 700;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+        }
+        .chairman-member-chip.weapon-chip {
+            background: #ecfdf5;
+            color: #065f46;
+            border-color: #6ee7b7;
+        }
+        .chairman-chip-remove-btn {
+            border: none;
+            background: #fee2e2;
+            color: #b91c1c;
+            width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .chairman-bar-menu-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 8px 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 6px;
+        }
+        .chairman-bar-price-input {
+            width: 86px;
+            min-height: 38px;
+            padding: 6px 8px;
+            border-radius: 10px;
+            border: 1.5px solid #cbd5e1;
+            font-weight: 800;
+            font-size: 0.88rem;
+            text-align: right;
+            color: #0f172a;
+            background: #ffffff;
+            font-family: inherit;
+        }
+        .chairman-toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 13px;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.86rem;
+            color: #0f172a;
+        }
     </style>
 </head>
 <body class="app-locked">
@@ -2713,6 +3141,7 @@
 
     <!-- 1. NEWS & STARTSEITE (AKTUELLER DIENSTPLAN) -->
     <div id="page-news" class="page-content active">
+        <div id="home-emergency-banner" role="alert" style="display: none;"></div>
         <button type="button" id="news-open-chat-banner-btn" onclick="openChatDrawer()" style="width: 100%; background: #ffffff; color: #0f172a; border: 1px solid #e2e8f0; border-left: 6px solid #25D366; border-radius: 16px; padding: 14px 16px; margin-top: 12px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06); cursor: pointer; text-align: left; font-family: inherit; box-sizing: border-box;">
             <span style="display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;">
                 <svg viewBox="0 0 32 32" aria-hidden="true" style="width: 40px; height: 40px; border-radius: 11px; background: #25D366; padding: 7px; box-sizing: border-box; flex-shrink: 0; display: block;">
@@ -2801,28 +3230,30 @@
             </div>
 
             <div id="tally-order-list-card">
-                <div class="strich-category-header">Speisen</div>
-                <div class="price-item"><span>🌭 Paar Hauswürste (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
-                <div class="price-item"><span>🌭 Paar Wienerle (€ 7,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
+                <div id="tally-order-list-items">
+                    <div class="strich-category-header">Speisen</div>
+                    <div class="price-item"><span>🌭 Paar Hauswürste (€ 7,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('hauswuerste', -1)">-</button><span id="count-hauswuerste" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('hauswuerste', 1)">+</button></div></div>
+                    <div class="price-item"><span>🌭 Paar Wienerle (€ 7,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wienerle', -1)">-</button><span id="count-wienerle" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wienerle', 1)">+</button></div></div>
 
-                <div class="strich-category-header">Getränke & Bier</div>
-                <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
-                <div class="price-item"><span>🍺 Radler 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
-                <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
-                <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
-                <div class="price-item"><span>🍷 Wein 1/4 lt. (€ 4,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
-                <div class="price-item"><span>🍷 Wein 1/8 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
-                <div class="price-item"><span>🍷 Wein gespritzt (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
-                <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
+                    <div class="strich-category-header">Getränke & Bier</div>
+                    <div class="price-item"><span>🍺 Bier 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('bier', -1)">-</button><span id="count-bier" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('bier', 1)">+</button></div></div>
+                    <div class="price-item"><span>🍺 Radler 0,33 lt. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('radler', -1)">-</button><span id="count-radler" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('radler', 1)">+</button></div></div>
+                    <div class="price-item"><span>🥤 Limo 0,3 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('limo', -1)">-</button><span id="count-limo" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('limo', 1)">+</button></div></div>
+                    <div class="price-item"><span>💧 Mineral 1/4 lt. (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('mineral', -1)">-</button><span id="count-mineral" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('mineral', 1)">+</button></div></div>
+                    <div class="price-item"><span>🍷 Wein 1/4 lt. (€ 4,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein4', -1)">-</button><span id="count-wein4" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein4', 1)">+</button></div></div>
+                    <div class="price-item"><span>🍷 Wein 1/8 lt. (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('wein8', -1)">-</button><span id="count-wein8" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('wein8', 1)">+</button></div></div>
+                    <div class="price-item"><span>🍷 Wein gespritzt (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('weingespr', -1)">-</button><span id="count-weingespr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('weingespr', 1)">+</button></div></div>
+                    <div class="price-item"><span>🥃 Schnaps 2 cl. (€ 3,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('schnaps', -1)">-</button><span id="count-schnaps" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('schnaps', 1)">+</button></div></div>
 
-                <div class="strich-category-header">Heissgetränke & Sonstiges</div>
-                <div class="price-item"><span>☕ Kaffee (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
-                <div class="price-item"><span>🍵 Tee (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
+                    <div class="strich-category-header">Heissgetränke & Sonstiges</div>
+                    <div class="price-item"><span>☕ Kaffee (€ 3,00)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('kaffee', -1)">-</button><span id="count-kaffee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('kaffee', 1)">+</button></div></div>
+                    <div class="price-item"><span>🍵 Tee (€ 2,50)</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('tee', -1)">-</button><span id="count-tee" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('tee', 1)">+</button></div></div>
 
-                <div class="strich-category-header">Luftgewehrschießen</div>
-                <div class="price-item" style="background: rgba(254, 242, 242, 0.9); padding: 10px 12px; border-radius: 10px;">
-                    <span>🎯 Luftgewehrschießen (€ 8,00 / P.)</span>
-                    <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
+                    <div class="strich-category-header">Luftgewehrschießen</div>
+                    <div class="price-item" style="background: rgba(254, 242, 242, 0.9); padding: 10px 12px; border-radius: 10px;">
+                        <span>🎯 Luftgewehrschießen (€ 8,00 / P.)</span>
+                        <div class="counter-controls"><button class="counter-btn" onclick="changeCount('luftgewehr', -1)">-</button><span id="count-luftgewehr" style="font-weight: bold; width: 24px; text-align: center;">0</span><button class="counter-btn" onclick="changeCount('luftgewehr', 1)">+</button></div>
+                    </div>
                 </div>
 
                 <div style="margin-top: 14px; padding-top: 10px; border-top: 2px solid #cbd5e1; display: flex; justify-content: space-between; font-weight: 800; font-size: 1.15em;">
@@ -3026,7 +3457,7 @@
                         <div class="admin-panel-subtitle">KB &amp; SV Gaschurn-Partenen</div>
                     </div>
                     <div class="admin-topbar-actions">
-                        <button type="button" id="admin-gear-security-btn" class="btn admin-gear-btn" onclick="switchAdminSection('admin-sec-security')" title="System &amp; Sicherheit">⚙️ System &amp; Sicherheit</button>
+                        <button type="button" id="admin-gear-security-btn" class="btn admin-gear-btn" onclick="switchAdminSection('admin-sec-security')" title="Obmann-Steuerzentrale &amp; System/Sicherheit" style="display: none;">👑 Obmann-Steuerzentrale</button>
                         <button type="button" class="btn admin-btn-delete" onclick="logoutAdmin()">🚪 Abmelden</button>
                     </div>
                 </div>
@@ -3053,9 +3484,9 @@
                         <span class="admin-nav-tile-icon">🍺</span>
                         <span>Schankbuch</span>
                     </button>
-                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-weapons" data-admin-section="admin-sec-weapons" onclick="switchAdminSection('admin-sec-weapons')">
-                        <span class="admin-nav-tile-icon">🎯</span>
-                        <span>Waffenprotokoll</span>
+                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-weapons" data-admin-section="admin-sec-security" onclick="openChairmanWeaponsSection()" style="display: none;">
+                        <span class="admin-nav-tile-icon">👑</span>
+                        <span>Obmann &amp; Waffen</span>
                     </button>
                 </div>
 
@@ -3260,135 +3691,315 @@
                     </div>
                 </section>
 
-                <!-- UNTERBEREICH 6: WAFFENPROTOKOLL / EXPORT -->
-                <section class="admin-section-block" id="admin-sec-weapons">
-                    <div class="admin-section-header">
-                        <div class="admin-section-heading">
-                            <span class="admin-section-num">6</span>
-                            <span>🎯 Waffenbuch &amp; Waffenprotokoll</span>
-                        </div>
-                    </div>
-                    <div class="admin-glass-card">
-                        <div class="admin-glass-card-title">
-                            <span>🎯 Waffenbuch-Protokolle &amp; Export</span>
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <button type="button" class="btn admin-btn-save" onclick="exportFullWeaponListPDF()">📥 Waffenliste PDF</button>
-                                <button type="button" class="btn admin-btn-edit" onclick="exportTresorQrCodePNG()">📷 Tresor-QR-Code PNG</button>
-                                <button type="button" id="admin-member-app-qr-btn" class="btn admin-btn-edit" onclick="exportMemberAppQrCodePNG()">📲 Mitglieder-App-QR-Code PNG</button>
-                            </div>
-                        </div>
-                        <p class="admin-muted-text" style="margin-bottom: 10px;">Übersicht aller gespeicherten Entnahme- und Rückgabeprotokolle (inkl. getrennter ZWR/ZVR-Daten):</p>
-                        <div id="admin-weapon-pdf-list"><p class="admin-muted-text">Keine Protokolle vorhanden.</p></div>
-                    </div>
-                </section>
+                <!-- UNTERBEREICH 6 (WEITERLEITUNG IN DIE EXKLUSIVE OBMANN-STEUERZENTRALE) -->
+                <section class="admin-section-block" id="admin-sec-weapons" style="display: none;"></section>
 
-                <!-- UNTERBEREICH 7 (ÜBER ZAHNRAD ⚙️): SYSTEM & SICHERHEIT (GESCHÜTZT DURCH MASTER-PIN) -->
-                <section class="admin-section-block" id="admin-sec-security">
-                    <div class="admin-section-header">
-                        <div class="admin-section-heading">
-                            <span class="admin-section-num">⚙️</span>
-                            <span>🔐 System &amp; Sicherheit (Vereins-Zugangscode &amp; OneSignal REST API Key)</span>
-                        </div>
-                    </div>
-
-                    <div id="admin-security-banner" class="admin-security-banner">
-                        <div>
-                            <span id="admin-security-status-badge" class="admin-security-badge">🔒 Geschützt – nur Haupt-Admin</span>
-                            <div id="admin-security-status-text" class="admin-muted-text" style="margin-top: 5px;">
-                                Zugangsdaten sind maskiert und gegen versehentliches Verstellen gesperrt.
-                            </div>
-                        </div>
-                        <button type="button" id="admin-security-unlock-btn" onclick="handleSecurityUnlockToggle()" class="btn admin-btn-edit">
-                            🔓 Zum Bearbeiten entsperren
-                        </button>
-                    </div>
-
-                    <div class="admin-grid-2">
-                        <!-- VEREINS-ZUGANGSCODE VERWALTUNG -->
-                        <div class="admin-glass-card" id="admin-access-pin-card">
-                            <div class="admin-glass-card-title">
-                                <span>🔐 Vereins-Zugangscode ändern</span>
-                            </div>
-                            <p class="admin-muted-text" style="margin-bottom: 10px;">
-                                Firestore (<code>settings/access</code>). Nach Speichern sperrt sich der Code auf Geräten mit altem Code automatisch.
-                            </p>
-                            <form onsubmit="updateClubAccessPin(event)">
-                                <div class="form-group">
-                                    <label>Aktueller / Neuer Vereins-Zugangscode</label>
-                                    <input type="password" class="form-control" id="admin-club-pin-input" value="••••••••" placeholder="Lade aktuellen Code..." required autocomplete="off" disabled readonly style="font-weight: 800; font-size: 1.05em; letter-spacing: 3px; text-align: center;">
-                                </div>
-                                <button type="submit" id="admin-club-pin-save-btn" class="btn admin-btn-save btn-block" disabled>💾 Neuen Zugangscode speichern</button>
-                            </form>
+                <!-- EXKLUSIVE OBMANN-STEUERZENTRALE & SYSTEM/SICHERHEIT (AUSSCHLIESSLICH FÜR OBMANN SIMON) -->
+                <section class="admin-section-block" id="admin-sec-security" style="display: none;">
+                    <div id="chairman-command-center" style="display: none;">
+                        <!-- DUNKELGOLDENE OBMANN-KOPFZEILE -->
+                        <div class="chairman-cc-hero">
+                            <div class="chairman-cc-hero-title">👑 Obmann-Steuerzentrale</div>
+                            <div class="chairman-cc-hero-sub">Exklusiv freigeschaltet für Simon Schweighofer · Alle Änderungen wirken sofort live</div>
                         </div>
 
-                        <!-- ONESIGNAL REST API KEY VERWALTUNG -->
-                        <div class="admin-glass-card" id="admin-onesignal-push-card">
-                            <div class="admin-glass-card-title">
-                                <span>🔔 OneSignal REST API Key</span>
-                            </div>
-                            <p class="admin-muted-text" style="margin-bottom: 10px;">
-                                Geschützt gespeichert in Firestore (<code>settings/push</code>) für automatische Push-Benachrichtigungen.
-                            </p>
-                            <form onsubmit="saveOneSignalRestApiKey(event)">
-                                <div class="form-group">
-                                    <label>OneSignal REST API Key</label>
-                                    <input type="password" class="form-control" id="admin-onesignal-key-input" value="••••••••" placeholder="Optional – leer lassen für Cloudflare Secret" autocomplete="off" disabled readonly style="font-size: 0.9em; letter-spacing: 2px;">
-                                </div>
-                                <button type="submit" id="admin-onesignal-save-btn" class="btn admin-btn-save btn-block" disabled>💾 Push-Key speichern</button>
-                            </form>
+                        <!-- 2x3 SCHNELLWAHL-RASTER -->
+                        <div class="chairman-quick-grid" role="navigation" aria-label="Obmann-Schnellwahl">
+                            <button type="button" class="chairman-quick-tile active" data-chairman-tile="sec-theme" onclick="toggleChairmanSection('sec-theme')">🎨 App-Farben (8)</button>
+                            <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-comm" onclick="toggleChairmanSection('sec-comm')">📢 Eilmeldung &amp; Chat</button>
+                            <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-bar" onclick="toggleChairmanSection('sec-bar')">🍺 Schankbuch-Preise</button>
+                            <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-members" onclick="toggleChairmanSection('sec-members')">👥 Mitglieder &amp; Waffen</button>
+                            <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-security" onclick="toggleChairmanSection('sec-security')">🔑 Code &amp; QR-Codes</button>
+                            <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-logs" onclick="toggleChairmanSection('sec-logs')">📋 Protokolle &amp; Log</button>
                         </div>
-                    </div>
 
-                    <!-- VEREINS-BACKUP & JAHRESABSCHLUSS -->
-                    <div class="admin-glass-card" id="admin-backup-card" style="margin-top: 14px;">
-                        <div class="admin-glass-card-title">
-                            <span>📊 Vereins-Backup &amp; Jahresabschluss</span>
-                        </div>
-                        <p class="admin-muted-text" style="margin-bottom: 12px;">
-                            Lädt alle gespeicherten Bar-Abrechnungen, Firmen-/Feier-Rechnungen (Schankbuch), Waffenbuch-Protokolle und Termine aus Firestore als übersichtliche Vorschau oder druckfertiges A4-PDF herunter.
-                        </p>
-                        <div id="admin-board-routine-box" style="background: #f8fafc; border-left: 4px solid #16a34a; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-size: 0.82em; line-height: 1.48; color: #1e293b;">
-                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">Vorstands-Routine:</div>
-                            <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px;">
-                                <li><strong>Quartals- &amp; Jahres-Backup:</strong> Einmal im Quartal oder zum Jahresende über „📥 Vereins-Backup &amp; Jahresabschluss (PDF)“ Schankbuch, Waffenbuch und Termine lokal als A4-PDF auf dem Vereins-PC oder USB-Stick sichern.</li>
-                                <li><strong>Zugangscode-Wechsel:</strong> Bei Vorstands- oder Mitgliederwechsel oben den Vereins-Zugangscode ändern – alle Geräte mit dem alten Code werden automatisch wieder auf den Sperrbildschirm zurückgesetzt.</li>
-                            </ul>
-                        </div>
-                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                            <button type="button" id="admin-annual-preview-btn" onclick="previewAnnualBackupReport(this)" class="btn admin-btn-edit" style="flex: 1; min-width: 210px; margin-top: 0;">
-                                👁️ Jahresabschluss-Vorschau
+                        <!-- AKKORDEON-SEKTION 1: APP-FARBDESIGN (STANDARDMÄSSIG GEÖFFNET) -->
+                        <div class="chairman-acc-section open" id="sec-theme">
+                            <button type="button" class="chairman-acc-header" aria-expanded="true" aria-controls="sec-theme-body" onclick="toggleChairmanSection('sec-theme')">
+                                <span>🎨 App-Farbdesign (8 Vereins-Farbwelten)</span>
+                                <span class="chairman-acc-arrow" aria-hidden="true">▾</span>
                             </button>
-                            <button type="button" id="admin-annual-pdf-btn" onclick="exportAnnualBackupPDF(this)" class="btn admin-btn-save" style="flex: 1; min-width: 230px; margin-top: 0;">
-                                📥 Vereins-Backup &amp; Jahresabschluss (PDF)
+                            <div class="chairman-acc-body" id="sec-theme-body">
+                                <div class="chairman-sub-block" id="admin-theme-control-box" style="display: none;">
+                                    <p class="admin-muted-text" style="margin-bottom: 12px;">
+                                        Wähle eine der 8 Vereins-Farbwelten aus – beim Speichern (<code>settings/theme</code>) wird das Design sofort in Echtzeit auf alle Mitglieder-Geräte übertragen.
+                                    </p>
+                                    <div id="admin-theme-tiles-grid" class="admin-theme-grid"></div>
+                                    <button type="button" id="admin-theme-save-btn" onclick="saveClubAppTheme()" class="btn admin-btn-save btn-block" style="margin-top: 12px;">
+                                        💾 Design für alle speichern
+                                    </button>
+                                    <div id="admin-theme-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700; color: #15803d;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AKKORDEON-SEKTION 2: STARTSEITEN-EILMELDUNG & CHAT-SCHREIBSPERRE -->
+                        <div class="chairman-acc-section" id="sec-comm">
+                            <button type="button" class="chairman-acc-header" aria-expanded="false" aria-controls="sec-comm-body" onclick="toggleChairmanSection('sec-comm')">
+                                <span>📢 Startseiten-Eilmeldung &amp; Chat-Schreibsperre</span>
+                                <span class="chairman-acc-arrow" aria-hidden="true">▾</span>
+                            </button>
+                            <div class="chairman-acc-body" id="sec-comm-body">
+                                <div class="chairman-sub-block" id="chairman-banner-card">
+                                    <div class="chairman-sub-title"><span>📢 Startseiten-Eilmeldung</span></div>
+                                    <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        Zeigt bei Aktivierung ein auffälliges Gold-Rot-Banner ganz oben auf der Startseite (<code>settings/banner</code>).
+                                    </p>
+                                    <div class="form-group" style="margin-bottom: 10px;">
+                                        <label for="chairman-banner-text">Eilmeldungs-Text</label>
+                                        <textarea id="chairman-banner-text" class="form-control" rows="2" maxlength="320" placeholder="z. B. Achtung: Schützenhaus heute wegen Ausrückung erst ab 19:30 Uhr geöffnet!"></textarea>
+                                    </div>
+                                    <label class="chairman-toggle-row" style="margin-bottom: 10px;">
+                                        <span>📢 Eilmeldung aktiv anzeigen</span>
+                                        <input type="checkbox" id="chairman-banner-active" style="width: 20px; height: 20px; accent-color: #b91c1c; cursor: pointer;">
+                                    </label>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                        <button type="button" id="chairman-banner-publish-btn" onclick="publishChairmanEmergencyBanner()" class="btn admin-btn-save" style="flex: 1; min-width: 190px; margin-top: 0;">
+                                            📢 Eilmeldung veröffentlichen
+                                        </button>
+                                        <button type="button" id="chairman-banner-hide-btn" onclick="hideChairmanEmergencyBanner()" class="btn admin-btn-delete" style="min-width: 130px; margin-top: 0;">
+                                            🗑️ Ausblenden
+                                        </button>
+                                    </div>
+                                    <div id="chairman-banner-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700;"></div>
+                                </div>
+
+                                <div class="chairman-sub-divider"></div>
+
+                                <div class="chairman-sub-block" id="chairman-chat-lock-card">
+                                    <div class="chairman-sub-title"><span>🔒 Chat-Schreibsperre</span></div>
+                                    <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        Wenn aktiv (<code>settings/chat_lock</code>), können normale Mitglieder im Vereins-Chat nur noch lesen – ausschließlich Obmann Simon darf schreiben.
+                                    </p>
+                                    <label class="chairman-toggle-row">
+                                        <span>🔒 Chat-Schreibsperre (Nur Obmann darf schreiben)</span>
+                                        <input type="checkbox" id="chairman-chat-lock-toggle" onchange="toggleChairmanChatLock(this.checked)" style="width: 22px; height: 22px; accent-color: #b91c1c; cursor: pointer;">
+                                    </label>
+                                    <div id="chairman-chat-lock-status" class="admin-muted-text" style="margin-top: 8px; font-weight: 700; color: #15803d;">🔓 Chat ist aktuell für alle Mitglieder geöffnet.</div>
+                                    <div id="chairman-chat-lock-feedback" class="admin-muted-text" style="display: none; margin-top: 6px; font-weight: 700;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AKKORDEON-SEKTION 3: SCHANKBUCH-PREISE & ARTIKEL -->
+                        <div class="chairman-acc-section" id="sec-bar">
+                            <button type="button" class="chairman-acc-header" aria-expanded="false" aria-controls="sec-bar-body" onclick="toggleChairmanSection('sec-bar')">
+                                <span>🍺 Schankbuch-Preise &amp; Artikel verwalten</span>
+                                <span class="chairman-acc-arrow" aria-hidden="true">▾</span>
+                            </button>
+                            <div class="chairman-acc-body" id="sec-bar-body">
+                                <div class="chairman-sub-block" id="chairman-bar-menu-card">
+                                    <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        Passe Preise in Echtzeit an oder lege neue Artikel im Schankbuch an (<code>settings/bar_menu</code>).
+                                    </p>
+                                    <div id="chairman-bar-menu-list" style="margin-bottom: 10px;"></div>
+                                    <button type="button" id="chairman-bar-menu-save-btn" onclick="saveChairmanBarMenuPrices()" class="btn admin-btn-save btn-block" style="margin-top: 0;">
+                                        💾 Preise speichern
+                                    </button>
+                                    <div class="chairman-sub-divider"></div>
+                                    <div class="chairman-sub-title"><span>➕ Neuen Artikel anlegen</span></div>
+                                    <div style="display: grid; grid-template-columns: 1fr 96px; gap: 8px; margin-bottom: 8px;">
+                                        <input type="text" id="chairman-new-bar-item-name" class="form-control" placeholder="Artikelname (z. B. Brezel)">
+                                        <input type="number" id="chairman-new-bar-item-price" class="form-control" step="0.10" min="0" placeholder="€ 2.50">
+                                    </div>
+                                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                        <select id="chairman-new-bar-item-category" class="form-control" style="flex: 1; min-width: 160px;">
+                                            <option value="Speisen">Speisen</option>
+                                            <option value="Getränke & Bier" selected>Getränke &amp; Bier</option>
+                                            <option value="Heissgetränke & Sonstiges">Heissgetränke &amp; Sonstiges</option>
+                                            <option value="Luftgewehrschießen">Luftgewehrschießen</option>
+                                        </select>
+                                        <button type="button" id="chairman-new-bar-item-add-btn" onclick="addChairmanBarMenuItem()" class="btn admin-btn-edit" style="margin-top: 0; white-space: nowrap;">
+                                            ➕ Neuen Artikel anlegen
+                                        </button>
+                                    </div>
+                                    <div id="chairman-bar-menu-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AKKORDEON-SEKTION 4: AKTIVE MITGLIEDER & WAFFENWARTE -->
+                        <div class="chairman-acc-section" id="sec-members">
+                            <button type="button" class="chairman-acc-header" aria-expanded="false" aria-controls="sec-members-body" onclick="toggleChairmanSection('sec-members')">
+                                <span>👥 Aktive Mitglieder &amp; Waffenwarte</span>
+                                <span class="chairman-acc-arrow" aria-hidden="true">▾</span>
+                            </button>
+                            <div class="chairman-acc-body" id="sec-members-body">
+                                <div class="chairman-sub-block" id="chairman-members-card">
+                                    <p class="admin-muted-text" style="margin-bottom: 12px;">
+                                        Verwaltet aktive Schankdienst-Mitglieder (<code>activeMembers</code>) und Waffenwarte (<code>weaponMembers</code>) in <code>settings/members</code> mit sofortiger Echtzeit-Übernahme in allen Auswahlmenüs.
+                                    </p>
+                                    <div>
+                                        <div class="chairman-sub-title"><span>Aktive Schankdienst-Mitglieder</span></div>
+                                        <div id="chairman-active-members-list" class="chairman-chip-list"></div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <input type="text" id="chairman-active-member-input" class="form-control" style="flex: 1; min-width: 0;" placeholder="Nachname Vorname hinzufügen..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); addChairmanMember('active'); }">
+                                            <button type="button" id="chairman-active-member-add-btn" onclick="addChairmanMember('active')" class="btn admin-btn-save" style="margin-top: 0; white-space: nowrap;">➕ Hinzufügen</button>
+                                        </div>
+                                    </div>
+                                    <div class="chairman-sub-divider"></div>
+                                    <div>
+                                        <div class="chairman-sub-title" style="color: #065f46;"><span>🎯 Waffenwarte (Waffenbuch-Berechtigte)</span></div>
+                                        <div id="chairman-weapon-members-list" class="chairman-chip-list"></div>
+                                        <div style="display: flex; gap: 8px;">
+                                            <input type="text" id="chairman-weapon-member-input" class="form-control" style="flex: 1; min-width: 0;" placeholder="Waffenwart hinzufügen..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); addChairmanMember('weapon'); }">
+                                            <button type="button" id="chairman-weapon-member-add-btn" onclick="addChairmanMember('weapon')" class="btn admin-btn-save" style="margin-top: 0; white-space: nowrap;">➕ Hinzufügen</button>
+                                        </div>
+                                    </div>
+                                    <div id="chairman-members-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AKKORDEON-SEKTION 5: ZUGANGSCODE, MITGLIEDER-QR, TRESOR-QR & PUSH-KEY -->
+                        <div class="chairman-acc-section" id="sec-security">
+                            <button type="button" class="chairman-acc-header" aria-expanded="false" aria-controls="sec-security-body" onclick="toggleChairmanSection('sec-security')">
+                                <span>🔑 Zugangscode, Mitglieder-QR &amp; Tresor-QR</span>
+                                <span class="chairman-acc-arrow" aria-hidden="true">▾</span>
+                            </button>
+                            <div class="chairman-acc-body" id="sec-security-body">
+                                <!-- VEREINS-ZUGANGSCODE VERWALTUNG (SHA-256 codeHash) -->
+                                <div class="chairman-sub-block" id="admin-access-pin-card">
+                                    <div class="chairman-sub-title"><span>🔑 Vereins-Zugangscode ändern</span></div>
+                                    <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        Speichert ausschließlich den SHA-256-Hash (<code>codeHash</code>) in Firestore (<code>settings/access</code>). Mindestens 4 Zeichen.
+                                    </p>
+                                    <form onsubmit="updateClubAccessPin(event)">
+                                        <div class="form-group">
+                                            <label for="admin-club-pin-input">Neuer Vereins-Zugangscode (mind. 4 Zeichen)</label>
+                                            <input type="password" class="form-control" id="admin-club-pin-input" minlength="4" placeholder="Neuer Code (mind. 4 Zeichen)" required autocomplete="off" style="font-weight: 800; font-size: 1.02em; letter-spacing: 2px; text-align: center;">
+                                        </div>
+                                        <button type="submit" id="admin-club-pin-save-btn" class="btn admin-btn-save btn-block">🔑 Neuen Zugangscode aktivieren</button>
+                                    </form>
+                                    <div id="chairman-club-pin-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700;"></div>
+                                </div>
+
+                                <div class="chairman-sub-divider"></div>
+
+                                <!-- QR-CODES (MITGLIEDER-APP & TRESOR) -->
+                                <div class="chairman-sub-block">
+                                    <div class="chairman-sub-title"><span>📲 Mitglieder-App &amp; Tresor QR-Codes</span></div>
+                                    <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        Hochauflösende PNG-Grafiken für Aushang, Mitglieder-Zugang und Waffentresor.
+                                    </p>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                        <button type="button" id="admin-member-app-qr-btn" class="btn admin-btn-edit" style="flex: 1; min-width: 190px; margin-top: 0;" onclick="exportMemberAppQrCodePNG()">📲 Mitglieder-App-QR-Code PNG</button>
+                                        <button type="button" class="btn admin-btn-edit" style="flex: 1; min-width: 190px; margin-top: 0;" onclick="exportTresorQrCodePNG()">📷 Tresor-QR-Code PNG</button>
+                                    </div>
+                                </div>
+
+                                <div class="chairman-sub-divider"></div>
+
+                                <!-- ONESIGNAL REST API KEY VERWALTUNG -->
+                                <div id="admin-security-banner" class="admin-security-banner" style="margin-bottom: 12px;">
+                                    <div>
+                                        <span id="admin-security-status-badge" class="admin-security-badge">🔒 Geschützt – nur Haupt-Admin</span>
+                                        <div id="admin-security-status-text" class="admin-muted-text" style="margin-top: 5px;">
+                                            OneSignal-Push-Schlüssel ist gegen versehentliches Verstellen geschützt.
+                                        </div>
+                                    </div>
+                                    <button type="button" id="admin-security-unlock-btn" onclick="handleSecurityUnlockToggle()" class="btn admin-btn-edit">
+                                        🔓 Push-Key entsperren
+                                    </button>
+                                </div>
+                                <div class="chairman-sub-block" id="admin-onesignal-push-card">
+                                    <div class="chairman-sub-title"><span>🔔 OneSignal REST API Key</span></div>
+                                    <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        Geschützt gespeichert in Firestore (<code>settings/push</code>) für automatische Push-Benachrichtigungen.
+                                    </p>
+                                    <form onsubmit="saveOneSignalRestApiKey(event)">
+                                        <div class="form-group">
+                                            <label for="admin-onesignal-key-input">OneSignal REST API Key</label>
+                                            <input type="password" class="form-control" id="admin-onesignal-key-input" value="••••••••" placeholder="Optional – leer lassen für Cloudflare Secret" autocomplete="off" disabled readonly style="font-size: 0.9em; letter-spacing: 2px;">
+                                        </div>
+                                        <button type="submit" id="admin-onesignal-save-btn" class="btn admin-btn-save btn-block" disabled>💾 Push-Key speichern</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AKKORDEON-SEKTION 6: WAFFENPROTOKOLLE, SICHERHEITS-LOG, BACKUP & HANDBUCH -->
+                        <div class="chairman-acc-section" id="sec-logs">
+                            <button type="button" class="chairman-acc-header" aria-expanded="false" aria-controls="sec-logs-body" onclick="toggleChairmanSection('sec-logs')">
+                                <span>📋 Waffenprotokolle, Sicherheits-Log &amp; Backup</span>
+                                <span class="chairman-acc-arrow" aria-hidden="true">▾</span>
+                            </button>
+                            <div class="chairman-acc-body" id="sec-logs-body">
+                                <!-- WAFFENBUCH-PROTOKOLLE -->
+                                <div class="chairman-sub-block" id="chairman-weapons-card">
+                                    <div id="admin-weapons-chairman-locked-notice" style="display: none; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 16px; color: #475569; font-size: 0.92rem; font-weight: 700;">
+                                        <span>🔒 Exklusiv für Obmann Simon freigeschaltet.</span>
+                                    </div>
+                                    <div id="admin-weapons-chairman-content" style="display: none;">
+                                        <div class="chairman-sub-title">
+                                            <span>🎯 Waffenbuch-Protokolle</span>
+                                            <button type="button" class="btn admin-btn-save" style="margin-top: 0;" onclick="exportFullWeaponListPDF()">📥 Waffenliste PDF</button>
+                                        </div>
+                                        <p class="admin-muted-text" style="margin-bottom: 10px;">Übersicht aller gespeicherten Entnahme- und Rückgabeprotokolle (inkl. getrennter ZWR/ZVR-Daten):</p>
+                                        <div id="admin-weapon-pdf-list"><p class="admin-muted-text">Keine Protokolle vorhanden.</p></div>
+                                    </div>
+                                </div>
+
+                                <div class="chairman-sub-divider"></div>
+
+                                <!-- VEREINS-BACKUP & JAHRESABSCHLUSS -->
+                                <div class="chairman-sub-block" id="admin-backup-card">
+                                    <div class="chairman-sub-title"><span>📊 Vereins-Backup &amp; Jahresabschluss</span></div>
+                                    <p class="admin-muted-text" style="margin-bottom: 12px;">
+                                        Lädt alle gespeicherten Bar-Abrechnungen, Firmen-/Feier-Rechnungen (Schankbuch), Waffenbuch-Protokolle und Termine aus Firestore als übersichtliche Vorschau oder druckfertiges A4-PDF herunter.
+                                    </p>
+                                    <div id="admin-board-routine-box" style="background: #f8fafc; border-left: 4px solid #16a34a; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-size: 0.82em; line-height: 1.48; color: #1e293b;">
+                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">Vorstands-Routine:</div>
+                                        <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px;">
+                                            <li><strong>Quartals- &amp; Jahres-Backup:</strong> Einmal im Quartal oder zum Jahresende über „📥 Vereins-Backup &amp; Jahresabschluss (PDF)“ Schankbuch, Waffenbuch und Termine lokal als A4-PDF auf dem Vereins-PC oder USB-Stick sichern.</li>
+                                            <li><strong>Zugangscode-Wechsel:</strong> Bei Vorstands- oder Mitgliederwechsel unter „🔑 Code &amp; QR-Codes“ den Vereins-Zugangscode ändern – alle Geräte mit dem alten Code werden automatisch wieder auf den Sperrbildschirm zurückgesetzt.</li>
+                                        </ul>
+                                    </div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                        <button type="button" id="admin-annual-preview-btn" onclick="previewAnnualBackupReport(this)" class="btn admin-btn-edit" style="flex: 1; min-width: 195px; margin-top: 0;">
+                                            👁️ Jahresabschluss-Vorschau
+                                        </button>
+                                        <button type="button" id="admin-annual-pdf-btn" onclick="exportAnnualBackupPDF(this)" class="btn admin-btn-save" style="flex: 1; min-width: 215px; margin-top: 0;">
+                                            📥 Vereins-Backup &amp; Jahresabschluss (PDF)
+                                        </button>
+                                    </div>
+                                    <div id="admin-backup-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700; color: #15803d;"></div>
+                                </div>
+
+                                <div class="chairman-sub-divider"></div>
+
+                                <!-- UNVERÄNDERLICHES VORSTANDS-AUDIT-LOG -->
+                                <div class="chairman-sub-block" id="admin-audit-log-card">
+                                    <div class="chairman-sub-title"><span>📜 Letzte Sicherheits-Protokolle (Audit-Log)</span></div>
+                                    <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        Unveränderliches Protokoll der letzten 15 kritischen Vorstands-Aktionen (schreibgeschützt, ohne Lösch-Button).
+                                    </p>
+                                    <div id="admin-audit-logs-list" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;">
+                                        <p class="admin-muted-text">Lade Sicherheits-Protokolle...</p>
+                                    </div>
+                                </div>
+
+                                <div class="chairman-sub-divider"></div>
+
+                                <!-- VORSTANDS- & ADMIN-HANDBUCH -->
+                                <div class="chairman-sub-block" id="admin-handbook-card">
+                                    <div class="chairman-sub-title"><span>📘 Vorstands- &amp; Admin-Handbuch</span></div>
+                                    <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        Übersichtliche Anleitung zu allen Admin-Modulen, Berechtigungen, Exporten und Sicherheitsfunktionen – inklusive Druck- &amp; PDF-Funktion.
+                                    </p>
+                                    <button type="button" id="admin-open-handbook-btn" onclick="openAdminHelpModal()" class="btn admin-btn-edit btn-block" style="margin-top: 0;">
+                                        📘 Vorstands- &amp; Admin-Handbuch öffnen
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DEZENTE FUSSZEILE: ALLE EINKLAPPEN -->
+                        <div class="chairman-cc-footer">
+                            <button type="button" class="chairman-collapse-all-btn" onclick="collapseAllChairmanSections()">
+                                ▴ Alle einklappen
                             </button>
                         </div>
-                        <div id="admin-backup-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700; color: #15803d;"></div>
-                    </div>
-
-                    <!-- UNVERÄNDERLICHES VORSTANDS-AUDIT-LOG -->
-                    <div class="admin-glass-card" id="admin-audit-log-card" style="margin-top: 14px;">
-                        <div class="admin-glass-card-title">
-                            <span>📜 Letzte Sicherheits-Protokolle (Audit-Log)</span>
-                        </div>
-                        <p class="admin-muted-text" style="margin-bottom: 10px;">
-                            Unveränderliches Protokoll der letzten 15 kritischen Vorstands-Aktionen (schreibgeschützt, ohne Lösch-Button).
-                        </p>
-                        <div id="admin-audit-logs-list" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;">
-                            <p class="admin-muted-text">Lade Sicherheits-Protokolle...</p>
-                        </div>
-                    </div>
-
-                    <!-- VORSTANDS- & ADMIN-HANDBUCH -->
-                    <div class="admin-glass-card" id="admin-handbook-card" style="margin-top: 14px;">
-                        <div class="admin-glass-card-title">
-                            <span>📘 Vorstands- &amp; Admin-Handbuch</span>
-                        </div>
-                        <p class="admin-muted-text" style="margin-bottom: 12px;">
-                            Übersichtliche Anleitung zu allen Admin-Modulen, Berechtigungen, Exporten und Sicherheitsfunktionen – inklusive Druck- &amp; PDF-Funktion.
-                        </p>
-                        <button type="button" id="admin-open-handbook-btn" onclick="openAdminHelpModal()" class="btn admin-btn-edit btn-block">
-                            📘 Vorstands- &amp; Admin-Handbuch öffnen
-                        </button>
                     </div>
                 </section>
             </div>
@@ -3993,6 +4604,10 @@
             </div>
         </div>
 
+        <div id="chat-locked-notice-bar" role="status" aria-live="polite" style="display: none;">
+            <span>🔒 Der Vereins-Chat ist vorübergehend nur für Durchsagen des Obmanns geöffnet.</span>
+        </div>
+
         <form id="chat-input-form" class="chat-input-bar" onsubmit="sendClubChatMessage(event)">
             <input type="file" id="chat-camera-input" accept="image/*" capture="environment" style="display: none;" onchange="handleChatImageSelect(this)">
             <input type="file" id="chat-image-input" accept="image/*" style="display: none;" onchange="handleChatImageSelect(this)">
@@ -4412,10 +5027,29 @@
             try { lockSecuritySettingsFields(); } catch(e) {}
         }
 
+        function openChairmanWeaponsSection() {
+            if (!isChairmanSimonLoggedIn()) return;
+            switchAdminSection('admin-sec-security');
+            toggleChairmanSection('sec-logs', true);
+            setTimeout(() => {
+                const logsSec = document.getElementById('sec-logs');
+                if (logsSec && typeof logsSec.scrollIntoView === 'function') {
+                    logsSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 60);
+        }
+
         function switchAdminSection(sectionId) {
             if (!sectionId) {
                 closeAllAdminSections();
                 return;
+            }
+            if ((sectionId === 'admin-sec-security' || sectionId === 'admin-sec-weapons') && !isChairmanSimonLoggedIn()) {
+                closeAllAdminSections();
+                return;
+            }
+            if (sectionId === 'admin-sec-weapons') {
+                sectionId = 'admin-sec-security';
             }
             const targetEl = document.getElementById(sectionId);
             const isAlreadyOpen = !!(targetEl && (targetEl.classList.contains('active') || targetEl.style.display === 'block'));
@@ -4441,6 +5075,9 @@
 
             if (sectionId === 'admin-sec-members') {
                 try { renderAdminMembersOverview(); } catch(e) {}
+            }
+            if (sectionId === 'admin-sec-security') {
+                try { updateChairmanExclusiveVisibility(); } catch(e) {}
             }
         }
 
@@ -4489,12 +5126,13 @@
             "Wittwer Werner"
         ];
 
-        const WEAPON_AUTHORIZED_MEMBERS = [
+        const DEFAULT_WEAPON_AUTHORIZED_MEMBERS = [
             "Schweighofer Simon",
             "Stocker Heimo",
             "Spettel Norbert",
             "Wachter Manfred"
         ];
+        let WEAPON_AUTHORIZED_MEMBERS = [...DEFAULT_WEAPON_AUTHORIZED_MEMBERS];
 
         const WEAPON_ROLE_MAP = {
             "schweighofer simon": "Obmann",
@@ -4665,7 +5303,10 @@
             if (!selectEl) return;
             const isAdmin = !!(typeof auth !== 'undefined' && auth && auth.currentUser);
             const saved = getSavedClubMemberName();
-            const selectable = DEFAULT_ACTIVE_MEMBERS.filter(name => isAdmin || !isAdminProtectedMemberName(name));
+            const sourceMembers = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
+                ? officialActiveMembers
+                : DEFAULT_ACTIVE_MEMBERS;
+            const selectable = sourceMembers.filter(name => isAdmin || !isAdminProtectedMemberName(name));
             let html = '<option value="">-- Bitte Namen wählen --</option>';
             selectable.forEach(name => {
                 const selectedAttr = saved === name ? ' selected' : '';
@@ -4806,38 +5447,45 @@
             }
         }
 
+        function applyMembersDataSnapshot(data) {
+            if (data && typeof data === 'object') {
+                const rawActive = Array.isArray(data.activeMembers)
+                    ? data.activeMembers
+                    : (Array.isArray(data.active) ? data.active : []);
+                const rawCustomActive = Array.isArray(data.customActive) ? data.customActive : [];
+                const combinedActive = sanitizeActiveMembersList([...rawActive, ...rawCustomActive], true);
+                officialActiveMembers = combinedActive.length > 0 ? combinedActive : [...DEFAULT_ACTIVE_MEMBERS];
+
+                const rawPassive = Array.isArray(data.passive)
+                    ? data.passive
+                    : (Array.isArray(data.passiveMembers) ? data.passiveMembers : []);
+                officialPassiveMembers = sanitizeActiveMembersList(rawPassive, true);
+
+                if (Array.isArray(data.weaponMembers)) {
+                    const cleanedWeapons = sanitizeActiveMembersList(data.weaponMembers, true);
+                    WEAPON_AUTHORIZED_MEMBERS = cleanedWeapons;
+                } else {
+                    WEAPON_AUTHORIZED_MEMBERS = [...DEFAULT_WEAPON_AUTHORIZED_MEMBERS];
+                }
+            } else {
+                officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
+                officialPassiveMembers = [];
+                WEAPON_AUTHORIZED_MEMBERS = [...DEFAULT_WEAPON_AUTHORIZED_MEMBERS];
+            }
+            try { populateWeaponMemberSelects(); } catch(e) {}
+            try { populateMemberNameSetupSelect(); } catch(e) {}
+            try { loadPublicMembersList(); } catch(e) {}
+            try { renderAdminMembersOverview(); } catch(e) {}
+            try { if (typeof renderChairmanMembersManager === 'function') renderChairmanMembersManager(); } catch(e) {}
+        }
+
         async function loadMembersFromFirestore() {
             try {
                 const doc = await db.collection("settings").doc("members").get();
-                if (doc.exists && doc.data()) {
-                    const data = doc.data();
-                    const rawActive = Array.isArray(data.active)
-                        ? data.active
-                        : (Array.isArray(data.activeMembers) ? data.activeMembers : []);
-                    const sanitizedBaseActive = sanitizeActiveMembersList(rawActive, false);
-                    const rawCustomActive = Array.isArray(data.customActive) ? data.customActive : [];
-                    const customActive = sanitizeActiveMembersList(rawCustomActive, true);
-                    const combinedActive = sanitizeActiveMembersList(
-                        [...(sanitizedBaseActive.length > 0 ? sanitizedBaseActive : DEFAULT_ACTIVE_MEMBERS), ...customActive],
-                        true
-                    );
-                    officialActiveMembers = combinedActive.length > 0 ? combinedActive : [...DEFAULT_ACTIVE_MEMBERS];
-
-                    const rawPassive = Array.isArray(data.passive)
-                        ? data.passive
-                        : (Array.isArray(data.passiveMembers) ? data.passiveMembers : []);
-                    officialPassiveMembers = sanitizeActiveMembersList(rawPassive, false);
-                } else {
-                    officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
-                    officialPassiveMembers = [];
-                }
+                applyMembersDataSnapshot(doc.exists ? doc.data() : null);
             } catch (e) {
-                officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
-                officialPassiveMembers = [];
+                applyMembersDataSnapshot(null);
             }
-            populateWeaponMemberSelects();
-            loadPublicMembersList();
-            try { renderAdminMembersOverview(); } catch(e) {}
         }
 
         function renderAdminMembersOverview() {
@@ -4847,7 +5495,7 @@
                 container.innerHTML = '';
                 return;
             }
-            const cleanedActive = sanitizeActiveMembersList(officialActiveMembers);
+            const cleanedActive = sanitizeActiveMembersList(officialActiveMembers, true);
             const activeList = cleanedActive.length > 0 ? cleanedActive : DEFAULT_ACTIVE_MEMBERS;
             const weaponList = Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [];
 
@@ -5028,7 +5676,7 @@
         }
 
         function exportFullWeaponListPDF() {
-            if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) { alert('⛔ Zugriff verweigert: Dieser Bereich ist ausschließlich für Obmann Simon freigeschaltet.'); return; }
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
             const now = new Date();
@@ -5441,10 +6089,7 @@
         }
 
         function exportTresorQrCodePNG() {
-            if (!auth.currentUser) {
-                alert("Zugriff verweigert: Bitte zuerst als Admin anmelden.");
-                return;
-            }
+            if (!isChairmanSimonLoggedIn()) { alert('⛔ Zugriff verweigert: Dieser Bereich ist ausschließlich für Obmann Simon freigeschaltet.'); return; }
             try {
                 lastGeneratedTresorQrDataUrl = generateTresorQrPngDataUrl(TRESOR_QR_TEXT, 500);
                 triggerTresorQrDownload(lastGeneratedTresorQrDataUrl);
@@ -5462,6 +6107,7 @@
         }
 
         function downloadTresorQrCodePNG() {
+            if (!isChairmanSimonLoggedIn()) { alert('⛔ Zugriff verweigert: Dieser Bereich ist ausschließlich für Obmann Simon freigeschaltet.'); return; }
             if (!lastGeneratedTresorQrDataUrl) {
                 lastGeneratedTresorQrDataUrl = generateTresorQrPngDataUrl(TRESOR_QR_TEXT, 500);
             }
@@ -5474,6 +6120,8 @@
                 modal.style.display = 'none';
                 modal.style.pointerEvents = 'none';
             }
+            const previewImg = document.getElementById('tresor-qr-preview-img');
+            if (previewImg) previewImg.removeAttribute('src');
         }
 
         function triggerMemberAppQrDownload(dataUrl) {
@@ -5487,10 +6135,7 @@
         }
 
         function exportMemberAppQrCodePNG() {
-            if (!auth.currentUser) {
-                alert("Zugriff verweigert: Bitte zuerst als Admin anmelden.");
-                return;
-            }
+            if (!isChairmanSimonLoggedIn()) { alert('⛔ Zugriff verweigert: Dieser Bereich ist ausschließlich für Obmann Simon freigeschaltet.'); return; }
             try {
                 lastGeneratedMemberAppQrDataUrl = generateTresorQrPngDataUrl(MEMBER_APP_QR_URL, 500);
                 triggerMemberAppQrDownload(lastGeneratedMemberAppQrDataUrl);
@@ -5508,10 +6153,7 @@
         }
 
         function downloadMemberAppQrCodePNG() {
-            if (!auth.currentUser) {
-                alert("Zugriff verweigert: Bitte zuerst als Admin anmelden.");
-                return;
-            }
+            if (!isChairmanSimonLoggedIn()) { alert('⛔ Zugriff verweigert: Dieser Bereich ist ausschließlich für Obmann Simon freigeschaltet.'); return; }
             if (!lastGeneratedMemberAppQrDataUrl) {
                 lastGeneratedMemberAppQrDataUrl = generateTresorQrPngDataUrl(MEMBER_APP_QR_URL, 500);
             }
@@ -5524,6 +6166,8 @@
                 modal.style.display = 'none';
                 modal.style.pointerEvents = 'none';
             }
+            const previewImg = document.getElementById('member-app-qr-preview-img');
+            if (previewImg) previewImg.removeAttribute('src');
         }
 
         // --- DIENSTPLAN (AUSSCHLIESSLICH AUS FIRESTORE / CACHE NACH ENTSPERREN) ---
@@ -9173,8 +9817,13 @@
         }
 
         async function loadAdminWeaponPDFs() {
-            if (!auth.currentUser) return;
             const container = document.getElementById('admin-weapon-pdf-list');
+            if (!isChairmanSimonLoggedIn()) {
+                window.weaponPdfMap = {};
+                if (container) container.innerHTML = '';
+                try { updateChairmanExclusiveVisibility(); } catch (e) {}
+                return;
+            }
             if (!container) return;
 
             try {
@@ -9282,7 +9931,7 @@
         const deletingWeaponLogIds = new Set();
 
         async function deleteAdminWeaponLog(logId) {
-            if (!auth || !auth.currentUser) { alert("Bitte zuerst im Admin-Bereich anmelden."); return; }
+            if (!isChairmanSimonLoggedIn()) { alert('⛔ Zugriff verweigert: Dieser Bereich ist ausschließlich für Obmann Simon freigeschaltet.'); return; }
             const cleanLogId = String(logId || '').trim();
             if (!cleanLogId || deletingWeaponLogIds.has(cleanLogId)) return;
 
@@ -9492,7 +10141,7 @@
         }
 
         async function previewWeaponPDF(docId) {
-            if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) { alert('⛔ Zugriff verweigert: Dieser Bereich ist ausschließlich für Obmann Simon freigeschaltet.'); return; }
             try {
                 const data = await resolveWeaponPdfRecord(docId);
                 if (!data) {
@@ -9555,7 +10204,7 @@
         }
 
         async function downloadWeaponPDF(docId) {
-            if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) { alert('⛔ Zugriff verweigert: Dieser Bereich ist ausschließlich für Obmann Simon freigeschaltet.'); return; }
             try {
                 const data = await resolveWeaponPdfRecord(docId);
                 if (!data) {
@@ -9586,6 +10235,22 @@
         }
 
         // --- SCHANKBUCH & OFFENE DECKEL ---
+        const DEFAULT_BAR_MENU_ITEMS = [
+            { id: 'hauswuerste', label: 'Paar Hauswürste', price: 7.50, category: 'Speisen', emoji: '🌭' },
+            { id: 'wienerle', label: 'Paar Wienerle', price: 7.00, category: 'Speisen', emoji: '🌭' },
+            { id: 'bier', label: 'Bier 0,33 lt.', price: 3.50, category: 'Getränke & Bier', emoji: '🍺' },
+            { id: 'radler', label: 'Radler 0,33 lt.', price: 3.50, category: 'Getränke & Bier', emoji: '🍺' },
+            { id: 'limo', label: 'Limo 0,3 lt.', price: 3.00, category: 'Getränke & Bier', emoji: '🥤' },
+            { id: 'mineral', label: 'Mineral 1/4 lt.', price: 2.50, category: 'Getränke & Bier', emoji: '💧' },
+            { id: 'wein4', label: 'Wein 1/4 lt.', price: 4.00, category: 'Getränke & Bier', emoji: '🍷' },
+            { id: 'wein8', label: 'Wein 1/8 lt.', price: 3.00, category: 'Getränke & Bier', emoji: '🍷' },
+            { id: 'weingespr', label: 'Wein gespritzt', price: 3.50, category: 'Getränke & Bier', emoji: '🍷' },
+            { id: 'schnaps', label: 'Schnaps 2 cl.', price: 3.50, category: 'Getränke & Bier', emoji: '🥃' },
+            { id: 'kaffee', label: 'Kaffee', price: 3.00, category: 'Heissgetränke & Sonstiges', emoji: '☕' },
+            { id: 'tee', label: 'Tee', price: 2.50, category: 'Heissgetränke & Sonstiges', emoji: '🍵' },
+            { id: 'luftgewehr', label: 'Luftgewehrschießen', price: 8.00, category: 'Luftgewehrschießen', emoji: '🎯', suffix: ' / P.', highlight: true }
+        ];
+        let clubBarMenuItems = DEFAULT_BAR_MENU_ITEMS.map(item => ({ ...item }));
         const drinkPrices = {
             hauswuerste: 7.50, wienerle: 7.00, bier: 3.50, radler: 3.50,
             limo: 3.00, mineral: 2.50, wein4: 4.00, wein8: 3.00,
@@ -9606,6 +10271,84 @@
             tee: 'Tee',
             luftgewehr: 'Luftgewehrschießen'
         };
+
+        function formatBarPriceEur(val) {
+            const num = Math.max(0, Math.round((Number(val) || 0) * 100) / 100);
+            return '€ ' + num.toFixed(2).replace('.', ',');
+        }
+
+        function renderPublicBarMenuItems() {
+            const container = document.getElementById('tally-order-list-items');
+            if (!container) return;
+            const categoryOrder = ['Speisen', 'Getränke & Bier', 'Heissgetränke & Sonstiges', 'Luftgewehrschießen'];
+            const grouped = new Map();
+            categoryOrder.forEach(c => grouped.set(c, []));
+            clubBarMenuItems.forEach(item => {
+                const cat = String(item.category || 'Getränke & Bier').trim() || 'Getränke & Bier';
+                if (!grouped.has(cat)) grouped.set(cat, []);
+                grouped.get(cat).push(item);
+            });
+            let html = '';
+            grouped.forEach((items, cat) => {
+                if (!items.length) return;
+                html += `<div class="strich-category-header">${escapeHtml(cat)}</div>`;
+                items.forEach(item => {
+                    const safeId = escapeHtml(item.id);
+                    const emoji = item.emoji ? `${escapeHtml(item.emoji)} ` : '🍽️ ';
+                    const suffix = item.suffix ? escapeHtml(item.suffix) : '';
+                    const priceText = formatBarPriceEur(item.price) + suffix;
+                    const qty = (typeof drinkCounts === 'object' && drinkCounts && drinkCounts[item.id]) ? Number(drinkCounts[item.id]) : 0;
+                    const rowStyle = item.highlight ? ' style="background: rgba(254, 242, 242, 0.9); padding: 10px 12px; border-radius: 10px;"' : '';
+                    html += `<div class="price-item"${rowStyle}><span>${emoji}${escapeHtml(item.label)} (${priceText})</span><div class="counter-controls"><button class="counter-btn" onclick="changeCount('${safeId}', -1)">-</button><span id="count-${safeId}" style="font-weight: bold; width: 24px; text-align: center;">${qty}</span><button class="counter-btn" onclick="changeCount('${safeId}', 1)">+</button></div></div>`;
+                });
+            });
+            container.innerHTML = html;
+            try {
+                if (typeof getActiveOpenTab === 'function' && typeof applyCountsToDrinkUI === 'function') {
+                    const activeTab = getActiveOpenTab();
+                    if (activeTab && activeTab.counts) {
+                        applyCountsToDrinkUI(activeTab.counts);
+                    }
+                    if (typeof renderOpenTabsBar === 'function') renderOpenTabsBar();
+                } else if (typeof calculateTotal === 'function') {
+                    calculateTotal();
+                }
+            } catch (e) {}
+        }
+
+        function applyBarMenuSnapshot(rawItems) {
+            const list = Array.isArray(rawItems) && rawItems.length > 0
+                ? rawItems.map(it => {
+                    const id = String((it && it.id) || '').trim().replace(/[^a-zA-Z0-9_-]/g, '');
+                    const label = String((it && it.label) || '').trim();
+                    const price = Math.max(0, Math.round((Number(it && it.price) || 0) * 100) / 100);
+                    if (!id || !label) return null;
+                    const def = DEFAULT_BAR_MENU_ITEMS.find(d => d.id === id);
+                    return {
+                        id,
+                        label,
+                        price,
+                        category: String((it && it.category) || (def && def.category) || 'Getränke & Bier').trim(),
+                        emoji: String((it && it.emoji) || (def && def.emoji) || '🍺').trim(),
+                        suffix: (it && it.suffix) || (def && def.suffix) || '',
+                        highlight: Boolean((it && it.highlight) || (def && def.highlight))
+                    };
+                }).filter(Boolean)
+                : DEFAULT_BAR_MENU_ITEMS.map(item => ({ ...item }));
+
+            clubBarMenuItems = list.length > 0 ? list : DEFAULT_BAR_MENU_ITEMS.map(item => ({ ...item }));
+            Object.keys(drinkPrices).forEach(k => { delete drinkPrices[k]; });
+            Object.keys(drinkLabels).forEach(k => { delete drinkLabels[k]; });
+            clubBarMenuItems.forEach(item => {
+                drinkPrices[item.id] = item.price;
+                drinkLabels[item.id] = item.label;
+                if (typeof drinkCounts === 'object' && drinkCounts && !(item.id in drinkCounts)) {
+                    drinkCounts[item.id] = 0;
+                }
+            });
+            renderPublicBarMenuItems();
+            try { if (typeof renderChairmanBarMenuManager === 'function') renderChairmanBarMenuManager(); } catch (e) {}
+        }
 
         function createEmptyDrinkCounts() {
             const counts = {};
@@ -11035,10 +11778,15 @@
 
         async function deleteItem(collectionName, docId) {
             if (!auth.currentUser) return;
+            if (collectionName === 'weapon_log' && !isChairmanSimonLoggedIn()) {
+                alert('⛔ Zugriff verweigert: Dieser Bereich ist ausschließlich für Obmann Simon freigeschaltet.');
+                return;
+            }
             if (confirm("Wirklich löschen?")) {
                 await db.collection(collectionName).doc(docId).delete();
                 alert("Gelöscht!");
-                loadEvents(); loadNews(); loadCashSales(); loadInvoices(); loadWeaponHistory(); loadAdminWeaponPDFs();
+                loadEvents(); loadNews(); loadCashSales(); loadInvoices(); loadWeaponHistory();
+                if (isChairmanSimonLoggedIn()) loadAdminWeaponPDFs();
             }
         }
 
@@ -11079,6 +11827,11 @@
             try { loadPublicMembersList(); } catch(e) {}
             if (!appDataLoadedAfterUnlock) {
                 appDataLoadedAfterUnlock = true;
+                try { initClubThemeRealtimeListener(); } catch(e) {}
+                try { initClubBannerRealtimeListener(); } catch(e) {}
+                try { initClubMembersRealtimeListener(); } catch(e) {}
+                try { initBarMenuRealtimeListener(); } catch(e) {}
+                try { initChatLockRealtimeListener(); } catch(e) {}
                 try { initDutyPlanRealtimeListener(); } catch(e) {}
                 try { initOpenTabsListener(); } catch(e) {}
                 try { initMidnightAndMinuteChecker(); } catch(e) {}
@@ -11158,7 +11911,7 @@
         }
 
         function loadAdminAuditLogs() {
-            if (typeof auth === 'undefined' || !auth || !auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) return;
             const container = document.getElementById('admin-audit-logs-list');
             if (adminAuditLogsUnsubscribe) return;
             try {
@@ -11191,15 +11944,21 @@
             loadAppDataAfterUnlock();
             try { lockSecuritySettingsFields(); } catch(e) {}
             try { closeAllAdminSections(); } catch(e) {}
+            try { updateChairmanExclusiveVisibility(); } catch(e) {}
             try { renderAdminMembersOverview(); } catch(e) {}
             try { loadCashSales(); } catch(e) {}
             try { loadInvoices(); } catch(e) {}
             try { loadKeyList(); } catch(e) {}
             try { loadInventory(); renderInventoryDisplay(); } catch(e) {}
-            try { loadAdminWeaponPDFs(); } catch(e) {}
-            try { loadAdminClubPin(); } catch(e) {}
-            try { loadAdminOneSignalKey(); } catch(e) {}
-            try { loadAdminAuditLogs(); } catch(e) {}
+            if (isChairmanSimonLoggedIn()) {
+                try { loadAdminWeaponPDFs(); } catch(e) {}
+                try { loadAdminClubPin(); } catch(e) {}
+                try { loadAdminOneSignalKey(); } catch(e) {}
+                try { loadAdminAuditLogs(); } catch(e) {}
+            } else {
+                window.weaponPdfMap = {};
+                try { stopAdminAuditLogListener(); } catch(e) {}
+            }
         }
 
         function clearAdminSensitiveData() {
@@ -11209,6 +11968,8 @@
             window.weaponPdfMap = {};
             window.invoicesMap = {};
             window.cashSalesList = [];
+            lastGeneratedTresorQrDataUrl = '';
+            lastGeneratedMemberAppQrDataUrl = '';
             try { lockSecuritySettingsFields(); } catch(e) {}
             try { stopAdminAuditLogListener(); } catch(e) {}
             try { if (typeof cancelEditDutyEntry === 'function') cancelEditDutyEntry(); } catch(e) {}
@@ -11234,6 +11995,11 @@
                 const el = document.getElementById(id);
                 if (el) el.innerHTML = '';
             });
+            ['tresor-qr-preview-img', 'member-app-qr-preview-img'].forEach(id => {
+                const imgEl = document.getElementById(id);
+                if (imgEl) imgEl.removeAttribute('src');
+            });
+            try { updateChairmanExclusiveVisibility(); } catch(e) {}
             const cashSumEl = document.getElementById('admin-cash-sales-sum-value');
             if (cashSumEl) cashSumEl.innerText = '€ 0,00';
             const cashCountEl = document.getElementById('admin-cash-sales-count');
@@ -11261,6 +12027,26 @@
             if (openTabsUnsubscribe) {
                 try { openTabsUnsubscribe(); } catch(e) {}
                 openTabsUnsubscribe = null;
+            }
+            if (clubThemeUnsubscribe) {
+                try { clubThemeUnsubscribe(); } catch(e) {}
+                clubThemeUnsubscribe = null;
+            }
+            if (clubBannerUnsubscribe) {
+                try { clubBannerUnsubscribe(); } catch(e) {}
+                clubBannerUnsubscribe = null;
+            }
+            if (clubMembersUnsubscribe) {
+                try { clubMembersUnsubscribe(); } catch(e) {}
+                clubMembersUnsubscribe = null;
+            }
+            if (clubBarMenuUnsubscribe) {
+                try { clubBarMenuUnsubscribe(); } catch(e) {}
+                clubBarMenuUnsubscribe = null;
+            }
+            if (clubChatLockUnsubscribe) {
+                try { clubChatLockUnsubscribe(); } catch(e) {}
+                clubChatLockUnsubscribe = null;
             }
             try { destroyClubChat(); } catch(e) {}
             Object.keys(pendingTabSyncTimers).forEach(id => {
@@ -11311,6 +12097,10 @@
 
         async function resolveClubPinHashFromData(data, allowMigrate = false) {
             if (!data) return null;
+            const rawCodeHash = data.codeHash !== undefined && data.codeHash !== null ? String(data.codeHash).trim() : '';
+            if (isSha256Hex(rawCodeHash)) {
+                return rawCodeHash.toLowerCase();
+            }
             const rawHash = data.clubPinHash !== undefined && data.clubPinHash !== null ? String(data.clubPinHash).trim() : '';
             if (isSha256Hex(rawHash)) {
                 return rawHash.toLowerCase();
@@ -11321,11 +12111,12 @@
                 return rawClubPin.toLowerCase();
             }
             const computedHash = await sha256Hex(rawClubPin);
-            if (allowMigrate && auth.currentUser) {
+            if (allowMigrate && isChairmanSimonLoggedIn()) {
                 try {
                     await db.collection("settings").doc("access").set({
-                        clubPin: computedHash,
+                        codeHash: computedHash,
                         clubPinHash: computedHash,
+                        clubPin: firebase.firestore.FieldValue.delete(),
                         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                     }, { merge: true });
                 } catch (e) {}
@@ -11496,22 +12287,22 @@
 
         async function updateClubAccessPin(e) {
             e.preventDefault();
-            if (!auth.currentUser) return;
-            if (!masterSecurityUnlocked) {
-                alert("Dieser Bereich ist geschützt. Bitte zuerst mit dem Haupt-Admin Master-PIN entsperren.");
-                return;
-            }
+            if (!isChairmanSimonLoggedIn()) return;
             const adminPinInput = document.getElementById('admin-club-pin-input');
+            const feedbackEl = document.getElementById('chairman-club-pin-feedback');
             const newPin = adminPinInput ? adminPinInput.value.trim() : "";
-            if (!newPin) {
-                alert("Bitte einen gültigen neuen Zugangscode eingeben!");
+            if (!newPin || newPin.length < 4) {
+                alert("Bitte mindestens 4 Zeichen für den neuen Vereins-Zugangscode eingeben!");
+                if (adminPinInput) adminPinInput.focus();
                 return;
             }
             try {
                 const newPinHash = await sha256Hex(newPin);
                 await db.collection("settings").doc("access").set({
-                    clubPin: newPinHash,
+                    codeHash: newPinHash,
                     clubPinHash: newPinHash,
+                    clubPin: firebase.firestore.FieldValue.delete(),
+                    updatedBy: 'Simon',
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
                 currentFirestoreClubPinHash = newPinHash;
@@ -11521,10 +12312,20 @@
                         localStorage.setItem(CLUB_PIN_STORAGE_KEY, newPinHash);
                     }
                 } catch (err) {}
-                lockSecuritySettingsFields();
-                logAdminAudit('Zugangscode geändert', 'Vereins-Zugangscode (SHA-256) aktualisiert');
-                alert("Vereins-Zugangscode erfolgreich als SHA-256-Hash gespeichert! Alle Geräte mit dem alten Code werden automatisch wieder gesperrt.");
+                if (adminPinInput) adminPinInput.value = '';
+                logAdminAudit('Zugangscode geändert', 'Vereins-Zugangscode (SHA-256 codeHash) durch Obmann aktiviert');
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#15803d';
+                    feedbackEl.textContent = '✅ Neuer Vereins-Zugangscode (SHA-256) erfolgreich aktiviert.';
+                    feedbackEl.style.display = 'block';
+                }
+                alert("Vereins-Zugangscode erfolgreich als SHA-256-Hash (codeHash) gespeichert! Alle Geräte mit dem alten Code werden automatisch wieder gesperrt.");
             } catch (err) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#b91c1c';
+                    feedbackEl.textContent = '❌ Fehler beim Speichern des Zugangscodes: ' + (err && err.message ? err.message : err);
+                    feedbackEl.style.display = 'block';
+                }
                 alert("Fehler beim Speichern des Zugangscodes: " + err.message);
             }
         }
@@ -11582,8 +12383,721 @@
             return String(activeAdminName || '').trim().toLowerCase() === 'simon';
         }
 
+        function isChairmanSimonLoggedIn() {
+            return !!(typeof auth !== 'undefined' && auth && auth.currentUser && auth.currentUser.email && auth.currentUser.email.toLowerCase() === 'admin+simon@kb-sv-gaschurn.at');
+        }
+
         function isObmannSimonLoggedIn() {
-            return !!(typeof auth !== 'undefined' && auth && auth.currentUser && auth.currentUser.email === 'admin+simon@kb-sv-gaschurn.at');
+            return isChairmanSimonLoggedIn();
+        }
+
+        const CLUB_APP_THEMES = {
+            schuetzen_gruen: {
+                id: 'schuetzen_gruen',
+                name: 'Schützen-Grün & Gold',
+                subtitle: 'Standard',
+                dark: '#064e3b',
+                primary: '#16a34a',
+                accent: '#eab308'
+            },
+            kaiser_bordeaux: {
+                id: 'kaiser_bordeaux',
+                name: 'Kaiser-Bordeaux & Gold',
+                subtitle: 'Tradition',
+                dark: '#7f1d1d',
+                primary: '#b91c1c',
+                accent: '#f59e0b'
+            },
+            alpen_blau: {
+                id: 'alpen_blau',
+                name: 'Alpen-Blau & Gold',
+                subtitle: 'Montafon',
+                dark: '#0f172a',
+                primary: '#1d4ed8',
+                accent: '#eab308'
+            },
+            anthrazit_gold: {
+                id: 'anthrazit_gold',
+                name: 'Anthrazit & Gold',
+                subtitle: 'Edel & Modern',
+                dark: '#18181b',
+                primary: '#27272a',
+                accent: '#eab308'
+            },
+            tannen_wald: {
+                id: 'tannen_wald',
+                name: 'Tannen-Waldgrün',
+                subtitle: 'Heimat',
+                dark: '#14532d',
+                primary: '#15803d',
+                accent: '#fbbf24'
+            },
+            bronze_kupfer: {
+                id: 'bronze_kupfer',
+                name: 'Bronze & Kupfer',
+                subtitle: 'Festlich',
+                dark: '#7c2d12',
+                primary: '#c2410c',
+                accent: '#fde047'
+            },
+            schiefer_petrol: {
+                id: 'schiefer_petrol',
+                name: 'Schiefer-Petrol',
+                subtitle: 'Alpin',
+                dark: '#134e4a',
+                primary: '#0f766e',
+                accent: '#eab308'
+            },
+            koenigs_violett: {
+                id: 'koenigs_violett',
+                name: 'Königs-Violett',
+                subtitle: 'Königsschießen',
+                dark: '#3b0764',
+                primary: '#6d28d9',
+                accent: '#eab308'
+            }
+        };
+
+        let clubThemeUnsubscribe = null;
+        let currentSavedClubThemeId = 'schuetzen_gruen';
+        let selectedAdminThemeId = 'schuetzen_gruen';
+
+        function applyClubAppTheme(themeId) {
+            const theme = CLUB_APP_THEMES[themeId] || CLUB_APP_THEMES.schuetzen_gruen;
+            if (!theme) return;
+            const root = document.documentElement;
+            if (root) {
+                root.style.setProperty('--app-primary', theme.primary);
+                root.style.setProperty('--app-primary-dark', theme.dark);
+                root.style.setProperty('--app-accent', theme.accent);
+                root.setAttribute('data-club-theme', theme.id);
+            }
+        }
+
+        function renderAdminThemeTiles() {
+            const gridEl = document.getElementById('admin-theme-tiles-grid');
+            if (!gridEl) return;
+            if (!isChairmanSimonLoggedIn()) {
+                gridEl.innerHTML = '';
+                return;
+            }
+            const activeId = CLUB_APP_THEMES[selectedAdminThemeId] ? selectedAdminThemeId : 'schuetzen_gruen';
+            gridEl.innerHTML = Object.values(CLUB_APP_THEMES).map(t => {
+                const isSelected = t.id === activeId;
+                return `
+                    <button type="button" class="admin-theme-tile${isSelected ? ' selected' : ''}" data-theme-id="${escapeHtml(t.id)}" onclick="selectAdminClubTheme(this.dataset.themeId)" aria-pressed="${isSelected ? 'true' : 'false'}">
+                        <span class="admin-theme-check" aria-hidden="true">✓</span>
+                        <span class="admin-theme-swatch-bar" style="background: linear-gradient(135deg, ${t.dark} 0%, ${t.primary} 100%);">
+                            <span class="admin-theme-accent-dot" style="background: ${t.accent};"></span>
+                        </span>
+                        <span class="admin-theme-tile-name">${escapeHtml(t.name)}</span>
+                        <span class="admin-theme-tile-sub">${escapeHtml(t.subtitle)}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectAdminClubTheme(themeId) {
+            if (!isChairmanSimonLoggedIn()) return;
+            if (!CLUB_APP_THEMES[themeId]) return;
+            selectedAdminThemeId = themeId;
+            renderAdminThemeTiles();
+            applyClubAppTheme(themeId);
+            const feedbackEl = document.getElementById('admin-theme-feedback');
+            if (feedbackEl) {
+                feedbackEl.style.display = 'none';
+                feedbackEl.textContent = '';
+            }
+        }
+
+        async function saveClubAppTheme(themeId) {
+            if (!isChairmanSimonLoggedIn()) return;
+            const targetId = (themeId && CLUB_APP_THEMES[themeId]) ? themeId : selectedAdminThemeId;
+            const theme = CLUB_APP_THEMES[targetId];
+            if (!theme) return;
+            const saveBtn = document.getElementById('admin-theme-save-btn');
+            const feedbackEl = document.getElementById('admin-theme-feedback');
+            if (saveBtn) saveBtn.disabled = true;
+            try {
+                await db.collection('settings').doc('theme').set({
+                    themeId: theme.id,
+                    updatedBy: 'Simon',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                currentSavedClubThemeId = theme.id;
+                selectedAdminThemeId = theme.id;
+                applyClubAppTheme(theme.id);
+                renderAdminThemeTiles();
+                try { logAdminAudit('App-Farbdesign geändert', `Farbwelt: ${theme.name} (${theme.id})`); } catch (e) {}
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#15803d';
+                    feedbackEl.textContent = `✅ Design „${theme.name}“ wurde für alle Mitglieder gespeichert.`;
+                    feedbackEl.style.display = 'block';
+                }
+            } catch (err) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#b91c1c';
+                    feedbackEl.textContent = '❌ Fehler beim Speichern des Farbdesigns: ' + (err && err.message ? err.message : err);
+                    feedbackEl.style.display = 'block';
+                }
+            } finally {
+                if (saveBtn) saveBtn.disabled = false;
+            }
+        }
+
+        function initClubThemeRealtimeListener() {
+            if (clubThemeUnsubscribe) return;
+            try {
+                clubThemeUnsubscribe = db.collection('settings').doc('theme').onSnapshot((doc) => {
+                    if (doc && doc.exists && doc.data()) {
+                        const remoteThemeId = String(doc.data().themeId || '').trim();
+                        if (remoteThemeId && CLUB_APP_THEMES[remoteThemeId]) {
+                            currentSavedClubThemeId = remoteThemeId;
+                            selectedAdminThemeId = remoteThemeId;
+                            applyClubAppTheme(remoteThemeId);
+                            if (isChairmanSimonLoggedIn()) {
+                                renderAdminThemeTiles();
+                            }
+                        }
+                    }
+                }, () => {});
+            } catch (e) {}
+        }
+
+        let clubBannerUnsubscribe = null;
+        let clubMembersUnsubscribe = null;
+        let clubBarMenuUnsubscribe = null;
+        let clubChatLockUnsubscribe = null;
+        let currentEmergencyBannerState = { text: '', active: false };
+        window.isClubChatLocked = false;
+
+        function renderHomeEmergencyBanner(state) {
+            const bannerEl = document.getElementById('home-emergency-banner');
+            const text = state && state.text ? String(state.text).trim() : '';
+            const active = Boolean(state && state.active === true && text.length > 0);
+            currentEmergencyBannerState = { text, active: Boolean(state && state.active === true) };
+            if (bannerEl) {
+                if (active) {
+                    bannerEl.innerHTML = `
+                        <div class="home-emergency-banner-badge">📢 EILMELDUNG DES OBMANNS</div>
+                        <div class="home-emergency-banner-text">${escapeHtml(text)}</div>
+                    `;
+                    bannerEl.style.display = 'block';
+                } else {
+                    bannerEl.innerHTML = '';
+                    bannerEl.style.display = 'none';
+                }
+            }
+            const inputEl = document.getElementById('chairman-banner-text');
+            const toggleEl = document.getElementById('chairman-banner-active');
+            if (isChairmanSimonLoggedIn()) {
+                if (inputEl && document.activeElement !== inputEl) inputEl.value = text;
+                if (toggleEl) toggleEl.checked = Boolean(state && state.active === true);
+            }
+        }
+
+        function initClubBannerRealtimeListener() {
+            if (clubBannerUnsubscribe) return;
+            try {
+                clubBannerUnsubscribe = db.collection('settings').doc('banner').onSnapshot((doc) => {
+                    if (doc && doc.exists && doc.data()) {
+                        renderHomeEmergencyBanner(doc.data());
+                    } else {
+                        renderHomeEmergencyBanner({ text: '', active: false });
+                    }
+                }, () => {});
+            } catch (e) {}
+        }
+
+        async function publishChairmanEmergencyBanner() {
+            if (!isChairmanSimonLoggedIn()) return;
+            const inputEl = document.getElementById('chairman-banner-text');
+            const toggleEl = document.getElementById('chairman-banner-active');
+            const feedbackEl = document.getElementById('chairman-banner-feedback');
+            const text = inputEl ? inputEl.value.trim().slice(0, 320) : '';
+            if (!text) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#b91c1c';
+                    feedbackEl.textContent = '⚠️ Bitte zuerst einen Eilmeldungs-Text eingeben.';
+                    feedbackEl.style.display = 'block';
+                }
+                if (inputEl) inputEl.focus();
+                return;
+            }
+            if (toggleEl) toggleEl.checked = true;
+            try {
+                await db.collection('settings').doc('banner').set({
+                    text: text,
+                    active: true,
+                    updatedBy: 'Simon',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                renderHomeEmergencyBanner({ text, active: true });
+                try { logAdminAudit('Startseiten-Eilmeldung veröffentlicht', text.slice(0, 90)); } catch (e) {}
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#15803d';
+                    feedbackEl.textContent = '✅ Eilmeldung ist jetzt live auf der Startseite sichtbar.';
+                    feedbackEl.style.display = 'block';
+                }
+            } catch (err) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#b91c1c';
+                    feedbackEl.textContent = '❌ Fehler beim Veröffentlichen: ' + (err && err.message ? err.message : err);
+                    feedbackEl.style.display = 'block';
+                }
+            }
+        }
+
+        async function hideChairmanEmergencyBanner() {
+            if (!isChairmanSimonLoggedIn()) return;
+            const inputEl = document.getElementById('chairman-banner-text');
+            const toggleEl = document.getElementById('chairman-banner-active');
+            const feedbackEl = document.getElementById('chairman-banner-feedback');
+            const text = inputEl ? inputEl.value.trim().slice(0, 320) : currentEmergencyBannerState.text;
+            if (toggleEl) toggleEl.checked = false;
+            try {
+                await db.collection('settings').doc('banner').set({
+                    text: text,
+                    active: false,
+                    updatedBy: 'Simon',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                renderHomeEmergencyBanner({ text, active: false });
+                try { logAdminAudit('Startseiten-Eilmeldung ausgeblendet', 'Banner auf Startseite deaktiviert'); } catch (e) {}
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#15803d';
+                    feedbackEl.textContent = '✅ Eilmeldung wurde für alle Mitglieder ausgeblendet.';
+                    feedbackEl.style.display = 'block';
+                }
+            } catch (err) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#b91c1c';
+                    feedbackEl.textContent = '❌ Fehler beim Ausblenden: ' + (err && err.message ? err.message : err);
+                    feedbackEl.style.display = 'block';
+                }
+            }
+        }
+
+        function initClubMembersRealtimeListener() {
+            if (clubMembersUnsubscribe) return;
+            try {
+                clubMembersUnsubscribe = db.collection('settings').doc('members').onSnapshot((doc) => {
+                    applyMembersDataSnapshot(doc && doc.exists ? doc.data() : null);
+                }, () => {});
+            } catch (e) {}
+        }
+
+        function renderChairmanMembersManager() {
+            const activeContainer = document.getElementById('chairman-active-members-list');
+            const weaponContainer = document.getElementById('chairman-weapon-members-list');
+            if (!isChairmanSimonLoggedIn()) {
+                if (activeContainer) activeContainer.innerHTML = '';
+                if (weaponContainer) weaponContainer.innerHTML = '';
+                return;
+            }
+            if (activeContainer) {
+                const list = Array.isArray(officialActiveMembers) ? officialActiveMembers : [];
+                activeContainer.innerHTML = list.length === 0
+                    ? '<span class="admin-muted-text">Keine Mitglieder eingetragen.</span>'
+                    : list.map(name => {
+                        const safe = escapeHtml(name);
+                        return `<span class="chairman-member-chip"><span>${safe}</span><button type="button" class="chairman-chip-remove-btn" data-member-type="active" data-member-name="${safe}" onclick="removeChairmanMember(this.dataset.memberType, this.dataset.memberName)" title="${safe} entfernen" aria-label="${safe} entfernen">✕</button></span>`;
+                    }).join('');
+            }
+            if (weaponContainer) {
+                const wList = Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [];
+                weaponContainer.innerHTML = wList.length === 0
+                    ? '<span class="admin-muted-text">Keine Waffenwarte eingetragen.</span>'
+                    : wList.map(name => {
+                        const safe = escapeHtml(name);
+                        return `<span class="chairman-member-chip weapon-chip"><span>🎯 ${safe}</span><button type="button" class="chairman-chip-remove-btn" data-member-type="weapon" data-member-name="${safe}" onclick="removeChairmanMember(this.dataset.memberType, this.dataset.memberName)" title="${safe} entfernen" aria-label="${safe} entfernen">✕</button></span>`;
+                    }).join('');
+            }
+        }
+
+        async function persistChairmanMembersLists(nextActive, nextWeapons, auditMsg) {
+            if (!isChairmanSimonLoggedIn()) return;
+            const feedbackEl = document.getElementById('chairman-members-feedback');
+            const cleanActive = sanitizeActiveMembersList(nextActive, true);
+            const cleanWeapons = sanitizeActiveMembersList(nextWeapons, true);
+            try {
+                await db.collection('settings').doc('members').set({
+                    activeMembers: cleanActive,
+                    active: cleanActive,
+                    weaponMembers: cleanWeapons,
+                    updatedBy: 'Simon',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                applyMembersDataSnapshot({ activeMembers: cleanActive, weaponMembers: cleanWeapons, passive: officialPassiveMembers });
+                try { logAdminAudit('Mitglieder-/Waffenwart-Liste geändert', auditMsg); } catch (e) {}
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#15803d';
+                    feedbackEl.textContent = '✅ Liste gespeichert und in Echtzeit aktualisiert.';
+                    feedbackEl.style.display = 'block';
+                }
+            } catch (err) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#b91c1c';
+                    feedbackEl.textContent = '❌ Fehler beim Speichern: ' + (err && err.message ? err.message : err);
+                    feedbackEl.style.display = 'block';
+                }
+            }
+        }
+
+        async function addChairmanMember(type) {
+            if (!isChairmanSimonLoggedIn()) return;
+            const inputId = type === 'weapon' ? 'chairman-weapon-member-input' : 'chairman-active-member-input';
+            const inputEl = document.getElementById(inputId);
+            const name = inputEl ? inputEl.value.trim().replace(/\s+/g, ' ') : '';
+            if (!name) return;
+            const nextActive = [...(Array.isArray(officialActiveMembers) ? officialActiveMembers : DEFAULT_ACTIVE_MEMBERS)];
+            const nextWeapons = [...(Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : DEFAULT_WEAPON_AUTHORIZED_MEMBERS)];
+            if (type === 'weapon') {
+                if (!nextWeapons.some(n => n.toLowerCase() === name.toLowerCase())) nextWeapons.push(name);
+            } else {
+                if (!nextActive.some(n => n.toLowerCase() === name.toLowerCase())) nextActive.push(name);
+            }
+            if (inputEl) inputEl.value = '';
+            await persistChairmanMembersLists(nextActive, nextWeapons, `${type === 'weapon' ? 'Waffenwart' : 'Mitglied'} hinzugefügt: ${name}`);
+        }
+
+        async function removeChairmanMember(type, name) {
+            if (!isChairmanSimonLoggedIn()) return;
+            const cleanTarget = String(name || '').trim().toLowerCase();
+            if (!cleanTarget) return;
+            const nextActive = (Array.isArray(officialActiveMembers) ? officialActiveMembers : [])
+                .filter(n => type !== 'active' || String(n).trim().toLowerCase() !== cleanTarget);
+            const nextWeapons = (Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [])
+                .filter(n => type !== 'weapon' || String(n).trim().toLowerCase() !== cleanTarget);
+            await persistChairmanMembersLists(nextActive, nextWeapons, `${type === 'weapon' ? 'Waffenwart' : 'Mitglied'} entfernt: ${name}`);
+        }
+
+        function initBarMenuRealtimeListener() {
+            if (clubBarMenuUnsubscribe) return;
+            try {
+                clubBarMenuUnsubscribe = db.collection('settings').doc('bar_menu').onSnapshot((doc) => {
+                    if (doc && doc.exists && doc.data() && Array.isArray(doc.data().items)) {
+                        applyBarMenuSnapshot(doc.data().items);
+                    } else {
+                        applyBarMenuSnapshot(DEFAULT_BAR_MENU_ITEMS);
+                    }
+                }, () => {});
+            } catch (e) {}
+        }
+
+        function renderChairmanBarMenuManager() {
+            const listEl = document.getElementById('chairman-bar-menu-list');
+            if (!listEl) return;
+            if (!isChairmanSimonLoggedIn()) {
+                listEl.innerHTML = '';
+                return;
+            }
+            listEl.innerHTML = clubBarMenuItems.map(item => {
+                const safeId = escapeHtml(item.id);
+                const isCustom = !DEFAULT_BAR_MENU_ITEMS.some(d => d.id === item.id);
+                const removeBtn = isCustom
+                    ? `<button type="button" class="chairman-chip-remove-btn" data-bar-item-id="${safeId}" onclick="removeChairmanBarMenuItem(this.dataset.barItemId)" title="Artikel entfernen" aria-label="Artikel entfernen">✕</button>`
+                    : '';
+                return `
+                    <div class="chairman-bar-menu-row">
+                        <div style="min-width: 0; flex: 1;">
+                            <div style="font-size: 0.85rem; font-weight: 800; color: #0f172a;">${escapeHtml(item.emoji || '🍺')} ${escapeHtml(item.label)}</div>
+                            <div style="font-size: 0.72rem; color: #64748b; font-weight: 600;">${escapeHtml(item.category || 'Getränke & Bier')}</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                            <span style="font-weight: 800; color: #475569; font-size: 0.86rem;">€</span>
+                            <input type="number" step="0.10" min="0" class="chairman-bar-price-input" data-bar-price-id="${safeId}" value="${Number(item.price || 0).toFixed(2)}">
+                            ${removeBtn}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function saveChairmanBarMenuPrices() {
+            if (!isChairmanSimonLoggedIn()) return;
+            const listEl = document.getElementById('chairman-bar-menu-list');
+            const feedbackEl = document.getElementById('chairman-bar-menu-feedback');
+            if (!listEl) return;
+            const priceInputs = Array.from(listEl.querySelectorAll('.chairman-bar-price-input'));
+            const priceMap = {};
+            priceInputs.forEach(inp => {
+                const id = String(inp.dataset.barPriceId || '').trim();
+                const parsed = parseFloat(String(inp.value || '0').replace(',', '.'));
+                if (id && !isNaN(parsed) && parsed >= 0) {
+                    priceMap[id] = Math.round(parsed * 100) / 100;
+                }
+            });
+            const updatedItems = clubBarMenuItems.map(item => ({
+                ...item,
+                price: (item.id in priceMap) ? priceMap[item.id] : item.price
+            }));
+            try {
+                await db.collection('settings').doc('bar_menu').set({
+                    items: updatedItems,
+                    updatedBy: 'Simon',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                applyBarMenuSnapshot(updatedItems);
+                try { logAdminAudit('Schankbuch-Preise aktualisiert', `${updatedItems.length} Artikel gespeichert`); } catch (e) {}
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#15803d';
+                    feedbackEl.textContent = '✅ Schankbuch-Preise gespeichert und live übernommen.';
+                    feedbackEl.style.display = 'block';
+                }
+            } catch (err) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#b91c1c';
+                    feedbackEl.textContent = '❌ Fehler beim Speichern der Preise: ' + (err && err.message ? err.message : err);
+                    feedbackEl.style.display = 'block';
+                }
+            }
+        }
+
+        async function addChairmanBarMenuItem() {
+            if (!isChairmanSimonLoggedIn()) return;
+            const nameEl = document.getElementById('chairman-new-bar-item-name');
+            const priceEl = document.getElementById('chairman-new-bar-item-price');
+            const catEl = document.getElementById('chairman-new-bar-item-category');
+            const feedbackEl = document.getElementById('chairman-bar-menu-feedback');
+            const label = nameEl ? nameEl.value.trim() : '';
+            const price = priceEl ? parseFloat(String(priceEl.value || '').replace(',', '.')) : NaN;
+            const category = catEl ? String(catEl.value || 'Getränke & Bier') : 'Getränke & Bier';
+            if (!label || isNaN(price) || price < 0) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#b91c1c';
+                    feedbackEl.textContent = '⚠️ Bitte Artikelname und gültigen Preis (€) eingeben.';
+                    feedbackEl.style.display = 'block';
+                }
+                return;
+            }
+            const slug = label.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 24) || 'artikel';
+            const id = `custom_${slug}_${Date.now().toString(36)}`;
+            const emojiMap = { 'Speisen': '🍽️', 'Getränke & Bier': '🍺', 'Heissgetränke & Sonstiges': '☕', 'Luftgewehrschießen': '🎯' };
+            const updatedItems = [
+                ...clubBarMenuItems,
+                { id, label, price: Math.round(price * 100) / 100, category, emoji: emojiMap[category] || '🍺', suffix: '', highlight: false }
+            ];
+            try {
+                await db.collection('settings').doc('bar_menu').set({
+                    items: updatedItems,
+                    updatedBy: 'Simon',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                if (nameEl) nameEl.value = '';
+                if (priceEl) priceEl.value = '';
+                applyBarMenuSnapshot(updatedItems);
+                try { logAdminAudit('Neuer Schankbuch-Artikel angelegt', `${label} (${formatBarPriceEur(price)})`); } catch (e) {}
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#15803d';
+                    feedbackEl.textContent = `✅ Artikel „${label}“ wurde im Schankbuch angelegt.`;
+                    feedbackEl.style.display = 'block';
+                }
+            } catch (err) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#b91c1c';
+                    feedbackEl.textContent = '❌ Fehler beim Anlegen: ' + (err && err.message ? err.message : err);
+                    feedbackEl.style.display = 'block';
+                }
+            }
+        }
+
+        async function removeChairmanBarMenuItem(itemId) {
+            if (!isChairmanSimonLoggedIn()) return;
+            const targetId = String(itemId || '').trim();
+            if (!targetId) return;
+            const removed = clubBarMenuItems.find(i => i.id === targetId);
+            const updatedItems = clubBarMenuItems.filter(i => i.id !== targetId);
+            try {
+                await db.collection('settings').doc('bar_menu').set({
+                    items: updatedItems,
+                    updatedBy: 'Simon',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                applyBarMenuSnapshot(updatedItems);
+                try { logAdminAudit('Schankbuch-Artikel entfernt', removed ? removed.label : targetId); } catch (e) {}
+            } catch (e) {}
+        }
+
+        function updateClubChatLockUI() {
+            const locked = Boolean(window.isClubChatLocked);
+            const isBlockedForUser = locked && !isChairmanSimonLoggedIn();
+            const inputForm = document.getElementById('chat-input-form');
+            const noticeBar = document.getElementById('chat-locked-notice-bar');
+            if (inputForm) inputForm.style.display = isBlockedForUser ? 'none' : '';
+            if (noticeBar) noticeBar.style.display = isBlockedForUser ? 'flex' : 'none';
+            if (isBlockedForUser) {
+                try { closeChatAttachMenu(); } catch (e) {}
+                try { closeChatPollCreator(); } catch (e) {}
+                const emojiPanel = document.getElementById('chat-emoji-panel');
+                if (emojiPanel) emojiPanel.classList.remove('open');
+            }
+            const toggleEl = document.getElementById('chairman-chat-lock-toggle');
+            const statusEl = document.getElementById('chairman-chat-lock-status');
+            if (toggleEl) toggleEl.checked = locked;
+            if (statusEl) {
+                statusEl.style.color = locked ? '#b91c1c' : '#15803d';
+                statusEl.textContent = locked
+                    ? '🔒 Schreibsperre AKTIV – nur Obmann Simon darf im Chat schreiben.'
+                    : '🔓 Chat ist aktuell für alle Mitglieder geöffnet.';
+            }
+        }
+
+        function initChatLockRealtimeListener() {
+            if (clubChatLockUnsubscribe) return;
+            try {
+                clubChatLockUnsubscribe = db.collection('settings').doc('chat_lock').onSnapshot((doc) => {
+                    window.isClubChatLocked = Boolean(doc && doc.exists && doc.data() && doc.data().locked === true);
+                    updateClubChatLockUI();
+                }, () => {});
+            } catch (e) {}
+        }
+
+        async function toggleChairmanChatLock(locked) {
+            if (!isChairmanSimonLoggedIn()) return;
+            const nextLocked = Boolean(locked);
+            const feedbackEl = document.getElementById('chairman-chat-lock-feedback');
+            try {
+                await db.collection('settings').doc('chat_lock').set({
+                    locked: nextLocked,
+                    updatedBy: 'Simon',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                window.isClubChatLocked = nextLocked;
+                updateClubChatLockUI();
+                try { logAdminAudit('Chat-Schreibsperre umgeschaltet', nextLocked ? 'Aktiviert (Nur Obmann)' : 'Deaktiviert (Alle Mitglieder)'); } catch (e) {}
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#15803d';
+                    feedbackEl.textContent = nextLocked ? '✅ Chat-Schreibsperre wurde aktiviert.' : '✅ Chat-Schreibsperre wurde aufgehoben.';
+                    feedbackEl.style.display = 'block';
+                }
+            } catch (err) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#b91c1c';
+                    feedbackEl.textContent = '❌ Fehler beim Umschalten der Schreibsperre: ' + (err && err.message ? err.message : err);
+                    feedbackEl.style.display = 'block';
+                }
+            }
+        }
+
+        function toggleChairmanSection(sectionId, forceOpen = false) {
+            if (!isChairmanSimonLoggedIn()) return;
+            const root = document.getElementById('chairman-command-center');
+            if (!root) return;
+            const target = document.getElementById(sectionId);
+            if (!target || !target.classList.contains('chairman-acc-section')) return;
+
+            const wasOpen = target.classList.contains('open');
+            const shouldOpen = forceOpen ? true : !wasOpen;
+
+            root.querySelectorAll('.chairman-acc-section').forEach(sec => {
+                sec.classList.remove('open');
+                const hdr = sec.querySelector('.chairman-acc-header');
+                if (hdr) hdr.setAttribute('aria-expanded', 'false');
+            });
+            root.querySelectorAll('.chairman-quick-tile').forEach(tile => {
+                tile.classList.remove('active');
+            });
+
+            if (shouldOpen) {
+                target.classList.add('open');
+                const hdr = target.querySelector('.chairman-acc-header');
+                if (hdr) hdr.setAttribute('aria-expanded', 'true');
+                const activeTile = root.querySelector('.chairman-quick-tile[data-chairman-tile="' + sectionId + '"]');
+                if (activeTile) activeTile.classList.add('active');
+            }
+        }
+
+        function collapseAllChairmanSections() {
+            const root = document.getElementById('chairman-command-center');
+            if (!root) return;
+            root.querySelectorAll('.chairman-acc-section').forEach(sec => {
+                sec.classList.remove('open');
+                const hdr = sec.querySelector('.chairman-acc-header');
+                if (hdr) hdr.setAttribute('aria-expanded', 'false');
+            });
+            root.querySelectorAll('.chairman-quick-tile').forEach(tile => {
+                tile.classList.remove('active');
+            });
+        }
+
+        function resetChairmanSectionsToDefault() {
+            const root = document.getElementById('chairman-command-center');
+            if (!root) return;
+            root.querySelectorAll('.chairman-acc-section').forEach(sec => {
+                const isDefault = sec.id === 'sec-theme';
+                sec.classList.toggle('open', isDefault);
+                const hdr = sec.querySelector('.chairman-acc-header');
+                if (hdr) hdr.setAttribute('aria-expanded', isDefault ? 'true' : 'false');
+            });
+            root.querySelectorAll('.chairman-quick-tile').forEach(tile => {
+                tile.classList.toggle('active', tile.getAttribute('data-chairman-tile') === 'sec-theme');
+            });
+        }
+
+        function updateChairmanExclusiveVisibility() {
+            const isChairman = isChairmanSimonLoggedIn();
+            const ccEl = document.getElementById('chairman-command-center');
+            const gearBtn = document.getElementById('admin-gear-security-btn');
+            const weaponsNavBtn = document.getElementById('admin-nav-btn-weapons');
+            const secSecurity = document.getElementById('admin-sec-security');
+            if (ccEl) ccEl.style.display = isChairman ? 'block' : 'none';
+            if (gearBtn) gearBtn.style.display = isChairman ? 'inline-flex' : 'none';
+            if (weaponsNavBtn) weaponsNavBtn.style.display = isChairman ? '' : 'none';
+            if (!isChairman && secSecurity) {
+                secSecurity.classList.remove('active');
+                secSecurity.style.display = 'none';
+            }
+
+            const contentEl = document.getElementById('admin-weapons-chairman-content');
+            const noticeEl = document.getElementById('admin-weapons-chairman-locked-notice');
+            if (contentEl) contentEl.style.display = isChairman ? 'block' : 'none';
+            if (noticeEl) noticeEl.style.display = isChairman ? 'none' : 'flex';
+            const themeControlBox = document.getElementById('admin-theme-control-box');
+            if (themeControlBox) {
+                themeControlBox.style.display = isChairman ? 'block' : 'none';
+            }
+            const clubPinInput = document.getElementById('admin-club-pin-input');
+            const clubPinBtn = document.getElementById('admin-club-pin-save-btn');
+            if (clubPinInput) {
+                clubPinInput.disabled = !isChairman;
+                clubPinInput.readOnly = !isChairman;
+                if (!isChairman) clubPinInput.value = '';
+            }
+            if (clubPinBtn) clubPinBtn.disabled = !isChairman;
+
+            if (isChairman) {
+                renderAdminThemeTiles();
+                renderChairmanMembersManager();
+                renderChairmanBarMenuManager();
+                renderHomeEmergencyBanner(currentEmergencyBannerState);
+            } else {
+                resetChairmanSectionsToDefault();
+                ['admin-theme-tiles-grid', 'chairman-active-members-list', 'chairman-weapon-members-list', 'chairman-bar-menu-list'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.innerHTML = '';
+                });
+                ['admin-theme-feedback', 'chairman-banner-feedback', 'chairman-members-feedback', 'chairman-bar-menu-feedback', 'chairman-chat-lock-feedback', 'chairman-club-pin-feedback'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) { el.style.display = 'none'; el.textContent = ''; }
+                });
+                const bannerInput = document.getElementById('chairman-banner-text');
+                if (bannerInput) bannerInput.value = '';
+                window.weaponPdfMap = {};
+                lastGeneratedTresorQrDataUrl = '';
+                lastGeneratedMemberAppQrDataUrl = '';
+                const pdfListEl = document.getElementById('admin-weapon-pdf-list');
+                if (pdfListEl) pdfListEl.innerHTML = '';
+                ['tresor-qr-preview-img', 'member-app-qr-preview-img'].forEach(id => {
+                    const imgEl = document.getElementById(id);
+                    if (imgEl) imgEl.removeAttribute('src');
+                });
+                try { stopAdminAuditLogListener(); } catch (e) {}
+                try { closeWeaponPDFModal(); } catch (e) {}
+                try { closeTresorQrModal(); } catch (e) {}
+                try { closeMemberAppQrModal(); } catch (e) {}
+            }
+            updateClubChatLockUI();
         }
 
         function updateAdminPushVisibility() {
@@ -11612,6 +13126,8 @@
                 }
                 if (eventPushWrap) eventPushWrap.dataset.lastRole = isMain ? 'simon' : 'other';
             }
+
+            updateChairmanExclusiveVisibility();
         }
 
         function toggleAdminPasswordVisibility() {
@@ -12222,6 +13738,7 @@
 
         function lockSecuritySettingsFields() {
             masterSecurityUnlocked = false;
+            const isChairman = isChairmanSimonLoggedIn();
             const clubPinInput = document.getElementById('admin-club-pin-input');
             const clubPinBtn = document.getElementById('admin-club-pin-save-btn');
             const osInput = document.getElementById('admin-onesignal-key-input');
@@ -12233,11 +13750,11 @@
 
             if (clubPinInput) {
                 clubPinInput.type = 'password';
-                clubPinInput.disabled = true;
-                clubPinInput.readOnly = true;
-                clubPinInput.value = '••••••••';
+                clubPinInput.disabled = !isChairman;
+                clubPinInput.readOnly = !isChairman;
+                clubPinInput.value = '';
             }
-            if (clubPinBtn) clubPinBtn.disabled = true;
+            if (clubPinBtn) clubPinBtn.disabled = !isChairman;
 
             if (osInput) {
                 osInput.type = 'password';
@@ -12253,11 +13770,11 @@
                 badge.innerText = '🔒 Geschützt – nur Haupt-Admin';
             }
             if (text) {
-                text.innerText = 'Zugangsdaten sind maskiert und gegen versehentliches Verstellen gesperrt.';
+                text.innerText = 'OneSignal-Push-Schlüssel ist gegen versehentliches Verstellen geschützt.';
             }
             if (unlockBtn) {
                 unlockBtn.className = 'btn admin-btn-edit';
-                unlockBtn.innerText = '🔓 Zum Bearbeiten entsperren';
+                unlockBtn.innerText = '🔓 Push-Key entsperren';
             }
         }
 
@@ -12492,7 +14009,7 @@
 
         async function saveOneSignalRestApiKey(e) {
             e.preventDefault();
-            if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) return;
             if (!masterSecurityUnlocked) {
                 alert("Dieser Bereich ist geschützt. Bitte zuerst mit dem Haupt-Admin Master-PIN entsperren.");
                 return;
@@ -13456,7 +14973,7 @@
         }
 
         async function previewAnnualBackupReport(btnEl) {
-            if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) return;
             const modal = document.getElementById('annual-backup-preview-modal');
             const bodyEl = document.getElementById('annual-backup-preview-body');
             if (!modal || !bodyEl) return;
@@ -13611,7 +15128,7 @@
         }
 
         async function exportAnnualBackupPDF(btnEl) {
-            if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) return;
             const feedbackEl = document.getElementById('admin-backup-feedback');
             if (feedbackEl) {
                 feedbackEl.style.display = 'none';
@@ -14855,6 +16372,10 @@
 
         async function handleChatPdfUpload(file) {
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (window.isClubChatLocked && !isChairmanSimonLoggedIn()) {
+                alert('🔒 Der Vereins-Chat ist vorübergehend nur für Durchsagen des Obmanns geöffnet.');
+                return;
+            }
             if (!file || isChatPdfUploadInFlight) return;
 
             const senderName = getSavedClubMemberName();
@@ -15035,6 +16556,11 @@
         }
 
         async function handleChatImageSelect(inputEl) {
+            if (window.isClubChatLocked && !isChairmanSimonLoggedIn()) {
+                alert('🔒 Der Vereins-Chat ist vorübergehend nur für Durchsagen des Obmanns geöffnet.');
+                clearPendingChatImage();
+                return;
+            }
             const file = inputEl && inputEl.files && inputEl.files[0];
             if (!file) return;
             if (!/^image\//i.test(file.type || '') && !/\.(jpe?g|png|webp|gif|heic|heif)$/i.test(file.name || '')) {
@@ -15438,6 +16964,7 @@
             initClubChatListener();
             initPinnedChatListener();
             initChatTypingListener();
+            updateClubChatLockUI();
             renderPinnedChatBanner();
             markChatAsRead();
             renderClubChatMessages();
@@ -15857,6 +17384,10 @@
 
         async function submitClubChatPoll() {
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (window.isClubChatLocked && !isChairmanSimonLoggedIn()) {
+                alert('🔒 Der Vereins-Chat ist vorübergehend nur für Durchsagen des Obmanns geöffnet.');
+                return;
+            }
             if (isChatPollSendInFlight) return;
 
             const senderName = getSavedClubMemberName();
@@ -17073,6 +18604,10 @@
         async function sendClubChatMessage(event, sendOptions) {
             if (event) event.preventDefault();
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (window.isClubChatLocked && !isChairmanSimonLoggedIn()) {
+                alert('🔒 Der Vereins-Chat ist vorübergehend nur für Durchsagen des Obmanns geöffnet.');
+                return;
+            }
             if (isChatSendInFlight) return;
             closeChatAttachMenu();
 
