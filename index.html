@@ -17411,6 +17411,154 @@
             try { inputEl.focus(); } catch (e) {}
         }
 
+        let chatSwipeToCloseListenerBound = false;
+        let chatSwipeCloseFinishTimer = null;
+        let chatSwipeSnapBackTimer = null;
+
+        function resetChatDrawerSwipeStyles(drawer) {
+            if (chatSwipeCloseFinishTimer) {
+                clearTimeout(chatSwipeCloseFinishTimer);
+                chatSwipeCloseFinishTimer = null;
+            }
+            if (chatSwipeSnapBackTimer) {
+                clearTimeout(chatSwipeSnapBackTimer);
+                chatSwipeSnapBackTimer = null;
+            }
+            if (drawer) {
+                drawer.style.transition = '';
+                drawer.style.transform = '';
+            }
+        }
+
+        function shouldIgnoreChatSwipeStart(target, drawer) {
+            const el = (target && target.nodeType === 1) ? target : (target && target.parentElement ? target.parentElement : null);
+            if (!el) return false;
+            if (typeof el.closest === 'function' && el.closest('input, textarea, select, [contenteditable="true"], #chat-emoji-panel, .chat-sticker-bar, .chat-reaction-picker')) {
+                return true;
+            }
+            let node = el;
+            while (node && node !== drawer) {
+                if (node.scrollWidth > node.clientWidth + 2) {
+                    try {
+                        const overflowX = (typeof window !== 'undefined' && typeof window.getComputedStyle === 'function')
+                            ? window.getComputedStyle(node).overflowX
+                            : '';
+                        if (overflowX === 'auto' || overflowX === 'scroll') {
+                            return true;
+                        }
+                    } catch (e) {}
+                }
+                node = node.parentElement;
+            }
+            return false;
+        }
+
+        function bindChatSwipeToCloseListener() {
+            if (chatSwipeToCloseListenerBound) return;
+            const drawer = document.getElementById('chat-drawer');
+            if (!drawer) return;
+
+            let tracking = false;
+            let isHorizontalSwiping = false;
+            let startX = 0;
+            let startY = 0;
+            let startTime = 0;
+            let lastDeltaX = 0;
+
+            const snapBack = () => {
+                drawer.style.transition = 'transform 0.22s ease-out';
+                drawer.style.transform = 'translateX(0)';
+                if (chatSwipeSnapBackTimer) clearTimeout(chatSwipeSnapBackTimer);
+                chatSwipeSnapBackTimer = setTimeout(() => {
+                    chatSwipeSnapBackTimer = null;
+                    drawer.style.transition = '';
+                    drawer.style.transform = '';
+                }, 230);
+            };
+
+            drawer.addEventListener('touchstart', (e) => {
+                if (!isChatDrawerOpen || !drawer.classList.contains('open')) return;
+                if (!e.touches || e.touches.length !== 1) return;
+                if (shouldIgnoreChatSwipeStart(e.target, drawer)) {
+                    tracking = false;
+                    isHorizontalSwiping = false;
+                    return;
+                }
+                if (chatSwipeSnapBackTimer) {
+                    clearTimeout(chatSwipeSnapBackTimer);
+                    chatSwipeSnapBackTimer = null;
+                }
+                tracking = true;
+                isHorizontalSwiping = false;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                startTime = Date.now();
+                lastDeltaX = 0;
+            }, { passive: true });
+
+            drawer.addEventListener('touchmove', (e) => {
+                if (!tracking || !e.touches || e.touches.length !== 1) return;
+                const deltaX = e.touches[0].clientX - startX;
+                const deltaY = e.touches[0].clientY - startY;
+
+                if (!isHorizontalSwiping) {
+                    if (Math.abs(deltaY) > 12 && Math.abs(deltaY) >= Math.abs(deltaX)) {
+                        tracking = false;
+                        return;
+                    }
+                    if (deltaX < -15 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+                        isHorizontalSwiping = true;
+                    } else {
+                        return;
+                    }
+                }
+
+                const clampedDeltaX = Math.min(0, deltaX);
+                lastDeltaX = clampedDeltaX;
+                drawer.style.transition = 'none';
+                drawer.style.transform = `translateX(${clampedDeltaX}px)`;
+            }, { passive: true });
+
+            drawer.addEventListener('touchend', (e) => {
+                if (!tracking) return;
+                const wasSwiping = isHorizontalSwiping;
+                const touchPoint = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0] : null;
+                const finalDeltaX = touchPoint ? Math.min(0, touchPoint.clientX - startX) : lastDeltaX;
+                const elapsed = Date.now() - startTime;
+
+                tracking = false;
+                isHorizontalSwiping = false;
+
+                if (!wasSwiping) return;
+
+                const shouldClose = (finalDeltaX < -85) || (finalDeltaX < -45 && elapsed < 250);
+                if (shouldClose) {
+                    drawer.style.transition = 'transform 0.22s ease-out';
+                    drawer.style.transform = 'translateX(-100%)';
+                    if (chatSwipeCloseFinishTimer) clearTimeout(chatSwipeCloseFinishTimer);
+                    chatSwipeCloseFinishTimer = setTimeout(() => {
+                        chatSwipeCloseFinishTimer = null;
+                        closeChatDrawer();
+                        drawer.style.transition = '';
+                        drawer.style.transform = '';
+                    }, 220);
+                } else {
+                    snapBack();
+                }
+            }, { passive: true });
+
+            drawer.addEventListener('touchcancel', () => {
+                const wasSwiping = isHorizontalSwiping;
+                tracking = false;
+                isHorizontalSwiping = false;
+                if (wasSwiping) {
+                    snapBack();
+                }
+            }, { passive: true });
+
+            chatSwipeToCloseListenerBound = true;
+        }
+
         function openChatDrawer() {
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
             isChatDrawerOpen = true;
@@ -17422,6 +17570,7 @@
             hideIncomingChatToast();
             const overlay = document.getElementById('chat-drawer-overlay');
             const drawer = document.getElementById('chat-drawer');
+            resetChatDrawerSwipeStyles(drawer);
             if (overlay) {
                 overlay.classList.add('open');
                 overlay.setAttribute('aria-hidden', 'false');
@@ -17432,6 +17581,7 @@
             }
             bindChatViewportListeners();
             bindChatScrollBottomListener();
+            bindChatSwipeToCloseListener();
             syncChatDrawerWithViewport();
             updateChatMuteButtonUI();
             updateChatIdentityLabel();
@@ -17474,6 +17624,7 @@
             markChatAsRead();
             const overlay = document.getElementById('chat-drawer-overlay');
             const drawer = document.getElementById('chat-drawer');
+            resetChatDrawerSwipeStyles(drawer);
             if (overlay) {
                 overlay.classList.remove('open');
                 overlay.setAttribute('aria-hidden', 'true');
