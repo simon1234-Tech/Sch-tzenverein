@@ -19,6 +19,7 @@
     <meta name="apple-mobile-web-app-title" content="KB & SV App">
     <link rel="apple-touch-icon" href="maskottchen.png">
     <link rel="icon" type="image/png" href="maskottchen.png">
+    <link rel="preload" as="image" href="vereinslogo.png" fetchpriority="high">
 
     <!-- Firebase SDKs (v10.14.1 compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
@@ -234,7 +235,7 @@
             width: 68px;
             height: 68px;
             border-radius: 50%;
-            object-fit: cover;
+            overflow: hidden;
             background: #0f172a;
             border: 2.5px solid #fbbf24;
             outline: 2px solid rgba(251, 191, 36, 0.45);
@@ -243,6 +244,13 @@
             flex-shrink: 0;
             display: block;
             margin-left: 2px;
+        }
+        .app-header-crest img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background: #0f172a;
         }
         .app-header-title-wrap {
             position: relative;
@@ -3065,7 +3073,9 @@
     <div id="club-lock-screen">
         <div style="width: 100%; height: 10px;"></div>
         <div class="lock-screen-card modal-anim">
-            <img src="maskottchen.png" alt="Schützen-Maskottchen KB &amp; SV Gaschurn-Partenen" style="width: 170px; height: 170px; max-width: 100%; object-fit: cover; object-position: top center; border-radius: 24px; border: 3px solid #991b1b; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22); margin: 0 auto 14px auto; display: block;" onerror="this.onerror=null; this.src='logo.png';">
+            <div role="img" aria-label="Vereinswappen KB &amp; SV Gaschurn-Partenen" style="width: 170px; height: 170px; max-width: 100%; border-radius: 24px; border: 3px solid #991b1b; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22); margin: 0 auto 14px auto; overflow: hidden; background: #0f172a;">
+                <img id="lock-screen-crest-img" src="maskottchen.png" alt="" loading="eager" decoding="sync" fetchpriority="high" style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; background: #0f172a;" onerror="this.onerror=null; this.src='logo.png';">
+            </div>
             <div style="font-size: 1.08em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; line-height: 1.25; color: #0f172a;">Kameradschaftsbund &amp; Schützenverein</div>
             <div style="font-size: 0.88em; font-weight: 800; color: #991b1b; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px;">GASCHURN-PARTENEN</div>
 
@@ -3088,7 +3098,7 @@
                 </button>
             </form>
             <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px; gap: 6px;">
-                <img src="siegel.png" alt="Powered by Simon Schweighofer" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid #eab308; animation: sealGoldPulse 2.6s ease-in-out infinite;" onerror="this.style.display='none';">
+                <img src="siegel.png" alt="" loading="eager" decoding="sync" fetchpriority="high" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: #0f172a; border: 2px solid #eab308; animation: sealGoldPulse 2.6s ease-in-out infinite;" onerror="this.style.display='none';">
                 <span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; letter-spacing: 0.05em; text-transform: uppercase;">Powered by Simon Schweighofer</span>
             </div>
         </div>
@@ -3123,7 +3133,9 @@
             <path d="M0 80 L0 64 L92 42 L166 58 L252 28 L334 54 L418 32 L505 56 L568 40 L600 54 L600 80 Z" fill="#ffffff"/>
         </svg>
         <div class="app-header-top-row">
-            <img src="vereinslogo.png" alt="Vereinswappen KB &amp; SV Gaschurn-Partenen" class="app-header-crest" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='logo.png';}else if(this.dataset.fb==='1'){this.dataset.fb='2';this.src='maskottchen.png';}else{this.onerror=null;}">
+            <span class="app-header-crest" role="img" aria-label="Vereinswappen KB &amp; SV Gaschurn-Partenen">
+                <img id="app-header-crest-img" data-club-crest="1" data-crest-src="vereinslogo.png" src="vereinslogo.png" alt="" loading="eager" decoding="sync" fetchpriority="high" onerror="if(window.handleClubCrestError){window.handleClubCrestError(this);}">
+            </span>
             <button type="button" id="header-help-btn" onclick="openMemberHelpModal()" aria-label="App-Anleitung öffnen" title="App-Anleitung öffnen" style="min-width: 56px; padding: 8px 12px; background: #ffffff; color: #7f1d1d; border: none; border-radius: 14px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); flex-shrink: 0; cursor: pointer; font-family: inherit; touch-action: manipulation;">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#7f1d1d" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <circle cx="12" cy="12" r="9.5"/>
@@ -3138,6 +3150,128 @@
             <p>Gaschurn-Partenen</p>
         </div>
     </div>
+
+    <script>
+        (function initClubCrestInstantCache() {
+            var CREST_CACHE_KEY = 'kb_sv_crest_dataurl';
+            var CREST_SOURCES = ['vereinslogo.png', 'logo.png', 'maskottchen.png'];
+
+            window.handleClubCrestError = function(imgEl) {
+                if (!imgEl) return;
+                try {
+                    var currentSrc = String(imgEl.getAttribute('src') || '');
+                    if (currentSrc.indexOf('data:image/') === 0) {
+                        try { localStorage.removeItem(CREST_CACHE_KEY); } catch (e) {}
+                        imgEl.dataset.fb = '0';
+                        imgEl.src = (imgEl.dataset && imgEl.dataset.crestSrc) || CREST_SOURCES[0];
+                        return;
+                    }
+                    if (!imgEl.dataset.fb || imgEl.dataset.fb === '0') {
+                        imgEl.dataset.fb = '1';
+                        imgEl.src = CREST_SOURCES[1];
+                    } else if (imgEl.dataset.fb === '1') {
+                        imgEl.dataset.fb = '2';
+                        imgEl.src = CREST_SOURCES[2];
+                    } else {
+                        imgEl.onerror = null;
+                    }
+                } catch (e) {
+                    imgEl.onerror = null;
+                }
+            };
+
+            function applyCachedCrestImmediately() {
+                try {
+                    var cachedDataUrl = localStorage.getItem(CREST_CACHE_KEY);
+                    if (!cachedDataUrl || cachedDataUrl.indexOf('data:image/') !== 0) return false;
+                    var crestImgs = document.querySelectorAll('img[data-club-crest="1"]');
+                    for (var i = 0; i < crestImgs.length; i++) {
+                        if (crestImgs[i].getAttribute('src') !== cachedDataUrl) {
+                            crestImgs[i].src = cachedDataUrl;
+                        }
+                    }
+                    return crestImgs.length > 0;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            function cacheClubCrestImage() {
+                applyCachedCrestImmediately();
+                try {
+                    var primaryEl = document.getElementById('app-header-crest-img');
+                    var primarySrc = (primaryEl && primaryEl.dataset && primaryEl.dataset.crestSrc) || CREST_SOURCES[0];
+                    var candidates = [primarySrc];
+                    for (var c = 0; c < CREST_SOURCES.length; c++) {
+                        if (candidates.indexOf(CREST_SOURCES[c]) === -1) candidates.push(CREST_SOURCES[c]);
+                    }
+
+                    var loadAttempt = function(idx) {
+                        if (idx >= candidates.length) return;
+                        var src = candidates[idx];
+                        var loader = new Image();
+                        loader.decoding = 'async';
+                        loader.onload = function() {
+                            try {
+                                var naturalW = loader.naturalWidth || loader.width;
+                                var naturalH = loader.naturalHeight || loader.height;
+                                if (!naturalW || !naturalH) {
+                                    loadAttempt(idx + 1);
+                                    return;
+                                }
+                                var maxDim = 256;
+                                var scale = Math.min(1, maxDim / Math.max(naturalW, naturalH));
+                                var targetW = Math.max(1, Math.round(naturalW * scale));
+                                var targetH = Math.max(1, Math.round(naturalH * scale));
+                                var canvas = document.createElement('canvas');
+                                canvas.width = targetW;
+                                canvas.height = targetH;
+                                var ctx = canvas.getContext('2d');
+                                if (!ctx) return;
+                                ctx.drawImage(loader, 0, 0, targetW, targetH);
+                                var dataUrl = canvas.toDataURL('image/png');
+                                if (dataUrl && dataUrl.indexOf('data:image/png') === 0) {
+                                    var prev = null;
+                                    try { prev = localStorage.getItem(CREST_CACHE_KEY); } catch (e) {}
+                                    try {
+                                        if (prev !== dataUrl) {
+                                            localStorage.setItem(CREST_CACHE_KEY, dataUrl);
+                                        }
+                                    } catch (storageErr) {
+                                        // Ignorieren, falls localStorage voll oder gesperrt ist
+                                    }
+                                    if (prev !== dataUrl) {
+                                        var crestImgs = document.querySelectorAll('img[data-club-crest="1"]');
+                                        for (var j = 0; j < crestImgs.length; j++) {
+                                            if (crestImgs[j].getAttribute('src') !== dataUrl) {
+                                                crestImgs[j].src = dataUrl;
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch (canvasErr) {
+                                // CORS / Tainted Canvas oder Speicherfehler sauber abfangen
+                            }
+                        };
+                        loader.onerror = function() {
+                            loadAttempt(idx + 1);
+                        };
+                        loader.src = src;
+                    };
+
+                    loadAttempt(0);
+                } catch (e) {}
+            }
+
+            window.cacheClubCrestImage = cacheClubCrestImage;
+            applyCachedCrestImmediately();
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', cacheClubCrestImage, { once: true });
+            } else {
+                cacheClubCrestImage();
+            }
+        })();
+    </script>
 
     <!-- 1. NEWS & STARTSEITE (AKTUELLER DIENSTPLAN) -->
     <div id="page-news" class="page-content active">
@@ -3663,12 +3797,18 @@
                             <span>📦 Lagerbestand</span>
                         </div>
                     </div>
+                    <div id="admin-inventory-last-updated" role="status" aria-live="polite" style="display: flex; align-items: center; gap: 10px; background: #fefce8; border: 1.5px solid #fde047; border-left: 5px solid #eab308; border-radius: 14px; padding: 12px 15px; margin: 10px 0 16px 0; color: #713f12; font-size: 0.92rem; font-weight: 700; box-shadow: 0 3px 10px rgba(234, 179, 8, 0.12); transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;">
+                        <span style="font-size: 1.35rem; line-height: 1; flex-shrink: 0;" aria-hidden="true">🕒</span>
+                        <div style="min-width: 0; flex: 1;">
+                            <div style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: #854d0e; font-weight: 800; line-height: 1.25;">ZULETZT GEÄNDERT</div>
+                            <div style="font-size: 0.96rem; color: #0f172a; font-weight: 800; line-height: 1.35; margin-top: 2px;">Noch keine Änderung protokolliert</div>
+                        </div>
+                    </div>
                     <div class="admin-glass-card">
                         <div class="admin-glass-card-title">
                             <span>📦 Aktueller Lagerbestand</span>
                             <button type="button" class="btn admin-btn-edit" onclick="editInventory()">✏️ Bearbeiten</button>
                         </div>
-                        <div id="inventory-timestamp" class="admin-muted-text" style="margin-bottom: 8px;">Noch nicht geändert</div>
                         <div id="admin-inventory-display"></div>
                     </div>
                 </section>
@@ -5613,14 +5753,129 @@
 
         // --- LAGERBESTAND INTERAKTIV ---
         let inventoryData = { hauswuerste: 20, wienerle: 15, bier: 3, limo: 2 };
-        let lastInventoryChangeTime = "Noch nicht geändert";
+        let lastInventoryChangeTime = "Noch keine Änderung protokolliert";
+        let inventorySavedFlashActive = false;
+        let inventorySavedFlashTimer = null;
+
+        function parseInventoryUpdatedAtDate(rawVal) {
+            if (!rawVal) return null;
+            try {
+                if (typeof rawVal.toDate === 'function') {
+                    const d = rawVal.toDate();
+                    return (d && typeof d.getTime === 'function' && !isNaN(d.getTime())) ? d : null;
+                }
+                if (typeof rawVal === 'object' && typeof rawVal.getTime === 'function') {
+                    return !isNaN(rawVal.getTime()) ? rawVal : null;
+                }
+                if (typeof rawVal === 'object' && typeof rawVal.seconds === 'number') {
+                    const d = new Date(rawVal.seconds * 1000);
+                    return !isNaN(d.getTime()) ? d : null;
+                }
+                if (typeof rawVal === 'number' || typeof rawVal === 'string') {
+                    const d = new Date(rawVal);
+                    return !isNaN(d.getTime()) ? d : null;
+                }
+            } catch (e) {}
+            return null;
+        }
+
+        function formatInventoryDateTime(dateObj) {
+            if (!dateObj || typeof dateObj.getTime !== 'function' || isNaN(dateObj.getTime())) return '';
+            const datePart = dateObj.toLocaleDateString('de-AT', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+            const timePart = dateObj.toLocaleTimeString('de-AT', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            return `${datePart}, ${timePart}`;
+        }
+
+        function renderInventoryLastUpdatedBox() {
+            const statusBox = document.getElementById('admin-inventory-last-updated');
+            if (!statusBox) return;
+
+            const updatedDate = parseInventoryUpdatedAtDate(inventoryData && inventoryData.updatedAt);
+            const formattedDateTime = formatInventoryDateTime(updatedDate);
+            const updatedBy = String((inventoryData && inventoryData.updatedBy) || '').trim();
+
+            let mainTextHtml = 'Noch keine Änderung protokolliert';
+            if (formattedDateTime && updatedBy) {
+                mainTextHtml = `${escapeHtml(formattedDateTime)} Uhr · von ${escapeHtml(updatedBy)}`;
+            } else if (formattedDateTime) {
+                mainTextHtml = `${escapeHtml(formattedDateTime)} Uhr`;
+            } else if (lastInventoryChangeTime && lastInventoryChangeTime !== 'Noch nicht geändert' && lastInventoryChangeTime !== 'Noch keine Änderung protokolliert') {
+                const cleanFallback = String(lastInventoryChangeTime).replace(/\s*Uhr\s*$/i, '').trim();
+                mainTextHtml = updatedBy
+                    ? `${escapeHtml(cleanFallback)} Uhr · von ${escapeHtml(updatedBy)}`
+                    : `${escapeHtml(cleanFallback)} Uhr`;
+            }
+
+            if (inventorySavedFlashActive) {
+                statusBox.style.background = '#dcfce7';
+                statusBox.style.borderColor = '#86efac';
+                statusBox.style.borderLeftColor = '#16a34a';
+                statusBox.style.color = '#14532d';
+                statusBox.style.boxShadow = '0 4px 14px rgba(22, 163, 74, 0.20)';
+            } else {
+                statusBox.style.background = '#fefce8';
+                statusBox.style.borderColor = '#fde047';
+                statusBox.style.borderLeftColor = '#eab308';
+                statusBox.style.color = '#713f12';
+                statusBox.style.boxShadow = '0 3px 10px rgba(234, 179, 8, 0.12)';
+            }
+
+            const kickerColor = inventorySavedFlashActive ? '#15803d' : '#854d0e';
+            const savedBadgeHtml = inventorySavedFlashActive
+                ? ' <span style="display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: #16a34a; color: #ffffff; font-size: 0.74rem; font-weight: 800; letter-spacing: 0.01em; text-transform: none; vertical-align: middle;">✅ Gerade gespeichert</span>'
+                : '';
+
+            statusBox.innerHTML = `
+                <span style="font-size: 1.35rem; line-height: 1; flex-shrink: 0;" aria-hidden="true">🕒</span>
+                <div style="min-width: 0; flex: 1;">
+                    <div style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: ${kickerColor}; font-weight: 800; line-height: 1.25;">ZULETZT GEÄNDERT${savedBadgeHtml}</div>
+                    <div style="font-size: 0.96rem; color: #0f172a; font-weight: 800; line-height: 1.35; margin-top: 2px;">${mainTextHtml}</div>
+                </div>
+            `;
+        }
+
+        function triggerInventorySavedFlash() {
+            if (inventorySavedFlashTimer) {
+                clearTimeout(inventorySavedFlashTimer);
+                inventorySavedFlashTimer = null;
+            }
+            inventorySavedFlashActive = true;
+            renderInventoryLastUpdatedBox();
+            inventorySavedFlashTimer = setTimeout(() => {
+                inventorySavedFlashActive = false;
+                inventorySavedFlashTimer = null;
+                renderInventoryLastUpdatedBox();
+            }, 2500);
+        }
+
+        function buildInventoryFirestorePayload(adminFirstName) {
+            const serverTs = (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue && typeof firebase.firestore.FieldValue.serverTimestamp === 'function')
+                ? firebase.firestore.FieldValue.serverTimestamp()
+                : new Date();
+            return {
+                ...inventoryData,
+                updatedAt: serverTs,
+                updatedBy: adminFirstName
+            };
+        }
 
         async function loadInventory() {
             if (!auth.currentUser) return;
             try {
                 const doc = await db.collection("settings").doc("inventory").get();
                 if (doc.exists) {
-                    inventoryData = doc.data();
+                    inventoryData = doc.data() || inventoryData;
+                    const loadedDate = parseInventoryUpdatedAtDate(inventoryData.updatedAt);
+                    if (loadedDate) {
+                        lastInventoryChangeTime = formatInventoryDateTime(loadedDate) + " Uhr";
+                    }
                 } else {
                     await db.collection("settings").doc("inventory").set(inventoryData);
                 }
@@ -5630,8 +5885,7 @@
 
         function renderInventoryDisplay() {
             const container = document.getElementById('admin-inventory-display');
-            const timeEl = document.getElementById('inventory-timestamp');
-            if (timeEl) timeEl.innerText = "Zuletzt geändert: " + lastInventoryChangeTime;
+            renderInventoryLastUpdatedBox();
             if (!container) return;
 
             const items = [
@@ -5669,10 +5923,16 @@
             if (!auth.currentUser) return;
             inventoryData[key] = Math.max(0, (inventoryData[key] || 0) + delta);
             const now = new Date();
-            lastInventoryChangeTime = now.toLocaleDateString('de-AT') + ", " + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'}) + " Uhr";
+            const adminFirstName = (typeof getCurrentAdminFirstName === 'function') ? getCurrentAdminFirstName() : 'Vorstand';
+            inventoryData.updatedAt = now;
+            inventoryData.updatedBy = adminFirstName;
+            lastInventoryChangeTime = formatInventoryDateTime(now) + " Uhr";
 
+            let saveSucceeded = false;
             try {
-                await db.collection("settings").doc("inventory").set(inventoryData);
+                const writePayload = buildInventoryFirestorePayload(adminFirstName);
+                await db.collection("settings").doc("inventory").set(writePayload);
+                saveSucceeded = true;
                 const meta = INVENTORY_ITEM_META[key] || { label: key, unit: '' };
                 const unitSuffix = meta.unit ? ` ${meta.unit}` : '';
                 const summary = `${meta.label} ${delta >= 0 ? '+' : ''}${delta} (Neu: ${inventoryData[key]}${unitSuffix})`;
@@ -5681,6 +5941,9 @@
             } catch(e) {}
 
             renderInventoryDisplay();
+            if (saveSucceeded) {
+                triggerInventorySavedFlash();
+            }
         }
 
         async function editInventory() {
@@ -5696,17 +5959,29 @@
             if (l !== null) inventoryData.limo = parseInt(l) || 0;
 
             const now = new Date();
-            lastInventoryChangeTime = now.toLocaleDateString('de-AT') + ", " + now.toLocaleTimeString('de-AT', {hour: '2-digit', minute:'2-digit'}) + " Uhr";
+            const adminFirstName = (typeof getCurrentAdminFirstName === 'function') ? getCurrentAdminFirstName() : 'Vorstand';
+            inventoryData.updatedAt = now;
+            inventoryData.updatedBy = adminFirstName;
+            lastInventoryChangeTime = formatInventoryDateTime(now) + " Uhr";
 
+            let saveSucceeded = false;
             try {
-                await db.collection("settings").doc("inventory").set(inventoryData);
+                const writePayload = buildInventoryFirestorePayload(adminFirstName);
+                await db.collection("settings").doc("inventory").set(writePayload);
+                saveSucceeded = true;
                 const summary = `Hauswürste: ${inventoryData.hauswuerste}, Wienerle: ${inventoryData.wienerle}, Bier: ${inventoryData.bier}, Limo: ${inventoryData.limo}`;
                 logAdminAudit('Lagerbestand bearbeitet', summary);
                 sendAdminInventoryChangePush(summary).catch(() => {});
             } catch(e) {}
 
             renderInventoryDisplay();
+            if (saveSucceeded) {
+                triggerInventorySavedFlash();
+            }
             alert("Lagerbestand erfolgreich gespeichert!");
+            if (saveSucceeded) {
+                triggerInventorySavedFlash();
+            }
         }
 
         function exportFullWeaponListPDF() {
