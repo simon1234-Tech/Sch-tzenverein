@@ -550,6 +550,9 @@
             z-index: 1;
             text-align: center;
             margin-top: 8px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
         }
         .app-header h1 {
             color: #ffffff;
@@ -4373,7 +4376,7 @@
                 <span style="font-size: 0.78rem; font-weight: 900; color: #7f1d1d; line-height: 1;">Hilfe</span>
             </button>
         </div>
-        <div class="app-header-title-wrap">
+        <div class="app-header-title-wrap" id="app-header-title-secret-trigger" onclick="handleHeaderTitleSecretTap(event)">
             <h1>KAMERADSCHAFTSBUND &amp; SCHÜTZENVEREIN</h1>
             <p>Gaschurn-Partenen</p>
         </div>
@@ -4914,21 +4917,59 @@
                             </button>
                             <div class="admin-accordion-body">
                                 <div class="admin-accordion-inner">
-                                    <div class="admin-accordion-content" style="border-top-color: #e2e8f0; display: flex; flex-direction: column; gap: 9px; font-size: 0.86em; line-height: 1.5; color: #1e293b;">
-                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 10px; padding: 10px 12px;">
-                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">🛡️ Für alle Vorstandsmitglieder (Heimo, Karin, Sabrina &amp; Simon)</div>
+                                    <div class="admin-accordion-content" style="border-top-color: #e2e8f0; display: flex; flex-direction: column; gap: 10px; font-size: 0.85em; line-height: 1.52; color: #1e293b;">
+                                        <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #991b1b; border-radius: 10px; padding: 10px 12px;">
+                                            <div style="font-weight: 800; color: #991b1b; margin-bottom: 6px;">Kapitel 1 – 🔐 Zugang, Rollen &amp; neues Vorstands-Handy</div>
                                             <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                                <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Schlüsselinhaber einsehen und Schlüsselliste als PDF mit Vereinssiegel drucken.</div>
-                                                <div><strong>📦 Lagerbestand:</strong> Aktuelle Bestände pflegen – oben steht immer sichtbar, wann und von wem zuletzt geändert wurde; Simon und Heimo erhalten bei Änderungen automatisch eine Push-Info.</div>
-                                                <div><strong>🍺 Schankbuch &amp; Kassa:</strong> Bar-Verkäufe (<strong style="color: #15803d;">Grün</strong>) und Firmen-Rechnungen (<strong style="color: #1d4ed8;">Blau</strong>) prüfen sowie Kassenberichte &amp; Rechnungen als PDF herunterladen.</div>
-                                                <div><strong>🔐 Sicherheit:</strong> Nach 5 Minuten Inaktivität loggt sich der Admin-Bereich automatisch aus.</div>
+                                                <div><strong>4 berechtigte Vorstands-Konten:</strong> <strong>Simon</strong> (Obmann / Haupt-Admin), <strong>Heimo</strong>, <strong>Karin</strong> und <strong>Sabrina</strong>.</div>
+                                                <div><strong>Unsichtbarer Admin-Tab:</strong> Auf normalen Mitglieder-Handys ist der Admin-Tab unten rechts komplett ausgeblendet. Sobald sich ein Vorstandsmitglied einmal auf seinem Handy anmeldet, bleibt der Tab auf diesem Gerät dauerhaft sichtbar.</div>
+                                                <div><strong>Geheimer Zugang bei neuem Handy:</strong> Einfach <strong>3× schnell hintereinander auf den Vereinsnamen oben im Header tippen</strong> – sofort wird das Gerät als Vorstands-Handy freigeschaltet und der Admin-Login öffnet sich.</div>
+                                                <div><strong>5-Minuten-Auto-Logout:</strong> Aus Sicherheitsgründen meldet sich der Admin-Bereich nach <strong>5 Minuten Inaktivität</strong> automatisch ab.</div>
+                                            </div>
+                                        </div>
+
+                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 10px; padding: 10px 12px;">
+                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Schlüssel, Lagerbestand &amp; Schankkassa)</div>
+                                            <div style="display: flex; flex-direction: column; gap: 6px; color: #334155;">
+                                                <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins können sämtliche Schlüsselinhaber (Name, Schlüssel-Nr., Adresse, Geburtsdatum, Telefon) einsehen und als offizielles PDF mit Vereinssiegel drucken. Das Hinzufügen, Bearbeiten und Entfernen von Schlüsselinhabern ist exklusiv für Obmann Simon freigeschaltet.</div>
+                                                <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Kinderleichte Anpassung der Bestände über die Touch-Knöpfe <code>− 1</code>, <code>+ 1</code> und <code>+ 5</code> sowie <strong>💾 Lagerbestand speichern</strong>. Ganz oben zeigt die Gold-Box jederzeit sichtbar an, wann und von wem zuletzt geändert wurde. <strong>Push-Regel:</strong> Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Mitteilung; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Mitteilung.</div>
+                                                <div><strong>🍺 Schankbuch &amp; Kassa (Grün vs. Blau):</strong> Klare Trennung zwischen <strong style="color: #15803d;">💵 Bar-Abrechnungen (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnungen (Blau)</strong>. Alle 4 Admins können Umsätze prüfen und Kassenberichte/Rechnungen als PDF herunterladen; Stornos oder Löschungen sind exklusiv dem Obmann vorbehalten.</div>
+                                            </div>
+                                        </div>
+
+                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 10px; padding: 10px 12px;">
+                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 📱 Was die App für alle Mitglieder kann (Überblick für Rückfragen)</div>
+                                            <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
+                                                <div><strong>📸 24h-Vereinsstatus:</strong> Leuchtet der runde Vereinslogo-Kreis oben links grün-gold, hat der Obmann aktuelle Fotos eingestellt (antippen zum Ansehen; verschwindet nach exakt 24 Stunden vollautomatisch und zeigt wieder das Vereinslogo).</div>
+                                                <div><strong>📰 News &amp; 📅 Termine:</strong> Beiträge liken (<code>👍</code>), bei Terminen abstimmen und Termine per <code>.ics</code>-Datei direkt in den eigenen Handy-Kalender übernehmen.</div>
+                                                <div><strong>🗓️ Dienstplan &amp; Tauschbörse:</strong> Eigene Schankdienste einsehen, bei Verhinderung Ersatz anfragen oder offene Dienste übernehmen; automatische Push-Erinnerungen laufen <strong>1 Tag</strong> und <strong>2 Stunden</strong> vor Dienstbeginn.</div>
+                                                <div><strong>💬 Vereins-Chat (mit Blaulicht &amp; Wischgeste):</strong> Texte, Fotos, Sprachnachrichten, Umfragen, 3D-Sticker und PDFs; neue Nachrichten lösen einen Blaulicht-Alarm aus; zum Schließen einfach von rechts nach links wischen. Je nach Berechtigung liegt der Chat unten in der Leiste oder oben auf der Startseite.</div>
+                                                <div><strong>🎯 Digitales Waffenbuch (nur Waffenwarte):</strong> Entnahme und Rückgabe der Kat.-C-Salutwaffen per Scan des Tresor-QR-Codes (automatische Sperre nach 2 Minuten).</div>
+                                            </div>
+                                        </div>
+
+                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #7c3aed; border-radius: 10px; padding: 10px 12px;">
+                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet &amp; Offline-Schutz bei Veranstaltungen</div>
+                                            <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
+                                                <div><strong>Reiner Schank-Kiosk-Modus (<code>?mode=schank</code>):</strong> Wird die App auf dem Schützenhaus-Tablet einmalig mit <code>?mode=schank</code> am Ende der Web-Adresse geöffnet und zum Startbildschirm hinzugefügt, startet das Tablet nach einmaliger Code-Eingabe ausschließlich im Vollbild-Schankbuch (ohne Chat, News oder Admin-Zugang; Beenden nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
+                                                <div><strong>Doppelter Offline-Tresor:</strong> Dank Service-Worker-Cache (<code>kb-sv-offline</code>) und lokalem IndexedDB-/Speicher-Spiegel (<code>kb_sv_open_tabs_backup</code>) arbeitet das Schankbuch bei WLAN-Ausfall oder Tablet-Neustart lückenlos weiter und synchronisiert alle Deckel automatisch, sobald wieder Internet da ist.</div>
+                                            </div>
+                                        </div>
+
+                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; border-radius: 10px; padding: 10px 12px;">
+                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 App aktualisieren &amp; Push-Tipps für Mitglieder</div>
+                                            <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
+                                                <div><strong>Aktualisieren ohne Datenverlust:</strong> Auf der Startseite einfach <strong>nach unten ziehen (Pull-to-Refresh)</strong> oder unten den Refresh-Button nutzen – dabei bleiben gespeicherte Namen, Login-Status und Browser-Verlauf vollständig erhalten.</div>
+                                                <div><strong>iPhone-Hinweis:</strong> Auf iPhones funktionieren Push-Nachrichten nur, wenn die App über <strong>Teilen → „Zum Startbildschirm“</strong> installiert und über dieses Icon geöffnet wird.</div>
                                             </div>
                                         </div>
 
                                         <div id="admin-guide-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 10px; padding: 10px 12px;">
-                                            <div style="font-weight: 800; color: #92400e; margin-bottom: 5px;">👑 Obmann-Steuerzentrale &amp; Exklusiv-Bereiche (Obmann Simon)</div>
-                                            <div style="color: #334155;">
-                                                Steuerung der 8 App-Farben, Startseiten-Eilmeldung, Chat-Schreibsperre, Schankbuch-Preise, Mitglieder- &amp; Schankbuch-Freigaben, Vereins-Zugangscode, News/Termine/Dienstplan sowie Einsicht und Download von Waffenprotokollen, QR-Codes, Sicherheits-Audit-Log und Jahresabschluss-Backup.
+                                            <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Kapitel 6 – 👑 Obmann-Steuerzentrale (3 ruhige Rubriken · exklusiv für Obmann Simon)</div>
+                                            <div style="display: flex; flex-direction: column; gap: 6px; color: #334155;">
+                                                <div><strong>1. Verein &amp; Betrieb:</strong> <strong>📸 24h-Status-Foto</strong> (HD-Fotos bis 15 MB mit optionalem Push &amp; 15-Minuten-Anti-Spam-Schutz), <strong>News &amp; Termine</strong> erstellen/löschen, <strong>Dienstplan &amp; Push</strong> verwalten, <strong>Startseiten-Eilmeldung</strong> schalten sowie <strong>Chat-Schreibsperre</strong> („Nur Obmann darf schreiben“) aktivieren.</div>
+                                                <div><strong>2. Schank, Mitglieder &amp; Protokolle:</strong> <strong>1-Listen-Mitgliederverwaltung</strong> (Mitglieder anlegen/suchen und per Schalter individuell für <strong>🍺 Schankbuch-Tab</strong> und <strong>🎯 Waffenwart</strong> freischalten), <strong>Schankbuch-Preise</strong> anpassen, <strong>Waffenprotokolle</strong> prüfen/archivieren, <strong>unveränderliches Sicherheits-Audit-Log</strong> einsehen und komplettes <strong>Jahresabschluss-Backup</strong> herunterladen.</div>
+                                                <div><strong>3. App &amp; Zugänge:</strong> Live-Umschaltung zwischen <strong>8 Vereins-Farbdesigns</strong>, Änderung des <strong>Vereins-Zugangscodes</strong> sowie Abruf &amp; Druck von <strong>Mitglieder-QR-Code</strong> und <strong>Tresor-QR-Code</strong>.</div>
                                             </div>
                                         </div>
                                     </div>
@@ -5933,40 +5974,58 @@
                 </div>
             </div>
             <div style="padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.87em; line-height: 1.55; color: #1e293b;">
-                <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #991b1b; border-radius: 12px; padding: 12px 14px; color: #1e293b;">
-                    <div style="font-weight: 800; color: #991b1b; margin-bottom: 5px;">🔐 Vorstands-Login &amp; Sicherheit</div>
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #991b1b; border-radius: 12px; padding: 12px 14px; color: #1e293b; break-inside: avoid; page-break-inside: avoid;">
+                    <div style="font-weight: 800; color: #991b1b; margin-bottom: 6px;">Kapitel 1 – 🔐 Zugang, Rollen &amp; neues Vorstands-Handy</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div>Anmeldung über die Vorstands-Karte mit persönlichem Account (<strong>Schweighofer Simon</strong>, <strong>Stocker Heimo</strong>, <strong>Stocker Karin</strong>, <strong>Kinzl Sabrina</strong>) und eigenem Passwort.</div>
-                        <div><strong>5-Minuten-Auto-Logout &amp; Offline-Schutz:</strong> Nach <strong>5 Minuten Inaktivität</strong> loggt sich der Admin-Bereich automatisch aus und löscht alle sensiblen Daten aus dem Arbeitsspeicher. Der Vereins-Zugangscode wird ausschließlich als <code>SHA-256</code>-Hash gespeichert; dank IndexedDB-Persistenz und lokalem Deckel-Spiegel bleiben Daten auch bei kurzem WLAN-Ausfall erhalten.</div>
+                        <div><strong>4 berechtigte Vorstands-Konten:</strong> <strong>Simon</strong> (Obmann / Haupt-Admin), <strong>Heimo</strong>, <strong>Karin</strong> und <strong>Sabrina</strong>.</div>
+                        <div><strong>Unsichtbarer Admin-Tab:</strong> Auf normalen Mitglieder-Handys ist der Admin-Tab unten rechts komplett ausgeblendet. Sobald sich ein Vorstandsmitglied einmal auf seinem Handy anmeldet, bleibt der Tab auf diesem Gerät dauerhaft sichtbar.</div>
+                        <div><strong>Geheimer Zugang bei neuem Handy:</strong> Einfach <strong>3× schnell hintereinander auf den Vereinsnamen oben im Header tippen</strong> – sofort wird das Gerät als Vorstands-Handy freigeschaltet und der Admin-Login öffnet sich.</div>
+                        <div><strong>5-Minuten-Auto-Logout:</strong> Aus Sicherheitsgründen meldet sich der Admin-Bereich nach <strong>5 Minuten Inaktivität</strong> automatisch ab.</div>
                     </div>
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #7c3aed; border-radius: 12px; padding: 12px 14px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">1. 🔑 Schlüssel &amp; Mitglieder (alle Vorstandsmitglieder)</div>
-                    <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div>Schlüsselinhaber und Kontaktdaten einsehen, pflegen und die vollständige <strong>Schlüsselliste als PDF mit Vereinssiegel</strong> drucken sowie aktive Mitglieder- und Berechtigungslisten prüfen.</div>
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #1e40af; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Schlüssel, Lagerbestand &amp; Schankkassa)</div>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins können sämtliche Schlüsselinhaber (Name, Schlüssel-Nr., Adresse, Geburtsdatum, Telefon) einsehen und als offizielles PDF mit Vereinssiegel drucken. Das Hinzufügen, Bearbeiten und Entfernen von Schlüsselinhabern ist exklusiv für Obmann Simon freigeschaltet.</div>
+                        <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Kinderleichte Anpassung der Bestände über die Touch-Knöpfe <code>− 1</code>, <code>+ 1</code> und <code>+ 5</code> sowie <strong>💾 Lagerbestand speichern</strong>. Ganz oben zeigt die Gold-Box jederzeit sichtbar an, wann und von wem zuletzt geändert wurde. <strong>Push-Regel:</strong> Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Mitteilung; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Mitteilung.</div>
+                        <div><strong>🍺 Schankbuch &amp; Kassa (Grün vs. Blau):</strong> Klare Trennung zwischen <strong style="color: #15803d;">💵 Bar-Abrechnungen (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnungen (Blau)</strong>. Alle 4 Admins können Umsätze prüfen und Kassenberichte/Rechnungen als PDF herunterladen; Stornos oder Löschungen sind exklusiv dem Obmann vorbehalten.</div>
                     </div>
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #eab308; border-radius: 12px; padding: 12px 14px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">2. 📦 Lagerbestand (alle Vorstandsmitglieder)</div>
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 📱 Was die App für alle Mitglieder kann (Überblick für Rückfragen)</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div>Aktuelle Getränke- und Speisenbestände pflegen (automatischer Abzug bei jeder Abrechnung). Ganz oben zeigt die hervorgehobene Status-Box immer sichtbar, <strong>wann und von wem zuletzt geändert wurde</strong>; <strong>Simon und Heimo</strong> erhalten bei Änderungen automatisch eine Push-Info.</div>
+                        <div><strong>📸 24h-Vereinsstatus:</strong> Leuchtet der runde Vereinslogo-Kreis oben links grün-gold, hat der Obmann aktuelle Fotos eingestellt (antippen zum Ansehen; verschwindet nach exakt 24 Stunden vollautomatisch und zeigt wieder das Vereinslogo).</div>
+                        <div><strong>📰 News &amp; 📅 Termine:</strong> Beiträge liken (<code>👍</code>), bei Terminen abstimmen und Termine per <code>.ics</code>-Datei direkt in den eigenen Handy-Kalender übernehmen.</div>
+                        <div><strong>🗓️ Dienstplan &amp; Tauschbörse:</strong> Eigene Schankdienste einsehen, bei Verhinderung Ersatz anfragen oder offene Dienste übernehmen; automatische Push-Erinnerungen laufen <strong>1 Tag</strong> und <strong>2 Stunden</strong> vor Dienstbeginn.</div>
+                        <div><strong>💬 Vereins-Chat (mit Blaulicht &amp; Wischgeste):</strong> Texte, Fotos, Sprachnachrichten, Umfragen, 3D-Sticker und PDFs; neue Nachrichten lösen einen Blaulicht-Alarm aus; zum Schließen einfach von rechts nach links wischen. Je nach Berechtigung liegt der Chat unten in der Leiste oder oben auf der Startseite.</div>
+                        <div><strong>🎯 Digitales Waffenbuch (nur Waffenwarte):</strong> Entnahme und Rückgabe der Kat.-C-Salutwaffen per Scan des Tresor-QR-Codes (automatische Sperre nach 2 Minuten).</div>
                     </div>
                 </div>
 
-                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 12px 14px;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">3. 🍺 Schankbuch &amp; Kassa (alle Vorstandsmitglieder)</div>
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #7c3aed; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet &amp; Offline-Schutz bei Veranstaltungen</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div>Farblich klar getrennte Abrechnung zwischen <strong style="color: #15803d;">💵 Bar-Verkäufen (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnungen (Blau)</strong> prüfen sowie Kassenberichte und Rechnungen direkt als PDF herunterladen.</div>
+                        <div><strong>Reiner Schank-Kiosk-Modus (<code>?mode=schank</code>):</strong> Wird die App auf dem Schützenhaus-Tablet einmalig mit <code>?mode=schank</code> am Ende der Web-Adresse geöffnet und zum Startbildschirm hinzugefügt, startet das Tablet nach einmaliger Code-Eingabe ausschließlich im Vollbild-Schankbuch (ohne Chat, News oder Admin-Zugang; Beenden nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
+                        <div><strong>Doppelter Offline-Tresor:</strong> Dank Service-Worker-Cache (<code>kb-sv-offline</code>) und lokalem IndexedDB-/Speicher-Spiegel (<code>kb_sv_open_tabs_backup</code>) arbeitet das Schankbuch bei WLAN-Ausfall oder Tablet-Neustart lückenlos weiter und synchronisiert alle Deckel automatisch, sobald wieder Internet da ist.</div>
                     </div>
                 </div>
 
-                <div id="admin-help-modal-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 12px; padding: 12px 14px;">
-                    <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">👑 Obmann-Steuerzentrale &amp; Exklusiv-Bereiche (Obmann Simon)</div>
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 App aktualisieren &amp; Push-Tipps für Mitglieder</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div><strong>Steuerzentrale (2×3 Kacheln):</strong> Steuerung der <strong>8 App-Farben</strong>, <strong>Startseiten-Eilmeldung</strong>, <strong>Chat-Schreibsperre</strong>, <strong>Schankbuch-Preise</strong>, <strong>Mitglieder- &amp; Schankbuch-Freigaben</strong> sowie <strong>Vereins-Zugangscode</strong>.</div>
-                        <div><strong>Exklusiv-Module &amp; Nachweise:</strong> Verwaltung von <strong>News, Terminen &amp; Dienstplan/Push</strong> sowie Einsicht und Download von <strong>Waffenprotokollen</strong>, <strong>Tresor- &amp; Mitglieder-QR-Codes</strong>, unveränderlichem <strong>Sicherheits-Audit-Log</strong> und <strong>Jahresabschluss-Backup (PDF)</strong>.</div>
+                        <div><strong>Aktualisieren ohne Datenverlust:</strong> Auf der Startseite einfach <strong>nach unten ziehen (Pull-to-Refresh)</strong> oder unten den Refresh-Button nutzen – dabei bleiben gespeicherte Namen, Login-Status und Browser-Verlauf vollständig erhalten.</div>
+                        <div><strong>iPhone-Hinweis:</strong> Auf iPhones funktionieren Push-Nachrichten nur, wenn die App über <strong>Teilen → „Zum Startbildschirm“</strong> installiert und über dieses Icon geöffnet wird.</div>
+                    </div>
+                </div>
+
+                <div id="admin-help-modal-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
+                    <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Kapitel 6 – 👑 Obmann-Steuerzentrale (3 ruhige Rubriken · exklusiv für Obmann Simon)</div>
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <div><strong>1. Verein &amp; Betrieb:</strong> <strong>📸 24h-Status-Foto</strong> (HD-Fotos bis 15 MB mit optionalem Push &amp; 15-Minuten-Anti-Spam-Schutz), <strong>News &amp; Termine</strong> erstellen/löschen, <strong>Dienstplan &amp; Push</strong> verwalten, <strong>Startseiten-Eilmeldung</strong> schalten sowie <strong>Chat-Schreibsperre</strong> („Nur Obmann darf schreiben“) aktivieren.</div>
+                        <div><strong>2. Schank, Mitglieder &amp; Protokolle:</strong> <strong>1-Listen-Mitgliederverwaltung</strong> (Mitglieder anlegen/suchen und per Schalter individuell für <strong>🍺 Schankbuch-Tab</strong> und <strong>🎯 Waffenwart</strong> freischalten), <strong>Schankbuch-Preise</strong> anpassen, <strong>Waffenprotokolle</strong> prüfen/archivieren, <strong>unveränderliches Sicherheits-Audit-Log</strong> einsehen und komplettes <strong>Jahresabschluss-Backup</strong> herunterladen.</div>
+                        <div><strong>3. App &amp; Zugänge:</strong> Live-Umschaltung zwischen <strong>8 Vereins-Farbdesigns</strong>, Änderung des <strong>Vereins-Zugangscodes</strong> sowie Abruf &amp; Druck von <strong>Mitglieder-QR-Code</strong> und <strong>Tresor-QR-Code</strong>.</div>
                     </div>
                 </div>
 
@@ -6989,46 +7048,12 @@
         };
 
 
-        const DEFAULT_ACTIVE_MEMBERS = [
-            "Kinzl Sabrina",
-            "Kofler Konrad",
-            "Mattle Werner",
-            "Rudigier Erwin",
-            "Sandrell Daniel",
-            "Schweighofer Dietmar",
-            "Schweighofer Simon",
-            "Spettel Maria",
-            "Spettel Norbert",
-            "Stocker Elias",
-            "Stocker Heimo",
-            "Stocker Karin",
-            "Stocker Natalie",
-            "Suntinger Jasmin",
-            "Tripolt Pascal",
-            "Wachter Manfred",
-            "Wachter Werner",
-            "Wittwer Christoph",
-            "Wittwer Werner"
-        ];
+        const DEFAULT_ACTIVE_MEMBERS = [];
 
-        const DEFAULT_WEAPON_AUTHORIZED_MEMBERS = [
-            "Schweighofer Simon",
-            "Stocker Heimo",
-            "Spettel Norbert",
-            "Wachter Manfred"
-        ];
-        let WEAPON_AUTHORIZED_MEMBERS = [...DEFAULT_WEAPON_AUTHORIZED_MEMBERS];
+        const DEFAULT_WEAPON_AUTHORIZED_MEMBERS = [];
+        let WEAPON_AUTHORIZED_MEMBERS = [];
 
-        const WEAPON_ROLE_MAP = {
-            "schweighofer simon": "Obmann",
-            "simon schweighofer": "Obmann",
-            "stocker heimo": "Obmann Stellvertreter + Waffenwart",
-            "heimo stocker": "Obmann Stellvertreter + Waffenwart",
-            "spettel norbert": "Waffenwart",
-            "norbert spettel": "Waffenwart",
-            "wachter manfred": "Waffenwart",
-            "manfred wachter": "Waffenwart"
-        };
+        const WEAPON_ROLE_MAP = {};
 
         function splitWeaponPerson(rawName) {
             let clean = String(rawName || '').trim().replace(/\s+/g, ' ');
@@ -7075,7 +7100,7 @@
         function isAllowedActiveMemberName(name, allowCustom = false) {
             const normalized = String(name || '').trim().replace(/\s+/g, ' ').toLowerCase();
             if (!normalized) return false;
-            return allowCustom || ALLOWED_ACTIVE_MEMBERS_NORMALIZED.has(normalized);
+            return allowCustom || ALLOWED_ACTIVE_MEMBERS_NORMALIZED.size === 0 || ALLOWED_ACTIVE_MEMBERS_NORMALIZED.has(normalized);
         }
 
         function sanitizeActiveMembersList(list, allowCustom = false) {
@@ -7101,6 +7126,8 @@
 
         const MEMBER_IDENTITY_STORAGE_KEY = 'kbsv_member_name';
         const VERIFIED_ADMIN_MEMBER_STORAGE_KEY = 'kbsv_verified_admin_member';
+        const BOARD_DEVICE_STORAGE_KEY = 'kb_sv_is_board_device';
+        const BOARD_ADMIN_FIRST_NAMES = ['simon', 'heimo', 'karin', 'sabrina'];
         const ADMIN_PROTECTED_MEMBER_NAMES = [
             "Schweighofer Simon",
             "Stocker Heimo",
@@ -7114,6 +7141,16 @@
             sabrina: "Kinzl Sabrina"
         };
         let pendingEventVoteAfterSetup = null;
+
+        function markDeviceAsBoardDevice() {
+            try { localStorage.setItem(BOARD_DEVICE_STORAGE_KEY, '1'); } catch (e) {}
+        }
+
+        function isBoardMemberName(name) {
+            const normalized = String(name || '').trim().toLowerCase();
+            if (!normalized) return false;
+            return BOARD_ADMIN_FIRST_NAMES.some(firstName => normalized.includes(firstName));
+        }
 
         function isAdminProtectedMemberName(name) {
             const normalized = String(name || '').trim().replace(/\s+/g, ' ').toLowerCase();
@@ -7287,11 +7324,75 @@
                     try { switchTab('news'); } catch (e) {}
                 }
             }
+            try { updateAdminTabVisibility(); } catch (e) {}
         }
+
+        function updateAdminTabVisibility() {
+            const navCardEl = document.getElementById('nav-card');
+            if (!navCardEl) return;
+            let isBoardDevice = false;
+            let storedMemberName = '';
+            let verifiedAdminName = '';
+            try { isBoardDevice = localStorage.getItem(BOARD_DEVICE_STORAGE_KEY) === '1'; } catch (e) {}
+            try { storedMemberName = String(localStorage.getItem(MEMBER_IDENTITY_STORAGE_KEY) || '').trim(); } catch (e) {}
+            try { verifiedAdminName = String(localStorage.getItem(VERIFIED_ADMIN_MEMBER_STORAGE_KEY) || '').trim(); } catch (e) {}
+
+            const currentMemberName = getCurrentMemberNameForAccess();
+            const isAdminLoggedIn = !!(typeof auth !== 'undefined' && auth && auth.currentUser);
+            const hasBoardName = isBoardMemberName(currentMemberName) || isBoardMemberName(storedMemberName) || isBoardMemberName(verifiedAdminName);
+
+            if (isBoardDevice || isAdminLoggedIn || hasBoardName) {
+                navCardEl.style.removeProperty('display');
+            } else {
+                navCardEl.style.setProperty('display', 'none', 'important');
+            }
+        }
+
+        let headerTitleSecretTapCount = 0;
+        let headerTitleSecretTapTimer = null;
+
+        function handleHeaderTitleSecretTap(event) {
+            if (event && typeof event.stopPropagation === 'function') {
+                event.stopPropagation();
+            }
+            headerTitleSecretTapCount += 1;
+            if (headerTitleSecretTapTimer) {
+                clearTimeout(headerTitleSecretTapTimer);
+            }
+            if (headerTitleSecretTapCount >= 3) {
+                headerTitleSecretTapCount = 0;
+                headerTitleSecretTapTimer = null;
+                markDeviceAsBoardDevice();
+                updateAdminTabVisibility();
+                if (document.body.classList.contains('app-locked') && typeof openAdminDirectLogin === 'function') {
+                    openAdminDirectLogin();
+                } else {
+                    switchTab('card');
+                    setTimeout(() => {
+                        const loginCard = document.getElementById('admin-login-card');
+                        if (loginCard && loginCard.style.display !== 'none' && typeof loginCard.scrollIntoView === 'function') {
+                            loginCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        const pwdInput = document.getElementById('admin-password-input');
+                        if (pwdInput && loginCard && loginCard.style.display !== 'none' && typeof pwdInput.focus === 'function') {
+                            pwdInput.focus();
+                        }
+                    }, 60);
+                }
+                return;
+            }
+            headerTitleSecretTapTimer = setTimeout(() => {
+                headerTitleSecretTapCount = 0;
+                headerTitleSecretTapTimer = null;
+            }, 1000);
+        }
+
+        try { updateAdminTabVisibility(); } catch (e) {}
 
         function refreshMemberIdentityViews() {
             updateFooterMemberIdentity();
             try { updateMemberNavigationMode(); } catch (e) {}
+            try { updateAdminTabVisibility(); } catch (e) {}
             try { updateChatIdentityLabel(); } catch (e) {}
             try { populateWeaponMemberSelects(); } catch (e) {}
             try {
@@ -11433,7 +11534,7 @@
                         `${aktuellerName || 'Unbekanntes Mitglied'} hat versucht, den Waffentresor per QR-Code zu entsperren.`
                     );
                     stopQrScanner().then(() => {
-                        const denyMsg = "⛔ Zugriff verweigert! Nur berechtigte Personen (Simon, Heimo, Norbert, Manfred) dürfen den Waffentresor entsperren.";
+                        const denyMsg = "⛔ Zugriff verweigert! Nur berechtigte Waffenwarte dürfen den Waffentresor entsperren.";
                         const errBox = document.getElementById('scanner-error-msg');
                         if (errBox) {
                             errBox.innerText = denyMsg;
@@ -16152,6 +16253,10 @@
                     const resolvedKey = resolveAdminKeyFromUser(userCredential && userCredential.user, selectedUser);
                     activeAdminName = resolvedKey || selectedUser || '';
                     const mappedMember = ADMIN_KEY_TO_MEMBER_NAME[resolvedKey] || ADMIN_KEY_TO_MEMBER_NAME[String(selectedUser || '').toLowerCase()];
+                    const boardKey = String(resolvedKey || selectedUser || '').trim().toLowerCase();
+                    if (BOARD_ADMIN_FIRST_NAMES.includes(boardKey) || isBoardMemberName(mappedMember)) {
+                        markDeviceAsBoardDevice();
+                    }
                     if (mappedMember) {
                         try {
                             localStorage.setItem(MEMBER_IDENTITY_STORAGE_KEY, mappedMember);
@@ -16231,6 +16336,9 @@
                 if (resolvedKey) {
                     activeAdminName = resolvedKey;
                     const mappedMember = ADMIN_KEY_TO_MEMBER_NAME[resolvedKey];
+                    if (BOARD_ADMIN_FIRST_NAMES.includes(String(resolvedKey).toLowerCase()) || isBoardMemberName(mappedMember)) {
+                        markDeviceAsBoardDevice();
+                    }
                     if (mappedMember) {
                         try {
                             localStorage.setItem(MEMBER_IDENTITY_STORAGE_KEY, mappedMember);
@@ -23285,6 +23393,7 @@
             } catch(e) {}
             try { updateFooterMemberIdentity(); } catch(e) {}
             try { updateMemberNavigationMode(); } catch(e) {}
+            try { updateAdminTabVisibility(); } catch(e) {}
             try { populateWeaponMemberSelects(); } catch(e) {}
             try { updateChatMuteButtonUI(); } catch(e) {}
             try { updateChatIdentityLabel(); } catch(e) {}
