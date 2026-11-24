@@ -2869,6 +2869,97 @@
             flex-shrink: 0;
             box-sizing: border-box;
         }
+        #admin-mode-switcher {
+            display: none;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 6px;
+            border-radius: 16px;
+            background: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            box-sizing: border-box;
+        }
+        .admin-mode-tab-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            min-height: 44px;
+            padding: 9px 10px;
+            border-radius: 12px;
+            border: 1.5px solid transparent;
+            background: transparent;
+            color: #334155;
+            font-family: inherit;
+            font-size: 0.82rem;
+            font-weight: 800;
+            line-height: 1.2;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, transform 0.12s ease;
+            box-sizing: border-box;
+        }
+        .admin-mode-tab-btn:active {
+            transform: scale(0.98);
+        }
+        #btn-mode-board.active {
+            background: #ffffff;
+            color: #0f172a;
+            border-color: #cbd5e1;
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+        }
+        #btn-mode-chairman {
+            color: #0f172a;
+            background: rgba(254, 249, 195, 0.55);
+            border-color: rgba(234, 179, 8, 0.45);
+        }
+        #btn-mode-chairman.active {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #facc15;
+            border-color: #eab308;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.28);
+        }
+        #chairman-own-menu-view {
+            display: none;
+            animation: fadeIn 0.18s ease;
+        }
+        .chairman-own-menu-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border: 1.5px solid #eab308;
+            border-radius: 16px;
+            padding: 13px 16px;
+            margin-bottom: 14px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.16);
+        }
+        .chairman-own-menu-title {
+            font-size: 0.98rem;
+            font-weight: 900;
+            color: #facc15;
+            line-height: 1.25;
+        }
+        .chairman-own-menu-sub {
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-top: 2px;
+            line-height: 1.3;
+        }
+        .admin-view-back-btn.chairman-back-btn {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #facc15;
+            border-color: #eab308;
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.18);
+        }
+        .admin-view-back-btn.chairman-back-btn:hover {
+            background: #0f172a;
+            border-color: #facc15;
+        }
         #admin-menu-home {
             display: block;
         }
@@ -4009,11 +4100,17 @@
                     </div>
                 </div>
 
-                <!-- ADMIN START-ÜBERSICHT (OHNE VERSCHACHTELTE DOPPEL-MENÜS) -->
+                <!-- HAUPTMENÜ-UMSCHALTUNG (EXKLUSIV FÜR OBMANN SIMON SICHTBAR) -->
+                <div id="admin-mode-switcher" role="tablist" aria-label="Admin-Bereich wählen" style="display: none !important;">
+                    <button type="button" id="btn-mode-board" class="admin-mode-tab-btn active" role="tab" aria-selected="true" onclick="switchAdminMenuMode('board')">📋 Vorstands-Bereich</button>
+                    <button type="button" id="btn-mode-chairman" class="admin-mode-tab-btn" role="tab" aria-selected="false" onclick="switchAdminMenuMode('chairman')">👑 Obmann-Steuerzentrale</button>
+                </div>
+
+                <!-- ADMIN START-ÜBERSICHT: VORSTANDS-BEREICH (FÜR ALLE 4 ADMINS) -->
                 <div id="admin-menu-home">
                     <!-- GRUPPE 1: VEREINSBETRIEB & KASSA (FÜR ALLE 4 ADMINS SICHTBAR) -->
                     <div class="admin-menu-group" id="admin-menu-general-group">
-                        <div class="admin-menu-group-label">🛡️ Vereinsbetrieb &amp; Kassa</div>
+                        <div class="admin-menu-group-label">📋 Vorstands-Bereich · Vereinsbetrieb &amp; Kassa</div>
                         <div class="admin-menu-list" role="navigation" aria-label="Vereinsbetrieb und Kassa">
                             <button type="button" class="admin-menu-row" id="admin-nav-btn-members" data-admin-view="members" onclick="openAdminView('members')">
                                 <span class="admin-menu-row-left">
@@ -4048,9 +4145,51 @@
                         </div>
                     </div>
 
-                    <!-- GRUPPE 2: OBMANN-STEUERZENTRALE (EXKLUSIV FÜR OBMANN SIMON) -->
+                    <!-- FUSSBEREICH DER START-ÜBERSICHT: ANLEITUNG & ABMELDEN -->
+                    <div class="admin-home-footer">
+                        <!-- AUFKLAPPBARE VORSTANDS- & ADMIN-ANLEITUNG -->
+                        <div class="admin-accordion-box" id="admin-guide-accordion-box" style="margin: 0; border-color: #cbd5e1;">
+                            <button type="button" class="admin-accordion-header" onclick="toggleAdminAccordion(this)" aria-expanded="false" style="background: #f8fafc; color: #0f172a;">
+                                <span>📘 Vorstands- &amp; Admin-Anleitung</span>
+                                <span class="admin-accordion-arrow" style="color: #475569;" aria-hidden="true">▼</span>
+                            </button>
+                            <div class="admin-accordion-body">
+                                <div class="admin-accordion-inner">
+                                    <div class="admin-accordion-content" style="border-top-color: #e2e8f0; display: flex; flex-direction: column; gap: 9px; font-size: 0.86em; line-height: 1.5; color: #1e293b;">
+                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 10px; padding: 10px 12px;">
+                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">🛡️ Für alle Vorstandsmitglieder (Heimo, Karin, Sabrina &amp; Simon)</div>
+                                            <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
+                                                <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Schlüsselinhaber einsehen und Schlüsselliste als PDF mit Vereinssiegel drucken.</div>
+                                                <div><strong>📦 Lagerbestand:</strong> Aktuelle Bestände pflegen – oben steht immer sichtbar, wann und von wem zuletzt geändert wurde; Simon und Heimo erhalten bei Änderungen automatisch eine Push-Info.</div>
+                                                <div><strong>🍺 Schankbuch &amp; Kassa:</strong> Bar-Verkäufe (<strong style="color: #15803d;">Grün</strong>) und Firmen-Rechnungen (<strong style="color: #1d4ed8;">Blau</strong>) prüfen sowie Kassenberichte &amp; Rechnungen als PDF herunterladen.</div>
+                                                <div><strong>🔐 Sicherheit:</strong> Nach 5 Minuten Inaktivität loggt sich der Admin-Bereich automatisch aus.</div>
+                                            </div>
+                                        </div>
+
+                                        <div id="admin-guide-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 10px; padding: 10px 12px;">
+                                            <div style="font-weight: 800; color: #92400e; margin-bottom: 5px;">👑 Obmann-Steuerzentrale &amp; Exklusiv-Bereiche (Obmann Simon)</div>
+                                            <div style="color: #334155;">
+                                                Steuerung der 8 App-Farben, Startseiten-Eilmeldung, Chat-Schreibsperre, Schankbuch-Preise, Mitglieder- &amp; Schankbuch-Freigaben, Vereins-Zugangscode, News/Termine/Dienstplan sowie Einsicht und Download von Waffenprotokollen, QR-Codes, Sicherheits-Audit-Log und Jahresabschluss-Backup.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" id="admin-home-logout-btn" class="btn admin-btn-delete btn-block" onclick="logoutAdmin()" style="margin-top: 2px;">🚪 Abmelden</button>
+                    </div>
+                </div>
+
+                <!-- EIGENES HAUPTMENÜ: OBMANN-STEUERZENTRALE (EXKLUSIV FÜR OBMANN SIMON) -->
+                <div id="chairman-own-menu-view" style="display: none !important;">
+                    <div class="chairman-own-menu-header">
+                        <div>
+                            <div class="chairman-own-menu-title">👑 Obmann-Steuerzentrale</div>
+                            <div class="chairman-own-menu-sub">Exklusive Steuerung &amp; Vereinsverwaltung für Obmann Simon</div>
+                        </div>
+                    </div>
+
                     <div class="admin-menu-group" id="admin-menu-chairman-group" style="display: none !important;">
-                        <div class="admin-menu-group-label chairman">👑 Obmann-Steuerzentrale</div>
                         <div class="admin-menu-list" role="navigation" aria-label="Obmann-Steuerzentrale">
                             <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-news-events" data-admin-view="news-events" onclick="openAdminView('news-events')">
                                 <span class="admin-menu-row-left">
@@ -4135,45 +4274,15 @@
                         </div>
                     </div>
 
-                    <!-- FUSSBEREICH DER START-ÜBERSICHT: ANLEITUNG & ABMELDEN -->
                     <div class="admin-home-footer">
-                        <!-- AUFKLAPPBARE VORSTANDS- & ADMIN-ANLEITUNG -->
-                        <div class="admin-accordion-box" id="admin-guide-accordion-box" style="margin: 0; border-color: #cbd5e1;">
-                            <button type="button" class="admin-accordion-header" onclick="toggleAdminAccordion(this)" aria-expanded="false" style="background: #f8fafc; color: #0f172a;">
-                                <span>📘 Vorstands- &amp; Admin-Anleitung</span>
-                                <span class="admin-accordion-arrow" style="color: #475569;" aria-hidden="true">▼</span>
-                            </button>
-                            <div class="admin-accordion-body">
-                                <div class="admin-accordion-inner">
-                                    <div class="admin-accordion-content" style="border-top-color: #e2e8f0; display: flex; flex-direction: column; gap: 9px; font-size: 0.86em; line-height: 1.5; color: #1e293b;">
-                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 10px; padding: 10px 12px;">
-                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">🛡️ Für alle Vorstandsmitglieder (Heimo, Karin, Sabrina &amp; Simon)</div>
-                                            <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                                <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Schlüsselinhaber einsehen und Schlüsselliste als PDF mit Vereinssiegel drucken.</div>
-                                                <div><strong>📦 Lagerbestand:</strong> Aktuelle Bestände pflegen – oben steht immer sichtbar, wann und von wem zuletzt geändert wurde; Simon und Heimo erhalten bei Änderungen automatisch eine Push-Info.</div>
-                                                <div><strong>🍺 Schankbuch &amp; Kassa:</strong> Bar-Verkäufe (<strong style="color: #15803d;">Grün</strong>) und Firmen-Rechnungen (<strong style="color: #1d4ed8;">Blau</strong>) prüfen sowie Kassenberichte &amp; Rechnungen als PDF herunterladen.</div>
-                                                <div><strong>🔐 Sicherheit:</strong> Nach 5 Minuten Inaktivität loggt sich der Admin-Bereich automatisch aus.</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="admin-guide-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 10px; padding: 10px 12px;">
-                                            <div style="font-weight: 800; color: #92400e; margin-bottom: 5px;">👑 Obmann-Steuerzentrale &amp; Exklusiv-Bereiche (Obmann Simon)</div>
-                                            <div style="color: #334155;">
-                                                Steuerung der 8 App-Farben, Startseiten-Eilmeldung, Chat-Schreibsperre, Schankbuch-Preise, Mitglieder- &amp; Schankbuch-Freigaben, Vereins-Zugangscode, News/Termine/Dienstplan sowie Einsicht und Download von Waffenprotokollen, QR-Codes, Sicherheits-Audit-Log und Jahresabschluss-Backup.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" id="admin-home-logout-btn" class="btn admin-btn-delete btn-block" onclick="logoutAdmin()" style="margin-top: 2px;">🚪 Abmelden</button>
+                        <button type="button" id="chairman-own-logout-btn" class="btn admin-btn-delete btn-block" onclick="logoutAdmin()">🚪 Abmelden</button>
                     </div>
                 </div>
 
                 <!-- VOLLBILD-DETAILANSICHT FÜR DEN GEWÄHLTEN ARBEITSBEREICH -->
                 <div id="admin-view-panel" style="display: none;">
                     <div class="admin-view-backbar">
-                        <button type="button" id="admin-view-back-btn" class="admin-view-back-btn" onclick="closeAdminView()">← Zurück zur Übersicht</button>
+                        <button type="button" id="admin-view-back-btn" class="admin-view-back-btn" onclick="closeAdminView()">← Zurück zum Vorstands-Bereich</button>
                         <div id="admin-view-panel-title" class="admin-view-back-title"></div>
                     </div>
 
@@ -5812,15 +5921,68 @@
         };
 
         let currentOpenAdminViewId = null;
+        let activeAdminMenuMode = 'board';
+
+        function syncAdminModeSwitcherUI() {
+            const isChairman = isChairmanSimonLoggedIn();
+            const effectiveMode = (activeAdminMenuMode === 'chairman' && isChairman) ? 'chairman' : 'board';
+            activeAdminMenuMode = effectiveMode;
+            const boardBtn = document.getElementById('btn-mode-board');
+            const chairmanBtn = document.getElementById('btn-mode-chairman');
+            if (boardBtn) {
+                boardBtn.classList.toggle('active', effectiveMode === 'board');
+                boardBtn.setAttribute('aria-selected', effectiveMode === 'board' ? 'true' : 'false');
+            }
+            if (chairmanBtn) {
+                chairmanBtn.classList.toggle('active', effectiveMode === 'chairman');
+                chairmanBtn.setAttribute('aria-selected', effectiveMode === 'chairman' ? 'true' : 'false');
+            }
+        }
+
+        function switchAdminMenuMode(mode) {
+            if (mode === 'chairman' && !isChairmanSimonLoggedIn()) {
+                activeAdminMenuMode = 'board';
+                closeAdminView();
+                return;
+            }
+            activeAdminMenuMode = (mode === 'chairman') ? 'chairman' : 'board';
+            closeAdminView();
+        }
 
         function closeAdminView() {
             currentOpenAdminViewId = null;
+            const isChairman = isChairmanSimonLoggedIn();
+            if (!isChairman) {
+                activeAdminMenuMode = 'board';
+            }
+            const showChairmanMenu = (activeAdminMenuMode === 'chairman' && isChairman);
             const homeEl = document.getElementById('admin-menu-home');
+            const chairmanMenuEl = document.getElementById('chairman-own-menu-view');
             const viewPanelEl = document.getElementById('admin-view-panel');
             const titleEl = document.getElementById('admin-view-panel-title');
+            const backBtn = document.getElementById('admin-view-back-btn');
             if (viewPanelEl) viewPanelEl.style.display = 'none';
-            if (homeEl) homeEl.style.display = 'block';
+            if (homeEl) {
+                if (showChairmanMenu) {
+                    homeEl.style.setProperty('display', 'none', 'important');
+                } else {
+                    homeEl.style.removeProperty('display');
+                    homeEl.style.display = 'block';
+                }
+            }
+            if (chairmanMenuEl) {
+                if (showChairmanMenu) {
+                    chairmanMenuEl.style.removeProperty('display');
+                    chairmanMenuEl.style.display = 'block';
+                } else {
+                    chairmanMenuEl.style.setProperty('display', 'none', 'important');
+                }
+            }
             if (titleEl) titleEl.textContent = '';
+            if (backBtn) {
+                backBtn.textContent = '← Zurück zum Vorstands-Bereich';
+                backBtn.classList.remove('chairman-back-btn');
+            }
 
             document.querySelectorAll('#admin-panel .admin-section-block').forEach(el => {
                 el.classList.remove('active');
@@ -5829,6 +5991,7 @@
             document.querySelectorAll('#chairman-command-center .chairman-acc-section').forEach(sec => {
                 sec.classList.remove('open');
             });
+            syncAdminModeSwitcherUI();
             try { lockSecuritySettingsFields(); } catch(e) {}
             try { window.scrollTo(0, 0); } catch(e) {}
         }
@@ -5840,9 +6003,13 @@
                 return;
             }
             if (cfg.chairmanOnly && !isChairmanSimonLoggedIn()) {
+                activeAdminMenuMode = 'board';
                 closeAdminView();
                 return;
             }
+
+            activeAdminMenuMode = cfg.chairmanOnly ? 'chairman' : 'board';
+            syncAdminModeSwitcherUI();
 
             try { lockSecuritySettingsFields(); } catch(e) {}
 
@@ -5855,11 +6022,23 @@
             });
 
             const homeEl = document.getElementById('admin-menu-home');
+            const chairmanMenuEl = document.getElementById('chairman-own-menu-view');
             const viewPanelEl = document.getElementById('admin-view-panel');
             const titleEl = document.getElementById('admin-view-panel-title');
-            if (homeEl) homeEl.style.display = 'none';
+            const backBtn = document.getElementById('admin-view-back-btn');
+            if (homeEl) homeEl.style.setProperty('display', 'none', 'important');
+            if (chairmanMenuEl) chairmanMenuEl.style.setProperty('display', 'none', 'important');
             if (viewPanelEl) viewPanelEl.style.display = 'block';
             if (titleEl) titleEl.textContent = cfg.title;
+            if (backBtn) {
+                if (cfg.chairmanOnly) {
+                    backBtn.textContent = '← Zurück zur Obmann-Steuerzentrale';
+                    backBtn.classList.add('chairman-back-btn');
+                } else {
+                    backBtn.textContent = '← Zurück zum Vorstands-Bereich';
+                    backBtn.classList.remove('chairman-back-btn');
+                }
+            }
 
             const targetSection = document.getElementById(cfg.sectionId);
             if (targetSection) {
@@ -13154,6 +13333,7 @@
         function loadAdminProtectedData() {
             if (!auth.currentUser) return;
             loadAppDataAfterUnlock();
+            activeAdminMenuMode = 'board';
             try { lockSecuritySettingsFields(); } catch(e) {}
             try { closeAllAdminSections(); } catch(e) {}
             try { updateChairmanExclusiveVisibility(); } catch(e) {}
@@ -13182,7 +13362,14 @@
             window.cashSalesList = [];
             lastGeneratedTresorQrDataUrl = '';
             lastGeneratedMemberAppQrDataUrl = '';
+            activeAdminMenuMode = 'board';
             try { closeAdminView(); } catch(e) {}
+            try {
+                const modeSwitcherEl = document.getElementById('admin-mode-switcher');
+                if (modeSwitcherEl) modeSwitcherEl.style.setProperty('display', 'none', 'important');
+                const chairmanMenuEl = document.getElementById('chairman-own-menu-view');
+                if (chairmanMenuEl) chairmanMenuEl.style.setProperty('display', 'none', 'important');
+            } catch(e) {}
             try { lockSecuritySettingsFields(); } catch(e) {}
             try { stopAdminAuditLogListener(); } catch(e) {}
             try { if (typeof cancelEditDutyEntry === 'function') cancelEditDutyEntry(); } catch(e) {}
@@ -14454,9 +14641,19 @@
         function updateChairmanExclusiveVisibility() {
             const isChairman = isChairmanSimonLoggedIn();
             const ccEl = document.getElementById('chairman-command-center');
+            const modeSwitcherEl = document.getElementById('admin-mode-switcher');
+            const chairmanMenuEl = document.getElementById('chairman-own-menu-view');
             const chairmanGroupEl = document.getElementById('admin-menu-chairman-group');
             const chairmanOnlySectionIds = ['admin-sec-news-events', 'admin-sec-duty', 'admin-sec-security', 'admin-sec-weapons'];
             if (ccEl) ccEl.style.display = isChairman ? 'block' : 'none';
+            if (modeSwitcherEl) {
+                if (isChairman) {
+                    modeSwitcherEl.style.removeProperty('display');
+                    modeSwitcherEl.style.display = 'grid';
+                } else {
+                    modeSwitcherEl.style.setProperty('display', 'none', 'important');
+                }
+            }
             if (chairmanGroupEl) {
                 if (isChairman) {
                     chairmanGroupEl.style.removeProperty('display');
@@ -14464,9 +14661,22 @@
                     chairmanGroupEl.style.setProperty('display', 'none', 'important');
                 }
             }
-            if (!isChairman && currentOpenAdminViewId && ADMIN_VIEW_CONFIG[currentOpenAdminViewId] && ADMIN_VIEW_CONFIG[currentOpenAdminViewId].chairmanOnly) {
-                closeAdminView();
+            if (!isChairman) {
+                activeAdminMenuMode = 'board';
+                if (chairmanMenuEl) {
+                    chairmanMenuEl.style.setProperty('display', 'none', 'important');
+                }
+                if (currentOpenAdminViewId && ADMIN_VIEW_CONFIG[currentOpenAdminViewId] && ADMIN_VIEW_CONFIG[currentOpenAdminViewId].chairmanOnly) {
+                    closeAdminView();
+                } else if (!currentOpenAdminViewId) {
+                    const homeEl = document.getElementById('admin-menu-home');
+                    if (homeEl) {
+                        homeEl.style.removeProperty('display');
+                        homeEl.style.display = 'block';
+                    }
+                }
             }
+            try { syncAdminModeSwitcherUI(); } catch(e) {}
             chairmanOnlySectionIds.forEach(secId => {
                 const secEl = document.getElementById(secId);
                 if (!secEl) return;
