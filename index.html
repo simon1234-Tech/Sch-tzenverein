@@ -4176,6 +4176,7 @@
                                 </div>
                             </div>
                         </div>
+                        <button type="button" id="admin-clean-reload-btn" class="btn btn-block" onclick="forceCleanAppReload(this)" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; font-weight: 800; margin-top: 2px;">🔄 App-Stand jetzt frisch laden (ohne Datenverlust)</button>
                         <button type="button" id="admin-home-logout-btn" class="btn admin-btn-delete btn-block" onclick="logoutAdmin()" style="margin-top: 2px;">🚪 Abmelden</button>
                     </div>
                 </div>
@@ -4275,6 +4276,7 @@
                     </div>
 
                     <div class="admin-home-footer">
+                        <button type="button" id="chairman-clean-reload-btn" class="btn btn-block" onclick="forceCleanAppReload(this)" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; font-weight: 800;">🔄 App-Stand jetzt frisch laden (ohne Datenverlust)</button>
                         <button type="button" id="chairman-own-logout-btn" class="btn admin-btn-delete btn-block" onclick="logoutAdmin()">🚪 Abmelden</button>
                     </div>
                 </div>
@@ -5153,6 +5155,8 @@
                     <img src="siegel.png" alt="Powered by Simon Schweighofer" style="width: 68px; height: 68px; border-radius: 50%; object-fit: cover; border: 2px solid #eab308; animation: sealGoldPulse 2.6s ease-in-out infinite;" onerror="this.style.display='none';">
                     <span style="font-size: 0.75rem; font-weight: 700; color: #475569;">App-Entwicklung &amp; Verwaltung: Simon Schweighofer</span>
                 </div>
+
+                <button type="button" id="member-help-clean-reload-btn" onclick="forceCleanAppReload(this)" class="btn btn-block" style="margin-top: 8px; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; font-weight: 800; font-size: 0.9rem;">🔄 App-Stand jetzt frisch laden (ohne Datenverlust)</button>
 
                 <button type="button" onclick="closeMemberHelpModal()" class="btn btn-primary btn-block" style="margin-top: 4px;">Verstanden</button>
             </div>
@@ -16689,6 +16693,55 @@
                 window.location.reload(true);
             } catch (e2) {
                 window.location.reload();
+            }
+        }
+
+        let isForceCleanAppReloadRunning = false;
+        async function forceCleanAppReload(triggerBtn) {
+            if (isForceCleanAppReloadRunning) return;
+            isForceCleanAppReloadRunning = true;
+
+            if (triggerBtn && typeof triggerBtn === 'object') {
+                try {
+                    triggerBtn.disabled = true;
+                    triggerBtn.textContent = '🔄 App-Stand wird frisch geladen...';
+                } catch (e) {}
+            }
+
+            try {
+                if ('caches' in window && caches && typeof caches.keys === 'function') {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map(k => caches.delete(k).catch(() => {})));
+                }
+            } catch (e) {}
+
+            try {
+                if ('serviceWorker' in navigator && navigator.serviceWorker) {
+                    if (typeof navigator.serviceWorker.getRegistrations === 'function') {
+                        const regs = await navigator.serviceWorker.getRegistrations();
+                        await Promise.all(
+                            regs.map(reg => (reg && typeof reg.update === 'function') ? reg.update().catch(() => {}) : Promise.resolve())
+                        );
+                    } else if (typeof navigator.serviceWorker.getRegistration === 'function') {
+                        const reg = await navigator.serviceWorker.getRegistration();
+                        if (reg && typeof reg.update === 'function') {
+                            await reg.update().catch(() => {});
+                        }
+                    }
+                }
+            } catch (e) {}
+
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.set('v', String(Date.now()));
+                window.location.replace(url.toString());
+                return;
+            } catch (e) {}
+
+            try {
+                window.location.reload();
+            } catch (e2) {
+                isForceCleanAppReloadRunning = false;
             }
         }
 
