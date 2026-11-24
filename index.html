@@ -25,6 +25,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
 
     <!-- OneSignal Web SDK v16 -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
@@ -1921,9 +1922,175 @@
         body.app-locked #app-updated-toast,
         body.app-locked #club-status-add-btn,
         body.app-locked #club-status-viewer,
-        body.app-locked #club-status-upload-modal {
+        body.app-locked #club-status-upload-modal,
+        body.app-locked #admin-cash-edit-modal {
             display: none !important;
             pointer-events: none !important;
+        }
+        /* SCHLÜSSELLISTE KARTEN & LAGERBESTAND TOUCH-STEUERUNG */
+        .key-holder-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        }
+        .key-holder-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding-bottom: 9px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .key-holder-name {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.3;
+        }
+        .key-holder-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+            color: #fde047;
+            border: 1.5px solid #eab308;
+            font-size: 0.78rem;
+            font-weight: 800;
+            line-height: 1.25;
+            max-width: 100%;
+            word-break: break-word;
+            box-shadow: 0 2px 6px rgba(30, 58, 138, 0.22);
+        }
+        .key-holder-details {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.88rem;
+            color: #334155;
+        }
+        .key-holder-detail-row {
+            display: grid;
+            grid-template-columns: 128px 1fr;
+            gap: 8px;
+            align-items: baseline;
+            line-height: 1.4;
+        }
+        .key-holder-detail-label {
+            font-weight: 700;
+            color: #475569;
+            white-space: nowrap;
+        }
+        .key-holder-detail-val {
+            color: #0f172a;
+            font-weight: 600;
+            word-break: break-word;
+        }
+        .key-holder-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .key-holder-group-card {
+            background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+            border: 1.5px solid #eab308;
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin: 14px 0 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .inv-item-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            transition: border-color 0.18s ease, background 0.18s ease;
+        }
+        .inv-item-card.has-change {
+            border-color: #eab308;
+            background: #fefce8;
+        }
+        .inv-item-left {
+            min-width: 140px;
+            flex: 1 1 160px;
+        }
+        .inv-item-name {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #475569;
+            line-height: 1.3;
+        }
+        .inv-item-qty {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 3px;
+            line-height: 1.25;
+        }
+        .inv-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .inv-touch-btn {
+            min-height: 44px;
+            min-width: 48px;
+            padding: 0 12px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.96rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+            touch-action: manipulation;
+            transition: transform 0.12s ease, opacity 0.15s ease;
+        }
+        .inv-touch-btn:active {
+            transform: scale(0.94);
+        }
+        .inv-touch-btn.minus {
+            background: #fee2e2;
+            color: #b91c1c;
+            border: 1.5px solid #fca5a5;
+        }
+        .inv-touch-btn.plus {
+            background: #dcfce7;
+            color: #15803d;
+            border: 1.5px solid #86efac;
+        }
+        .inv-touch-btn.plus5 {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1.5px solid #93c5fd;
+        }
+        @media (max-width: 420px) {
+            .key-holder-detail-row {
+                grid-template-columns: 112px 1fr;
+            }
         }
         #chat-side-trigger {
             position: absolute;
@@ -3753,6 +3920,143 @@
             border-color: #15803d;
             color: #ffffff;
         }
+        .chairman-unified-counts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .chairman-unified-count-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 9px;
+            border-radius: 8px;
+            font-size: 0.76rem;
+            font-weight: 800;
+            background: #ffffff;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+        .chairman-unified-count-tag.bar-tag {
+            background: #f0fdf4;
+            color: #166534;
+            border-color: #86efac;
+        }
+        .chairman-unified-count-tag.weapon-tag {
+            background: #eff6ff;
+            color: #1e40af;
+            border-color: #93c5fd;
+        }
+        .chairman-unified-search-wrap {
+            margin: 10px 0 12px 0;
+        }
+        .chairman-unified-search-wrap input {
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .chairman-unified-members-list {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+        .chairman-unified-member-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+        }
+        .chairman-unified-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .chairman-unified-member-name {
+            font-size: 0.96rem;
+            font-weight: 800;
+            color: #0f172a;
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.3;
+            flex: 1;
+            min-width: 0;
+        }
+        .chairman-unified-delete-btn {
+            min-width: 34px;
+            min-height: 34px;
+            border-radius: 9px;
+            border: 1px solid #fecaca;
+            background: #fef2f2;
+            color: #dc2626;
+            font-size: 0.92rem;
+            line-height: 1;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            padding: 0;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .chairman-unified-delete-btn:hover {
+            background: #fee2e2;
+            border-color: #f87171;
+        }
+        .chairman-unified-rights-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .chairman-right-toggle-btn {
+            width: 100%;
+            min-height: 40px;
+            border-radius: 10px;
+            padding: 7px 8px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            line-height: 1.25;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            white-space: normal;
+            word-break: break-word;
+            box-sizing: border-box;
+            transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .chairman-right-toggle-btn.inactive {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .chairman-right-toggle-btn.bar-active {
+            background: #dcfce7;
+            border: 1.5px solid #16a34a;
+            color: #166534;
+            font-weight: 800;
+            box-shadow: 0 2px 6px rgba(22, 163, 74, 0.12);
+        }
+        .chairman-right-toggle-btn.weapon-active {
+            background: #dbeafe;
+            border: 1.5px solid #2563eb;
+            color: #1e40af;
+            font-weight: 800;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
+        }
         .chairman-bar-menu-row {
             display: flex;
             align-items: center;
@@ -4507,6 +4811,8 @@
                         </div>
                     </div>
 
+                    <button type="button" id="chairman-status-upload-btn" onclick="openClubStatusUploadModal(event)" style="display: none; width: 100%; min-height: 50px; margin-bottom: 14px; padding: 12px 16px; border-radius: 14px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: 1.5px solid #eab308; font-weight: 800; font-size: 0.95rem; cursor: pointer; font-family: inherit; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25); box-sizing: border-box;">📸 24h-Status-Foto einstellen</button>
+
                     <div class="admin-menu-group" id="admin-menu-chairman-group" style="display: none !important;">
                         <div class="admin-menu-list" role="navigation" aria-label="Obmann-Steuerzentrale">
                             <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-news-events" data-admin-view="news-events" onclick="openAdminView('news-events')">
@@ -4713,33 +5019,37 @@
                                 <button type="button" class="btn admin-btn-edit" onclick="exportKeyListPDF()">📥 PDF Export / Drucken</button>
                             </div>
 
-                            <form id="key-list-form" onsubmit="saveKeyListItem(event)" style="background: rgba(255, 255, 255, 0.88); padding: 12px; border-radius: 14px; border: 1px solid #cbd5e1; margin-bottom: 14px;">
+                            <form id="key-list-form" onsubmit="saveKeyListItem(event)" style="display: none !important; background: #ffffff; padding: 14px; border-radius: 14px; border: 1.5px solid #cbd5e1; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);">
                                 <input type="hidden" id="key-edit-index" value="">
                                 <input type="hidden" id="key-edit-is-header" value="0">
-                                <h4 id="key-form-title" style="color: #15803d; font-size: 0.9em; margin-bottom: 8px; font-weight: 800;">➕ Neuen Schlüsselinhaber hinzufügen</h4>
-                                <div class="form-group">
-                                    <label id="key-name-label">Name (Vorname Nachname)</label>
+                                <h4 id="key-form-title" style="color: #15803d; font-size: 0.94rem; margin: 0 0 12px 0; font-weight: 800;">➕ Neuen Schlüsselinhaber hinzufügen</h4>
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label id="key-name-label" for="key-name" style="display: block; font-weight: 700; margin-bottom: 4px;">Name</label>
                                     <input type="text" class="form-control" id="key-name" placeholder="Vorname Nachname" required>
                                 </div>
-                                <div id="key-person-fields" class="admin-grid-2" style="gap: 8px;">
-                                    <div class="form-group" style="margin-bottom: 4px;">
-                                        <label>Geburtsdatum</label>
-                                        <input type="text" class="form-control" id="key-dob" placeholder="TT.MM.JJJJ">
-                                    </div>
-                                    <div class="form-group" style="margin-bottom: 4px;">
-                                        <label>Telefonnummer</label>
-                                        <input type="text" class="form-control" id="key-tel" placeholder="z. B. +43 664 ...">
-                                    </div>
-                                    <div class="form-group admin-span-full" style="margin-bottom: 4px;">
-                                        <label>Wohnadresse</label>
-                                        <input type="text" class="form-control" id="key-addr" placeholder="Straße Hausnummer, PLZ Ort">
-                                    </div>
-                                    <div class="form-group admin-span-full" style="margin-bottom: 6px;">
-                                        <label>Schlüsselnummer / Bemerkung</label>
+                                <div id="key-person-fields" class="admin-grid-2" style="gap: 10px;">
+                                    <div class="form-group admin-span-full" style="margin-bottom: 2px;">
+                                        <label for="key-role" style="display: block; font-weight: 700; margin-bottom: 4px;">Schlüssel-Nr. / Art</label>
                                         <input type="text" class="form-control" id="key-role" placeholder="z. B. Schlüssel Nr. 1 / Eingang &amp; Büro">
                                     </div>
+                                    <div class="form-group" style="margin-bottom: 2px;">
+                                        <label for="key-street" style="display: block; font-weight: 700; margin-bottom: 4px;">Straße &amp; Hausnummer</label>
+                                        <input type="text" class="form-control" id="key-street" placeholder="z. B. Rütler 43b">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 2px;">
+                                        <label for="key-zipcity" style="display: block; font-weight: 700; margin-bottom: 4px;">PLZ &amp; Ort</label>
+                                        <input type="text" class="form-control" id="key-zipcity" placeholder="z. B. 6794 Partenen">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 2px;">
+                                        <label for="key-dob" style="display: block; font-weight: 700; margin-bottom: 4px;">Geburtsdatum</label>
+                                        <input type="text" class="form-control" id="key-dob" placeholder="TT.MM.JJJJ">
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 2px;">
+                                        <label for="key-tel" style="display: block; font-weight: 700; margin-bottom: 4px;">Telefonnummer</label>
+                                        <input type="text" class="form-control" id="key-tel" placeholder="z. B. +43 664 ...">
+                                    </div>
                                 </div>
-                                <div style="display: flex; gap: 8px; margin-top: 6px;">
+                                <div style="display: flex; gap: 8px; margin-top: 12px;">
                                     <button type="submit" id="key-save-btn" class="btn admin-btn-save" style="flex: 1; margin-top: 0;">💾 In Datenbank speichern</button>
                                     <button type="button" id="key-cancel-btn" onclick="resetKeyListForm()" class="btn admin-btn-delete" style="display: none; margin-top: 0;">Abbrechen</button>
                                 </div>
@@ -4768,9 +5078,10 @@
                     <div class="admin-glass-card">
                         <div class="admin-glass-card-title">
                             <span>📦 Aktueller Lagerbestand</span>
-                            <button type="button" class="btn admin-btn-edit" onclick="editInventory()">✏️ Bearbeiten</button>
                         </div>
                         <div id="admin-inventory-display"></div>
+                        <button type="button" id="admin-inventory-save-btn" class="btn admin-btn-save btn-block" onclick="saveInventoryChanges()" style="margin-top: 12px; min-height: 48px; font-size: 0.98rem; font-weight: 800; border-radius: 14px;">💾 Lagerbestand speichern</button>
+                        <div id="admin-inventory-save-feedback" role="status" aria-live="polite" style="display: none; margin-top: 10px; padding: 10px 12px; border-radius: 12px; font-size: 0.86rem; font-weight: 800; text-align: center;"></div>
                     </div>
                 </section>
 
@@ -4932,44 +5243,29 @@
                             <!-- SEKTION 4: MITGLIEDER & SCHANKBUCH-RECHTE -->
                             <div class="chairman-acc-section" id="sec-members" role="tabpanel">
                                 <div class="chairman-sub-block" id="chairman-members-card">
-                                    <!-- KARTE 4a: AKTIVE VEREINS- & SCHANKDIENST-MITGLIEDER -->
                                     <div class="chairman-subcard">
-                                        <div class="chairman-subcard-title"><span>👥 Aktive Vereins- &amp; Schankdienst-Mitglieder</span></div>
+                                        <div class="chairman-subcard-title"><span>👥 Mitglieder &amp; Schank-Rechte</span></div>
                                         <p class="chairman-subcard-desc">
-                                            Verwaltet <code>activeMembers</code> in <code>settings/members</code> mit sofortiger Echtzeit-Übernahme.
+                                            Alle Vereinsmitglieder auf einen Blick: Schankbuch-Tab (<code>barMembers</code>) und Waffenwart-Rechte (<code>weaponWardens</code>) direkt pro Person umschalten.
                                         </p>
-                                        <div id="chairman-active-members-list" class="chairman-chip-list"></div>
-                                        <div class="chairman-input-add-row">
-                                            <input type="text" id="chairman-active-member-input" class="form-control" placeholder="Nachname Vorname hinzufügen..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); addChairmanMember('active'); }">
-                                            <button type="button" id="chairman-active-member-add-btn" onclick="addChairmanMember('active')" class="btn admin-btn-save">➕ Hinzufügen</button>
-                                        </div>
-                                    </div>
 
-                                    <!-- KARTE 4b: BERECHTIGTE WAFFENWARTE -->
-                                    <div class="chairman-subcard">
-                                        <div class="chairman-subcard-title" style="color: #065f46;"><span>🎯 Berechtigte Waffenwarte</span></div>
-                                        <p class="chairman-subcard-desc">
-                                            Verwaltet <code>weaponMembers</code> in <code>settings/members</code> für alle Waffenbuch-Auswahlmenüs.
-                                        </p>
-                                        <div id="chairman-weapon-members-list" class="chairman-chip-list"></div>
-                                        <div class="chairman-input-add-row">
-                                            <input type="text" id="chairman-weapon-member-input" class="form-control" placeholder="Waffenwart hinzufügen..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); addChairmanMember('weapon'); }">
-                                            <button type="button" id="chairman-weapon-member-add-btn" onclick="addChairmanMember('weapon')" class="btn admin-btn-save">➕ Hinzufügen</button>
-                                        </div>
-                                        <div id="chairman-members-feedback" class="admin-muted-text" style="display: none; margin-top: 10px; font-weight: 700;"></div>
-                                    </div>
+                                        <div id="chairman-unified-counts" class="chairman-unified-counts"></div>
 
-                                    <!-- KARTE 4c: SCHANKBUCH-BERECHTIGUNG (TAB SICHTBAR) -->
-                                    <div class="chairman-subcard" id="chairman-bar-members-card">
-                                        <div class="chairman-subcard-title"><span>🍺 Schankbuch-Berechtigung (Tab sichtbar)</span></div>
-                                        <p class="chairman-subcard-desc">
-                                            Wähle aus, welche Mitglieder unten den Reiter „🍺 Schankbuch“ sehen dürfen (<code>barMembers</code> in <code>settings/members</code>). Alle anderen sehen dort direkt den „💬 Vereins-Chat“.
-                                        </p>
-                                        <div id="chairman-bar-members-grid" class="chairman-bar-rights-grid"></div>
-                                        <button type="button" id="chairman-bar-members-save-btn" onclick="saveChairmanBarMembersPermissions()" class="btn admin-btn-save btn-block" style="margin-top: 0;">
-                                            💾 Schankbuch-Rechte speichern
+                                        <div class="chairman-input-add-row">
+                                            <input type="text" id="chairman-active-member-input" class="form-control" placeholder="Nachname Vorname eingeben..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); addChairmanUnifiedMember(); }">
+                                            <button type="button" id="chairman-active-member-add-btn" onclick="addChairmanUnifiedMember()" class="btn admin-btn-save">➕ Hinzufügen</button>
+                                        </div>
+
+                                        <div class="chairman-unified-search-wrap">
+                                            <input type="search" id="chairman-members-search-input" class="form-control" placeholder="🔍 Mitglied suchen..." oninput="renderChairmanMembersManager(true)" autocomplete="off" aria-label="Mitglied suchen">
+                                        </div>
+
+                                        <div id="chairman-unified-members-list" class="chairman-unified-members-list"></div>
+
+                                        <button type="button" id="chairman-members-save-all-btn" onclick="saveAllChairmanMembersAndRights()" class="btn admin-btn-save btn-block" style="margin-top: 4px; min-height: 46px; font-weight: 800; border-radius: 12px;">
+                                            💾 Alle Mitglieder &amp; Rechte speichern
                                         </button>
-                                        <div id="chairman-bar-members-feedback" class="admin-muted-text" style="display: none; margin-top: 10px; font-weight: 700;"></div>
+                                        <div id="chairman-members-feedback" class="admin-muted-text" style="display: none; margin-top: 10px; font-weight: 700;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -5687,19 +5983,29 @@
     <div id="club-status-upload-modal" role="dialog" aria-modal="true" aria-labelledby="club-status-upload-title" aria-hidden="true" onclick="if(event.target===this){closeClubStatusUploadModal();}">
         <div class="club-status-upload-card modal-anim">
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px;">
-                <h3 id="club-status-upload-title" style="margin: 0; font-size: 1.12rem; font-weight: 900; color: #0f172a; line-height: 1.25;">📸 24h-Vereinsstatus posten</h3>
+                <h3 id="club-status-upload-title" style="margin: 0; font-size: 1.12rem; font-weight: 900; color: #0f172a; line-height: 1.25;">📸 24h-Status-Foto einstellen</h3>
                 <button type="button" onclick="closeClubStatusUploadModal()" aria-label="Dialog schließen" style="width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #334155; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: inherit;">✕</button>
             </div>
-            <p style="margin: 0 0 12px 0; font-size: 0.86rem; color: #475569; line-height: 1.45;">Wähle ein Foto oder ein kurzes Video (unter 8 Sek., max. 750 KB). Der Status erscheint sofort im runden Wappen-Kreis und verschwindet nach 24 Stunden automatisch.</p>
+            <p style="margin: 0 0 12px 0; font-size: 0.86rem; color: #475569; line-height: 1.45;">Wähle ein Handy-Foto (bis 15 MB). Das Bild wird automatisch in gestochen scharfer HD-Qualität aufbereitet, erscheint sofort im Wappen-Kreis und verschwindet nach 24 Stunden automatisch.</p>
 
-            <label for="club-status-file-input" style="display: block; font-size: 0.84rem; font-weight: 800; color: #1e293b; margin-bottom: 6px;">Foto oder kurzes Video auswählen</label>
-            <input type="file" id="club-status-file-input" accept="image/*,video/mp4,video/webm,video/quicktime" onchange="handleClubStatusFileChange(this)" style="width: 100%; padding: 10px; border: 1.5px dashed #94a3b8; border-radius: 12px; background: #f8fafc; font-size: 0.88rem; color: #0f172a; box-sizing: border-box; font-family: inherit;">
+            <label for="club-status-file-input" style="display: block; font-size: 0.84rem; font-weight: 800; color: #1e293b; margin-bottom: 6px;">Foto auswählen (bis 15 MB)</label>
+            <input type="file" id="club-status-file-input" accept="image/*" onchange="handleClubStatusFileChange(this)" style="width: 100%; padding: 10px; border: 1.5px dashed #94a3b8; border-radius: 12px; background: #f8fafc; font-size: 0.88rem; color: #0f172a; box-sizing: border-box; font-family: inherit;">
 
             <div id="club-status-preview-wrap" class="club-status-upload-preview">
                 <img id="club-status-preview-img" alt="Status-Vorschau" style="display: none;">
                 <video id="club-status-preview-video" controls playsinline webkit-playsinline muted style="display: none;"></video>
             </div>
             <div id="club-status-size-info" style="display: none; font-size: 0.8rem; font-weight: 700; color: #15803d; margin-bottom: 10px;"></div>
+
+            <div id="club-status-upload-progress-wrap" style="display: none; margin: 10px 0; padding: 10px 12px; border-radius: 12px; background: #f8fafc; border: 1.5px solid #cbd5e1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span id="club-status-upload-progress-label" style="font-size: 0.82rem; font-weight: 800; color: #0f172a;">⏳ Wird hochgeladen...</span>
+                    <span id="club-status-upload-progress-pct" style="font-size: 0.8rem; font-weight: 800; color: #15803d;">0 %</span>
+                </div>
+                <div style="width: 100%; height: 8px; border-radius: 999px; background: #e2e8f0; overflow: hidden;">
+                    <div id="club-status-upload-progress-bar" style="width: 0%; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #16a34a 0%, #eab308 100%); transition: width 0.2s ease;"></div>
+                </div>
+            </div>
 
             <div id="club-status-upload-feedback" role="alert" style="display: none; padding: 10px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; line-height: 1.4; margin: 8px 0 10px 0;"></div>
 
@@ -5710,6 +6016,36 @@
                 <button type="button" onclick="closeClubStatusUploadModal()" style="flex: 0 0 auto; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #475569; font-weight: 800; font-size: 0.9rem; cursor: pointer; font-family: inherit;">Abbrechen</button>
                 <button type="button" id="club-status-submit-btn" onclick="publishClubStatus(event)" disabled style="flex: 1; min-height: 46px; border-radius: 12px; border: 1.5px solid #eab308; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; font-weight: 800; font-size: 0.92rem; cursor: pointer; font-family: inherit; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25); opacity: 0.55;">🚀 Für 24h posten</button>
             </div>
+        </div>
+    </div>
+
+    <!-- SCHANKKASSA / RECHNUNG BEARBEITEN DIALOG (EXKLUSIV FÜR OBMANN SIMON) -->
+    <div id="admin-cash-edit-modal" role="dialog" aria-modal="true" aria-labelledby="admin-cash-edit-title" aria-hidden="true" onclick="if(event.target===this){closeAdminCashEditModal();}" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.74); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 10075; display: none; pointer-events: none; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box;">
+        <div class="modal-anim" style="background: #ffffff; border: 2px solid #eab308; border-radius: 20px; max-width: 400px; width: 100%; padding: 20px; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.32); box-sizing: border-box; color: #0f172a;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px;">
+                <h3 id="admin-cash-edit-title" style="margin: 0; font-size: 1.08rem; font-weight: 900; color: #0f172a;">✏️ Eintrag bearbeiten</h3>
+                <button type="button" onclick="closeAdminCashEditModal()" aria-label="Dialog schließen" style="width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #334155; font-weight: 800; cursor: pointer; font-family: inherit;">✕</button>
+            </div>
+            <form id="admin-cash-edit-form" onsubmit="saveAdminCashEditModal(event)">
+                <input type="hidden" id="admin-cash-edit-collection" value="">
+                <input type="hidden" id="admin-cash-edit-docid" value="">
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label id="admin-cash-edit-name-label" for="admin-cash-edit-name" style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 4px;">Name / Deckel</label>
+                    <input type="text" id="admin-cash-edit-name" class="form-control" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label id="admin-cash-edit-date-label" for="admin-cash-edit-date" style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 4px;">Datum / Zeit</label>
+                    <input type="text" id="admin-cash-edit-date" class="form-control">
+                </div>
+                <div class="form-group" style="margin-bottom: 14px;">
+                    <label for="admin-cash-edit-total" style="display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 4px;">Betrag (€)</label>
+                    <input type="text" id="admin-cash-edit-total" class="form-control" inputmode="decimal" required>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" onclick="closeAdminCashEditModal()" style="flex: 0 0 auto; padding: 11px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #475569; font-weight: 800; cursor: pointer; font-family: inherit;">Abbrechen</button>
+                    <button type="submit" id="admin-cash-edit-save-btn" class="btn admin-btn-save" style="flex: 1; margin-top: 0;">💾 Änderungen speichern</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -7006,6 +7342,9 @@
                 if (Array.isArray(data.weaponMembers)) {
                     const cleanedWeapons = sanitizeActiveMembersList(data.weaponMembers, true);
                     WEAPON_AUTHORIZED_MEMBERS = cleanedWeapons;
+                } else if (Array.isArray(data.weaponWardens)) {
+                    const cleanedWeapons = sanitizeActiveMembersList(data.weaponWardens, true);
+                    WEAPON_AUTHORIZED_MEMBERS = cleanedWeapons;
                 } else {
                     WEAPON_AUTHORIZED_MEMBERS = [...DEFAULT_WEAPON_AUTHORIZED_MEMBERS];
                 }
@@ -7249,6 +7588,46 @@
             };
         }
 
+        let inventoryDraftData = null;
+        let inventoryHasUnsavedChanges = false;
+        let inventorySavingInFlight = false;
+
+        function formatInventoryQtyDisplay(val) {
+            const num = Math.max(0, Math.round((Number(val) || 0) * 100) / 100);
+            return Number.isInteger(num) ? String(num) : num.toFixed(2).replace('.', ',');
+        }
+
+        function syncInventoryDraftFromSaved() {
+            inventoryDraftData = {
+                hauswuerste: Math.max(0, Number(inventoryData && inventoryData.hauswuerste) || 0),
+                wienerle: Math.max(0, Number(inventoryData && inventoryData.wienerle) || 0),
+                bier: Math.max(0, Number(inventoryData && inventoryData.bier) || 0),
+                limo: Math.max(0, Number(inventoryData && inventoryData.limo) || 0)
+            };
+            inventoryHasUnsavedChanges = false;
+        }
+
+        function setInventorySaveFeedback(message, isError) {
+            const box = document.getElementById('admin-inventory-save-feedback');
+            if (!box) return;
+            if (!message) {
+                box.style.display = 'none';
+                box.textContent = '';
+                return;
+            }
+            box.textContent = message;
+            box.style.display = 'block';
+            if (isError) {
+                box.style.background = '#fef2f2';
+                box.style.color = '#991b1b';
+                box.style.border = '1.5px solid #fecaca';
+            } else {
+                box.style.background = '#f0fdf4';
+                box.style.color = '#166534';
+                box.style.border = '1.5px solid #bbf7d0';
+            }
+        }
+
         async function loadInventory() {
             if (!auth.currentUser) return;
             try {
@@ -7262,6 +7641,7 @@
                 } else {
                     await db.collection("settings").doc("inventory").set(inventoryData);
                 }
+                syncInventoryDraftFromSaved();
                 renderInventoryDisplay();
             } catch(e) {}
         }
@@ -7271,28 +7651,45 @@
             renderInventoryLastUpdatedBox();
             if (!container) return;
 
+            if (!inventoryDraftData || !inventoryHasUnsavedChanges) {
+                syncInventoryDraftFromSaved();
+            }
+
             const items = [
-                { key: 'hauswuerste', label: 'Hauswürste (Paar)', unit: 'Paar' },
-                { key: 'wienerle', label: 'Wienerle (Paar)', unit: 'Paar' },
+                { key: 'hauswuerste', label: 'Hauswürste', unit: 'Paar' },
+                { key: 'wienerle', label: 'Wienerle', unit: 'Paar' },
                 { key: 'bier', label: 'Bier Kisten 0,33l', unit: 'Kisten' },
                 { key: 'limo', label: 'Limo Kisten 0,3l', unit: 'Kisten' }
             ];
 
             let html = "";
             items.forEach(item => {
-                let val = inventoryData[item.key] || 0;
+                const savedVal = Math.max(0, Math.round((Number(inventoryData && inventoryData[item.key]) || 0) * 100) / 100);
+                const draftVal = Math.max(0, Math.round((Number(inventoryDraftData && inventoryDraftData[item.key]) || 0) * 100) / 100);
+                const changed = Math.abs(draftVal - savedVal) > 0.0001;
+                const displayVal = formatInventoryQtyDisplay(draftVal);
                 html += `
-                    <div class="price-item" style="background: rgba(255, 255, 255, 0.92); padding: 10px 12px; border-radius: 11px; margin-bottom: 8px; border: 1px solid #cbd5e1; color: #0f172a; box-shadow: 0 2px 6px rgba(15,23,42,0.04);">
-                        <span style="font-size: 0.88em; color: #0f172a;"><strong>${item.label}</strong></span>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <button type="button" class="counter-btn" style="width: 32px; height: 32px; font-size: 1.05em; background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1;" onclick="updateInventoryQty('${item.key}', -1)">-</button>
-                            <span style="font-weight: 800; min-width: 58px; text-align: center; font-size: 0.95em; color: #15803d;" id="inv-val-${item.key}">${val} ${item.unit}</span>
-                            <button type="button" class="counter-btn" style="width: 32px; height: 32px; font-size: 1.05em; background: #ecfdf5; color: #15803d; border: 1px solid #6ee7b7;" onclick="updateInventoryQty('${item.key}', 1)">+</button>
+                    <div class="inv-item-card${changed ? ' has-change' : ''}" data-inv-key="${item.key}">
+                        <div class="inv-item-left">
+                            <div class="inv-item-name">${escapeHtml(item.label)}</div>
+                            <div class="inv-item-qty" id="inv-val-${item.key}">${escapeHtml(displayVal)} ${escapeHtml(item.unit)}</div>
+                        </div>
+                        <div class="inv-item-controls">
+                            <button type="button" class="inv-touch-btn minus" onclick="adjustInventoryDraft('${item.key}', -1)" aria-label="${escapeHtml(item.label)} um 1 verringern">− 1</button>
+                            <button type="button" class="inv-touch-btn plus" onclick="adjustInventoryDraft('${item.key}', 1)" aria-label="${escapeHtml(item.label)} um 1 erhöhen">+ 1</button>
+                            <button type="button" class="inv-touch-btn plus5" onclick="adjustInventoryDraft('${item.key}', 5)" aria-label="${escapeHtml(item.label)} um 5 erhöhen">+ 5</button>
                         </div>
                     </div>
                 `;
             });
             container.innerHTML = html;
+
+            const saveBtn = document.getElementById('admin-inventory-save-btn');
+            if (saveBtn && !inventorySavingInFlight) {
+                saveBtn.textContent = inventoryHasUnsavedChanges
+                    ? '💾 Lagerbestand speichern (Änderungen offen)'
+                    : '💾 Lagerbestand speichern';
+            }
         }
 
         const INVENTORY_ITEM_META = {
@@ -7302,9 +7699,57 @@
             limo: { label: 'Limo', unit: 'Kisten' }
         };
 
-        async function updateInventoryQty(key, delta) {
+        function adjustInventoryDraft(key, delta) {
             if (!auth.currentUser) return;
-            inventoryData[key] = Math.max(0, (inventoryData[key] || 0) + delta);
+            if (!INVENTORY_ITEM_META[key]) return;
+            if (!inventoryDraftData) syncInventoryDraftFromSaved();
+            const currentVal = Number(inventoryDraftData[key]) || 0;
+            const nextVal = Math.max(0, Math.round((currentVal + Number(delta || 0)) * 100) / 100);
+            inventoryDraftData[key] = nextVal;
+            inventoryHasUnsavedChanges = Object.keys(INVENTORY_ITEM_META).some(k => {
+                const savedVal = Math.max(0, Math.round((Number(inventoryData && inventoryData[k]) || 0) * 100) / 100);
+                const curVal = Math.max(0, Math.round((Number(inventoryDraftData[k]) || 0) * 100) / 100);
+                return Math.abs(curVal - savedVal) > 0.0001;
+            });
+            setInventorySaveFeedback('', false);
+            renderInventoryDisplay();
+        }
+
+        function updateInventoryQty(key, delta) {
+            adjustInventoryDraft(key, delta);
+        }
+
+        async function saveInventoryChanges() {
+            if (!auth.currentUser || inventorySavingInFlight) return;
+            if (!inventoryDraftData) syncInventoryDraftFromSaved();
+
+            inventorySavingInFlight = true;
+            const saveBtn = document.getElementById('admin-inventory-save-btn');
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.textContent = '⏳ Speichere Lagerbestand...';
+            }
+
+            const prevSnapshot = {
+                hauswuerste: Math.max(0, Number(inventoryData && inventoryData.hauswuerste) || 0),
+                wienerle: Math.max(0, Number(inventoryData && inventoryData.wienerle) || 0),
+                bier: Math.max(0, Number(inventoryData && inventoryData.bier) || 0),
+                limo: Math.max(0, Number(inventoryData && inventoryData.limo) || 0)
+            };
+
+            const changeParts = [];
+            Object.keys(INVENTORY_ITEM_META).forEach(k => {
+                const oldV = Math.round(prevSnapshot[k] * 100) / 100;
+                const newV = Math.max(0, Math.round((Number(inventoryDraftData[k]) || 0) * 100) / 100);
+                inventoryData[k] = newV;
+                const diff = Math.round((newV - oldV) * 100) / 100;
+                if (Math.abs(diff) > 0.0001) {
+                    const meta = INVENTORY_ITEM_META[k];
+                    const diffStr = diff > 0 ? `+${formatInventoryQtyDisplay(diff)}` : `-${formatInventoryQtyDisplay(Math.abs(diff))}`;
+                    changeParts.push(`${meta.label} ${diffStr} (Neu: ${formatInventoryQtyDisplay(newV)} ${meta.unit})`);
+                }
+            });
+
             const now = new Date();
             const adminFirstName = (typeof getCurrentAdminFirstName === 'function') ? getCurrentAdminFirstName() : 'Vorstand';
             inventoryData.updatedAt = now;
@@ -7316,54 +7761,33 @@
                 const writePayload = buildInventoryFirestorePayload(adminFirstName);
                 await db.collection("settings").doc("inventory").set(writePayload);
                 saveSucceeded = true;
-                const meta = INVENTORY_ITEM_META[key] || { label: key, unit: '' };
-                const unitSuffix = meta.unit ? ` ${meta.unit}` : '';
-                const summary = `${meta.label} ${delta >= 0 ? '+' : ''}${delta} (Neu: ${inventoryData[key]}${unitSuffix})`;
-                logAdminAudit('Lagerbestand geändert', `${key}: ${delta >= 0 ? '+' : ''}${delta} (Neu: ${inventoryData[key]})`);
+                const summary = changeParts.length > 0
+                    ? changeParts.join(', ')
+                    : `Hauswürste: ${formatInventoryQtyDisplay(inventoryData.hauswuerste)}, Wienerle: ${formatInventoryQtyDisplay(inventoryData.wienerle)}, Bier: ${formatInventoryQtyDisplay(inventoryData.bier)}, Limo: ${formatInventoryQtyDisplay(inventoryData.limo)}`;
+                logAdminAudit('Lagerbestand gespeichert', summary);
                 sendAdminInventoryChangePush(summary).catch(() => {});
-            } catch(e) {}
+                syncInventoryDraftFromSaved();
+            } catch (e) {
+                Object.keys(prevSnapshot).forEach(k => { inventoryData[k] = prevSnapshot[k]; });
+                setInventorySaveFeedback('❌ Fehler beim Speichern des Lagerbestands. Bitte Verbindung prüfen.', true);
+            } finally {
+                inventorySavingInFlight = false;
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                }
+            }
 
             renderInventoryDisplay();
             if (saveSucceeded) {
                 triggerInventorySavedFlash();
+                setInventorySaveFeedback('✅ Lagerbestand erfolgreich gespeichert!', false);
             }
         }
 
-        async function editInventory() {
-            if (!auth.currentUser) return;
-            const h = prompt("Hauswürste Bestand (Paar):", inventoryData.hauswuerste);
-            const w = prompt("Wienerle Bestand (Paar):", inventoryData.wienerle);
-            const b = prompt("Bier Kisten Bestand:", inventoryData.bier);
-            const l = prompt("Limo Kisten Bestand:", inventoryData.limo);
-
-            if (h !== null) inventoryData.hauswuerste = parseInt(h) || 0;
-            if (w !== null) inventoryData.wienerle = parseInt(w) || 0;
-            if (b !== null) inventoryData.bier = parseInt(b) || 0;
-            if (l !== null) inventoryData.limo = parseInt(l) || 0;
-
-            const now = new Date();
-            const adminFirstName = (typeof getCurrentAdminFirstName === 'function') ? getCurrentAdminFirstName() : 'Vorstand';
-            inventoryData.updatedAt = now;
-            inventoryData.updatedBy = adminFirstName;
-            lastInventoryChangeTime = formatInventoryDateTime(now) + " Uhr";
-
-            let saveSucceeded = false;
-            try {
-                const writePayload = buildInventoryFirestorePayload(adminFirstName);
-                await db.collection("settings").doc("inventory").set(writePayload);
-                saveSucceeded = true;
-                const summary = `Hauswürste: ${inventoryData.hauswuerste}, Wienerle: ${inventoryData.wienerle}, Bier: ${inventoryData.bier}, Limo: ${inventoryData.limo}`;
-                logAdminAudit('Lagerbestand bearbeitet', summary);
-                sendAdminInventoryChangePush(summary).catch(() => {});
-            } catch(e) {}
-
-            renderInventoryDisplay();
-            if (saveSucceeded) {
-                triggerInventorySavedFlash();
-            }
-            alert("Lagerbestand erfolgreich gespeichert!");
-            if (saveSucceeded) {
-                triggerInventorySavedFlash();
+        function editInventory() {
+            const container = document.getElementById('admin-inventory-display');
+            if (container && typeof container.scrollIntoView === 'function') {
+                container.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
@@ -10074,12 +10498,39 @@
             }
             const name = String(raw.name || raw.fullName || raw.vornameNachname || '').trim();
             const dob = String(raw.dob || raw.geburtsdatum || raw.birthDate || '').trim();
-            const addr = String(raw.addr || raw.address || raw.adresse || raw.wohnadresse || '').trim();
+            const street = String(raw.street || raw.strasse || '').trim();
+            const zipCity = String(raw.zipCity || raw.plzOrt || '').trim();
+            const combinedAddr = [street, zipCity].filter(Boolean).join(', ');
+            const addr = String(raw.addr || raw.address || raw.adresse || raw.wohnadresse || combinedAddr || '').trim();
             const tel = String(raw.tel || raw.telefon || raw.phone || raw.telefonnummer || '').trim();
             const role = String(raw.role || raw.keyNumber || raw.schluessel || raw.schluesselnummer || raw.bemerkung || raw.function || '').trim();
             const group = String(raw.group || raw.gruppe || raw.category || '').trim();
             if (!name && !dob && !addr && !tel && !role) return null;
-            return group ? { name, dob, addr, tel, role, group } : { name, dob, addr, tel, role };
+            const entry = { name, dob, addr, tel, role };
+            if (street) entry.street = street;
+            if (zipCity) entry.zipCity = zipCity;
+            if (group) entry.group = group;
+            return entry;
+        }
+
+        function splitKeyAddressParts(item) {
+            if (!item) return { street: '', zipCity: '' };
+            if (item.street || item.zipCity) {
+                return {
+                    street: String(item.street || '').trim(),
+                    zipCity: String(item.zipCity || '').trim()
+                };
+            }
+            const rawAddr = String(item.addr || '').trim();
+            if (!rawAddr) return { street: '', zipCity: '' };
+            const commaIdx = rawAddr.indexOf(',');
+            if (commaIdx > -1) {
+                return {
+                    street: rawAddr.slice(0, commaIdx).trim(),
+                    zipCity: rawAddr.slice(commaIdx + 1).trim()
+                };
+            }
+            return { street: rawAddr, zipCity: '' };
         }
 
         function extractKeyArrayFromDoc(docSnap) {
@@ -10092,71 +10543,92 @@
             return rawArr.map(normalizeKeyEntry).filter(Boolean);
         }
 
+        function syncKeyListRoleVisibility() {
+            const isChairman = (typeof isChairmanSimonLoggedIn === 'function') && isChairmanSimonLoggedIn();
+            const keyFormEl = document.getElementById('key-list-form');
+            if (keyFormEl) {
+                if (isChairman) {
+                    keyFormEl.style.removeProperty('display');
+                    keyFormEl.style.display = 'block';
+                } else {
+                    keyFormEl.style.setProperty('display', 'none', 'important');
+                    resetKeyListForm();
+                }
+            }
+            document.querySelectorAll('.chairman-only-key-action').forEach(el => {
+                if (!isChairman) {
+                    el.style.setProperty('display', 'none', 'important');
+                } else {
+                    el.style.removeProperty('display');
+                }
+            });
+        }
+
         function renderKeyList() {
             const container = document.getElementById('admin-keys-list');
+            syncKeyListRoleVisibility();
             if (!container) return;
             if (!exactPdfKeyList || exactPdfKeyList.length === 0) {
                 container.innerHTML = '<p class="admin-muted-text">Keine Einträge in der Schlüsselliste (Firestore <code>settings/keys</code> / <code>settings/pdfKeys</code>).</p>';
                 return;
             }
+            const isChairman = (typeof isChairmanSimonLoggedIn === 'function') && isChairmanSimonLoggedIn();
             let rowNumber = 0;
-            let tableRowsHtml = '';
+            let cardsHtml = '';
             exactPdfKeyList.forEach((k, idx) => {
                 if (k.header) {
-                    tableRowsHtml += `
-                        <tr style="background:#fef3c7;">
-                            <td colspan="6" style="padding:8px 10px; font-weight:800; color:#92400e; border-bottom:1px solid #fde68a;">${escapeHtml(k.header)}</td>
-                            <td style="padding:6px 8px; white-space:nowrap; text-align:right; border-bottom:1px solid #fde68a;">
-                                <button type="button" class="btn admin-btn-edit" style="padding:4px 8px !important; font-size:0.75em !important; margin-top:0;" onclick="startEditKeyListItem(${idx})" title="Bearbeiten">✏️</button>
-                                <button type="button" class="btn admin-btn-delete" style="padding:4px 8px !important; font-size:0.75em !important; margin-top:0;" onclick="deleteKeyListItem(${idx})" title="Löschen">🗑️</button>
-                            </td>
-                        </tr>
+                    const headerActionsHtml = isChairman ? `
+                        <div class="chairman-only-key-action" style="display: flex; gap: 6px; flex-shrink: 0;">
+                            <button type="button" class="btn admin-btn-edit" style="padding: 6px 10px !important; font-size: 0.78rem !important; margin-top: 0;" onclick="startEditKeyListItem(${idx})">✏️ Bearbeiten</button>
+                            <button type="button" class="btn admin-btn-delete" style="padding: 6px 10px !important; font-size: 0.78rem !important; margin-top: 0;" onclick="deleteKeyListItem(${idx})">🗑️ Entfernen</button>
+                        </div>
+                    ` : '';
+                    cardsHtml += `
+                        <div class="key-holder-group-card">
+                            <span style="font-weight: 800; color: #92400e; font-size: 0.92rem;">${escapeHtml(k.header)}</span>
+                            ${headerActionsHtml}
+                        </div>
                     `;
                 } else {
                     rowNumber++;
-                    const roleStr = k.role || '';
-                    const roleLower = roleStr.toLowerCase();
-                    const isNoKey = roleLower.includes('kein schlüssel') || roleLower.includes('keiner');
-                    const isKeyAssigned = !isNoKey && (roleStr.includes('Schlüssel') || roleStr.includes('Waffenschrank') || roleStr.includes('Büro') || roleStr.includes('Nr.') || roleStr.includes('Eingang'));
-                    tableRowsHtml += `
-                        <tr style="background:${rowNumber % 2 === 0 ? '#f8fafc' : '#ffffff'};">
-                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; color:#64748b; font-weight:700;">${rowNumber}</td>
-                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; font-weight:700; color:#0f172a; min-width:130px;">${escapeHtml(k.name || '—')}</td>
-                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap; color:#334155;">${escapeHtml(k.dob || '—')}</td>
-                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; min-width:150px; color:#334155;">${escapeHtml(k.addr || '—')}</td>
-                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap; color:#334155;">${escapeHtml(k.tel || '—')}</td>
-                            <td style="padding:8px 8px; border-bottom:1px solid #e2e8f0; min-width:140px;">
-                                <span style="display:inline-block; background:${isKeyAssigned ? '#d1fae5' : '#f1f5f9'}; color:${isKeyAssigned ? '#065f46' : '#475569'}; border:1px solid ${isKeyAssigned ? '#6ee7b7' : '#cbd5e1'}; padding:3px 7px; border-radius:6px; font-weight:700; font-size:0.88em;">${escapeHtml(roleStr || '—')}</span>
-                            </td>
-                            <td style="padding:6px 8px; border-bottom:1px solid #e2e8f0; white-space:nowrap; text-align:right;">
-                                <button type="button" class="btn admin-btn-edit" style="padding:4px 8px !important; font-size:0.75em !important; margin-top:0;" onclick="startEditKeyListItem(${idx})" title="Bearbeiten">✏️</button>
-                                <button type="button" class="btn admin-btn-delete" style="padding:4px 8px !important; font-size:0.75em !important; margin-top:0;" onclick="deleteKeyListItem(${idx})" title="Löschen">🗑️</button>
-                            </td>
-                        </tr>
+                    const roleStr = String(k.role || '').trim();
+                    const addrParts = splitKeyAddressParts(k);
+                    const fullAddr = [addrParts.street, addrParts.zipCity].filter(Boolean).join(', ') || String(k.addr || '').trim();
+                    const actionsHtml = isChairman ? `
+                        <div class="key-holder-actions chairman-only-key-action">
+                            <button type="button" class="btn admin-btn-edit" style="padding: 7px 12px !important; font-size: 0.8rem !important; margin-top: 0; border-radius: 10px;" onclick="startEditKeyListItem(${idx})">✏️ Bearbeiten</button>
+                            <button type="button" class="btn admin-btn-delete" style="padding: 7px 12px !important; font-size: 0.8rem !important; margin-top: 0; border-radius: 10px;" onclick="deleteKeyListItem(${idx})">🗑️ Entfernen</button>
+                        </div>
+                    ` : '';
+                    cardsHtml += `
+                        <div class="key-holder-card">
+                            <div class="key-holder-card-header">
+                                <div class="key-holder-name">${escapeHtml(k.name || '—')}</div>
+                                <span class="key-holder-badge">🔑 ${escapeHtml(roleStr || 'Kein Schlüssel hinterlegt')}</span>
+                            </div>
+                            <div class="key-holder-details">
+                                <div class="key-holder-detail-row">
+                                    <span class="key-holder-detail-label">📍 Adresse:</span>
+                                    <span class="key-holder-detail-val">${escapeHtml(fullAddr || '—')}</span>
+                                </div>
+                                <div class="key-holder-detail-row">
+                                    <span class="key-holder-detail-label">🎂 Geburtsdatum:</span>
+                                    <span class="key-holder-detail-val">${escapeHtml(k.dob || '—')}</span>
+                                </div>
+                                <div class="key-holder-detail-row">
+                                    <span class="key-holder-detail-label">📞 Telefon:</span>
+                                    <span class="key-holder-detail-val">${escapeHtml(k.tel || '—')}</span>
+                                </div>
+                            </div>
+                            ${actionsHtml}
+                        </div>
                     `;
                 }
             });
 
             container.innerHTML = `
-                <div class="admin-muted-text" style="margin-bottom:6px; font-weight:700;">Gesamt: ${rowNumber} Schlüsselinhaber</div>
-                <div style="overflow-x:auto; border:1px solid #cbd5e1; border-radius:12px; background:rgba(255,255,255,0.95); box-shadow:0 4px 12px rgba(15,23,42,0.05);">
-                    <table style="width:100%; border-collapse:collapse; font-size:0.8em; text-align:left;">
-                        <thead>
-                            <tr style="background:linear-gradient(135deg, #16a34a, #15803d); color:#ffffff;">
-                                <th style="padding:9px 8px;">Nr.</th>
-                                <th style="padding:9px 8px;">Name</th>
-                                <th style="padding:9px 8px;">Geburtsdatum</th>
-                                <th style="padding:9px 8px;">Wohnadresse</th>
-                                <th style="padding:9px 8px;">Telefonnummer</th>
-                                <th style="padding:9px 8px;">Schlüssel / Bemerkung</th>
-                                <th style="padding:9px 8px; text-align:right;">Aktionen</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${tableRowsHtml}
-                        </tbody>
-                    </table>
-                </div>
+                <div class="admin-muted-text" style="margin-bottom: 10px; font-weight: 700;">Gesamt: ${rowNumber} Schlüsselinhaber</div>
+                <div>${cardsHtml}</div>
             `;
         }
 
@@ -10180,6 +10652,7 @@
 
         async function persistKeyListToFirestore() {
             if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) return;
             const payload = {
                 items: exactPdfKeyList,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -10206,11 +10679,11 @@
             if (editIdx) editIdx.value = '';
             if (isHeaderEl) isHeaderEl.value = '0';
             if (titleEl) titleEl.innerText = '➕ Neuen Schlüsselinhaber hinzufügen';
-            if (nameLabel) nameLabel.innerText = 'Name (Vorname Nachname)';
-            if (personFields) personFields.style.display = 'block';
+            if (nameLabel) nameLabel.innerText = 'Name';
+            if (personFields) personFields.style.display = 'grid';
             if (saveBtn) saveBtn.innerText = '💾 In Datenbank speichern';
             if (cancelBtn) cancelBtn.style.display = 'none';
-            ['key-name', 'key-dob', 'key-addr', 'key-tel', 'key-role'].forEach(id => {
+            ['key-name', 'key-dob', 'key-street', 'key-zipcity', 'key-tel', 'key-role'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.value = '';
             });
@@ -10218,6 +10691,7 @@
 
         function startEditKeyListItem(index) {
             if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) return;
             const item = exactPdfKeyList[index];
             if (!item) return;
             const editIdx = document.getElementById('key-edit-index');
@@ -10231,7 +10705,8 @@
             if (editIdx) editIdx.value = String(index);
             const keyNameEl = document.getElementById('key-name');
             const keyDobEl = document.getElementById('key-dob');
-            const keyAddrEl = document.getElementById('key-addr');
+            const keyStreetEl = document.getElementById('key-street');
+            const keyZipCityEl = document.getElementById('key-zipcity');
             const keyTelEl = document.getElementById('key-tel');
             const keyRoleEl = document.getElementById('key-role');
             if (item.header) {
@@ -10241,30 +10716,34 @@
                 if (personFields) personFields.style.display = 'none';
                 if (keyNameEl) keyNameEl.value = item.header || '';
             } else {
+                const addrParts = splitKeyAddressParts(item);
                 if (isHeaderEl) isHeaderEl.value = '0';
                 if (titleEl) titleEl.innerText = '✏️ Schlüsselinhaber bearbeiten';
-                if (nameLabel) nameLabel.innerText = 'Name (Vorname Nachname)';
-                if (personFields) personFields.style.display = 'block';
+                if (nameLabel) nameLabel.innerText = 'Name';
+                if (personFields) personFields.style.display = 'grid';
                 if (keyNameEl) keyNameEl.value = item.name || '';
                 if (keyDobEl) keyDobEl.value = item.dob || '';
-                if (keyAddrEl) keyAddrEl.value = item.addr || '';
+                if (keyStreetEl) keyStreetEl.value = addrParts.street || '';
+                if (keyZipCityEl) keyZipCityEl.value = addrParts.zipCity || '';
                 if (keyTelEl) keyTelEl.value = item.tel || '';
                 if (keyRoleEl) keyRoleEl.value = item.role || '';
             }
             if (saveBtn) saveBtn.innerText = '💾 Änderungen speichern';
             if (cancelBtn) cancelBtn.style.display = 'inline-block';
             const formEl = document.getElementById('key-list-form');
-            if (formEl) formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (formEl && typeof formEl.scrollIntoView === 'function') formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         async function saveKeyListItem(e) {
-            e.preventDefault();
+            if (e && typeof e.preventDefault === 'function') e.preventDefault();
             if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) return;
             const editIdxEl = document.getElementById('key-edit-index');
             const isHeaderEl = document.getElementById('key-edit-is-header');
             const keyNameEl = document.getElementById('key-name');
             const keyDobEl = document.getElementById('key-dob');
-            const keyAddrEl = document.getElementById('key-addr');
+            const keyStreetEl = document.getElementById('key-street');
+            const keyZipCityEl = document.getElementById('key-zipcity');
             const keyTelEl = document.getElementById('key-tel');
             const keyRoleEl = document.getElementById('key-role');
             const editIdxRaw = editIdxEl ? editIdxEl.value : '';
@@ -10272,12 +10751,18 @@
             const name = (keyNameEl && keyNameEl.value ? keyNameEl.value : '').trim();
             if (!name) return;
 
+            const street = (keyStreetEl && keyStreetEl.value ? keyStreetEl.value : '').trim();
+            const zipCity = (keyZipCityEl && keyZipCityEl.value ? keyZipCityEl.value : '').trim();
+            const combinedAddr = [street, zipCity].filter(Boolean).join(', ');
+
             const updatedEntry = isHeader
                 ? { header: name }
                 : {
                     name,
                     dob: (keyDobEl && keyDobEl.value ? keyDobEl.value : '').trim(),
-                    addr: (keyAddrEl && keyAddrEl.value ? keyAddrEl.value : '').trim(),
+                    street,
+                    zipCity,
+                    addr: combinedAddr,
                     tel: (keyTelEl && keyTelEl.value ? keyTelEl.value : '').trim(),
                     role: (keyRoleEl && keyRoleEl.value ? keyRoleEl.value : '').trim()
                 };
@@ -10306,6 +10791,7 @@
 
         async function deleteKeyListItem(index) {
             if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) return;
             const item = exactPdfKeyList[index];
             if (!item) return;
             if (!confirm(`Eintrag "${item.name || item.header}" wirklich löschen?`)) return;
@@ -12961,6 +13447,13 @@
                     const serviceBadgeHtml = serviceText
                         ? ` <span style="color: #64748b; font-size: 0.85em; font-weight: 600;">(${escapeHtml(serviceText)})</span>`
                         : '';
+                    const isChairman = (typeof isChairmanSimonLoggedIn === 'function') && isChairmanSimonLoggedIn();
+                    const cashActionsHtml = isChairman ? `
+                            <div class="chairman-only-cash-action" style="display: flex; align-items: center; gap: 5px; flex-shrink: 0; margin-left: 6px;">
+                                <button type="button" class="btn admin-btn-edit" style="padding: 5px 8px !important; font-size: 0.78em !important; border-radius: 8px; margin-top: 0;" data-doc-id="${safeDocId}" onclick="openAdminCashEditModal('cash_sales', this.dataset.docId)" title="Bar-Abrechnung bearbeiten">✏️</button>
+                                <button type="button" class="btn admin-btn-delete" style="padding: 5px 8px !important; font-size: 0.78em !important; border-radius: 8px; margin-top: 0;" data-doc-id="${safeDocId}" onclick="deleteItem('cash_sales', this.dataset.docId)" title="Bar-Abrechnung löschen">🗑️</button>
+                            </div>
+                    ` : '';
                     html += `
                         <div class="admin-list-row" style="padding: 8px 10px; align-items: center;">
                             <div style="flex: 1; min-width: 0;">
@@ -12974,9 +13467,7 @@
                                 </div>
                                 ${itemsSummary ? `<div style="color: #475569; font-size: 0.78em; margin-top: 3px; line-height: 1.35;">${escapeHtml(itemsSummary)}</div>` : ''}
                             </div>
-                            <div style="display: flex; align-items: center; flex-shrink: 0; margin-left: 6px;">
-                                <button type="button" class="btn" style="background: transparent; color: #94a3b8; border: 1px solid #e2e8f0; box-shadow: none; padding: 4px 7px !important; font-size: 0.8em !important; border-radius: 8px;" data-doc-id="${safeDocId}" onclick="deleteItem('cash_sales', this.dataset.docId)" title="Bar-Abrechnung löschen">🗑</button>
-                            </div>
+                            ${cashActionsHtml}
                         </div>
                     `;
                 });
@@ -13282,6 +13773,11 @@
                     const amountStr = totalNum.toFixed(2).replace('.', ',');
 
                     const safeDocId = escapeHtml(doc.id);
+                    const isChairman = (typeof isChairmanSimonLoggedIn === 'function') && isChairmanSimonLoggedIn();
+                    const chairmanInvoiceActionsHtml = isChairman ? `
+                                <button type="button" class="btn admin-btn-edit chairman-only-cash-action" style="padding: 6px 9px !important; font-size: 0.78em !important;" data-doc-id="${safeDocId}" onclick="openAdminCashEditModal('tally_billings', this.dataset.docId)" title="Rechnung bearbeiten">✏️</button>
+                                <button type="button" class="btn admin-btn-delete chairman-only-cash-action" style="padding: 6px 9px !important; font-size: 0.78em !important;" data-doc-id="${safeDocId}" onclick="deleteItem('tally_billings', this.dataset.docId)" title="Löschen">🗑️</button>
+                    ` : '';
                     html += `
                         <div class="admin-list-row">
                             <div style="flex:1; min-width:0;">
@@ -13291,7 +13787,7 @@
                             <div style="display: flex; gap: 5px; flex-shrink: 0;">
                                 <button type="button" class="btn admin-btn-edit" style="padding: 6px 9px !important; font-size: 0.78em !important;" data-doc-id="${safeDocId}" onclick="viewInvoiceModal(this.dataset.docId)" title="Rechnung Ansehen">👁️</button>
                                 <button type="button" class="btn admin-btn-save" style="padding: 6px 9px !important; font-size: 0.78em !important;" data-doc-id="${safeDocId}" onclick="generateInvoicePDF(this.dataset.docId)" title="PDF Herunterladen">📥</button>
-                                <button type="button" class="btn admin-btn-delete" style="padding: 6px 9px !important; font-size: 0.78em !important;" data-doc-id="${safeDocId}" onclick="deleteItem('tally_billings', this.dataset.docId)" title="Löschen">🗑️</button>
+                                ${chairmanInvoiceActionsHtml}
                             </div>
                         </div>
                     `;
@@ -13541,9 +14037,113 @@
             }
         }
 
+        function openAdminCashEditModal(collectionName, docId) {
+            if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) return;
+            if (collectionName !== 'cash_sales' && collectionName !== 'tally_billings') return;
+            const modal = document.getElementById('admin-cash-edit-modal');
+            const titleEl = document.getElementById('admin-cash-edit-title');
+            const colEl = document.getElementById('admin-cash-edit-collection');
+            const docIdEl = document.getElementById('admin-cash-edit-docid');
+            const nameLabel = document.getElementById('admin-cash-edit-name-label');
+            const dateLabel = document.getElementById('admin-cash-edit-date-label');
+            const nameInput = document.getElementById('admin-cash-edit-name');
+            const dateInput = document.getElementById('admin-cash-edit-date');
+            const totalInput = document.getElementById('admin-cash-edit-total');
+            if (!modal || !colEl || !docIdEl || !nameInput || !dateInput || !totalInput) return;
+
+            if (collectionName === 'cash_sales') {
+                const list = Array.isArray(window.cashSalesList) ? window.cashSalesList : [];
+                const sale = list.find(item => item && item.id === docId);
+                if (!sale) return;
+                if (titleEl) titleEl.textContent = '✏️ Bar-Abrechnung bearbeiten';
+                if (nameLabel) nameLabel.textContent = 'Name / Deckel';
+                if (dateLabel) dateLabel.textContent = 'Datum / Zeit';
+                nameInput.value = sale.tabName || '';
+                dateInput.value = sale.dateDisplay || '';
+                totalInput.value = Number(sale.totalNum || 0).toFixed(2).replace('.', ',');
+            } else {
+                const inv = (window.invoicesMap && window.invoicesMap[docId]) ? window.invoicesMap[docId] : null;
+                if (!inv) return;
+                let rawTotal = inv.total;
+                if (typeof rawTotal === 'string') {
+                    rawTotal = parseFloat(rawTotal.replace('€', '').replace(',', '.').trim());
+                }
+                const totalNum = isNaN(rawTotal) ? 0 : Number(rawTotal);
+                if (titleEl) titleEl.textContent = `✏️ Rechnung ${inv.invoiceNum || ''} bearbeiten`;
+                if (nameLabel) nameLabel.textContent = 'Empfänger / Kunde';
+                if (dateLabel) dateLabel.textContent = 'Rechnungsdatum';
+                nameInput.value = inv.recipientName || '';
+                dateInput.value = inv.date || '';
+                totalInput.value = totalNum.toFixed(2).replace('.', ',');
+            }
+
+            colEl.value = collectionName;
+            docIdEl.value = docId;
+            modal.style.display = 'flex';
+            modal.style.pointerEvents = 'auto';
+            modal.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeAdminCashEditModal() {
+            const modal = document.getElementById('admin-cash-edit-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+            }
+        }
+
+        async function saveAdminCashEditModal(evt) {
+            if (evt && typeof evt.preventDefault === 'function') evt.preventDefault();
+            if (!auth.currentUser) return;
+            if (!isChairmanSimonLoggedIn()) return;
+            const colEl = document.getElementById('admin-cash-edit-collection');
+            const docIdEl = document.getElementById('admin-cash-edit-docid');
+            const nameInput = document.getElementById('admin-cash-edit-name');
+            const dateInput = document.getElementById('admin-cash-edit-date');
+            const totalInput = document.getElementById('admin-cash-edit-total');
+            const collectionName = colEl ? colEl.value : '';
+            const docId = docIdEl ? docIdEl.value : '';
+            if (!docId || (collectionName !== 'cash_sales' && collectionName !== 'tally_billings')) return;
+
+            const cleanName = (nameInput ? nameInput.value : '').trim();
+            const cleanDate = (dateInput ? dateInput.value : '').trim();
+            const parsedTotal = parseFloat(String(totalInput ? totalInput.value : '0').replace('€', '').replace(',', '.').trim());
+            if (!cleanName || isNaN(parsedTotal) || parsedTotal < 0) {
+                alert('Bitte gültigen Namen und Betrag eingeben.');
+                return;
+            }
+            const roundedTotal = Math.round(parsedTotal * 100) / 100;
+
+            try {
+                if (collectionName === 'cash_sales') {
+                    await db.collection('cash_sales').doc(docId).update({
+                        tabName: cleanName,
+                        dateTime: cleanDate,
+                        total: roundedTotal
+                    });
+                    logAdminAudit('Bar-Abrechnung bearbeitet', `${cleanName} (€ ${roundedTotal.toFixed(2).replace('.', ',')})`);
+                    closeAdminCashEditModal();
+                    await loadCashSales();
+                } else {
+                    await db.collection('tally_billings').doc(docId).update({
+                        recipientName: cleanName,
+                        date: cleanDate,
+                        total: roundedTotal
+                    });
+                    logAdminAudit('Rechnung bearbeitet', `${cleanName} (€ ${roundedTotal.toFixed(2).replace('.', ',')})`);
+                    closeAdminCashEditModal();
+                    await loadInvoices();
+                }
+            } catch (err) {
+                alert('Fehler beim Speichern: ' + (err && err.message ? err.message : String(err)));
+            }
+        }
+
         async function deleteItem(collectionName, docId) {
             if (!auth.currentUser) return;
-            if ((collectionName === 'weapon_log' || collectionName === 'news' || collectionName === 'events' || collectionName === 'duty_plan') && !isChairmanSimonLoggedIn()) {
+            if ((collectionName === 'weapon_log' || collectionName === 'news' || collectionName === 'events' || collectionName === 'duty_plan' || collectionName === 'cash_sales' || collectionName === 'tally_billings') && !isChairmanSimonLoggedIn()) {
                 return;
             }
             if (confirm("Wirklich löschen?")) {
@@ -14501,222 +15101,295 @@
             } catch (e) {}
         }
 
+        let pendingChairmanActiveMembers = null;
         let pendingChairmanBarMembers = null;
+        let pendingChairmanWeaponWardens = null;
+        let chairmanMembersSaveSeq = 0;
+        let chairmanMembersInFlightSaves = 0;
 
-        function renderChairmanBarMembersSelector() {
-            const gridEl = document.getElementById('chairman-bar-members-grid');
-            if (!gridEl) return;
-            if (!isChairmanSimonLoggedIn()) {
-                gridEl.innerHTML = '';
-                return;
-            }
-            const allActive = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
-                ? officialActiveMembers
-                : DEFAULT_ACTIVE_MEMBERS;
-            const activeNormSet = new Set(allActive.map(n => normalizeMemberNameForMatch(n)));
-            if (!Array.isArray(pendingChairmanBarMembers)) {
-                pendingChairmanBarMembers = Array.isArray(officialBarMembers)
-                    ? officialBarMembers.filter(n => activeNormSet.has(normalizeMemberNameForMatch(n)))
-                    : [...allActive];
-            } else {
-                pendingChairmanBarMembers = pendingChairmanBarMembers.filter(n => activeNormSet.has(normalizeMemberNameForMatch(n)));
-            }
-            const activeSelectedSet = new Set(pendingChairmanBarMembers.map(n => normalizeMemberNameForMatch(n)));
-            if (allActive.length === 0) {
-                gridEl.innerHTML = '<span class="admin-muted-text">Keine aktiven Mitglieder vorhanden.</span>';
-                return;
-            }
-            gridEl.innerHTML = allActive.map(name => {
-                const safe = escapeHtml(name);
-                const isSelected = activeSelectedSet.has(normalizeMemberNameForMatch(name));
-                return `<button type="button" class="chairman-bar-right-chip${isSelected ? ' selected' : ''}" data-bar-member-name="${safe}" aria-pressed="${isSelected ? 'true' : 'false'}" onclick="toggleChairmanBarMemberChip(this.dataset.barMemberName)"><span class="chairman-bar-right-name">${safe}</span><span class="chairman-bar-right-check" aria-hidden="true">✓</span></button>`;
-            }).join('');
-        }
-
-        function toggleChairmanBarMemberChip(memberName) {
-            if (!isChairmanSimonLoggedIn()) return;
-            const cleanName = String(memberName || '').trim();
-            if (!cleanName) return;
-            const allActive = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
-                ? officialActiveMembers
-                : DEFAULT_ACTIVE_MEMBERS;
-            if (!Array.isArray(pendingChairmanBarMembers)) {
-                pendingChairmanBarMembers = Array.isArray(officialBarMembers)
-                    ? [...officialBarMembers]
-                    : [...allActive];
-            }
-            const targetNorm = normalizeMemberNameForMatch(cleanName);
-            const existsIdx = pendingChairmanBarMembers.findIndex(n => normalizeMemberNameForMatch(n) === targetNorm);
-            if (existsIdx >= 0) {
-                pendingChairmanBarMembers.splice(existsIdx, 1);
-            } else {
-                pendingChairmanBarMembers.push(cleanName);
-            }
-            renderChairmanBarMembersSelector();
-            const feedbackEl = document.getElementById('chairman-bar-members-feedback');
-            if (feedbackEl) {
+        function setChairmanMembersFeedback(message, isError = false) {
+            const feedbackEl = document.getElementById('chairman-members-feedback');
+            if (!feedbackEl) return;
+            if (!message) {
                 feedbackEl.style.display = 'none';
                 feedbackEl.textContent = '';
-            }
-        }
-
-        async function saveChairmanBarMembersPermissions() {
-            if (!isChairmanSimonLoggedIn()) return;
-            const saveBtn = document.getElementById('chairman-bar-members-save-btn');
-            const feedbackEl = document.getElementById('chairman-bar-members-feedback');
-            const allActive = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
-                ? officialActiveMembers
-                : DEFAULT_ACTIVE_MEMBERS;
-            const activeNormSet = new Set(allActive.map(n => normalizeMemberNameForMatch(n)));
-            const rawSelection = Array.isArray(pendingChairmanBarMembers)
-                ? pendingChairmanBarMembers
-                : (Array.isArray(officialBarMembers) ? officialBarMembers : allActive);
-            const cleanBarMembers = sanitizeActiveMembersList(
-                rawSelection.filter(n => activeNormSet.has(normalizeMemberNameForMatch(n))),
-                true
-            );
-            if (saveBtn) saveBtn.disabled = true;
-            try {
-                await db.collection('settings').doc('members').set({
-                    barMembers: cleanBarMembers,
-                    updatedBy: 'Simon',
-                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
-                pendingChairmanBarMembers = [...cleanBarMembers];
-                applyMembersDataSnapshot({
-                    activeMembers: officialActiveMembers,
-                    weaponMembers: WEAPON_AUTHORIZED_MEMBERS,
-                    barMembers: cleanBarMembers,
-                    passive: officialPassiveMembers
-                });
-                try { logAdminAudit('Schankbuch-Berechtigungen aktualisiert', `${cleanBarMembers.length} Mitglieder freigeschaltet`); } catch (e) {}
-                if (feedbackEl) {
-                    feedbackEl.style.color = '#15803d';
-                    feedbackEl.textContent = `✅ Schankbuch-Rechte gespeichert (${cleanBarMembers.length} Mitglieder freigeschaltet).`;
-                    feedbackEl.style.display = 'block';
-                }
-            } catch (err) {
-                if (feedbackEl) {
-                    feedbackEl.style.color = '#b91c1c';
-                    feedbackEl.textContent = '❌ Fehler beim Speichern der Schankbuch-Rechte: ' + (err && err.message ? err.message : err);
-                    feedbackEl.style.display = 'block';
-                }
-            } finally {
-                if (saveBtn) saveBtn.disabled = false;
-            }
-        }
-
-        function renderChairmanMembersManager() {
-            const activeContainer = document.getElementById('chairman-active-members-list');
-            const weaponContainer = document.getElementById('chairman-weapon-members-list');
-            const barGridContainer = document.getElementById('chairman-bar-members-grid');
-            if (!isChairmanSimonLoggedIn()) {
-                if (activeContainer) activeContainer.innerHTML = '';
-                if (weaponContainer) weaponContainer.innerHTML = '';
-                if (barGridContainer) barGridContainer.innerHTML = '';
-                pendingChairmanBarMembers = null;
                 return;
             }
-            if (activeContainer) {
-                const list = Array.isArray(officialActiveMembers) ? officialActiveMembers : [];
-                activeContainer.innerHTML = list.length === 0
-                    ? '<span class="admin-muted-text">Keine Mitglieder eingetragen.</span>'
-                    : list.map(name => {
-                        const safe = escapeHtml(name);
-                        return `<span class="chairman-member-chip"><span>${safe}</span><button type="button" class="chairman-chip-remove-btn" data-member-type="active" data-member-name="${safe}" onclick="removeChairmanMember(this.dataset.memberType, this.dataset.memberName)" title="${safe} entfernen" aria-label="${safe} entfernen">✕</button></span>`;
-                    }).join('');
+            feedbackEl.style.color = isError ? '#b91c1c' : '#15803d';
+            feedbackEl.textContent = message;
+            feedbackEl.style.display = 'block';
+        }
+
+        function syncChairmanUnifiedDraftFromLive(forceSync = false) {
+            const liveActive = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
+                ? [...officialActiveMembers]
+                : [...DEFAULT_ACTIVE_MEMBERS];
+            const activeNormSet = new Set(liveActive.map(n => normalizeMemberNameForMatch(n)));
+            const liveBar = Array.isArray(officialBarMembers)
+                ? officialBarMembers.filter(n => activeNormSet.has(normalizeMemberNameForMatch(n)))
+                : [...liveActive];
+            const liveWeapons = Array.isArray(WEAPON_AUTHORIZED_MEMBERS)
+                ? [...WEAPON_AUTHORIZED_MEMBERS]
+                : [...DEFAULT_WEAPON_AUTHORIZED_MEMBERS];
+
+            if (forceSync || !Array.isArray(pendingChairmanActiveMembers)) {
+                pendingChairmanActiveMembers = liveActive;
             }
-            if (weaponContainer) {
-                const wList = Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [];
-                weaponContainer.innerHTML = wList.length === 0
-                    ? '<span class="admin-muted-text">Keine Waffenwarte eingetragen.</span>'
-                    : wList.map(name => {
-                        const safe = escapeHtml(name);
-                        return `<span class="chairman-member-chip weapon-chip"><span>🎯 ${safe}</span><button type="button" class="chairman-chip-remove-btn" data-member-type="weapon" data-member-name="${safe}" onclick="removeChairmanMember(this.dataset.memberType, this.dataset.memberName)" title="${safe} entfernen" aria-label="${safe} entfernen">✕</button></span>`;
-                    }).join('');
+            if (forceSync || !Array.isArray(pendingChairmanBarMembers)) {
+                pendingChairmanBarMembers = liveBar;
+            } else {
+                const draftActiveNormSet = new Set(pendingChairmanActiveMembers.map(n => normalizeMemberNameForMatch(n)));
+                pendingChairmanBarMembers = pendingChairmanBarMembers.filter(n => draftActiveNormSet.has(normalizeMemberNameForMatch(n)));
             }
-            const allActiveForBar = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
-                ? officialActiveMembers
-                : DEFAULT_ACTIVE_MEMBERS;
-            const activeNormSetForBar = new Set(allActiveForBar.map(n => normalizeMemberNameForMatch(n)));
-            pendingChairmanBarMembers = Array.isArray(officialBarMembers)
-                ? officialBarMembers.filter(n => activeNormSetForBar.has(normalizeMemberNameForMatch(n)))
-                : [...allActiveForBar];
-            renderChairmanBarMembersSelector();
+            if (forceSync || !Array.isArray(pendingChairmanWeaponWardens)) {
+                pendingChairmanWeaponWardens = liveWeapons;
+            }
+        }
+
+        function renderChairmanMembersManager(preserveDraft = false) {
+            const listEl = document.getElementById('chairman-unified-members-list');
+            const countsEl = document.getElementById('chairman-unified-counts');
+            if (!isChairmanSimonLoggedIn()) {
+                if (listEl) listEl.innerHTML = '';
+                if (countsEl) countsEl.innerHTML = '';
+                pendingChairmanActiveMembers = null;
+                pendingChairmanBarMembers = null;
+                pendingChairmanWeaponWardens = null;
+                return;
+            }
+
+            syncChairmanUnifiedDraftFromLive(!preserveDraft && chairmanMembersInFlightSaves === 0);
+
+            const allActive = Array.isArray(pendingChairmanActiveMembers) ? pendingChairmanActiveMembers : [];
+            const barSet = new Set((Array.isArray(pendingChairmanBarMembers) ? pendingChairmanBarMembers : []).map(n => normalizeMemberNameForMatch(n)));
+            const weaponSet = new Set((Array.isArray(pendingChairmanWeaponWardens) ? pendingChairmanWeaponWardens : []).map(n => normalizeMemberNameForMatch(n)));
+
+            if (countsEl) {
+                const barCount = allActive.filter(n => barSet.has(normalizeMemberNameForMatch(n))).length;
+                const weaponCount = allActive.filter(n => weaponSet.has(normalizeMemberNameForMatch(n))).length;
+                countsEl.innerHTML = `
+                    <span class="chairman-unified-count-tag">👥 ${allActive.length} Mitglieder</span>
+                    <span class="chairman-unified-count-tag bar-tag">🍺 ${barCount} Schankbuch</span>
+                    <span class="chairman-unified-count-tag weapon-tag">🎯 ${weaponCount} Waffenwarte</span>
+                `;
+            }
+
+            if (!listEl) {
+                updateChairmanTileStatuses();
+                return;
+            }
+
+            const searchInput = document.getElementById('chairman-members-search-input');
+            const query = searchInput ? String(searchInput.value || '').trim().toLowerCase() : '';
+            const filtered = query
+                ? allActive.filter(name => String(name || '').toLowerCase().includes(query))
+                : allActive;
+
+            if (allActive.length === 0) {
+                listEl.innerHTML = '<div class="admin-muted-text" style="text-align: center; padding: 14px;">Noch keine Mitglieder eingetragen.</div>';
+            } else if (filtered.length === 0) {
+                listEl.innerHTML = `<div class="admin-muted-text" style="text-align: center; padding: 14px;">Kein Mitglied für „${escapeHtml(searchInput ? searchInput.value.trim() : query)}“ gefunden.</div>`;
+            } else {
+                listEl.innerHTML = filtered.map(name => {
+                    const safe = escapeHtml(name);
+                    const norm = normalizeMemberNameForMatch(name);
+                    const hasBar = barSet.has(norm);
+                    const hasWeapon = weaponSet.has(norm);
+                    const barBtnClass = hasBar ? 'chairman-right-toggle-btn bar-active' : 'chairman-right-toggle-btn inactive';
+                    const barBtnLabel = hasBar ? '✅ 🍺 Schankbuch' : '⬜ 🍺 Kein Schankbuch';
+                    const barBtnTitle = hasBar ? 'Schankbuch-Tab aktiv (tippen zum Deaktivieren)' : 'Kein Schankbuch – zeigt stattdessen Direkt-Chat';
+                    const weaponBtnClass = hasWeapon ? 'chairman-right-toggle-btn weapon-active' : 'chairman-right-toggle-btn inactive';
+                    const weaponBtnLabel = hasWeapon ? '✅ 🎯 Waffenwart' : '⬜ 🎯 Kein Waffenwart';
+                    const weaponBtnTitle = hasWeapon ? 'Als Waffenwart berechtigt (tippen zum Entfernen)' : 'Kein Waffenwart (tippen zum Freischalten)';
+
+                    return `
+                        <div class="chairman-unified-member-card" data-member-card="${safe}">
+                            <div class="chairman-unified-card-top">
+                                <span class="chairman-unified-member-name">${safe}</span>
+                                <button type="button" class="chairman-unified-delete-btn" data-member-name="${safe}" onclick="removeChairmanUnifiedMember(this.dataset.memberName)" title="${safe} aus allen Listen entfernen" aria-label="${safe} entfernen">🗑️</button>
+                            </div>
+                            <div class="chairman-unified-rights-row">
+                                <button type="button" class="${barBtnClass}" data-member-name="${safe}" aria-pressed="${hasBar ? 'true' : 'false'}" title="${barBtnTitle}" onclick="toggleChairmanMemberRight(this.dataset.memberName, 'bar')">${barBtnLabel}</button>
+                                <button type="button" class="${weaponBtnClass}" data-member-name="${safe}" aria-pressed="${hasWeapon ? 'true' : 'false'}" title="${weaponBtnTitle}" onclick="toggleChairmanMemberRight(this.dataset.memberName, 'weapon')">${weaponBtnLabel}</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
             updateChairmanTileStatuses();
         }
 
-        async function persistChairmanMembersLists(nextActive, nextWeapons, auditMsg) {
+        function renderChairmanBarMembersSelector() {
+            renderChairmanMembersManager(false);
+        }
+
+        async function persistAllChairmanMembersAndRights(auditMsg, showSuccessText = '') {
             if (!isChairmanSimonLoggedIn()) return;
-            const feedbackEl = document.getElementById('chairman-members-feedback');
-            const cleanActive = sanitizeActiveMembersList(nextActive, true);
-            const cleanWeapons = sanitizeActiveMembersList(nextWeapons, true);
+            syncChairmanUnifiedDraftFromLive(false);
+
+            const cleanActive = sanitizeActiveMembersList(pendingChairmanActiveMembers || [], true);
             const activeNormSet = new Set(cleanActive.map(n => normalizeMemberNameForMatch(n)));
-            const hasExplicitBarMembers = Array.isArray(officialBarMembers);
-            const prunedBarMembers = hasExplicitBarMembers
-                ? sanitizeActiveMembersList(
-                    officialBarMembers.filter(n => activeNormSet.has(normalizeMemberNameForMatch(n))),
-                    true
-                )
-                : null;
+            const cleanBarMembers = sanitizeActiveMembersList(
+                (pendingChairmanBarMembers || []).filter(n => activeNormSet.has(normalizeMemberNameForMatch(n))),
+                true
+            );
+            const cleanWeapons = sanitizeActiveMembersList(pendingChairmanWeaponWardens || [], true);
+
+            pendingChairmanActiveMembers = [...cleanActive];
+            pendingChairmanBarMembers = [...cleanBarMembers];
+            pendingChairmanWeaponWardens = [...cleanWeapons];
+
+            const mySeq = ++chairmanMembersSaveSeq;
+            chairmanMembersInFlightSaves++;
+            const saveBtn = document.getElementById('chairman-members-save-all-btn');
+            if (saveBtn) saveBtn.disabled = true;
+
             try {
                 const firestorePayload = {
                     activeMembers: cleanActive,
                     active: cleanActive,
+                    barMembers: cleanBarMembers,
                     weaponMembers: cleanWeapons,
+                    weaponWardens: cleanWeapons,
                     updatedBy: 'Simon',
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
-                if (hasExplicitBarMembers) {
-                    firestorePayload.barMembers = prunedBarMembers;
-                }
                 await db.collection('settings').doc('members').set(firestorePayload, { merge: true });
-                const snapshotPayload = { activeMembers: cleanActive, weaponMembers: cleanWeapons, passive: officialPassiveMembers };
-                if (hasExplicitBarMembers) {
-                    snapshotPayload.barMembers = prunedBarMembers;
-                }
-                applyMembersDataSnapshot(snapshotPayload);
-                try { logAdminAudit('Mitglieder-/Waffenwart-Liste geändert', auditMsg); } catch (e) {}
-                if (feedbackEl) {
-                    feedbackEl.style.color = '#15803d';
-                    feedbackEl.textContent = '✅ Liste gespeichert und in Echtzeit aktualisiert.';
-                    feedbackEl.style.display = 'block';
-                }
+                if (mySeq !== chairmanMembersSaveSeq) return;
+                applyMembersDataSnapshot({
+                    activeMembers: cleanActive,
+                    barMembers: cleanBarMembers,
+                    weaponMembers: cleanWeapons,
+                    weaponWardens: cleanWeapons,
+                    passive: officialPassiveMembers
+                });
+                try { updateMemberNavigationMode(); } catch (e) {}
+                try { logAdminAudit('Mitglieder & Rechte gespeichert', auditMsg || `${cleanActive.length} Mitglieder · ${cleanBarMembers.length} Schankbuch · ${cleanWeapons.length} Waffenwarte`); } catch (e) {}
+                setChairmanMembersFeedback(
+                    showSuccessText || `✅ Gespeichert (${cleanActive.length} Mitglieder · ${cleanBarMembers.length} Schankbuch · ${cleanWeapons.length} Waffenwarte).`,
+                    false
+                );
             } catch (err) {
-                if (feedbackEl) {
-                    feedbackEl.style.color = '#b91c1c';
-                    feedbackEl.textContent = '❌ Fehler beim Speichern: ' + (err && err.message ? err.message : err);
-                    feedbackEl.style.display = 'block';
+                setChairmanMembersFeedback(
+                    '❌ Fehler beim Speichern: ' + (err && err.message ? err.message : err),
+                    true
+                );
+            } finally {
+                chairmanMembersInFlightSaves = Math.max(0, chairmanMembersInFlightSaves - 1);
+                if (saveBtn && mySeq === chairmanMembersSaveSeq) {
+                    saveBtn.disabled = false;
                 }
             }
+        }
+
+        async function saveAllChairmanMembersAndRights() {
+            if (!isChairmanSimonLoggedIn()) return;
+            await persistAllChairmanMembersAndRights('Alle Mitglieder & Rechte gespeichert');
+        }
+
+        async function saveChairmanBarMembersPermissions() {
+            if (!isChairmanSimonLoggedIn()) return;
+            await saveAllChairmanMembersAndRights();
+        }
+
+        function toggleChairmanMemberRight(memberName, rightType) {
+            if (!isChairmanSimonLoggedIn()) return;
+            const cleanName = String(memberName || '').trim();
+            if (!cleanName) return;
+            if (rightType !== 'bar' && rightType !== 'weapon') return;
+            syncChairmanUnifiedDraftFromLive(false);
+
+            const targetNorm = normalizeMemberNameForMatch(cleanName);
+            const targetList = rightType === 'bar' ? pendingChairmanBarMembers : pendingChairmanWeaponWardens;
+            const idx = targetList.findIndex(n => normalizeMemberNameForMatch(n) === targetNorm);
+            let nowActive = false;
+            if (idx >= 0) {
+                targetList.splice(idx, 1);
+                nowActive = false;
+            } else {
+                targetList.push(cleanName);
+                nowActive = true;
+            }
+
+            renderChairmanMembersManager(true);
+            const label = rightType === 'bar'
+                ? (nowActive ? `🍺 Schankbuch für ${cleanName} aktiviert` : `💬 Schankbuch für ${cleanName} deaktiviert`)
+                : (nowActive ? `🎯 Waffenwart für ${cleanName} aktiviert` : `🎯 Waffenwart für ${cleanName} entfernt`);
+            persistAllChairmanMembersAndRights(label, `✅ ${label} & sofort gespeichert.`);
+        }
+
+        async function addChairmanUnifiedMember() {
+            if (!isChairmanSimonLoggedIn()) return;
+            const inputEl = document.getElementById('chairman-active-member-input');
+            const name = inputEl ? inputEl.value.trim().replace(/\s+/g, ' ') : '';
+            if (!name) return;
+            syncChairmanUnifiedDraftFromLive(false);
+
+            const targetNorm = normalizeMemberNameForMatch(name);
+            const alreadyActive = pendingChairmanActiveMembers.some(n => normalizeMemberNameForMatch(n) === targetNorm);
+            if (!alreadyActive) {
+                pendingChairmanActiveMembers.push(name);
+            }
+            if (!pendingChairmanBarMembers.some(n => normalizeMemberNameForMatch(n) === targetNorm)) {
+                pendingChairmanBarMembers.push(name);
+            }
+            if (inputEl) inputEl.value = '';
+
+            renderChairmanMembersManager(true);
+            await persistAllChairmanMembersAndRights(
+                `Mitglied hinzugefügt: ${name} (inkl. Schankbuch)`,
+                `✅ „${name}“ hinzugefügt (inkl. Schankbuch-Recht) & gespeichert.`
+            );
         }
 
         async function addChairmanMember(type) {
             if (!isChairmanSimonLoggedIn()) return;
-            const inputId = type === 'weapon' ? 'chairman-weapon-member-input' : 'chairman-active-member-input';
-            const inputEl = document.getElementById(inputId);
-            const name = inputEl ? inputEl.value.trim().replace(/\s+/g, ' ') : '';
-            if (!name) return;
-            const nextActive = [...(Array.isArray(officialActiveMembers) ? officialActiveMembers : DEFAULT_ACTIVE_MEMBERS)];
-            const nextWeapons = [...(Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : DEFAULT_WEAPON_AUTHORIZED_MEMBERS)];
             if (type === 'weapon') {
-                if (!nextWeapons.some(n => n.toLowerCase() === name.toLowerCase())) nextWeapons.push(name);
-            } else {
-                if (!nextActive.some(n => n.toLowerCase() === name.toLowerCase())) nextActive.push(name);
+                await addChairmanUnifiedMember();
+                return;
             }
-            if (inputEl) inputEl.value = '';
-            await persistChairmanMembersLists(nextActive, nextWeapons, `${type === 'weapon' ? 'Waffenwart' : 'Mitglied'} hinzugefügt: ${name}`);
+            await addChairmanUnifiedMember();
+        }
+
+        async function executeRemoveChairmanUnifiedMember(cleanName) {
+            if (!isChairmanSimonLoggedIn()) return;
+            const targetNorm = normalizeMemberNameForMatch(cleanName);
+            if (!targetNorm) return;
+            syncChairmanUnifiedDraftFromLive(false);
+
+            pendingChairmanActiveMembers = pendingChairmanActiveMembers.filter(n => normalizeMemberNameForMatch(n) !== targetNorm);
+            pendingChairmanBarMembers = pendingChairmanBarMembers.filter(n => normalizeMemberNameForMatch(n) !== targetNorm);
+            pendingChairmanWeaponWardens = pendingChairmanWeaponWardens.filter(n => normalizeMemberNameForMatch(n) !== targetNorm);
+
+            renderChairmanMembersManager(true);
+            await persistAllChairmanMembersAndRights(
+                `Mitglied aus allen Listen entfernt: ${cleanName}`,
+                `✅ „${cleanName}“ wurde aus allen Listen entfernt & gespeichert.`
+            );
+        }
+
+        function removeChairmanUnifiedMember(memberName) {
+            if (!isChairmanSimonLoggedIn()) return;
+            const cleanName = String(memberName || '').trim();
+            if (!cleanName) return;
+            if (typeof showCustomConfirm === 'function') {
+                showCustomConfirm(
+                    'Mitglied entfernen?',
+                    `Möchtest du „${cleanName}“ wirklich komplett aus allen Listen (Mitglieder, Schankbuch & Waffenwarte) entfernen?`,
+                    (confirmed) => {
+                        if (confirmed) {
+                            executeRemoveChairmanUnifiedMember(cleanName);
+                        }
+                    }
+                );
+            } else {
+                executeRemoveChairmanUnifiedMember(cleanName);
+            }
         }
 
         async function removeChairmanMember(type, name) {
             if (!isChairmanSimonLoggedIn()) return;
-            const cleanTarget = String(name || '').trim().toLowerCase();
-            if (!cleanTarget) return;
-            const nextActive = (Array.isArray(officialActiveMembers) ? officialActiveMembers : [])
-                .filter(n => type !== 'active' || String(n).trim().toLowerCase() !== cleanTarget);
-            const nextWeapons = (Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [])
-                .filter(n => type !== 'weapon' || String(n).trim().toLowerCase() !== cleanTarget);
-            await persistChairmanMembersLists(nextActive, nextWeapons, `${type === 'weapon' ? 'Waffenwart' : 'Mitglied'} entfernt: ${name}`);
+            removeChairmanUnifiedMember(name);
         }
 
         function initBarMenuRealtimeListener() {
@@ -15116,12 +15789,19 @@
                 updateChairmanTileStatuses();
             } else {
                 resetChairmanSectionsToDefault();
+                pendingChairmanActiveMembers = null;
                 pendingChairmanBarMembers = null;
-                ['admin-theme-tiles-grid', 'chairman-active-members-list', 'chairman-weapon-members-list', 'chairman-bar-members-grid', 'chairman-bar-menu-list'].forEach(id => {
+                pendingChairmanWeaponWardens = null;
+                chairmanMembersSaveSeq = 0;
+                ['admin-theme-tiles-grid', 'chairman-unified-members-list', 'chairman-unified-counts', 'chairman-bar-menu-list'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.innerHTML = '';
                 });
-                ['admin-theme-feedback', 'chairman-banner-feedback', 'chairman-members-feedback', 'chairman-bar-members-feedback', 'chairman-bar-menu-feedback', 'chairman-chat-lock-feedback', 'chairman-club-pin-feedback'].forEach(id => {
+                ['chairman-active-member-input', 'chairman-members-search-input'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
+                ['admin-theme-feedback', 'chairman-banner-feedback', 'chairman-members-feedback', 'chairman-bar-menu-feedback', 'chairman-chat-lock-feedback', 'chairman-club-pin-feedback'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) { el.style.display = 'none'; el.textContent = ''; }
                 });
@@ -15140,7 +15820,25 @@
                 try { closeWeaponPDFModal(); } catch (e) {}
                 try { closeTresorQrModal(); } catch (e) {}
                 try { closeMemberAppQrModal(); } catch (e) {}
+                try { closeAdminCashEditModal(); } catch (e) {}
             }
+            try { if (typeof syncKeyListRoleVisibility === 'function') syncKeyListRoleVisibility(); } catch (e) {}
+            try {
+                if (!isChairman) {
+                    document.querySelectorAll('.chairman-only-cash-action').forEach(el => {
+                        el.style.setProperty('display', 'none', 'important');
+                    });
+                }
+                if (Array.isArray(exactPdfKeyList) && exactPdfKeyList.length > 0 && typeof renderKeyList === 'function') {
+                    renderKeyList();
+                }
+            } catch (e) {}
+            try {
+                if (!auth || !auth.currentUser) {
+                    inventoryHasUnsavedChanges = false;
+                    inventoryDraftData = null;
+                }
+            } catch (e) {}
             updateClubChatLockUI();
             try { if (typeof updateMemberNavigationMode === 'function') updateMemberNavigationMode(); } catch (e) {}
             try { if (typeof updateClubStatusChairmanUI === 'function') updateClubStatusChairmanUI(); } catch (e) {}
@@ -21178,6 +21876,11 @@
                 }
             }
             if (evt.key === 'Escape') {
+                const cashEditModal = document.getElementById('admin-cash-edit-modal');
+                if (cashEditModal && cashEditModal.style.display === 'flex') {
+                    closeAdminCashEditModal();
+                    return;
+                }
                 const statusUploadModal = document.getElementById('club-status-upload-modal');
                 if (statusUploadModal && statusUploadModal.style.display === 'flex') {
                     closeClubStatusUploadModal();
@@ -21205,16 +21908,21 @@
         });
 
         /* =========================================================
-           24-STUNDEN-VEREINSSTATUS (HEADER-RING, VIEWER & UPLOAD)
+           24-STUNDEN-VEREINSSTATUS (HEADER-RING, VIEWER & HD-UPLOAD)
            ========================================================= */
         const CLUB_STATUS_DEFAULT_LOGO = 'logo.png?v=3';
         const CLUB_STATUS_FALLBACK_LOGO = 'siegel.png';
         const CLUB_STATUS_TTL_MS = 24 * 60 * 60 * 1000;
         const CLUB_STATUS_IMAGE_DURATION_MS = 5000;
         const CLUB_STATUS_EXPIRY_CHECK_MS = 30000;
+        const CLUB_STATUS_MAX_IMAGE_FILE_BYTES = 15 * 1024 * 1024;
+        const CLUB_STATUS_STORAGE_OPTIMIZE_THRESHOLD_BYTES = 2 * 1024 * 1024;
+        const CLUB_STATUS_HD_MAX_EDGE = 2048;
+        const CLUB_STATUS_HD_JPEG_QUALITY = 0.88;
+        const CLUB_STATUS_FALLBACK_MAX_EDGE = 1400;
+        const CLUB_STATUS_FALLBACK_JPEG_QUALITY = 0.80;
         const CLUB_STATUS_MAX_IMAGE_BYTES = 650 * 1024;
-        const CLUB_STATUS_MAX_VIDEO_BYTES = 750 * 1024;
-        const CLUB_STATUS_VIDEO_TOO_LARGE_MSG = 'Bitte ein kurzes Video unter 8 Sekunden auswählen (max. 750 KB).';
+        const CLUB_STATUS_STORAGE_STALL_TIMEOUT_MS = 12000;
 
         let clubStatusUnsubscribe = null;
         let clubStatusExpiryInterval = null;
@@ -21226,6 +21934,7 @@
         let clubStatusProgressRaf = null;
         let clubStatusSlideStartTs = 0;
         let clubStatusPendingUpload = null;
+        let clubStatusPreviewObjectUrl = null;
         let clubStatusPublishing = false;
         const clubStatusDeletingIds = new Set();
 
@@ -21241,6 +21950,9 @@
             if (typeof mediaData !== 'string') return false;
             const trimmed = mediaData.trim();
             if (!trimmed) return false;
+            if (/^https:\/\/[^\s"'<>]+$/i.test(trimmed)) {
+                return type === 'image' || type === 'video';
+            }
             if (type === 'image') {
                 return /^data:image\/(png|jpe?g|gif|webp);base64,[a-z0-9+/=\s]+$/i.test(trimmed);
             }
@@ -21259,6 +21971,28 @@
             const diffHours = Math.floor(diffMin / 60);
             if (diffHours === 1) return 'Vor 1 Std.';
             return `Vor ${diffHours} Std.`;
+        }
+
+        function formatClubStatusFileSize(bytes) {
+            const num = Number(bytes) || 0;
+            if (num >= 1024 * 1024) {
+                return `${(num / (1024 * 1024)).toFixed(1).replace('.', ',')} MB`;
+            }
+            return `${Math.max(1, Math.round(num / 1024))} KB`;
+        }
+
+        function deleteClubStatusStorageFile(storagePath) {
+            if (!storagePath || typeof storagePath !== 'string') return;
+            const cleanedPath = storagePath.trim();
+            if (!cleanedPath) return;
+            try {
+                if (typeof firebase !== 'undefined' && firebase && typeof firebase.storage === 'function') {
+                    const storageRef = firebase.storage().ref(cleanedPath);
+                    if (storageRef && typeof storageRef.delete === 'function') {
+                        storageRef.delete().catch(() => {});
+                    }
+                }
+            } catch (e) {}
         }
 
         function resetHeaderCrestToDefaultLogo() {
@@ -21346,6 +22080,10 @@
             if (addBtn) {
                 addBtn.style.display = isSimon ? 'inline-flex' : 'none';
             }
+            const chairmanMenuUploadBtn = document.getElementById('chairman-status-upload-btn');
+            if (chairmanMenuUploadBtn) {
+                chairmanMenuUploadBtn.style.display = isSimon ? 'flex' : 'none';
+            }
             const delBtn = document.getElementById('club-status-viewer-delete-btn');
             if (delBtn) {
                 delBtn.style.display = isSimon ? 'inline-flex' : 'none';
@@ -21364,6 +22102,9 @@
             expiredList.forEach(item => {
                 if (!item || !item.id || clubStatusDeletingIds.has(item.id)) return;
                 clubStatusDeletingIds.add(item.id);
+                if (item.storagePath) {
+                    deleteClubStatusStorageFile(item.storagePath);
+                }
                 try {
                     db.collection('club_status').doc(item.id).delete()
                         .catch(() => {})
@@ -21430,12 +22171,16 @@
                             const data = doc.data() || {};
                             const createdAt = normalizeClubStatusMs(data.createdAt);
                             const expiresAt = normalizeClubStatusMs(data.expiresAt) || (createdAt ? createdAt + CLUB_STATUS_TTL_MS : 0);
-                            const type = data.type === 'video' ? 'video' : 'image';
+                            const rawType = data.mediaType || data.type;
+                            const type = rawType === 'video' ? 'video' : 'image';
                             const mediaData = typeof data.mediaData === 'string' ? data.mediaData : '';
+                            const storagePath = typeof data.storagePath === 'string' ? data.storagePath.trim() : '';
                             const entry = {
                                 id: doc.id,
                                 type,
+                                mediaType: type,
                                 mediaData,
+                                storagePath,
                                 caption: String(data.caption || '').trim().slice(0, 120),
                                 sender: String(data.sender || 'Obmann').trim() || 'Obmann',
                                 createdAt,
@@ -21685,7 +22430,11 @@
             const current = clubStatusItems[clubStatusViewerIndex];
             if (!current || !current.id) return;
             const deleteId = current.id;
+            const deleteStoragePath = current.storagePath || '';
             try {
+                if (deleteStoragePath) {
+                    deleteClubStatusStorageFile(deleteStoragePath);
+                }
                 if (typeof db !== 'undefined' && db) {
                     await db.collection('club_status').doc(deleteId).delete();
                 }
@@ -21720,7 +22469,38 @@
             }
         }
 
+        function setClubStatusUploadProgress(visible, percent, labelText) {
+            const wrap = document.getElementById('club-status-upload-progress-wrap');
+            const bar = document.getElementById('club-status-upload-progress-bar');
+            const pctEl = document.getElementById('club-status-upload-progress-pct');
+            const labelEl = document.getElementById('club-status-upload-progress-label');
+            if (!wrap) return;
+            if (!visible) {
+                wrap.style.display = 'none';
+                if (bar) bar.style.width = '0%';
+                if (pctEl) pctEl.textContent = '0 %';
+                return;
+            }
+            const clamped = Math.max(0, Math.min(100, Math.round(Number(percent) || 0)));
+            wrap.style.display = 'block';
+            if (bar) bar.style.width = `${clamped}%`;
+            if (pctEl) pctEl.textContent = `${clamped} %`;
+            if (labelEl && labelText) labelEl.textContent = labelText;
+        }
+
+        function revokeClubStatusPreviewUrl() {
+            if (clubStatusPreviewObjectUrl) {
+                try {
+                    if (typeof URL !== 'undefined' && typeof URL.revokeObjectURL === 'function') {
+                        URL.revokeObjectURL(clubStatusPreviewObjectUrl);
+                    }
+                } catch (e) {}
+                clubStatusPreviewObjectUrl = null;
+            }
+        }
+
         function resetClubStatusUploadForm() {
+            revokeClubStatusPreviewUrl();
             clubStatusPendingUpload = null;
             clubStatusPublishing = false;
             const fileInput = document.getElementById('club-status-file-input');
@@ -21746,6 +22526,7 @@
                 submitBtn.style.opacity = '0.55';
                 submitBtn.textContent = '🚀 Für 24h posten';
             }
+            setClubStatusUploadProgress(false, 0, '');
             setClubStatusUploadFeedback('', false);
         }
 
@@ -21781,64 +22562,178 @@
             });
         }
 
-        function compressClubStatusImage(file) {
+        function loadClubStatusImageFromFile(file) {
             return new Promise(async (resolve, reject) => {
+                let objectUrl = null;
                 try {
-                    const rawDataUrl = await readFileAsDataUrl(file);
                     const img = new Image();
-                    img.onload = () => {
-                        try {
-                            const naturalW = img.naturalWidth || img.width;
-                            const naturalH = img.naturalHeight || img.height;
-                            if (!naturalW || !naturalH) {
-                                reject(new Error('Bild konnte nicht verarbeitet werden.'));
-                                return;
-                            }
-                            const maxWidths = [1080, 900, 760, 640];
-                            const qualities = [0.78, 0.70, 0.62, 0.54, 0.46];
-                            let bestDataUrl = '';
-                            for (let wIdx = 0; wIdx < maxWidths.length; wIdx++) {
-                                const limitW = maxWidths[wIdx];
-                                const scale = naturalW > limitW ? (limitW / naturalW) : 1;
-                                const targetW = Math.max(1, Math.round(naturalW * scale));
-                                const targetH = Math.max(1, Math.round(naturalH * scale));
-                                const canvas = document.createElement('canvas');
-                                canvas.width = targetW;
-                                canvas.height = targetH;
-                                const ctx = canvas.getContext('2d');
-                                if (!ctx) {
-                                    reject(new Error('Canvas nicht verfügbar.'));
-                                    return;
-                                }
-                                ctx.drawImage(img, 0, 0, targetW, targetH);
-                                for (let qIdx = 0; qIdx < qualities.length; qIdx++) {
-                                    const candidate = canvas.toDataURL('image/jpeg', qualities[qIdx]);
-                                    bestDataUrl = candidate;
-                                    if (candidate.length <= CLUB_STATUS_MAX_IMAGE_BYTES) {
-                                        resolve({ dataUrl: candidate, byteSize: candidate.length });
-                                        return;
-                                    }
-                                }
-                            }
-                            if (bestDataUrl && bestDataUrl.length <= CLUB_STATUS_MAX_IMAGE_BYTES) {
-                                resolve({ dataUrl: bestDataUrl, byteSize: bestDataUrl.length });
-                            } else {
-                                reject(new Error('Das Foto ist leider auch nach der Komprimierung zu groß (max. 650 KB).'));
-                            }
-                        } catch (err) {
-                            reject(err);
+                    const cleanup = () => {
+                        if (objectUrl && typeof URL !== 'undefined' && typeof URL.revokeObjectURL === 'function') {
+                            try { URL.revokeObjectURL(objectUrl); } catch (e) {}
+                            objectUrl = null;
                         }
                     };
-                    img.onerror = () => reject(new Error('Bildformat wird nicht unterstützt.'));
-                    img.src = rawDataUrl;
+                    img.onload = () => {
+                        cleanup();
+                        resolve(img);
+                    };
+                    img.onerror = () => {
+                        cleanup();
+                        reject(new Error('Bildformat wird nicht unterstützt.'));
+                    };
+                    if (typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function') {
+                        objectUrl = URL.createObjectURL(file);
+                        img.src = objectUrl;
+                    } else {
+                        img.src = await readFileAsDataUrl(file);
+                    }
+                } catch (err) {
+                    if (objectUrl && typeof URL !== 'undefined' && typeof URL.revokeObjectURL === 'function') {
+                        try { URL.revokeObjectURL(objectUrl); } catch (e) {}
+                    }
+                    reject(err);
+                }
+            });
+        }
+
+        function drawImageResizedToCanvas(img, maxLongestEdge) {
+            const naturalW = img.naturalWidth || img.width;
+            const naturalH = img.naturalHeight || img.height;
+            if (!naturalW || !naturalH) {
+                throw new Error('Bild konnte nicht verarbeitet werden.');
+            }
+            const longest = Math.max(naturalW, naturalH);
+            const scale = longest > maxLongestEdge ? (maxLongestEdge / longest) : 1;
+            const targetW = Math.max(1, Math.round(naturalW * scale));
+            const targetH = Math.max(1, Math.round(naturalH * scale));
+            const canvas = document.createElement('canvas');
+            canvas.width = targetW;
+            canvas.height = targetH;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+                throw new Error('Canvas nicht verfügbar.');
+            }
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, targetW, targetH);
+            return canvas;
+        }
+
+        function canvasToJpegBlob(canvas, quality) {
+            return new Promise((resolve, reject) => {
+                try {
+                    if (typeof canvas.toBlob === 'function') {
+                        canvas.toBlob((blob) => {
+                            if (blob) {
+                                resolve(blob);
+                            } else {
+                                reject(new Error('Bild-Blob konnte nicht erstellt werden.'));
+                            }
+                        }, 'image/jpeg', quality);
+                        return;
+                    }
+                    const dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    const parts = dataUrl.split(',');
+                    const binStr = atob(parts[1] || '');
+                    const bytes = new Uint8Array(binStr.length);
+                    for (let i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
+                    resolve(new Blob([bytes], { type: 'image/jpeg' }));
                 } catch (err) {
                     reject(err);
                 }
             });
         }
 
+        async function prepareClubStatusHdBlob(file) {
+            const mime = String(file.type || '').toLowerCase();
+            const needsOptimization = (file.size > CLUB_STATUS_STORAGE_OPTIMIZE_THRESHOLD_BYTES) || (mime !== 'image/jpeg' && mime !== 'image/jpg');
+            if (!needsOptimization) {
+                return file;
+            }
+            const img = await loadClubStatusImageFromFile(file);
+            const canvas = drawImageResizedToCanvas(img, CLUB_STATUS_HD_MAX_EDGE);
+            return await canvasToJpegBlob(canvas, CLUB_STATUS_HD_JPEG_QUALITY);
+        }
+
+        async function compressClubStatusImageFallback(file) {
+            const img = await loadClubStatusImageFromFile(file);
+            const maxEdges = [CLUB_STATUS_FALLBACK_MAX_EDGE, 1200, 1000, 840, 680];
+            const qualities = [CLUB_STATUS_FALLBACK_JPEG_QUALITY, 0.72, 0.64, 0.56, 0.48, 0.40];
+            let bestDataUrl = '';
+            for (let eIdx = 0; eIdx < maxEdges.length; eIdx++) {
+                const canvas = drawImageResizedToCanvas(img, maxEdges[eIdx]);
+                for (let qIdx = 0; qIdx < qualities.length; qIdx++) {
+                    const candidate = canvas.toDataURL('image/jpeg', qualities[qIdx]);
+                    bestDataUrl = candidate;
+                    if (candidate.length <= CLUB_STATUS_MAX_IMAGE_BYTES) {
+                        return { dataUrl: candidate, byteSize: candidate.length };
+                    }
+                }
+            }
+            if (bestDataUrl && bestDataUrl.length <= CLUB_STATUS_MAX_IMAGE_BYTES) {
+                return { dataUrl: bestDataUrl, byteSize: bestDataUrl.length };
+            }
+            throw new Error('Das Foto konnte leider nicht ausreichend komprimiert werden.');
+        }
+
+        function uploadClubStatusBlobToStorage(storageRef, blob, onProgress) {
+            return new Promise((resolve, reject) => {
+                let settled = false;
+                let stallTimer = null;
+                let uploadTask = null;
+
+                const clearStallTimer = () => {
+                    if (stallTimer) {
+                        try { clearTimeout(stallTimer); } catch (e) {}
+                        stallTimer = null;
+                    }
+                };
+                const finish = (err, snapshot) => {
+                    if (settled) return;
+                    settled = true;
+                    clearStallTimer();
+                    if (err) reject(err);
+                    else resolve(snapshot);
+                };
+
+                try {
+                    uploadTask = storageRef.put(blob, { contentType: 'image/jpeg' });
+                } catch (err) {
+                    finish(err);
+                    return;
+                }
+
+                if (uploadTask && typeof uploadTask.on === 'function') {
+                    stallTimer = setTimeout(() => {
+                        try { if (typeof uploadTask.cancel === 'function') uploadTask.cancel(); } catch (e) {}
+                        finish(new Error('Storage-Upload Zeitüberschreitung'));
+                    }, CLUB_STATUS_STORAGE_STALL_TIMEOUT_MS);
+
+                    uploadTask.on(
+                        'state_changed',
+                        (snap) => {
+                            if (snap && snap.bytesTransferred > 0) {
+                                clearStallTimer();
+                            }
+                            if (snap && snap.totalBytes > 0 && typeof onProgress === 'function') {
+                                onProgress(snap.bytesTransferred / snap.totalBytes);
+                            }
+                        },
+                        (err) => finish(err),
+                        () => finish(null, uploadTask.snapshot)
+                    );
+                } else if (uploadTask && typeof uploadTask.then === 'function') {
+                    uploadTask.then((snap) => finish(null, snap), (err) => finish(err));
+                } else {
+                    finish(new Error('Firebase Storage Upload nicht unterstützt'));
+                }
+            });
+        }
+
         async function handleClubStatusFileChange(inputEl) {
+            revokeClubStatusPreviewUrl();
             clubStatusPendingUpload = null;
+            setClubStatusUploadProgress(false, 0, '');
             setClubStatusUploadFeedback('', false);
 
             const previewWrap = document.getElementById('club-status-preview-wrap');
@@ -21861,63 +22756,44 @@
             if (!file) return;
 
             const mime = String(file.type || '').toLowerCase();
-            const isVideo = mime.startsWith('video/');
-            const isImage = mime.startsWith('image/');
+            const fileName = String(file.name || '').toLowerCase();
+            const isImage = mime.startsWith('image/') || /\.(jpe?g|png|webp|gif|heic|heif)$/i.test(fileName);
 
-            if (!isImage && !isVideo) {
-                setClubStatusUploadFeedback('Bitte ein Foto (JPG/PNG/WebP) oder ein kurzes Video (MP4/WebM/MOV) auswählen.', true);
+            if (!isImage) {
+                setClubStatusUploadFeedback('Bitte ein Foto (JPG, PNG, WebP) bis max. 15 MB auswählen.', true);
                 return;
             }
 
-            if (isVideo) {
-                if (file.size > CLUB_STATUS_MAX_VIDEO_BYTES) {
-                    setClubStatusUploadFeedback(CLUB_STATUS_VIDEO_TOO_LARGE_MSG, true);
-                    return;
-                }
-                try {
-                    const dataUrl = await readFileAsDataUrl(file);
-                    if (!isValidClubStatusMedia('video', dataUrl) || dataUrl.length > 1030000) {
-                        setClubStatusUploadFeedback(CLUB_STATUS_VIDEO_TOO_LARGE_MSG, true);
-                        return;
-                    }
-                    clubStatusPendingUpload = { type: 'video', mediaData: dataUrl };
-                    if (previewWrap) previewWrap.style.display = 'flex';
-                    if (previewVideo) {
-                        previewVideo.src = dataUrl;
-                        previewVideo.style.display = 'block';
-                    }
-                    if (sizeInfo) {
-                        sizeInfo.textContent = `✅ Video bereit (${Math.max(1, Math.round(file.size / 1024))} KB)`;
-                        sizeInfo.style.display = 'block';
-                    }
-                    if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = '1'; }
-                } catch (e) {
-                    setClubStatusUploadFeedback('Video konnte nicht geladen werden.', true);
-                }
+            if (file.size > CLUB_STATUS_MAX_IMAGE_FILE_BYTES) {
+                setClubStatusUploadFeedback('Das ausgewählte Foto ist größer als 15 MB. Bitte ein Foto bis maximal 15 MB auswählen.', true);
                 return;
             }
 
-            setClubStatusUploadFeedback('⏳ Foto wird automatisch optimiert...', false);
             try {
-                const compressed = await compressClubStatusImage(file);
-                if (!compressed || !isValidClubStatusMedia('image', compressed.dataUrl)) {
-                    setClubStatusUploadFeedback('Foto konnte nicht verarbeitet werden.', true);
-                    return;
+                let previewSrc = '';
+                if (typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function') {
+                    clubStatusPreviewObjectUrl = URL.createObjectURL(file);
+                    previewSrc = clubStatusPreviewObjectUrl;
+                } else {
+                    previewSrc = await readFileAsDataUrl(file);
                 }
-                clubStatusPendingUpload = { type: 'image', mediaData: compressed.dataUrl };
-                setClubStatusUploadFeedback('', false);
+
+                clubStatusPendingUpload = { type: 'image', file };
                 if (previewWrap) previewWrap.style.display = 'flex';
                 if (previewImg) {
-                    previewImg.src = compressed.dataUrl;
+                    previewImg.src = previewSrc;
                     previewImg.style.display = 'block';
                 }
                 if (sizeInfo) {
-                    sizeInfo.textContent = `✅ Foto optimiert (${Math.max(1, Math.round(compressed.byteSize / 1024))} KB)`;
+                    sizeInfo.textContent = `✅ Foto bereit (${formatClubStatusFileSize(file.size)}) – automatische HD-Aufbereitung beim Posten`;
                     sizeInfo.style.display = 'block';
                 }
-                if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = '1'; }
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                }
             } catch (err) {
-                setClubStatusUploadFeedback((err && err.message) ? err.message : 'Foto konnte nicht optimiert werden.', true);
+                setClubStatusUploadFeedback('Vorschau konnte nicht geladen werden. Bitte ein anderes Foto wählen.', true);
             }
         }
 
@@ -21928,8 +22804,8 @@
                 setClubStatusUploadFeedback('Nur Obmann Simon darf einen Vereinsstatus veröffentlichen.', true);
                 return;
             }
-            if (!clubStatusPendingUpload || !isValidClubStatusMedia(clubStatusPendingUpload.type, clubStatusPendingUpload.mediaData)) {
-                setClubStatusUploadFeedback('Bitte zuerst ein gültiges Foto oder kurzes Video auswählen.', true);
+            if (!clubStatusPendingUpload || !clubStatusPendingUpload.file) {
+                setClubStatusUploadFeedback('Bitte zuerst ein Foto auswählen.', true);
                 return;
             }
             if (typeof db === 'undefined' || !db) {
@@ -21938,35 +22814,83 @@
             }
 
             clubStatusPublishing = true;
+            setClubStatusUploadFeedback('', false);
             const submitBtn = document.getElementById('club-status-submit-btn');
             if (submitBtn) {
                 submitBtn.disabled = true;
                 submitBtn.style.opacity = '0.7';
-                submitBtn.textContent = '⏳ Wird veröffentlicht...';
+                submitBtn.textContent = '⏳ Wird hochgeladen...';
             }
 
             try {
+                const file = clubStatusPendingUpload.file;
                 const captionInput = document.getElementById('club-status-caption-input');
                 const caption = captionInput ? String(captionInput.value || '').trim().slice(0, 120) : '';
                 const now = Date.now();
                 const expiresAt = now + CLUB_STATUS_TTL_MS;
+
+                let mediaData = '';
+                let storagePath = '';
+                let uploadedViaStorage = false;
+
+                // WEG A: Firebase Storage (HD bis 2048px, JPEG 0.88)
+                if (typeof firebase !== 'undefined' && firebase && typeof firebase.storage === 'function') {
+                    try {
+                        setClubStatusUploadProgress(true, 15, '⏳ HD-Foto wird aufbereitet...');
+                        const hdBlob = await prepareClubStatusHdBlob(file);
+                        setClubStatusUploadProgress(true, 30, '☁️ Foto wird hochgeladen...');
+                        const targetPath = `club_status/${now}_status.jpg`;
+                        const storageRef = firebase.storage().ref().child(targetPath);
+                        const snapshot = await uploadClubStatusBlobToStorage(storageRef, hdBlob, (ratio) => {
+                            const pct = 30 + Math.round(Math.max(0, Math.min(1, ratio)) * 55);
+                            setClubStatusUploadProgress(true, pct, '☁️ Foto wird hochgeladen...');
+                        });
+                        setClubStatusUploadProgress(true, 90, '💾 Status wird gespeichert...');
+                        const downloadUrl = await snapshot.ref.getDownloadURL();
+                        if (isValidClubStatusMedia('image', downloadUrl)) {
+                            mediaData = downloadUrl;
+                            storagePath = (snapshot && snapshot.ref && snapshot.ref.fullPath) ? snapshot.ref.fullPath : targetPath;
+                            uploadedViaStorage = true;
+                        }
+                    } catch (storageErr) {
+                        uploadedViaStorage = false;
+                    }
+                }
+
+                // WEG B: Automatischer Fallback (max. 1400px, JPEG 0.80 -> sicher unter 650 KB)
+                if (!uploadedViaStorage) {
+                    setClubStatusUploadProgress(true, 45, '⏳ Optimiere HD-Foto für Direkt-Speicher...');
+                    const fallbackImg = await compressClubStatusImageFallback(file);
+                    if (!fallbackImg || !isValidClubStatusMedia('image', fallbackImg.dataUrl)) {
+                        throw new Error('Bild konnte nicht verarbeitet werden.');
+                    }
+                    mediaData = fallbackImg.dataUrl;
+                    storagePath = '';
+                    setClubStatusUploadProgress(true, 85, '💾 Status wird gespeichert...');
+                }
+
                 await db.collection('club_status').add({
-                    type: clubStatusPendingUpload.type,
-                    mediaData: clubStatusPendingUpload.mediaData,
+                    mediaData,
+                    storagePath,
+                    mediaType: 'image',
+                    type: 'image',
                     caption,
                     sender: 'Schweighofer Simon',
                     createdAt: now,
                     expiresAt
                 });
+
+                setClubStatusUploadProgress(true, 100, '✅ 24h-Status veröffentlicht!');
                 closeClubStatusUploadModal();
             } catch (err) {
                 clubStatusPublishing = false;
+                setClubStatusUploadProgress(false, 0, '');
                 if (submitBtn) {
                     submitBtn.disabled = false;
                     submitBtn.style.opacity = '1';
                     submitBtn.textContent = '🚀 Für 24h posten';
                 }
-                setClubStatusUploadFeedback('Speichern fehlgeschlagen. Bitte eine kleinere Datei versuchen oder Verbindung prüfen.', true);
+                setClubStatusUploadFeedback((err && err.message) ? err.message : 'Speichern fehlgeschlagen. Bitte Verbindung prüfen und erneut versuchen.', true);
             }
         }
 
@@ -22204,7 +23128,7 @@
                         }
                     });
                 }
-                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'cash-report-preview-modal', 'annual-backup-preview-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'chat-image-lightbox', 'member-name-setup-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'master-pin-modal', 'admin-logout-modal', 'app-update-modal', 'club-status-viewer', 'club-status-upload-modal'].forEach(id => {
+                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'cash-report-preview-modal', 'annual-backup-preview-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'chat-image-lightbox', 'member-name-setup-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'master-pin-modal', 'admin-logout-modal', 'app-update-modal', 'club-status-viewer', 'club-status-upload-modal', 'admin-cash-edit-modal'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el && getComputedStyle(el).display === 'none') {
                         el.style.pointerEvents = 'none';
