@@ -2867,105 +2867,188 @@
             flex-shrink: 0;
             box-sizing: border-box;
         }
-        #chairman-command-center {
-            background: #ffffff;
-            border: 1.5px solid #e2e8f0;
-            border-top: 4px solid #eab308;
-            border-radius: 22px;
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
-            overflow: hidden;
-            margin-bottom: 12px;
+        #admin-menu-home {
+            display: block;
         }
-        .chairman-cc-hero {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #ffffff;
-            padding: 16px 18px;
-            border-bottom: 3px solid #eab308;
+        .admin-menu-group {
+            margin-bottom: 18px;
         }
-        .chairman-cc-hero-title {
-            font-size: 1.08rem;
-            font-weight: 900;
-            color: #facc15;
-            letter-spacing: 0.01em;
-            line-height: 1.25;
+        .admin-menu-group-label {
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #475569;
+            margin: 0 0 8px 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .chairman-cc-hero-sub {
-            font-size: 0.8rem;
-            color: #cbd5e1;
-            margin-top: 3px;
-            font-weight: 600;
-            line-height: 1.38;
+        .admin-menu-group-label.chairman {
+            color: #92400e;
         }
-        .chairman-quick-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding: 14px;
-            background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .chairman-quick-tile {
-            min-height: 68px;
-            border-radius: 14px;
-            padding: 10px 12px;
-            text-align: left;
+        .admin-menu-list {
             display: flex;
             flex-direction: column;
+            gap: 8px;
+        }
+        .admin-menu-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-height: 54px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            color: #0f172a;
+            font-family: inherit;
+            text-align: left;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+            transition: border-color 0.16s ease, background 0.16s ease, transform 0.12s ease, box-shadow 0.16s ease;
+            box-sizing: border-box;
+        }
+        .admin-menu-row:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.07);
+        }
+        .admin-menu-row:active {
+            transform: scale(0.99);
+        }
+        .admin-menu-row-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex: 1;
+        }
+        .admin-menu-row-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
-            gap: 3px;
+            font-size: 1.18rem;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .admin-menu-row.chairman-row .admin-menu-row-icon {
+            background: #fefce8;
+            border-color: #fde68a;
+        }
+        .admin-menu-row-text {
+            min-width: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .admin-menu-row-title {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+        .admin-menu-row-sub {
+            font-size: 0.77rem;
+            font-weight: 600;
+            color: #64748b;
+            line-height: 1.3;
+            word-break: break-word;
+        }
+        .admin-menu-row-chevron {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #94a3b8;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .admin-home-footer {
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(15, 23, 42, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #admin-view-panel {
+            display: none;
+            animation: fadeIn 0.18s ease;
+        }
+        .admin-view-backbar {
+            position: sticky;
+            top: 0;
+            z-index: 25;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(248, 250, 252, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+        }
+        .admin-view-back-btn {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 40px;
+            padding: 8px 14px;
+            border-radius: 12px;
             border: 1.5px solid #cbd5e1;
             background: #ffffff;
             color: #0f172a;
             font-family: inherit;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
-            box-sizing: border-box;
-        }
-        .chairman-quick-tile:hover {
-            border-color: #94a3b8;
-            background: #fefce8;
-        }
-        .chairman-quick-tile:active {
-            transform: scale(0.985);
-        }
-        .chairman-quick-tile.active {
-            border: 2px solid #eab308;
-            background: #fefce8;
-            box-shadow: 0 4px 12px rgba(234, 179, 8, 0.16);
-        }
-        .chairman-tile-title {
-            font-size: 0.84rem;
+            font-size: 0.86rem;
             font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .admin-view-back-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+        .admin-view-back-title {
+            font-size: 1.02rem;
+            font-weight: 900;
             color: #0f172a;
-            line-height: 1.22;
-        }
-        .chairman-quick-tile.active .chairman-tile-title {
-            color: #713f12;
-        }
-        .chairman-tile-status {
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: #64748b;
             line-height: 1.25;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
+            padding: 0 2px;
         }
-        .chairman-quick-tile.active .chairman-tile-status {
-            color: #854d0e;
+        #admin-view-panel .admin-section-header {
+            display: none;
+        }
+        #chairman-command-center {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            overflow: visible;
+            margin-bottom: 12px;
         }
         #chairman-panels-stage {
-            padding: 16px;
-            background: #ffffff;
+            padding: 0;
+            background: transparent;
         }
         #chairman-panels-stage.is-empty {
             display: none;
         }
         .chairman-acc-section {
             display: none;
-            background: #ffffff;
+            background: transparent;
         }
         .chairman-acc-section.open {
             display: block;
@@ -3220,23 +3303,24 @@
         }
         .chairman-bar-rights-grid {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: 1fr;
             gap: 8px;
             margin-bottom: 12px;
         }
         .chairman-bar-right-chip {
+            width: 100%;
             min-height: 42px;
             border-radius: 12px;
             border: 1.5px solid #cbd5e1;
             background: #ffffff;
             color: #334155;
-            padding: 8px 10px;
+            padding: 8px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 6px;
+            gap: 8px;
             font-family: inherit;
-            font-size: 0.8rem;
+            font-size: 0.84rem;
             font-weight: 700;
             text-align: left;
             cursor: pointer;
@@ -3253,9 +3337,10 @@
             box-shadow: 0 2px 8px rgba(22, 163, 74, 0.14);
         }
         .chairman-bar-right-name {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            white-space: normal;
+            word-break: break-word;
+            text-align: left;
+            line-height: 1.25;
             min-width: 0;
             flex: 1;
         }
@@ -3920,69 +4005,175 @@
                         <div class="admin-panel-title">🛡️ Vereins-Administration</div>
                         <div class="admin-panel-subtitle">KB &amp; SV Gaschurn-Partenen</div>
                     </div>
-                    <div class="admin-topbar-actions">
-                        <button type="button" id="admin-gear-security-btn" class="btn admin-gear-btn" onclick="switchAdminSection('admin-sec-security')" title="Obmann-Steuerzentrale &amp; System/Sicherheit" style="display: none !important;">👑 Obmann-Steuerzentrale</button>
-                        <button type="button" class="btn admin-btn-delete" onclick="logoutAdmin()">🚪 Abmelden</button>
+                </div>
+
+                <!-- ADMIN START-ÜBERSICHT (OHNE VERSCHACHTELTE DOPPEL-MENÜS) -->
+                <div id="admin-menu-home">
+                    <!-- GRUPPE 1: VEREINSBETRIEB & KASSA (FÜR ALLE 4 ADMINS SICHTBAR) -->
+                    <div class="admin-menu-group" id="admin-menu-general-group">
+                        <div class="admin-menu-group-label">🛡️ Vereinsbetrieb &amp; Kassa</div>
+                        <div class="admin-menu-list" role="navigation" aria-label="Vereinsbetrieb und Kassa">
+                            <button type="button" class="admin-menu-row" id="admin-nav-btn-members" data-admin-view="members" onclick="openAdminView('members')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">🔑</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">Schlüsselliste &amp; PDF</span>
+                                        <span class="admin-menu-row-sub">Schlüsselinhaber, Mitglieder &amp; PDF-Export</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+                            <button type="button" class="admin-menu-row" id="admin-nav-btn-inventory" data-admin-view="inventory" onclick="openAdminView('inventory')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">📦</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">Lagerbestand</span>
+                                        <span class="admin-menu-row-sub">Bestände pflegen &amp; letzte Änderung prüfen</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+                            <button type="button" class="admin-menu-row" id="admin-nav-btn-drinks" data-admin-view="drinks" onclick="openAdminView('drinks')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">🍺</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">Schankbuch &amp; Kassa</span>
+                                        <span class="admin-menu-row-sub">Bar-Abrechnungen, Firmen-Rechnungen &amp; PDF</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <!-- KOMPAKTE BEREICHS-BUTTON-LEISTE (2 SPALTEN MOBIL / 3 SPALTEN PC) -->
-                <div class="admin-nav-grid" role="tablist" aria-label="Admin Bereiche">
-                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-news-events" data-admin-section="admin-sec-news-events" onclick="switchAdminSection('admin-sec-news-events')" style="display: none !important;">
-                        <span class="admin-nav-tile-icon">📰</span>
-                        <span>News &amp; Termine</span>
-                    </button>
-                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-duty" data-admin-section="admin-sec-duty" onclick="switchAdminSection('admin-sec-duty')" style="display: none !important;">
-                        <span class="admin-nav-tile-icon">🛡️</span>
-                        <span>Dienstplan &amp; Push</span>
-                    </button>
-                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-members" data-admin-section="admin-sec-members" onclick="switchAdminSection('admin-sec-members')">
-                        <span class="admin-nav-tile-icon">🔑</span>
-                        <span>Schlüssel &amp; Mitglieder</span>
-                    </button>
-                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-inventory" data-admin-section="admin-sec-inventory" onclick="switchAdminSection('admin-sec-inventory')">
-                        <span class="admin-nav-tile-icon">📦</span>
-                        <span>Lagerbestand</span>
-                    </button>
-                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-drinks" data-admin-section="admin-sec-drinks" onclick="switchAdminSection('admin-sec-drinks')">
-                        <span class="admin-nav-tile-icon">🍺</span>
-                        <span>Schankbuch</span>
-                    </button>
-                    <button type="button" class="admin-nav-tile" id="admin-nav-btn-weapons" data-admin-section="admin-sec-security" onclick="openChairmanWeaponsSection()" style="display: none !important;">
-                        <span class="admin-nav-tile-icon">👑</span>
-                        <span>Obmann &amp; Waffen</span>
-                    </button>
-                </div>
+                    <!-- GRUPPE 2: OBMANN-STEUERZENTRALE (EXKLUSIV FÜR OBMANN SIMON) -->
+                    <div class="admin-menu-group" id="admin-menu-chairman-group" style="display: none !important;">
+                        <div class="admin-menu-group-label chairman">👑 Obmann-Steuerzentrale</div>
+                        <div class="admin-menu-list" role="navigation" aria-label="Obmann-Steuerzentrale">
+                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-news-events" data-admin-view="news-events" onclick="openAdminView('news-events')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">📰</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">News &amp; Termine</span>
+                                        <span class="admin-menu-row-sub">Beiträge &amp; Kalender pflegen</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-duty" data-admin-view="duty" onclick="openAdminView('duty')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">📅</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">Dienstplan &amp; Push</span>
+                                        <span class="admin-menu-row-sub">Schichten &amp; Erinnerungen</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-members" data-admin-view="chairman-members" onclick="openAdminView('chairman-members')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">👥</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">Mitglieder &amp; Schank-Rechte</span>
+                                        <span class="admin-menu-row-sub">Mitglieder, Waffenwarte &amp; Schankbuch-Tab</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-bar" data-admin-view="chairman-bar" onclick="openAdminView('chairman-bar')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">🍺</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">Schankbuch-Preise</span>
+                                        <span class="admin-menu-row-sub">Getränke &amp; Artikel bearbeiten</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-comm" data-admin-view="chairman-comm" onclick="openAdminView('chairman-comm')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">📢</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">Eilmeldung &amp; Chat-Sperre</span>
+                                        <span class="admin-menu-row-sub">Startseiten-Banner &amp; Chat-Modus</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-theme" data-admin-view="chairman-theme" onclick="openAdminView('chairman-theme')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">🎨</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">App-Farbdesign (8 Farben)</span>
+                                        <span class="admin-menu-row-sub">Vereinsfarbe live umstellen</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-security" data-admin-view="chairman-security" onclick="openAdminView('chairman-security')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">🔑</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">Zugangscode &amp; QR-Codes</span>
+                                        <span class="admin-menu-row-sub">Vereins-Code, App-QR &amp; Tresor-QR</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-weapons" data-admin-view="chairman-logs" onclick="openAdminView('chairman-logs')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">📋</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">Waffenprotokolle, Log &amp; Backup</span>
+                                        <span class="admin-menu-row-sub">PDF-Protokolle, Audit-Log &amp; Jahresabschluss</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+                        </div>
+                    </div>
 
-                <!-- AUFKLAPPBARE VORSTANDS- & ADMIN-ANLEITUNG -->
-                <div class="admin-accordion-box" id="admin-guide-accordion-box" style="margin-top: 2px; margin-bottom: 14px; border-color: #cbd5e1;">
-                    <button type="button" class="admin-accordion-header" onclick="toggleAdminAccordion(this)" aria-expanded="false" style="background: #f8fafc; color: #0f172a;">
-                        <span>📘 Vorstands- &amp; Admin-Anleitung</span>
-                        <span class="admin-accordion-arrow" style="color: #475569;" aria-hidden="true">▼</span>
-                    </button>
-                    <div class="admin-accordion-body">
-                        <div class="admin-accordion-inner">
-                            <div class="admin-accordion-content" style="border-top-color: #e2e8f0; display: flex; flex-direction: column; gap: 9px; font-size: 0.86em; line-height: 1.5; color: #1e293b;">
-                                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 10px; padding: 10px 12px;">
-                                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">🛡️ Für alle Vorstandsmitglieder (Heimo, Karin, Sabrina &amp; Simon)</div>
-                                    <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                        <div><strong>🔑 Schlüssel &amp; Mitglieder:</strong> Schlüsselinhaber einsehen und Schlüsselliste als PDF mit Vereinssiegel drucken.</div>
-                                        <div><strong>📦 Lagerbestand:</strong> Aktuelle Bestände pflegen – oben steht immer sichtbar, wann und von wem zuletzt geändert wurde; Simon und Heimo erhalten bei Änderungen automatisch eine Push-Info.</div>
-                                        <div><strong>🍺 Schankbuch &amp; Kassa:</strong> Bar-Verkäufe (<strong style="color: #15803d;">Grün</strong>) und Firmen-Rechnungen (<strong style="color: #1d4ed8;">Blau</strong>) prüfen sowie Kassenberichte &amp; Rechnungen als PDF herunterladen.</div>
-                                        <div><strong>🔐 Sicherheit:</strong> Nach 5 Minuten Inaktivität loggt sich der Admin-Bereich automatisch aus.</div>
-                                    </div>
-                                </div>
+                    <!-- FUSSBEREICH DER START-ÜBERSICHT: ANLEITUNG & ABMELDEN -->
+                    <div class="admin-home-footer">
+                        <!-- AUFKLAPPBARE VORSTANDS- & ADMIN-ANLEITUNG -->
+                        <div class="admin-accordion-box" id="admin-guide-accordion-box" style="margin: 0; border-color: #cbd5e1;">
+                            <button type="button" class="admin-accordion-header" onclick="toggleAdminAccordion(this)" aria-expanded="false" style="background: #f8fafc; color: #0f172a;">
+                                <span>📘 Vorstands- &amp; Admin-Anleitung</span>
+                                <span class="admin-accordion-arrow" style="color: #475569;" aria-hidden="true">▼</span>
+                            </button>
+                            <div class="admin-accordion-body">
+                                <div class="admin-accordion-inner">
+                                    <div class="admin-accordion-content" style="border-top-color: #e2e8f0; display: flex; flex-direction: column; gap: 9px; font-size: 0.86em; line-height: 1.5; color: #1e293b;">
+                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 10px; padding: 10px 12px;">
+                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">🛡️ Für alle Vorstandsmitglieder (Heimo, Karin, Sabrina &amp; Simon)</div>
+                                            <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
+                                                <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Schlüsselinhaber einsehen und Schlüsselliste als PDF mit Vereinssiegel drucken.</div>
+                                                <div><strong>📦 Lagerbestand:</strong> Aktuelle Bestände pflegen – oben steht immer sichtbar, wann und von wem zuletzt geändert wurde; Simon und Heimo erhalten bei Änderungen automatisch eine Push-Info.</div>
+                                                <div><strong>🍺 Schankbuch &amp; Kassa:</strong> Bar-Verkäufe (<strong style="color: #15803d;">Grün</strong>) und Firmen-Rechnungen (<strong style="color: #1d4ed8;">Blau</strong>) prüfen sowie Kassenberichte &amp; Rechnungen als PDF herunterladen.</div>
+                                                <div><strong>🔐 Sicherheit:</strong> Nach 5 Minuten Inaktivität loggt sich der Admin-Bereich automatisch aus.</div>
+                                            </div>
+                                        </div>
 
-                                <div id="admin-guide-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 10px; padding: 10px 12px;">
-                                    <div style="font-weight: 800; color: #92400e; margin-bottom: 5px;">👑 Obmann-Steuerzentrale &amp; Exklusiv-Bereiche (Obmann Simon)</div>
-                                    <div style="color: #334155;">
-                                        Steuerung der 8 App-Farben, Startseiten-Eilmeldung, Chat-Schreibsperre, Schankbuch-Preise, Mitglieder- &amp; Schankbuch-Freigaben, Vereins-Zugangscode, News/Termine/Dienstplan sowie Einsicht und Download von Waffenprotokollen, QR-Codes, Sicherheits-Audit-Log und Jahresabschluss-Backup.
+                                        <div id="admin-guide-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 10px; padding: 10px 12px;">
+                                            <div style="font-weight: 800; color: #92400e; margin-bottom: 5px;">👑 Obmann-Steuerzentrale &amp; Exklusiv-Bereiche (Obmann Simon)</div>
+                                            <div style="color: #334155;">
+                                                Steuerung der 8 App-Farben, Startseiten-Eilmeldung, Chat-Schreibsperre, Schankbuch-Preise, Mitglieder- &amp; Schankbuch-Freigaben, Vereins-Zugangscode, News/Termine/Dienstplan sowie Einsicht und Download von Waffenprotokollen, QR-Codes, Sicherheits-Audit-Log und Jahresabschluss-Backup.
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <button type="button" id="admin-home-logout-btn" class="btn admin-btn-delete btn-block" onclick="logoutAdmin()" style="margin-top: 2px;">🚪 Abmelden</button>
                     </div>
                 </div>
+
+                <!-- VOLLBILD-DETAILANSICHT FÜR DEN GEWÄHLTEN ARBEITSBEREICH -->
+                <div id="admin-view-panel" style="display: none;">
+                    <div class="admin-view-backbar">
+                        <button type="button" id="admin-view-back-btn" class="admin-view-back-btn" onclick="closeAdminView()">← Zurück zur Übersicht</button>
+                        <div id="admin-view-panel-title" class="admin-view-back-title"></div>
+                    </div>
 
                 <!-- UNTERBEREICH 1: NEWS & TERMINE ERSTELLEN / VERWALTEN -->
                 <section class="admin-section-block" id="admin-sec-news-events" style="display: none;">
@@ -4197,48 +4388,10 @@
                 <!-- EXKLUSIVE OBMANN-STEUERZENTRALE & SYSTEM/SICHERHEIT (AUSSCHLIESSLICH FÜR OBMANN SIMON) -->
                 <section class="admin-section-block" id="admin-sec-security" style="display: none;">
                     <div id="chairman-command-center" style="display: none;">
-                        <!-- KOMPAKTE OBMANN-KOPFZEILE -->
-                        <div class="chairman-cc-hero">
-                            <div class="chairman-cc-hero-title">👑 Obmann-Steuerzentrale</div>
-                            <div class="chairman-cc-hero-sub">Tippe eine Kachel an, um den Bereich zu öffnen</div>
-                        </div>
-
-                        <!-- 2x3 KACHEL-NAVIGATION MIT LIVE-STATUS -->
-                        <div class="chairman-quick-grid" role="tablist" aria-label="Obmann-Steuerzentrale Bereiche">
-                            <button type="button" class="chairman-quick-tile active" data-chairman-tile="sec-theme" role="tab" aria-selected="true" aria-controls="sec-theme" onclick="toggleChairmanSection('sec-theme')">
-                                <span class="chairman-tile-title">🎨 App-Farben</span>
-                                <span id="tile-status-theme" class="chairman-tile-status">8 Farbwelten</span>
-                            </button>
-                            <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-comm" role="tab" aria-selected="false" aria-controls="sec-comm" onclick="toggleChairmanSection('sec-comm')">
-                                <span class="chairman-tile-title">📢 Eilmeldung &amp; Chat</span>
-                                <span id="tile-status-comm" class="chairman-tile-status">Banner &amp; Chat-Sperre</span>
-                            </button>
-                            <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-bar" role="tab" aria-selected="false" aria-controls="sec-bar" onclick="toggleChairmanSection('sec-bar')">
-                                <span class="chairman-tile-title">🍺 Schank-Preise</span>
-                                <span id="tile-status-bar" class="chairman-tile-status">Karte &amp; Artikel</span>
-                            </button>
-                            <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-members" role="tab" aria-selected="false" aria-controls="sec-members" onclick="toggleChairmanSection('sec-members')">
-                                <span class="chairman-tile-title">👥 Mitglieder &amp; Rechte</span>
-                                <span id="tile-status-members" class="chairman-tile-status">Schank &amp; Waffenwarte</span>
-                            </button>
-                            <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-security" role="tab" aria-selected="false" aria-controls="sec-security" onclick="toggleChairmanSection('sec-security')">
-                                <span class="chairman-tile-title">🔑 Code &amp; QR-Codes</span>
-                                <span id="tile-status-security" class="chairman-tile-status">Zugang &amp; Tresor-QR</span>
-                            </button>
-                            <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-logs" role="tab" aria-selected="false" aria-controls="sec-logs" onclick="toggleChairmanSection('sec-logs')">
-                                <span class="chairman-tile-title">📋 Protokolle &amp; Log</span>
-                                <span id="tile-status-logs" class="chairman-tile-status">Waffen, Audit &amp; Backup</span>
-                            </button>
-                        </div>
-
-                        <!-- EINZELANSICHT FÜR DEN GEWÄHLTEN BEREICH -->
+                        <!-- EINZELANSICHT FÜR DEN GEWÄHLTEN OBMANN-BEREICH -->
                         <div id="chairman-panels-stage">
                             <!-- SEKTION 1: APP-FARBEN -->
-                            <div class="chairman-acc-section open" id="sec-theme" role="tabpanel">
-                                <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">🎨 App-Farben</span>
-                                    <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
-                                </div>
+                            <div class="chairman-acc-section" id="sec-theme" role="tabpanel">
                                 <div class="chairman-subcard">
                                     <div class="chairman-sub-block" id="admin-theme-control-box" style="display: none;">
                                         <div class="chairman-subcard-title"><span>🎨 Vereins-Farbwelten (2×4 Auswahl)</span></div>
@@ -4256,10 +4409,6 @@
 
                             <!-- SEKTION 2: EILMELDUNG & CHAT -->
                             <div class="chairman-acc-section" id="sec-comm" role="tabpanel">
-                                <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">📢 Eilmeldung &amp; Chat</span>
-                                    <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
-                                </div>
 
                                 <!-- KARTE 2a: STARTSEITEN-EILMELDUNG -->
                                 <div class="chairman-subcard">
@@ -4310,10 +4459,6 @@
 
                             <!-- SEKTION 3: SCHANK-PREISE -->
                             <div class="chairman-acc-section" id="sec-bar" role="tabpanel">
-                                <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">🍺 Schank-Preise</span>
-                                    <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
-                                </div>
                                 <div class="chairman-sub-block" id="chairman-bar-menu-card">
                                     <!-- KARTE 3a: BESTEHENDE ARTIKEL & PREISE -->
                                     <div class="chairman-subcard">
@@ -4356,10 +4501,6 @@
 
                             <!-- SEKTION 4: MITGLIEDER & SCHANKBUCH-RECHTE -->
                             <div class="chairman-acc-section" id="sec-members" role="tabpanel">
-                                <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">👥 Mitglieder &amp; Schankbuch-Rechte</span>
-                                    <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
-                                </div>
                                 <div class="chairman-sub-block" id="chairman-members-card">
                                     <!-- KARTE 4a: AKTIVE VEREINS- & SCHANKDIENST-MITGLIEDER -->
                                     <div class="chairman-subcard">
@@ -4405,10 +4546,6 @@
 
                             <!-- SEKTION 5: CODE & QR-CODES -->
                             <div class="chairman-acc-section" id="sec-security" role="tabpanel">
-                                <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">🔑 Code &amp; QR-Codes</span>
-                                    <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
-                                </div>
 
                                 <!-- KARTE 5a: VEREINS-ZUGANGSCODE ÄNDERN -->
                                 <div class="chairman-subcard">
@@ -4493,10 +4630,6 @@
 
                             <!-- SEKTION 6: PROTOKOLLE, AUDIT-LOG & BACKUP -->
                             <div class="chairman-acc-section" id="sec-logs" role="tabpanel">
-                                <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">📋 Protokolle, Audit-Log &amp; Backup</span>
-                                    <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
-                                </div>
 
                                 <!-- KARTE 6a: WAFFENBUCH-PROTOKOLLE -->
                                 <div class="chairman-subcard">
@@ -4574,6 +4707,7 @@
                         </div>
                     </div>
                 </section>
+                </div><!-- /#admin-view-panel -->
             </div>
         </div>
     </div>
@@ -5073,6 +5207,20 @@
             <button type="button" id="admin-logout-modal-ok-btn" onclick="closeAdminLogoutModal()" style="width: 100%; background: #facc15; color: #1e3a8a; border: 2px solid #fef08a; padding: 14px 20px; font-weight: 900; font-size: 1.05rem; border-radius: 14px; cursor: pointer; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28); font-family: inherit;">OK</button>
         </div>
     </div>
+
+    <!-- AUTOMATISCHES APP-UPDATE POPUP -->
+    <div id="app-update-modal" role="dialog" aria-modal="true" aria-labelledby="app-update-modal-title" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 10050; display: none; pointer-events: none; align-items: center; justify-content: center; padding: 20px;">
+        <div class="modal-anim" style="background: #ffffff; border: 2px solid #eab308; border-radius: 22px; max-width: 360px; width: 100%; padding: 22px; text-align: center; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35); box-sizing: border-box;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); border: 2.5px solid #eab308; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.65rem; line-height: 1; box-shadow: 0 6px 16px rgba(22, 163, 74, 0.28);" aria-hidden="true">🔄</div>
+            <h3 id="app-update-modal-title" style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 12px 0 6px 0; line-height: 1.3;">Neue App-Version verfügbar!</h3>
+            <p style="font-size: 0.9rem; color: #475569; line-height: 1.45; margin: 0 0 18px 0;">Der Obmann hat neue Funktionen oder Verbesserungen eingespielt. Tippe auf „Jetzt aktualisieren“, um sofort den neuesten Stand zu laden.</p>
+            <button type="button" id="app-update-now-btn" onclick="applyAppUpdateNow()" style="width: 100%; min-height: 46px; border-radius: 14px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: 1.5px solid #eab308; font-weight: 800; font-size: 0.96rem; cursor: pointer; margin-bottom: 8px; font-family: inherit; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.28);">🔄 Jetzt aktualisieren</button>
+            <button type="button" id="app-update-later-btn" onclick="dismissAppUpdateModal()" style="background: none; border: none; color: #64748b; font-size: 0.84rem; font-weight: 600; cursor: pointer; padding: 6px; font-family: inherit;">Später erinnern</button>
+        </div>
+    </div>
+
+    <!-- BESTÄTIGUNGS-POPUP NACH ERFOLGREICHEM APP-UPDATE -->
+    <div id="app-updated-toast" role="status" aria-live="polite" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.96); z-index: 10060; display: none; opacity: 0; pointer-events: none; background: #0f172a; color: #ffffff; border: 2px solid #eab308; border-radius: 18px; padding: 16px 22px; box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3); font-size: 0.96rem; font-weight: 800; text-align: center; max-width: calc(100vw - 40px); line-height: 1.35; transition: opacity 0.3s ease, transform 0.3s ease;">✅ App ist auf dem neuesten Stand!</div>
 
     <!-- VEREINS-CHAT VORHANG-SCHUBLADE -->
     <div id="chat-drawer-overlay" onclick="closeChatDrawer()" aria-hidden="true"></div>
@@ -5592,83 +5740,204 @@
             window.scrollTo(0, 0);
         }
 
-        function closeAllAdminSections() {
+        const ADMIN_VIEW_CONFIG = {
+            'members': {
+                title: '🔑 Schlüsselliste & PDF',
+                sectionId: 'admin-sec-members',
+                chairmanSubSectionId: null,
+                chairmanOnly: false
+            },
+            'inventory': {
+                title: '📦 Lagerbestand',
+                sectionId: 'admin-sec-inventory',
+                chairmanSubSectionId: null,
+                chairmanOnly: false
+            },
+            'drinks': {
+                title: '🍺 Schankbuch & Kassa',
+                sectionId: 'admin-sec-drinks',
+                chairmanSubSectionId: null,
+                chairmanOnly: false
+            },
+            'news-events': {
+                title: '📰 News & Termine',
+                sectionId: 'admin-sec-news-events',
+                chairmanSubSectionId: null,
+                chairmanOnly: true
+            },
+            'duty': {
+                title: '📅 Dienstplan & Push',
+                sectionId: 'admin-sec-duty',
+                chairmanSubSectionId: null,
+                chairmanOnly: true
+            },
+            'chairman-members': {
+                title: '👥 Mitglieder & Schank-Rechte',
+                sectionId: 'admin-sec-security',
+                chairmanSubSectionId: 'sec-members',
+                chairmanOnly: true
+            },
+            'chairman-bar': {
+                title: '🍺 Schankbuch-Preise',
+                sectionId: 'admin-sec-security',
+                chairmanSubSectionId: 'sec-bar',
+                chairmanOnly: true
+            },
+            'chairman-comm': {
+                title: '📢 Eilmeldung & Chat-Sperre',
+                sectionId: 'admin-sec-security',
+                chairmanSubSectionId: 'sec-comm',
+                chairmanOnly: true
+            },
+            'chairman-theme': {
+                title: '🎨 App-Farbdesign (8 Farben)',
+                sectionId: 'admin-sec-security',
+                chairmanSubSectionId: 'sec-theme',
+                chairmanOnly: true
+            },
+            'chairman-security': {
+                title: '🔑 Zugangscode & QR-Codes',
+                sectionId: 'admin-sec-security',
+                chairmanSubSectionId: 'sec-security',
+                chairmanOnly: true
+            },
+            'chairman-logs': {
+                title: '📋 Waffenprotokolle, Log & Backup',
+                sectionId: 'admin-sec-security',
+                chairmanSubSectionId: 'sec-logs',
+                chairmanOnly: true
+            }
+        };
+
+        let currentOpenAdminViewId = null;
+
+        function closeAdminView() {
+            currentOpenAdminViewId = null;
+            const homeEl = document.getElementById('admin-menu-home');
+            const viewPanelEl = document.getElementById('admin-view-panel');
+            const titleEl = document.getElementById('admin-view-panel-title');
+            if (viewPanelEl) viewPanelEl.style.display = 'none';
+            if (homeEl) homeEl.style.display = 'block';
+            if (titleEl) titleEl.textContent = '';
+
             document.querySelectorAll('#admin-panel .admin-section-block').forEach(el => {
                 el.classList.remove('active');
                 el.style.display = 'none';
             });
-            document.querySelectorAll('#admin-panel .admin-nav-tile').forEach(btn => btn.classList.remove('active'));
-            const gearBtn = document.getElementById('admin-gear-security-btn');
-            if (gearBtn) gearBtn.classList.remove('active');
+            document.querySelectorAll('#chairman-command-center .chairman-acc-section').forEach(sec => {
+                sec.classList.remove('open');
+            });
             try { lockSecuritySettingsFields(); } catch(e) {}
+            try { window.scrollTo(0, 0); } catch(e) {}
+        }
+
+        function openAdminView(viewId) {
+            const cfg = ADMIN_VIEW_CONFIG[viewId];
+            if (!cfg) {
+                closeAdminView();
+                return;
+            }
+            if (cfg.chairmanOnly && !isChairmanSimonLoggedIn()) {
+                closeAdminView();
+                return;
+            }
+
+            try { lockSecuritySettingsFields(); } catch(e) {}
+
+            document.querySelectorAll('#admin-panel .admin-section-block').forEach(el => {
+                el.classList.remove('active');
+                el.style.display = 'none';
+            });
+            document.querySelectorAll('#chairman-command-center .chairman-acc-section').forEach(sec => {
+                sec.classList.remove('open');
+            });
+
+            const homeEl = document.getElementById('admin-menu-home');
+            const viewPanelEl = document.getElementById('admin-view-panel');
+            const titleEl = document.getElementById('admin-view-panel-title');
+            if (homeEl) homeEl.style.display = 'none';
+            if (viewPanelEl) viewPanelEl.style.display = 'block';
+            if (titleEl) titleEl.textContent = cfg.title;
+
+            const targetSection = document.getElementById(cfg.sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                targetSection.style.display = 'block';
+            }
+
+            if (cfg.chairmanSubSectionId) {
+                const ccEl = document.getElementById('chairman-command-center');
+                const stageEl = document.getElementById('chairman-panels-stage');
+                const subSecEl = document.getElementById(cfg.chairmanSubSectionId);
+                if (ccEl) ccEl.style.display = 'block';
+                if (stageEl) stageEl.classList.remove('is-empty');
+                if (subSecEl) subSecEl.classList.add('open');
+            }
+
+            currentOpenAdminViewId = viewId;
+
+            if (viewId === 'members') {
+                try { renderAdminMembersOverview(); } catch(e) {}
+            } else if (viewId === 'chairman-theme') {
+                try { renderAdminThemeTiles(); } catch(e) {}
+            } else if (viewId === 'chairman-comm') {
+                try { renderHomeEmergencyBanner(currentEmergencyBannerState); } catch(e) {}
+            } else if (viewId === 'chairman-bar') {
+                try { renderChairmanBarMenuManager(); } catch(e) {}
+            } else if (viewId === 'chairman-members') {
+                try { renderChairmanMembersManager(); } catch(e) {}
+            } else if (viewId === 'chairman-security') {
+                try { renderChairmanInlineQrPreviews(); } catch(e) {}
+            } else if (viewId === 'chairman-logs') {
+                try { updateChairmanExclusiveVisibility(); } catch(e) {}
+            }
+
+            try { window.scrollTo(0, 0); } catch(e) {}
+        }
+
+        function closeAllAdminSections() {
+            closeAdminView();
         }
 
         function openChairmanWeaponsSection() {
             if (!isChairmanSimonLoggedIn()) return;
-            switchAdminSection('admin-sec-security');
-            toggleChairmanSection('sec-logs', true);
-            setTimeout(() => {
-                const logsSec = document.getElementById('sec-logs');
-                if (logsSec && typeof logsSec.scrollIntoView === 'function') {
-                    logsSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }, 60);
+            openAdminView('chairman-logs');
         }
 
         function switchAdminSection(sectionId) {
             if (!sectionId) {
-                closeAllAdminSections();
+                closeAdminView();
                 return;
             }
-            if ((sectionId === 'admin-sec-news-events' || sectionId === 'admin-sec-duty' || sectionId === 'admin-sec-security' || sectionId === 'admin-sec-weapons') && !isChairmanSimonLoggedIn()) {
-                closeAllAdminSections();
+            const directViewMap = {
+                'admin-sec-members': 'members',
+                'admin-sec-inventory': 'inventory',
+                'admin-sec-drinks': 'drinks',
+                'admin-sec-news-events': 'news-events',
+                'admin-sec-duty': 'duty',
+                'admin-sec-weapons': 'chairman-logs',
+                'admin-sec-security': 'chairman-theme'
+            };
+            const targetViewId = directViewMap[sectionId] || (ADMIN_VIEW_CONFIG[sectionId] ? sectionId : null);
+            if (!targetViewId) {
+                closeAdminView();
                 return;
             }
-            if (sectionId === 'admin-sec-weapons') {
-                sectionId = 'admin-sec-security';
-            }
-            const targetEl = document.getElementById(sectionId);
-            const isAlreadyOpen = !!(targetEl && (targetEl.classList.contains('active') || targetEl.style.display === 'block'));
-
-            closeAllAdminSections();
-
-            if (isAlreadyOpen) {
-                return;
-            }
-
-            if (targetEl) {
-                targetEl.classList.add('active');
-                targetEl.style.display = 'block';
-            }
-
-            if (sectionId === 'admin-sec-security') {
-                const gearBtn = document.getElementById('admin-gear-security-btn');
-                if (gearBtn) gearBtn.classList.add('active');
-            } else {
-                const matchingBtn = document.querySelector(`#admin-panel .admin-nav-tile[data-admin-section="${sectionId}"]`);
-                if (matchingBtn) matchingBtn.classList.add('active');
-            }
-
-            if (sectionId === 'admin-sec-members') {
-                try { renderAdminMembersOverview(); } catch(e) {}
-            }
-            if (sectionId === 'admin-sec-security') {
-                try { updateChairmanExclusiveVisibility(); } catch(e) {}
-            }
+            openAdminView(targetViewId);
         }
 
         function switchAdminTab(tabContentId) {
             const sectionMap = {
-                'admin-tab-news': 'admin-sec-news-events',
-                'admin-tab-events': 'admin-sec-news-events',
-                'admin-tab-duty': 'admin-sec-duty',
-                'admin-tab-inventory': 'admin-sec-inventory',
-                'admin-tab-drinks': 'admin-sec-drinks',
-                'admin-tab-weapons': 'admin-sec-weapons',
-                'admin-tab-members': 'admin-sec-members',
-                'admin-tab-security': 'admin-sec-security'
+                'admin-tab-news': 'news-events',
+                'admin-tab-events': 'news-events',
+                'admin-tab-duty': 'duty',
+                'admin-tab-inventory': 'inventory',
+                'admin-tab-drinks': 'drinks',
+                'admin-tab-weapons': 'chairman-logs',
+                'admin-tab-members': 'members',
+                'admin-tab-security': 'chairman-security'
             };
-            switchAdminSection(sectionMap[tabContentId] || tabContentId);
+            openAdminView(sectionMap[tabContentId] || tabContentId);
         }
 
         window.toggleAdminAccordion = function(btn) {
@@ -12906,6 +13175,7 @@
             window.cashSalesList = [];
             lastGeneratedTresorQrDataUrl = '';
             lastGeneratedMemberAppQrDataUrl = '';
+            try { closeAdminView(); } catch(e) {}
             try { lockSecuritySettingsFields(); } catch(e) {}
             try { stopAdminAuditLogListener(); } catch(e) {}
             try { if (typeof cancelEditDutyEntry === 'function') cancelEditDutyEntry(); } catch(e) {}
@@ -13648,10 +13918,13 @@
             const allActive = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
                 ? officialActiveMembers
                 : DEFAULT_ACTIVE_MEMBERS;
+            const activeNormSet = new Set(allActive.map(n => normalizeMemberNameForMatch(n)));
             if (!Array.isArray(pendingChairmanBarMembers)) {
                 pendingChairmanBarMembers = Array.isArray(officialBarMembers)
-                    ? [...officialBarMembers]
+                    ? officialBarMembers.filter(n => activeNormSet.has(normalizeMemberNameForMatch(n)))
                     : [...allActive];
+            } else {
+                pendingChairmanBarMembers = pendingChairmanBarMembers.filter(n => activeNormSet.has(normalizeMemberNameForMatch(n)));
             }
             const activeSelectedSet = new Set(pendingChairmanBarMembers.map(n => normalizeMemberNameForMatch(n)));
             if (allActive.length === 0) {
@@ -13699,10 +13972,14 @@
             const allActive = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
                 ? officialActiveMembers
                 : DEFAULT_ACTIVE_MEMBERS;
+            const activeNormSet = new Set(allActive.map(n => normalizeMemberNameForMatch(n)));
             const rawSelection = Array.isArray(pendingChairmanBarMembers)
                 ? pendingChairmanBarMembers
                 : (Array.isArray(officialBarMembers) ? officialBarMembers : allActive);
-            const cleanBarMembers = sanitizeActiveMembersList(rawSelection, true);
+            const cleanBarMembers = sanitizeActiveMembersList(
+                rawSelection.filter(n => activeNormSet.has(normalizeMemberNameForMatch(n))),
+                true
+            );
             if (saveBtn) saveBtn.disabled = true;
             try {
                 await db.collection('settings').doc('members').set({
@@ -13763,9 +14040,13 @@
                         return `<span class="chairman-member-chip weapon-chip"><span>🎯 ${safe}</span><button type="button" class="chairman-chip-remove-btn" data-member-type="weapon" data-member-name="${safe}" onclick="removeChairmanMember(this.dataset.memberType, this.dataset.memberName)" title="${safe} entfernen" aria-label="${safe} entfernen">✕</button></span>`;
                     }).join('');
             }
+            const allActiveForBar = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
+                ? officialActiveMembers
+                : DEFAULT_ACTIVE_MEMBERS;
+            const activeNormSetForBar = new Set(allActiveForBar.map(n => normalizeMemberNameForMatch(n)));
             pendingChairmanBarMembers = Array.isArray(officialBarMembers)
-                ? [...officialBarMembers]
-                : [...(Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0 ? officialActiveMembers : DEFAULT_ACTIVE_MEMBERS)];
+                ? officialBarMembers.filter(n => activeNormSetForBar.has(normalizeMemberNameForMatch(n)))
+                : [...allActiveForBar];
             renderChairmanBarMembersSelector();
             updateChairmanTileStatuses();
         }
@@ -13775,17 +14056,29 @@
             const feedbackEl = document.getElementById('chairman-members-feedback');
             const cleanActive = sanitizeActiveMembersList(nextActive, true);
             const cleanWeapons = sanitizeActiveMembersList(nextWeapons, true);
+            const activeNormSet = new Set(cleanActive.map(n => normalizeMemberNameForMatch(n)));
+            const hasExplicitBarMembers = Array.isArray(officialBarMembers);
+            const prunedBarMembers = hasExplicitBarMembers
+                ? sanitizeActiveMembersList(
+                    officialBarMembers.filter(n => activeNormSet.has(normalizeMemberNameForMatch(n))),
+                    true
+                )
+                : null;
             try {
-                await db.collection('settings').doc('members').set({
+                const firestorePayload = {
                     activeMembers: cleanActive,
                     active: cleanActive,
                     weaponMembers: cleanWeapons,
                     updatedBy: 'Simon',
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
+                };
+                if (hasExplicitBarMembers) {
+                    firestorePayload.barMembers = prunedBarMembers;
+                }
+                await db.collection('settings').doc('members').set(firestorePayload, { merge: true });
                 const snapshotPayload = { activeMembers: cleanActive, weaponMembers: cleanWeapons, passive: officialPassiveMembers };
-                if (Array.isArray(officialBarMembers)) {
-                    snapshotPayload.barMembers = officialBarMembers;
+                if (hasExplicitBarMembers) {
+                    snapshotPayload.barMembers = prunedBarMembers;
                 }
                 applyMembersDataSnapshot(snapshotPayload);
                 try { logAdminAudit('Mitglieder-/Waffenwart-Liste geändert', auditMsg); } catch (e) {}
@@ -14085,67 +14378,34 @@
 
         function toggleChairmanSection(sectionId, forceOpen = false) {
             if (!isChairmanSimonLoggedIn()) return;
-            const root = document.getElementById('chairman-command-center');
-            if (!root) return;
-            const stage = document.getElementById('chairman-panels-stage');
-            const target = document.getElementById(sectionId);
-            if (!target || !target.classList.contains('chairman-acc-section')) return;
-
-            const wasOpen = target.classList.contains('open');
-            const shouldOpen = forceOpen ? true : !wasOpen;
-
-            root.querySelectorAll('.chairman-acc-section').forEach(sec => {
-                sec.classList.remove('open');
-            });
-            root.querySelectorAll('.chairman-quick-tile').forEach(tile => {
-                tile.classList.remove('active');
-                tile.setAttribute('aria-selected', 'false');
-            });
-
-            if (shouldOpen) {
-                target.classList.add('open');
-                const activeTile = root.querySelector('.chairman-quick-tile[data-chairman-tile="' + sectionId + '"]');
-                if (activeTile) {
-                    activeTile.classList.add('active');
-                    activeTile.setAttribute('aria-selected', 'true');
+            const subToViewMap = {
+                'sec-theme': 'chairman-theme',
+                'sec-comm': 'chairman-comm',
+                'sec-bar': 'chairman-bar',
+                'sec-members': 'chairman-members',
+                'sec-security': 'chairman-security',
+                'sec-logs': 'chairman-logs'
+            };
+            const mappedView = subToViewMap[sectionId];
+            if (mappedView) {
+                if (!forceOpen && currentOpenAdminViewId === mappedView) {
+                    closeAdminView();
+                } else {
+                    openAdminView(mappedView);
                 }
-                if (stage) stage.classList.remove('is-empty');
-                if (sectionId === 'sec-security') {
-                    try { renderChairmanInlineQrPreviews(); } catch (e) {}
-                }
-            } else {
-                if (stage) stage.classList.add('is-empty');
             }
         }
 
         function collapseAllChairmanSections() {
-            const root = document.getElementById('chairman-command-center');
-            if (!root) return;
-            const stage = document.getElementById('chairman-panels-stage');
-            root.querySelectorAll('.chairman-acc-section').forEach(sec => {
-                sec.classList.remove('open');
-            });
-            root.querySelectorAll('.chairman-quick-tile').forEach(tile => {
-                tile.classList.remove('active');
-                tile.setAttribute('aria-selected', 'false');
-            });
-            if (stage) stage.classList.add('is-empty');
+            closeAdminView();
         }
 
         function resetChairmanSectionsToDefault() {
             const root = document.getElementById('chairman-command-center');
             if (!root) return;
-            const stage = document.getElementById('chairman-panels-stage');
             root.querySelectorAll('.chairman-acc-section').forEach(sec => {
-                const isDefault = sec.id === 'sec-theme';
-                sec.classList.toggle('open', isDefault);
+                sec.classList.remove('open');
             });
-            root.querySelectorAll('.chairman-quick-tile').forEach(tile => {
-                const isDefault = tile.getAttribute('data-chairman-tile') === 'sec-theme';
-                tile.classList.toggle('active', isDefault);
-                tile.setAttribute('aria-selected', isDefault ? 'true' : 'false');
-            });
-            if (stage) stage.classList.remove('is-empty');
             updateChairmanTileStatuses();
         }
 
@@ -14172,27 +14432,19 @@
         function updateChairmanExclusiveVisibility() {
             const isChairman = isChairmanSimonLoggedIn();
             const ccEl = document.getElementById('chairman-command-center');
-            const gearBtn = document.getElementById('admin-gear-security-btn');
-            const chairmanOnlyTileIds = ['admin-nav-btn-news-events', 'admin-nav-btn-duty', 'admin-nav-btn-weapons'];
+            const chairmanGroupEl = document.getElementById('admin-menu-chairman-group');
             const chairmanOnlySectionIds = ['admin-sec-news-events', 'admin-sec-duty', 'admin-sec-security', 'admin-sec-weapons'];
             if (ccEl) ccEl.style.display = isChairman ? 'block' : 'none';
-            if (gearBtn) {
+            if (chairmanGroupEl) {
                 if (isChairman) {
-                    gearBtn.style.setProperty('display', 'inline-flex');
+                    chairmanGroupEl.style.removeProperty('display');
                 } else {
-                    gearBtn.style.setProperty('display', 'none', 'important');
+                    chairmanGroupEl.style.setProperty('display', 'none', 'important');
                 }
             }
-            chairmanOnlyTileIds.forEach(tileId => {
-                const tileEl = document.getElementById(tileId);
-                if (!tileEl) return;
-                if (isChairman) {
-                    tileEl.style.removeProperty('display');
-                } else {
-                    tileEl.classList.remove('active');
-                    tileEl.style.setProperty('display', 'none', 'important');
-                }
-            });
+            if (!isChairman && currentOpenAdminViewId && ADMIN_VIEW_CONFIG[currentOpenAdminViewId] && ADMIN_VIEW_CONFIG[currentOpenAdminViewId].chairmanOnly) {
+                closeAdminView();
+            }
             chairmanOnlySectionIds.forEach(secId => {
                 const secEl = document.getElementById(secId);
                 if (!secEl) return;
@@ -20265,8 +20517,174 @@
             }
         });
 
+        let appUpdateNotifierInitialized = false;
+        let appUpdateWaitingWorker = null;
+        let appUpdateDismissedThisSession = false;
+        let appUpdateReloading = false;
+        let appUpdatedToastHideTimer = null;
+        let appUpdatedToastClearTimer = null;
+        const trackedAppUpdateRegs = (typeof WeakSet === 'function') ? new WeakSet() : null;
+
+        function showAppUpdateModal(worker) {
+            if (worker) appUpdateWaitingWorker = worker;
+            if (appUpdateDismissedThisSession || appUpdateReloading) return;
+            const modal = document.getElementById('app-update-modal');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            modal.style.pointerEvents = 'auto';
+        }
+
+        function dismissAppUpdateModal() {
+            appUpdateDismissedThisSession = true;
+            const modal = document.getElementById('app-update-modal');
+            if (!modal) return;
+            modal.style.display = 'none';
+            modal.style.pointerEvents = 'none';
+        }
+
+        function showAppUpdatedToast() {
+            const toast = document.getElementById('app-updated-toast');
+            if (!toast) return;
+            if (appUpdatedToastHideTimer) { clearTimeout(appUpdatedToastHideTimer); appUpdatedToastHideTimer = null; }
+            if (appUpdatedToastClearTimer) { clearTimeout(appUpdatedToastClearTimer); appUpdatedToastClearTimer = null; }
+            toast.style.display = 'block';
+            toast.style.opacity = '0';
+            toast.style.transform = 'translate(-50%, -50%) scale(0.96)';
+            const reveal = () => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translate(-50%, -50%) scale(1)';
+            };
+            if (typeof requestAnimationFrame === 'function') {
+                requestAnimationFrame(() => requestAnimationFrame(reveal));
+            } else {
+                setTimeout(reveal, 16);
+            }
+            appUpdatedToastHideTimer = setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, -50%) scale(0.96)';
+                appUpdatedToastClearTimer = setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 320);
+            }, 3000);
+        }
+
+        async function applyAppUpdateNow() {
+            if (appUpdateReloading) return;
+            appUpdateReloading = true;
+            const btn = document.getElementById('app-update-now-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = '⏳ Aktualisiere...';
+            }
+            try { sessionStorage.setItem('kb_sv_just_updated', '1'); } catch (e) {}
+            try {
+                if (appUpdateWaitingWorker && typeof appUpdateWaitingWorker.postMessage === 'function') {
+                    appUpdateWaitingWorker.postMessage({ type: 'SKIP_WAITING' });
+                } else if ('serviceWorker' in navigator && typeof navigator.serviceWorker.getRegistration === 'function') {
+                    const reg = await navigator.serviceWorker.getRegistration();
+                    if (reg && reg.waiting && typeof reg.waiting.postMessage === 'function') {
+                        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                    }
+                }
+            } catch (e) {}
+            try {
+                if ('caches' in window && typeof caches.keys === 'function') {
+                    const cacheKeys = await caches.keys();
+                    await Promise.all(
+                        cacheKeys
+                            .filter(key => String(key || '').startsWith('kb-sv-offline-'))
+                            .map(key => caches.delete(key).catch(() => {}))
+                    );
+                }
+            } catch (e) {}
+            setTimeout(() => {
+                try { window.location.reload(); } catch (e) {}
+            }, 120);
+        }
+
+        function attachRegistrationUpdateWatcher(reg) {
+            if (!reg) return;
+            if (reg.waiting) {
+                showAppUpdateModal(reg.waiting);
+            }
+            if (trackedAppUpdateRegs && trackedAppUpdateRegs.has(reg)) return;
+            if (trackedAppUpdateRegs) trackedAppUpdateRegs.add(reg);
+            if (typeof reg.addEventListener === 'function') {
+                reg.addEventListener('updatefound', () => {
+                    const installingWorker = reg.installing;
+                    if (!installingWorker || typeof installingWorker.addEventListener !== 'function') return;
+                    installingWorker.addEventListener('statechange', () => {
+                        if (installingWorker.state === 'installed' && navigator.serviceWorker && navigator.serviceWorker.controller) {
+                            showAppUpdateModal(installingWorker);
+                        }
+                    });
+                });
+            }
+        }
+
+        async function checkForServiceWorkerUpdate() {
+            if (!('serviceWorker' in navigator) || !navigator.serviceWorker) return;
+            try {
+                let primaryReg = null;
+                if (typeof navigator.serviceWorker.getRegistration === 'function') {
+                    primaryReg = await navigator.serviceWorker.getRegistration();
+                }
+                if (primaryReg) {
+                    attachRegistrationUpdateWatcher(primaryReg);
+                    if (typeof primaryReg.update === 'function') {
+                        primaryReg.update().catch(() => {});
+                    }
+                } else if (typeof navigator.serviceWorker.getRegistrations === 'function') {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    (Array.isArray(regs) ? regs : []).forEach(reg => {
+                        attachRegistrationUpdateWatcher(reg);
+                        if (reg && typeof reg.update === 'function') {
+                            reg.update().catch(() => {});
+                        }
+                    });
+                }
+            } catch (e) {}
+        }
+
+        function setupAppUpdateNotifier() {
+            if (appUpdateNotifierInitialized) return;
+            appUpdateNotifierInitialized = true;
+
+            try {
+                if (sessionStorage.getItem('kb_sv_just_updated') === '1') {
+                    sessionStorage.removeItem('kb_sv_just_updated');
+                    showAppUpdatedToast();
+                }
+            } catch (e) {}
+
+            if (!('serviceWorker' in navigator) || !navigator.serviceWorker) return;
+
+            try {
+                if (typeof navigator.serviceWorker.addEventListener === 'function') {
+                    navigator.serviceWorker.addEventListener('controllerchange', () => {
+                        if (appUpdateReloading) return;
+                        try {
+                            if (sessionStorage.getItem('kb_sv_just_updated') === '1') {
+                                sessionStorage.removeItem('kb_sv_just_updated');
+                            }
+                        } catch (e) {}
+                        showAppUpdatedToast();
+                    });
+                }
+            } catch (e) {}
+
+            checkForServiceWorkerUpdate();
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    checkForServiceWorkerUpdate();
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             try { updateOfflineWarningBanner(); } catch(e) {}
+            try { setupAppUpdateNotifier(); } catch(e) {}
             try {
                 const pinInput = document.getElementById('club-pin-input');
                 if (pinInput) {
@@ -20279,7 +20697,7 @@
                         }
                     });
                 }
-                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'cash-report-preview-modal', 'annual-backup-preview-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'chat-image-lightbox', 'member-name-setup-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'master-pin-modal', 'admin-logout-modal'].forEach(id => {
+                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'cash-report-preview-modal', 'annual-backup-preview-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'chat-image-lightbox', 'member-name-setup-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'master-pin-modal', 'admin-logout-modal', 'app-update-modal'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el && getComputedStyle(el).display === 'none') {
                         el.style.pointerEvents = 'none';
