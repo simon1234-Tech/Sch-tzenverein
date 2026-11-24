@@ -232,7 +232,16 @@
             position: relative;
             z-index: 1;
         }
+        .app-header-crest-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-left: 2px;
+        }
         .app-header-crest {
+            position: relative;
             width: 68px;
             height: 68px;
             border-radius: 50%;
@@ -244,7 +253,15 @@
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
             flex-shrink: 0;
             display: block;
-            margin-left: 2px;
+            transition: transform 0.16s ease, box-shadow 0.22s ease;
+        }
+        .app-header-crest.has-active-status {
+            outline: none;
+            box-shadow: 0 0 0 3px #16a34a, 0 0 12px rgba(22, 163, 74, 0.65);
+            cursor: pointer;
+        }
+        .app-header-crest.has-active-status:active {
+            transform: scale(0.95);
         }
         .app-header-crest img {
             width: 100%;
@@ -252,6 +269,280 @@
             object-fit: cover;
             display: block;
             background: #0f172a;
+        }
+        .club-status-video-badge {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.38);
+            font-size: 1.45rem;
+            line-height: 1;
+            pointer-events: none;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+        }
+        .club-status-add-btn {
+            position: absolute;
+            right: -2px;
+            bottom: -2px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fde047 0%, #eab308 100%);
+            color: #0f172a;
+            border: 2px solid #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            font-size: 15px;
+            font-weight: 900;
+            line-height: 1;
+            padding: 0;
+            margin: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 6;
+            font-family: inherit;
+            touch-action: manipulation;
+            transition: transform 0.15s ease;
+        }
+        .club-status-add-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* 24-STUNDEN-VEREINSSTATUS VOLLBILD-BETRACHTER & UPLOAD */
+        #club-status-viewer {
+            position: fixed;
+            inset: 0;
+            background: #000000;
+            z-index: 10060;
+            display: none;
+            flex-direction: column;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            color: #ffffff;
+        }
+        .club-status-viewer-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 4;
+            padding: calc(12px + env(safe-area-inset-top, 0px)) 14px 18px 14px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.35) 70%, rgba(0, 0, 0, 0) 100%);
+        }
+        .club-status-progress-bars {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+        .club-status-progress-seg {
+            flex: 1;
+            height: 3.5px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.32);
+            overflow: hidden;
+        }
+        .club-status-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #ffffff;
+            border-radius: 999px;
+            transition: none;
+        }
+        .club-status-viewer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .club-status-viewer-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+        .club-status-viewer-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid #eab308;
+            background: #0f172a;
+            flex-shrink: 0;
+        }
+        .club-status-viewer-sender-wrap {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        .club-status-viewer-sender {
+            font-size: 0.94rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
+        }
+        .club-status-viewer-time {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.82);
+            line-height: 1.25;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
+        }
+        .club-status-viewer-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        .club-status-viewer-icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(15, 23, 42, 0.62);
+            color: #ffffff;
+            font-size: 1.05rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            font-family: inherit;
+            touch-action: manipulation;
+        }
+        .club-status-viewer-icon-btn.delete-btn {
+            background: rgba(185, 28, 28, 0.82);
+            border-color: rgba(254, 202, 202, 0.45);
+        }
+        .club-status-viewer-stage {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #000000;
+        }
+        #club-status-viewer-img,
+        #club-status-viewer-video {
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: none;
+            background: #000000;
+        }
+        .club-status-tap-zone {
+            position: absolute;
+            top: 86px;
+            bottom: 0;
+            z-index: 3;
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .club-status-tap-zone.left {
+            left: 0;
+            width: 38%;
+        }
+        .club-status-tap-zone.right {
+            right: 0;
+            width: 62%;
+        }
+        #club-status-viewer.is-video-slide .club-status-tap-zone {
+            bottom: 78px;
+        }
+        .club-status-viewer-caption-wrap {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+            z-index: 4;
+            padding: 0 18px;
+            display: none;
+            justify-content: center;
+            pointer-events: none;
+        }
+        #club-status-viewer.is-video-slide .club-status-viewer-caption-wrap {
+            bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+        }
+        .club-status-viewer-caption {
+            max-width: 520px;
+            background: rgba(15, 23, 42, 0.78);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 14px;
+            font-size: 0.94rem;
+            font-weight: 600;
+            line-height: 1.4;
+            text-align: center;
+            word-break: break-word;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+        }
+        #club-status-upload-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 10070;
+            display: none;
+            pointer-events: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+        .club-status-upload-card {
+            background: #ffffff;
+            border: 2px solid #eab308;
+            border-radius: 22px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 90dvh;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+            box-sizing: border-box;
+            color: #0f172a;
+        }
+        .club-status-upload-preview {
+            width: 100%;
+            max-height: 240px;
+            border-radius: 14px;
+            background: #0f172a;
+            overflow: hidden;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            margin: 12px 0;
+            border: 1.5px solid #cbd5e1;
+        }
+        .club-status-upload-preview img,
+        .club-status-upload-preview video {
+            width: 100%;
+            max-height: 240px;
+            object-fit: contain;
+            display: block;
         }
         .app-header-title-wrap {
             position: relative;
@@ -1627,7 +1918,10 @@
         body.app-locked #member-name-setup-modal,
         body.app-locked #chat-popup-toast,
         body.app-locked #app-update-modal,
-        body.app-locked #app-updated-toast {
+        body.app-locked #app-updated-toast,
+        body.app-locked #club-status-add-btn,
+        body.app-locked #club-status-viewer,
+        body.app-locked #club-status-upload-modal {
             display: none !important;
             pointer-events: none !important;
         }
@@ -1723,7 +2017,9 @@
         #chat-drawer.open {
             transform: translateX(0);
         }
-        body.chat-drawer-open .bottom-nav {
+        body.chat-drawer-open .bottom-nav,
+        body.club-status-viewer-open .bottom-nav,
+        body.club-status-upload-open .bottom-nav {
             display: none !important;
         }
         .chat-drawer-header {
@@ -3619,9 +3915,13 @@
             <path d="M0 80 L0 64 L92 42 L166 58 L252 28 L334 54 L418 32 L505 56 L568 40 L600 54 L600 80 Z" fill="#ffffff"/>
         </svg>
         <div class="app-header-top-row">
-            <span class="app-header-crest" role="img" aria-label="Vereinswappen KB &amp; SV Gaschurn-Partenen">
-                <img id="app-header-crest-img" data-club-crest="1" data-crest-src="vereinslogo.png" src="vereinslogo.png" alt="" loading="eager" decoding="sync" fetchpriority="high" onerror="if(window.handleClubCrestError){window.handleClubCrestError(this);}">
-            </span>
+            <div class="app-header-crest-wrap">
+                <span id="app-header-crest-btn" class="app-header-crest" role="img" aria-label="Vereinswappen KB &amp; SV Gaschurn-Partenen" onclick="handleClubStatusCrestClick(event)" onkeydown="if(event.key==='Enter'||event.key===' '){handleClubStatusCrestClick(event);}">
+                    <img id="app-header-crest-img" data-club-crest="1" data-crest-src="logo.png?v=3" src="logo.png?v=3" alt="Vereinswappen" loading="eager" decoding="sync" fetchpriority="high" onerror="if(window.handleClubCrestError){window.handleClubCrestError(this);}">
+                    <span id="club-status-video-badge" class="club-status-video-badge" aria-hidden="true">▶️</span>
+                </span>
+                <button type="button" id="club-status-add-btn" class="club-status-add-btn" onclick="openClubStatusUploadModal(event)" aria-label="Neuen 24h-Vereinsstatus hinzufügen" title="Neuen 24h-Vereinsstatus hinzufügen" style="display: none;">+</button>
+            </div>
             <button type="button" id="header-help-btn" onclick="openMemberHelpModal()" aria-label="App-Anleitung öffnen" title="App-Anleitung öffnen" style="min-width: 56px; padding: 8px 12px; background: #ffffff; color: #7f1d1d; border: none; border-radius: 14px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); flex-shrink: 0; cursor: pointer; font-family: inherit; touch-action: manipulation;">
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#7f1d1d" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <circle cx="12" cy="12" r="9.5"/>
@@ -3641,14 +3941,22 @@
 
     <script>
         (function initClubCrestInstantCache() {
-            var CREST_CACHE_KEY = 'kb_sv_crest_dataurl';
-            var CREST_SOURCES = ['vereinslogo.png', 'logo.png', 'maskottchen.png'];
+            var CREST_CACHE_KEY = 'kb_sv_crest_dataurl_v3';
+            var CREST_SOURCES = ['logo.png?v=3', 'siegel.png', 'vereinslogo.png', 'maskottchen.png'];
+            var CREST_SVG_FALLBACK = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='60' r='58' fill='%230f172a' stroke='%23eab308' stroke-width='4'/%3E%3Ccircle cx='60' cy='60' r='48' fill='%237f1d1d' stroke='%23fde047' stroke-width='2'/%3E%3Ctext x='60' y='56' text-anchor='middle' fill='%23ffffff' font-family='Arial,sans-serif' font-size='20' font-weight='900'%3EKB%26SV%3C/text%3E%3Ctext x='60' y='76' text-anchor='middle' fill='%23fde047' font-family='Arial,sans-serif' font-size='11' font-weight='800'%3EGASCHURN%3C/text%3E%3C/svg%3E";
+            window.CLUB_CREST_SVG_FALLBACK = CREST_SVG_FALLBACK;
 
             window.handleClubCrestError = function(imgEl) {
                 if (!imgEl) return;
                 try {
+                    if (imgEl.dataset && imgEl.dataset.statusActive === '1') {
+                        imgEl.dataset.statusActive = '0';
+                        imgEl.dataset.fb = '0';
+                        imgEl.src = CREST_SOURCES[0];
+                        return;
+                    }
                     var currentSrc = String(imgEl.getAttribute('src') || '');
-                    if (currentSrc.indexOf('data:image/') === 0) {
+                    if (currentSrc.indexOf('data:image/png') === 0 || currentSrc.indexOf('data:image/jpeg') === 0) {
                         try { localStorage.removeItem(CREST_CACHE_KEY); } catch (e) {}
                         imgEl.dataset.fb = '0';
                         imgEl.src = (imgEl.dataset && imgEl.dataset.crestSrc) || CREST_SOURCES[0];
@@ -3660,6 +3968,13 @@
                     } else if (imgEl.dataset.fb === '1') {
                         imgEl.dataset.fb = '2';
                         imgEl.src = CREST_SOURCES[2];
+                    } else if (imgEl.dataset.fb === '2') {
+                        imgEl.dataset.fb = '3';
+                        imgEl.src = CREST_SOURCES[3];
+                    } else if (imgEl.dataset.fb === '3') {
+                        imgEl.dataset.fb = '4';
+                        imgEl.onerror = null;
+                        imgEl.src = CREST_SVG_FALLBACK;
                     } else {
                         imgEl.onerror = null;
                     }
@@ -3674,6 +3989,7 @@
                     if (!cachedDataUrl || cachedDataUrl.indexOf('data:image/') !== 0) return false;
                     var crestImgs = document.querySelectorAll('img[data-club-crest="1"]');
                     for (var i = 0; i < crestImgs.length; i++) {
+                        if (crestImgs[i].dataset && crestImgs[i].dataset.statusActive === '1') continue;
                         if (crestImgs[i].getAttribute('src') !== cachedDataUrl) {
                             crestImgs[i].src = cachedDataUrl;
                         }
@@ -3731,6 +4047,7 @@
                                     if (prev !== dataUrl) {
                                         var crestImgs = document.querySelectorAll('img[data-club-crest="1"]');
                                         for (var j = 0; j < crestImgs.length; j++) {
+                                            if (crestImgs[j].dataset && crestImgs[j].dataset.statusActive === '1') continue;
                                             if (crestImgs[j].getAttribute('src') !== dataUrl) {
                                                 crestImgs[j].src = dataUrl;
                                             }
@@ -5336,6 +5653,65 @@
 
     <!-- BESTÄTIGUNGS-POPUP NACH ERFOLGREICHEM APP-UPDATE -->
     <div id="app-updated-toast" role="status" aria-live="polite" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.96); z-index: 10060; display: none; opacity: 0; pointer-events: none; background: #0f172a; color: #ffffff; border: 2px solid #eab308; border-radius: 18px; padding: 16px 22px; box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3); font-size: 0.96rem; font-weight: 800; text-align: center; max-width: calc(100vw - 40px); line-height: 1.35; transition: opacity 0.3s ease, transform 0.3s ease;">✅ App ist auf dem neuesten Stand!</div>
+
+    <!-- 24-STUNDEN-VEREINSSTATUS VOLLBILD-BETRACHTER -->
+    <div id="club-status-viewer" role="dialog" aria-modal="true" aria-label="24-Stunden-Vereinsstatus" aria-hidden="true">
+        <div class="club-status-viewer-top">
+            <div id="club-status-progress-bars" class="club-status-progress-bars" aria-hidden="true"></div>
+            <div class="club-status-viewer-header">
+                <div class="club-status-viewer-meta">
+                    <img id="club-status-viewer-avatar" class="club-status-viewer-avatar" src="logo.png?v=3" alt="" onerror="if(window.handleClubCrestError){window.handleClubCrestError(this);}">
+                    <div class="club-status-viewer-sender-wrap">
+                        <span id="club-status-viewer-sender" class="club-status-viewer-sender">Vereinsstatus</span>
+                        <span id="club-status-viewer-time" class="club-status-viewer-time">Gerade eben</span>
+                    </div>
+                </div>
+                <div class="club-status-viewer-actions">
+                    <button type="button" id="club-status-viewer-delete-btn" class="club-status-viewer-icon-btn delete-btn" onclick="deleteCurrentClubStatus(event)" aria-label="Diesen Status löschen" title="Diesen Status löschen" style="display: none;">🗑️</button>
+                    <button type="button" id="club-status-viewer-close-btn" class="club-status-viewer-icon-btn" onclick="closeClubStatusViewer(event)" aria-label="Status schließen" title="Status schließen">✕</button>
+                </div>
+            </div>
+        </div>
+        <div id="club-status-viewer-stage" class="club-status-viewer-stage">
+            <button type="button" class="club-status-tap-zone left" onclick="prevClubStatusSlide(event)" aria-label="Vorheriger Status"></button>
+            <button type="button" class="club-status-tap-zone right" onclick="nextClubStatusSlide(event)" aria-label="Nächster Status"></button>
+            <img id="club-status-viewer-img" alt="24h-Vereinsstatus Foto">
+            <video id="club-status-viewer-video" autoplay playsinline webkit-playsinline controls></video>
+        </div>
+        <div id="club-status-viewer-caption-wrap" class="club-status-viewer-caption-wrap">
+            <div id="club-status-viewer-caption" class="club-status-viewer-caption"></div>
+        </div>
+    </div>
+
+    <!-- 24-STUNDEN-VEREINSSTATUS UPLOAD-DIALOG (NUR OBMANN SIMON) -->
+    <div id="club-status-upload-modal" role="dialog" aria-modal="true" aria-labelledby="club-status-upload-title" aria-hidden="true" onclick="if(event.target===this){closeClubStatusUploadModal();}">
+        <div class="club-status-upload-card modal-anim">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px;">
+                <h3 id="club-status-upload-title" style="margin: 0; font-size: 1.12rem; font-weight: 900; color: #0f172a; line-height: 1.25;">📸 24h-Vereinsstatus posten</h3>
+                <button type="button" onclick="closeClubStatusUploadModal()" aria-label="Dialog schließen" style="width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #334155; font-weight: 800; font-size: 1rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: inherit;">✕</button>
+            </div>
+            <p style="margin: 0 0 12px 0; font-size: 0.86rem; color: #475569; line-height: 1.45;">Wähle ein Foto oder ein kurzes Video (unter 8 Sek., max. 750 KB). Der Status erscheint sofort im runden Wappen-Kreis und verschwindet nach 24 Stunden automatisch.</p>
+
+            <label for="club-status-file-input" style="display: block; font-size: 0.84rem; font-weight: 800; color: #1e293b; margin-bottom: 6px;">Foto oder kurzes Video auswählen</label>
+            <input type="file" id="club-status-file-input" accept="image/*,video/mp4,video/webm,video/quicktime" onchange="handleClubStatusFileChange(this)" style="width: 100%; padding: 10px; border: 1.5px dashed #94a3b8; border-radius: 12px; background: #f8fafc; font-size: 0.88rem; color: #0f172a; box-sizing: border-box; font-family: inherit;">
+
+            <div id="club-status-preview-wrap" class="club-status-upload-preview">
+                <img id="club-status-preview-img" alt="Status-Vorschau" style="display: none;">
+                <video id="club-status-preview-video" controls playsinline webkit-playsinline muted style="display: none;"></video>
+            </div>
+            <div id="club-status-size-info" style="display: none; font-size: 0.8rem; font-weight: 700; color: #15803d; margin-bottom: 10px;"></div>
+
+            <div id="club-status-upload-feedback" role="alert" style="display: none; padding: 10px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; line-height: 1.4; margin: 8px 0 10px 0;"></div>
+
+            <label for="club-status-caption-input" style="display: block; font-size: 0.84rem; font-weight: 800; color: #1e293b; margin: 10px 0 6px 0;">Kurzer Text / Bildunterschrift (optional)</label>
+            <input type="text" id="club-status-caption-input" maxlength="120" placeholder="z. B. Tolle Stimmung am Schießstand! 🎯" autocomplete="off" style="width: 100%; padding: 11px 12px; border: 1.5px solid #cbd5e1; border-radius: 12px; font-size: 0.92rem; color: #0f172a; background: #ffffff; box-sizing: border-box; font-family: inherit;">
+
+            <div style="display: flex; gap: 8px; margin-top: 16px;">
+                <button type="button" onclick="closeClubStatusUploadModal()" style="flex: 0 0 auto; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #475569; font-weight: 800; font-size: 0.9rem; cursor: pointer; font-family: inherit;">Abbrechen</button>
+                <button type="button" id="club-status-submit-btn" onclick="publishClubStatus(event)" disabled style="flex: 1; min-height: 46px; border-radius: 12px; border: 1.5px solid #eab308; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; font-weight: 800; font-size: 0.92rem; cursor: pointer; font-family: inherit; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25); opacity: 0.55;">🚀 Für 24h posten</button>
+            </div>
+        </div>
+    </div>
 
     <!-- VEREINS-CHAT VORHANG-SCHUBLADE -->
     <div id="chat-drawer-overlay" onclick="closeChatDrawer()" aria-hidden="true"></div>
@@ -13225,7 +13601,10 @@
                 try { initDutyPlanRealtimeListener(); } catch(e) {}
                 try { initOpenTabsListener(); } catch(e) {}
                 try { initMidnightAndMinuteChecker(); } catch(e) {}
+                try { initClubStatusRealtimeListener(); } catch(e) {}
+                try { startClubStatusExpiryChecker(); } catch(e) {}
             }
+            try { updateClubStatusChairmanUI(); } catch(e) {}
             try { loadMembersFromFirestore(); } catch(e) {}
             try { loadWeaponsFromFirestore(); } catch(e) {}
             try { loadNews(); } catch(e) {}
@@ -13385,6 +13764,8 @@
             try { closeInvoiceModal(); } catch(e) {}
             try { closeMemberAppQrModal(); } catch(e) {}
             try { closeTresorQrModal(); } catch(e) {}
+            try { if (typeof closeClubStatusUploadModal === 'function') closeClubStatusUploadModal(); } catch(e) {}
+            try { if (typeof updateClubStatusChairmanUI === 'function') updateClubStatusChairmanUI(); } catch(e) {}
             [
                 'admin-keys-list',
                 'admin-weapon-pdf-list',
@@ -13453,6 +13834,7 @@
                 clubChatLockUnsubscribe = null;
             }
             try { destroyClubChat(); } catch(e) {}
+            try { if (typeof destroyClubStatus === 'function') destroyClubStatus(); } catch(e) {}
             Object.keys(pendingTabSyncTimers).forEach(id => {
                 try { clearTimeout(pendingTabSyncTimers[id]); } catch(e) {}
                 delete pendingTabSyncTimers[id];
@@ -14761,6 +15143,7 @@
             }
             updateClubChatLockUI();
             try { if (typeof updateMemberNavigationMode === 'function') updateMemberNavigationMode(); } catch (e) {}
+            try { if (typeof updateClubStatusChairmanUI === 'function') updateClubStatusChairmanUI(); } catch (e) {}
         }
 
         function updateAdminPushVisibility() {
@@ -20780,7 +21163,26 @@
         });
 
         document.addEventListener('keydown', (evt) => {
+            if (isClubStatusViewerOpen) {
+                if (evt.key === 'Escape') {
+                    closeClubStatusViewer();
+                    return;
+                }
+                if (evt.key === 'ArrowRight') {
+                    nextClubStatusSlide();
+                    return;
+                }
+                if (evt.key === 'ArrowLeft') {
+                    prevClubStatusSlide();
+                    return;
+                }
+            }
             if (evt.key === 'Escape') {
+                const statusUploadModal = document.getElementById('club-status-upload-modal');
+                if (statusUploadModal && statusUploadModal.style.display === 'flex') {
+                    closeClubStatusUploadModal();
+                    return;
+                }
                 if (openChatReactionPickerMsgId) {
                     closeChatReactionPicker();
                     return;
@@ -20801,6 +21203,789 @@
                 }
             }
         });
+
+        /* =========================================================
+           24-STUNDEN-VEREINSSTATUS (HEADER-RING, VIEWER & UPLOAD)
+           ========================================================= */
+        const CLUB_STATUS_DEFAULT_LOGO = 'logo.png?v=3';
+        const CLUB_STATUS_FALLBACK_LOGO = 'siegel.png';
+        const CLUB_STATUS_TTL_MS = 24 * 60 * 60 * 1000;
+        const CLUB_STATUS_IMAGE_DURATION_MS = 5000;
+        const CLUB_STATUS_EXPIRY_CHECK_MS = 30000;
+        const CLUB_STATUS_MAX_IMAGE_BYTES = 650 * 1024;
+        const CLUB_STATUS_MAX_VIDEO_BYTES = 750 * 1024;
+        const CLUB_STATUS_VIDEO_TOO_LARGE_MSG = 'Bitte ein kurzes Video unter 8 Sekunden auswählen (max. 750 KB).';
+
+        let clubStatusUnsubscribe = null;
+        let clubStatusExpiryInterval = null;
+        let clubStatusItems = [];
+        let isClubStatusViewerOpen = false;
+        let clubStatusViewerIndex = 0;
+        let clubStatusCurrentViewedId = null;
+        let clubStatusSlideTimer = null;
+        let clubStatusProgressRaf = null;
+        let clubStatusSlideStartTs = 0;
+        let clubStatusPendingUpload = null;
+        let clubStatusPublishing = false;
+        const clubStatusDeletingIds = new Set();
+
+        function normalizeClubStatusMs(val) {
+            if (typeof val === 'number' && isFinite(val)) return val;
+            if (val && typeof val.toMillis === 'function') return val.toMillis();
+            if (val instanceof Date && !isNaN(val.getTime())) return val.getTime();
+            const parsed = Number(val);
+            return isFinite(parsed) ? parsed : 0;
+        }
+
+        function isValidClubStatusMedia(type, mediaData) {
+            if (typeof mediaData !== 'string') return false;
+            const trimmed = mediaData.trim();
+            if (!trimmed) return false;
+            if (type === 'image') {
+                return /^data:image\/(png|jpe?g|gif|webp);base64,[a-z0-9+/=\s]+$/i.test(trimmed);
+            }
+            if (type === 'video') {
+                return /^data:video\/(mp4|webm|quicktime|ogg)(?:;\s*codecs=[^;,]+)?;base64,[a-z0-9+/=\s]+$/i.test(trimmed);
+            }
+            return false;
+        }
+
+        function formatClubStatusRelativeTime(createdAtMs) {
+            const now = Date.now();
+            const diffMs = Math.max(0, now - normalizeClubStatusMs(createdAtMs));
+            const diffMin = Math.floor(diffMs / 60000);
+            if (diffMin < 1) return 'Gerade eben';
+            if (diffMin < 60) return `Vor ${diffMin} Min.`;
+            const diffHours = Math.floor(diffMin / 60);
+            if (diffHours === 1) return 'Vor 1 Std.';
+            return `Vor ${diffHours} Std.`;
+        }
+
+        function resetHeaderCrestToDefaultLogo() {
+            const crestBtn = document.getElementById('app-header-crest-btn');
+            const crestImg = document.getElementById('app-header-crest-img');
+            const videoBadge = document.getElementById('club-status-video-badge');
+            if (crestBtn) {
+                crestBtn.classList.remove('has-active-status');
+                crestBtn.setAttribute('role', 'img');
+                crestBtn.removeAttribute('tabindex');
+                crestBtn.removeAttribute('title');
+                crestBtn.setAttribute('aria-label', 'Vereinswappen KB & SV Gaschurn-Partenen');
+            }
+            if (videoBadge) {
+                videoBadge.style.display = 'none';
+            }
+            if (crestImg) {
+                crestImg.dataset.statusActive = '0';
+                crestImg.dataset.fb = '0';
+                crestImg.onerror = function() {
+                    if (window.handleClubCrestError) {
+                        window.handleClubCrestError(this);
+                    } else {
+                        this.onerror = null;
+                        this.src = CLUB_STATUS_FALLBACK_LOGO;
+                    }
+                };
+                if (crestImg.getAttribute('src') !== CLUB_STATUS_DEFAULT_LOGO) {
+                    crestImg.src = CLUB_STATUS_DEFAULT_LOGO;
+                }
+            }
+        }
+
+        function renderClubStatusHeaderCrest() {
+            const now = Date.now();
+            const active = clubStatusItems.filter(item => item && item.expiresAt > now);
+            const crestBtn = document.getElementById('app-header-crest-btn');
+            const crestImg = document.getElementById('app-header-crest-img');
+            const videoBadge = document.getElementById('club-status-video-badge');
+
+            if (!active.length) {
+                resetHeaderCrestToDefaultLogo();
+                return;
+            }
+
+            const newest = active[active.length - 1];
+            if (crestBtn) {
+                crestBtn.classList.add('has-active-status');
+                crestBtn.setAttribute('role', 'button');
+                crestBtn.setAttribute('tabindex', '0');
+                crestBtn.setAttribute('title', `24h-Vereinsstatus ansehen (${active.length} aktiv)`);
+                crestBtn.setAttribute('aria-label', `24h-Vereinsstatus ansehen (${active.length} aktiv)`);
+            }
+
+            if (newest.type === 'image' && isValidClubStatusMedia('image', newest.mediaData)) {
+                if (videoBadge) videoBadge.style.display = 'none';
+                if (crestImg) {
+                    crestImg.dataset.statusActive = '1';
+                    crestImg.dataset.fb = '0';
+                    crestImg.onerror = function() {
+                        if (window.handleClubCrestError) window.handleClubCrestError(this);
+                    };
+                    if (crestImg.getAttribute('src') !== newest.mediaData) {
+                        crestImg.src = newest.mediaData;
+                    }
+                }
+            } else {
+                if (crestImg) {
+                    crestImg.dataset.statusActive = '0';
+                    crestImg.dataset.fb = '0';
+                    crestImg.onerror = function() {
+                        if (window.handleClubCrestError) window.handleClubCrestError(this);
+                    };
+                    if (crestImg.getAttribute('src') !== CLUB_STATUS_DEFAULT_LOGO) {
+                        crestImg.src = CLUB_STATUS_DEFAULT_LOGO;
+                    }
+                }
+                if (videoBadge) videoBadge.style.display = 'flex';
+            }
+        }
+
+        function updateClubStatusChairmanUI() {
+            const isSimon = (typeof isChairmanSimonLoggedIn === 'function') && isChairmanSimonLoggedIn();
+            const addBtn = document.getElementById('club-status-add-btn');
+            if (addBtn) {
+                addBtn.style.display = isSimon ? 'inline-flex' : 'none';
+            }
+            const delBtn = document.getElementById('club-status-viewer-delete-btn');
+            if (delBtn) {
+                delBtn.style.display = isSimon ? 'inline-flex' : 'none';
+            }
+            if (!isSimon) {
+                const uploadModal = document.getElementById('club-status-upload-modal');
+                if (uploadModal && uploadModal.style.display === 'flex') {
+                    closeClubStatusUploadModal();
+                }
+            }
+        }
+
+        function deleteExpiredClubStatusDocs(expiredList) {
+            if (!Array.isArray(expiredList) || !expiredList.length) return;
+            if (typeof db === 'undefined' || !db) return;
+            expiredList.forEach(item => {
+                if (!item || !item.id || clubStatusDeletingIds.has(item.id)) return;
+                clubStatusDeletingIds.add(item.id);
+                try {
+                    db.collection('club_status').doc(item.id).delete()
+                        .catch(() => {})
+                        .finally(() => {
+                            clubStatusDeletingIds.delete(item.id);
+                        });
+                } catch (e) {
+                    clubStatusDeletingIds.delete(item.id);
+                }
+            });
+        }
+
+        function checkAndPurgeExpiredClubStatuses() {
+            const now = Date.now();
+            if (!clubStatusItems.length) {
+                resetHeaderCrestToDefaultLogo();
+                return;
+            }
+            const expired = [];
+            const stillActive = [];
+            clubStatusItems.forEach(item => {
+                if (!item || item.expiresAt <= now) {
+                    if (item && item.id) expired.push(item);
+                } else {
+                    stillActive.push(item);
+                }
+            });
+            if (!expired.length) return;
+            deleteExpiredClubStatusDocs(expired);
+            clubStatusItems = stillActive;
+            renderClubStatusHeaderCrest();
+            if (isClubStatusViewerOpen) {
+                if (!clubStatusItems.length) {
+                    closeClubStatusViewer();
+                } else {
+                    const keepIdx = clubStatusItems.findIndex(item => item.id === clubStatusCurrentViewedId);
+                    const nextIdx = keepIdx >= 0 ? keepIdx : Math.min(clubStatusViewerIndex, clubStatusItems.length - 1);
+                    renderClubStatusViewerSlide(nextIdx);
+                }
+            }
+        }
+
+        function startClubStatusExpiryChecker() {
+            if (clubStatusExpiryInterval) {
+                try { clearInterval(clubStatusExpiryInterval); } catch (e) {}
+                clubStatusExpiryInterval = null;
+            }
+            clubStatusExpiryInterval = setInterval(() => {
+                try { checkAndPurgeExpiredClubStatuses(); } catch (e) {}
+            }, CLUB_STATUS_EXPIRY_CHECK_MS);
+        }
+
+        function initClubStatusRealtimeListener() {
+            if (clubStatusUnsubscribe) return;
+            if (typeof db === 'undefined' || !db) return;
+            try {
+                clubStatusUnsubscribe = db.collection('club_status')
+                    .orderBy('createdAt', 'asc')
+                    .onSnapshot((snapshot) => {
+                        const now = Date.now();
+                        const active = [];
+                        const expired = [];
+                        snapshot.forEach(doc => {
+                            const data = doc.data() || {};
+                            const createdAt = normalizeClubStatusMs(data.createdAt);
+                            const expiresAt = normalizeClubStatusMs(data.expiresAt) || (createdAt ? createdAt + CLUB_STATUS_TTL_MS : 0);
+                            const type = data.type === 'video' ? 'video' : 'image';
+                            const mediaData = typeof data.mediaData === 'string' ? data.mediaData : '';
+                            const entry = {
+                                id: doc.id,
+                                type,
+                                mediaData,
+                                caption: String(data.caption || '').trim().slice(0, 120),
+                                sender: String(data.sender || 'Obmann').trim() || 'Obmann',
+                                createdAt,
+                                expiresAt
+                            };
+                            if (expiresAt <= now) {
+                                expired.push(entry);
+                            } else if (isValidClubStatusMedia(type, mediaData)) {
+                                active.push(entry);
+                            }
+                        });
+
+                        if (expired.length) {
+                            deleteExpiredClubStatusDocs(expired);
+                        }
+
+                        clubStatusItems = active;
+                        renderClubStatusHeaderCrest();
+                        updateClubStatusChairmanUI();
+
+                        if (isClubStatusViewerOpen) {
+                            if (!clubStatusItems.length) {
+                                closeClubStatusViewer();
+                            } else {
+                                const existingIdx = clubStatusItems.findIndex(item => item.id === clubStatusCurrentViewedId);
+                                if (existingIdx >= 0) {
+                                    clubStatusViewerIndex = existingIdx;
+                                    buildClubStatusProgressSegments(clubStatusItems.length, existingIdx);
+                                } else {
+                                    renderClubStatusViewerSlide(Math.min(clubStatusViewerIndex, clubStatusItems.length - 1));
+                                }
+                            }
+                        }
+                    }, () => {});
+            } catch (e) {}
+        }
+
+        function clearClubStatusSlideTimers() {
+            if (clubStatusSlideTimer) {
+                try { clearTimeout(clubStatusSlideTimer); } catch (e) {}
+                clubStatusSlideTimer = null;
+            }
+            if (clubStatusProgressRaf) {
+                try { cancelAnimationFrame(clubStatusProgressRaf); } catch (e) {}
+                clubStatusProgressRaf = null;
+            }
+        }
+
+        function buildClubStatusProgressSegments(count, activeIdx) {
+            const container = document.getElementById('club-status-progress-bars');
+            if (!container) return;
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const seg = document.createElement('div');
+                seg.className = 'club-status-progress-seg';
+                const fill = document.createElement('div');
+                fill.className = 'club-status-progress-fill';
+                fill.id = `club-status-progress-fill-${i}`;
+                fill.style.width = i < activeIdx ? '100%' : '0%';
+                seg.appendChild(fill);
+                container.appendChild(seg);
+            }
+        }
+
+        function handleClubStatusCrestClick(evt) {
+            if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
+            checkAndPurgeExpiredClubStatuses();
+            if (!clubStatusItems.length) return;
+            openClubStatusViewer(0);
+        }
+
+        function openClubStatusViewer(startIndex) {
+            checkAndPurgeExpiredClubStatuses();
+            if (!clubStatusItems.length) return;
+            const viewer = document.getElementById('club-status-viewer');
+            if (!viewer) return;
+            isClubStatusViewerOpen = true;
+            viewer.style.display = 'flex';
+            viewer.style.pointerEvents = 'auto';
+            viewer.setAttribute('aria-hidden', 'false');
+            if (document.body) document.body.classList.add('club-status-viewer-open');
+            updateClubStatusChairmanUI();
+            const safeIdx = Math.max(0, Math.min(Number(startIndex) || 0, clubStatusItems.length - 1));
+            renderClubStatusViewerSlide(safeIdx);
+        }
+
+        function closeClubStatusViewer(evt) {
+            if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
+            clearClubStatusSlideTimers();
+            isClubStatusViewerOpen = false;
+            clubStatusCurrentViewedId = null;
+            const viewer = document.getElementById('club-status-viewer');
+            const imgEl = document.getElementById('club-status-viewer-img');
+            const videoEl = document.getElementById('club-status-viewer-video');
+            if (videoEl) {
+                try { videoEl.pause(); } catch (e) {}
+                videoEl.ontimeupdate = null;
+                videoEl.onended = null;
+                videoEl.onloadedmetadata = null;
+                videoEl.removeAttribute('src');
+                try { videoEl.load(); } catch (e) {}
+                videoEl.style.display = 'none';
+            }
+            if (imgEl) {
+                imgEl.removeAttribute('src');
+                imgEl.style.display = 'none';
+            }
+            if (viewer) {
+                viewer.classList.remove('is-video-slide');
+                viewer.style.display = 'none';
+                viewer.style.pointerEvents = 'none';
+                viewer.setAttribute('aria-hidden', 'true');
+            }
+            if (document.body) document.body.classList.remove('club-status-viewer-open');
+        }
+
+        function renderClubStatusViewerSlide(index) {
+            clearClubStatusSlideTimers();
+            if (!clubStatusItems.length) {
+                closeClubStatusViewer();
+                return;
+            }
+            if (index < 0) index = 0;
+            if (index >= clubStatusItems.length) {
+                closeClubStatusViewer();
+                return;
+            }
+            clubStatusViewerIndex = index;
+            const item = clubStatusItems[index];
+            clubStatusCurrentViewedId = item.id;
+
+            const viewer = document.getElementById('club-status-viewer');
+            const senderEl = document.getElementById('club-status-viewer-sender');
+            const timeEl = document.getElementById('club-status-viewer-time');
+            const imgEl = document.getElementById('club-status-viewer-img');
+            const videoEl = document.getElementById('club-status-viewer-video');
+            const captionWrap = document.getElementById('club-status-viewer-caption-wrap');
+            const captionEl = document.getElementById('club-status-viewer-caption');
+
+            buildClubStatusProgressSegments(clubStatusItems.length, index);
+            if (senderEl) senderEl.textContent = item.sender || 'Obmann';
+            if (timeEl) timeEl.textContent = formatClubStatusRelativeTime(item.createdAt);
+
+            if (captionWrap && captionEl) {
+                if (item.caption) {
+                    captionEl.textContent = item.caption;
+                    captionWrap.style.display = 'flex';
+                } else {
+                    captionEl.textContent = '';
+                    captionWrap.style.display = 'none';
+                }
+            }
+
+            if (videoEl) {
+                try { videoEl.pause(); } catch (e) {}
+                videoEl.ontimeupdate = null;
+                videoEl.onended = null;
+                videoEl.onloadedmetadata = null;
+                videoEl.style.display = 'none';
+            }
+            if (imgEl) {
+                imgEl.style.display = 'none';
+            }
+
+            const activeFill = document.getElementById(`club-status-progress-fill-${index}`);
+
+            if (item.type === 'video' && isValidClubStatusMedia('video', item.mediaData)) {
+                if (viewer) viewer.classList.add('is-video-slide');
+                if (videoEl) {
+                    videoEl.muted = false;
+                    videoEl.src = item.mediaData;
+                    videoEl.currentTime = 0;
+                    videoEl.style.display = 'block';
+                    videoEl.ontimeupdate = () => {
+                        if (!isClubStatusViewerOpen || clubStatusCurrentViewedId !== item.id) return;
+                        if (activeFill && videoEl.duration && isFinite(videoEl.duration) && videoEl.duration > 0) {
+                            const pct = Math.min(100, Math.max(0, (videoEl.currentTime / videoEl.duration) * 100));
+                            activeFill.style.width = `${pct}%`;
+                        }
+                    };
+                    videoEl.onended = () => {
+                        if (!isClubStatusViewerOpen || clubStatusCurrentViewedId !== item.id) return;
+                        if (activeFill) activeFill.style.width = '100%';
+                        nextClubStatusSlide();
+                    };
+                    try {
+                        const playPromise = videoEl.play();
+                        if (playPromise && typeof playPromise.catch === 'function') {
+                            playPromise.catch(() => {
+                                try {
+                                    videoEl.muted = true;
+                                    videoEl.play().catch(() => {});
+                                } catch (e) {}
+                            });
+                        }
+                    } catch (e) {}
+                }
+            } else if (isValidClubStatusMedia('image', item.mediaData)) {
+                if (viewer) viewer.classList.remove('is-video-slide');
+                if (imgEl) {
+                    imgEl.src = item.mediaData;
+                    imgEl.style.display = 'block';
+                }
+                clubStatusSlideStartTs = Date.now();
+                const tickProgress = () => {
+                    if (!isClubStatusViewerOpen || clubStatusCurrentViewedId !== item.id) return;
+                    const elapsed = Date.now() - clubStatusSlideStartTs;
+                    const pct = Math.min(100, (elapsed / CLUB_STATUS_IMAGE_DURATION_MS) * 100);
+                    if (activeFill) activeFill.style.width = `${pct}%`;
+                    if (elapsed < CLUB_STATUS_IMAGE_DURATION_MS && typeof requestAnimationFrame === 'function') {
+                        clubStatusProgressRaf = requestAnimationFrame(tickProgress);
+                    }
+                };
+                if (typeof requestAnimationFrame === 'function') {
+                    clubStatusProgressRaf = requestAnimationFrame(tickProgress);
+                }
+                clubStatusSlideTimer = setTimeout(() => {
+                    if (!isClubStatusViewerOpen || clubStatusCurrentViewedId !== item.id) return;
+                    if (activeFill) activeFill.style.width = '100%';
+                    nextClubStatusSlide();
+                }, CLUB_STATUS_IMAGE_DURATION_MS);
+            } else {
+                nextClubStatusSlide();
+            }
+        }
+
+        function nextClubStatusSlide(evt) {
+            if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
+            if (!isClubStatusViewerOpen) return;
+            if (clubStatusViewerIndex + 1 >= clubStatusItems.length) {
+                closeClubStatusViewer();
+            } else {
+                renderClubStatusViewerSlide(clubStatusViewerIndex + 1);
+            }
+        }
+
+        function prevClubStatusSlide(evt) {
+            if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
+            if (!isClubStatusViewerOpen) return;
+            const targetIdx = Math.max(0, clubStatusViewerIndex - 1);
+            renderClubStatusViewerSlide(targetIdx);
+        }
+
+        async function deleteCurrentClubStatus(evt) {
+            if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
+            if (typeof isChairmanSimonLoggedIn !== 'function' || !isChairmanSimonLoggedIn()) return;
+            const current = clubStatusItems[clubStatusViewerIndex];
+            if (!current || !current.id) return;
+            const deleteId = current.id;
+            try {
+                if (typeof db !== 'undefined' && db) {
+                    await db.collection('club_status').doc(deleteId).delete();
+                }
+                clubStatusItems = clubStatusItems.filter(item => item.id !== deleteId);
+                renderClubStatusHeaderCrest();
+                if (!clubStatusItems.length) {
+                    closeClubStatusViewer();
+                } else {
+                    renderClubStatusViewerSlide(Math.min(clubStatusViewerIndex, clubStatusItems.length - 1));
+                }
+            } catch (e) {}
+        }
+
+        function setClubStatusUploadFeedback(message, isError) {
+            const box = document.getElementById('club-status-upload-feedback');
+            if (!box) return;
+            if (!message) {
+                box.style.display = 'none';
+                box.textContent = '';
+                return;
+            }
+            box.textContent = message;
+            box.style.display = 'block';
+            if (isError) {
+                box.style.background = '#fef2f2';
+                box.style.color = '#991b1b';
+                box.style.border = '1.5px solid #fecaca';
+            } else {
+                box.style.background = '#f0fdf4';
+                box.style.color = '#166534';
+                box.style.border = '1.5px solid #bbf7d0';
+            }
+        }
+
+        function resetClubStatusUploadForm() {
+            clubStatusPendingUpload = null;
+            clubStatusPublishing = false;
+            const fileInput = document.getElementById('club-status-file-input');
+            const captionInput = document.getElementById('club-status-caption-input');
+            const previewWrap = document.getElementById('club-status-preview-wrap');
+            const previewImg = document.getElementById('club-status-preview-img');
+            const previewVideo = document.getElementById('club-status-preview-video');
+            const sizeInfo = document.getElementById('club-status-size-info');
+            const submitBtn = document.getElementById('club-status-submit-btn');
+
+            if (fileInput) fileInput.value = '';
+            if (captionInput) captionInput.value = '';
+            if (previewWrap) previewWrap.style.display = 'none';
+            if (previewImg) { previewImg.style.display = 'none'; previewImg.removeAttribute('src'); }
+            if (previewVideo) {
+                try { previewVideo.pause(); } catch (e) {}
+                previewVideo.style.display = 'none';
+                previewVideo.removeAttribute('src');
+            }
+            if (sizeInfo) { sizeInfo.style.display = 'none'; sizeInfo.textContent = ''; }
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.55';
+                submitBtn.textContent = '🚀 Für 24h posten';
+            }
+            setClubStatusUploadFeedback('', false);
+        }
+
+        function openClubStatusUploadModal(evt) {
+            if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
+            if (typeof isChairmanSimonLoggedIn !== 'function' || !isChairmanSimonLoggedIn()) return;
+            resetClubStatusUploadForm();
+            const modal = document.getElementById('club-status-upload-modal');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            modal.style.pointerEvents = 'auto';
+            modal.setAttribute('aria-hidden', 'false');
+            if (document.body) document.body.classList.add('club-status-upload-open');
+        }
+
+        function closeClubStatusUploadModal() {
+            const modal = document.getElementById('club-status-upload-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+            }
+            if (document.body) document.body.classList.remove('club-status-upload-open');
+            resetClubStatusUploadForm();
+        }
+
+        function readFileAsDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(String(reader.result || ''));
+                reader.onerror = () => reject(new Error('Datei konnte nicht gelesen werden.'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function compressClubStatusImage(file) {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    const rawDataUrl = await readFileAsDataUrl(file);
+                    const img = new Image();
+                    img.onload = () => {
+                        try {
+                            const naturalW = img.naturalWidth || img.width;
+                            const naturalH = img.naturalHeight || img.height;
+                            if (!naturalW || !naturalH) {
+                                reject(new Error('Bild konnte nicht verarbeitet werden.'));
+                                return;
+                            }
+                            const maxWidths = [1080, 900, 760, 640];
+                            const qualities = [0.78, 0.70, 0.62, 0.54, 0.46];
+                            let bestDataUrl = '';
+                            for (let wIdx = 0; wIdx < maxWidths.length; wIdx++) {
+                                const limitW = maxWidths[wIdx];
+                                const scale = naturalW > limitW ? (limitW / naturalW) : 1;
+                                const targetW = Math.max(1, Math.round(naturalW * scale));
+                                const targetH = Math.max(1, Math.round(naturalH * scale));
+                                const canvas = document.createElement('canvas');
+                                canvas.width = targetW;
+                                canvas.height = targetH;
+                                const ctx = canvas.getContext('2d');
+                                if (!ctx) {
+                                    reject(new Error('Canvas nicht verfügbar.'));
+                                    return;
+                                }
+                                ctx.drawImage(img, 0, 0, targetW, targetH);
+                                for (let qIdx = 0; qIdx < qualities.length; qIdx++) {
+                                    const candidate = canvas.toDataURL('image/jpeg', qualities[qIdx]);
+                                    bestDataUrl = candidate;
+                                    if (candidate.length <= CLUB_STATUS_MAX_IMAGE_BYTES) {
+                                        resolve({ dataUrl: candidate, byteSize: candidate.length });
+                                        return;
+                                    }
+                                }
+                            }
+                            if (bestDataUrl && bestDataUrl.length <= CLUB_STATUS_MAX_IMAGE_BYTES) {
+                                resolve({ dataUrl: bestDataUrl, byteSize: bestDataUrl.length });
+                            } else {
+                                reject(new Error('Das Foto ist leider auch nach der Komprimierung zu groß (max. 650 KB).'));
+                            }
+                        } catch (err) {
+                            reject(err);
+                        }
+                    };
+                    img.onerror = () => reject(new Error('Bildformat wird nicht unterstützt.'));
+                    img.src = rawDataUrl;
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
+
+        async function handleClubStatusFileChange(inputEl) {
+            clubStatusPendingUpload = null;
+            setClubStatusUploadFeedback('', false);
+
+            const previewWrap = document.getElementById('club-status-preview-wrap');
+            const previewImg = document.getElementById('club-status-preview-img');
+            const previewVideo = document.getElementById('club-status-preview-video');
+            const sizeInfo = document.getElementById('club-status-size-info');
+            const submitBtn = document.getElementById('club-status-submit-btn');
+
+            if (previewWrap) previewWrap.style.display = 'none';
+            if (previewImg) { previewImg.style.display = 'none'; previewImg.removeAttribute('src'); }
+            if (previewVideo) {
+                try { previewVideo.pause(); } catch (e) {}
+                previewVideo.style.display = 'none';
+                previewVideo.removeAttribute('src');
+            }
+            if (sizeInfo) { sizeInfo.style.display = 'none'; sizeInfo.textContent = ''; }
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.55'; }
+
+            const file = inputEl && inputEl.files && inputEl.files[0];
+            if (!file) return;
+
+            const mime = String(file.type || '').toLowerCase();
+            const isVideo = mime.startsWith('video/');
+            const isImage = mime.startsWith('image/');
+
+            if (!isImage && !isVideo) {
+                setClubStatusUploadFeedback('Bitte ein Foto (JPG/PNG/WebP) oder ein kurzes Video (MP4/WebM/MOV) auswählen.', true);
+                return;
+            }
+
+            if (isVideo) {
+                if (file.size > CLUB_STATUS_MAX_VIDEO_BYTES) {
+                    setClubStatusUploadFeedback(CLUB_STATUS_VIDEO_TOO_LARGE_MSG, true);
+                    return;
+                }
+                try {
+                    const dataUrl = await readFileAsDataUrl(file);
+                    if (!isValidClubStatusMedia('video', dataUrl) || dataUrl.length > 1030000) {
+                        setClubStatusUploadFeedback(CLUB_STATUS_VIDEO_TOO_LARGE_MSG, true);
+                        return;
+                    }
+                    clubStatusPendingUpload = { type: 'video', mediaData: dataUrl };
+                    if (previewWrap) previewWrap.style.display = 'flex';
+                    if (previewVideo) {
+                        previewVideo.src = dataUrl;
+                        previewVideo.style.display = 'block';
+                    }
+                    if (sizeInfo) {
+                        sizeInfo.textContent = `✅ Video bereit (${Math.max(1, Math.round(file.size / 1024))} KB)`;
+                        sizeInfo.style.display = 'block';
+                    }
+                    if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = '1'; }
+                } catch (e) {
+                    setClubStatusUploadFeedback('Video konnte nicht geladen werden.', true);
+                }
+                return;
+            }
+
+            setClubStatusUploadFeedback('⏳ Foto wird automatisch optimiert...', false);
+            try {
+                const compressed = await compressClubStatusImage(file);
+                if (!compressed || !isValidClubStatusMedia('image', compressed.dataUrl)) {
+                    setClubStatusUploadFeedback('Foto konnte nicht verarbeitet werden.', true);
+                    return;
+                }
+                clubStatusPendingUpload = { type: 'image', mediaData: compressed.dataUrl };
+                setClubStatusUploadFeedback('', false);
+                if (previewWrap) previewWrap.style.display = 'flex';
+                if (previewImg) {
+                    previewImg.src = compressed.dataUrl;
+                    previewImg.style.display = 'block';
+                }
+                if (sizeInfo) {
+                    sizeInfo.textContent = `✅ Foto optimiert (${Math.max(1, Math.round(compressed.byteSize / 1024))} KB)`;
+                    sizeInfo.style.display = 'block';
+                }
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = '1'; }
+            } catch (err) {
+                setClubStatusUploadFeedback((err && err.message) ? err.message : 'Foto konnte nicht optimiert werden.', true);
+            }
+        }
+
+        async function publishClubStatus(evt) {
+            if (evt && typeof evt.preventDefault === 'function') evt.preventDefault();
+            if (clubStatusPublishing) return;
+            if (typeof isChairmanSimonLoggedIn !== 'function' || !isChairmanSimonLoggedIn()) {
+                setClubStatusUploadFeedback('Nur Obmann Simon darf einen Vereinsstatus veröffentlichen.', true);
+                return;
+            }
+            if (!clubStatusPendingUpload || !isValidClubStatusMedia(clubStatusPendingUpload.type, clubStatusPendingUpload.mediaData)) {
+                setClubStatusUploadFeedback('Bitte zuerst ein gültiges Foto oder kurzes Video auswählen.', true);
+                return;
+            }
+            if (typeof db === 'undefined' || !db) {
+                setClubStatusUploadFeedback('Datenbank ist momentan nicht verfügbar.', true);
+                return;
+            }
+
+            clubStatusPublishing = true;
+            const submitBtn = document.getElementById('club-status-submit-btn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.7';
+                submitBtn.textContent = '⏳ Wird veröffentlicht...';
+            }
+
+            try {
+                const captionInput = document.getElementById('club-status-caption-input');
+                const caption = captionInput ? String(captionInput.value || '').trim().slice(0, 120) : '';
+                const now = Date.now();
+                const expiresAt = now + CLUB_STATUS_TTL_MS;
+                await db.collection('club_status').add({
+                    type: clubStatusPendingUpload.type,
+                    mediaData: clubStatusPendingUpload.mediaData,
+                    caption,
+                    sender: 'Schweighofer Simon',
+                    createdAt: now,
+                    expiresAt
+                });
+                closeClubStatusUploadModal();
+            } catch (err) {
+                clubStatusPublishing = false;
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.textContent = '🚀 Für 24h posten';
+                }
+                setClubStatusUploadFeedback('Speichern fehlgeschlagen. Bitte eine kleinere Datei versuchen oder Verbindung prüfen.', true);
+            }
+        }
+
+        function destroyClubStatus() {
+            if (clubStatusUnsubscribe) {
+                try { clubStatusUnsubscribe(); } catch (e) {}
+                clubStatusUnsubscribe = null;
+            }
+            if (clubStatusExpiryInterval) {
+                try { clearInterval(clubStatusExpiryInterval); } catch (e) {}
+                clubStatusExpiryInterval = null;
+            }
+            clubStatusItems = [];
+            clubStatusDeletingIds.clear();
+            try { closeClubStatusViewer(); } catch (e) {}
+            try { closeClubStatusUploadModal(); } catch (e) {}
+            try { resetHeaderCrestToDefaultLogo(); } catch (e) {}
+            try { updateClubStatusChairmanUI(); } catch (e) {}
+        }
 
         let appUpdateNotifierInitialized = false;
         let hasPendingAppUpdate = false;
@@ -21019,7 +22204,7 @@
                         }
                     });
                 }
-                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'cash-report-preview-modal', 'annual-backup-preview-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'chat-image-lightbox', 'member-name-setup-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'master-pin-modal', 'admin-logout-modal', 'app-update-modal'].forEach(id => {
+                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'cash-report-preview-modal', 'annual-backup-preview-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'chat-image-lightbox', 'member-name-setup-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'master-pin-modal', 'admin-logout-modal', 'app-update-modal', 'club-status-viewer', 'club-status-upload-modal'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el && getComputedStyle(el).display === 'none') {
                         el.style.pointerEvents = 'none';
