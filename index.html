@@ -3006,16 +3006,59 @@
             color: #0f172a;
             border-color: #94a3b8;
         }
+        .chairman-subcard,
         .chairman-inner-card {
             background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 14px;
-            margin-bottom: 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 14px;
             box-sizing: border-box;
         }
+        .chairman-subcard:last-child,
         .chairman-inner-card:last-child {
             margin-bottom: 0;
+        }
+        .chairman-subcard-title {
+            font-size: 0.98rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 4px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+            line-height: 1.3;
+        }
+        .chairman-subcard-desc {
+            font-size: 0.82rem;
+            color: #475569;
+            margin: 0 0 12px 0;
+            line-height: 1.45;
+            font-weight: 500;
+        }
+        .chairman-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            line-height: 1.25;
+            flex-shrink: 0;
+        }
+        .chairman-status-pill.is-active {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+        .chairman-status-pill.is-off {
+            background: #e2e8f0;
+            color: #475569;
+            border: 1px solid #cbd5e1;
         }
         #chairman-command-center .chairman-sub-block {
             background: transparent;
@@ -3026,10 +3069,10 @@
             border-radius: 0;
         }
         #chairman-command-center .chairman-sub-title {
-            font-size: 0.88rem;
+            font-size: 0.98rem;
             font-weight: 800;
             color: #0f172a;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -3041,7 +3084,31 @@
             background: #e2e8f0;
             margin: 14px 0;
         }
-        #chairman-command-center .form-control,
+        #chairman-command-center .form-group {
+            margin-bottom: 10px;
+        }
+        #chairman-command-center .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 5px;
+        }
+        #chairman-command-center .form-control {
+            min-height: 44px;
+            border-radius: 12px;
+            border: 1.5px solid #cbd5e1;
+            background: #ffffff;
+            padding: 10px 12px;
+            font-size: 0.9rem;
+            color: #0f172a;
+            box-sizing: border-box;
+        }
+        #chairman-command-center .form-control:focus {
+            border-color: #eab308;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.16);
+        }
         #chairman-command-center .btn,
         #chairman-command-center .chairman-toggle-row {
             min-height: 44px;
@@ -3051,25 +3118,81 @@
         #chairman-command-center .btn {
             font-weight: 700;
         }
+        #chairman-command-center .btn-block {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
         #chairman-command-center textarea.form-control {
-            min-height: 68px;
+            min-height: 76px;
+            resize: vertical;
+        }
+        .chairman-btn-row-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .chairman-btn-row-2 .btn {
+            width: 100%;
+            margin-top: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .chairman-input-add-row {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
+        .chairman-input-add-row .form-control {
+            flex: 1;
+            min-width: 0;
+        }
+        .chairman-input-add-row .btn {
+            margin-top: 0;
+            white-space: nowrap;
+            flex-shrink: 0;
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+        .chairman-new-item-row {
+            display: grid;
+            grid-template-columns: 1fr 104px;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 390px) {
+            .chairman-btn-row-2 {
+                grid-template-columns: 1fr;
+            }
+            .chairman-input-add-row {
+                flex-direction: column;
+            }
+            .chairman-input-add-row .btn {
+                width: 100%;
+            }
         }
         .chairman-chip-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 10px;
+            gap: 7px;
+            margin-bottom: 12px;
         }
         .chairman-member-chip {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: #f8fafc;
+            background: #ffffff;
             color: #0f172a;
             border: 1px solid #cbd5e1;
             border-radius: 999px;
-            padding: 4px 6px 4px 11px;
-            font-size: 0.79rem;
+            padding: 5px 6px 5px 12px;
+            font-size: 0.8rem;
             font-weight: 700;
             box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
         }
@@ -3082,8 +3205,8 @@
             border: none;
             background: #fee2e2;
             color: #b91c1c;
-            width: 20px;
-            height: 20px;
+            width: 21px;
+            height: 21px;
             border-radius: 999px;
             font-size: 0.72rem;
             font-weight: 900;
@@ -3095,21 +3218,85 @@
             line-height: 1;
             flex-shrink: 0;
         }
+        .chairman-bar-rights-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .chairman-bar-right-chip {
+            min-height: 42px;
+            border-radius: 12px;
+            border: 1.5px solid #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+            box-sizing: border-box;
+        }
+        .chairman-bar-right-chip:hover {
+            border-color: #94a3b8;
+        }
+        .chairman-bar-right-chip.selected {
+            background: #ecfdf5;
+            border-color: #16a34a;
+            color: #065f46;
+            box-shadow: 0 2px 8px rgba(22, 163, 74, 0.14);
+        }
+        .chairman-bar-right-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            min-width: 0;
+            flex: 1;
+        }
+        .chairman-bar-right-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            border: 1.5px solid #cbd5e1;
+            background: #f8fafc;
+            color: transparent;
+            font-size: 0.75rem;
+            font-weight: 900;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.15s ease;
+        }
+        .chairman-bar-right-chip.selected .chairman-bar-right-check {
+            background: #16a34a;
+            border-color: #15803d;
+            color: #ffffff;
+        }
         .chairman-bar-menu-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
-            padding: 8px 10px;
-            background: #f8fafc;
+            gap: 10px;
+            padding: 9px 12px;
+            background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+        }
+        .chairman-bar-menu-row:last-child {
+            margin-bottom: 0;
         }
         .chairman-bar-price-input {
-            width: 86px;
-            min-height: 38px;
-            padding: 6px 8px;
+            width: 88px;
+            min-height: 40px;
+            padding: 6px 10px;
             border-radius: 10px;
             border: 1.5px solid #cbd5e1;
             font-weight: 800;
@@ -3118,20 +3305,68 @@
             color: #0f172a;
             background: #ffffff;
             font-family: inherit;
+            box-sizing: border-box;
         }
         .chairman-toggle-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            padding: 10px 13px;
+            gap: 12px;
+            padding: 11px 14px;
             border-radius: 12px;
-            background: #f8fafc;
+            background: #ffffff;
             border: 1.5px solid #cbd5e1;
             cursor: pointer;
             font-weight: 800;
             font-size: 0.86rem;
             color: #0f172a;
+        }
+        .chairman-chat-lock-status-box {
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 0.84rem;
+            font-weight: 800;
+            background: #ecfdf5;
+            border: 1px solid #86efac;
+            color: #15803d;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chairman-chat-lock-status-box.is-locked {
+            background: #fef2f2;
+            border-color: #fca5a5;
+            color: #b91c1c;
+        }
+        .chairman-qr-preview-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .chairman-qr-preview-img {
+            width: 164px;
+            height: 164px;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #ffffff;
+            image-rendering: pixelated;
+            display: block;
+        }
+        .chairman-qr-caption {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #64748b;
+            text-align: center;
+            word-break: break-all;
         }
     </style>
 </head>
@@ -3983,7 +4218,7 @@
                                 <span id="tile-status-bar" class="chairman-tile-status">Karte &amp; Artikel</span>
                             </button>
                             <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-members" role="tab" aria-selected="false" aria-controls="sec-members" onclick="toggleChairmanSection('sec-members')">
-                                <span class="chairman-tile-title">👥 Mitglieder</span>
+                                <span class="chairman-tile-title">👥 Mitglieder &amp; Rechte</span>
                                 <span id="tile-status-members" class="chairman-tile-status">Schank &amp; Waffenwarte</span>
                             </button>
                             <button type="button" class="chairman-quick-tile" data-chairman-tile="sec-security" role="tab" aria-selected="false" aria-controls="sec-security" onclick="toggleChairmanSection('sec-security')">
@@ -3998,160 +4233,188 @@
 
                         <!-- EINZELANSICHT FÜR DEN GEWÄHLTEN BEREICH -->
                         <div id="chairman-panels-stage">
-                            <!-- BEREICH 1: APP-FARBDESIGN (STANDARDMÄSSIG GEÖFFNET) -->
+                            <!-- SEKTION 1: APP-FARBEN -->
                             <div class="chairman-acc-section open" id="sec-theme" role="tabpanel">
                                 <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">🎨 App-Farbdesign (8 Vereins-Farbwelten)</span>
+                                    <span class="chairman-panel-head-title">🎨 App-Farben</span>
                                     <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
                                 </div>
-                                <div class="chairman-inner-card">
+                                <div class="chairman-subcard">
                                     <div class="chairman-sub-block" id="admin-theme-control-box" style="display: none;">
-                                        <p class="admin-muted-text" style="margin-bottom: 12px;">
-                                            Wähle eine der 8 Vereins-Farbwelten aus – beim Speichern (<code>settings/theme</code>) wird das Design sofort in Echtzeit auf alle Mitglieder-Geräte übertragen.
+                                        <div class="chairman-subcard-title"><span>🎨 Vereins-Farbwelten (2×4 Auswahl)</span></div>
+                                        <p class="chairman-subcard-desc">
+                                            Wähle eine der 8 Farbwelten aus – beim Speichern (<code>settings/theme</code>) wird das Design sofort in Echtzeit auf alle Mitglieder-Geräte übertragen.
                                         </p>
                                         <div id="admin-theme-tiles-grid" class="admin-theme-grid"></div>
-                                        <button type="button" id="admin-theme-save-btn" onclick="saveClubAppTheme()" class="btn admin-btn-save btn-block" style="margin-top: 12px;">
-                                            💾 Design für alle speichern
+                                        <button type="button" id="admin-theme-save-btn" onclick="saveClubAppTheme()" class="btn admin-btn-save btn-block" style="margin-top: 14px;">
+                                            💾 Design für alle Mitglieder aktivieren
                                         </button>
-                                        <div id="admin-theme-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700; color: #15803d;"></div>
+                                        <div id="admin-theme-feedback" class="admin-muted-text" style="display: none; margin-top: 10px; font-weight: 700; color: #15803d;"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- BEREICH 2: STARTSEITEN-EILMELDUNG & CHAT-SCHREIBSPERRE -->
+                            <!-- SEKTION 2: EILMELDUNG & CHAT -->
                             <div class="chairman-acc-section" id="sec-comm" role="tabpanel">
                                 <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">📢 Eilmeldung &amp; Chat-Schreibsperre</span>
+                                    <span class="chairman-panel-head-title">📢 Eilmeldung &amp; Chat</span>
                                     <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
                                 </div>
-                                <div class="chairman-inner-card">
+
+                                <!-- KARTE 2a: STARTSEITEN-EILMELDUNG -->
+                                <div class="chairman-subcard">
                                     <div class="chairman-sub-block" id="chairman-banner-card">
-                                        <div class="chairman-sub-title"><span>📢 Startseiten-Eilmeldung</span></div>
-                                        <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        <div class="chairman-subcard-title">
+                                            <span>📢 Startseiten-Eilmeldung</span>
+                                            <span id="chairman-banner-status-badge" class="chairman-status-pill is-off">Aus</span>
+                                        </div>
+                                        <p class="chairman-subcard-desc">
                                             Zeigt bei Aktivierung ein auffälliges Gold-Rot-Banner ganz oben auf der Startseite (<code>settings/banner</code>).
                                         </p>
-                                        <div class="form-group" style="margin-bottom: 10px;">
+                                        <div class="form-group">
                                             <label for="chairman-banner-text">Eilmeldungs-Text</label>
                                             <textarea id="chairman-banner-text" class="form-control" rows="2" maxlength="320" placeholder="z. B. Achtung: Schützenhaus heute wegen Ausrückung erst ab 19:30 Uhr geöffnet!"></textarea>
                                         </div>
-                                        <label class="chairman-toggle-row" style="margin-bottom: 10px; background: #ffffff;">
-                                            <span>📢 Eilmeldung aktiv anzeigen</span>
-                                            <input type="checkbox" id="chairman-banner-active" style="width: 20px; height: 20px; accent-color: #b91c1c; cursor: pointer;">
+                                        <label class="chairman-toggle-row" style="margin-bottom: 10px;">
+                                            <span>📢 Eilmeldung auf Startseite aktiv anzeigen</span>
+                                            <input type="checkbox" id="chairman-banner-active" style="width: 22px; height: 22px; accent-color: #b91c1c; cursor: pointer;">
                                         </label>
-                                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                                            <button type="button" id="chairman-banner-publish-btn" onclick="publishChairmanEmergencyBanner()" class="btn admin-btn-save" style="flex: 1; min-width: 190px; margin-top: 0;">
-                                                📢 Eilmeldung veröffentlichen
+                                        <div class="chairman-btn-row-2">
+                                            <button type="button" id="chairman-banner-publish-btn" onclick="publishChairmanEmergencyBanner()" class="btn admin-btn-save">
+                                                📢 Veröffentlichen
                                             </button>
-                                            <button type="button" id="chairman-banner-hide-btn" onclick="hideChairmanEmergencyBanner()" class="btn admin-btn-delete" style="min-width: 130px; margin-top: 0;">
+                                            <button type="button" id="chairman-banner-hide-btn" onclick="hideChairmanEmergencyBanner()" class="btn admin-btn-delete">
                                                 🗑️ Ausblenden
                                             </button>
                                         </div>
-                                        <div id="chairman-banner-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700;"></div>
+                                        <div id="chairman-banner-feedback" class="admin-muted-text" style="display: none; margin-top: 10px; font-weight: 700;"></div>
                                     </div>
                                 </div>
 
-                                <div class="chairman-inner-card">
+                                <!-- KARTE 2b: CHAT-SCHREIBSPERRE -->
+                                <div class="chairman-subcard">
                                     <div class="chairman-sub-block" id="chairman-chat-lock-card">
-                                        <div class="chairman-sub-title"><span>🔒 Chat-Schreibsperre</span></div>
-                                        <p class="admin-muted-text" style="margin-bottom: 10px;">
-                                            Wenn aktiv (<code>settings/chat_lock</code>), können normale Mitglieder im Vereins-Chat nur noch lesen – ausschließlich Obmann Simon darf schreiben.
+                                        <div class="chairman-subcard-title"><span>🔒 Chat-Schreibsperre</span></div>
+                                        <p class="chairman-subcard-desc">
+                                            Wenn aktiv (<code>settings/chat_lock</code>), können Mitglieder im Vereins-Chat nur noch lesen – ausschließlich Obmann Simon darf schreiben.
                                         </p>
-                                        <label class="chairman-toggle-row" style="background: #ffffff;">
-                                            <span>🔒 Chat-Schreibsperre (Nur Obmann darf schreiben)</span>
-                                            <input type="checkbox" id="chairman-chat-lock-toggle" onchange="toggleChairmanChatLock(this.checked)" style="width: 22px; height: 22px; accent-color: #b91c1c; cursor: pointer;">
+                                        <label class="chairman-toggle-row">
+                                            <span>🔒 Schreibsperre (Nur Obmann darf schreiben)</span>
+                                            <input type="checkbox" id="chairman-chat-lock-toggle" onchange="toggleChairmanChatLock(this.checked)" style="width: 24px; height: 24px; accent-color: #b91c1c; cursor: pointer;">
                                         </label>
-                                        <div id="chairman-chat-lock-status" class="admin-muted-text" style="margin-top: 8px; font-weight: 700; color: #15803d;">🔓 Chat ist aktuell für alle Mitglieder geöffnet.</div>
-                                        <div id="chairman-chat-lock-feedback" class="admin-muted-text" style="display: none; margin-top: 6px; font-weight: 700;"></div>
+                                        <div id="chairman-chat-lock-status" class="chairman-chat-lock-status-box">🔓 Chat für alle offen</div>
+                                        <div id="chairman-chat-lock-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700;"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- BEREICH 3: SCHANKBUCH-PREISE & ARTIKEL -->
+                            <!-- SEKTION 3: SCHANK-PREISE -->
                             <div class="chairman-acc-section" id="sec-bar" role="tabpanel">
                                 <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">🍺 Schankbuch-Preise &amp; Artikel</span>
+                                    <span class="chairman-panel-head-title">🍺 Schank-Preise</span>
                                     <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
                                 </div>
                                 <div class="chairman-sub-block" id="chairman-bar-menu-card">
-                                    <div class="chairman-inner-card">
-                                        <div class="chairman-sub-title"><span>💶 Aktuelle Preisliste</span></div>
-                                        <p class="admin-muted-text" style="margin-bottom: 10px;">
-                                            Passe Preise in Echtzeit an (<code>settings/bar_menu</code>).
+                                    <!-- KARTE 3a: BESTEHENDE ARTIKEL & PREISE -->
+                                    <div class="chairman-subcard">
+                                        <div class="chairman-subcard-title"><span>💶 Bestehende Artikel &amp; Preise</span></div>
+                                        <p class="chairman-subcard-desc">
+                                            Passe Preise in Echtzeit an (<code>settings/bar_menu</code>) – links der Artikel, rechts der Preis in €.
                                         </p>
-                                        <div id="chairman-bar-menu-list" style="margin-bottom: 10px;"></div>
+                                        <div id="chairman-bar-menu-list" style="margin-bottom: 12px;"></div>
                                         <button type="button" id="chairman-bar-menu-save-btn" onclick="saveChairmanBarMenuPrices()" class="btn admin-btn-save btn-block" style="margin-top: 0;">
-                                            💾 Preise speichern
+                                            💾 Alle Preise speichern
                                         </button>
                                     </div>
 
-                                    <div class="chairman-inner-card">
-                                        <div class="chairman-sub-title"><span>➕ Neuen Artikel anlegen</span></div>
-                                        <div style="display: grid; grid-template-columns: 1fr 96px; gap: 8px; margin-bottom: 8px;">
+                                    <!-- KARTE 3b: NEUEN ARTIKEL HINZUFÜGEN -->
+                                    <div class="chairman-subcard">
+                                        <div class="chairman-subcard-title"><span>➕ Neuen Artikel hinzufügen</span></div>
+                                        <p class="chairman-subcard-desc">
+                                            Erweitere die Schankkarte um ein neues Getränk oder eine Speise – sofort auf allen Geräten verfügbar.
+                                        </p>
+                                        <div class="chairman-new-item-row">
                                             <input type="text" id="chairman-new-bar-item-name" class="form-control" placeholder="Artikelname (z. B. Brezel)">
                                             <input type="number" id="chairman-new-bar-item-price" class="form-control" step="0.10" min="0" placeholder="€ 2.50">
                                         </div>
-                                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                            <select id="chairman-new-bar-item-category" class="form-control" style="flex: 1; min-width: 160px;">
+                                        <div class="form-group">
+                                            <label for="chairman-new-bar-item-category">Kategorie</label>
+                                            <select id="chairman-new-bar-item-category" class="form-control">
                                                 <option value="Speisen">Speisen</option>
                                                 <option value="Getränke & Bier" selected>Getränke &amp; Bier</option>
                                                 <option value="Heissgetränke & Sonstiges">Heissgetränke &amp; Sonstiges</option>
                                                 <option value="Luftgewehrschießen">Luftgewehrschießen</option>
                                             </select>
-                                            <button type="button" id="chairman-new-bar-item-add-btn" onclick="addChairmanBarMenuItem()" class="btn admin-btn-edit" style="margin-top: 0; white-space: nowrap;">
-                                                ➕ Neuen Artikel anlegen
-                                            </button>
                                         </div>
-                                        <div id="chairman-bar-menu-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700;"></div>
+                                        <button type="button" id="chairman-new-bar-item-add-btn" onclick="addChairmanBarMenuItem()" class="btn admin-btn-edit btn-block" style="margin-top: 0;">
+                                            ➕ Artikel hinzufügen
+                                        </button>
+                                        <div id="chairman-bar-menu-feedback" class="admin-muted-text" style="display: none; margin-top: 10px; font-weight: 700;"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- BEREICH 4: AKTIVE MITGLIEDER & WAFFENWARTE -->
+                            <!-- SEKTION 4: MITGLIEDER & SCHANKBUCH-RECHTE -->
                             <div class="chairman-acc-section" id="sec-members" role="tabpanel">
                                 <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">👥 Aktive Mitglieder &amp; Waffenwarte</span>
+                                    <span class="chairman-panel-head-title">👥 Mitglieder &amp; Schankbuch-Rechte</span>
                                     <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
                                 </div>
                                 <div class="chairman-sub-block" id="chairman-members-card">
-                                    <div class="chairman-inner-card">
-                                        <div class="chairman-sub-title"><span>🍺 Aktive Schankdienst-Mitglieder</span></div>
-                                        <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                    <!-- KARTE 4a: AKTIVE VEREINS- & SCHANKDIENST-MITGLIEDER -->
+                                    <div class="chairman-subcard">
+                                        <div class="chairman-subcard-title"><span>👥 Aktive Vereins- &amp; Schankdienst-Mitglieder</span></div>
+                                        <p class="chairman-subcard-desc">
                                             Verwaltet <code>activeMembers</code> in <code>settings/members</code> mit sofortiger Echtzeit-Übernahme.
                                         </p>
                                         <div id="chairman-active-members-list" class="chairman-chip-list"></div>
-                                        <div style="display: flex; gap: 8px;">
-                                            <input type="text" id="chairman-active-member-input" class="form-control" style="flex: 1; min-width: 0;" placeholder="Nachname Vorname hinzufügen..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); addChairmanMember('active'); }">
-                                            <button type="button" id="chairman-active-member-add-btn" onclick="addChairmanMember('active')" class="btn admin-btn-save" style="margin-top: 0; white-space: nowrap;">➕ Hinzufügen</button>
+                                        <div class="chairman-input-add-row">
+                                            <input type="text" id="chairman-active-member-input" class="form-control" placeholder="Nachname Vorname hinzufügen..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); addChairmanMember('active'); }">
+                                            <button type="button" id="chairman-active-member-add-btn" onclick="addChairmanMember('active')" class="btn admin-btn-save">➕ Hinzufügen</button>
                                         </div>
                                     </div>
 
-                                    <div class="chairman-inner-card">
-                                        <div class="chairman-sub-title" style="color: #065f46;"><span>🎯 Waffenwarte (Waffenbuch-Berechtigte)</span></div>
-                                        <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                    <!-- KARTE 4b: BERECHTIGTE WAFFENWARTE -->
+                                    <div class="chairman-subcard">
+                                        <div class="chairman-subcard-title" style="color: #065f46;"><span>🎯 Berechtigte Waffenwarte</span></div>
+                                        <p class="chairman-subcard-desc">
                                             Verwaltet <code>weaponMembers</code> in <code>settings/members</code> für alle Waffenbuch-Auswahlmenüs.
                                         </p>
                                         <div id="chairman-weapon-members-list" class="chairman-chip-list"></div>
-                                        <div style="display: flex; gap: 8px;">
-                                            <input type="text" id="chairman-weapon-member-input" class="form-control" style="flex: 1; min-width: 0;" placeholder="Waffenwart hinzufügen..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); addChairmanMember('weapon'); }">
-                                            <button type="button" id="chairman-weapon-member-add-btn" onclick="addChairmanMember('weapon')" class="btn admin-btn-save" style="margin-top: 0; white-space: nowrap;">➕ Hinzufügen</button>
+                                        <div class="chairman-input-add-row">
+                                            <input type="text" id="chairman-weapon-member-input" class="form-control" placeholder="Waffenwart hinzufügen..." onkeydown="if (event.key === 'Enter') { event.preventDefault(); addChairmanMember('weapon'); }">
+                                            <button type="button" id="chairman-weapon-member-add-btn" onclick="addChairmanMember('weapon')" class="btn admin-btn-save">➕ Hinzufügen</button>
                                         </div>
-                                        <div id="chairman-members-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700;"></div>
+                                        <div id="chairman-members-feedback" class="admin-muted-text" style="display: none; margin-top: 10px; font-weight: 700;"></div>
+                                    </div>
+
+                                    <!-- KARTE 4c: SCHANKBUCH-BERECHTIGUNG (TAB SICHTBAR) -->
+                                    <div class="chairman-subcard" id="chairman-bar-members-card">
+                                        <div class="chairman-subcard-title"><span>🍺 Schankbuch-Berechtigung (Tab sichtbar)</span></div>
+                                        <p class="chairman-subcard-desc">
+                                            Wähle aus, welche Mitglieder unten den Reiter „🍺 Schankbuch“ sehen dürfen (<code>barMembers</code> in <code>settings/members</code>). Alle anderen sehen dort direkt den „💬 Vereins-Chat“.
+                                        </p>
+                                        <div id="chairman-bar-members-grid" class="chairman-bar-rights-grid"></div>
+                                        <button type="button" id="chairman-bar-members-save-btn" onclick="saveChairmanBarMembersPermissions()" class="btn admin-btn-save btn-block" style="margin-top: 0;">
+                                            💾 Schankbuch-Rechte speichern
+                                        </button>
+                                        <div id="chairman-bar-members-feedback" class="admin-muted-text" style="display: none; margin-top: 10px; font-weight: 700;"></div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- BEREICH 5: ZUGANGSCODE, MITGLIEDER-QR, TRESOR-QR & PUSH-KEY -->
+                            <!-- SEKTION 5: CODE & QR-CODES -->
                             <div class="chairman-acc-section" id="sec-security" role="tabpanel">
                                 <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">🔑 Zugangscode, QR-Codes &amp; Push-Key</span>
+                                    <span class="chairman-panel-head-title">🔑 Code &amp; QR-Codes</span>
                                     <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
                                 </div>
 
-                                <!-- VEREINS-ZUGANGSCODE VERWALTUNG (SHA-256 codeHash) -->
-                                <div class="chairman-inner-card">
+                                <!-- KARTE 5a: VEREINS-ZUGANGSCODE ÄNDERN -->
+                                <div class="chairman-subcard">
                                     <div class="chairman-sub-block" id="admin-access-pin-card">
-                                        <div class="chairman-sub-title"><span>🔑 Vereins-Zugangscode ändern</span></div>
-                                        <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        <div class="chairman-subcard-title"><span>🔑 Vereins-Zugangscode ändern</span></div>
+                                        <p class="chairman-subcard-desc">
                                             Speichert ausschließlich den SHA-256-Hash (<code>codeHash</code>) in Firestore (<code>settings/access</code>). Mindestens 4 Zeichen.
                                         </p>
                                         <form onsubmit="updateClubAccessPin(event)">
@@ -4159,28 +4422,48 @@
                                                 <label for="admin-club-pin-input">Neuer Vereins-Zugangscode (mind. 4 Zeichen)</label>
                                                 <input type="password" class="form-control" id="admin-club-pin-input" minlength="4" placeholder="Neuer Code (mind. 4 Zeichen)" required autocomplete="off" style="font-weight: 800; font-size: 1.02em; letter-spacing: 2px; text-align: center;">
                                             </div>
-                                            <button type="submit" id="admin-club-pin-save-btn" class="btn admin-btn-save btn-block">🔑 Neuen Zugangscode aktivieren</button>
+                                            <button type="submit" id="admin-club-pin-save-btn" class="btn admin-btn-save btn-block" style="margin-top: 0;">🔑 Neuen Zugangscode speichern</button>
                                         </form>
-                                        <div id="chairman-club-pin-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700;"></div>
+                                        <div id="chairman-club-pin-feedback" class="admin-muted-text" style="display: none; margin-top: 10px; font-weight: 700;"></div>
                                     </div>
                                 </div>
 
-                                <!-- QR-CODES (MITGLIEDER-APP & TRESOR) -->
-                                <div class="chairman-inner-card">
+                                <!-- KARTE 5b: MITGLIEDER-APP QR-CODE -->
+                                <div class="chairman-subcard" id="chairman-member-qr-card">
                                     <div class="chairman-sub-block">
-                                        <div class="chairman-sub-title"><span>📲 Mitglieder-App &amp; Tresor QR-Codes</span></div>
-                                        <p class="admin-muted-text" style="margin-bottom: 10px;">
-                                            Hochauflösende PNG-Grafiken für Aushang, Mitglieder-Zugang und Waffentresor.
+                                        <div class="chairman-subcard-title"><span>📲 Mitglieder-App QR-Code</span></div>
+                                        <p class="chairman-subcard-desc">
+                                            Hochauflösender QR-Code für Aushang, Schaukasten und schnellen Mitglieder-Zugang zur Vereins-App.
                                         </p>
-                                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                                            <button type="button" id="admin-member-app-qr-btn" class="btn admin-btn-edit" style="flex: 1; min-width: 190px; margin-top: 0;" onclick="exportMemberAppQrCodePNG()">📲 Mitglieder-App-QR-Code PNG</button>
-                                            <button type="button" class="btn admin-btn-edit" style="flex: 1; min-width: 190px; margin-top: 0;" onclick="exportTresorQrCodePNG()">📷 Tresor-QR-Code PNG</button>
+                                        <div class="chairman-qr-preview-box">
+                                            <img id="chairman-inline-member-app-qr-img" class="chairman-qr-preview-img" alt="Mitglieder-App QR-Code">
+                                            <span class="chairman-qr-caption">Direktlink zur Mitglieder-App</span>
                                         </div>
+                                        <button type="button" id="admin-member-app-qr-btn" class="btn admin-btn-edit btn-block" style="margin-top: 0;" onclick="exportMemberAppQrCodePNG()">
+                                            📥 Mitglieder-App QR-Code herunterladen / drucken
+                                        </button>
                                     </div>
                                 </div>
 
-                                <!-- ONESIGNAL REST API KEY VERWALTUNG -->
-                                <div class="chairman-inner-card">
+                                <!-- KARTE 5c: TRESOR QR-CODE (WAFFENBUCH) -->
+                                <div class="chairman-subcard" id="chairman-tresor-qr-card">
+                                    <div class="chairman-sub-block">
+                                        <div class="chairman-subcard-title"><span>📷 Tresor QR-Code (Waffenbuch)</span></div>
+                                        <p class="chairman-subcard-desc">
+                                            Offizieller Scan-Code für den Waffentresor zur sicheren digitalen Waffen-Entnahme und -Rückgabe.
+                                        </p>
+                                        <div class="chairman-qr-preview-box">
+                                            <img id="chairman-inline-tresor-qr-img" class="chairman-qr-preview-img" alt="Tresor QR-Code">
+                                            <span class="chairman-qr-caption">Scan-Code für den Waffentresor</span>
+                                        </div>
+                                        <button type="button" id="admin-tresor-qr-btn" class="btn admin-btn-edit btn-block" style="margin-top: 0;" onclick="exportTresorQrCodePNG()">
+                                            📥 Tresor QR-Code herunterladen / drucken
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- KARTE 5d: ONESIGNAL REST API KEY VERWALTUNG -->
+                                <div class="chairman-subcard">
                                     <div id="admin-security-banner" class="admin-security-banner" style="margin-bottom: 12px;">
                                         <div>
                                             <span id="admin-security-status-badge" class="admin-security-badge">🔒 Geschützt – nur Haupt-Admin</span>
@@ -4193,8 +4476,8 @@
                                         </button>
                                     </div>
                                     <div class="chairman-sub-block" id="admin-onesignal-push-card">
-                                        <div class="chairman-sub-title"><span>🔔 OneSignal REST API Key</span></div>
-                                        <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        <div class="chairman-subcard-title"><span>🔔 OneSignal REST API Key</span></div>
+                                        <p class="chairman-subcard-desc">
                                             Geschützt gespeichert in Firestore (<code>settings/push</code>) für automatische Push-Benachrichtigungen.
                                         </p>
                                         <form onsubmit="saveOneSignalRestApiKey(event)">
@@ -4202,80 +4485,84 @@
                                                 <label for="admin-onesignal-key-input">OneSignal REST API Key</label>
                                                 <input type="password" class="form-control" id="admin-onesignal-key-input" value="••••••••" placeholder="Optional – leer lassen für Cloudflare Secret" autocomplete="off" disabled readonly style="font-size: 0.9em; letter-spacing: 2px;">
                                             </div>
-                                            <button type="submit" id="admin-onesignal-save-btn" class="btn admin-btn-save btn-block" disabled>💾 Push-Key speichern</button>
+                                            <button type="submit" id="admin-onesignal-save-btn" class="btn admin-btn-save btn-block" style="margin-top: 0;" disabled>💾 Push-Key speichern</button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- BEREICH 6: WAFFENPROTOKOLLE, SICHERHEITS-LOG, BACKUP & HANDBUCH -->
+                            <!-- SEKTION 6: PROTOKOLLE, AUDIT-LOG & BACKUP -->
                             <div class="chairman-acc-section" id="sec-logs" role="tabpanel">
                                 <div class="chairman-panel-head">
-                                    <span class="chairman-panel-head-title">📋 Waffenprotokolle, Audit-Log &amp; Backup</span>
+                                    <span class="chairman-panel-head-title">📋 Protokolle, Audit-Log &amp; Backup</span>
                                     <button type="button" class="chairman-panel-close-btn" onclick="collapseAllChairmanSections()">✕ Schließen</button>
                                 </div>
 
-                                <!-- WAFFENBUCH-PROTOKOLLE -->
-                                <div class="chairman-inner-card">
+                                <!-- KARTE 6a: WAFFENBUCH-PROTOKOLLE -->
+                                <div class="chairman-subcard">
                                     <div class="chairman-sub-block" id="chairman-weapons-card">
                                         <div id="admin-weapons-chairman-locked-notice" style="display: none; align-items: center; gap: 10px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px 16px; color: #475569; font-size: 0.92rem; font-weight: 700;">
                                             <span>🔒 Exklusiv für Obmann Simon freigeschaltet.</span>
                                         </div>
                                         <div id="admin-weapons-chairman-content" style="display: none;">
-                                            <div class="chairman-sub-title">
+                                            <div class="chairman-subcard-title">
                                                 <span>🎯 Waffenbuch-Protokolle</span>
-                                                <button type="button" class="btn admin-btn-save" style="margin-top: 0;" onclick="exportFullWeaponListPDF()">📥 Waffenliste PDF</button>
                                             </div>
-                                            <p class="admin-muted-text" style="margin-bottom: 10px;">Übersicht aller gespeicherten Entnahme- und Rückgabeprotokolle (inkl. getrennter ZWR/ZVR-Daten):</p>
+                                            <p class="chairman-subcard-desc">
+                                                Übersicht aller gespeicherten Entnahme- und Rückgabeprotokolle (inkl. getrennter ZWR/ZVR-Daten).
+                                            </p>
+                                            <button type="button" class="btn admin-btn-save btn-block" style="margin-top: 0; margin-bottom: 12px;" onclick="exportFullWeaponListPDF()">
+                                                📥 Gesamte Waffenliste als PDF
+                                            </button>
                                             <div id="admin-weapon-pdf-list"><p class="admin-muted-text">Keine Protokolle vorhanden.</p></div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- VEREINS-BACKUP & JAHRESABSCHLUSS -->
-                                <div class="chairman-inner-card">
+                                <!-- KARTE 6b: JAHRESABSCHLUSS-BACKUP -->
+                                <div class="chairman-subcard">
                                     <div class="chairman-sub-block" id="admin-backup-card">
-                                        <div class="chairman-sub-title"><span>📊 Vereins-Backup &amp; Jahresabschluss</span></div>
-                                        <p class="admin-muted-text" style="margin-bottom: 12px;">
+                                        <div class="chairman-subcard-title"><span>📊 Jahresabschluss-Backup</span></div>
+                                        <p class="chairman-subcard-desc">
                                             Lädt alle gespeicherten Bar-Abrechnungen, Firmen-/Feier-Rechnungen (Schankbuch), Waffenbuch-Protokolle und Termine aus Firestore als übersichtliche Vorschau oder druckfertiges A4-PDF herunter.
                                         </p>
-                                        <div id="admin-board-routine-box" style="background: #ffffff; border-left: 4px solid #16a34a; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-size: 0.82em; line-height: 1.48; color: #1e293b;">
+                                        <div id="admin-board-routine-box" style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 12px; padding: 11px 14px; margin-bottom: 12px; font-size: 0.82em; line-height: 1.48; color: #1e293b;">
                                             <div style="font-weight: 800; color: #0f172a; margin-bottom: 5px;">Vorstands-Routine:</div>
                                             <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px;">
                                                 <li><strong>Quartals- &amp; Jahres-Backup:</strong> Einmal im Quartal oder zum Jahresende über „📥 Vereins-Backup &amp; Jahresabschluss (PDF)“ Schankbuch, Waffenbuch und Termine lokal als A4-PDF auf dem Vereins-PC oder USB-Stick sichern.</li>
                                                 <li><strong>Zugangscode-Wechsel:</strong> Bei Vorstands- oder Mitgliederwechsel unter „🔑 Code &amp; QR-Codes“ den Vereins-Zugangscode ändern – alle Geräte mit dem alten Code werden automatisch wieder auf den Sperrbildschirm zurückgesetzt.</li>
                                             </ul>
                                         </div>
-                                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-                                            <button type="button" id="admin-annual-preview-btn" onclick="previewAnnualBackupReport(this)" class="btn admin-btn-edit" style="flex: 1; min-width: 195px; margin-top: 0;">
-                                                👁️ Jahresabschluss-Vorschau
+                                        <div class="chairman-btn-row-2">
+                                            <button type="button" id="admin-annual-preview-btn" onclick="previewAnnualBackupReport(this)" class="btn admin-btn-edit">
+                                                👁️ Vorschau
                                             </button>
-                                            <button type="button" id="admin-annual-pdf-btn" onclick="exportAnnualBackupPDF(this)" class="btn admin-btn-save" style="flex: 1; min-width: 215px; margin-top: 0;">
-                                                📥 Vereins-Backup &amp; Jahresabschluss (PDF)
+                                            <button type="button" id="admin-annual-pdf-btn" onclick="exportAnnualBackupPDF(this)" class="btn admin-btn-save">
+                                                📥 Backup-PDF
                                             </button>
                                         </div>
-                                        <div id="admin-backup-feedback" class="admin-muted-text" style="display: none; margin-top: 8px; font-weight: 700; color: #15803d;"></div>
+                                        <div id="admin-backup-feedback" class="admin-muted-text" style="display: none; margin-top: 10px; font-weight: 700; color: #15803d;"></div>
                                     </div>
                                 </div>
 
-                                <!-- UNVERÄNDERLICHES VORSTANDS-AUDIT-LOG -->
-                                <div class="chairman-inner-card">
+                                <!-- KARTE 6c: SICHERHEITS-AUDIT-LOG -->
+                                <div class="chairman-subcard">
                                     <div class="chairman-sub-block" id="admin-audit-log-card">
-                                        <div class="chairman-sub-title"><span>📜 Letzte Sicherheits-Protokolle (Audit-Log)</span></div>
-                                        <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        <div class="chairman-subcard-title"><span>📜 Sicherheits-Audit-Log</span></div>
+                                        <p class="chairman-subcard-desc">
                                             Unveränderliches Protokoll der letzten 15 kritischen Vorstands-Aktionen (schreibgeschützt, ohne Lösch-Button).
                                         </p>
-                                        <div id="admin-audit-logs-list" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;">
+                                        <div id="admin-audit-logs-list" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
                                             <p class="admin-muted-text">Lade Sicherheits-Protokolle...</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- VORSTANDS- & ADMIN-HANDBUCH -->
-                                <div class="chairman-inner-card">
+                                <!-- KARTE 6d: VORSTANDS- & ADMIN-HANDBUCH -->
+                                <div class="chairman-subcard">
                                     <div class="chairman-sub-block" id="admin-handbook-card">
-                                        <div class="chairman-sub-title"><span>📘 Vorstands- &amp; Admin-Handbuch</span></div>
-                                        <p class="admin-muted-text" style="margin-bottom: 10px;">
+                                        <div class="chairman-subcard-title"><span>📘 Vorstands- &amp; Admin-Handbuch</span></div>
+                                        <p class="chairman-subcard-desc">
                                             Übersichtliche Anleitung zu allen Admin-Modulen, Berechtigungen, Exporten und Sicherheitsfunktionen – inklusive Druck- &amp; PDF-Funktion.
                                         </p>
                                         <button type="button" id="admin-open-handbook-btn" onclick="openAdminHelpModal()" class="btn admin-btn-edit btn-block" style="margin-top: 0;">
@@ -12644,7 +12931,7 @@
                 const el = document.getElementById(id);
                 if (el) el.innerHTML = '';
             });
-            ['tresor-qr-preview-img', 'member-app-qr-preview-img'].forEach(id => {
+            ['tresor-qr-preview-img', 'member-app-qr-preview-img', 'chairman-inline-tresor-qr-img', 'chairman-inline-member-app-qr-img'].forEach(id => {
                 const imgEl = document.getElementById(id);
                 if (imgEl) imgEl.removeAttribute('src');
             });
@@ -13245,6 +13532,12 @@
             }
             const inputEl = document.getElementById('chairman-banner-text');
             const toggleEl = document.getElementById('chairman-banner-active');
+            const badgeEl = document.getElementById('chairman-banner-status-badge');
+            if (badgeEl) {
+                badgeEl.textContent = active ? 'Aktiv' : 'Aus';
+                badgeEl.classList.toggle('is-active', active);
+                badgeEl.classList.toggle('is-off', !active);
+            }
             if (isChairmanSimonLoggedIn()) {
                 if (inputEl && document.activeElement !== inputEl) inputEl.value = text;
                 if (toggleEl) toggleEl.checked = Boolean(state && state.active === true);
@@ -13343,12 +13636,113 @@
             } catch (e) {}
         }
 
+        let pendingChairmanBarMembers = null;
+
+        function renderChairmanBarMembersSelector() {
+            const gridEl = document.getElementById('chairman-bar-members-grid');
+            if (!gridEl) return;
+            if (!isChairmanSimonLoggedIn()) {
+                gridEl.innerHTML = '';
+                return;
+            }
+            const allActive = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
+                ? officialActiveMembers
+                : DEFAULT_ACTIVE_MEMBERS;
+            if (!Array.isArray(pendingChairmanBarMembers)) {
+                pendingChairmanBarMembers = Array.isArray(officialBarMembers)
+                    ? [...officialBarMembers]
+                    : [...allActive];
+            }
+            const activeSelectedSet = new Set(pendingChairmanBarMembers.map(n => normalizeMemberNameForMatch(n)));
+            if (allActive.length === 0) {
+                gridEl.innerHTML = '<span class="admin-muted-text">Keine aktiven Mitglieder vorhanden.</span>';
+                return;
+            }
+            gridEl.innerHTML = allActive.map(name => {
+                const safe = escapeHtml(name);
+                const isSelected = activeSelectedSet.has(normalizeMemberNameForMatch(name));
+                return `<button type="button" class="chairman-bar-right-chip${isSelected ? ' selected' : ''}" data-bar-member-name="${safe}" aria-pressed="${isSelected ? 'true' : 'false'}" onclick="toggleChairmanBarMemberChip(this.dataset.barMemberName)"><span class="chairman-bar-right-name">${safe}</span><span class="chairman-bar-right-check" aria-hidden="true">✓</span></button>`;
+            }).join('');
+        }
+
+        function toggleChairmanBarMemberChip(memberName) {
+            if (!isChairmanSimonLoggedIn()) return;
+            const cleanName = String(memberName || '').trim();
+            if (!cleanName) return;
+            const allActive = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
+                ? officialActiveMembers
+                : DEFAULT_ACTIVE_MEMBERS;
+            if (!Array.isArray(pendingChairmanBarMembers)) {
+                pendingChairmanBarMembers = Array.isArray(officialBarMembers)
+                    ? [...officialBarMembers]
+                    : [...allActive];
+            }
+            const targetNorm = normalizeMemberNameForMatch(cleanName);
+            const existsIdx = pendingChairmanBarMembers.findIndex(n => normalizeMemberNameForMatch(n) === targetNorm);
+            if (existsIdx >= 0) {
+                pendingChairmanBarMembers.splice(existsIdx, 1);
+            } else {
+                pendingChairmanBarMembers.push(cleanName);
+            }
+            renderChairmanBarMembersSelector();
+            const feedbackEl = document.getElementById('chairman-bar-members-feedback');
+            if (feedbackEl) {
+                feedbackEl.style.display = 'none';
+                feedbackEl.textContent = '';
+            }
+        }
+
+        async function saveChairmanBarMembersPermissions() {
+            if (!isChairmanSimonLoggedIn()) return;
+            const saveBtn = document.getElementById('chairman-bar-members-save-btn');
+            const feedbackEl = document.getElementById('chairman-bar-members-feedback');
+            const allActive = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
+                ? officialActiveMembers
+                : DEFAULT_ACTIVE_MEMBERS;
+            const rawSelection = Array.isArray(pendingChairmanBarMembers)
+                ? pendingChairmanBarMembers
+                : (Array.isArray(officialBarMembers) ? officialBarMembers : allActive);
+            const cleanBarMembers = sanitizeActiveMembersList(rawSelection, true);
+            if (saveBtn) saveBtn.disabled = true;
+            try {
+                await db.collection('settings').doc('members').set({
+                    barMembers: cleanBarMembers,
+                    updatedBy: 'Simon',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                pendingChairmanBarMembers = [...cleanBarMembers];
+                applyMembersDataSnapshot({
+                    activeMembers: officialActiveMembers,
+                    weaponMembers: WEAPON_AUTHORIZED_MEMBERS,
+                    barMembers: cleanBarMembers,
+                    passive: officialPassiveMembers
+                });
+                try { logAdminAudit('Schankbuch-Berechtigungen aktualisiert', `${cleanBarMembers.length} Mitglieder freigeschaltet`); } catch (e) {}
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#15803d';
+                    feedbackEl.textContent = `✅ Schankbuch-Rechte gespeichert (${cleanBarMembers.length} Mitglieder freigeschaltet).`;
+                    feedbackEl.style.display = 'block';
+                }
+            } catch (err) {
+                if (feedbackEl) {
+                    feedbackEl.style.color = '#b91c1c';
+                    feedbackEl.textContent = '❌ Fehler beim Speichern der Schankbuch-Rechte: ' + (err && err.message ? err.message : err);
+                    feedbackEl.style.display = 'block';
+                }
+            } finally {
+                if (saveBtn) saveBtn.disabled = false;
+            }
+        }
+
         function renderChairmanMembersManager() {
             const activeContainer = document.getElementById('chairman-active-members-list');
             const weaponContainer = document.getElementById('chairman-weapon-members-list');
+            const barGridContainer = document.getElementById('chairman-bar-members-grid');
             if (!isChairmanSimonLoggedIn()) {
                 if (activeContainer) activeContainer.innerHTML = '';
                 if (weaponContainer) weaponContainer.innerHTML = '';
+                if (barGridContainer) barGridContainer.innerHTML = '';
+                pendingChairmanBarMembers = null;
                 return;
             }
             if (activeContainer) {
@@ -13369,6 +13763,10 @@
                         return `<span class="chairman-member-chip weapon-chip"><span>🎯 ${safe}</span><button type="button" class="chairman-chip-remove-btn" data-member-type="weapon" data-member-name="${safe}" onclick="removeChairmanMember(this.dataset.memberType, this.dataset.memberName)" title="${safe} entfernen" aria-label="${safe} entfernen">✕</button></span>`;
                     }).join('');
             }
+            pendingChairmanBarMembers = Array.isArray(officialBarMembers)
+                ? [...officialBarMembers]
+                : [...(Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0 ? officialActiveMembers : DEFAULT_ACTIVE_MEMBERS)];
+            renderChairmanBarMembersSelector();
             updateChairmanTileStatuses();
         }
 
@@ -13385,7 +13783,11 @@
                     updatedBy: 'Simon',
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
-                applyMembersDataSnapshot({ activeMembers: cleanActive, weaponMembers: cleanWeapons, passive: officialPassiveMembers });
+                const snapshotPayload = { activeMembers: cleanActive, weaponMembers: cleanWeapons, passive: officialPassiveMembers };
+                if (Array.isArray(officialBarMembers)) {
+                    snapshotPayload.barMembers = officialBarMembers;
+                }
+                applyMembersDataSnapshot(snapshotPayload);
                 try { logAdminAudit('Mitglieder-/Waffenwart-Liste geändert', auditMsg); } catch (e) {}
                 if (feedbackEl) {
                     feedbackEl.style.color = '#15803d';
@@ -13594,10 +13996,10 @@
             const statusEl = document.getElementById('chairman-chat-lock-status');
             if (toggleEl) toggleEl.checked = locked;
             if (statusEl) {
-                statusEl.style.color = locked ? '#b91c1c' : '#15803d';
+                statusEl.classList.toggle('is-locked', locked);
                 statusEl.textContent = locked
-                    ? '🔒 Schreibsperre AKTIV – nur Obmann Simon darf im Chat schreiben.'
-                    : '🔓 Chat ist aktuell für alle Mitglieder geöffnet.';
+                    ? '🔒 Nur Obmann darf schreiben'
+                    : '🔓 Chat für alle offen';
             }
             updateChairmanTileStatuses();
         }
@@ -13708,6 +14110,9 @@
                     activeTile.setAttribute('aria-selected', 'true');
                 }
                 if (stage) stage.classList.remove('is-empty');
+                if (sectionId === 'sec-security') {
+                    try { renderChairmanInlineQrPreviews(); } catch (e) {}
+                }
             } else {
                 if (stage) stage.classList.add('is-empty');
             }
@@ -13742,6 +14147,26 @@
             });
             if (stage) stage.classList.remove('is-empty');
             updateChairmanTileStatuses();
+        }
+
+        function renderChairmanInlineQrPreviews() {
+            const memberImg = document.getElementById('chairman-inline-member-app-qr-img');
+            const tresorImg = document.getElementById('chairman-inline-tresor-qr-img');
+            if (!isChairmanSimonLoggedIn()) {
+                if (memberImg) memberImg.removeAttribute('src');
+                if (tresorImg) tresorImg.removeAttribute('src');
+                return;
+            }
+            try {
+                if (memberImg && !memberImg.getAttribute('src') && typeof generateTresorQrPngDataUrl === 'function') {
+                    memberImg.src = generateTresorQrPngDataUrl(MEMBER_APP_QR_URL, 320);
+                }
+            } catch (e) {}
+            try {
+                if (tresorImg && !tresorImg.getAttribute('src') && typeof generateTresorQrPngDataUrl === 'function') {
+                    tresorImg.src = generateTresorQrPngDataUrl(TRESOR_QR_TEXT, 320);
+                }
+            } catch (e) {}
         }
 
         function updateChairmanExclusiveVisibility() {
@@ -13817,14 +14242,16 @@
                 renderChairmanMembersManager();
                 renderChairmanBarMenuManager();
                 renderHomeEmergencyBanner(currentEmergencyBannerState);
+                renderChairmanInlineQrPreviews();
                 updateChairmanTileStatuses();
             } else {
                 resetChairmanSectionsToDefault();
-                ['admin-theme-tiles-grid', 'chairman-active-members-list', 'chairman-weapon-members-list', 'chairman-bar-menu-list'].forEach(id => {
+                pendingChairmanBarMembers = null;
+                ['admin-theme-tiles-grid', 'chairman-active-members-list', 'chairman-weapon-members-list', 'chairman-bar-members-grid', 'chairman-bar-menu-list'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.innerHTML = '';
                 });
-                ['admin-theme-feedback', 'chairman-banner-feedback', 'chairman-members-feedback', 'chairman-bar-menu-feedback', 'chairman-chat-lock-feedback', 'chairman-club-pin-feedback'].forEach(id => {
+                ['admin-theme-feedback', 'chairman-banner-feedback', 'chairman-members-feedback', 'chairman-bar-members-feedback', 'chairman-bar-menu-feedback', 'chairman-chat-lock-feedback', 'chairman-club-pin-feedback'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) { el.style.display = 'none'; el.textContent = ''; }
                 });
@@ -13835,7 +14262,7 @@
                 lastGeneratedMemberAppQrDataUrl = '';
                 const pdfListEl = document.getElementById('admin-weapon-pdf-list');
                 if (pdfListEl) pdfListEl.innerHTML = '';
-                ['tresor-qr-preview-img', 'member-app-qr-preview-img'].forEach(id => {
+                ['tresor-qr-preview-img', 'member-app-qr-preview-img', 'chairman-inline-tresor-qr-img', 'chairman-inline-member-app-qr-img'].forEach(id => {
                     const imgEl = document.getElementById(id);
                     if (imgEl) imgEl.removeAttribute('src');
                 });
