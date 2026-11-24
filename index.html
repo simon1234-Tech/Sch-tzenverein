@@ -1625,7 +1625,9 @@
         body.app-locked #chat-drawer-overlay,
         body.app-locked #chat-drawer,
         body.app-locked #member-name-setup-modal,
-        body.app-locked #chat-popup-toast {
+        body.app-locked #chat-popup-toast,
+        body.app-locked #app-update-modal,
+        body.app-locked #app-updated-toast {
             display: none !important;
             pointer-events: none !important;
         }
@@ -13053,6 +13055,11 @@
                     openMemberNameSetupModal(false);
                 }
             } catch(e) {}
+            try {
+                if (typeof flushPendingAppUpdateUI === 'function') {
+                    flushPendingAppUpdateUI();
+                }
+            } catch(e) {}
         }
 
         let adminAuditLogsUnsubscribe = null;
@@ -13381,6 +13388,11 @@
                 inputEl.value = '';
             }
             loadAppDataAfterUnlock();
+            try {
+                if (typeof flushPendingAppUpdateUI === 'function') {
+                    flushPendingAppUpdateUI();
+                }
+            } catch (e) {}
         }
 
         function lockClubApp(forceClearInput = true) {
@@ -13393,6 +13405,16 @@
             if (lockScreen) {
                 lockScreen.style.display = 'flex';
                 lockScreen.style.pointerEvents = 'auto';
+            }
+            const updateModal = document.getElementById('app-update-modal');
+            if (updateModal) {
+                updateModal.style.display = 'none';
+                updateModal.style.pointerEvents = 'none';
+            }
+            const updatedToast = document.getElementById('app-updated-toast');
+            if (updatedToast) {
+                updatedToast.style.display = 'none';
+                updatedToast.style.opacity = '0';
             }
             const pageCard = document.getElementById('page-card');
             if (pageCard) pageCard.style.display = '';
@@ -20518,6 +20540,7 @@
         });
 
         let appUpdateNotifierInitialized = false;
+        let hasPendingAppUpdate = false;
         let appUpdateWaitingWorker = null;
         let appUpdateDismissedThisSession = false;
         let appUpdateReloading = false;
@@ -20525,17 +20548,40 @@
         let appUpdatedToastClearTimer = null;
         const trackedAppUpdateRegs = (typeof WeakSet === 'function') ? new WeakSet() : null;
 
+        function isAppUnlockedForUpdateUI() {
+            if (!document.body) return false;
+            if (document.body.classList.contains('app-locked') || document.body.classList.contains('admin-direct-login')) {
+                return false;
+            }
+            const lockScreen = document.getElementById('club-lock-screen');
+            if (lockScreen) {
+                if (lockScreen.style.display === 'flex' || lockScreen.style.display === 'block') return false;
+                try {
+                    const computed = typeof getComputedStyle === 'function' ? getComputedStyle(lockScreen) : null;
+                    if (computed && computed.display && computed.display !== 'none') return false;
+                } catch (e) {}
+            }
+            return true;
+        }
+
         function showAppUpdateModal(worker) {
             if (worker) appUpdateWaitingWorker = worker;
+            hasPendingAppUpdate = true;
             if (appUpdateDismissedThisSession || appUpdateReloading) return;
             const modal = document.getElementById('app-update-modal');
             if (!modal) return;
+            if (!isAppUnlockedForUpdateUI()) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+                return;
+            }
             modal.style.display = 'flex';
             modal.style.pointerEvents = 'auto';
         }
 
         function dismissAppUpdateModal() {
             appUpdateDismissedThisSession = true;
+            hasPendingAppUpdate = false;
             const modal = document.getElementById('app-update-modal');
             if (!modal) return;
             modal.style.display = 'none';
@@ -20543,6 +20589,7 @@
         }
 
         function showAppUpdatedToast() {
+            if (!isAppUnlockedForUpdateUI()) return;
             const toast = document.getElementById('app-updated-toast');
             if (!toast) return;
             if (appUpdatedToastHideTimer) { clearTimeout(appUpdatedToastHideTimer); appUpdatedToastHideTimer = null; }
@@ -20566,6 +20613,19 @@
                     toast.style.display = 'none';
                 }, 320);
             }, 3000);
+        }
+
+        function flushPendingAppUpdateUI() {
+            if (!isAppUnlockedForUpdateUI()) return;
+            try {
+                if (sessionStorage.getItem('kb_sv_just_updated') === '1') {
+                    sessionStorage.removeItem('kb_sv_just_updated');
+                    showAppUpdatedToast();
+                }
+            } catch (e) {}
+            if (hasPendingAppUpdate && !appUpdateDismissedThisSession && !appUpdateReloading) {
+                showAppUpdateModal(appUpdateWaitingWorker);
+            }
         }
 
         async function applyAppUpdateNow() {
@@ -20650,12 +20710,7 @@
             if (appUpdateNotifierInitialized) return;
             appUpdateNotifierInitialized = true;
 
-            try {
-                if (sessionStorage.getItem('kb_sv_just_updated') === '1') {
-                    sessionStorage.removeItem('kb_sv_just_updated');
-                    showAppUpdatedToast();
-                }
-            } catch (e) {}
+            flushPendingAppUpdateUI();
 
             if (!('serviceWorker' in navigator) || !navigator.serviceWorker) return;
 
@@ -20663,12 +20718,16 @@
                 if (typeof navigator.serviceWorker.addEventListener === 'function') {
                     navigator.serviceWorker.addEventListener('controllerchange', () => {
                         if (appUpdateReloading) return;
-                        try {
-                            if (sessionStorage.getItem('kb_sv_just_updated') === '1') {
-                                sessionStorage.removeItem('kb_sv_just_updated');
-                            }
-                        } catch (e) {}
-                        showAppUpdatedToast();
+                        if (isAppUnlockedForUpdateUI()) {
+                            try {
+                                if (sessionStorage.getItem('kb_sv_just_updated') === '1') {
+                                    sessionStorage.removeItem('kb_sv_just_updated');
+                                }
+                            } catch (e) {}
+                            showAppUpdatedToast();
+                        } else {
+                            try { sessionStorage.setItem('kb_sv_just_updated', '1'); } catch (e) {}
+                        }
                     });
                 }
             } catch (e) {}
