@@ -6,7 +6,7 @@ self.addEventListener("push", () => {
   }
 });
 
-const OFFLINE_CACHE = "kb-sv-offline-v3";
+const OFFLINE_CACHE = "kb-sv-offline-v4";
 const OFFLINE_ASSETS = [
   "/Sch-tzenverein/",
   "/Sch-tzenverein/index.html",
@@ -48,8 +48,9 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
   if (url.origin === self.location.origin && url.pathname.startsWith("/Sch-tzenverein/")) {
+    const isHtml = event.request.mode === "navigate" || url.pathname.endsWith(".html") || url.pathname.endsWith("/");
     event.respondWith(
-      fetch(event.request)
+      fetch(isHtml ? new Request(event.request.url, { cache: "no-store" }) : event.request)
         .then((response) => {
           const copy = response.clone();
           caches.open(OFFLINE_CACHE).then((cache) => {
