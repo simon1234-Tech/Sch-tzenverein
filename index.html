@@ -3385,33 +3385,171 @@
         }
         #chairman-own-menu-view {
             display: none;
+            background: #0f172a;
+            border: 1.5px solid #334155;
+            border-radius: 20px;
+            padding: 16px;
+            color: #f8fafc;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22);
             animation: fadeIn 0.18s ease;
         }
         .chairman-own-menu-header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            border: 1.5px solid #eab308;
-            border-radius: 16px;
-            padding: 13px 16px;
-            margin-bottom: 14px;
-            color: #ffffff;
+            padding: 2px 4px 12px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #1e293b;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.16);
         }
         .chairman-own-menu-title {
-            font-size: 0.98rem;
-            font-weight: 900;
-            color: #facc15;
+            font-size: 1.04rem;
+            font-weight: 800;
+            color: #eab308;
             line-height: 1.25;
+            letter-spacing: 0.01em;
         }
         .chairman-own-menu-sub {
             font-size: 0.76rem;
+            font-weight: 500;
+            color: #94a3b8;
+            margin-top: 3px;
+            line-height: 1.35;
+        }
+        #chairman-status-upload-btn {
+            width: 100%;
+            min-height: 46px;
+            margin-bottom: 4px;
+            padding: 10px 14px;
+            border-radius: 14px;
+            background: #14532d;
+            border: 1.5px solid #22c55e;
+            color: #f0fdf4;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-family: inherit;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-sizing: border-box;
+            transition: background 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
+        }
+        #chairman-status-upload-btn:hover {
+            background: #166534;
+            border-color: #4ade80;
+        }
+        #chairman-status-upload-btn:active {
+            transform: scale(0.99);
+        }
+        #chairman-own-menu-view #admin-menu-chairman-group {
+            margin-bottom: 0;
+        }
+        #chairman-own-menu-view .admin-menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .chairman-menu-rubric-label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin: 16px 0 8px 4px;
+            line-height: 1.2;
+        }
+        #chairman-own-menu-view .chairman-menu-rubric-label:first-child {
+            margin-top: 12px;
+        }
+        #chairman-own-menu-view .admin-menu-row.chairman-row {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 10px 14px;
+            min-height: 0;
+            margin-bottom: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 11px;
+            color: #f8fafc;
+            box-shadow: none;
+        }
+        #chairman-own-menu-view .admin-menu-row.chairman-row:last-child {
+            margin-bottom: 0;
+        }
+        #chairman-own-menu-view .admin-menu-row.chairman-row:hover {
+            background: #273449;
+            border-color: rgba(234, 179, 8, 0.55);
+            box-shadow: none;
+        }
+        #chairman-own-menu-view .admin-menu-row.chairman-row .admin-menu-row-left {
+            gap: 11px;
+        }
+        #chairman-own-menu-view .admin-menu-row.chairman-row .admin-menu-row-icon {
+            background: rgba(234, 179, 8, 0.12);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+            color: #eab308;
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            font-size: 1.05rem;
+        }
+        #chairman-own-menu-view .admin-menu-row.chairman-row .admin-menu-row-title {
+            color: #f8fafc;
+            font-size: 0.92rem;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+        #chairman-own-menu-view .admin-menu-row.chairman-row .admin-menu-row-sub {
+            color: #94a3b8;
+            font-size: 0.76rem;
+            font-weight: 500;
+            line-height: 1.28;
+        }
+        #chairman-own-menu-view .admin-menu-row.chairman-row .admin-menu-row-chevron {
+            color: #64748b;
+            font-size: 1.25rem;
             font-weight: 600;
+        }
+        #chairman-own-menu-view .admin-home-footer {
+            border-top: 1px solid #1e293b;
+            margin-top: 14px;
+            padding-top: 12px;
+            gap: 8px;
+        }
+        #chairman-clean-reload-btn {
+            background: #1e293b;
+            border: 1px solid #475569;
             color: #cbd5e1;
-            margin-top: 2px;
-            line-height: 1.3;
+            border-radius: 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            min-height: 40px;
+            padding: 8px 14px;
+            box-shadow: none;
+        }
+        #chairman-clean-reload-btn:hover {
+            background: #273449;
+            border-color: #64748b;
+            color: #f8fafc;
+        }
+        #chairman-own-logout-btn {
+            background: rgba(127, 29, 29, 0.35);
+            border: 1px solid rgba(239, 68, 68, 0.45);
+            color: #fca5a5;
+            border-radius: 12px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            min-height: 40px;
+            padding: 8px 14px;
+            box-shadow: none;
+        }
+        #chairman-own-logout-btn:hover {
+            background: rgba(153, 27, 27, 0.5);
+            border-color: #ef4444;
+            color: #fee2e2;
         }
         .admin-view-back-btn.chairman-back-btn {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -4807,14 +4945,15 @@
                     <div class="chairman-own-menu-header">
                         <div>
                             <div class="chairman-own-menu-title">👑 Obmann-Steuerzentrale</div>
-                            <div class="chairman-own-menu-sub">Exklusive Steuerung &amp; Vereinsverwaltung für Obmann Simon</div>
+                            <div class="chairman-own-menu-sub">Exklusive Steuerung &amp; Vereinsverwaltung</div>
                         </div>
                     </div>
 
-                    <button type="button" id="chairman-status-upload-btn" onclick="openClubStatusUploadModal(event)" style="display: none; width: 100%; min-height: 50px; margin-bottom: 14px; padding: 12px 16px; border-radius: 14px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: 1.5px solid #eab308; font-weight: 800; font-size: 0.95rem; cursor: pointer; font-family: inherit; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25); box-sizing: border-box;">📸 24h-Status-Foto einstellen</button>
+                    <button type="button" id="chairman-status-upload-btn" onclick="openClubStatusUploadModal(event)" style="display: none;">📸 24h-Status-Foto einstellen</button>
 
                     <div class="admin-menu-group" id="admin-menu-chairman-group" style="display: none !important;">
                         <div class="admin-menu-list" role="navigation" aria-label="Obmann-Steuerzentrale">
+                            <div class="chairman-menu-rubric-label">VEREIN &amp; BETRIEB</div>
                             <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-news-events" data-admin-view="news-events" onclick="openAdminView('news-events')">
                                 <span class="admin-menu-row-left">
                                     <span class="admin-menu-row-icon" aria-hidden="true">📰</span>
@@ -4835,6 +4974,18 @@
                                 </span>
                                 <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
                             </button>
+                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-comm" data-admin-view="chairman-comm" onclick="openAdminView('chairman-comm')">
+                                <span class="admin-menu-row-left">
+                                    <span class="admin-menu-row-icon" aria-hidden="true">📢</span>
+                                    <span class="admin-menu-row-text">
+                                        <span class="admin-menu-row-title">Eilmeldung &amp; Chat-Sperre</span>
+                                        <span class="admin-menu-row-sub">Startseiten-Banner &amp; Chat-Modus</span>
+                                    </span>
+                                </span>
+                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            </button>
+
+                            <div class="chairman-menu-rubric-label">SCHANK, MITGLIEDER &amp; PROTOKOLLE</div>
                             <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-members" data-admin-view="chairman-members" onclick="openAdminView('chairman-members')">
                                 <span class="admin-menu-row-left">
                                     <span class="admin-menu-row-icon" aria-hidden="true">👥</span>
@@ -4855,16 +5006,18 @@
                                 </span>
                                 <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
                             </button>
-                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-comm" data-admin-view="chairman-comm" onclick="openAdminView('chairman-comm')">
+                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-weapons" data-admin-view="chairman-logs" onclick="openAdminView('chairman-logs')">
                                 <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">📢</span>
+                                    <span class="admin-menu-row-icon" aria-hidden="true">📋</span>
                                     <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">Eilmeldung &amp; Chat-Sperre</span>
-                                        <span class="admin-menu-row-sub">Startseiten-Banner &amp; Chat-Modus</span>
+                                        <span class="admin-menu-row-title">Waffenprotokolle, Log &amp; Backup</span>
+                                        <span class="admin-menu-row-sub">PDF-Protokolle, Audit-Log &amp; Jahresabschluss</span>
                                     </span>
                                 </span>
                                 <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
                             </button>
+
+                            <div class="chairman-menu-rubric-label">APP &amp; ZUGÄNGE</div>
                             <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-theme" data-admin-view="chairman-theme" onclick="openAdminView('chairman-theme')">
                                 <span class="admin-menu-row-left">
                                     <span class="admin-menu-row-icon" aria-hidden="true">🎨</span>
@@ -4885,21 +5038,11 @@
                                 </span>
                                 <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
                             </button>
-                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-weapons" data-admin-view="chairman-logs" onclick="openAdminView('chairman-logs')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">📋</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">Waffenprotokolle, Log &amp; Backup</span>
-                                        <span class="admin-menu-row-sub">PDF-Protokolle, Audit-Log &amp; Jahresabschluss</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
-                            </button>
                         </div>
                     </div>
 
                     <div class="admin-home-footer">
-                        <button type="button" id="chairman-clean-reload-btn" class="btn btn-block" onclick="forceCleanAppReload(this)" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; font-weight: 800;">🔄 App-Stand jetzt frisch laden (ohne Datenverlust)</button>
+                        <button type="button" id="chairman-clean-reload-btn" class="btn btn-block" onclick="forceCleanAppReload(this)">🔄 App-Stand jetzt frisch laden (ohne Datenverlust)</button>
                         <button type="button" id="chairman-own-logout-btn" class="btn admin-btn-delete btn-block" onclick="logoutAdmin()">🚪 Abmelden</button>
                     </div>
                 </div>
