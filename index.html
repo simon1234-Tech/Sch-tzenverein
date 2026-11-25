@@ -3340,221 +3340,198 @@
             box-sizing: border-box;
         }
         #admin-mode-switcher {
-            display: none;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 8px;
-            margin-bottom: 16px;
-            padding: 6px;
-            border-radius: 16px;
-            background: #e2e8f0;
-            border: 1px solid #cbd5e1;
-            box-sizing: border-box;
+            display: none !important;
         }
-        .admin-mode-tab-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            min-height: 44px;
-            padding: 9px 10px;
-            border-radius: 12px;
-            border: 1.5px solid transparent;
-            background: transparent;
-            color: #334155;
-            font-family: inherit;
-            font-size: 0.82rem;
-            font-weight: 800;
-            line-height: 1.2;
-            text-align: center;
-            cursor: pointer;
-            transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, transform 0.12s ease;
-            box-sizing: border-box;
-        }
-        .admin-mode-tab-btn:active {
-            transform: scale(0.98);
-        }
-        #btn-mode-board.active {
-            background: #ffffff;
-            color: #0f172a;
-            border-color: #cbd5e1;
-            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
-        }
-        #btn-mode-chairman {
-            color: #0f172a;
-            background: rgba(254, 249, 195, 0.55);
-            border-color: rgba(234, 179, 8, 0.45);
-        }
-        #btn-mode-chairman.active {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #facc15;
-            border-color: #eab308;
-            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.28);
-        }
-        #chairman-own-menu-view {
-            display: none;
-            background: #0f172a;
-            border: 1.5px solid #334155;
+        #admin-menu-home {
+            display: block;
+            background: #090d16;
             border-radius: 20px;
             padding: 16px;
             color: #f8fafc;
-            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22);
+            box-shadow: 0 14px 32px rgba(9, 13, 22, 0.28);
+            box-sizing: border-box;
             animation: fadeIn 0.18s ease;
         }
-        .chairman-own-menu-header {
-            padding: 2px 4px 12px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #1e293b;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        .admin-dark-menu-heading {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0 0 14px 0;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            text-align: left;
+        }
+        .admin-dark-tile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
-        .chairman-own-menu-title {
-            font-size: 1.04rem;
-            font-weight: 800;
-            color: #eab308;
-            line-height: 1.25;
-            letter-spacing: 0.01em;
-        }
-        .chairman-own-menu-sub {
-            font-size: 0.76rem;
-            font-weight: 500;
-            color: #94a3b8;
-            margin-top: 3px;
-            line-height: 1.35;
-        }
-        #chairman-status-upload-btn {
+        .admin-dark-tile {
+            position: relative;
             width: 100%;
-            min-height: 46px;
-            margin-bottom: 4px;
-            padding: 10px 14px;
+            background: #161b26;
+            border: 1px solid #232a3b;
             border-radius: 14px;
-            background: #14532d;
-            border: 1.5px solid #22c55e;
-            color: #f0fdf4;
-            font-weight: 700;
-            font-size: 0.9rem;
+            padding: 14px;
+            min-height: 92px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            text-align: left;
             cursor: pointer;
             font-family: inherit;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            color: #f1f5f9;
+            box-sizing: border-box;
+            transition: background 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
+        }
+        .admin-dark-tile:hover {
+            background: #1c2230;
+            border-color: #334155;
+        }
+        .admin-dark-tile:active {
+            transform: scale(0.985);
+        }
+        .admin-dark-tile.chairman-tile:hover {
+            border-color: rgba(234, 179, 8, 0.5);
+        }
+        .admin-dark-tile-icon {
+            font-size: 1.45rem;
+            line-height: 1;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .admin-dark-tile-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            line-height: 1.25;
+            word-break: break-word;
+            display: block;
+        }
+        .admin-dark-status-dot {
+            display: none;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22), 0 0 8px rgba(34, 197, 94, 0.65);
+        }
+        #chairman-own-menu-view {
+            display: none;
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid #232a3b;
+            box-sizing: border-box;
+        }
+        .admin-dark-section-divider {
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin: 0 0 10px 2px;
+            line-height: 1.2;
+        }
+        #chairman-status-upload-btn {
+            position: relative;
+            width: 100%;
+            background: #161b26;
+            border: 1px solid #232a3b;
+            border-radius: 14px;
+            padding: 14px;
+            min-height: 92px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            text-align: left;
+            cursor: pointer;
+            font-family: inherit;
+            color: #f1f5f9;
             box-sizing: border-box;
             transition: background 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
         }
         #chairman-status-upload-btn:hover {
-            background: #166534;
-            border-color: #4ade80;
+            background: #1c2230;
+            border-color: rgba(34, 197, 94, 0.55);
         }
         #chairman-status-upload-btn:active {
-            transform: scale(0.99);
+            transform: scale(0.985);
         }
-        #chairman-own-menu-view #admin-menu-chairman-group {
-            margin-bottom: 0;
-        }
-        #chairman-own-menu-view .admin-menu-list {
+        .admin-dark-bottom-actions {
+            margin-top: 12px;
             display: flex;
             flex-direction: column;
             gap: 0;
         }
-        .chairman-menu-rubric-label {
-            font-size: 0.72rem;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin: 16px 0 8px 4px;
-            line-height: 1.2;
-        }
-        #chairman-own-menu-view .chairman-menu-rubric-label:first-child {
+        .admin-dark-bar-btn {
+            width: 100%;
+            background: #161b26;
+            border: 1px solid #232a3b;
+            border-radius: 14px;
+            padding: 14px 16px;
             margin-top: 12px;
-        }
-        #chairman-own-menu-view .admin-menu-row.chairman-row {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 10px 14px;
-            min-height: 0;
-            margin-bottom: 7px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 11px;
-            color: #f8fafc;
-            box-shadow: none;
-        }
-        #chairman-own-menu-view .admin-menu-row.chairman-row:last-child {
-            margin-bottom: 0;
-        }
-        #chairman-own-menu-view .admin-menu-row.chairman-row:hover {
-            background: #273449;
-            border-color: rgba(234, 179, 8, 0.55);
-            box-shadow: none;
-        }
-        #chairman-own-menu-view .admin-menu-row.chairman-row .admin-menu-row-left {
-            gap: 11px;
-        }
-        #chairman-own-menu-view .admin-menu-row.chairman-row .admin-menu-row-icon {
-            background: rgba(234, 179, 8, 0.12);
-            border: 1px solid rgba(234, 179, 8, 0.2);
-            color: #eab308;
-            width: 34px;
-            height: 34px;
-            border-radius: 9px;
-            font-size: 1.05rem;
-        }
-        #chairman-own-menu-view .admin-menu-row.chairman-row .admin-menu-row-title {
-            color: #f8fafc;
+            gap: 10px;
+            color: #f1f5f9;
+            font-family: inherit;
+            font-weight: 700;
             font-size: 0.92rem;
-            font-weight: 700;
             line-height: 1.25;
+            text-align: left;
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: background 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
         }
-        #chairman-own-menu-view .admin-menu-row.chairman-row .admin-menu-row-sub {
-            color: #94a3b8;
-            font-size: 0.76rem;
-            font-weight: 500;
-            line-height: 1.28;
+        .admin-dark-bar-btn:first-child {
+            margin-top: 0;
         }
-        #chairman-own-menu-view .admin-menu-row.chairman-row .admin-menu-row-chevron {
-            color: #64748b;
+        .admin-dark-bar-btn.secondary-bar {
+            margin-top: 8px;
+        }
+        .admin-dark-bar-btn:hover {
+            background: #1c2230;
+            border-color: #334155;
+        }
+        .admin-dark-bar-btn:active {
+            transform: scale(0.99);
+        }
+        .admin-dark-bar-chevron {
             font-size: 1.25rem;
-            font-weight: 600;
-        }
-        #chairman-own-menu-view .admin-home-footer {
-            border-top: 1px solid #1e293b;
-            margin-top: 14px;
-            padding-top: 12px;
-            gap: 8px;
-        }
-        #chairman-clean-reload-btn {
-            background: #1e293b;
-            border: 1px solid #475569;
-            color: #cbd5e1;
-            border-radius: 12px;
-            font-size: 0.82rem;
             font-weight: 700;
-            min-height: 40px;
-            padding: 8px 14px;
-            box-shadow: none;
+            color: #94a3b8;
+            line-height: 1;
+            flex-shrink: 0;
         }
-        #chairman-clean-reload-btn:hover {
-            background: #273449;
-            border-color: #64748b;
-            color: #f8fafc;
-        }
-        #chairman-own-logout-btn {
-            background: rgba(127, 29, 29, 0.35);
-            border: 1px solid rgba(239, 68, 68, 0.45);
+        #admin-home-logout-btn.admin-dark-logout-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px 16px;
+            min-height: 46px;
+            border-radius: 14px;
+            background: rgba(127, 29, 29, 0.32);
+            border: 1px solid rgba(239, 68, 68, 0.4);
             color: #fca5a5;
-            border-radius: 12px;
-            font-size: 0.84rem;
+            font-family: inherit;
+            font-size: 0.9rem;
             font-weight: 700;
-            min-height: 40px;
-            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
             box-shadow: none;
+            box-sizing: border-box;
+            transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
         }
-        #chairman-own-logout-btn:hover {
-            background: rgba(153, 27, 27, 0.5);
+        #admin-home-logout-btn.admin-dark-logout-btn:hover {
+            background: rgba(153, 27, 27, 0.48);
             border-color: #ef4444;
             color: #fee2e2;
         }
@@ -3567,118 +3544,6 @@
         .admin-view-back-btn.chairman-back-btn:hover {
             background: #0f172a;
             border-color: #facc15;
-        }
-        #admin-menu-home {
-            display: block;
-        }
-        .admin-menu-group {
-            margin-bottom: 18px;
-        }
-        .admin-menu-group-label {
-            font-size: 0.78rem;
-            font-weight: 800;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            color: #475569;
-            margin: 0 0 8px 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .admin-menu-group-label.chairman {
-            color: #92400e;
-        }
-        .admin-menu-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .admin-menu-row {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            min-height: 54px;
-            padding: 12px 16px;
-            border-radius: 14px;
-            background: #ffffff;
-            border: 1.5px solid #e2e8f0;
-            color: #0f172a;
-            font-family: inherit;
-            text-align: left;
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
-            transition: border-color 0.16s ease, background 0.16s ease, transform 0.12s ease, box-shadow 0.16s ease;
-            box-sizing: border-box;
-        }
-        .admin-menu-row:hover {
-            border-color: #94a3b8;
-            background: #f8fafc;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.07);
-        }
-        .admin-menu-row:active {
-            transform: scale(0.99);
-        }
-        .admin-menu-row-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 0;
-            flex: 1;
-        }
-        .admin-menu-row-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 11px;
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.18rem;
-            line-height: 1;
-            flex-shrink: 0;
-        }
-        .admin-menu-row.chairman-row .admin-menu-row-icon {
-            background: #fefce8;
-            border-color: #fde68a;
-        }
-        .admin-menu-row-text {
-            min-width: 0;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .admin-menu-row-title {
-            font-size: 0.92rem;
-            font-weight: 800;
-            color: #0f172a;
-            line-height: 1.25;
-            word-break: break-word;
-        }
-        .admin-menu-row-sub {
-            font-size: 0.77rem;
-            font-weight: 600;
-            color: #64748b;
-            line-height: 1.3;
-            word-break: break-word;
-        }
-        .admin-menu-row-chevron {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: #94a3b8;
-            line-height: 1;
-            flex-shrink: 0;
-        }
-        .admin-home-footer {
-            margin-top: 18px;
-            padding-top: 14px;
-            border-top: 1px solid rgba(15, 23, 42, 0.08);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
         }
         #admin-view-panel {
             display: none;
@@ -4714,6 +4579,10 @@
             <button id="stop-scanner-btn" onclick="stopQrScanner()" class="btn btn-danger btn-block" style="display: none; margin-top: 8px;">Scanner stoppen</button>
         </div>
 
+        <div id="weapon-return-card" style="display: none; background: #f0fdf4; border: 2px solid #16a34a; border-radius: 16px; padding: 14px; margin: 12px 0;">
+            <div id="weapon-history-list"></div>
+        </div>
+
         <div id="weapon-form-card" class="glass-card glass-card-red" style="border-left-color: #b91c1c !important; transition: all 0.3s;">
             <div class="card-title" style="color: #b91c1c; font-size: 1.2em;">
                 <span style="display: inline-flex; align-items: center; gap: 8px;">
@@ -4789,25 +4658,22 @@
 
                     <div class="form-group">
                         <label>4. Anlass / Grund der Ausrückung</label>
-                        <input type="text" class="form-control" id="weapon-occasion" required placeholder="z.B. Fronleichnam Prozession / Begräbnis">
+                        <input type="text" class="form-control" id="weapon-occasion" required value="Salut Ausrückung" placeholder="z.B. Fronleichnam Prozession / Begräbnis">
                     </div>
 
                     <div class="form-group">
                         <label>5. Ort der Ausrückung</label>
-                        <input type="text" class="form-control" id="weapon-location" required value="Pfarrkirche Partenen" placeholder="Ort eingeben">
+                        <div id="weapon-location-chips" style="display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 8px 0;">
+                            <button type="button" class="weapon-location-chip" data-location="Gaschurn" aria-pressed="true" onclick="selectWeaponLocationChip('Gaschurn')" style="padding: 6px 12px; border-radius: 999px; border: 1.5px solid #16a34a; background: #dcfce7; color: #166534; font-size: 0.82rem; font-weight: 700; cursor: pointer;">Gaschurn</button>
+                            <button type="button" class="weapon-location-chip" data-location="Partenen" aria-pressed="false" onclick="selectWeaponLocationChip('Partenen')" style="padding: 6px 12px; border-radius: 999px; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #1e293b; font-size: 0.82rem; font-weight: 700; cursor: pointer;">Partenen</button>
+                            <button type="button" class="weapon-location-chip" data-location="Gaschurn / Partenen" aria-pressed="false" onclick="selectWeaponLocationChip('Gaschurn / Partenen')" style="padding: 6px 12px; border-radius: 999px; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #1e293b; font-size: 0.82rem; font-weight: 700; cursor: pointer;">Gaschurn / Partenen</button>
+                        </div>
+                        <input type="text" class="form-control" id="weapon-location" required value="Gaschurn" placeholder="Ort eingeben" oninput="syncWeaponLocationChips()">
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.15em; padding: 18px 24px; font-weight: 800; background: linear-gradient(135deg, #dc2626, #991b1b); box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);">🚀 Waffen entnehmen & Protokoll abschließen</button>
                 </form>
             </div>
-        </div>
-
-        <div class="glass-card glass-card-blue" style="border-left-color: #2563eb !important;">
-            <div class="card-title" style="color: #2563eb;">📋 Aktive Entnahmen & Rückgabe (Read-Only)</div>
-            <p style="font-size: 0.8em; color: var(--text-muted); margin-bottom: 10px;">
-                Aktive Entnahmen sind schreibgeschützt. Nach Abschluss wird das Waffenbuch automatisch gesperrt.
-            </p>
-            <div id="weapon-history-list"><p style="font-size: 0.85em; color: var(--text-muted);">Lade Entnahmen...</p></div>
         </div>
     </div>
 
@@ -4872,230 +4738,159 @@
                     <button type="button" id="btn-mode-chairman" class="admin-mode-tab-btn" role="tab" aria-selected="false" onclick="switchAdminMenuMode('chairman')">👑 Obmann-Steuerzentrale</button>
                 </div>
 
-                <!-- ADMIN START-ÜBERSICHT: VORSTANDS-BEREICH (FÜR ALLE 4 ADMINS) -->
+                <!-- ADMIN START-ÜBERSICHT IM 2-SPALTEN-DARK-GRID-DESIGN -->
                 <div id="admin-menu-home">
-                    <!-- GRUPPE 1: VEREINSBETRIEB & KASSA (FÜR ALLE 4 ADMINS SICHTBAR) -->
-                    <div class="admin-menu-group" id="admin-menu-general-group">
-                        <div class="admin-menu-group-label">📋 Vorstands-Bereich · Vereinsbetrieb &amp; Kassa</div>
-                        <div class="admin-menu-list" role="navigation" aria-label="Vereinsbetrieb und Kassa">
-                            <button type="button" class="admin-menu-row" id="admin-nav-btn-members" data-admin-view="members" onclick="openAdminView('members')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">🔑</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">Schlüsselliste &amp; PDF</span>
-                                        <span class="admin-menu-row-sub">Schlüsselinhaber, Mitglieder &amp; PDF-Export</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                    <h2 id="admin-dark-menu-heading" class="admin-dark-menu-heading">Admin-Menü</h2>
+
+                    <!-- 4 VORSTANDS-KACHELN (FÜR ALLE 4 ADMINS SICHTBAR) -->
+                    <div id="admin-menu-general-group" role="navigation" aria-label="Vorstands-Bereich">
+                        <div class="admin-dark-tile-grid">
+                            <button type="button" class="admin-dark-tile" id="admin-nav-btn-members" data-admin-view="members" onclick="openAdminView('members')">
+                                <span class="admin-dark-tile-icon" aria-hidden="true">🔑</span>
+                                <span class="admin-dark-tile-title">Schlüsselliste &amp; PDF</span>
                             </button>
-                            <button type="button" class="admin-menu-row" id="admin-nav-btn-inventory" data-admin-view="inventory" onclick="openAdminView('inventory')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">📦</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">Lagerbestand</span>
-                                        <span class="admin-menu-row-sub">Bestände pflegen &amp; letzte Änderung prüfen</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            <button type="button" class="admin-dark-tile" id="admin-nav-btn-inventory" data-admin-view="inventory" onclick="openAdminView('inventory')">
+                                <span class="admin-dark-tile-icon" aria-hidden="true">📦</span>
+                                <span class="admin-dark-tile-title">Lagerbestand</span>
                             </button>
-                            <button type="button" class="admin-menu-row" id="admin-nav-btn-drinks" data-admin-view="drinks" onclick="openAdminView('drinks')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">🍺</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">Schankbuch &amp; Kassa</span>
-                                        <span class="admin-menu-row-sub">Bar-Abrechnungen, Firmen-Rechnungen &amp; PDF</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
+                            <button type="button" class="admin-dark-tile" id="admin-nav-btn-drinks-cash" data-admin-view="drinks-cash" onclick="openAdminView('drinks-cash')">
+                                <span class="admin-dark-tile-icon" aria-hidden="true">💵</span>
+                                <span class="admin-dark-tile-title">Bar-Abrechnungen</span>
+                            </button>
+                            <button type="button" class="admin-dark-tile" id="admin-nav-btn-drinks-invoices" data-admin-view="drinks-invoices" onclick="openAdminView('drinks-invoices')">
+                                <span class="admin-dark-tile-icon" aria-hidden="true">🧾</span>
+                                <span class="admin-dark-tile-title">Firmen-Rechnungen</span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- FUSSBEREICH DER START-ÜBERSICHT: ANLEITUNG & ABMELDEN -->
-                    <div class="admin-home-footer">
-                        <!-- AUFKLAPPBARE VORSTANDS- & ADMIN-ANLEITUNG -->
-                        <div class="admin-accordion-box" id="admin-guide-accordion-box" style="margin: 0; border-color: #cbd5e1;">
-                            <button type="button" class="admin-accordion-header" onclick="toggleAdminAccordion(this)" aria-expanded="false" style="background: #f8fafc; color: #0f172a;">
-                                <span>📘 Vorstands- &amp; Admin-Anleitung</span>
-                                <span class="admin-accordion-arrow" style="color: #475569;" aria-hidden="true">▼</span>
-                            </button>
-                            <div class="admin-accordion-body">
-                                <div class="admin-accordion-inner">
-                                    <div class="admin-accordion-content" style="border-top-color: #e2e8f0; display: flex; flex-direction: column; gap: 10px; font-size: 0.85em; line-height: 1.52; color: #1e293b;">
-                                        <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #991b1b; border-radius: 10px; padding: 10px 12px;">
-                                            <div style="font-weight: 800; color: #991b1b; margin-bottom: 6px;">Kapitel 1 – 🔐 Zugang, Rollen &amp; neues Vorstands-Handy</div>
-                                            <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                                <div><strong>4 berechtigte Vorstands-Konten:</strong> <strong>Simon</strong> (Obmann / Haupt-Admin), <strong>Heimo</strong>, <strong>Karin</strong> und <strong>Sabrina</strong>.</div>
-                                                <div><strong>Unsichtbarer Admin-Tab:</strong> Auf normalen Mitglieder-Handys ist der Admin-Tab unten rechts komplett ausgeblendet. Sobald sich ein Vorstandsmitglied einmal auf seinem Handy anmeldet, bleibt der Tab auf diesem Gerät dauerhaft sichtbar.</div>
-                                                <div><strong>Geheimer Zugang bei neuem Handy:</strong> Einfach <strong>3× schnell hintereinander auf den Vereinsnamen oben im Header tippen</strong> – sofort wird das Gerät als Vorstands-Handy freigeschaltet und der Admin-Login öffnet sich.</div>
-                                                <div><strong>5-Minuten-Auto-Logout:</strong> Aus Sicherheitsgründen meldet sich der Admin-Bereich nach <strong>5 Minuten Inaktivität</strong> automatisch ab.</div>
-                                            </div>
-                                        </div>
+                    <!-- 9 EXKLUSIVE OBMANN-KACHELN (AUSSCHLIESSLICH FÜR OBMANN SIMON SICHTBAR) -->
+                    <div id="chairman-own-menu-view" style="display: none !important;">
+                        <div id="admin-menu-chairman-group" style="display: none !important;" role="navigation" aria-label="Obmann-Steuerung">
+                            <div class="admin-dark-section-divider">OBMANN-STEUERUNG</div>
+                            <div class="admin-dark-tile-grid">
+                                <button type="button" class="admin-dark-tile chairman-tile" id="chairman-status-upload-btn" onclick="openClubStatusUploadModal(event)" style="display: none;">
+                                    <span id="chairman-status-active-dot" class="admin-dark-status-dot" aria-hidden="true"></span>
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">📸</span>
+                                    <span class="admin-dark-tile-title">24h-Status-Foto</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-news-events" data-admin-view="news-events" onclick="openAdminView('news-events')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">📰</span>
+                                    <span class="admin-dark-tile-title">News &amp; Termine</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-duty" data-admin-view="duty" onclick="openAdminView('duty')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">📅</span>
+                                    <span class="admin-dark-tile-title">Dienstplan &amp; Push</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-chairman-comm" data-admin-view="chairman-comm" onclick="openAdminView('chairman-comm')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">📢</span>
+                                    <span class="admin-dark-tile-title">Eilmeldung &amp; Chat</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-chairman-members" data-admin-view="chairman-members" onclick="openAdminView('chairman-members')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">👥</span>
+                                    <span class="admin-dark-tile-title">Mitglieder &amp; Rechte</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-chairman-bar" data-admin-view="chairman-bar" onclick="openAdminView('chairman-bar')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">🍺</span>
+                                    <span class="admin-dark-tile-title">Schankbuch-Preise</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-weapons" data-admin-view="chairman-logs" onclick="openAdminView('chairman-logs')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">📋</span>
+                                    <span class="admin-dark-tile-title">Waffenbuch &amp; Log</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-chairman-theme" data-admin-view="chairman-theme" onclick="openAdminView('chairman-theme')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">🎨</span>
+                                    <span class="admin-dark-tile-title">App-Farbdesign</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-chairman-security" data-admin-view="chairman-security" onclick="openAdminView('chairman-security')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">📲</span>
+                                    <span class="admin-dark-tile-title">Code &amp; QR-Codes</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 10px; padding: 10px 12px;">
-                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Schlüssel, Lagerbestand &amp; Schankkassa)</div>
-                                            <div style="display: flex; flex-direction: column; gap: 6px; color: #334155;">
-                                                <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins können sämtliche Schlüsselinhaber (Name, Schlüssel-Nr., Adresse, Geburtsdatum, Telefon) einsehen und als offizielles PDF mit Vereinssiegel drucken. Das Hinzufügen, Bearbeiten und Entfernen von Schlüsselinhabern ist exklusiv für Obmann Simon freigeschaltet.</div>
-                                                <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Kinderleichte Anpassung der Bestände über die Touch-Knöpfe <code>− 1</code>, <code>+ 1</code> und <code>+ 5</code> sowie <strong>💾 Lagerbestand speichern</strong>. Ganz oben zeigt die Gold-Box jederzeit sichtbar an, wann und von wem zuletzt geändert wurde. <strong>Push-Regel:</strong> Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Mitteilung; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Mitteilung.</div>
-                                                <div><strong>🍺 Schankbuch &amp; Kassa (Grün vs. Blau):</strong> Klare Trennung zwischen <strong style="color: #15803d;">💵 Bar-Abrechnungen (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnungen (Blau)</strong>. Alle 4 Admins können Umsätze prüfen und Kassenberichte/Rechnungen als PDF herunterladen; Stornos oder Löschungen sind exklusiv dem Obmann vorbehalten.</div>
-                                            </div>
-                                        </div>
+                    <!-- BREITE UNTERE AKTIONS-LEISTEN -->
+                    <div class="admin-dark-bottom-actions">
+                        <button type="button" id="admin-dark-handbook-bar-btn" class="admin-dark-bar-btn" onclick="openAdminHelpModal()">
+                            <span>📘 Vorstands- &amp; Admin-Handbuch</span>
+                            <span class="admin-dark-bar-chevron" aria-hidden="true">›</span>
+                        </button>
+                        <button type="button" id="admin-clean-reload-btn" class="admin-dark-bar-btn secondary-bar" onclick="forceCleanAppReload(this)">
+                            <span>🔄 App-Stand jetzt frisch laden</span>
+                            <span class="admin-dark-bar-chevron" aria-hidden="true">›</span>
+                        </button>
+                        <button type="button" id="admin-home-logout-btn" class="admin-dark-logout-btn" onclick="logoutAdmin()">🚪 Abmelden</button>
+                    </div>
 
-                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 10px; padding: 10px 12px;">
-                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 📱 Was die App für alle Mitglieder kann (Überblick für Rückfragen)</div>
-                                            <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                                <div><strong>📸 24h-Vereinsstatus:</strong> Leuchtet der runde Vereinslogo-Kreis oben links grün-gold, hat der Obmann aktuelle Fotos eingestellt (antippen zum Ansehen; verschwindet nach exakt 24 Stunden vollautomatisch und zeigt wieder das Vereinslogo).</div>
-                                                <div><strong>📰 News &amp; 📅 Termine:</strong> Beiträge liken (<code>👍</code>), bei Terminen abstimmen und Termine per <code>.ics</code>-Datei direkt in den eigenen Handy-Kalender übernehmen.</div>
-                                                <div><strong>🗓️ Dienstplan &amp; Tauschbörse:</strong> Eigene Schankdienste einsehen, bei Verhinderung Ersatz anfragen oder offene Dienste übernehmen; automatische Push-Erinnerungen laufen <strong>1 Tag</strong> und <strong>2 Stunden</strong> vor Dienstbeginn.</div>
-                                                <div><strong>💬 Vereins-Chat (mit Blaulicht &amp; Wischgeste):</strong> Texte, Fotos, Sprachnachrichten, Umfragen, 3D-Sticker und PDFs; neue Nachrichten lösen einen Blaulicht-Alarm aus; zum Schließen einfach von rechts nach links wischen. Je nach Berechtigung liegt der Chat unten in der Leiste oder oben auf der Startseite.</div>
-                                                <div><strong>🎯 Digitales Waffenbuch (nur Waffenwarte):</strong> Entnahme und Rückgabe der Kat.-C-Salutwaffen per Scan des Tresor-QR-Codes (automatische Sperre nach 2 Minuten).</div>
-                                            </div>
+                    <!-- AUFKLAPPBARE VORSTANDS- & ADMIN-ANLEITUNG (REFERENZ ERHALTEN) -->
+                    <div class="admin-accordion-box" id="admin-guide-accordion-box" style="display: none; margin: 12px 0 0 0; border-color: #232a3b;">
+                        <button type="button" class="admin-accordion-header" onclick="toggleAdminAccordion(this)" aria-expanded="false" style="background: #161b26; color: #f1f5f9;">
+                            <span>📘 Vorstands- &amp; Admin-Anleitung</span>
+                            <span class="admin-accordion-arrow" style="color: #94a3b8;" aria-hidden="true">▼</span>
+                        </button>
+                        <div class="admin-accordion-body">
+                            <div class="admin-accordion-inner">
+                                <div class="admin-accordion-content" style="border-top-color: #e2e8f0; display: flex; flex-direction: column; gap: 10px; font-size: 0.85em; line-height: 1.52; color: #1e293b;">
+                                    <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #991b1b; border-radius: 10px; padding: 10px 12px;">
+                                        <div style="font-weight: 800; color: #991b1b; margin-bottom: 6px;">Kapitel 1 – 🔐 Zugang, unsichtbarer Admin-Tab &amp; neues Vorstands-Handy</div>
+                                        <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
+                                            <div><strong>4 berechtigte Vorstands-Konten:</strong> <strong>Simon</strong> (Obmann / Haupt-Admin), <strong>Heimo</strong>, <strong>Karin</strong> und <strong>Sabrina</strong>.</div>
+                                            <div><strong>Unsichtbar für normale Mitglieder:</strong> Auf normalen Mitglieder-Handys ist der Admin-Tab unten rechts komplett ausgeblendet. Sobald sich ein Vorstandsmitglied einmal anmeldet, bleibt der Tab auf diesem Gerät dauerhaft gespeichert.</div>
+                                            <div><strong>Geheimer Zugang bei neuem Handy:</strong> Einfach <strong>3× schnell hintereinander auf den Vereinsnamen oben im Header tippen</strong> – sofort erscheint der Admin-Tab wieder und der Login öffnet sich.</div>
+                                            <div><strong>5-Minuten-Auto-Logout:</strong> Nach <strong>5 Minuten Inaktivität</strong> meldet sich der Admin-Bereich aus Sicherheitsgründen automatisch ab.</div>
                                         </div>
-
-                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #7c3aed; border-radius: 10px; padding: 10px 12px;">
-                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet &amp; Offline-Schutz bei Veranstaltungen</div>
-                                            <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                                <div><strong>Reiner Schank-Kiosk-Modus (<code>?mode=schank</code>):</strong> Wird die App auf dem Schützenhaus-Tablet einmalig mit <code>?mode=schank</code> am Ende der Web-Adresse geöffnet und zum Startbildschirm hinzugefügt, startet das Tablet nach einmaliger Code-Eingabe ausschließlich im Vollbild-Schankbuch (ohne Chat, News oder Admin-Zugang; Beenden nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
-                                                <div><strong>Doppelter Offline-Tresor:</strong> Dank Service-Worker-Cache (<code>kb-sv-offline</code>) und lokalem IndexedDB-/Speicher-Spiegel (<code>kb_sv_open_tabs_backup</code>) arbeitet das Schankbuch bei WLAN-Ausfall oder Tablet-Neustart lückenlos weiter und synchronisiert alle Deckel automatisch, sobald wieder Internet da ist.</div>
-                                            </div>
+                                    </div>
+                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 10px; padding: 10px 12px;">
+                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Schlüsselliste, Lagerbestand &amp; Schankkassa)</div>
+                                        <div style="display: flex; flex-direction: column; gap: 6px; color: #334155;">
+                                            <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins können sämtliche Schlüsselinhaber (Name, Schlüssel-Nr., Adresse, Geburtsdatum, Telefon) einsehen und als PDF mit Vereinssiegel drucken. Hinzufügen, Bearbeiten und Löschen ist exklusiv für Obmann Simon freigeschaltet.</div>
+                                            <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Kinderleichte Anpassung über <code>[ − ]</code> <code>[ Zahl ]</code> <code>[ + ]</code> pro Artikel (lädt immer den echten Altbestand aus Firebase, sodass Zugänge sauber aufaddiert werden). Oben zeigt die Gold-Box jederzeit sichtbar an, wann und von wem zuletzt geändert wurde. <strong>Push-Regel:</strong> Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Info; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Info.</div>
+                                            <div><strong>🍺 Schankkassa (Grün &amp; Blau):</strong> Alle 4 Admins sehen alle <strong style="color: #15803d;">💵 Bar-Abrechnungen (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnungen (Blau)</strong> inklusive PDF-Download; Stornos oder Löschungen sind exklusiv dem Obmann vorbehalten.</div>
                                         </div>
-
-                                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; border-radius: 10px; padding: 10px 12px;">
-                                            <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 App aktualisieren &amp; Push-Tipps für Mitglieder</div>
-                                            <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                                <div><strong>Aktualisieren ohne Datenverlust:</strong> Auf der Startseite einfach <strong>nach unten ziehen (Pull-to-Refresh)</strong> oder unten den Refresh-Button nutzen – dabei bleiben gespeicherte Namen, Login-Status und Browser-Verlauf vollständig erhalten.</div>
-                                                <div><strong>iPhone-Hinweis:</strong> Auf iPhones funktionieren Push-Nachrichten nur, wenn die App über <strong>Teilen → „Zum Startbildschirm“</strong> installiert und über dieses Icon geöffnet wird.</div>
-                                            </div>
+                                    </div>
+                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 10px; padding: 10px 12px;">
+                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 📱 Überblick über alle Mitglieder-Funktionen (für Rückfragen im Verein)</div>
+                                        <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
+                                            <div><strong>📸 24h-Vereinsstatus:</strong> Leuchtet der runde Vereinslogo-Kreis oben links grün-gold, hat der Obmann aktuelle Fotos eingestellt (antippen zum Ansehen; verschwindet nach 24 Stunden vollautomatisch).</div>
+                                            <div><strong>📰 News &amp; 📅 Termine:</strong> Vereins-News mit „👍 Gefällt mir“, Eilmeldungen sowie Termine mit direkter Zu-/Absage-Abstimmung und <code>.ics</code>-Kalender-Export fürs Smartphone.</div>
+                                            <div><strong>🗓️ Dienstplan:</strong> Alle eingeteilten Schankdienste übersichtlich im Blick; automatische Push-Erinnerungen laufen <strong>1 Tag vorher (18:00 Uhr)</strong> und <strong>2 Stunden</strong> vor Dienstbeginn.</div>
+                                            <div><strong>💬 Vereins-Chat:</strong> Dynamische Leisten-Position je nach Rechten (unten in der Hauptleiste oder oben auf der Startseite), Blaulicht-Alarm bei neuen Nachrichten, Texte, Fotos, Sprachnachrichten, Umfragen, 3D-Sticker &amp; PDFs sowie Wischgeste von rechts nach links zum Schließen.</div>
+                                            <div><strong>🍺 Schankbuch &amp; 🎯 Digitales Waffenbuch:</strong> Schankbuch mit offenen Tisch-Deckeln und Grün/Blau-Abrechnung. Im Waffenbuch sind Reservewaffen ausblendbar, <strong>„Salut Ausrückung“</strong> &amp; Orts-Chips vorausgefüllt, der kompakte Rückgabe-Button sitzt direkt oben und alle Hinweise erscheinen als große Vereins-Popups (5-Minuten-Tresor-Scan).</div>
                                         </div>
-
-                                        <div id="admin-guide-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 10px; padding: 10px 12px;">
-                                            <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Kapitel 6 – 👑 Obmann-Steuerzentrale (3 ruhige Rubriken · exklusiv für Obmann Simon)</div>
-                                            <div style="display: flex; flex-direction: column; gap: 6px; color: #334155;">
-                                                <div><strong>1. Verein &amp; Betrieb:</strong> <strong>📸 24h-Status-Foto</strong> (HD-Fotos bis 15 MB mit optionalem Push &amp; 15-Minuten-Anti-Spam-Schutz), <strong>News &amp; Termine</strong> erstellen/löschen, <strong>Dienstplan &amp; Push</strong> verwalten, <strong>Startseiten-Eilmeldung</strong> schalten sowie <strong>Chat-Schreibsperre</strong> („Nur Obmann darf schreiben“) aktivieren.</div>
-                                                <div><strong>2. Schank, Mitglieder &amp; Protokolle:</strong> <strong>1-Listen-Mitgliederverwaltung</strong> (Mitglieder anlegen/suchen und per Schalter individuell für <strong>🍺 Schankbuch-Tab</strong> und <strong>🎯 Waffenwart</strong> freischalten), <strong>Schankbuch-Preise</strong> anpassen, <strong>Waffenprotokolle</strong> prüfen/archivieren, <strong>unveränderliches Sicherheits-Audit-Log</strong> einsehen und komplettes <strong>Jahresabschluss-Backup</strong> herunterladen.</div>
-                                                <div><strong>3. App &amp; Zugänge:</strong> Live-Umschaltung zwischen <strong>8 Vereins-Farbdesigns</strong>, Änderung des <strong>Vereins-Zugangscodes</strong> sowie Abruf &amp; Druck von <strong>Mitglieder-QR-Code</strong> und <strong>Tresor-QR-Code</strong>.</div>
-                                            </div>
+                                    </div>
+                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #7c3aed; border-radius: 10px; padding: 10px 12px;">
+                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet (<code>?mode=schank</code>) &amp; Offline-Tresor</div>
+                                        <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
+                                            <div><strong>Reiner Schank-Kiosk-Modus:</strong> Wird die App auf dem Schützenhaus-Tablet einmalig mit <code>?mode=schank</code> am Ende der Web-Adresse geöffnet und zum Startbildschirm hinzugefügt, startet das Tablet nach einmaliger Code-Eingabe ausschließlich im Vollbild-Schankbuch (ohne Chat, News oder Admin-Zugang; Beenden nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
+                                            <div><strong>Doppelter Offline-Schutz:</strong> Dank Sofort-Start-Cache (<code>Stale-While-Revalidate</code>) und lokalem Tisch-Deckel-Tresor arbeitet das Schankbuch bei WLAN-Ausfall lückenlos weiter und synchronisiert automatisch bei Rückkehr des Internets.</div>
+                                        </div>
+                                    </div>
+                                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; border-radius: 10px; padding: 10px 12px;">
+                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 Aktualisieren &amp; Push-Einrichtung für Mitglieder</div>
+                                        <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
+                                            <div><strong>Aktualisieren ohne Datenverlust:</strong> Auf der Startseite einfach <strong>nach unten ziehen (Pull-to-Refresh)</strong> oder unten den Refresh-Button nutzen – die neueste Version wird ohne Verlust von Name, Login oder Verlauf geladen.</div>
+                                            <div><strong>iPhone-Pflichtschritt für Push:</strong> iPhones benötigen zwingend die Installation über <strong>Teilen → „Zum Startbildschirm“</strong> und das Öffnen über dieses Icon, damit Push-Benachrichtigungen ankommen.</div>
+                                        </div>
+                                    </div>
+                                    <div id="admin-guide-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 10px; padding: 10px 12px;">
+                                        <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Kapitel 6 – 👑 Obmann-Steuerzentrale (exklusiv für Obmann Simon)</div>
+                                        <div style="display: flex; flex-direction: column; gap: 6px; color: #334155;">
+                                            <div><strong>1. Verein &amp; Betrieb:</strong> <strong>📸 24h-Status-Foto</strong> (HD-Fotos bis 15 MB), <strong>News &amp; Termine</strong> erstellen/löschen, <strong>Dienstplan &amp; Push</strong> verwalten, <strong>Startseiten-Eilmeldung</strong>, <strong>Chat-Schreibsperre</strong> sowie exklusives Versenden von <strong>📅 Termin-Karten im Vereins-Chat</strong> (nur für Obmann Simon sichtbar).</div>
+                                            <div><strong>2. Schank, Mitglieder &amp; Protokolle:</strong> <strong>1-Listen-Mitgliederverwaltung</strong> (Mitglieder anlegen/suchen und per Schalter individuell für <strong>🍺 Schankbuch</strong> und <strong>🎯 Waffenbuch</strong> freischalten – steuert live die untere Navigationsleiste der Mitglieder), <strong>Schankbuch-Preise</strong>, <strong>Waffenprotokolle</strong>, <strong>unveränderliches Sicherheits-Audit-Log</strong> und <strong>Jahresabschluss-Backup</strong>.</div>
+                                            <div><strong>3. App &amp; Zugänge:</strong> Live-Umschaltung zwischen <strong>8 Vereins-Farbdesigns</strong>, Änderung des <strong>Vereins-Zugangscodes</strong> sowie Abruf &amp; Druck von <strong>Mitglieder-QR-Code</strong> und <strong>Tresor-QR-Code</strong>.</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <button type="button" id="admin-clean-reload-btn" class="btn btn-block" onclick="forceCleanAppReload(this)" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; font-weight: 800; margin-top: 2px;">🔄 App-Stand jetzt frisch laden (ohne Datenverlust)</button>
-                        <button type="button" id="admin-home-logout-btn" class="btn admin-btn-delete btn-block" onclick="logoutAdmin()" style="margin-top: 2px;">🚪 Abmelden</button>
-                    </div>
-                </div>
-
-                <!-- EIGENES HAUPTMENÜ: OBMANN-STEUERZENTRALE (EXKLUSIV FÜR OBMANN SIMON) -->
-                <div id="chairman-own-menu-view" style="display: none !important;">
-                    <div class="chairman-own-menu-header">
-                        <div>
-                            <div class="chairman-own-menu-title">👑 Obmann-Steuerzentrale</div>
-                            <div class="chairman-own-menu-sub">Exklusive Steuerung &amp; Vereinsverwaltung</div>
-                        </div>
-                    </div>
-
-                    <button type="button" id="chairman-status-upload-btn" onclick="openClubStatusUploadModal(event)" style="display: none;">📸 24h-Status-Foto einstellen</button>
-
-                    <div class="admin-menu-group" id="admin-menu-chairman-group" style="display: none !important;">
-                        <div class="admin-menu-list" role="navigation" aria-label="Obmann-Steuerzentrale">
-                            <div class="chairman-menu-rubric-label">VEREIN &amp; BETRIEB</div>
-                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-news-events" data-admin-view="news-events" onclick="openAdminView('news-events')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">📰</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">News &amp; Termine</span>
-                                        <span class="admin-menu-row-sub">Beiträge &amp; Kalender pflegen</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
-                            </button>
-                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-duty" data-admin-view="duty" onclick="openAdminView('duty')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">📅</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">Dienstplan &amp; Push</span>
-                                        <span class="admin-menu-row-sub">Schichten &amp; Erinnerungen</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
-                            </button>
-                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-comm" data-admin-view="chairman-comm" onclick="openAdminView('chairman-comm')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">📢</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">Eilmeldung &amp; Chat-Sperre</span>
-                                        <span class="admin-menu-row-sub">Startseiten-Banner &amp; Chat-Modus</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
-                            </button>
-
-                            <div class="chairman-menu-rubric-label">SCHANK, MITGLIEDER &amp; PROTOKOLLE</div>
-                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-members" data-admin-view="chairman-members" onclick="openAdminView('chairman-members')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">👥</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">Mitglieder &amp; Schank-Rechte</span>
-                                        <span class="admin-menu-row-sub">Mitglieder, Waffenwarte &amp; Schankbuch-Tab</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
-                            </button>
-                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-bar" data-admin-view="chairman-bar" onclick="openAdminView('chairman-bar')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">🍺</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">Schankbuch-Preise</span>
-                                        <span class="admin-menu-row-sub">Getränke &amp; Artikel bearbeiten</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
-                            </button>
-                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-weapons" data-admin-view="chairman-logs" onclick="openAdminView('chairman-logs')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">📋</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">Waffenprotokolle, Log &amp; Backup</span>
-                                        <span class="admin-menu-row-sub">PDF-Protokolle, Audit-Log &amp; Jahresabschluss</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
-                            </button>
-
-                            <div class="chairman-menu-rubric-label">APP &amp; ZUGÄNGE</div>
-                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-theme" data-admin-view="chairman-theme" onclick="openAdminView('chairman-theme')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">🎨</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">App-Farbdesign (8 Farben)</span>
-                                        <span class="admin-menu-row-sub">Vereinsfarbe live umstellen</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
-                            </button>
-                            <button type="button" class="admin-menu-row chairman-row" id="admin-nav-btn-chairman-security" data-admin-view="chairman-security" onclick="openAdminView('chairman-security')">
-                                <span class="admin-menu-row-left">
-                                    <span class="admin-menu-row-icon" aria-hidden="true">🔑</span>
-                                    <span class="admin-menu-row-text">
-                                        <span class="admin-menu-row-title">Zugangscode &amp; QR-Codes</span>
-                                        <span class="admin-menu-row-sub">Vereins-Code, App-QR &amp; Tresor-QR</span>
-                                    </span>
-                                </span>
-                                <span class="admin-menu-row-chevron" aria-hidden="true">›</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="admin-home-footer">
-                        <button type="button" id="chairman-clean-reload-btn" class="btn btn-block" onclick="forceCleanAppReload(this)">🔄 App-Stand jetzt frisch laden (ohne Datenverlust)</button>
-                        <button type="button" id="chairman-own-logout-btn" class="btn admin-btn-delete btn-block" onclick="logoutAdmin()">🚪 Abmelden</button>
                     </div>
                 </div>
 
                 <!-- VOLLBILD-DETAILANSICHT FÜR DEN GEWÄHLTEN ARBEITSBEREICH -->
                 <div id="admin-view-panel" style="display: none;">
                     <div class="admin-view-backbar">
-                        <button type="button" id="admin-view-back-btn" class="admin-view-back-btn" onclick="closeAdminView()">← Zurück zum Vorstands-Bereich</button>
+                        <button type="button" id="admin-view-back-btn" class="admin-view-back-btn" onclick="closeAdminView()">← Zurück zum Admin-Menü</button>
                         <div id="admin-view-panel-title" class="admin-view-back-title"></div>
                     </div>
 
@@ -5892,63 +5687,71 @@
                     <button type="button" id="install-help-btn" onclick="openInstallHelpModal()" style="width: 100%; margin-bottom: 16px; padding: 12px 14px; background: #eff6ff; color: #1d4ed8; border: 2px solid #93c5fd; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">📲 App auf dem Handy speichern</button>
                 </div>
 
-                <div class="member-help-card" data-speech="Startseite, News und Termine. Lies aktuelle Vereins News und unterstütze Beiträge mit Gefällt mir. Beachte Eilmeldungen des Obmanns ganz oben, stimme bei Terminen direkt ab und speichere Termine als Kalenderdatei in deinen eigenen Handy Kalender." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                <div class="member-help-card" data-speech="24 Stunden Vereinsstatus, News und Termine. Leuchtet der runde Vereinslogo Kreis oben links grün gold, hat der Obmann aktuelle Fotos in den 24 Stunden Status gestellt. Einfach antippen zum Ansehen. Nach 24 Stunden verschwindet der Status automatisch und das Vereinslogo erscheint wieder. Darunter findest du alle Vereins News mit Gefällt mir, Eilmeldungen sowie Termine mit direkter Zu und Absage Abstimmung und Kalender Export fürs Smartphone." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">📰 Startseite, News &amp; Termine</div>
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">📸 24h-Vereinsstatus, News &amp; Termine</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
-                        Aktuelle Vereins-News lesen und mit „👍 Gefällt mir“ unterstützen, Eilmeldungen des Obmanns beachten, bei Terminen abstimmen und Termine direkt in den eigenen Handy-Kalender (<code>.ics</code>) speichern.
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                        <div>Leuchtet der runde Vereinslogo-Kreis oben links grün-gold, hat der Obmann aktuelle Fotos in den <strong>24-Stunden-Status</strong> gestellt – einfach antippen zum Ansehen (nach 24 Stunden verschwindet der Status automatisch und das Vereinslogo erscheint wieder).</div>
+                        <div>Darunter findest du alle <strong>Vereins-News</strong> (mit „👍 Gefällt mir“), <strong>Eilmeldungen</strong> sowie <strong>Termine</strong> mit direkter Zu-/Absage-Abstimmung und <code>.ics</code>-Kalender-Export fürs Smartphone.</div>
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Dienstplan und Schankdienst. Prüfe deine eigenen Dienste, frage bei Verhinderung Ersatz an oder übernimm einen offenen Dienst. Automatische Push Erinnerungen kommen einen Tag vorher sowie zwei Stunden vor Dienstbeginn." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #0f766e; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Dienstplan und Erinnerungen. Sieh alle eingeteilten Schankdienste übersichtlich ein. Wer im Dienstplan eingetragen ist, erhält automatisch einen Tag vorher um 18 Uhr und zwei Stunden vor Dienstbeginn eine Push Erinnerung aufs Handy." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #0f766e; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">🛡️ Dienstplan &amp; Schankdienst</div>
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">📅 Dienstplan &amp; Erinnerungen</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
-                        Eigene Dienste prüfen, bei Verhinderung Ersatz anfragen oder einen offenen Dienst übernehmen; automatische Push-Erinnerungen kommen 1 Tag und 2 Stunden vorher.
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                        <div>Alle eingeteilten Schankdienste übersichtlich einsehen.</div>
+                        <div>Wer im Dienstplan eingetragen ist, erhält automatisch <strong>1 Tag vorher (18:00 Uhr)</strong> und <strong>2 Stunden vor Dienstbeginn</strong> eine Push-Erinnerung aufs Handy.</div>
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Vereins Chat mit Wischgeste und Blaulicht. Bei neuen Nachrichten blitzt der Chat Zugang blau auf. Je nach Berechtigung liegt der Chat direkt unten in der Hauptleiste oder oben auf der Startseite. Im Chat sind Texte, Fotos, Sprachnachrichten, Umfragen, 3D Sticker und PDFs möglich. Zum Schließen einfach von rechts nach links wischen oder auf das Kreuz tippen." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #25D366; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Vereins Chat mit dynamischer Leiste, Blaulicht und Wischgeste. Je nachdem, welche Bereiche für dich freigeschaltet sind, sitzt der Vereins Chat entweder direkt unten in der Hauptleiste an der Stelle von Schankbuch oder Waffenbuch, oder als große Karte oben auf der Startseite. Geht eine neue Nachricht ein, blinkt der Chat Button oder die Chat Karte blau auf und zeigt die Anzahl ungelesener Nachrichten. Du kannst Texte, Galerie und Kamera Fotos, Sprachnachrichten, Umfragen, 3D Sticker und PDFs versenden. Zum Schließen des Chats einfach von rechts nach links wischen oder oben rechts auf das Kreuz tippen." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #25D366; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">💬 Vereins-Chat (Wischgeste &amp; Blaulicht)</div>
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">💬 Vereins-Chat (Dynamische Leiste, Blaulicht &amp; Wischgeste)</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
-                        Bei neuen Nachrichten blitzt der Chat-Zugang blau auf; je nach Berechtigung liegt der Chat direkt unten in der Hauptleiste oder oben auf der Startseite. Im Chat sind Texte, Fotos, Sprachnachrichten, Umfragen, 3D-Sticker und PDFs möglich – zum Schließen einfach von rechts nach links wischen (oder auf <code>✕</code> tippen).
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                        <div><strong>Position in der App:</strong> Je nachdem, welche Bereiche für dich freigeschaltet sind, sitzt der <strong>💬 Vereins-Chat</strong> entweder direkt unten in der Hauptleiste (genau an der Stelle von Schankbuch oder Waffenbuch) oder als große Karte oben auf der Startseite.</div>
+                        <div><strong>Blaulicht-Alarm:</strong> Geht eine neue Nachricht ein, blinkt der Chat-Button bzw. die Chat-Karte blau auf und zeigt die Anzahl ungelesener Nachrichten.</div>
+                        <div><strong>Funktionen:</strong> Texte, Galerie- &amp; Kamera-Fotos, Sprachnachrichten, Umfragen, 3D-Sticker und PDFs versenden; zum Schließen des Chats einfach <strong>von rechts nach links wischen</strong> (oder oben rechts auf <code>✕</code> tippen).</div>
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Schankbuch, nur für freigeschaltete Schank Mitglieder. Buche Getränke auf offene Tisch Deckel und kassiere sauber getrennt zwischen grüner Bar Abrechnung und blauer Firmen oder Feier Rechnung." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #d97706; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Schankbuch, nur für freigeschaltete Schank Mitglieder. Dieser Bereich ist nur sichtbar, wenn du vom Obmann für das Schankbuch freigeschaltet bist. Buche Getränke auf offene Tisch Deckel und trenne beim Kassieren sauber zwischen grüner Bar Abrechnung und blauer Firmen oder Feier Rechnung." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #d97706; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">🍻 Schankbuch (nur für freigeschaltete Schank-Mitglieder)</div>
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">🍺 Schankbuch (nur für freigeschaltete Schank-Mitglieder)</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
-                        Getränke auf offene Tisch-Deckel buchen und getrennt zwischen <strong style="color: #15803d;">💵 Bar-Abrechnung (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnung (Blau)</strong> kassieren.
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                        <div>Nur sichtbar, wenn du vom Obmann für das Schankbuch freigeschaltet bist.</div>
+                        <div>Getränke auf offene Tisch-Deckel buchen und beim Kassieren sauber zwischen <strong style="color: #15803d;">💵 Bar-Abrechnung (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnung (Blau)</strong> trennen.</div>
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Digitales Waffenbuch, nur für Waffenwarte. Entnahme und Rückgabe der Kategorie C Salutwaffen erfolgen per Kamera Scan des Tresor QR Codes. Aus Sicherheitsgründen sperrt sich das Formular nach zwei Minuten automatisch." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #b91c1c; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Digitales Waffenbuch, nur für freigeschaltete Waffenwarte. Dieser Bereich ist nur sichtbar, wenn du als Waffenwart freigeschaltet bist. Zur Entnahme den Tresor QR Code scannen, das öffnet den Tresor für fünf Minuten. Danach aktive Waffen anhaken, Reserve Waffen lassen sich bei Bedarf per Button einblenden. Salut Ausrückung und der Ort per Schnellauswahl Chip sind bereits vorbereitet. Dann unterschreiben und speichern. Zur Rückgabe einfach oben auf den grünen Button QR Code scannen und Waffen zurückbringen tippen, den Tresor QR Code scannen und die Rückgabe abschließen." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #b91c1c; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">🎯 Digitales Waffenbuch (nur Waffenwarte)</div>
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">🎯 Digitales Waffenbuch (nur für freigeschaltete Waffenwarte)</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
-                        Entnahme und Rückgabe der Kat.-C-Salutwaffen per Scan des Tresor-QR-Codes (sperrt sich nach 2 Minuten automatisch).
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                        <div>Nur sichtbar, wenn du als Waffenwart freigeschaltet bist.</div>
+                        <div><strong>Entnahme:</strong> Tresor-QR-Code scannen (öffnet den Tresor für 5 Minuten) → aktive Waffen anhaken (Reserve-Waffen lassen sich bei Bedarf per Button einblenden) → <strong>„Salut Ausrückung“</strong> und <strong>Ort</strong> (per Schnellauswahl-Chip) sind bereits vorbereitet → unterschreiben &amp; speichern.</div>
+                        <div><strong>Rückgabe:</strong> Oben auf den grünen Button <strong>„📷 QR-Code scannen &amp; Waffe(n) zurückbringen“</strong> tippen, Tresor-QR-Code scannen und Rückgabe abschließen.</div>
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Push Nachrichten, Offline Modus und App installieren. Installiere die App über das Browser Menü mit Zum Startbildschirm hinzufügen und erlaube Push Nachrichten. Dank eingebautem Offline Speicher bleiben geladene Inhalte und Schankbuch Deckel auch bei kurzem WLAN Ausfall erhalten." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Installation, Push Nachrichten, Offline Modus und Aktualisieren. Installiere die App über das Browser Menü mit Zum Startbildschirm hinzufügen. Auf iPhones funktionieren Push Nachrichten nur, wenn die App über Teilen und Zum Startbildschirm installiert und über dieses Icon geöffnet wird. Dank eingebautem Offline Speicher bleiben geladene Inhalte auch bei kurzem WLAN Ausfall erhalten. Zum Aktualisieren ohne Datenverlust auf der Startseite einfach nach unten ziehen oder unten den Button App Stand jetzt frisch laden nutzen. Name, Entsperr Status und Verlauf bleiben dabei vollständig erhalten." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">📲 Push-Nachrichten, Offline-Modus &amp; App installieren</div>
+                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">🔔 Installation, Push-Nachrichten, Offline-Modus &amp; Aktualisieren</div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
                     </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155;">
-                        App über das Browser-Menü („Zum Startbildschirm hinzufügen“) installieren und Push-Nachrichten erlauben; dank eingebautem Offline-Speicher bleiben geladene Inhalte und Schankbuch-Deckel auch bei kurzem WLAN-Ausfall erhalten.
+                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
+                        <div><strong>Installation &amp; iPhone-Hinweis:</strong> App über das Browser-Menü („Zum Startbildschirm hinzufügen“) installieren. Auf <strong>iPhones (iOS)</strong> funktionieren Push-Nachrichten nur, wenn die App über <strong>Teilen → „Zum Startbildschirm“</strong> installiert und über dieses Icon geöffnet wird.</div>
+                        <div><strong>Offline-Modus &amp; Aktualisieren ohne Datenverlust:</strong> Dank Offline-Speicher bleiben geladene Inhalte auch bei kurzem WLAN-Ausfall erhalten. Auf der Startseite einfach <strong>nach unten ziehen (Pull-to-Refresh)</strong> oder unten den Refresh-Button <strong>„🔄 App-Stand jetzt frisch laden“</strong> nutzen – Name, Entsperr-Status und Verlauf bleiben dabei vollständig erhalten.</div>
                     </div>
                 </div>
 
@@ -5979,56 +5782,56 @@
             </div>
             <div style="padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.87em; line-height: 1.55; color: #1e293b;">
                 <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #991b1b; border-radius: 12px; padding: 12px 14px; color: #1e293b; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #991b1b; margin-bottom: 6px;">Kapitel 1 – 🔐 Zugang, Rollen &amp; neues Vorstands-Handy</div>
+                    <div style="font-weight: 800; color: #991b1b; margin-bottom: 6px;">Kapitel 1 – 🔐 Zugang, unsichtbarer Admin-Tab &amp; neues Vorstands-Handy</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
                         <div><strong>4 berechtigte Vorstands-Konten:</strong> <strong>Simon</strong> (Obmann / Haupt-Admin), <strong>Heimo</strong>, <strong>Karin</strong> und <strong>Sabrina</strong>.</div>
-                        <div><strong>Unsichtbarer Admin-Tab:</strong> Auf normalen Mitglieder-Handys ist der Admin-Tab unten rechts komplett ausgeblendet. Sobald sich ein Vorstandsmitglied einmal auf seinem Handy anmeldet, bleibt der Tab auf diesem Gerät dauerhaft sichtbar.</div>
-                        <div><strong>Geheimer Zugang bei neuem Handy:</strong> Einfach <strong>3× schnell hintereinander auf den Vereinsnamen oben im Header tippen</strong> – sofort wird das Gerät als Vorstands-Handy freigeschaltet und der Admin-Login öffnet sich.</div>
-                        <div><strong>5-Minuten-Auto-Logout:</strong> Aus Sicherheitsgründen meldet sich der Admin-Bereich nach <strong>5 Minuten Inaktivität</strong> automatisch ab.</div>
+                        <div><strong>Unsichtbar für normale Mitglieder:</strong> Auf normalen Mitglieder-Handys ist der Admin-Tab unten rechts komplett ausgeblendet. Sobald sich ein Vorstandsmitglied einmal anmeldet, bleibt der Tab auf diesem Gerät dauerhaft gespeichert.</div>
+                        <div><strong>Geheimer Zugang bei neuem Handy:</strong> Einfach <strong>3× schnell hintereinander auf den Vereinsnamen oben im Header tippen</strong> – sofort erscheint der Admin-Tab wieder und der Login öffnet sich.</div>
+                        <div><strong>5-Minuten-Auto-Logout:</strong> Nach <strong>5 Minuten Inaktivität</strong> meldet sich der Admin-Bereich aus Sicherheitsgründen automatisch ab.</div>
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #1e40af; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Schlüssel, Lagerbestand &amp; Schankkassa)</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Schlüsselliste, Lagerbestand &amp; Schankkassa)</div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins können sämtliche Schlüsselinhaber (Name, Schlüssel-Nr., Adresse, Geburtsdatum, Telefon) einsehen und als offizielles PDF mit Vereinssiegel drucken. Das Hinzufügen, Bearbeiten und Entfernen von Schlüsselinhabern ist exklusiv für Obmann Simon freigeschaltet.</div>
-                        <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Kinderleichte Anpassung der Bestände über die Touch-Knöpfe <code>− 1</code>, <code>+ 1</code> und <code>+ 5</code> sowie <strong>💾 Lagerbestand speichern</strong>. Ganz oben zeigt die Gold-Box jederzeit sichtbar an, wann und von wem zuletzt geändert wurde. <strong>Push-Regel:</strong> Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Mitteilung; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Mitteilung.</div>
-                        <div><strong>🍺 Schankbuch &amp; Kassa (Grün vs. Blau):</strong> Klare Trennung zwischen <strong style="color: #15803d;">💵 Bar-Abrechnungen (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnungen (Blau)</strong>. Alle 4 Admins können Umsätze prüfen und Kassenberichte/Rechnungen als PDF herunterladen; Stornos oder Löschungen sind exklusiv dem Obmann vorbehalten.</div>
+                        <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins können sämtliche Schlüsselinhaber (Name, Schlüssel-Nr., Adresse, Geburtsdatum, Telefon) einsehen und als PDF mit Vereinssiegel drucken. Hinzufügen, Bearbeiten und Löschen ist exklusiv für Obmann Simon freigeschaltet.</div>
+                        <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Kinderleichte Anpassung über <code>[ − ]</code> <code>[ Zahl ]</code> <code>[ + ]</code> pro Artikel (lädt immer den echten Altbestand aus Firebase, sodass Zugänge sauber aufaddiert werden). Oben zeigt die Gold-Box jederzeit sichtbar an, wann und von wem zuletzt geändert wurde. <strong>Push-Regel:</strong> Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Info; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Info.</div>
+                        <div><strong>🍺 Schankkassa (Grün &amp; Blau):</strong> Alle 4 Admins sehen alle <strong style="color: #15803d;">💵 Bar-Abrechnungen (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnungen (Blau)</strong> inklusive PDF-Download; Stornos oder Löschungen sind exklusiv dem Obmann vorbehalten.</div>
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 📱 Was die App für alle Mitglieder kann (Überblick für Rückfragen)</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 📱 Überblick über alle Mitglieder-Funktionen (für Rückfragen im Verein)</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div><strong>📸 24h-Vereinsstatus:</strong> Leuchtet der runde Vereinslogo-Kreis oben links grün-gold, hat der Obmann aktuelle Fotos eingestellt (antippen zum Ansehen; verschwindet nach exakt 24 Stunden vollautomatisch und zeigt wieder das Vereinslogo).</div>
-                        <div><strong>📰 News &amp; 📅 Termine:</strong> Beiträge liken (<code>👍</code>), bei Terminen abstimmen und Termine per <code>.ics</code>-Datei direkt in den eigenen Handy-Kalender übernehmen.</div>
-                        <div><strong>🗓️ Dienstplan &amp; Tauschbörse:</strong> Eigene Schankdienste einsehen, bei Verhinderung Ersatz anfragen oder offene Dienste übernehmen; automatische Push-Erinnerungen laufen <strong>1 Tag</strong> und <strong>2 Stunden</strong> vor Dienstbeginn.</div>
-                        <div><strong>💬 Vereins-Chat (mit Blaulicht &amp; Wischgeste):</strong> Texte, Fotos, Sprachnachrichten, Umfragen, 3D-Sticker und PDFs; neue Nachrichten lösen einen Blaulicht-Alarm aus; zum Schließen einfach von rechts nach links wischen. Je nach Berechtigung liegt der Chat unten in der Leiste oder oben auf der Startseite.</div>
-                        <div><strong>🎯 Digitales Waffenbuch (nur Waffenwarte):</strong> Entnahme und Rückgabe der Kat.-C-Salutwaffen per Scan des Tresor-QR-Codes (automatische Sperre nach 2 Minuten).</div>
+                        <div><strong>📸 24h-Vereinsstatus:</strong> Leuchtet der runde Vereinslogo-Kreis oben links grün-gold, hat der Obmann aktuelle Fotos eingestellt (antippen zum Ansehen; verschwindet nach 24 Stunden vollautomatisch).</div>
+                        <div><strong>📰 News &amp; 📅 Termine:</strong> Vereins-News mit „👍 Gefällt mir“, Eilmeldungen sowie Termine mit direkter Zu-/Absage-Abstimmung und <code>.ics</code>-Kalender-Export fürs Smartphone.</div>
+                        <div><strong>🗓️ Dienstplan:</strong> Alle eingeteilten Schankdienste übersichtlich im Blick; automatische Push-Erinnerungen laufen <strong>1 Tag vorher (18:00 Uhr)</strong> und <strong>2 Stunden</strong> vor Dienstbeginn.</div>
+                        <div><strong>💬 Vereins-Chat:</strong> Dynamische Leisten-Position je nach Rechten (unten in der Hauptleiste oder oben auf der Startseite), Blaulicht-Alarm bei neuen Nachrichten, Texte, Fotos, Sprachnachrichten, Umfragen, 3D-Sticker &amp; PDFs sowie Wischgeste von rechts nach links zum Schließen.</div>
+                        <div><strong>🍺 Schankbuch &amp; 🎯 Digitales Waffenbuch:</strong> Schankbuch mit offenen Tisch-Deckeln und Grün/Blau-Abrechnung. Im Waffenbuch sind Reservewaffen ausblendbar, <strong>„Salut Ausrückung“</strong> &amp; Orts-Chips vorausgefüllt, der kompakte Rückgabe-Button sitzt direkt oben und alle Hinweise erscheinen als große Vereins-Popups (5-Minuten-Tresor-Scan).</div>
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #7c3aed; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet &amp; Offline-Schutz bei Veranstaltungen</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet (<code>?mode=schank</code>) &amp; Offline-Tresor</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div><strong>Reiner Schank-Kiosk-Modus (<code>?mode=schank</code>):</strong> Wird die App auf dem Schützenhaus-Tablet einmalig mit <code>?mode=schank</code> am Ende der Web-Adresse geöffnet und zum Startbildschirm hinzugefügt, startet das Tablet nach einmaliger Code-Eingabe ausschließlich im Vollbild-Schankbuch (ohne Chat, News oder Admin-Zugang; Beenden nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
-                        <div><strong>Doppelter Offline-Tresor:</strong> Dank Service-Worker-Cache (<code>kb-sv-offline</code>) und lokalem IndexedDB-/Speicher-Spiegel (<code>kb_sv_open_tabs_backup</code>) arbeitet das Schankbuch bei WLAN-Ausfall oder Tablet-Neustart lückenlos weiter und synchronisiert alle Deckel automatisch, sobald wieder Internet da ist.</div>
+                        <div><strong>Reiner Schank-Kiosk-Modus:</strong> Wird die App auf dem Schützenhaus-Tablet einmalig mit <code>?mode=schank</code> am Ende der Web-Adresse geöffnet und zum Startbildschirm hinzugefügt, startet das Tablet nach einmaliger Code-Eingabe ausschließlich im Vollbild-Schankbuch (ohne Chat, News oder Admin-Zugang; Beenden nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
+                        <div><strong>Doppelter Offline-Schutz:</strong> Dank Sofort-Start-Cache (<code>Stale-While-Revalidate</code>) und lokalem Tisch-Deckel-Tresor arbeitet das Schankbuch bei WLAN-Ausfall lückenlos weiter und synchronisiert automatisch bei Rückkehr des Internets.</div>
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 App aktualisieren &amp; Push-Tipps für Mitglieder</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 Aktualisieren &amp; Push-Einrichtung für Mitglieder</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div><strong>Aktualisieren ohne Datenverlust:</strong> Auf der Startseite einfach <strong>nach unten ziehen (Pull-to-Refresh)</strong> oder unten den Refresh-Button nutzen – dabei bleiben gespeicherte Namen, Login-Status und Browser-Verlauf vollständig erhalten.</div>
-                        <div><strong>iPhone-Hinweis:</strong> Auf iPhones funktionieren Push-Nachrichten nur, wenn die App über <strong>Teilen → „Zum Startbildschirm“</strong> installiert und über dieses Icon geöffnet wird.</div>
+                        <div><strong>Aktualisieren ohne Datenverlust:</strong> Auf der Startseite einfach <strong>nach unten ziehen (Pull-to-Refresh)</strong> oder unten den Refresh-Button nutzen – die neueste Version wird ohne Verlust von Name, Login oder Verlauf geladen.</div>
+                        <div><strong>iPhone-Pflichtschritt für Push:</strong> iPhones benötigen zwingend die Installation über <strong>Teilen → „Zum Startbildschirm“</strong> und das Öffnen über dieses Icon, damit Push-Benachrichtigungen ankommen.</div>
                     </div>
                 </div>
 
                 <div id="admin-help-modal-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
                     <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Kapitel 6 – 👑 Obmann-Steuerzentrale (3 ruhige Rubriken · exklusiv für Obmann Simon)</div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <div><strong>1. Verein &amp; Betrieb:</strong> <strong>📸 24h-Status-Foto</strong> (HD-Fotos bis 15 MB mit optionalem Push &amp; 15-Minuten-Anti-Spam-Schutz), <strong>News &amp; Termine</strong> erstellen/löschen, <strong>Dienstplan &amp; Push</strong> verwalten, <strong>Startseiten-Eilmeldung</strong> schalten sowie <strong>Chat-Schreibsperre</strong> („Nur Obmann darf schreiben“) aktivieren.</div>
-                        <div><strong>2. Schank, Mitglieder &amp; Protokolle:</strong> <strong>1-Listen-Mitgliederverwaltung</strong> (Mitglieder anlegen/suchen und per Schalter individuell für <strong>🍺 Schankbuch-Tab</strong> und <strong>🎯 Waffenwart</strong> freischalten), <strong>Schankbuch-Preise</strong> anpassen, <strong>Waffenprotokolle</strong> prüfen/archivieren, <strong>unveränderliches Sicherheits-Audit-Log</strong> einsehen und komplettes <strong>Jahresabschluss-Backup</strong> herunterladen.</div>
+                        <div><strong>1. Verein &amp; Betrieb:</strong> <strong>📸 24h-Status-Foto</strong> (HD-Fotos bis 15 MB), <strong>News &amp; Termine</strong> erstellen/löschen, <strong>Dienstplan &amp; Push</strong> verwalten, <strong>Startseiten-Eilmeldung</strong>, <strong>Chat-Schreibsperre</strong> sowie exklusives Versenden von <strong>📅 Termin-Karten im Vereins-Chat</strong> (nur für Obmann Simon sichtbar).</div>
+                        <div><strong>2. Schank, Mitglieder &amp; Protokolle:</strong> <strong>1-Listen-Mitgliederverwaltung</strong> (Mitglieder anlegen/suchen und per Schalter individuell für <strong>🍺 Schankbuch</strong> und <strong>🎯 Waffenbuch</strong> freischalten – steuert live die untere Navigationsleiste der Mitglieder), <strong>Schankbuch-Preise</strong>, <strong>Waffenprotokolle</strong>, <strong>unveränderliches Sicherheits-Audit-Log</strong> und <strong>Jahresabschluss-Backup</strong>.</div>
                         <div><strong>3. App &amp; Zugänge:</strong> Live-Umschaltung zwischen <strong>8 Vereins-Farbdesigns</strong>, Änderung des <strong>Vereins-Zugangscodes</strong> sowie Abruf &amp; Druck von <strong>Mitglieder-QR-Code</strong> und <strong>Tresor-QR-Code</strong>.</div>
                     </div>
                 </div>
@@ -6430,7 +6233,7 @@
                 </span>
                 <span class="chat-attach-tile-label">Kamera</span>
             </button>
-            <button type="button" id="chat-attach-event-btn" class="chat-attach-tile-btn" onclick="insertNextEventIntoChat()">
+            <button type="button" id="chat-attach-event-btn" class="chat-attach-tile-btn" onclick="insertNextEventIntoChat()" style="display: none !important;">
                 <span class="chat-attach-tile-icon" style="background: #16a34a;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <rect x="3" y="4" width="18" height="18" rx="2.5" ry="2.5"/>
@@ -6613,8 +6416,111 @@
         </a>
     </nav>
 
+    <!-- GROßES VEREINS-POPUP (ERSETZT STANDARD-BROWSER-ALERT) -->
+    <div id="club-alert-modal" role="dialog" aria-modal="true" aria-labelledby="club-alert-title" aria-describedby="club-alert-text" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 10090; display: none; align-items: center; justify-content: center; padding: 20px; pointer-events: none;">
+        <div style="background: #ffffff; border: 2.5px solid #eab308; border-radius: 24px; max-width: 390px; width: 100%; padding: 26px 22px; text-align: center; box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);">
+            <div id="club-alert-icon-wrap" style="width: 64px; height: 64px; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 2rem; background: #dcfce7;">
+                <span id="club-alert-icon" aria-hidden="true">✅</span>
+            </div>
+            <h3 id="club-alert-title" style="font-size: 1.3rem; font-weight: 900; color: #0f172a; line-height: 1.25; margin: 14px 0 8px 0;">Vereins-Info</h3>
+            <p id="club-alert-text" style="font-size: 1.06rem; font-weight: 600; color: #334155; line-height: 1.45; margin: 0 0 22px 0; white-space: pre-line; word-break: break-word;"></p>
+            <button type="button" id="club-alert-ok-btn" onclick="closeClubAlert()" style="width: 100%; min-height: 52px; border-radius: 16px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: 2px solid #eab308; font-size: 1.08rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer;">✅ OK / Verstanden</button>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIK -->
     <script>
+        const __nativeBrowserAlert = (typeof window !== 'undefined' && typeof window.alert === 'function')
+            ? window.alert.bind(window)
+            : null;
+        const _clubAlertQueue = [];
+        let _clubAlertActive = null;
+
+        function _renderNextClubAlert() {
+            if (_clubAlertActive || _clubAlertQueue.length === 0) return;
+            const modal = document.getElementById('club-alert-modal');
+            const titleEl = document.getElementById('club-alert-title');
+            const textEl = document.getElementById('club-alert-text');
+            const iconWrap = document.getElementById('club-alert-icon-wrap');
+            const iconEl = document.getElementById('club-alert-icon');
+            const okBtn = document.getElementById('club-alert-ok-btn');
+            const item = _clubAlertQueue.shift();
+
+            if (!modal || !titleEl || !textEl) {
+                if (__nativeBrowserAlert) __nativeBrowserAlert(item.message);
+                try { item.resolve(); } catch (e) {}
+                _renderNextClubAlert();
+                return;
+            }
+
+            _clubAlertActive = item;
+            const isWarning = item.type === 'warning' || item.type === 'error' || item.type === 'danger';
+            if (iconWrap) iconWrap.style.background = isWarning ? '#fef9c3' : '#dcfce7';
+            if (iconEl) iconEl.textContent = isWarning ? '⚠️' : '✅';
+            titleEl.textContent = item.title || (isWarning ? 'Hinweis' : 'Vereins-Info');
+            textEl.textContent = item.message;
+
+            modal.style.display = 'flex';
+            modal.style.pointerEvents = 'auto';
+            if (okBtn) {
+                try { okBtn.focus(); } catch (e) {}
+            }
+        }
+
+        function closeClubAlert() {
+            const modal = document.getElementById('club-alert-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+            }
+            const current = _clubAlertActive;
+            _clubAlertActive = null;
+            if (current && typeof current.resolve === 'function') {
+                try { current.resolve(); } catch (e) {}
+            }
+            if (_clubAlertQueue.length > 0) {
+                _renderNextClubAlert();
+            }
+        }
+
+        function showClubAlert(message, title = 'Vereins-Info', type = 'success') {
+            const cleanMessage = String(message == null ? '' : message);
+            const cleanTitle = String(title || '').trim() || (type === 'warning' || type === 'error' ? 'Hinweis' : 'Vereins-Info');
+            const cleanType = String(type || 'success').trim().toLowerCase();
+            return new Promise((resolve) => {
+                _clubAlertQueue.push({
+                    message: cleanMessage,
+                    title: cleanTitle,
+                    type: cleanType,
+                    resolve
+                });
+                _renderNextClubAlert();
+            });
+        }
+
+        if (typeof window !== 'undefined') {
+            window.showClubAlert = showClubAlert;
+            window.closeClubAlert = closeClubAlert;
+            window.alert = function(msg) {
+                const text = String(msg == null ? '' : msg);
+                const isAccessDenied = /⛔|zugriff verweigert|nur obmann|nur berechtigte|geschützt/i.test(text);
+                const isError = /fehler|konnte nicht|ungültig|blockiert/i.test(text);
+                const isWarning = isAccessDenied || isError || /bitte|🔒|⚠️|🚨|nicht unterstützt|nicht verfügbar|nicht möglich|kein(e|en)?\b|zu groß|leider|gesperrt/i.test(text);
+                const inferredType = isWarning ? 'warning' : 'success';
+                const inferredTitle = isAccessDenied
+                    ? 'Zugriff verweigert'
+                    : (isError ? 'Fehler' : (isWarning ? 'Hinweis' : 'Vereins-Info'));
+                return showClubAlert(text, inferredTitle, inferredType);
+            };
+            document.addEventListener('keydown', (evt) => {
+                if (!_clubAlertActive) return;
+                if (evt.key === 'Escape' || evt.key === 'Enter') {
+                    evt.preventDefault();
+                    closeClubAlert();
+                }
+            });
+        }
+
         function switchLegalTab(tabName) {
             const validTabs = ['impressum', 'datenschutz', 'cookies'];
             const activeTab = validTabs.includes(tabName) ? tabName : 'impressum';
@@ -6801,6 +6707,18 @@
                 chairmanSubSectionId: null,
                 chairmanOnly: false
             },
+            'drinks-cash': {
+                title: '💵 Bar-Abrechnungen',
+                sectionId: 'admin-sec-drinks',
+                chairmanSubSectionId: null,
+                chairmanOnly: false
+            },
+            'drinks-invoices': {
+                title: '🧾 Firmen-Rechnungen',
+                sectionId: 'admin-sec-drinks',
+                chairmanSubSectionId: null,
+                chairmanOnly: false
+            },
             'news-events': {
                 title: '📰 News & Termine',
                 sectionId: 'admin-sec-news-events',
@@ -6814,7 +6732,7 @@
                 chairmanOnly: true
             },
             'chairman-members': {
-                title: '👥 Mitglieder & Schank-Rechte',
+                title: '👥 Mitglieder & Rechte',
                 sectionId: 'admin-sec-security',
                 chairmanSubSectionId: 'sec-members',
                 chairmanOnly: true
@@ -6826,25 +6744,25 @@
                 chairmanOnly: true
             },
             'chairman-comm': {
-                title: '📢 Eilmeldung & Chat-Sperre',
+                title: '📢 Eilmeldung & Chat',
                 sectionId: 'admin-sec-security',
                 chairmanSubSectionId: 'sec-comm',
                 chairmanOnly: true
             },
             'chairman-theme': {
-                title: '🎨 App-Farbdesign (8 Farben)',
+                title: '🎨 App-Farbdesign',
                 sectionId: 'admin-sec-security',
                 chairmanSubSectionId: 'sec-theme',
                 chairmanOnly: true
             },
             'chairman-security': {
-                title: '🔑 Zugangscode & QR-Codes',
+                title: '📲 Code & QR-Codes',
                 sectionId: 'admin-sec-security',
                 chairmanSubSectionId: 'sec-security',
                 chairmanOnly: true
             },
             'chairman-logs': {
-                title: '📋 Waffenprotokolle, Log & Backup',
+                title: '📋 Waffenbuch & Log',
                 sectionId: 'admin-sec-security',
                 chairmanSubSectionId: 'sec-logs',
                 chairmanOnly: true
@@ -6856,27 +6774,18 @@
 
         function syncAdminModeSwitcherUI() {
             const isChairman = isChairmanSimonLoggedIn();
-            const effectiveMode = (activeAdminMenuMode === 'chairman' && isChairman) ? 'chairman' : 'board';
-            activeAdminMenuMode = effectiveMode;
-            const boardBtn = document.getElementById('btn-mode-board');
-            const chairmanBtn = document.getElementById('btn-mode-chairman');
-            if (boardBtn) {
-                boardBtn.classList.toggle('active', effectiveMode === 'board');
-                boardBtn.setAttribute('aria-selected', effectiveMode === 'board' ? 'true' : 'false');
+            const headingEl = document.getElementById('admin-dark-menu-heading');
+            if (headingEl) {
+                headingEl.textContent = isChairman ? '👑 Obmann-Menü' : 'Admin-Menü';
             }
-            if (chairmanBtn) {
-                chairmanBtn.classList.toggle('active', effectiveMode === 'chairman');
-                chairmanBtn.setAttribute('aria-selected', effectiveMode === 'chairman' ? 'true' : 'false');
+            const modeSwitcherEl = document.getElementById('admin-mode-switcher');
+            if (modeSwitcherEl) {
+                modeSwitcherEl.style.setProperty('display', 'none', 'important');
             }
         }
 
         function switchAdminMenuMode(mode) {
-            if (mode === 'chairman' && !isChairmanSimonLoggedIn()) {
-                activeAdminMenuMode = 'board';
-                closeAdminView();
-                return;
-            }
-            activeAdminMenuMode = (mode === 'chairman') ? 'chairman' : 'board';
+            activeAdminMenuMode = (mode === 'chairman' && isChairmanSimonLoggedIn()) ? 'chairman' : 'board';
             closeAdminView();
         }
 
@@ -6886,34 +6795,43 @@
             if (!isChairman) {
                 activeAdminMenuMode = 'board';
             }
-            const showChairmanMenu = (activeAdminMenuMode === 'chairman' && isChairman);
             const homeEl = document.getElementById('admin-menu-home');
             const chairmanMenuEl = document.getElementById('chairman-own-menu-view');
+            const chairmanGroupEl = document.getElementById('admin-menu-chairman-group');
             const viewPanelEl = document.getElementById('admin-view-panel');
             const titleEl = document.getElementById('admin-view-panel-title');
             const backBtn = document.getElementById('admin-view-back-btn');
             if (viewPanelEl) viewPanelEl.style.display = 'none';
             if (homeEl) {
-                if (showChairmanMenu) {
-                    homeEl.style.setProperty('display', 'none', 'important');
-                } else {
-                    homeEl.style.removeProperty('display');
-                    homeEl.style.display = 'block';
-                }
+                homeEl.style.removeProperty('display');
+                homeEl.style.display = 'block';
             }
             if (chairmanMenuEl) {
-                if (showChairmanMenu) {
+                if (isChairman) {
                     chairmanMenuEl.style.removeProperty('display');
                     chairmanMenuEl.style.display = 'block';
                 } else {
                     chairmanMenuEl.style.setProperty('display', 'none', 'important');
                 }
             }
+            if (chairmanGroupEl) {
+                if (isChairman) {
+                    chairmanGroupEl.style.removeProperty('display');
+                    chairmanGroupEl.style.display = 'block';
+                } else {
+                    chairmanGroupEl.style.setProperty('display', 'none', 'important');
+                }
+            }
             if (titleEl) titleEl.textContent = '';
             if (backBtn) {
-                backBtn.textContent = '← Zurück zum Vorstands-Bereich';
+                backBtn.textContent = '← Zurück zum Admin-Menü';
                 backBtn.classList.remove('chairman-back-btn');
             }
+
+            const cashCard = document.getElementById('admin-cash-sales-card');
+            const invCard = document.getElementById('admin-tally-invoices-card');
+            if (cashCard) cashCard.style.display = '';
+            if (invCard) invCard.style.display = '';
 
             document.querySelectorAll('#admin-panel .admin-section-block').forEach(el => {
                 el.classList.remove('active');
@@ -6953,20 +6871,17 @@
             });
 
             const homeEl = document.getElementById('admin-menu-home');
-            const chairmanMenuEl = document.getElementById('chairman-own-menu-view');
             const viewPanelEl = document.getElementById('admin-view-panel');
             const titleEl = document.getElementById('admin-view-panel-title');
             const backBtn = document.getElementById('admin-view-back-btn');
             if (homeEl) homeEl.style.setProperty('display', 'none', 'important');
-            if (chairmanMenuEl) chairmanMenuEl.style.setProperty('display', 'none', 'important');
             if (viewPanelEl) viewPanelEl.style.display = 'block';
             if (titleEl) titleEl.textContent = cfg.title;
             if (backBtn) {
+                backBtn.textContent = '← Zurück zum Admin-Menü';
                 if (cfg.chairmanOnly) {
-                    backBtn.textContent = '← Zurück zur Obmann-Steuerzentrale';
                     backBtn.classList.add('chairman-back-btn');
                 } else {
-                    backBtn.textContent = '← Zurück zum Vorstands-Bereich';
                     backBtn.classList.remove('chairman-back-btn');
                 }
             }
@@ -6975,6 +6890,21 @@
             if (targetSection) {
                 targetSection.classList.add('active');
                 targetSection.style.display = 'block';
+            }
+
+            if (cfg.sectionId === 'admin-sec-drinks') {
+                const cashCard = document.getElementById('admin-cash-sales-card');
+                const invCard = document.getElementById('admin-tally-invoices-card');
+                if (viewId === 'drinks-cash') {
+                    if (cashCard) cashCard.style.display = 'block';
+                    if (invCard) invCard.style.display = 'none';
+                } else if (viewId === 'drinks-invoices') {
+                    if (cashCard) cashCard.style.display = 'none';
+                    if (invCard) invCard.style.display = 'block';
+                } else {
+                    if (cashCard) cashCard.style.display = 'block';
+                    if (invCard) invCard.style.display = 'block';
+                }
             }
 
             if (cfg.chairmanSubSectionId) {
@@ -11579,9 +11509,10 @@
                     badge.innerText = 'GESPERRT (Tresor-Scan erforderlich)';
                 }
                 const occInput = document.getElementById('weapon-occasion');
-                if (occInput) occInput.value = '';
+                if (occInput) occInput.value = 'Salut Ausrückung';
                 const locInput = document.getElementById('weapon-location');
-                if (locInput) locInput.value = 'Pfarrkirche Partenen';
+                if (locInput) locInput.value = 'Gaschurn';
+                try { syncWeaponLocationChips('Gaschurn'); } catch(e) {}
                 const primarySelect = document.getElementById('weapon-member-primary');
                 if (primarySelect) {
                     primarySelect.selectedIndex = 0;
@@ -11610,12 +11541,12 @@
 
             try {
                 const historyList = document.getElementById('weapon-history-list');
+                const returnCard = document.getElementById('weapon-return-card') || (historyList ? historyList.closest('.glass-card') : null);
                 if (historyList) {
                     historyList.innerHTML = '';
-                    const historyCard = historyList.closest('.glass-card');
-                    if (historyCard) {
-                        historyCard.style.display = 'none';
-                    }
+                }
+                if (returnCard) {
+                    returnCard.style.display = 'none';
                 }
                 const scannerCard = document.getElementById('scanner-card-issue');
                 if (scannerCard) {
@@ -11712,7 +11643,7 @@
             const scannerCard = document.getElementById('scanner-card-issue');
             const isScannerCardVisible = scannerCard && getComputedStyle(scannerCard).display !== 'none';
             if (!errBox || !isScannerCardVisible) {
-                alert(userMsg);
+                showClubAlert(userMsg, 'Kamera-Hinweis', 'warning');
             }
         }
 
@@ -11812,7 +11743,7 @@
                             errBox.innerText = errMsg;
                             errBox.style.display = 'block';
                         }
-                        alert(errMsg);
+                        showClubAlert(errMsg, 'Ungültiger QR-Code', 'warning');
                         resetWeaponScanState();
                     });
                     return;
@@ -11832,7 +11763,7 @@
                             errBox.innerText = denyMsg;
                             errBox.style.display = 'block';
                         }
-                        alert(denyMsg);
+                        showClubAlert(denyMsg, 'Zugriff verweigert', 'warning');
                         resetWeaponScanState();
                     });
                     return;
@@ -11920,9 +11851,42 @@
                     badge.style.background = '#16a34a';
                     badge.innerText = '✅ TRESOR BESTÄTIGT (Entnahme freigeschaltet)';
                 }
-                alert("QR-Code erfolgreich gescannt! Waffentresor bestätigt. Du kannst nun das Entnahmeprotokoll ausfüllen.");
+                const occInput = document.getElementById('weapon-occasion');
+                if (occInput && !String(occInput.value || '').trim()) {
+                    occInput.value = 'Salut Ausrückung';
+                }
+                const locInput = document.getElementById('weapon-location');
+                if (locInput && !String(locInput.value || '').trim()) {
+                    locInput.value = 'Gaschurn';
+                }
+                try { syncWeaponLocationChips(); } catch(e) {}
+                showClubAlert('QR-Code erfolgreich gescannt. Du kannst nun das Entnahmeprotokoll ausfüllen.', 'Tresor bestätigt!', 'success');
                 resetWeaponAutoLockTimer();
             } catch(e) {}
+        }
+
+        function syncWeaponLocationChips(explicitValue) {
+            const locInput = document.getElementById('weapon-location');
+            const currentVal = String(explicitValue !== undefined ? explicitValue : (locInput ? locInput.value : '')).trim().toLowerCase();
+            document.querySelectorAll('#weapon-location-chips .weapon-location-chip').forEach(btn => {
+                const chipVal = String(btn.dataset.location || '').trim().toLowerCase();
+                const isActive = chipVal !== '' && chipVal === currentVal;
+                btn.style.background = isActive ? '#dcfce7' : '#f8fafc';
+                btn.style.borderColor = isActive ? '#16a34a' : '#cbd5e1';
+                btn.style.color = isActive ? '#166534' : '#1e293b';
+                btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+            });
+        }
+
+        function selectWeaponLocationChip(locationName) {
+            const locInput = document.getElementById('weapon-location');
+            if (locInput) {
+                locInput.value = String(locationName || '').trim();
+            }
+            syncWeaponLocationChips(locationName);
+            if (typeof isWeaponVaultUnlocked === 'function' && isWeaponVaultUnlocked()) {
+                try { resetWeaponAutoLockTimer(); } catch(e) {}
+            }
         }
 
         async function stopQrScanner() {
@@ -12331,7 +12295,7 @@
 
         async function saveWeaponIssue(e) {
             e.preventDefault();
-            if (!isWeaponVaultUnlocked()) { alert('Bitte zuerst QR-Code scannen!'); return; }
+            if (!isWeaponVaultUnlocked()) { showClubAlert('Bitte zuerst den Tresor-QR-Code scannen!', 'Tresor gesperrt', 'warning'); return; }
             try {
                 const primaryEl = document.getElementById('weapon-member-primary');
                 const secondaryEl = document.getElementById('weapon-member-secondary');
@@ -12344,7 +12308,7 @@
 
                 const checkboxes = document.querySelectorAll('input[name="weapons"]:checked');
                 if (!checkboxes || checkboxes.length === 0) {
-                    alert("Bitte wählen Sie mindestens eine Waffe aus!");
+                    showClubAlert('Bitte wählen Sie mindestens eine Waffe aus!', 'Waffenauswahl fehlt', 'warning');
                     return;
                 }
 
@@ -12362,7 +12326,7 @@
                 });
 
                 if (selectedWeaponsData.length === 0) {
-                    alert("Fehler: Die ausgewählten Waffen konnten nicht zugeordnet werden. Bitte Seite neu laden.");
+                    showClubAlert('Die ausgewählten Waffen konnten nicht zugeordnet werden. Bitte Seite neu laden.', 'Fehler', 'warning');
                     return;
                 }
 
@@ -12406,8 +12370,6 @@
                     "⚠️ Waffen-Entnahme protokolliert",
                     `${uebernehmer} hat ${anzahlWaffen} Salutwaffe(n) für „${anlass}“ (${ort}) entnommen.`
                 );
-                alert("Waffenentnahme erfolgreich erfasst und im Admin-Bereich hinterlegt. Das Waffenbuch wird gesperrt.");
-                
                 resetWeaponScanState();
                 lockWeaponFormUI();
                 window.__weaponBookLockedAfterReturn = false;
@@ -12415,8 +12377,9 @@
 
                 loadWeaponHistory();
                 loadAdminWeaponPDFs();
+                showClubAlert('Waffenentnahme erfolgreich erfasst und im Admin-Bereich hinterlegt. Das Waffenbuch wird jetzt wieder gesperrt.', 'Entnahme protokolliert!', 'success');
             } catch (err) {
-                alert("Fehler beim Speichern: " + err.message);
+                showClubAlert('Fehler beim Speichern: ' + err.message, 'Fehler', 'warning');
             }
         }
 
@@ -12479,11 +12442,11 @@
                 isSavingWeaponReturn = false;
                 lockWeaponBookAfterReturn();
                 loadAdminWeaponPDFs();
-                alert("Tresor-Scan erfolgreich! Rückgabe protokolliert und im Admin-Bereich gespeichert.");
+                showClubAlert('Tresor-Scan erfolgreich! Die Rückgabe wurde protokolliert und im Admin-Bereich gespeichert.', 'Rückgabe abgeschlossen!', 'success');
             } catch (err) {
                 isSavingWeaponReturn = false;
                 resetWeaponScanState();
-                alert("Fehler bei Rückgabe: " + err.message);
+                showClubAlert('Fehler bei Rückgabe: ' + err.message, 'Fehler', 'warning');
             }
         }
 
@@ -12491,62 +12454,68 @@
             const container = document.getElementById('weapon-history-list');
             if (!container) return;
 
-            const historyCard = container.closest('.glass-card');
+            const returnCard = document.getElementById('weapon-return-card') || container.closest('.glass-card');
             let sessionLocked = false;
             try { sessionLocked = sessionStorage.getItem('kbsv_weapon_return_locked') === '1'; } catch(e) {}
             if (window.__weaponBookLockedAfterReturn || sessionLocked) {
                 container.innerHTML = '';
-                if (historyCard) historyCard.style.display = 'none';
+                if (returnCard) returnCard.style.display = 'none';
                 return;
             }
-            if (historyCard) historyCard.style.display = '';
 
             try {
                 const snapshot = await db.collection("weapon_log").where("status", "==", "Entnommen").get();
-                let html = "";
-                
                 if (snapshot.empty) {
-                    container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine aktiven Entnahmen. (Nach Abschluss wird das Waffenbuch gesperrt)</p>';
+                    container.innerHTML = '';
+                    if (returnCard) returnCard.style.display = 'none';
                     return;
                 }
 
+                const openDocs = [];
                 snapshot.forEach(doc => {
-                    const w = doc.data() || {};
-                    let weaponsListHtml = "";
-                    (w.selectedWeapons || []).forEach(item => {
-                        let maskedItem = item;
-                        if (item.includes('Nr. ')) {
-                            let parts = item.split('Nr. ');
-                            let prefix = parts[0] + 'ZWR: ';
-                            let numPart = parts[1].split(' /')[0].trim();
-                            let rest = item.substring((parts[0] + 'Nr. ').length + parts[1].split(' /')[0].length);
-                            maskedItem = prefix + maskWeaponNumber(numPart) + rest;
-                        }
-                        maskedItem = maskedItem
-                            .replace(/ZVR-\s*([A-Za-z0-9]+)/gi, (_, code) => 'ZVR: ' + maskZvrNumber(code))
-                            .replace(/ZVR:\s*([A-Za-z0-9]+)/gi, (_, code) => 'ZVR: ' + maskZvrNumber(code))
-                            .replace(/624291509/g, maskZvrNumber('624291509'));
-                        weaponsListHtml += `<div style="font-size: 0.85em; color: var(--primary-red); font-weight: 700;">• ${escapeHtml(maskedItem)}</div>`;
-                    });
-
-                    html += `
-                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 14px; margin-bottom: 12px; border-left: 6px solid #b91c1c; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <strong style="font-size: 1em; color: #0f172a;">👤 ${escapeHtml(w.collectorStr || 'Unbekannt')}</strong>
-                                <span style="background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.75em;">${escapeHtml(w.status || 'Entnommen')} (Read-Only)</span>
-                            </div>
-                            <div style="margin-bottom: 6px;">${weaponsListHtml}</div>
-                            <div style="font-size: 0.8em; color: var(--text-dark); margin-bottom: 4px;"><strong>Anlass:</strong> ${escapeHtml(w.occasion || '')} (${escapeHtml(w.location || '')})</div>
-                            <div style="font-size: 0.75em; color: var(--text-muted); margin-bottom: 12px;">
-                                📤 Entnommen: <strong>${escapeHtml(w.issueTime || '')}</strong> | ZVR: ${maskZvrNumber('624291509')}
-                            </div>
-                            <button data-doc-id="${escapeHtml(doc.id)}" onclick="promptReturnWeapon(this.dataset.docId)" class="btn btn-green btn-block" style="padding: 14px 20px; font-size: 1.05em; font-weight: 800; background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 6px 20px rgba(22, 163, 74, 0.35);">📷 QR-Code scannen & Waffe(n) zurückbringen</button>
-                        </div>
-                    `;
+                    openDocs.push({ id: doc.id, data: doc.data() || {} });
                 });
+
+                if (openDocs.length === 0) {
+                    container.innerHTML = '';
+                    if (returnCard) returnCard.style.display = 'none';
+                    return;
+                }
+
+                let html = '';
+                if (openDocs.length === 1) {
+                    const entry = openDocs[0];
+                    const w = entry.data;
+                    const count = Array.isArray(w.selectedWeapons) ? w.selectedWeapons.length : 0;
+                    const waffenLabel = count === 1 ? '1 Waffe entnommen' : `${count} Waffen entnommen`;
+                    html = `
+                        <div style="font-size: 0.9rem; font-weight: 800; color: #166534; margin-bottom: 10px; line-height: 1.35;">📦 Offene Ausrückung bereit zur Rückgabe (${waffenLabel})</div>
+                        <button type="button" data-doc-id="${escapeHtml(entry.id)}" onclick="promptReturnWeapon(this.dataset.docId)" style="width: 100%; min-height: 50px; border-radius: 14px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; font-weight: 800; font-size: 1rem; border: none; padding: 12px 16px; cursor: pointer; box-shadow: 0 6px 18px rgba(22, 163, 74, 0.28);">📷 QR-Code scannen &amp; Waffe(n) zurückbringen</button>
+                    `;
+                } else {
+                    const totalWeapons = openDocs.reduce((sum, entry) => sum + (Array.isArray(entry.data.selectedWeapons) ? entry.data.selectedWeapons.length : 0), 0);
+                    html += `<div style="font-size: 0.9rem; font-weight: 800; color: #166534; margin-bottom: 10px; line-height: 1.35;">📦 ${openDocs.length} offene Ausrückungen bereit zur Rückgabe (${totalWeapons} Waffen entnommen)</div>`;
+                    openDocs.forEach((entry, idx) => {
+                        const w = entry.data;
+                        const count = Array.isArray(w.selectedWeapons) ? w.selectedWeapons.length : 0;
+                        const waffenLabel = count === 1 ? '1 Waffe' : `${count} Waffen`;
+                        const occasionText = String(w.occasion || 'Ausrückung').trim();
+                        const timeText = String(w.issueTime || '').trim();
+                        const metaLine = [occasionText, timeText].filter(Boolean).join(' · ');
+                        html += `
+                            <div style="${idx > 0 ? 'margin-top: 10px; padding-top: 10px; border-top: 1px solid #bbf7d0;' : ''}">
+                                <div style="font-size: 0.82rem; font-weight: 700; color: #15803d; margin-bottom: 6px; line-height: 1.3;">${escapeHtml(metaLine)} (${waffenLabel})</div>
+                                <button type="button" data-doc-id="${escapeHtml(entry.id)}" onclick="promptReturnWeapon(this.dataset.docId)" style="width: 100%; min-height: 50px; border-radius: 14px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; font-weight: 800; font-size: 1rem; border: none; padding: 12px 16px; cursor: pointer; box-shadow: 0 6px 18px rgba(22, 163, 74, 0.28);">📷 QR-Code scannen &amp; Waffe(n) zurückbringen</button>
+                            </div>
+                        `;
+                    });
+                }
+
                 container.innerHTML = html;
+                if (returnCard) returnCard.style.display = 'block';
             } catch (e) {
-                container.innerHTML = '<p style="font-size:0.85em; color:red;">Fehler beim Laden.</p>';
+                container.innerHTML = '';
+                if (returnCard) returnCard.style.display = 'none';
             }
         }
 
@@ -16262,25 +16231,26 @@
             const chairmanOnlySectionIds = ['admin-sec-news-events', 'admin-sec-duty', 'admin-sec-security', 'admin-sec-weapons'];
             if (ccEl) ccEl.style.display = isChairman ? 'block' : 'none';
             if (modeSwitcherEl) {
+                modeSwitcherEl.style.setProperty('display', 'none', 'important');
+            }
+            if (chairmanMenuEl) {
                 if (isChairman) {
-                    modeSwitcherEl.style.removeProperty('display');
-                    modeSwitcherEl.style.display = 'grid';
+                    chairmanMenuEl.style.removeProperty('display');
+                    chairmanMenuEl.style.display = 'block';
                 } else {
-                    modeSwitcherEl.style.setProperty('display', 'none', 'important');
+                    chairmanMenuEl.style.setProperty('display', 'none', 'important');
                 }
             }
             if (chairmanGroupEl) {
                 if (isChairman) {
                     chairmanGroupEl.style.removeProperty('display');
+                    chairmanGroupEl.style.display = 'block';
                 } else {
                     chairmanGroupEl.style.setProperty('display', 'none', 'important');
                 }
             }
             if (!isChairman) {
                 activeAdminMenuMode = 'board';
-                if (chairmanMenuEl) {
-                    chairmanMenuEl.style.setProperty('display', 'none', 'important');
-                }
                 if (currentOpenAdminViewId && ADMIN_VIEW_CONFIG[currentOpenAdminViewId] && ADMIN_VIEW_CONFIG[currentOpenAdminViewId].chairmanOnly) {
                     closeAdminView();
                 } else if (!currentOpenAdminViewId) {
@@ -16289,6 +16259,12 @@
                         homeEl.style.removeProperty('display');
                         homeEl.style.display = 'block';
                     }
+                }
+            } else if (!currentOpenAdminViewId) {
+                const homeEl = document.getElementById('admin-menu-home');
+                if (homeEl) {
+                    homeEl.style.removeProperty('display');
+                    homeEl.style.display = 'block';
                 }
             }
             try { syncAdminModeSwitcherUI(); } catch(e) {}
@@ -16319,6 +16295,7 @@
             if (adminHelpModalChairmanExtra) {
                 adminHelpModalChairmanExtra.style.display = isChairman ? 'block' : 'none';
             }
+            try { updateChatAttachEventButtonVisibility(); } catch (e) {}
             if (!isChairman) {
                 const adminGuideBox = document.getElementById('admin-guide-accordion-box');
                 if (adminGuideBox) {
@@ -19794,11 +19771,23 @@
             isInsertingChatEmoji = false;
         }
 
+        function updateChatAttachEventButtonVisibility() {
+            const eventBtn = document.getElementById('chat-attach-event-btn');
+            if (!eventBtn) return;
+            const isChairman = typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn();
+            if (isChairman) {
+                eventBtn.style.setProperty('display', 'flex', 'important');
+            } else {
+                eventBtn.style.setProperty('display', 'none', 'important');
+            }
+        }
+
         function toggleChatAttachMenu(event) {
             if (event) event.stopPropagation();
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
             closeChatReactionPicker();
             closeChatEmojiPanel();
+            updateChatAttachEventButtonVisibility();
             const panel = document.getElementById('chat-attach-panel');
             const btn = document.getElementById('chat-attach-btn');
             if (!panel) return;
@@ -20412,6 +20401,7 @@
         }
 
         async function insertNextEventIntoChat() {
+            if (!isChairmanSimonLoggedIn()) return;
             closeChatAttachMenu();
             if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
 
@@ -20656,6 +20646,7 @@
             updateChatMuteButtonUI();
             updateChatIdentityLabel();
             closeChatAttachMenu();
+            updateChatAttachEventButtonVisibility();
             updateChatActionButtonUI();
             initClubChatListener();
             initPinnedChatListener();
@@ -22572,6 +22563,10 @@
             if (videoBadge) {
                 videoBadge.style.display = 'none';
             }
+            const chairmanStatusDot = document.getElementById('chairman-status-active-dot');
+            if (chairmanStatusDot) {
+                chairmanStatusDot.style.display = 'none';
+            }
             if (crestImg) {
                 crestImg.dataset.statusActive = '0';
                 crestImg.dataset.fb = '0';
@@ -22595,10 +22590,15 @@
             const crestBtn = document.getElementById('app-header-crest-btn');
             const crestImg = document.getElementById('app-header-crest-img');
             const videoBadge = document.getElementById('club-status-video-badge');
+            const chairmanStatusDot = document.getElementById('chairman-status-active-dot');
 
             if (!active.length) {
                 resetHeaderCrestToDefaultLogo();
                 return;
+            }
+
+            if (chairmanStatusDot) {
+                chairmanStatusDot.style.display = 'inline-block';
             }
 
             const newest = active[active.length - 1];
@@ -23691,7 +23691,7 @@
                         }
                     });
                 }
-                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'cash-report-preview-modal', 'annual-backup-preview-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'chat-image-lightbox', 'member-name-setup-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'master-pin-modal', 'admin-logout-modal', 'app-update-modal', 'club-status-viewer', 'club-status-upload-modal', 'admin-cash-edit-modal'].forEach(id => {
+                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'cash-report-preview-modal', 'annual-backup-preview-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'chat-image-lightbox', 'member-name-setup-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'master-pin-modal', 'admin-logout-modal', 'app-update-modal', 'club-status-viewer', 'club-status-upload-modal', 'admin-cash-edit-modal', 'club-alert-modal'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el && getComputedStyle(el).display === 'none') {
                         el.style.pointerEvents = 'none';
