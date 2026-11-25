@@ -1654,7 +1654,11 @@
             position: fixed;
             inset: 0;
             z-index: 99999;
-            background: linear-gradient(160deg, #f8fafc 0%, #e2e8f0 100%);
+            background-color: #0f172a;
+            background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.38) 0%, rgba(15, 23, 42, 0.68) 100%), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             padding: 20px 16px;
             overflow-y: auto;
             flex-direction: column;
@@ -1716,7 +1720,7 @@
             background: rgba(255, 255, 255, 0.96);
             border-radius: 24px;
             padding: 28px 22px;
-            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
             border: 1.5px solid rgba(255, 255, 255, 0.95);
             text-align: center;
             margin: auto 0;
@@ -4169,8 +4173,12 @@
     <div id="club-lock-screen">
         <div style="width: 100%; height: 10px;"></div>
         <div class="lock-screen-card modal-anim">
-            <div role="img" aria-label="Vereinswappen KB &amp; SV Gaschurn-Partenen" style="width: 170px; height: 170px; max-width: 100%; border-radius: 24px; border: 3px solid #991b1b; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22); margin: 0 auto 14px auto; overflow: hidden; background: #0f172a;">
-                <img id="lock-screen-crest-img" src="maskottchen.png" alt="" loading="eager" decoding="sync" fetchpriority="high" style="width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; background: #0f172a;" onerror="this.onerror=null; this.src='logo.png';">
+            <div role="img" aria-label="Vereinswappen KB &amp; SV Gaschurn-Partenen" style="width: 120px; height: 120px; max-width: 100%; border-radius: 24px; border: 3px solid #991b1b; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22); margin: 0 auto 14px auto; overflow: hidden; background: #0f172a; display: flex; align-items: center; justify-content: center;">
+                <img id="lock-screen-crest-img" src="./logo.png" alt="Vereinswappen KB &amp; SV" loading="eager" decoding="sync" fetchpriority="high" style="width: 100%; height: 100%; object-fit: cover; display: block; background: #0f172a;" onerror="this.style.display='none'; var fb=document.getElementById('lock-screen-crest-fallback'); if(fb){fb.style.display='flex';}">
+                <div id="lock-screen-crest-fallback" style="display: none; width: 100%; height: 100%; background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%); color: #ffffff; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; letter-spacing: 0.04em; text-align: center; line-height: 1.15;">
+                    <span style="font-size: 1.35rem;">KB &amp; SV</span>
+                    <span style="font-size: 0.62rem; color: #fde047; margin-top: 3px; letter-spacing: 0.08em;">GASCHURN</span>
+                </div>
             </div>
             <div style="font-size: 1.08em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; line-height: 1.25; color: #0f172a;">Kameradschaftsbund &amp; Schützenverein</div>
             <div style="font-size: 0.88em; font-weight: 800; color: #991b1b; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px;">GASCHURN-PARTENEN</div>
@@ -4199,16 +4207,16 @@
             </div>
         </div>
 
-        <div style="padding: 18px 0 8px 0; text-align: center; position: relative; z-index: 5; pointer-events: auto;">
-            <button type="button" id="admin-direct-login-btn" onclick="openAdminDirectLogin()" style="background: none; border: none; color: #64748b; font-size: 0.8em; font-weight: 600; text-decoration: underline; cursor: pointer; font-family: inherit; padding: 10px 14px; position: relative; z-index: 6; pointer-events: auto;">
+        <div style="padding: 18px 0 8px 0; text-align: center; position: relative; z-index: 5; pointer-events: auto; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);">
+            <button type="button" id="admin-direct-login-btn" onclick="openAdminDirectLogin()" style="background: none; border: none; color: #f1f5f9; font-size: 0.8em; font-weight: 600; text-decoration: underline; cursor: pointer; font-family: inherit; padding: 10px 14px; position: relative; z-index: 6; pointer-events: auto;">
                 Direkt zum Admin-Login
             </button>
-            <div style="margin-top: 2px; font-size: 0.72em; color: #64748b; line-height: 1.5;">
-                <button type="button" onclick="openLegalModal('impressum')" style="background: none; border: none; color: #64748b; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Impressum</button>
+            <div style="margin-top: 2px; font-size: 0.72em; color: #e2e8f0; line-height: 1.5;">
+                <button type="button" onclick="openLegalModal('impressum')" style="background: none; border: none; color: #e2e8f0; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Impressum</button>
                 <span> · </span>
-                <button type="button" onclick="openLegalModal('datenschutz')" style="background: none; border: none; color: #64748b; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Datenschutz</button>
+                <button type="button" onclick="openLegalModal('datenschutz')" style="background: none; border: none; color: #e2e8f0; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Datenschutz</button>
                 <span> · </span>
-                <button type="button" onclick="openLegalModal('cookies')" style="background: none; border: none; color: #64748b; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Cookie-Einstellungen</button>
+                <button type="button" onclick="openLegalModal('cookies')" style="background: none; border: none; color: #e2e8f0; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Cookie-Einstellungen</button>
             </div>
         </div>
     </div>
