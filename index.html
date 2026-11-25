@@ -693,10 +693,12 @@
             padding: 4px 9px !important;
         }
 
-        #nav-drinks {
+        #nav-drinks,
+        #nav-chat-btn {
             position: relative !important;
         }
-        #nav-drinks-chat-badge {
+        #nav-drinks-chat-badge,
+        #nav-chat-btn-badge {
             display: none;
             position: absolute;
             top: 2px;
@@ -729,10 +731,12 @@
                 color: #1e40af !important;
             }
         }
-        #nav-drinks.nav-chat-bluelight {
+        #nav-drinks.nav-chat-bluelight,
+        #nav-chat-btn.nav-chat-bluelight {
             animation: navChatBlueLightFlash 1.3s ease-in-out infinite !important;
         }
-        #nav-drinks.nav-chat-bluelight #nav-drinks-chat-badge {
+        #nav-drinks.nav-chat-bluelight #nav-drinks-chat-badge,
+        #nav-chat-btn.nav-chat-bluelight #nav-chat-btn-badge {
             animation: badgeBlueLightFlash 1.3s ease-in-out infinite !important;
         }
 
@@ -4745,7 +4749,7 @@
             </p>
 
             <div id="weapon-timeout-notice" role="alert" style="display: none; margin-bottom: 14px; padding: 12px 14px; border-radius: 12px; background: #fef2f2; border: 1.5px solid #dc2626; color: #991b1b; font-size: 0.88em; font-weight: 700; line-height: 1.45; align-items: flex-start; justify-content: space-between; gap: 10px; box-shadow: 0 6px 18px rgba(220, 38, 38, 0.14);">
-                <span id="weapon-timeout-notice-text">🔒 Zeitüberschreitung (2 Minuten Inaktivität): Das Waffenbuch wurde aus Sicherheitsgründen wieder gesperrt und zurückgesetzt.</span>
+                <span id="weapon-timeout-notice-text">🔒 Zeitüberschreitung (5 Minuten Inaktivität): Das Waffenbuch wurde aus Sicherheitsgründen wieder gesperrt und zurückgesetzt.</span>
                 <button type="button" onclick="hideWeaponTimeoutNotice()" aria-label="Hinweis schließen" style="background: transparent; border: none; color: #991b1b; font-size: 1.05em; font-weight: 800; cursor: pointer; padding: 0 2px; line-height: 1; flex-shrink: 0;">✕</button>
             </div>
 
@@ -6528,25 +6532,8 @@
                         <path d="M6 5H15C15 6.10457 14.1046 7 13 7H8C6.89543 7 6 6.10457 6 5Z" fill="#ffffff"/>
                     </svg>
                 </span>
-                <span id="nav-drinks-svg-chat" style="display: none; align-items: center; justify-content: center;">
-                    <svg width="24" height="24" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <defs>
-                            <linearGradient id="navChatGoldGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#fde047"/>
-                                <stop offset="50%" stop-color="#eab308"/>
-                                <stop offset="100%" stop-color="#b45309"/>
-                            </linearGradient>
-                        </defs>
-                        <path d="M12 10H38C41.3137 10 44 12.6863 44 16V30C44 33.3137 41.3137 36 38 36H22L14 43V36H12C8.68629 36 6 33.3137 6 30V16C6 12.6863 8.68629 10 12 10Z" fill="#881337" stroke="url(#navChatGoldGrad)" stroke-width="2.6" stroke-linejoin="round"/>
-                        <path d="M24 20H52C55.3137 20 58 22.6863 58 26V42C58 45.3137 55.3137 48 52 48H49V55L41 48H24C20.6863 48 18 45.3137 18 42V26C18 22.6863 20.6863 20 24 20Z" fill="#0f172a" stroke="url(#navChatGoldGrad)" stroke-width="2.6" stroke-linejoin="round"/>
-                        <circle cx="38" cy="34" r="8.5" stroke="url(#navChatGoldGrad)" stroke-width="2.2"/>
-                        <circle cx="38" cy="34" r="4.2" stroke="url(#navChatGoldGrad)" stroke-width="1.8"/>
-                        <circle cx="38" cy="34" r="1.5" fill="#fde047"/>
-                    </svg>
-                </span>
             </span>
             <span id="nav-drinks-label">Schankbuch</span>
-            <span id="nav-drinks-chat-badge" aria-hidden="true"></span>
         </a>
 
         <a onclick="switchTab('weapons')" class="nav-item" id="nav-weapons">
@@ -6587,6 +6574,29 @@
                 </svg>
             </span>
             <span>Waffenbuch</span>
+        </a>
+
+        <a onclick="if (typeof openChatDrawer === 'function') openChatDrawer();" class="nav-item nav-chat-mode" id="nav-chat-btn" data-nav-mode="chat" style="display: none !important;">
+            <span class="nav-icon" id="nav-chat-btn-icon">
+                <span style="display: inline-flex; align-items: center; justify-content: center;">
+                    <svg width="24" height="24" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <defs>
+                            <linearGradient id="navChatGoldGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#fde047"/>
+                                <stop offset="50%" stop-color="#eab308"/>
+                                <stop offset="100%" stop-color="#b45309"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M12 10H38C41.3137 10 44 12.6863 44 16V30C44 33.3137 41.3137 36 38 36H22L14 43V36H12C8.68629 36 6 33.3137 6 30V16C6 12.6863 8.68629 10 12 10Z" fill="#881337" stroke="url(#navChatGoldGrad)" stroke-width="2.6" stroke-linejoin="round"/>
+                        <path d="M24 20H52C55.3137 20 58 22.6863 58 26V42C58 45.3137 55.3137 48 52 48H49V55L41 48H24C20.6863 48 18 45.3137 18 42V26C18 22.6863 20.6863 20 24 20Z" fill="#0f172a" stroke="url(#navChatGoldGrad)" stroke-width="2.6" stroke-linejoin="round"/>
+                        <circle cx="38" cy="34" r="8.5" stroke="url(#navChatGoldGrad)" stroke-width="2.2"/>
+                        <circle cx="38" cy="34" r="4.2" stroke="url(#navChatGoldGrad)" stroke-width="1.8"/>
+                        <circle cx="38" cy="34" r="1.5" fill="#fde047"/>
+                    </svg>
+                </span>
+            </span>
+            <span id="nav-chat-btn-label">Vereins-Chat</span>
+            <span id="nav-chat-btn-badge" aria-hidden="true"></span>
         </a>
 
         <a onclick="switchTab('card')" class="nav-item" id="nav-card">
@@ -6733,8 +6743,10 @@
 
         function switchTab(tabId) {
             if (tabId === 'drinks' && typeof hasCurrentMemberSchankbuchAccess === 'function' && !hasCurrentMemberSchankbuchAccess()) {
-                if (typeof openChatDrawer === 'function') openChatDrawer();
-                return;
+                tabId = 'news';
+            }
+            if (tabId === 'weapons' && typeof hasCurrentMemberWeaponAccess === 'function' && !hasCurrentMemberWeaponAccess()) {
+                tabId = 'news';
             }
             stopQrScanner();
             if (tabId !== 'weapons' && typeof weaponSessionUnlocked !== 'undefined' && weaponSessionUnlocked) {
@@ -6756,6 +6768,7 @@
             updateAppFooterVisibility(tabId);
             if (tabId === 'weapons') {
                 try { populateWeaponMemberSelects(); } catch(e) {}
+                try { collapseWeaponReserveList(); } catch(e) {}
             } else if (tabId === 'events') {
                 if (!officialActiveMembers || officialActiveMembers.length === 0) {
                     officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
@@ -6977,6 +6990,8 @@
 
             if (viewId === 'members') {
                 try { renderAdminMembersOverview(); } catch(e) {}
+            } else if (viewId === 'inventory') {
+                try { loadInventory(); } catch(e) {}
             } else if (viewId === 'chairman-theme') {
                 try { renderAdminThemeTiles(); } catch(e) {}
             } else if (viewId === 'chairman-comm') {
@@ -7239,53 +7254,120 @@
             if (typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn()) {
                 return true;
             }
-            const currentName = getCurrentMemberNameForAccess();
-            if (!currentName) return false;
-            if (Array.isArray(officialBarMembers)) {
-                return memberNameMatchesList(currentName, officialBarMembers);
+            const currentSelectedName = getCurrentMemberNameForAccess();
+            if (!currentSelectedName) return false;
+            const barMembers = Array.isArray(officialBarMembers) ? officialBarMembers : null;
+            if (Array.isArray(barMembers)) {
+                return barMembers.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, barMembers);
             }
             const activeList = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
                 ? officialActiveMembers
                 : DEFAULT_ACTIVE_MEMBERS;
-            return memberNameMatchesList(currentName, activeList);
+            return activeList.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, activeList);
+        }
+
+        function hasCurrentMemberWeaponAccess() {
+            if (typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn()) {
+                return true;
+            }
+            const currentSelectedName = getCurrentMemberNameForAccess();
+            if (!currentSelectedName) return false;
+            const weaponWardens = Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [];
+            return weaponWardens.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, weaponWardens);
         }
 
         function handleNavDrinksClick() {
             if (hasCurrentMemberSchankbuchAccess()) {
                 switchTab('drinks');
-            } else if (typeof openChatDrawer === 'function') {
-                openChatDrawer();
+            } else {
+                switchTab('news');
             }
         }
 
         function updateMemberNavigationMode() {
-            const hasSchankAccess = hasCurrentMemberSchankbuchAccess();
+            const currentSelectedName = getCurrentMemberNameForAccess();
+            const barMembers = Array.isArray(officialBarMembers) ? officialBarMembers : null;
+            const weaponWardens = Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [];
+
+            const hasBarAccess = (typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn())
+                ? true
+                : (Array.isArray(barMembers)
+                    ? (barMembers.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, barMembers))
+                    : hasCurrentMemberSchankbuchAccess());
+            const hasWeaponAccess = (typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn())
+                ? true
+                : (Array.isArray(weaponWardens) && (weaponWardens.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, weaponWardens)));
+
+            const navNewsEl = document.getElementById('nav-news');
+            const navEventsEl = document.getElementById('nav-events');
             const navDrinksEl = document.getElementById('nav-drinks');
-            const beerIconEl = document.getElementById('nav-drinks-svg-beer');
-            const chatIconEl = document.getElementById('nav-drinks-svg-chat');
-            const navLabelEl = document.getElementById('nav-drinks-label');
-            const navBadgeEl = document.getElementById('nav-drinks-chat-badge');
+            const navWeaponsEl = document.getElementById('nav-weapons');
+            const navChatBtnEl = document.getElementById('nav-chat-btn');
+            const navChatBadgeEl = document.getElementById('nav-chat-btn-badge');
+            const navCardEl = document.getElementById('nav-card');
             const homeChatCardEl = document.getElementById('news-open-chat-banner-btn') || document.getElementById('home-chat-card');
             const bannerBadgeEl = document.getElementById('news-chat-new-badge');
+
+            // Klare Flexbox-Reihenfolge der Basis-Tabs
+            if (navNewsEl) navNewsEl.style.order = '1';
+            if (navEventsEl) navEventsEl.style.order = '2';
+            if (navDrinksEl) navDrinksEl.style.order = '3';
+            if (navWeaponsEl) navWeaponsEl.style.order = '4';
+            if (navCardEl) navCardEl.style.order = '5';
 
             const unreadCount = (typeof isChatDrawerOpen !== 'undefined' && isChatDrawerOpen)
                 ? 0
                 : Math.max(0, Number(typeof currentClubChatUnreadCount !== 'undefined' ? currentClubChatUnreadCount : 0) || 0);
 
-            if (hasSchankAccess) {
-                if (navDrinksEl) {
-                    navDrinksEl.setAttribute('data-nav-mode', 'drinks');
-                    navDrinksEl.classList.remove('nav-chat-mode', 'nav-chat-bluelight', 'chat-card-bluelight');
+            // 1. Schankbuch-Tab unten (order: 3)
+            if (navDrinksEl) {
+                navDrinksEl.setAttribute('data-nav-mode', 'drinks');
+                navDrinksEl.classList.remove('nav-chat-mode', 'nav-chat-bluelight', 'chat-card-bluelight');
+                if (hasBarAccess) {
+                    navDrinksEl.style.setProperty('display', 'flex', 'important');
+                    navDrinksEl.style.order = '3';
+                } else {
+                    navDrinksEl.style.setProperty('display', 'none', 'important');
+                    navDrinksEl.classList.remove('active');
                 }
-                if (beerIconEl) beerIconEl.style.display = 'inline-flex';
-                if (chatIconEl) chatIconEl.style.display = 'none';
-                if (navLabelEl) navLabelEl.textContent = 'Schankbuch';
-                if (navBadgeEl) {
-                    navBadgeEl.textContent = '';
-                    navBadgeEl.style.display = 'none';
+            }
+            if (!hasBarAccess) {
+                const drinksPageEl = document.getElementById('page-drinks');
+                if (drinksPageEl && drinksPageEl.classList.contains('active')) {
+                    try { switchTab('news'); } catch (e) {}
+                }
+            }
+
+            // 2. Waffenbuch-Tab unten (order: 4)
+            if (navWeaponsEl) {
+                if (hasWeaponAccess) {
+                    navWeaponsEl.style.setProperty('display', 'flex', 'important');
+                    navWeaponsEl.style.order = '4';
+                } else {
+                    navWeaponsEl.style.setProperty('display', 'none', 'important');
+                    navWeaponsEl.classList.remove('active');
+                }
+            }
+            if (!hasWeaponAccess) {
+                const weaponsPageEl = document.getElementById('page-weapons');
+                if (weaponsPageEl && weaponsPageEl.classList.contains('active')) {
+                    try { switchTab('news'); } catch (e) {}
+                }
+            }
+
+            // 3. Exakte Positions-Übernahme für den Vereins-Chat in allen 4 Fällen
+            if (hasBarAccess && hasWeaponAccess) {
+                // Fall 1: BEIDE aktiv -> Chat unten ausgeblendet, oben auf News-Seite sichtbar
+                if (navChatBtnEl) {
+                    navChatBtnEl.style.setProperty('display', 'none', 'important');
+                    navChatBtnEl.classList.remove('nav-chat-bluelight', 'active');
+                }
+                if (navChatBadgeEl) {
+                    navChatBadgeEl.textContent = '';
+                    navChatBadgeEl.style.display = 'none';
                 }
                 if (homeChatCardEl) {
-                    homeChatCardEl.style.display = 'flex';
+                    homeChatCardEl.style.setProperty('display', 'flex', 'important');
                     homeChatCardEl.classList.toggle('chat-card-bluelight', unreadCount > 0);
                 }
                 if (bannerBadgeEl) {
@@ -7297,34 +7379,38 @@
                     }
                 }
             } else {
-                if (navDrinksEl) {
-                    navDrinksEl.setAttribute('data-nav-mode', 'chat');
-                    navDrinksEl.classList.add('nav-chat-mode');
-                    navDrinksEl.classList.remove('active');
-                    navDrinksEl.classList.toggle('nav-chat-bluelight', unreadCount > 0);
+                // Fall 2 (!hasBarAccess && hasWeaponAccess) -> order: 3 (Platz des Schankbuchs, direkt vor Waffenbuch)
+                // Fall 3 (hasBarAccess && !hasWeaponAccess) -> order: 4 (Platz des Waffenbuchs, direkt nach Schankbuch)
+                // Fall 4 (!hasBarAccess && !hasWeaponAccess) -> order: 3 (direkt neben News & Termine)
+                const chatOrder = (hasBarAccess && !hasWeaponAccess) ? '4' : '3';
+                if (navChatBtnEl) {
+                    navChatBtnEl.style.order = chatOrder;
+                    navChatBtnEl.style.setProperty('display', 'flex', 'important');
+                    navChatBtnEl.classList.toggle('nav-chat-bluelight', unreadCount > 0);
                 }
-                if (beerIconEl) beerIconEl.style.display = 'none';
-                if (chatIconEl) chatIconEl.style.display = 'inline-flex';
-                if (navLabelEl) navLabelEl.textContent = 'Vereins-Chat';
-                if (navBadgeEl) {
+                if (navChatBadgeEl) {
                     if (unreadCount > 0) {
-                        navBadgeEl.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
-                        navBadgeEl.style.display = 'inline-flex';
+                        navChatBadgeEl.textContent = unreadCount > 99 ? '99+' : String(unreadCount);
+                        navChatBadgeEl.style.display = 'inline-flex';
                     } else {
-                        navBadgeEl.textContent = '';
-                        navBadgeEl.style.display = 'none';
+                        navChatBadgeEl.textContent = '';
+                        navChatBadgeEl.style.display = 'none';
                     }
                 }
                 if (homeChatCardEl) {
-                    homeChatCardEl.style.display = 'none';
+                    homeChatCardEl.style.setProperty('display', 'none', 'important');
                     homeChatCardEl.classList.remove('chat-card-bluelight');
                 }
-                const drinksPageEl = document.getElementById('page-drinks');
-                if (drinksPageEl && drinksPageEl.classList.contains('active')) {
-                    try { switchTab('news'); } catch (e) {}
-                }
             }
+
             try { updateAdminTabVisibility(); } catch (e) {}
+
+            // 4. Startseiten-Fußzeile in allen 4 Kombinationen sauber sichtbar halten
+            try {
+                const activePageEl = document.querySelector('.page-content.active');
+                const activeTabId = activePageEl ? String(activePageEl.id || '').replace(/^page-/, '') : 'news';
+                updateAppFooterVisibility(activeTabId || 'news');
+            } catch (e) {}
         }
 
         function updateAdminTabVisibility() {
@@ -7679,7 +7765,13 @@
                         kaliber: d.kaliber || '',
                         kat: d.kat || 'C',
                         zuweisung: d.zuweisung || 'Reserve',
-                        nummer: d.nummer || ''
+                        nummer: d.nummer || '',
+                        name: d.name || '',
+                        owner: d.owner || '',
+                        assignedTo: d.assignedTo || '',
+                        holder: d.holder || '',
+                        label: d.label || '',
+                        status: d.status || ''
                     });
                 });
                 officialWeaponList = sortWeaponsList(list);
@@ -7689,6 +7781,78 @@
             populateWeaponCheckboxes();
         }
 
+        function isReserveWeaponItem(w) {
+            if (!w || typeof w !== 'object') return true;
+            const ownerCandidates = [
+                w.zuweisung,
+                w.assignedTo,
+                w.owner,
+                w.holder
+            ].map(v => String(v || '').trim()).filter(Boolean);
+            const allCheckedFields = [
+                w.zuweisung,
+                w.name,
+                w.owner,
+                w.assignedTo,
+                w.holder,
+                w.label,
+                w.status
+            ].map(v => String(v || '').trim()).filter(Boolean);
+
+            if (allCheckedFields.some(val => /reserve/i.test(val))) {
+                return true;
+            }
+            const primaryOwner = ownerCandidates[0] || '';
+            if (!primaryOwner || /^[-–—]+$/.test(primaryOwner) || /^(keine?r?|unbekannt|frei|lager|offen)$/i.test(primaryOwner)) {
+                return true;
+            }
+            return false;
+        }
+
+        function collapseWeaponReserveList() {
+            const reserveContainer = document.getElementById('weapon-reserve-container');
+            const toggleBtn = document.getElementById('weapon-reserve-toggle-btn');
+            if (reserveContainer) {
+                reserveContainer.style.display = 'none';
+            }
+            if (toggleBtn) {
+                const count = toggleBtn.getAttribute('data-reserve-count') || '0';
+                toggleBtn.textContent = `📦 Reserve-Waffen einblenden (${count})`;
+                toggleBtn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        function toggleWeaponReserveList() {
+            const reserveContainer = document.getElementById('weapon-reserve-container');
+            const toggleBtn = document.getElementById('weapon-reserve-toggle-btn');
+            if (!reserveContainer || !toggleBtn) return;
+            const isHidden = reserveContainer.style.display === 'none' || reserveContainer.style.display === '';
+            if (isHidden) {
+                reserveContainer.style.display = 'flex';
+                toggleBtn.textContent = '🔼 Reserve-Waffen wieder ausblenden';
+                toggleBtn.setAttribute('aria-expanded', 'true');
+            } else {
+                collapseWeaponReserveList();
+            }
+        }
+
+        function renderWeaponCheckboxItemHtml(w, isReserve) {
+            let maskedNum = maskWeaponNumber(w.nummer);
+            let maskedZvr = maskZvrNumber("624291509");
+            let zuwText = String(w.zuweisung || w.assignedTo || w.owner || w.holder || 'Reserve').trim() || 'Reserve';
+            let zuwBadge = isReserve
+                ? `<span style="display:inline-block; background:#fef3c7; color:#92400e; border:1px solid #f59e0b; padding:1px 6px; border-radius:6px; font-weight:800; font-size:0.82em;">${escapeHtml(zuwText.toUpperCase())}</span>`
+                : `<span style="display:inline-block; background:#e0f2fe; color:#075985; border:1px solid #7dd3fc; padding:1px 6px; border-radius:6px; font-weight:800; font-size:0.82em;">👤 ${escapeHtml(zuwText)}</span>`;
+            let labelText = `${escapeHtml(w.hersteller)} ${escapeHtml(w.modell)} (${escapeHtml(w.kaliber)}) – ZWR: ${escapeHtml(maskedNum)} | ZVR: ${escapeHtml(maskedZvr)} ${zuwBadge}`;
+            let weaponInternalId = String(w.id || w.docId || '').trim();
+            return `
+                <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer; flex-wrap: wrap;">
+                    <input type="checkbox" name="weapons" value="${escapeHtml(weaponInternalId)}" style="width: 18px; height: 18px; accent-color: #b91c1c; flex-shrink: 0;"> 
+                    <span><strong>${escapeHtml(w.art)}</strong>: ${labelText}</span>
+                </label>
+            `;
+        }
+
         function populateWeaponCheckboxes() {
             const container = document.getElementById('weapon-checkboxes-container');
             if (!container) return;
@@ -7696,24 +7860,38 @@
                 container.innerHTML = '<p style="font-size:0.85em; color:var(--text-muted);">Keine Waffen aus Firestore geladen.</p>';
                 return;
             }
-            let html = "";
+            const activeWeapons = [];
+            const reserveWeapons = [];
             officialWeaponList.forEach(w => {
-                let maskedNum = maskWeaponNumber(w.nummer);
-                let maskedZvr = maskZvrNumber("624291509");
-                let zuwText = String(w.zuweisung || 'Reserve').trim();
-                let isReserve = /^reserve/i.test(zuwText);
-                let zuwBadge = isReserve
-                    ? `<span style="display:inline-block; background:#fef3c7; color:#92400e; border:1px solid #f59e0b; padding:1px 6px; border-radius:6px; font-weight:800; font-size:0.82em;">${escapeHtml(zuwText.toUpperCase())}</span>`
-                    : `<span style="display:inline-block; background:#e0f2fe; color:#075985; border:1px solid #7dd3fc; padding:1px 6px; border-radius:6px; font-weight:800; font-size:0.82em;">👤 ${escapeHtml(zuwText)}</span>`;
-                let labelText = `${escapeHtml(w.hersteller)} ${escapeHtml(w.modell)} (${escapeHtml(w.kaliber)}) – ZWR: ${escapeHtml(maskedNum)} | ZVR: ${escapeHtml(maskedZvr)} ${zuwBadge}`;
-                let weaponInternalId = String(w.id || w.docId || '').trim();
-                html += `
-                    <label style="font-weight: normal; font-size: 0.9em; display: flex; align-items: center; gap: 8px; cursor: pointer; flex-wrap: wrap;">
-                        <input type="checkbox" name="weapons" value="${escapeHtml(weaponInternalId)}" style="width: 18px; height: 18px; accent-color: #b91c1c; flex-shrink: 0;"> 
-                        <span><strong>${escapeHtml(w.art)}</strong>: ${labelText}</span>
-                    </label>
-                `;
+                if (isReserveWeaponItem(w)) {
+                    reserveWeapons.push(w);
+                } else {
+                    activeWeapons.push(w);
+                }
             });
+
+            let html = "";
+            if (activeWeapons.length > 0) {
+                activeWeapons.forEach(w => {
+                    html += renderWeaponCheckboxItemHtml(w, false);
+                });
+            } else {
+                html += '<p style="font-size:0.84em; color:var(--text-muted); margin:0;">Keine aktiv zugewiesenen Waffen vorhanden.</p>';
+            }
+
+            if (reserveWeapons.length > 0) {
+                let reserveHtml = "";
+                reserveWeapons.forEach(w => {
+                    reserveHtml += renderWeaponCheckboxItemHtml(w, true);
+                });
+                html += `
+                    <button type="button" id="weapon-reserve-toggle-btn" data-reserve-count="${reserveWeapons.length}" aria-expanded="false" onclick="toggleWeaponReserveList()" style="width: 100%; margin-top: 10px; padding: 10px 14px; border-radius: 12px; background: #f8fafc; border: 1.5px dashed #94a3b8; color: #334155; font-weight: 700; font-size: 0.86rem; cursor: pointer;">📦 Reserve-Waffen einblenden (${reserveWeapons.length})</button>
+                    <div id="weapon-reserve-container" style="display: none; flex-direction: column; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #cbd5e1;">
+                        ${reserveHtml}
+                    </div>
+                `;
+            }
+
             container.innerHTML = html;
         }
 
@@ -7877,7 +8055,23 @@
             try {
                 const doc = await db.collection("settings").doc("inventory").get();
                 if (doc.exists) {
-                    inventoryData = doc.data() || inventoryData;
+                    const loaded = doc.data() || {};
+                    inventoryData = {
+                        ...inventoryData,
+                        ...loaded,
+                        hauswuerste: (loaded.hauswuerste !== undefined && loaded.hauswuerste !== null && !isNaN(Number(loaded.hauswuerste)))
+                            ? Math.max(0, Number(loaded.hauswuerste))
+                            : Math.max(0, Number(inventoryData && inventoryData.hauswuerste) || 0),
+                        wienerle: (loaded.wienerle !== undefined && loaded.wienerle !== null && !isNaN(Number(loaded.wienerle)))
+                            ? Math.max(0, Number(loaded.wienerle))
+                            : Math.max(0, Number(inventoryData && inventoryData.wienerle) || 0),
+                        bier: (loaded.bier !== undefined && loaded.bier !== null && !isNaN(Number(loaded.bier)))
+                            ? Math.max(0, Number(loaded.bier))
+                            : Math.max(0, Number(inventoryData && inventoryData.bier) || 0),
+                        limo: (loaded.limo !== undefined && loaded.limo !== null && !isNaN(Number(loaded.limo)))
+                            ? Math.max(0, Number(loaded.limo))
+                            : Math.max(0, Number(inventoryData && inventoryData.limo) || 0)
+                    };
                     const loadedDate = parseInventoryUpdatedAtDate(inventoryData.updatedAt);
                     if (loadedDate) {
                         lastInventoryChangeTime = formatInventoryDateTime(loadedDate) + " Uhr";
@@ -7888,6 +8082,25 @@
                 syncInventoryDraftFromSaved();
                 renderInventoryDisplay();
             } catch(e) {}
+        }
+
+        function formatInventoryInputValue(val) {
+            const num = Math.max(0, Math.round((Number(val) || 0) * 100) / 100);
+            return String(num);
+        }
+
+        function updateInventorySaveButtonState() {
+            inventoryHasUnsavedChanges = Object.keys(INVENTORY_ITEM_META).some(k => {
+                const savedVal = Math.max(0, Math.round((Number(inventoryData && inventoryData[k]) || 0) * 100) / 100);
+                const curVal = Math.max(0, Math.round((Number(inventoryDraftData && inventoryDraftData[k]) || 0) * 100) / 100);
+                return Math.abs(curVal - savedVal) > 0.0001;
+            });
+            const saveBtn = document.getElementById('admin-inventory-save-btn');
+            if (saveBtn && !inventorySavingInFlight) {
+                saveBtn.textContent = inventoryHasUnsavedChanges
+                    ? '💾 Lagerbestand speichern (Änderungen offen)'
+                    : '💾 Lagerbestand speichern';
+            }
         }
 
         function renderInventoryDisplay() {
@@ -7908,32 +8121,21 @@
 
             let html = "";
             items.forEach(item => {
-                const savedVal = Math.max(0, Math.round((Number(inventoryData && inventoryData[item.key]) || 0) * 100) / 100);
                 const draftVal = Math.max(0, Math.round((Number(inventoryDraftData && inventoryDraftData[item.key]) || 0) * 100) / 100);
-                const changed = Math.abs(draftVal - savedVal) > 0.0001;
-                const displayVal = formatInventoryQtyDisplay(draftVal);
+                const inputVal = formatInventoryInputValue(draftVal);
                 html += `
-                    <div class="inv-item-card${changed ? ' has-change' : ''}" data-inv-key="${item.key}">
-                        <div class="inv-item-left">
-                            <div class="inv-item-name">${escapeHtml(item.label)}</div>
-                            <div class="inv-item-qty" id="inv-val-${item.key}">${escapeHtml(displayVal)} ${escapeHtml(item.unit)}</div>
-                        </div>
-                        <div class="inv-item-controls">
-                            <button type="button" class="inv-touch-btn minus" onclick="adjustInventoryDraft('${item.key}', -1)" aria-label="${escapeHtml(item.label)} um 1 verringern">− 1</button>
-                            <button type="button" class="inv-touch-btn plus" onclick="adjustInventoryDraft('${item.key}', 1)" aria-label="${escapeHtml(item.label)} um 1 erhöhen">+ 1</button>
-                            <button type="button" class="inv-touch-btn plus5" onclick="adjustInventoryDraft('${item.key}', 5)" aria-label="${escapeHtml(item.label)} um 5 erhöhen">+ 5</button>
+                    <div data-inv-key="${item.key}" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 10px 14px; margin-bottom: 8px;">
+                        <div style="font-weight: 800; font-size: 0.96rem; color: #0f172a; min-width: 0; flex: 1;">${escapeHtml(item.label)}</div>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+                            <button type="button" onclick="adjustInventoryDraft('${item.key}', -1)" aria-label="${escapeHtml(item.label)} um 1 verringern" style="width: 44px; height: 44px; border-radius: 12px; background: #fee2e2; color: #b91c1c; font-size: 1.3rem; font-weight: 900; border: 1.5px solid #fca5a5; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; line-height: 1; flex-shrink: 0;">−</button>
+                            <input type="number" min="0" step="any" id="inv-input-${item.key}" value="${escapeHtml(inputVal)}" oninput="handleInventoryNumberInput('${item.key}', this.value, false)" onchange="handleInventoryNumberInput('${item.key}', this.value, true)" aria-label="${escapeHtml(item.label)} Bestand" style="width: 68px; height: 44px; text-align: center; font-size: 1.1rem; font-weight: 800; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #ffffff; color: #0f172a; padding: 0 4px; box-sizing: border-box;">
+                            <button type="button" onclick="adjustInventoryDraft('${item.key}', 1)" aria-label="${escapeHtml(item.label)} um 1 erhöhen" style="width: 44px; height: 44px; border-radius: 12px; background: #dcfce7; color: #15803d; font-size: 1.3rem; font-weight: 900; border: 1.5px solid #86efac; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; line-height: 1; flex-shrink: 0;">+</button>
                         </div>
                     </div>
                 `;
             });
             container.innerHTML = html;
-
-            const saveBtn = document.getElementById('admin-inventory-save-btn');
-            if (saveBtn && !inventorySavingInFlight) {
-                saveBtn.textContent = inventoryHasUnsavedChanges
-                    ? '💾 Lagerbestand speichern (Änderungen offen)'
-                    : '💾 Lagerbestand speichern';
-            }
+            updateInventorySaveButtonState();
         }
 
         const INVENTORY_ITEM_META = {
@@ -7943,20 +8145,49 @@
             limo: { label: 'Limo', unit: 'Kisten' }
         };
 
+        function handleInventoryNumberInput(key, rawValue, normalizeField) {
+            if (!auth.currentUser) return;
+            if (!INVENTORY_ITEM_META[key]) return;
+            if (!inventoryDraftData) syncInventoryDraftFromSaved();
+            const trimmed = String(rawValue === undefined || rawValue === null ? '' : rawValue).trim().replace(',', '.');
+            if (trimmed === '' && !normalizeField) {
+                setInventorySaveFeedback('', false);
+                return;
+            }
+            const parsed = Number(trimmed);
+            const nextVal = (!isNaN(parsed) && isFinite(parsed))
+                ? Math.max(0, Math.round(parsed * 100) / 100)
+                : 0;
+            inventoryDraftData[key] = nextVal;
+            if (normalizeField) {
+                const inputEl = document.getElementById('inv-input-' + key);
+                if (inputEl) inputEl.value = formatInventoryInputValue(nextVal);
+            }
+            setInventorySaveFeedback('', false);
+            updateInventorySaveButtonState();
+        }
+
         function adjustInventoryDraft(key, delta) {
             if (!auth.currentUser) return;
             if (!INVENTORY_ITEM_META[key]) return;
             if (!inventoryDraftData) syncInventoryDraftFromSaved();
-            const currentVal = Number(inventoryDraftData[key]) || 0;
+            const inputEl = document.getElementById('inv-input-' + key);
+            let currentVal = Number(inventoryDraftData[key]) || 0;
+            if (inputEl && String(inputEl.value).trim() !== '') {
+                const parsedDom = Number(String(inputEl.value).trim().replace(',', '.'));
+                if (!isNaN(parsedDom) && isFinite(parsedDom)) {
+                    currentVal = Math.max(0, parsedDom);
+                }
+            }
             const nextVal = Math.max(0, Math.round((currentVal + Number(delta || 0)) * 100) / 100);
             inventoryDraftData[key] = nextVal;
-            inventoryHasUnsavedChanges = Object.keys(INVENTORY_ITEM_META).some(k => {
-                const savedVal = Math.max(0, Math.round((Number(inventoryData && inventoryData[k]) || 0) * 100) / 100);
-                const curVal = Math.max(0, Math.round((Number(inventoryDraftData[k]) || 0) * 100) / 100);
-                return Math.abs(curVal - savedVal) > 0.0001;
-            });
+            if (inputEl) {
+                inputEl.value = formatInventoryInputValue(nextVal);
+            } else {
+                renderInventoryDisplay();
+            }
             setInventorySaveFeedback('', false);
-            renderInventoryDisplay();
+            updateInventorySaveButtonState();
         }
 
         function updateInventoryQty(key, delta) {
@@ -7966,6 +8197,19 @@
         async function saveInventoryChanges() {
             if (!auth.currentUser || inventorySavingInFlight) return;
             if (!inventoryDraftData) syncInventoryDraftFromSaved();
+
+            Object.keys(INVENTORY_ITEM_META).forEach(k => {
+                const inputEl = document.getElementById('inv-input-' + k);
+                if (inputEl) {
+                    const raw = String(inputEl.value || '').trim().replace(',', '.');
+                    const parsed = raw === '' ? 0 : Number(raw);
+                    const cleanVal = (!isNaN(parsed) && isFinite(parsed))
+                        ? Math.max(0, Math.round(parsed * 100) / 100)
+                        : Math.max(0, Number(inventoryDraftData[k]) || 0);
+                    inventoryDraftData[k] = cleanVal;
+                    inputEl.value = formatInventoryInputValue(cleanVal);
+                }
+            });
 
             inventorySavingInFlight = true;
             const saveBtn = document.getElementById('admin-inventory-save-btn');
@@ -11204,11 +11448,46 @@
         let html5QrCode = null;
         let currentScanMode = 'issue';
         let pendingReturnRecordId = null;
+        let pendingReturnSaveAfterScan = null;
         let isProcessingScan = false;
+        let isSavingWeaponReturn = false;
         let weaponSessionUnlocked = false;
-        const WEAPON_AUTO_LOCK_TIMEOUT_MS = 120000;
+        const WEAPON_AUTO_LOCK_TIMEOUT_MS = 5 * 60 * 1000;
+        let weaponVaultUnlockedUntil = 0;
+        let weaponVaultScanToken = '';
         let weaponAutoLockTimer = null;
         window.__weaponBookLockedAfterReturn = false;
+
+        function isWeaponVaultUnlocked() {
+            const valid = Boolean(
+                weaponSessionUnlocked &&
+                weaponVaultScanToken &&
+                weaponVaultUnlockedUntil > 0 &&
+                Date.now() < weaponVaultUnlockedUntil
+            );
+            if (!valid && (weaponSessionUnlocked || weaponVaultUnlockedUntil > 0 || weaponVaultScanToken)) {
+                weaponSessionUnlocked = false;
+                weaponVaultUnlockedUntil = 0;
+                weaponVaultScanToken = '';
+            }
+            return valid;
+        }
+
+        function grantWeaponVaultUnlock() {
+            weaponVaultUnlockedUntil = Date.now() + WEAPON_AUTO_LOCK_TIMEOUT_MS;
+            weaponVaultScanToken = 'TRESOR-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+            weaponSessionUnlocked = true;
+            resetWeaponAutoLockTimer();
+            return weaponVaultScanToken;
+        }
+
+        function revokeWeaponVaultUnlock() {
+            clearWeaponAutoLockTimer();
+            weaponSessionUnlocked = false;
+            weaponVaultUnlockedUntil = 0;
+            weaponVaultScanToken = '';
+            pendingReturnSaveAfterScan = null;
+        }
 
         function clearWeaponAutoLockTimer() {
             if (weaponAutoLockTimer) {
@@ -11235,16 +11514,22 @@
 
         function handleWeaponInactivityTimeout() {
             weaponAutoLockTimer = null;
-            if (!weaponSessionUnlocked) return;
+            if (!weaponSessionUnlocked && weaponVaultUnlockedUntil <= 0) return;
+            if (isSavingWeaponReturn) {
+                weaponVaultUnlockedUntil = Date.now() + WEAPON_AUTO_LOCK_TIMEOUT_MS;
+                resetWeaponAutoLockTimer();
+                return;
+            }
             resetWeaponScanState();
             lockWeaponFormUI();
-            showWeaponTimeoutNotice('🔒 Zeitüberschreitung (2 Minuten Inaktivität): Das Waffenbuch wurde aus Sicherheitsgründen wieder gesperrt und zurückgesetzt.');
+            showWeaponTimeoutNotice('🔒 Zeitüberschreitung (5 Minuten Inaktivität): Das Waffenbuch wurde aus Sicherheitsgründen wieder gesperrt und zurückgesetzt.');
         }
 
         function resetWeaponAutoLockTimer() {
             clearWeaponAutoLockTimer();
-            if (!weaponSessionUnlocked) return;
-            weaponAutoLockTimer = setTimeout(handleWeaponInactivityTimeout, WEAPON_AUTO_LOCK_TIMEOUT_MS);
+            if (!weaponSessionUnlocked || !weaponVaultScanToken) return;
+            const remainingMs = Math.max(1000, weaponVaultUnlockedUntil - Date.now());
+            weaponAutoLockTimer = setTimeout(handleWeaponInactivityTimeout, remainingMs);
         }
 
         function bindWeaponFormActivityListeners() {
@@ -11253,7 +11538,8 @@
                 if (!issueForm || issueForm.dataset.autoLockBound === '1') return;
                 issueForm.dataset.autoLockBound = '1';
                 const onFormActivity = () => {
-                    if (weaponSessionUnlocked) {
+                    if (isWeaponVaultUnlocked()) {
+                        weaponVaultUnlockedUntil = Date.now() + WEAPON_AUTO_LOCK_TIMEOUT_MS;
                         resetWeaponAutoLockTimer();
                     }
                 };
@@ -11266,12 +11552,12 @@
         function resetWeaponScanState() {
             currentScanMode = 'issue';
             pendingReturnRecordId = null;
+            pendingReturnSaveAfterScan = null;
             isProcessingScan = false;
         }
 
         function lockWeaponFormUI() {
-            clearWeaponAutoLockTimer();
-            weaponSessionUnlocked = false;
+            revokeWeaponVaultUnlock();
             try {
                 const formCard = document.getElementById('weapon-form-card');
                 if (formCard) {
@@ -11309,12 +11595,13 @@
                 document.querySelectorAll('input[name="weapons"]').forEach(cb => {
                     cb.checked = false;
                 });
+                try { collapseWeaponReserveList(); } catch(e) {}
             } catch(e) {}
         }
 
         function lockWeaponBookAfterReturn() {
             resetWeaponScanState();
-            weaponSessionUnlocked = false;
+            revokeWeaponVaultUnlock();
             window.__weaponBookLockedAfterReturn = true;
             try { sessionStorage.setItem('kbsv_weapon_return_locked', '1'); } catch(e) {}
 
@@ -11393,7 +11680,7 @@
                 if (typeof stopQrScanner === 'function') {
                     try { stopQrScanner(); } catch(e) {}
                 }
-                if (weaponSessionUnlocked) {
+                if (!isSavingWeaponReturn && weaponSessionUnlocked) {
                     resetWeaponScanState();
                     lockWeaponFormUI();
                 }
@@ -11463,11 +11750,16 @@
         async function startQrScanner(mode, recordId = null) {
             currentScanMode = mode;
             pendingReturnRecordId = recordId;
+            pendingReturnSaveAfterScan = (mode === 'return' && recordId) ? recordId : null;
             isProcessingScan = false;
             clearScannerError();
 
+            const scannerCard = document.getElementById('scanner-card-issue');
             const readerDiv = document.getElementById('reader');
             const stopBtn = document.getElementById('stop-scanner-btn');
+            if (scannerCard && typeof scannerCard.scrollIntoView === 'function' && mode === 'return') {
+                try { scannerCard.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
+            }
             if (readerDiv) {
                 readerDiv.style.display = 'block';
                 readerDiv.style.minHeight = '260px';
@@ -11548,7 +11840,8 @@
 
                 isProcessingScan = true;
                 const scanMode = currentScanMode;
-                const returnId = pendingReturnRecordId;
+                const returnId = pendingReturnSaveAfterScan || pendingReturnRecordId;
+                grantWeaponVaultUnlock();
                 const primarySelect = document.getElementById('weapon-member-primary');
                 const aktuellerName = getSavedClubMemberName()
                     || (primarySelect && String(primarySelect.value || '').trim())
@@ -11601,7 +11894,12 @@
             try {
                 hideWeaponTimeoutNotice();
                 bindWeaponFormActivityListeners();
-                weaponSessionUnlocked = true;
+                if (!isWeaponVaultUnlocked()) {
+                    grantWeaponVaultUnlock();
+                } else {
+                    weaponVaultUnlockedUntil = Date.now() + WEAPON_AUTO_LOCK_TIMEOUT_MS;
+                    resetWeaponAutoLockTimer();
+                }
                 const formCard = document.getElementById('weapon-form-card');
                 const issueForm = document.getElementById('weapon-issue-form');
                 const lockOverlay = document.getElementById('weapon-lock-overlay');
@@ -12033,7 +12331,7 @@
 
         async function saveWeaponIssue(e) {
             e.preventDefault();
-            if (!weaponSessionUnlocked) { alert('Bitte zuerst QR-Code scannen!'); return; }
+            if (!isWeaponVaultUnlocked()) { alert('Bitte zuerst QR-Code scannen!'); return; }
             try {
                 const primaryEl = document.getElementById('weapon-member-primary');
                 const secondaryEl = document.getElementById('weapon-member-secondary');
@@ -12123,12 +12421,23 @@
         }
 
         function promptReturnWeapon(recordId) {
-            if (confirm("Für die Rückgabe muss der QR-Code direkt am Waffentresor gescannt werden. Jetzt Scanner starten?")) {
-                startQrScanner('return', recordId);
+            if (!recordId || isSavingWeaponReturn) return;
+            if (isWeaponVaultUnlocked()) {
+                executeReturnProcess(recordId);
+                return;
             }
+            pendingReturnSaveAfterScan = recordId;
+            startQrScanner('return', recordId);
         }
 
         async function executeReturnProcess(recordId) {
+            if (!recordId || isSavingWeaponReturn) return;
+            if (!isWeaponVaultUnlocked()) {
+                pendingReturnSaveAfterScan = recordId;
+                startQrScanner('return', recordId);
+                return;
+            }
+            isSavingWeaponReturn = true;
             try {
                 const now = new Date();
                 const dateStr = now.toLocaleDateString('de-AT');
@@ -12138,6 +12447,7 @@
                 const docRef = db.collection("weapon_log").doc(recordId);
                 const doc = await docRef.get();
                 if (!doc.exists) {
+                    isSavingWeaponReturn = false;
                     resetWeaponScanState();
                     return;
                 }
@@ -12166,10 +12476,12 @@
                     `${uebernehmer} hat die entnommenen Salutwaffen wieder im Tresor verschlossen.`
                 );
 
+                isSavingWeaponReturn = false;
                 lockWeaponBookAfterReturn();
                 loadAdminWeaponPDFs();
                 alert("Tresor-Scan erfolgreich! Rückgabe protokolliert und im Admin-Bereich gespeichert.");
             } catch (err) {
+                isSavingWeaponReturn = false;
                 resetWeaponScanState();
                 alert("Fehler bei Rückgabe: " + err.message);
             }
