@@ -4249,7 +4249,7 @@
         </div>
 
         <div style="padding: 16px 0 8px 0; text-align: center; position: relative; z-index: 5; pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-            <button type="button" id="lockscreen-admin-login-link" onclick="openAdminDirectLogin()" style="display: inline-block; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(234, 179, 8, 0.45); border-radius: 999px; color: #f8fafc; font-size: 0.8rem; font-weight: 700; text-decoration: none; cursor: pointer; font-family: inherit; padding: 7px 16px; position: relative; z-index: 6; pointer-events: auto;">
+            <button type="button" id="lockscreen-admin-login-link" onclick="openAdminDirectLogin()" style="display: none !important; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(234, 179, 8, 0.45); border-radius: 999px; color: #f8fafc; font-size: 0.8rem; font-weight: 700; text-decoration: none; cursor: pointer; font-family: inherit; padding: 7px 16px; position: relative; z-index: 6; pointer-events: auto;">
                 Direkt zum Admin-Login
             </button>
             <div class="lock-screen-footer-pill">
@@ -5953,8 +5953,8 @@
                 <button type="button" id="member-name-setup-save-btn" onclick="saveMemberNameSetup()" class="btn btn-green" style="flex:1; padding:12px;">✅ Bestätigen</button>
                 <button type="button" id="member-name-setup-cancel-btn" onclick="closeMemberNameSetupModal()" class="btn" style="display:none; flex:1; padding:12px; background:#e2e8f0; color:#1e293b;">Abbrechen</button>
             </div>
-            <div id="name-modal-admin-login-link" style="display: none !important; margin-top:14px; padding-top:12px; border-top:1px solid #e2e8f0; text-align:center;">
-                <a href="#" id="member-setup-admin-login-link" onclick="event.preventDefault(); openAdminLoginFromMemberSetup();" style="font-size:0.8em; font-weight:700; color:#b91c1c; text-decoration:underline;">Vorstand / Admin? Direkt zum Admin-Login →</a>
+            <div id="name-modal-admin-login-link" style="display: block; text-align: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
+                <a href="#" id="member-setup-admin-login-link" onclick="event.preventDefault(); openAdminLoginFromMemberSetup();" style="display: block; text-align: center; font-size: 0.85rem; font-weight: 700; color: #475569; text-decoration: underline; cursor: pointer;">🔐 Vorstand / Admin: Direkt zum Admin-Login</a>
             </div>
         </div>
     </div>
@@ -7417,7 +7417,7 @@
         function updateLockscreenAdminLinkVisibility() {
             const linkEl = document.getElementById('lockscreen-admin-login-link');
             if (!linkEl) return;
-            linkEl.style.display = 'inline-block';
+            linkEl.style.setProperty('display', 'none', 'important');
         }
 
         let lockscreenCrestSecretTapCount = 0;
@@ -7632,7 +7632,7 @@
             }
             const adminLinkWrap = document.getElementById('name-modal-admin-login-link');
             if (adminLinkWrap) {
-                adminLinkWrap.style.setProperty('display', 'none', 'important');
+                adminLinkWrap.style.setProperty('display', 'block', 'important');
             }
             if (modal) {
                 modal.style.setProperty('display', 'flex', 'important');
