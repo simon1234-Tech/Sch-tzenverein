@@ -2308,16 +2308,44 @@
             color: #475569;
             font-weight: 600;
         }
-        #chat-messages-list {
+        .chat-messages-watermark-stage {
             flex: 1;
+            min-height: 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background: #efeae2;
+            overflow: hidden;
+        }
+        .chat-bg-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 210px;
+            height: 210px;
+            object-fit: contain;
+            opacity: 0.04;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+            z-index: 0;
+        }
+        #chat-messages-list {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            min-height: 0;
             overflow-y: auto;
             padding: 12px 14px;
             display: flex;
             flex-direction: column;
             gap: 9px;
-            background: #efeae2;
+            background: transparent;
         }
         .chat-msg-bubble {
+            position: relative;
+            z-index: 1;
             max-width: 85%;
             width: fit-content;
             min-width: 150px;
@@ -5718,99 +5746,124 @@
 
     <!-- MODAL FÜR MITGLIEDER-KURZANLEITUNG -->
     <div id="member-help-modal" style="display: none; pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.68); z-index: 999999; justify-content: center; align-items: center; padding: 14px; backdrop-filter: blur(5px);" onclick="if (event.target === this) closeMemberHelpModal()">
-        <div style="background: rgba(255, 255, 255, 0.98); width: 100%; max-width: 520px; border-radius: 20px; overflow: hidden; color: #1e293b; box-shadow: 0 25px 45px rgba(0, 0, 0, 0.34); border: 1.5px solid #e2e8f0; max-height: 90vh; display: flex; flex-direction: column;" class="modal-anim">
-            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 14px 18px; background: #f8fafc; border-bottom: 1.5px solid #e2e8f0; flex-shrink: 0;">
-                <div>
-                    <h3 style="color: #b91c1c; font-size: 1.05em; font-weight: 800; margin: 0;">📖 App-Anleitung für Mitglieder</h3>
-                    <div style="font-size: 0.76em; color: #64748b; font-weight: 600; margin-top: 2px;">Kameradschaftsbund &amp; Schützenverein Gaschurn-Partenen</div>
+        <div style="background: #f8fafc; width: 100%; max-width: 520px; border-radius: 22px; overflow: hidden; color: #1e293b; box-shadow: 0 25px 45px rgba(0, 0, 0, 0.34); border: 1.5px solid #e2e8f0; max-height: 90vh; display: flex; flex-direction: column;" class="modal-anim">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 16px 18px; background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-bottom: 1.5px solid #e2e8f0; flex-shrink: 0;">
+                <div style="display: flex; align-items: center; gap: 11px; min-width: 0; flex: 1;">
+                    <img src="./logo.png" alt="Vereinslogo KB &amp; SV" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid #eab308; background: #0f172a; flex-shrink: 0; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.14);" onerror="this.style.display='none';">
+                    <div style="min-width: 0;">
+                        <h3 style="font-size: 1.12rem; font-weight: 900; color: #0f172a; margin: 0; line-height: 1.2;">App-Anleitung für Mitglieder</h3>
+                        <div style="font-size: 0.78rem; color: #64748b; font-weight: 700; margin-top: 2px; line-height: 1.2;">KB &amp; SV Gaschurn-Partenen</div>
+                    </div>
                 </div>
-                <button type="button" onclick="closeMemberHelpModal()" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px; margin-top: 0;">✖</button>
+                <button type="button" onclick="closeMemberHelpModal()" aria-label="Anleitung schließen" style="width: 34px; height: 34px; border-radius: 10px; background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; font-size: 0.9rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 0; font-family: inherit;">✖</button>
             </div>
-            <div style="padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.86em; line-height: 1.5;">
-                <div style="display: flex; flex-direction: column;">
-                    <button type="button" id="read-member-help-btn" onclick="toggleReadMemberHelpAloud()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #16a34a; color: #ffffff; border: none; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔊 Anleitung laut vorlesen</button>
-                    <button type="button" id="push-activate-btn" onclick="enablePushNotifications()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #fef3c7; color: #92400e; border: 2px solid #f59e0b; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔔 Push-Benachrichtigungen aktivieren</button>
-                    <div id="push-status-hint" style="display: none; margin: -2px 0 10px 0; padding: 9px 12px; border-radius: 10px; font-size: 0.85em; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
-                    <button type="button" id="font-size-toggle-btn" onclick="toggleLargeFontMode()" style="width: 100%; margin-bottom: 10px; padding: 12px 14px; background: #ffffff; color: #1e293b; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">🔍 Große Schrift: Aus</button>
-                    <button type="button" id="install-help-btn" onclick="openInstallHelpModal()" style="width: 100%; margin-bottom: 16px; padding: 12px 14px; background: #eff6ff; color: #1d4ed8; border: 2px solid #93c5fd; border-radius: 12px; font-size: 1rem; font-weight: 800; font-family: inherit; cursor: pointer;">📲 App auf dem Handy speichern</button>
+            <div style="padding: 15px 16px 18px 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 0; font-size: 0.88rem; line-height: 1.48;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+                    <button type="button" id="read-member-help-btn" onclick="toggleReadMemberHelpAloud()" style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: none; border-radius: 14px; padding: 11px 10px; font-weight: 800; font-size: 0.84rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; text-align: center; font-family: inherit; line-height: 1.25; box-shadow: 0 3px 10px rgba(22, 163, 74, 0.22);">🔊 Alle vorlesen</button>
+                    <button type="button" id="push-activate-btn" onclick="enablePushNotifications()" style="background: #fef9c3; color: #854d0e; border: 1.5px solid #eab308; border-radius: 14px; padding: 11px 10px; font-weight: 800; font-size: 0.84rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; text-align: center; font-family: inherit; line-height: 1.25;">🔔 Push aktivieren</button>
+                    <button type="button" id="font-size-toggle-btn" onclick="toggleLargeFontMode()" style="background: #f8fafc; color: #1e293b; border: 1.5px solid #cbd5e1; border-radius: 14px; padding: 11px 10px; font-weight: 800; font-size: 0.84rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; text-align: center; font-family: inherit; line-height: 1.25;">🔍 Große Schrift: Aus</button>
+                    <button type="button" id="install-help-btn" onclick="openInstallHelpModal()" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 11px 10px; font-weight: 800; font-size: 0.84rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; text-align: center; font-family: inherit; line-height: 1.25;">📲 Auf Handy speichern</button>
+                    <button type="button" id="member-help-clean-reload-btn" onclick="forceCleanAppReload(this)" style="background: #f5f3ff; color: #5b21b6; border: 1.5px solid #ddd6fe; border-radius: 14px; padding: 11px 10px; font-weight: 800; font-size: 0.84rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; text-align: center; font-family: inherit; line-height: 1.25;">🔄 App aktualisieren</button>
+                    <button type="button" id="toggle-member-guide-btn" onclick="toggleMemberHelpGuide()" aria-expanded="false" aria-controls="member-help-guide-container" style="background: #f0fdf4; color: #166534; border: 1.5px solid #86efac; border-radius: 14px; padding: 11px 10px; font-weight: 800; font-size: 0.84rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; text-align: center; font-family: inherit; line-height: 1.25;">📖 App-Anleitung ▼</button>
                 </div>
+                <div id="push-status-hint" style="display: none; margin: 0 0 10px 0; padding: 9px 12px; border-radius: 12px; font-size: 0.82rem; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
 
-                <div class="member-help-card" data-speech="24 Stunden Vereinsstatus, News und Termine. Leuchtet der runde Vereinslogo Kreis oben links grün gold, hat der Obmann aktuelle Fotos in den 24 Stunden Status gestellt. Einfach antippen zum Ansehen. Nach 24 Stunden verschwindet der Status automatisch und das Vereinslogo erscheint wieder. Darunter findest du alle Vereins News mit Gefällt mir, Eilmeldungen sowie Termine mit direkter Zu und Absage Abstimmung und Kalender Export fürs Smartphone." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">📸 24h-Vereinsstatus, News &amp; Termine</div>
-                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
+                <div id="member-help-guide-container" style="display: none; margin-top: 6px;">
+                <div class="member-help-card" data-speech="24 Stunden Vereinsstatus, News und Termine. Leuchtet der runde Vereinslogo Kreis oben links grün gold, hat der Obmann aktuelle Fotos in den 24 Stunden Status gestellt. Einfach antippen zum Ansehen. Nach 24 Stunden verschwindet der Status automatisch und das Vereinslogo erscheint wieder. Darunter findest du alle Vereins News mit Gefällt mir, Eilmeldungen sowie Termine mit direkter Zu und Absage Abstimmung und Kalender Export fürs Smartphone." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
+                        <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
+                            <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">📸</span>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">24h-Vereinsstatus, News &amp; Termine</div>
+                        </div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
                     </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                        <div>Leuchtet der runde Vereinslogo-Kreis oben links grün-gold, hat der Obmann aktuelle Fotos in den <strong>24-Stunden-Status</strong> gestellt – einfach antippen zum Ansehen (nach 24 Stunden verschwindet der Status automatisch und das Vereinslogo erscheint wieder).</div>
-                        <div>Darunter findest du alle <strong>Vereins-News</strong> (mit „👍 Gefällt mir“), <strong>Eilmeldungen</strong> sowie <strong>Termine</strong> mit direkter Zu-/Absage-Abstimmung und <code>.ics</code>-Kalender-Export fürs Smartphone.</div>
-                    </div>
-                </div>
-
-                <div class="member-help-card" data-speech="Dienstplan und Erinnerungen. Sieh alle eingeteilten Schankdienste übersichtlich ein. Wer im Dienstplan eingetragen ist, erhält automatisch einen Tag vorher um 18 Uhr und zwei Stunden vor Dienstbeginn eine Push Erinnerung aufs Handy." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #0f766e; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">📅 Dienstplan &amp; Erinnerungen</div>
-                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
-                    </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                        <div>Alle eingeteilten Schankdienste übersichtlich einsehen.</div>
-                        <div>Wer im Dienstplan eingetragen ist, erhält automatisch <strong>1 Tag vorher (18:00 Uhr)</strong> und <strong>2 Stunden vor Dienstbeginn</strong> eine Push-Erinnerung aufs Handy.</div>
+                    <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
+                        <div>• <strong>24h-Vereinsstatus:</strong> Leuchtet das runde Logo oben links grün-gold, antippen zum Ansehen aktueller Fotos (verschwindet nach 24 Std. automatisch).</div>
+                        <div>• <strong>Vereins-News &amp; Eilmeldungen:</strong> Alle Beiträge mit „👍 Gefällt mir“ direkt auf der Startseite.</div>
+                        <div>• <strong>Termine:</strong> Direkt zu-/absagen und per <code>.ics</code>-Export im Smartphone-Kalender speichern.</div>
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Vereins Chat mit dynamischer Leiste, Blaulicht und Wischgeste. Je nachdem, welche Bereiche für dich freigeschaltet sind, sitzt der Vereins Chat entweder direkt unten in der Hauptleiste an der Stelle von Schankbuch oder Waffenbuch, oder als große Karte oben auf der Startseite. Geht eine neue Nachricht ein, blinkt der Chat Button oder die Chat Karte blau auf und zeigt die Anzahl ungelesener Nachrichten. Du kannst Texte, Galerie und Kamera Fotos, Sprachnachrichten, Umfragen, 3D Sticker und PDFs versenden. Zum Schließen des Chats einfach von rechts nach links wischen oder oben rechts auf das Kreuz tippen." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #25D366; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">💬 Vereins-Chat (Dynamische Leiste, Blaulicht &amp; Wischgeste)</div>
-                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
+                <div class="member-help-card" data-speech="Dienstplan und Erinnerungen. Sieh alle eingeteilten Schankdienste übersichtlich ein. Wer im Dienstplan eingetragen ist, erhält automatisch einen Tag vorher um 18 Uhr und zwei Stunden vor Dienstbeginn eine Push Erinnerung aufs Handy." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
+                        <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
+                            <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">📅</span>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Dienstplan &amp; Erinnerungen</div>
+                        </div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
                     </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                        <div><strong>Position in der App:</strong> Je nachdem, welche Bereiche für dich freigeschaltet sind, sitzt der <strong>💬 Vereins-Chat</strong> entweder direkt unten in der Hauptleiste (genau an der Stelle von Schankbuch oder Waffenbuch) oder als große Karte oben auf der Startseite.</div>
-                        <div><strong>Blaulicht-Alarm:</strong> Geht eine neue Nachricht ein, blinkt der Chat-Button bzw. die Chat-Karte blau auf und zeigt die Anzahl ungelesener Nachrichten.</div>
-                        <div><strong>Funktionen:</strong> Texte, Galerie- &amp; Kamera-Fotos, Sprachnachrichten, Umfragen, 3D-Sticker und PDFs versenden; zum Schließen des Chats einfach <strong>von rechts nach links wischen</strong> (oder oben rechts auf <code>✕</code> tippen).</div>
-                    </div>
-                </div>
-
-                <div class="member-help-card" data-speech="Schankbuch, nur für freigeschaltete Schank Mitglieder. Dieser Bereich ist nur sichtbar, wenn du vom Obmann für das Schankbuch freigeschaltet bist. Buche Getränke auf offene Tisch Deckel und trenne beim Kassieren sauber zwischen grüner Bar Abrechnung und blauer Firmen oder Feier Rechnung." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #d97706; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">🍺 Schankbuch (nur für freigeschaltete Schank-Mitglieder)</div>
-                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
-                    </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                        <div>Nur sichtbar, wenn du vom Obmann für das Schankbuch freigeschaltet bist.</div>
-                        <div>Getränke auf offene Tisch-Deckel buchen und beim Kassieren sauber zwischen <strong style="color: #15803d;">💵 Bar-Abrechnung (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnung (Blau)</strong> trennen.</div>
+                    <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
+                        <div>• <strong>Übersicht:</strong> Alle eingeteilten Schankdienste inklusive Archiv auf einen Blick einsehen.</div>
+                        <div>• <strong>Automatische Erinnerung:</strong> Eingeteilte Mitglieder erhalten <strong>1 Tag vorher (18:00 Uhr)</strong> und <strong>2 Std. vor Dienstbeginn</strong> eine Push-Nachricht.</div>
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Digitales Waffenbuch, nur für freigeschaltete Waffenwarte. Dieser Bereich ist nur sichtbar, wenn du als Waffenwart freigeschaltet bist. Zur Entnahme den Tresor QR Code scannen, das öffnet den Tresor für fünf Minuten. Danach aktive Waffen anhaken, Reserve Waffen lassen sich bei Bedarf per Button einblenden. Salut Ausrückung und der Ort per Schnellauswahl Chip sind bereits vorbereitet. Dann unterschreiben und speichern. Zur Rückgabe einfach oben auf den grünen Button QR Code scannen und Waffen zurückbringen tippen, den Tresor QR Code scannen und die Rückgabe abschließen." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #b91c1c; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">🎯 Digitales Waffenbuch (nur für freigeschaltete Waffenwarte)</div>
-                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
+                <div class="member-help-card" data-speech="Vereins Chat mit dynamischer Leiste, Blaulicht und Wischgeste. Je nachdem, welche Bereiche für dich freigeschaltet sind, sitzt der Vereins Chat entweder direkt unten in der Hauptleiste an der Stelle von Schankbuch oder Waffenbuch, oder als große Karte oben auf der Startseite. Geht eine neue Nachricht ein, blinkt der Chat Button oder die Chat Karte blau auf und zeigt die Anzahl ungelesener Nachrichten. Du kannst Texte, Galerie und Kamera Fotos, Sprachnachrichten, Umfragen, 3D Sticker und PDFs versenden. Zum Schließen des Chats einfach von rechts nach links wischen oder oben rechts auf das Kreuz tippen." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
+                        <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
+                            <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">💬</span>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Vereins-Chat &amp; Blaulicht</div>
+                        </div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
                     </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                        <div>Nur sichtbar, wenn du als Waffenwart freigeschaltet bist.</div>
-                        <div><strong>Entnahme:</strong> Tresor-QR-Code scannen (öffnet den Tresor für 5 Minuten) → aktive Waffen anhaken (Reserve-Waffen lassen sich bei Bedarf per Button einblenden) → <strong>„Salut Ausrückung“</strong> und <strong>Ort</strong> (per Schnellauswahl-Chip) sind bereits vorbereitet → unterschreiben &amp; speichern.</div>
-                        <div><strong>Rückgabe:</strong> Oben auf den grünen Button <strong>„📷 QR-Code scannen &amp; Waffe(n) zurückbringen“</strong> tippen, Tresor-QR-Code scannen und Rückgabe abschließen.</div>
-                    </div>
-                </div>
-
-                <div class="member-help-card" data-speech="Installation, Push Nachrichten, Offline Modus und Aktualisieren. Installiere die App über das Browser Menü mit Zum Startbildschirm hinzufügen. Auf iPhones funktionieren Push Nachrichten nur, wenn die App über Teilen und Zum Startbildschirm installiert und über dieses Icon geöffnet wird. Dank eingebautem Offline Speicher bleiben geladene Inhalte auch bei kurzem WLAN Ausfall erhalten. Zum Aktualisieren ohne Datenverlust auf der Startseite einfach nach unten ziehen oder unten den Button App Stand jetzt frisch laden nutzen. Name, Entsperr Status und Verlauf bleiben dabei vollständig erhalten." style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 13px 14px; transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
-                        <div style="font-size: 1rem; font-weight: 800; color: #0f172a;">🔔 Installation, Push-Nachrichten, Offline-Modus &amp; Aktualisieren</div>
-                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; border-radius: 8px; padding: 3px 8px; font-size: 0.85em; font-weight: 800; cursor: pointer; line-height: 1.2;">🔊</button>
-                    </div>
-                    <div style="font-size: 0.96rem; line-height: 1.55; color: #334155; display: flex; flex-direction: column; gap: 6px;">
-                        <div><strong>Installation &amp; iPhone-Hinweis:</strong> App über das Browser-Menü („Zum Startbildschirm hinzufügen“) installieren. Auf <strong>iPhones (iOS)</strong> funktionieren Push-Nachrichten nur, wenn die App über <strong>Teilen → „Zum Startbildschirm“</strong> installiert und über dieses Icon geöffnet wird.</div>
-                        <div><strong>Offline-Modus &amp; Aktualisieren ohne Datenverlust:</strong> Dank Offline-Speicher bleiben geladene Inhalte auch bei kurzem WLAN-Ausfall erhalten. Auf der Startseite einfach <strong>nach unten ziehen (Pull-to-Refresh)</strong> oder unten den Refresh-Button <strong>„🔄 App-Stand jetzt frisch laden“</strong> nutzen – Name, Entsperr-Status und Verlauf bleiben dabei vollständig erhalten.</div>
+                    <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
+                        <div>• <strong>Position &amp; Blaulicht:</strong> Sitzt je nach Freischaltung unten in der Leiste oder auf der Startseite und blinkt bei neuen Nachrichten blau mit Zähler.</div>
+                        <div>• <strong>Inhalte:</strong> Texte, Galerie-/Kamera-Fotos, Sprachnachrichten, Umfragen, 3D-Sticker &amp; PDFs teilen.</div>
+                        <div>• <strong>Schnell schließen:</strong> Einfach <strong>von rechts nach links wischen</strong> oder oben rechts auf <code>✕</code> tippen.</div>
                     </div>
                 </div>
 
-                <div style="border-top: 1px solid #e2e8f0; margin-top: 18px; padding-top: 16px; display: flex; flex-direction: column; align-items: center; gap: 6px;">
-                    <img src="siegel.png" alt="Powered by Simon Schweighofer" style="width: 68px; height: 68px; border-radius: 50%; object-fit: cover; border: 2px solid #eab308; animation: sealGoldPulse 2.6s ease-in-out infinite;" onerror="this.style.display='none';">
+                <div class="member-help-card" data-speech="Schankbuch, nur für freigeschaltete Schank Mitglieder. Dieser Bereich ist nur sichtbar, wenn du vom Obmann für das Schankbuch freigeschaltet bist. Buche Getränke auf offene Tisch Deckel und trenne beim Kassieren sauber zwischen grüner Bar Abrechnung und blauer Firmen oder Feier Rechnung." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
+                        <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
+                            <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">🍺</span>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Schankbuch (Schank-Mitglieder)</div>
+                        </div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
+                    </div>
+                    <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
+                        <div>• <strong>Freischaltung:</strong> Nur sichtbar, wenn du vom Obmann für das Schankbuch berechtigt bist.</div>
+                        <div>• <strong>Deckel &amp; Kassieren:</strong> Getränke auf offene Tisch-Deckel buchen und sauber zwischen <strong style="color: #15803d;">💵 Bar-Abrechnung (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnung (Blau)</strong> trennen.</div>
+                    </div>
+                </div>
+
+                <div class="member-help-card" data-speech="Digitales Waffenbuch, nur für freigeschaltete Waffenwarte. Dieser Bereich ist nur sichtbar, wenn du als Waffenwart freigeschaltet bist. Zur Entnahme den Tresor QR Code scannen, das öffnet den Tresor für fünf Minuten. Danach aktive Waffen anhaken, Reserve Waffen lassen sich bei Bedarf per Button einblenden. Salut Ausrückung und der Ort per Schnellauswahl Chip sind bereits vorbereitet. Dann unterschreiben und speichern. Zur Rückgabe einfach oben auf den grünen Button QR Code scannen und Waffen zurückbringen tippen, den Tresor QR Code scannen und die Rückgabe abschließen." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
+                        <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
+                            <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">🎯</span>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Digitales Waffenbuch (Waffenwarte)</div>
+                        </div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
+                    </div>
+                    <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
+                        <div>• <strong>Freischaltung:</strong> Nur für berechtigte Waffenwarte sichtbar.</div>
+                        <div>• <strong>Entnahme:</strong> Tresor-QR-Code scannen (5 Min. offen), aktive Waffen anhaken (Reserve einblendbar), <strong>Salut Ausrückung &amp; Ort</strong> sind vorbereitet – unterschreiben &amp; speichern.</div>
+                        <div>• <strong>Rückgabe:</strong> Oben auf <strong>„📷 QR-Code scannen &amp; Waffe(n) zurückbringen“</strong> tippen, Tresor-Code scannen und abschließen.</div>
+                    </div>
+                </div>
+
+                <div class="member-help-card" data-speech="Installation, Push Nachrichten, Offline Modus und Aktualisieren. Installiere die App über das Browser Menü mit Zum Startbildschirm hinzufügen. Auf iPhones funktionieren Push Nachrichten nur, wenn die App über Teilen und Zum Startbildschirm installiert und über dieses Icon geöffnet wird. Dank eingebautem Offline Speicher bleiben geladene Inhalte auch bei kurzem WLAN Ausfall erhalten. Zum Aktualisieren ohne Datenverlust auf der Startseite einfach nach unten ziehen oder unten den Button App Stand jetzt frisch laden nutzen. Name, Entsperr Status und Verlauf bleiben dabei vollständig erhalten." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
+                        <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
+                            <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">🔔</span>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Installation, Push, Offline &amp; Update</div>
+                        </div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
+                    </div>
+                    <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
+                        <div>• <strong>Installation &amp; iPhone-Push:</strong> Über Browser-Menü zum Startbildschirm hinzufügen (auf <strong>iPhones</strong> funktionieren Push-Infos nur über <strong>Teilen → Zum Home-Bildschirm</strong>).</div>
+                        <div>• <strong>Offline-Speicher:</strong> Geladene Inhalte bleiben auch bei kurzem WLAN-Ausfall erhalten.</div>
+                        <div>• <strong>Frisch laden ohne Datenverlust:</strong> Auf der Startseite nach unten ziehen oder oben <strong>„🔄 App aktualisieren“</strong> nutzen – Name &amp; Status bleiben erhalten.</div>
+                    </div>
+                </div>
+                </div>
+
+                <div style="border-top: 1px solid #e2e8f0; margin-top: 8px; padding-top: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                    <img src="siegel.png" alt="Powered by Simon Schweighofer" style="width: 62px; height: 62px; border-radius: 50%; object-fit: cover; border: 2px solid #eab308; animation: sealGoldPulse 2.6s ease-in-out infinite;" onerror="this.style.display='none';">
                     <span style="font-size: 0.75rem; font-weight: 700; color: #475569;">App-Entwicklung &amp; Verwaltung: Simon Schweighofer</span>
                 </div>
 
-                <button type="button" id="member-help-clean-reload-btn" onclick="forceCleanAppReload(this)" class="btn btn-block" style="margin-top: 8px; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #93c5fd; font-weight: 800; font-size: 0.9rem;">🔄 App-Stand jetzt frisch laden (ohne Datenverlust)</button>
-
-                <button type="button" onclick="closeMemberHelpModal()" class="btn btn-primary btn-block" style="margin-top: 4px;">Verstanden</button>
+                <button type="button" onclick="closeMemberHelpModal()" class="btn btn-primary btn-block" style="margin-top: 12px; border-radius: 14px;">Verstanden</button>
             </div>
         </div>
     </div>
@@ -6136,8 +6189,11 @@
 
         <div id="chat-pinned-banner" style="display: none; flex-shrink: 0; padding: 10px 12px 0 12px; background: #ffffff;"></div>
 
-        <div id="chat-messages-list">
-            <p style="font-size: 0.84em; color: #64748b; text-align: center; margin-top: 20px;">Lade Vereins-Chat...</p>
+        <div class="chat-messages-watermark-stage">
+            <img src="./siegel.png" alt="" aria-hidden="true" class="chat-bg-watermark" onerror="this.style.display='none';">
+            <div id="chat-messages-list">
+                <p style="font-size: 0.84em; color: #64748b; text-align: center; margin-top: 20px;">Lade Vereins-Chat...</p>
+            </div>
         </div>
 
         <button type="button" id="chat-scroll-bottom-btn" onclick="scrollChatToBottom(true)" title="Nach unten springen" aria-label="Nach unten springen" style="position: absolute; right: 14px; bottom: 74px; z-index: 25; width: 38px; height: 38px; border-radius: 50%; background: #ffffff; color: #475569; border: 1px solid #cbd5e1; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.16); display: none; align-items: center; justify-content: center; cursor: pointer; padding: 0;">
@@ -10625,7 +10681,7 @@
                 btn.style.borderColor = '#15803d';
             } else {
                 btn.innerText = '🔍 Große Schrift: Aus';
-                btn.style.background = '#ffffff';
+                btn.style.background = '#f8fafc';
                 btn.style.color = '#1e293b';
                 btn.style.borderColor = '#cbd5e1';
             }
@@ -17048,15 +17104,15 @@
             if (!btn) return;
 
             if (isGranted) {
-                btn.innerText = '✅ Push-Benachrichtigungen sind aktiv';
+                btn.innerText = '✅ Push aktiv';
                 btn.style.background = '#dcfce7';
                 btn.style.borderColor = '#16a34a';
                 btn.style.color = '#15803d';
             } else {
-                btn.innerText = '🔔 Push-Benachrichtigungen aktivieren';
-                btn.style.background = '#fef3c7';
-                btn.style.borderColor = '#f59e0b';
-                btn.style.color = '#92400e';
+                btn.innerText = '🔔 Push aktivieren';
+                btn.style.background = '#fef9c3';
+                btn.style.borderColor = '#eab308';
+                btn.style.color = '#854d0e';
             }
 
             if (hint) {
@@ -18013,9 +18069,9 @@
             if (!modal) return;
             modal.querySelectorAll('.member-help-card-speak-btn').forEach(b => {
                 b.innerText = '🔊';
-                b.style.background = '#eff6ff';
-                b.style.color = '#1d4ed8';
-                b.style.borderColor = '#93c5fd';
+                b.style.background = '#f8fafc';
+                b.style.color = '#334155';
+                b.style.borderColor = '#cbd5e1';
             });
         }
 
@@ -18032,11 +18088,11 @@
             const btn = document.getElementById('read-member-help-btn');
             if (!btn) return;
             if (isReading) {
-                btn.innerText = '⏹️ Vorlesen stoppen';
+                btn.innerText = '⏹️ Stoppen';
                 btn.style.background = '#dc2626';
             } else {
-                btn.innerText = '🔊 Anleitung laut vorlesen';
-                btn.style.background = '#16a34a';
+                btn.innerText = '🔊 Alle vorlesen';
+                btn.style.background = 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)';
             }
         }
 
@@ -18456,6 +18512,7 @@
 
             initHelpSpeechVoicesListener();
             stopReadMemberHelpAloud();
+            try { toggleMemberHelpGuide(true); } catch (e) {}
             const currentToken = memberHelpSpeechToken;
             isMemberHelpSpeechActive = true;
             updateReadMemberHelpButtonUI(true);
@@ -18489,9 +18546,25 @@
             speakCardAt(0);
         }
 
+        function toggleMemberHelpGuide(forceOpen) {
+            const container = document.getElementById('member-help-guide-container');
+            const btn = document.getElementById('toggle-member-guide-btn');
+            if (!container) return;
+            const currentlyOpen = container.style.display !== 'none';
+            const nextOpen = (typeof forceOpen === 'boolean') ? forceOpen : !currentlyOpen;
+            container.style.display = nextOpen ? 'block' : 'none';
+            if (btn) {
+                btn.textContent = nextOpen ? '📖 App-Anleitung ▲' : '📖 App-Anleitung ▼';
+                btn.setAttribute('aria-expanded', nextOpen ? 'true' : 'false');
+            }
+        }
+
         function openMemberHelpModal() {
             stopReadMemberHelpAloud();
             initHelpSpeechVoicesListener();
+            try {
+                toggleMemberHelpGuide(false);
+            } catch (e) {}
             try {
                 updateLargeFontToggleUI(document.documentElement.classList.contains('large-font-mode'));
             } catch (e) {}
