@@ -4249,7 +4249,7 @@
         </div>
 
         <div style="padding: 16px 0 8px 0; text-align: center; position: relative; z-index: 5; pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-            <button type="button" id="lockscreen-admin-login-link" onclick="openAdminDirectLogin()" style="display: none !important; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(234, 179, 8, 0.45); border-radius: 999px; color: #f8fafc; font-size: 0.8rem; font-weight: 700; text-decoration: none; cursor: pointer; font-family: inherit; padding: 7px 16px; position: relative; z-index: 6; pointer-events: auto;">
+            <button type="button" id="lockscreen-admin-login-link" onclick="openAdminDirectLogin()" style="display: inline-block; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(234, 179, 8, 0.45); border-radius: 999px; color: #f8fafc; font-size: 0.8rem; font-weight: 700; text-decoration: none; cursor: pointer; font-family: inherit; padding: 7px 16px; position: relative; z-index: 6; pointer-events: auto;">
                 Direkt zum Admin-Login
             </button>
             <div class="lock-screen-footer-pill">
@@ -5946,7 +5946,7 @@
                 Dein Name wird automatisch für Termine, Dienstplan und Vereins-Chat verwendet.
             </p>
             <div class="form-group" style="margin-bottom:12px;">
-                <select id="member-name-setup-select" class="form-control" onchange="handleMemberNameSetupSelectChange(this)" style="font-weight:700; font-size:1em;"></select>
+                <select id="member-name-setup-select" class="form-control" style="font-weight:700; font-size:1em;"></select>
             </div>
             <div id="member-name-setup-error" style="display:none; margin-bottom:10px; padding:7px 10px; border-radius:10px; background:#fee2e2; color:#b91c1c; font-size:0.82em; font-weight:700; text-align:center;">Bitte wähle zuerst deinen Namen aus.</div>
             <div style="display:flex; gap:10px;">
@@ -5995,13 +5995,13 @@
     </div>
 
     <!-- AUTOMATISCHES APP-UPDATE POPUP -->
-    <div id="app-update-modal" role="dialog" aria-modal="true" aria-labelledby="app-update-modal-title" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.72); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 10050; display: none; pointer-events: none; align-items: center; justify-content: center; padding: 20px;">
-        <div class="modal-anim" style="background: #ffffff; border: 2px solid #eab308; border-radius: 22px; max-width: 360px; width: 100%; padding: 22px; text-align: center; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35); box-sizing: border-box;">
-            <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); border: 2.5px solid #eab308; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.65rem; line-height: 1; box-shadow: 0 6px 16px rgba(22, 163, 74, 0.28);" aria-hidden="true">🔄</div>
-            <h3 id="app-update-modal-title" style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 12px 0 6px 0; line-height: 1.3;">Neue App-Version verfügbar!</h3>
-            <p style="font-size: 0.9rem; color: #475569; line-height: 1.45; margin: 0 0 18px 0;">Der Obmann hat neue Funktionen oder Verbesserungen eingespielt. Tippe auf „Jetzt aktualisieren“, um sofort den neuesten Stand zu laden.</p>
-            <button type="button" id="app-update-now-btn" onclick="applyAppUpdateNow()" style="width: 100%; min-height: 46px; border-radius: 14px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: 1.5px solid #eab308; font-weight: 800; font-size: 0.96rem; cursor: pointer; margin-bottom: 8px; font-family: inherit; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.28);">🔄 Jetzt aktualisieren</button>
-            <button type="button" id="app-update-later-btn" onclick="dismissAppUpdateModal()" style="background: none; border: none; color: #64748b; font-size: 0.84rem; font-weight: 600; cursor: pointer; padding: 6px; font-family: inherit;">Später erinnern</button>
+    <div id="app-update-modal" role="dialog" aria-modal="true" aria-labelledby="app-update-modal-title" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10095; display: none; pointer-events: none; align-items: center; justify-content: center; padding: 20px;">
+        <div class="modal-anim" style="background: #ffffff; border: 2.5px solid #eab308; border-radius: 24px; max-width: 390px; width: 100%; padding: 26px 22px; text-align: center; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5); box-sizing: border-box;">
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); border: 2.5px solid #eab308; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px auto; font-size: 1.75rem; line-height: 1; box-shadow: 0 8px 20px rgba(22, 163, 74, 0.32);" aria-hidden="true">✨</div>
+            <h3 id="app-update-modal-title" style="font-size: 1.28rem; font-weight: 900; color: #0f172a; margin: 0; line-height: 1.3;">Neue App-Version verfügbar!</h3>
+            <p style="font-size: 1.02rem; color: #334155; line-height: 1.45; margin: 10px 0 20px 0;">Die Vereins-App wurde vom Obmann aktualisiert. Tippe jetzt auf Aktualisieren, um den neuesten Stand zu laden (dein Name &amp; Zugang bleiben gespeichert).</p>
+            <button type="button" id="app-update-now-btn" onclick="applyAppUpdateNow()" style="width: 100%; min-height: 52px; border-radius: 16px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: 2px solid #eab308; font-size: 1.06rem; font-weight: 800; cursor: pointer; margin-bottom: 10px; font-family: inherit; box-shadow: 0 8px 20px rgba(22, 163, 74, 0.3);">🔄 Jetzt aktualisieren</button>
+            <button type="button" id="app-update-later-btn" onclick="dismissAppUpdateModal()" style="background: none; border: none; color: #64748b; font-size: 0.86rem; font-weight: 600; cursor: pointer; padding: 6px 10px; font-family: inherit; text-decoration: underline;">Später erinnern</button>
         </div>
     </div>
 
@@ -7417,21 +7417,7 @@
         function updateLockscreenAdminLinkVisibility() {
             const linkEl = document.getElementById('lockscreen-admin-login-link');
             if (!linkEl) return;
-            let isBoardDevice = false;
-            let storedMemberName = '';
-            let verifiedAdminName = '';
-            try { isBoardDevice = localStorage.getItem(BOARD_DEVICE_STORAGE_KEY) === '1'; } catch (e) {}
-            try { storedMemberName = String(localStorage.getItem(MEMBER_IDENTITY_STORAGE_KEY) || '').trim(); } catch (e) {}
-            try { verifiedAdminName = String(localStorage.getItem(VERIFIED_ADMIN_MEMBER_STORAGE_KEY) || '').trim(); } catch (e) {}
-
-            const currentMemberName = getCurrentMemberNameForAccess();
-            const hasBoardName = isBoardMemberName(currentMemberName) || isBoardMemberName(storedMemberName) || isBoardMemberName(verifiedAdminName);
-
-            if (isBoardDevice || hasBoardName) {
-                linkEl.style.setProperty('display', 'inline-block', 'important');
-            } else {
-                linkEl.style.setProperty('display', 'none', 'important');
-            }
+            linkEl.style.display = 'inline-block';
         }
 
         let lockscreenCrestSecretTapCount = 0;
@@ -7615,7 +7601,13 @@
             const sourceMembers = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
                 ? officialActiveMembers
                 : DEFAULT_ACTIVE_MEMBERS;
-            const selectable = [...sourceMembers];
+            const selectable = sourceMembers.filter(name => {
+                const trimmed = String(name || '').trim();
+                if (!trimmed) return false;
+                return !/^(Simon|Heimo|Karin|Sabrina)\b/i.test(trimmed)
+                    && !/\b(Simon|Heimo|Karin|Sabrina)\b/i.test(trimmed)
+                    && !isAdminProtectedMemberName(trimmed);
+            });
             let html = '<option value="">-- Bitte Namen wählen --</option>';
             selectable.forEach(name => {
                 const selectedAttr = saved === name ? ' selected' : '';
@@ -7627,26 +7619,9 @@
             }
         }
 
-        function handleMemberNameSetupSelectChange(selectEl) {
-            if (!selectEl) return;
-            const chosen = String(selectEl.value || '').trim();
-            if (!chosen) return;
-            const isAdmin = !!(typeof auth !== 'undefined' && auth && auth.currentUser);
-            if (!isAdmin && isBoardNameMatchForRedirect(chosen)) {
-                redirectBoardUserToAdminPasswordLogin(chosen);
-            }
-        }
-
         function openMemberNameSetupModal(allowCancel = false) {
             if (document.body.classList.contains('app-locked') && !(typeof auth !== 'undefined' && auth && auth.currentUser)) return;
             const modal = document.getElementById('member-name-setup-modal');
-            if (!allowCancel && isBoardUserForLockscreenFlow()) {
-                if (modal) {
-                    modal.style.setProperty('display', 'none', 'important');
-                    modal.style.pointerEvents = 'none';
-                }
-                return;
-            }
             populateMemberNameSetupSelect();
             const errEl = document.getElementById('member-name-setup-error');
             if (errEl) errEl.style.display = 'none';
@@ -7657,13 +7632,7 @@
             }
             const adminLinkWrap = document.getElementById('name-modal-admin-login-link');
             if (adminLinkWrap) {
-                let isBoardDev = false;
-                try { isBoardDev = localStorage.getItem('kb_sv_is_board_device') === '1'; } catch (e) {}
-                if (isBoardDev) {
-                    adminLinkWrap.style.setProperty('display', 'block', 'important');
-                } else {
-                    adminLinkWrap.style.setProperty('display', 'none', 'important');
-                }
+                adminLinkWrap.style.setProperty('display', 'none', 'important');
             }
             if (modal) {
                 modal.style.setProperty('display', 'flex', 'important');
@@ -7692,12 +7661,10 @@
             const errEl = document.getElementById('member-name-setup-error');
             const chosen = selectEl ? String(selectEl.value || '').trim() : '';
             const isAdmin = !!(typeof auth !== 'undefined' && auth && auth.currentUser);
-            if (!isAdmin && isBoardNameMatchForRedirect(chosen)) {
-                if (errEl) errEl.style.display = 'none';
-                redirectBoardUserToAdminPasswordLogin(chosen);
-                return;
-            }
-            if (!chosen || (!isAdmin && isAdminProtectedMemberName(chosen))) {
+            const isExcludedBoardName = /^(Simon|Heimo|Karin|Sabrina)\b/i.test(chosen)
+                || /\b(Simon|Heimo|Karin|Sabrina)\b/i.test(chosen)
+                || isAdminProtectedMemberName(chosen);
+            if (!chosen || (!isAdmin && isExcludedBoardName)) {
                 if (errEl) errEl.style.display = 'block';
                 if (selectEl) selectEl.focus();
                 return;
@@ -14941,11 +14908,7 @@
             try { initClubChat(); } catch(e) {}
             try {
                 if (!document.body.classList.contains('app-locked') && !auth.currentUser && !getSavedClubMemberName()) {
-                    if (isBoardUserForLockscreenFlow()) {
-                        closeMemberNameSetupModal();
-                    } else {
-                        openMemberNameSetupModal(false);
-                    }
+                    openMemberNameSetupModal(false);
                 }
             } catch(e) {}
             try {
@@ -15272,7 +15235,6 @@
         }
 
         function unlockClubApp() {
-            const wasLocked = document.body.classList.contains('app-locked') || document.documentElement.classList.contains('kbsv-pre-locked');
             document.documentElement.classList.add('kbsv-pre-unlocked');
             document.documentElement.classList.remove('kbsv-pre-locked');
             document.body.classList.remove('app-locked');
@@ -15292,14 +15254,7 @@
                 inputEl.readOnly = false;
                 inputEl.value = '';
             }
-            if (isBoardUserForLockscreenFlow()) {
-                try { closeMemberNameSetupModal(); } catch (e) {}
-                try { updateAdminTabVisibility(); } catch (e) {}
-            }
             loadAppDataAfterUnlock();
-            if (wasLocked && isBoardUserForLockscreenFlow() && !(typeof auth !== 'undefined' && auth && auth.currentUser)) {
-                redirectBoardUserToAdminPasswordLogin();
-            }
             try {
                 if (typeof flushPendingAppUpdateUI === 'function') {
                     flushPendingAppUpdateUI();
@@ -15405,11 +15360,7 @@
                 if (validHash && enteredHash === validHash) {
                     try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, enteredHash); } catch (err) {}
                     unlockClubApp();
-                    if (isBoardUserForLockscreenFlow()) {
-                        redirectBoardUserToAdminPasswordLogin();
-                    } else {
-                        switchTab('news');
-                    }
+                    switchTab('news');
                 } else {
                     if (errEl) {
                         errEl.innerText = validHash ? "Falscher Zugangscode" : "Zugangscode noch nicht im System hinterlegt";
@@ -23711,7 +23662,64 @@
         let appUpdateReloading = false;
         let appUpdatedToastHideTimer = null;
         let appUpdatedToastClearTimer = null;
+        let initialHtmlSignature = null;
+        let initialHtmlHash = null;
+        let appUpdateCheckInFlight = false;
+        let liveAppUpdateIntervalId = null;
         const trackedAppUpdateRegs = (typeof WeakSet === 'function') ? new WeakSet() : null;
+
+        function computeHtmlSignature(htmlText) {
+            const text = String(htmlText || '');
+            let hash = 2166136261;
+            for (let i = 0; i < text.length; i++) {
+                hash ^= text.charCodeAt(i);
+                hash = Math.imul(hash, 16777619);
+            }
+            return text.length + ':' + (hash >>> 0).toString(16);
+        }
+
+        async function checkForLiveAppUpdate() {
+            if (appUpdateReloading || appUpdateCheckInFlight) return;
+            if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+            if (typeof fetch !== 'function') return;
+
+            appUpdateCheckInFlight = true;
+            try {
+                const bust = Date.now();
+                let response = null;
+                try {
+                    response = await fetch('./index.html?v=' + bust, { cache: 'no-store' });
+                } catch (err) {
+                    response = null;
+                }
+                if (!response || !response.ok) {
+                    const fallbackPath = (window.location && window.location.pathname) ? window.location.pathname : './index.html';
+                    try {
+                        response = await fetch(fallbackPath + '?v=' + bust, { cache: 'no-store' });
+                    } catch (err) {
+                        response = null;
+                    }
+                }
+                if (!response || !response.ok) return;
+
+                const htmlText = await response.text();
+                if (!htmlText || htmlText.length < 1000 || !/<html/i.test(htmlText)) return;
+
+                const newHash = computeHtmlSignature(htmlText);
+                if (!initialHtmlHash) {
+                    initialHtmlSignature = newHash;
+                    initialHtmlHash = newHash;
+                    return;
+                }
+                if (newHash !== initialHtmlHash) {
+                    showAppUpdateModal();
+                }
+            } catch (e) {
+                // Offline- oder Netzwerkfehler still ignorieren
+            } finally {
+                appUpdateCheckInFlight = false;
+            }
+        }
 
         function isAppUnlockedForUpdateUI() {
             if (!document.body) return false;
@@ -23816,9 +23824,7 @@
                 if ('caches' in window && typeof caches.keys === 'function') {
                     const cacheKeys = await caches.keys();
                     await Promise.all(
-                        cacheKeys
-                            .filter(key => String(key || '').startsWith('kb-sv-offline-'))
-                            .map(key => caches.delete(key).catch(() => {}))
+                        cacheKeys.map(key => caches.delete(key).catch(() => {}))
                     );
                 }
             } catch (e) {}
@@ -23877,6 +23883,27 @@
 
             flushPendingAppUpdateUI();
 
+            // 1) Live-HTML-Fingerabdruck-Prüfung: 3s nach Start, beim Zurückkehren aus dem Hintergrund & alle 2 Minuten
+            setTimeout(() => {
+                checkForLiveAppUpdate();
+            }, 3000);
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    checkForLiveAppUpdate();
+                    checkForServiceWorkerUpdate();
+                }
+            });
+
+            if (liveAppUpdateIntervalId) {
+                try { clearInterval(liveAppUpdateIntervalId); } catch (e) {}
+            }
+            liveAppUpdateIntervalId = setInterval(() => {
+                if (document.visibilityState !== 'hidden') {
+                    checkForLiveAppUpdate();
+                }
+            }, 120000);
+
             if (!('serviceWorker' in navigator) || !navigator.serviceWorker) return;
 
             try {
@@ -23898,12 +23925,6 @@
             } catch (e) {}
 
             checkForServiceWorkerUpdate();
-
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible') {
-                    checkForServiceWorkerUpdate();
-                }
-            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
