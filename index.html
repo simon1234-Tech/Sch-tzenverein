@@ -8,11 +8,10 @@
     <title>Vereins-App - KB &amp; SV Gaschurn-Partenen</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Bibliotheken für PDF-Export & QR-Code -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
+    <!-- Bibliotheken für PDF-Export & Emoji (nicht-blockierend geladen; html5-qrcode wird erst im Waffenbuch nachgeladen) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous" defer></script>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -4211,7 +4210,7 @@
     </div>
 
     <!-- SPERRBILDSCHIRM BEIM ÖFFNEN -->
-    <div id="club-lock-screen">
+    <div id="club-lock-screen" style="background-color: #0f172a;">
         <div style="width: 100%; height: 10px;"></div>
         <div class="lock-screen-card modal-anim">
             <div id="lock-screen-crest-trigger" class="lock-screen-logo" role="img" aria-label="Vereinswappen KB &amp; SV Gaschurn-Partenen" onclick="handleLockscreenCrestSecretTap(event)">
@@ -6722,6 +6721,7 @@
             if(targetNav) targetNav.classList.add('active');
             updateAppFooterVisibility(tabId);
             if (tabId === 'weapons') {
+                try { if (typeof ensureHtml5QrcodeLoaded === 'function') ensureHtml5QrcodeLoaded().catch(() => {}); } catch(e) {}
                 try { populateWeaponMemberSelects(); } catch(e) {}
                 try { collapseWeaponReserveList(); } catch(e) {}
             } else if (tabId === 'events') {
@@ -11847,6 +11847,43 @@
             });
         }
 
+        let html5QrcodeLoadPromise = null;
+        function ensureHtml5QrcodeLoaded() {
+            if (typeof Html5Qrcode !== 'undefined') {
+                return Promise.resolve(true);
+            }
+            if (html5QrcodeLoadPromise) {
+                return html5QrcodeLoadPromise;
+            }
+            html5QrcodeLoadPromise = new Promise((resolve, reject) => {
+                const existing = document.querySelector('script[data-lazy-lib="html5-qrcode"]');
+                if (existing) {
+                    if (typeof Html5Qrcode !== 'undefined') {
+                        resolve(true);
+                        return;
+                    }
+                    existing.addEventListener('load', () => resolve(true), { once: true });
+                    existing.addEventListener('error', () => {
+                        html5QrcodeLoadPromise = null;
+                        reject(new Error('QR-Scanner-Bibliothek (Html5Qrcode) konnte nicht geladen werden.'));
+                    }, { once: true });
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/html5-qrcode';
+                script.type = 'text/javascript';
+                script.async = true;
+                script.dataset.lazyLib = 'html5-qrcode';
+                script.onload = () => resolve(true);
+                script.onerror = () => {
+                    html5QrcodeLoadPromise = null;
+                    reject(new Error('QR-Scanner-Bibliothek (Html5Qrcode) konnte nicht geladen werden.'));
+                };
+                document.head.appendChild(script);
+            });
+            return html5QrcodeLoadPromise;
+        }
+
         async function startQrScanner(mode, recordId = null) {
             currentScanMode = mode;
             pendingReturnRecordId = recordId;
@@ -11866,6 +11903,12 @@
                 readerDiv.style.width = '100%';
             }
             if (stopBtn) stopBtn.style.display = 'block';
+
+            if (typeof Html5Qrcode === 'undefined') {
+                try {
+                    await ensureHtml5QrcodeLoaded();
+                } catch (e) {}
+            }
 
             if (typeof Html5Qrcode === 'undefined') {
                 await stopQrScanner();
@@ -15007,30 +15050,75 @@
             } catch (e) {}
         }
 
-        function loadAdminProtectedData() {
-            if (!auth.currentUser) return;
-            loadAppDataAfterUnlock();
+        let lastAdminProtectedLoadUid = '';
+        let lastAdminProtectedLoadAt = 0;
+
+        function showAdminMenuImmediately() {
             activeAdminMenuMode = 'board';
             try { lockSecuritySettingsFields(); } catch(e) {}
             try { closeAllAdminSections(); } catch(e) {}
             try { updateChairmanExclusiveVisibility(); } catch(e) {}
-            try { renderAdminMembersOverview(); } catch(e) {}
-            try { loadCashSales(); } catch(e) {}
-            try { loadInvoices(); } catch(e) {}
-            try { loadKeyList(); } catch(e) {}
-            try { loadInventory(); renderInventoryDisplay(); } catch(e) {}
-            if (isChairmanSimonLoggedIn()) {
-                try { loadAdminWeaponPDFs(); } catch(e) {}
-                try { loadAdminClubPin(); } catch(e) {}
-                try { loadAdminOneSignalKey(); } catch(e) {}
-                try { loadAdminAuditLogs(); } catch(e) {}
+            const adminMenuHomeEl = document.getElementById('admin-menu-home');
+            if (adminMenuHomeEl && !currentOpenAdminViewId) {
+                adminMenuHomeEl.style.removeProperty('display');
+                adminMenuHomeEl.style.display = 'block';
+            }
+        }
+
+        function loadAdminProtectedData(forceReload = false) {
+            if (!auth.currentUser) return;
+            const currentUid = String(auth.currentUser.uid || auth.currentUser.email || '');
+            const now = Date.now();
+            showAdminMenuImmediately();
+
+            if (!forceReload && currentUid && currentUid === lastAdminProtectedLoadUid && (now - lastAdminProtectedLoadAt) < 1500) {
+                return;
+            }
+            lastAdminProtectedLoadUid = currentUid;
+            lastAdminProtectedLoadAt = now;
+
+            const runBackgroundAdminLoad = () => {
+                if (!auth.currentUser) return;
+                const bgTasks = [
+                    () => loadAppDataAfterUnlock(),
+                    () => renderAdminMembersOverview(),
+                    () => loadCashSales(),
+                    () => loadInvoices(),
+                    () => loadKeyList(),
+                    () => {
+                        const invRes = loadInventory();
+                        renderInventoryDisplay();
+                        return invRes;
+                    }
+                ];
+
+                if (isChairmanSimonLoggedIn()) {
+                    bgTasks.push(
+                        () => loadAdminWeaponPDFs(),
+                        () => loadAdminClubPin(),
+                        () => loadAdminOneSignalKey(),
+                        () => loadAdminAuditLogs()
+                    );
+                } else {
+                    window.weaponPdfMap = {};
+                    try { stopAdminAuditLogListener(); } catch(e) {}
+                }
+
+                Promise.allSettled(
+                    bgTasks.map((task) => Promise.resolve().then(() => task()))
+                ).catch(() => {});
+            };
+
+            if (typeof requestAnimationFrame === 'function') {
+                requestAnimationFrame(() => setTimeout(runBackgroundAdminLoad, 0));
             } else {
-                window.weaponPdfMap = {};
-                try { stopAdminAuditLogListener(); } catch(e) {}
+                setTimeout(runBackgroundAdminLoad, 0);
             }
         }
 
         function clearAdminSensitiveData() {
+            lastAdminProtectedLoadUid = '';
+            lastAdminProtectedLoadAt = 0;
             loadedClubPinValue = '';
             loadedOneSignalKeyValue = '';
             exactPdfKeyList = [];
@@ -16699,6 +16787,32 @@
             }, 500);
         }
 
+        const BOARD_ADMIN_EMAILS = [
+            'admin+simon@kb-sv-gaschurn.at',
+            'admin+heimo@kb-sv-gaschurn.at',
+            'admin+karin@kb-sv-gaschurn.at',
+            'admin+sabrina@kb-sv-gaschurn.at'
+        ];
+
+        function signInBoardAdminParallel(candidateEmails, password) {
+            const attempts = candidateEmails.map((email) => auth.signInWithEmailAndPassword(email, password));
+            if (attempts.length === 1) return attempts[0];
+            if (typeof Promise.any === 'function') {
+                return Promise.any(attempts);
+            }
+            return new Promise((resolve, reject) => {
+                let remaining = attempts.length;
+                let firstError = null;
+                attempts.forEach((p) => {
+                    Promise.resolve(p).then(resolve, (err) => {
+                        if (!firstError) firstError = err;
+                        remaining -= 1;
+                        if (remaining === 0) reject(firstError || new Error('Anmeldung fehlgeschlagen'));
+                    });
+                });
+            });
+        }
+
         function handleAdminLogin(e) {
             e.preventDefault();
             if (!adminHumanVerified) {
@@ -16707,21 +16821,30 @@
             }
             const userSelectEl = document.getElementById('admin-user-select');
             const pwdInputEl = document.getElementById('admin-password-input');
-            const selectedUser = userSelectEl ? userSelectEl.value : '';
+            const selectedUser = String(userSelectEl ? userSelectEl.value : '').trim();
             const password = pwdInputEl ? pwdInputEl.value : '';
-            const adminEmail = `admin+${selectedUser}@kb-sv-gaschurn.at`;
+            const candidateEmails = selectedUser.includes('@')
+                ? [selectedUser]
+                : Array.from(new Set([
+                    ...(selectedUser ? [`admin+${selectedUser}@kb-sv-gaschurn.at`] : []),
+                    ...BOARD_ADMIN_EMAILS
+                ]));
             const submitBtn = document.getElementById('admin-login-submit-btn');
 
             resetAdminPasswordVisibility();
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.textContent = '⏳ Anmeldung läuft...';
+                submitBtn.textContent = '⏳ Wird angemeldet...';
             }
 
-            auth.signInWithEmailAndPassword(adminEmail, password)
+            signInBoardAdminParallel(candidateEmails, password)
                 .then((userCredential) => {
-                    const resolvedKey = resolveAdminKeyFromUser(userCredential && userCredential.user, selectedUser);
-                    activeAdminName = resolvedKey || selectedUser || '';
+                    const resolvedKey =
+                        resolveAdminKeyFromUser(userCredential && userCredential.user, '') ||
+                        resolveAdminKeyFromUser(userCredential && userCredential.user, selectedUser) ||
+                        selectedUser ||
+                        '';
+                    activeAdminName = resolvedKey;
                     const mappedMember = ADMIN_KEY_TO_MEMBER_NAME[resolvedKey] || ADMIN_KEY_TO_MEMBER_NAME[String(selectedUser || '').toLowerCase()];
                     const boardKey = String(resolvedKey || selectedUser || '').trim().toLowerCase();
                     if (BOARD_ADMIN_FIRST_NAMES.includes(boardKey) || isBoardMemberName(mappedMember)) {
@@ -16751,10 +16874,11 @@
                     if (pwdInputEl) pwdInputEl.value = '';
                     resetAdminPasswordVisibility();
                     resetAdminHumanCheck();
-                    
+
+                    showAdminMenuImmediately();
                     showAdminSuccessModal();
                     resetInactivityTimer();
-                    
+
                     loadAdminProtectedData();
                     updateAdminPushVisibility();
                     refreshMemberIdentityViews();
@@ -16802,7 +16926,7 @@
 
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                const resolvedKey = resolveAdminKeyFromUser(user, activeAdminName);
+                const resolvedKey = resolveAdminKeyFromUser(user, '') || resolveAdminKeyFromUser(user, activeAdminName);
                 if (resolvedKey) {
                     activeAdminName = resolvedKey;
                     const mappedMember = ADMIN_KEY_TO_MEMBER_NAME[resolvedKey];
@@ -16831,6 +16955,7 @@
                 if (pageCard) pageCard.style.display = '';
                 const loginCardEl = document.getElementById('admin-login-card');
                 if (loginCardEl) loginCardEl.style.display = 'none';
+                showAdminMenuImmediately();
                 resetInactivityTimer();
                 loadAdminProtectedData();
                 updateAdminPushVisibility();
