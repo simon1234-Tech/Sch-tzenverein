@@ -4221,8 +4221,8 @@
                     <span style="font-size: 0.52rem; color: #fde047; margin-top: 2px; letter-spacing: 0.07em;">GASCHURN</span>
                 </div>
             </div>
-            <div style="font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.25; color: #0f172a;">Kameradschaftsbund &amp; Schützenverein</div>
-            <div style="font-size: 0.86rem; font-weight: 800; color: #991b1b; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px;">GASCHURN-PARTENEN</div>
+            <div id="lock-screen-title-secret-trigger" onclick="handleLockscreenCrestSecretTap(event)" style="font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.25; color: #0f172a; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation;">Kameradschaftsbund &amp; Schützenverein</div>
+            <div onclick="handleLockscreenCrestSecretTap(event)" style="font-size: 0.86rem; font-weight: 800; color: #991b1b; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation;">GASCHURN-PARTENEN</div>
 
             <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 14px; margin: 14px 0 18px 0;">
                 <div style="color: #15803d; font-size: 1.02rem; font-weight: 800; margin-bottom: 6px; line-height: 1.35;">Herzlich willkommen im digitalen Vereinsheim!</div>
@@ -5941,7 +5941,7 @@
     <!-- EINMALIGE NAMENSAUSWAHL NACH ENTSPERREN -->
     <div id="member-name-setup-modal" style="display:none; pointer-events:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.74); backdrop-filter:blur(6px); z-index:999999999; justify-content:center; align-items:center; padding:16px;">
         <div style="background:#ffffff; padding:24px; border-radius:22px; max-width:420px; width:100%; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); border:3px solid #16a34a; color:#0f172a;" class="modal-anim">
-            <h3 style="color:#15803d; font-size:1.14em; font-weight:800; margin-bottom:10px; text-align:center; line-height:1.3;">👤 Willkommen! Bitte wähle deinen Namen aus</h3>
+            <h3 id="member-name-setup-heading" onclick="handleNameModalSecretTap(event)" style="color:#15803d; font-size:1.14em; font-weight:800; margin-bottom:10px; text-align:center; line-height:1.3; cursor:pointer; user-select:none; -webkit-user-select:none; touch-action:manipulation;">👤 Willkommen! Bitte wähle deinen Namen aus</h3>
             <p style="font-size:0.84em; color:#475569; text-align:center; margin-bottom:14px; line-height:1.45;">
                 Dein Name wird automatisch für Termine, Dienstplan und Vereins-Chat verwendet.
             </p>
@@ -7452,6 +7452,7 @@
                 try { markDeviceAsBoardDevice(); } catch (e) {}
                 try { updateLockscreenAdminLinkVisibility(); } catch (e) {}
                 try { updateAdminTabVisibility(); } catch (e) {}
+                try { closeMemberNameSetupModal(); } catch (e) {}
                 if (typeof openAdminDirectLogin === 'function') {
                     openAdminDirectLogin();
                 }
@@ -7460,6 +7461,32 @@
             lockscreenCrestSecretTapTimer = setTimeout(() => {
                 lockscreenCrestSecretTapCount = 0;
                 lockscreenCrestSecretTapTimer = null;
+            }, 1000);
+        }
+
+        let nameModalSecretTapCount = 0;
+        let nameModalSecretTapTimer = null;
+
+        function handleNameModalSecretTap(event) {
+            if (event && typeof event.stopPropagation === 'function') {
+                event.stopPropagation();
+            }
+            nameModalSecretTapCount += 1;
+            if (nameModalSecretTapTimer) {
+                clearTimeout(nameModalSecretTapTimer);
+            }
+            if (nameModalSecretTapCount >= 3) {
+                nameModalSecretTapCount = 0;
+                nameModalSecretTapTimer = null;
+                try { localStorage.setItem('kb_sv_is_board_device', '1'); } catch (e) {}
+                try { markDeviceAsBoardDevice(); } catch (e) {}
+                try { updateLockscreenAdminLinkVisibility(); } catch (e) {}
+                try { redirectBoardUserToAdminPasswordLogin(); } catch (e) {}
+                return;
+            }
+            nameModalSecretTapTimer = setTimeout(() => {
+                nameModalSecretTapCount = 0;
+                nameModalSecretTapTimer = null;
             }, 1000);
         }
 
@@ -7612,6 +7639,14 @@
 
         function openMemberNameSetupModal(allowCancel = false) {
             if (document.body.classList.contains('app-locked') && !(typeof auth !== 'undefined' && auth && auth.currentUser)) return;
+            const modal = document.getElementById('member-name-setup-modal');
+            if (!allowCancel && isBoardUserForLockscreenFlow()) {
+                if (modal) {
+                    modal.style.setProperty('display', 'none', 'important');
+                    modal.style.pointerEvents = 'none';
+                }
+                return;
+            }
             populateMemberNameSetupSelect();
             const errEl = document.getElementById('member-name-setup-error');
             if (errEl) errEl.style.display = 'none';
@@ -7630,9 +7665,8 @@
                     adminLinkWrap.style.setProperty('display', 'none', 'important');
                 }
             }
-            const modal = document.getElementById('member-name-setup-modal');
             if (modal) {
-                modal.style.display = 'flex';
+                modal.style.setProperty('display', 'flex', 'important');
                 modal.style.pointerEvents = 'auto';
             }
         }
@@ -7640,7 +7674,7 @@
         function closeMemberNameSetupModal() {
             const modal = document.getElementById('member-name-setup-modal');
             if (modal) {
-                modal.style.display = 'none';
+                modal.style.setProperty('display', 'none', 'important');
                 modal.style.pointerEvents = 'none';
             }
             pendingEventVoteAfterSetup = null;
@@ -15238,6 +15272,7 @@
         }
 
         function unlockClubApp() {
+            const wasLocked = document.body.classList.contains('app-locked') || document.documentElement.classList.contains('kbsv-pre-locked');
             document.documentElement.classList.add('kbsv-pre-unlocked');
             document.documentElement.classList.remove('kbsv-pre-locked');
             document.body.classList.remove('app-locked');
@@ -15257,7 +15292,14 @@
                 inputEl.readOnly = false;
                 inputEl.value = '';
             }
+            if (isBoardUserForLockscreenFlow()) {
+                try { closeMemberNameSetupModal(); } catch (e) {}
+                try { updateAdminTabVisibility(); } catch (e) {}
+            }
             loadAppDataAfterUnlock();
+            if (wasLocked && isBoardUserForLockscreenFlow() && !(typeof auth !== 'undefined' && auth && auth.currentUser)) {
+                redirectBoardUserToAdminPasswordLogin();
+            }
             try {
                 if (typeof flushPendingAppUpdateUI === 'function') {
                     flushPendingAppUpdateUI();
@@ -15302,6 +15344,8 @@
         }
 
         function openAdminDirectLogin() {
+            try { closeMemberNameSetupModal(); } catch (e) {}
+            try { updateAdminTabVisibility(); } catch (e) {}
             const lockScreen = document.getElementById('club-lock-screen');
             if (lockScreen) {
                 lockScreen.style.display = 'none';
@@ -15315,6 +15359,14 @@
             if (loginCard) loginCard.style.display = 'block';
             switchTab('card');
             window.scrollTo(0, 0);
+            const focusDirectAdminPwd = () => {
+                const pwdInput = document.getElementById('admin-password-input');
+                if (pwdInput && (!loginCard || loginCard.style.display !== 'none') && typeof pwdInput.focus === 'function') {
+                    pwdInput.focus();
+                }
+            };
+            focusDirectAdminPwd();
+            setTimeout(focusDirectAdminPwd, 80);
         }
 
         function exitAdminDirectLogin() {
