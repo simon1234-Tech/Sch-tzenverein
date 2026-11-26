@@ -1718,10 +1718,12 @@
             width: 100%;
             max-width: 420px;
             background: rgba(255, 255, 255, 0.96);
-            border-radius: 24px;
-            padding: 28px 22px;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-            border: 1.5px solid rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(234, 179, 8, 0.55);
+            border-radius: 26px;
+            padding: 26px 22px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
             text-align: center;
             margin: auto 0;
             position: relative;
@@ -1737,40 +1739,79 @@
             box-shadow: 0 10px 24px rgba(185, 28, 28, 0.25);
         }
         .lock-screen-logo {
-            width: 82px;
-            height: 82px;
+            width: 86px;
+            height: 86px;
             border-radius: 50%;
-            background: #ffffff;
-            padding: 5px;
+            border: 3px solid #eab308;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.22);
             margin: 0 auto 12px auto;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-            object-fit: contain;
+            overflow: hidden;
+            background: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+        .lock-screen-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
             display: block;
+            background: #0f172a;
         }
         .lock-pin-input {
             width: 100%;
-            padding: 16px 14px;
-            font-size: 1.35em;
+            min-height: 52px;
+            padding: 12px 14px;
+            font-size: 1.15rem;
             font-weight: 800;
-            letter-spacing: 4px;
+            letter-spacing: 0.14em;
             text-align: center;
-            border-radius: 16px;
+            border-radius: 14px;
             border: 2px solid #cbd5e1;
             background: #ffffff;
             color: #0f172a;
             font-family: inherit;
-            transition: all 0.2s;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
             position: relative;
             z-index: 3;
             pointer-events: auto;
             -webkit-user-select: text;
             user-select: text;
             touch-action: manipulation;
+            box-sizing: border-box;
         }
         .lock-pin-input:focus {
             outline: none;
-            border-color: #b91c1c;
-            box-shadow: 0 0 0 4px rgba(185, 28, 28, 0.15);
+            border-color: #991b1b;
+            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.35), 0 0 0 5px rgba(153, 27, 27, 0.14);
+        }
+        #club-pin-submit-btn {
+            border-radius: 14px;
+            min-height: 52px;
+            font-weight: 800;
+            font-size: 1.02rem;
+            box-shadow: 0 8px 20px rgba(153, 27, 27, 0.32);
+        }
+        .lock-screen-footer-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            color: #e2e8f0;
+            line-height: 1.4;
+            border: 1px solid rgba(255, 255, 255, 0.14);
         }
         .admin-direct-back-btn {
             display: none;
@@ -4173,19 +4214,19 @@
     <div id="club-lock-screen">
         <div style="width: 100%; height: 10px;"></div>
         <div class="lock-screen-card modal-anim">
-            <div role="img" aria-label="Vereinswappen KB &amp; SV Gaschurn-Partenen" style="width: 120px; height: 120px; max-width: 100%; border-radius: 24px; border: 3px solid #991b1b; box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22); margin: 0 auto 14px auto; overflow: hidden; background: #0f172a; display: flex; align-items: center; justify-content: center;">
-                <img id="lock-screen-crest-img" src="./logo.png" alt="Vereinswappen KB &amp; SV" loading="eager" decoding="sync" fetchpriority="high" style="width: 100%; height: 100%; object-fit: cover; display: block; background: #0f172a;" onerror="this.style.display='none'; var fb=document.getElementById('lock-screen-crest-fallback'); if(fb){fb.style.display='flex';}">
-                <div id="lock-screen-crest-fallback" style="display: none; width: 100%; height: 100%; background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%); color: #ffffff; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; letter-spacing: 0.04em; text-align: center; line-height: 1.15;">
-                    <span style="font-size: 1.35rem;">KB &amp; SV</span>
-                    <span style="font-size: 0.62rem; color: #fde047; margin-top: 3px; letter-spacing: 0.08em;">GASCHURN</span>
+            <div id="lock-screen-crest-trigger" class="lock-screen-logo" role="img" aria-label="Vereinswappen KB &amp; SV Gaschurn-Partenen" onclick="handleLockscreenCrestSecretTap(event)">
+                <img id="lock-screen-crest-img" src="./logo.png" alt="Vereinswappen KB &amp; SV" loading="eager" decoding="sync" fetchpriority="high" onerror="this.style.display='none'; var fb=document.getElementById('lock-screen-crest-fallback'); if(fb){fb.style.display='flex';}">
+                <div id="lock-screen-crest-fallback" style="display: none; width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%); color: #ffffff; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; letter-spacing: 0.03em; text-align: center; line-height: 1.1;">
+                    <span style="font-size: 1.05rem;">KB &amp; SV</span>
+                    <span style="font-size: 0.52rem; color: #fde047; margin-top: 2px; letter-spacing: 0.07em;">GASCHURN</span>
                 </div>
             </div>
-            <div style="font-size: 1.08em; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; line-height: 1.25; color: #0f172a;">Kameradschaftsbund &amp; Schützenverein</div>
-            <div style="font-size: 0.88em; font-weight: 800; color: #991b1b; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 4px;">GASCHURN-PARTENEN</div>
+            <div style="font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.25; color: #0f172a;">Kameradschaftsbund &amp; Schützenverein</div>
+            <div style="font-size: 0.86rem; font-weight: 800; color: #991b1b; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px;">GASCHURN-PARTENEN</div>
 
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px 14px; margin: 12px 0 16px 0;">
-                <div style="color: #15803d; font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; line-height: 1.3;">Herzlich willkommen im digitalen Vereinsheim!</div>
-                <p style="color: #334155; font-size: 0.92rem; line-height: 1.5; margin: 0; font-weight: 500;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 14px; margin: 14px 0 18px 0;">
+                <div style="color: #15803d; font-size: 1.02rem; font-weight: 800; margin-bottom: 6px; line-height: 1.35;">Herzlich willkommen im digitalen Vereinsheim!</div>
+                <p style="color: #334155; font-size: 0.9rem; line-height: 1.55; margin: 0; font-weight: 500;">
                     Schön, dass du da bist! Hier findest du alle aktuellen Vereins-News, Termine, den Dienstplan sowie unsere digitalen Vereinsbücher. Bitte gib den Vereins-Zugangscode ein, um einzutreten.
                 </p>
             </div>
@@ -4194,29 +4235,29 @@
                 <div class="form-group" style="margin-bottom: 12px;">
                     <input type="password" inputmode="numeric" id="club-pin-input" class="lock-pin-input" placeholder="Code eingeben" required autocomplete="off">
                 </div>
-                <div id="club-pin-error" style="display: none; color: #dc2626; background: #fee2e2; border: 1px solid #fecaca; border-radius: 10px; padding: 9px 12px; font-size: 0.85em; font-weight: 700; margin-bottom: 12px;">
+                <div id="club-pin-error" style="display: none; color: #dc2626; background: #fee2e2; border: 1px solid #fecaca; border-radius: 12px; padding: 9px 12px; font-size: 0.85em; font-weight: 700; margin-bottom: 12px;">
                     Falscher Zugangscode
                 </div>
-                <button type="submit" id="club-pin-submit-btn" class="btn btn-primary btn-block" style="padding: 15px 20px; font-size: 1.05em; margin-top: 4px;">
+                <button type="submit" id="club-pin-submit-btn" class="btn btn-primary btn-block" style="padding: 14px 20px; border-radius: 14px; min-height: 52px; font-weight: 800; font-size: 1.02rem; box-shadow: 0 8px 20px rgba(153, 27, 27, 0.32); margin-top: 4px;">
                     🔓 App entsperren
                 </button>
             </form>
             <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px; gap: 6px;">
-                <img src="siegel.png" alt="" loading="eager" decoding="sync" fetchpriority="high" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: #0f172a; border: 2px solid #eab308; animation: sealGoldPulse 2.6s ease-in-out infinite;" onerror="this.style.display='none';">
+                <img src="siegel.png" alt="" loading="eager" decoding="sync" fetchpriority="high" style="width: 68px; height: 68px; border-radius: 50%; object-fit: cover; background: #0f172a; border: 2px solid #eab308; animation: sealGoldPulse 2.6s ease-in-out infinite;" onerror="this.style.display='none';">
                 <span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; letter-spacing: 0.05em; text-transform: uppercase;">Powered by Simon Schweighofer</span>
             </div>
         </div>
 
-        <div style="padding: 18px 0 8px 0; text-align: center; position: relative; z-index: 5; pointer-events: auto; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);">
-            <button type="button" id="admin-direct-login-btn" onclick="openAdminDirectLogin()" style="background: none; border: none; color: #f1f5f9; font-size: 0.8em; font-weight: 600; text-decoration: underline; cursor: pointer; font-family: inherit; padding: 10px 14px; position: relative; z-index: 6; pointer-events: auto;">
+        <div style="padding: 16px 0 8px 0; text-align: center; position: relative; z-index: 5; pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <button type="button" id="lockscreen-admin-login-link" onclick="openAdminDirectLogin()" style="display: none !important; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(234, 179, 8, 0.45); border-radius: 999px; color: #f8fafc; font-size: 0.8rem; font-weight: 700; text-decoration: none; cursor: pointer; font-family: inherit; padding: 7px 16px; position: relative; z-index: 6; pointer-events: auto;">
                 Direkt zum Admin-Login
             </button>
-            <div style="margin-top: 2px; font-size: 0.72em; color: #e2e8f0; line-height: 1.5;">
-                <button type="button" onclick="openLegalModal('impressum')" style="background: none; border: none; color: #e2e8f0; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Impressum</button>
-                <span> · </span>
-                <button type="button" onclick="openLegalModal('datenschutz')" style="background: none; border: none; color: #e2e8f0; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Datenschutz</button>
-                <span> · </span>
-                <button type="button" onclick="openLegalModal('cookies')" style="background: none; border: none; color: #e2e8f0; text-decoration: underline; cursor: pointer; font: inherit; padding: 4px 2px;">Cookie-Einstellungen</button>
+            <div class="lock-screen-footer-pill">
+                <button type="button" onclick="openLegalModal('impressum')" style="background: none; border: none; color: #e2e8f0; text-decoration: underline; cursor: pointer; font: inherit; padding: 2px 3px;">Impressum</button>
+                <span>·</span>
+                <button type="button" onclick="openLegalModal('datenschutz')" style="background: none; border: none; color: #e2e8f0; text-decoration: underline; cursor: pointer; font: inherit; padding: 2px 3px;">Datenschutz</button>
+                <span>·</span>
+                <button type="button" onclick="openLegalModal('cookies')" style="background: none; border: none; color: #e2e8f0; text-decoration: underline; cursor: pointer; font: inherit; padding: 2px 3px;">Cookie-Einstellungen</button>
             </div>
         </div>
     </div>
@@ -5905,14 +5946,14 @@
                 Dein Name wird automatisch für Termine, Dienstplan und Vereins-Chat verwendet.
             </p>
             <div class="form-group" style="margin-bottom:12px;">
-                <select id="member-name-setup-select" class="form-control" style="font-weight:700; font-size:1em;"></select>
+                <select id="member-name-setup-select" class="form-control" onchange="handleMemberNameSetupSelectChange(this)" style="font-weight:700; font-size:1em;"></select>
             </div>
             <div id="member-name-setup-error" style="display:none; margin-bottom:10px; padding:7px 10px; border-radius:10px; background:#fee2e2; color:#b91c1c; font-size:0.82em; font-weight:700; text-align:center;">Bitte wähle zuerst deinen Namen aus.</div>
             <div style="display:flex; gap:10px;">
                 <button type="button" id="member-name-setup-save-btn" onclick="saveMemberNameSetup()" class="btn btn-green" style="flex:1; padding:12px;">✅ Bestätigen</button>
                 <button type="button" id="member-name-setup-cancel-btn" onclick="closeMemberNameSetupModal()" class="btn" style="display:none; flex:1; padding:12px; background:#e2e8f0; color:#1e293b;">Abbrechen</button>
             </div>
-            <div style="margin-top:14px; padding-top:12px; border-top:1px solid #e2e8f0; text-align:center;">
+            <div id="name-modal-admin-login-link" style="display: none !important; margin-top:14px; padding-top:12px; border-top:1px solid #e2e8f0; text-align:center;">
                 <a href="#" id="member-setup-admin-login-link" onclick="event.preventDefault(); openAdminLoginFromMemberSetup();" style="font-size:0.8em; font-weight:700; color:#b91c1c; text-decoration:underline;">Vorstand / Admin? Direkt zum Admin-Login →</a>
             </div>
         </div>
@@ -7370,6 +7411,56 @@
             } else {
                 navCardEl.style.setProperty('display', 'none', 'important');
             }
+            try { updateLockscreenAdminLinkVisibility(); } catch (e) {}
+        }
+
+        function updateLockscreenAdminLinkVisibility() {
+            const linkEl = document.getElementById('lockscreen-admin-login-link');
+            if (!linkEl) return;
+            let isBoardDevice = false;
+            let storedMemberName = '';
+            let verifiedAdminName = '';
+            try { isBoardDevice = localStorage.getItem(BOARD_DEVICE_STORAGE_KEY) === '1'; } catch (e) {}
+            try { storedMemberName = String(localStorage.getItem(MEMBER_IDENTITY_STORAGE_KEY) || '').trim(); } catch (e) {}
+            try { verifiedAdminName = String(localStorage.getItem(VERIFIED_ADMIN_MEMBER_STORAGE_KEY) || '').trim(); } catch (e) {}
+
+            const currentMemberName = getCurrentMemberNameForAccess();
+            const hasBoardName = isBoardMemberName(currentMemberName) || isBoardMemberName(storedMemberName) || isBoardMemberName(verifiedAdminName);
+
+            if (isBoardDevice || hasBoardName) {
+                linkEl.style.setProperty('display', 'inline-block', 'important');
+            } else {
+                linkEl.style.setProperty('display', 'none', 'important');
+            }
+        }
+
+        let lockscreenCrestSecretTapCount = 0;
+        let lockscreenCrestSecretTapTimer = null;
+
+        function handleLockscreenCrestSecretTap(event) {
+            if (event && typeof event.stopPropagation === 'function') {
+                event.stopPropagation();
+            }
+            lockscreenCrestSecretTapCount += 1;
+            if (lockscreenCrestSecretTapTimer) {
+                clearTimeout(lockscreenCrestSecretTapTimer);
+            }
+            if (lockscreenCrestSecretTapCount >= 3) {
+                lockscreenCrestSecretTapCount = 0;
+                lockscreenCrestSecretTapTimer = null;
+                try { localStorage.setItem('kb_sv_is_board_device', '1'); } catch (e) {}
+                try { markDeviceAsBoardDevice(); } catch (e) {}
+                try { updateLockscreenAdminLinkVisibility(); } catch (e) {}
+                try { updateAdminTabVisibility(); } catch (e) {}
+                if (typeof openAdminDirectLogin === 'function') {
+                    openAdminDirectLogin();
+                }
+                return;
+            }
+            lockscreenCrestSecretTapTimer = setTimeout(() => {
+                lockscreenCrestSecretTapCount = 0;
+                lockscreenCrestSecretTapTimer = null;
+            }, 1000);
         }
 
         let headerTitleSecretTapCount = 0;
@@ -7412,6 +7503,7 @@
         }
 
         try { updateAdminTabVisibility(); } catch (e) {}
+        try { updateLockscreenAdminLinkVisibility(); } catch (e) {}
 
         function refreshMemberIdentityViews() {
             updateFooterMemberIdentity();
@@ -7432,15 +7524,71 @@
             try { if (typeof syncOneSignalMemberNameTag === 'function') syncOneSignalMemberNameTag(); } catch (e) {}
         }
 
+        function isBoardNameMatchForRedirect(name) {
+            const cleaned = String(name || '').trim();
+            if (!cleaned) return false;
+            return /^(Simon|Heimo|Karin|Sabrina)\b/i.test(cleaned) || isBoardMemberName(cleaned) || isAdminProtectedMemberName(cleaned);
+        }
+
+        function isBoardUserForLockscreenFlow(extraName = '') {
+            let isBoardDevice = false;
+            let savedNameAlt = '';
+            let savedNameMain = '';
+            let verifiedAdminName = '';
+            try { isBoardDevice = localStorage.getItem('kb_sv_is_board_device') === '1'; } catch (e) {}
+            try { savedNameAlt = String(localStorage.getItem('kb_sv_member_name') || '').trim(); } catch (e) {}
+            try { savedNameMain = String(localStorage.getItem(MEMBER_IDENTITY_STORAGE_KEY) || '').trim(); } catch (e) {}
+            try { verifiedAdminName = String(localStorage.getItem(VERIFIED_ADMIN_MEMBER_STORAGE_KEY) || '').trim(); } catch (e) {}
+            const savedName = savedNameAlt || savedNameMain || verifiedAdminName || String(extraName || '').trim();
+            return isBoardDevice || isBoardNameMatchForRedirect(savedName) || isBoardNameMatchForRedirect(savedNameMain) || isBoardNameMatchForRedirect(verifiedAdminName) || isBoardNameMatchForRedirect(extraName);
+        }
+
+        function redirectBoardUserToAdminPasswordLogin(preferredName = '') {
+            try { localStorage.setItem('kb_sv_is_board_device', '1'); } catch (e) {}
+            try { markDeviceAsBoardDevice(); } catch (e) {}
+            try { updateAdminTabVisibility(); } catch (e) {}
+            try { closeMemberNameSetupModal(); } catch (e) {}
+
+            try {
+                const candidate = String(
+                    preferredName ||
+                    localStorage.getItem('kb_sv_member_name') ||
+                    localStorage.getItem(MEMBER_IDENTITY_STORAGE_KEY) ||
+                    localStorage.getItem(VERIFIED_ADMIN_MEMBER_STORAGE_KEY) ||
+                    ''
+                ).trim().toLowerCase();
+                const userSelectEl = document.getElementById('admin-user-select');
+                if (userSelectEl && candidate) {
+                    const matchedKey = ['simon', 'heimo', 'karin', 'sabrina'].find(k => candidate.includes(k));
+                    if (matchedKey) userSelectEl.value = matchedKey;
+                }
+            } catch (e) {}
+
+            switchTab('card');
+
+            const focusAdminPassword = () => {
+                const loginCard = document.getElementById('admin-login-card');
+                const isLoginVisible = !!(loginCard && loginCard.style.display !== 'none');
+                if (isLoginVisible && typeof loginCard.scrollIntoView === 'function') {
+                    loginCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                const pwdInput = document.getElementById('admin-password-input');
+                if (isLoginVisible && pwdInput && typeof pwdInput.focus === 'function') {
+                    pwdInput.focus();
+                }
+            };
+            focusAdminPassword();
+            setTimeout(focusAdminPassword, 80);
+        }
+
         function populateMemberNameSetupSelect() {
             const selectEl = document.getElementById('member-name-setup-select');
             if (!selectEl) return;
-            const isAdmin = !!(typeof auth !== 'undefined' && auth && auth.currentUser);
             const saved = getSavedClubMemberName();
             const sourceMembers = (Array.isArray(officialActiveMembers) && officialActiveMembers.length > 0)
                 ? officialActiveMembers
                 : DEFAULT_ACTIVE_MEMBERS;
-            const selectable = sourceMembers.filter(name => isAdmin || !isAdminProtectedMemberName(name));
+            const selectable = [...sourceMembers];
             let html = '<option value="">-- Bitte Namen wählen --</option>';
             selectable.forEach(name => {
                 const selectedAttr = saved === name ? ' selected' : '';
@@ -7449,6 +7597,16 @@
             selectEl.innerHTML = html;
             if (saved && selectable.includes(saved)) {
                 selectEl.value = saved;
+            }
+        }
+
+        function handleMemberNameSetupSelectChange(selectEl) {
+            if (!selectEl) return;
+            const chosen = String(selectEl.value || '').trim();
+            if (!chosen) return;
+            const isAdmin = !!(typeof auth !== 'undefined' && auth && auth.currentUser);
+            if (!isAdmin && isBoardNameMatchForRedirect(chosen)) {
+                redirectBoardUserToAdminPasswordLogin(chosen);
             }
         }
 
@@ -7461,6 +7619,16 @@
             const hasSaved = !!getSavedClubMemberName();
             if (cancelBtn) {
                 cancelBtn.style.display = (allowCancel || hasSaved) ? 'block' : 'none';
+            }
+            const adminLinkWrap = document.getElementById('name-modal-admin-login-link');
+            if (adminLinkWrap) {
+                let isBoardDev = false;
+                try { isBoardDev = localStorage.getItem('kb_sv_is_board_device') === '1'; } catch (e) {}
+                if (isBoardDev) {
+                    adminLinkWrap.style.setProperty('display', 'block', 'important');
+                } else {
+                    adminLinkWrap.style.setProperty('display', 'none', 'important');
+                }
             }
             const modal = document.getElementById('member-name-setup-modal');
             if (modal) {
@@ -7482,20 +7650,7 @@
         function openAdminLoginFromMemberSetup() {
             pendingEventVoteAfterSetup = null;
             pendingNewsLikeAfterSetup = null;
-            const modal = document.getElementById('member-name-setup-modal');
-            if (modal) {
-                modal.style.display = 'none';
-                modal.style.pointerEvents = 'none';
-            }
-            switchTab('card');
-            setTimeout(() => {
-                const loginCard = document.getElementById('admin-login-card');
-                if (loginCard && typeof loginCard.scrollIntoView === 'function') {
-                    loginCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-                const pwdInput = document.getElementById('admin-password-input');
-                if (pwdInput && typeof pwdInput.focus === 'function') pwdInput.focus();
-            }, 60);
+            redirectBoardUserToAdminPasswordLogin();
         }
 
         async function saveMemberNameSetup() {
@@ -7503,6 +7658,11 @@
             const errEl = document.getElementById('member-name-setup-error');
             const chosen = selectEl ? String(selectEl.value || '').trim() : '';
             const isAdmin = !!(typeof auth !== 'undefined' && auth && auth.currentUser);
+            if (!isAdmin && isBoardNameMatchForRedirect(chosen)) {
+                if (errEl) errEl.style.display = 'none';
+                redirectBoardUserToAdminPasswordLogin(chosen);
+                return;
+            }
             if (!chosen || (!isAdmin && isAdminProtectedMemberName(chosen))) {
                 if (errEl) errEl.style.display = 'block';
                 if (selectEl) selectEl.focus();
@@ -14747,7 +14907,11 @@
             try { initClubChat(); } catch(e) {}
             try {
                 if (!document.body.classList.contains('app-locked') && !auth.currentUser && !getSavedClubMemberName()) {
-                    openMemberNameSetupModal(false);
+                    if (isBoardUserForLockscreenFlow()) {
+                        closeMemberNameSetupModal();
+                    } else {
+                        openMemberNameSetupModal(false);
+                    }
                 }
             } catch(e) {}
             try {
@@ -15112,6 +15276,7 @@
                 lockScreen.style.display = 'flex';
                 lockScreen.style.pointerEvents = 'auto';
             }
+            try { updateLockscreenAdminLinkVisibility(); } catch (e) {}
             const updateModal = document.getElementById('app-update-modal');
             if (updateModal) {
                 updateModal.style.display = 'none';
@@ -15164,6 +15329,7 @@
                 lockScreen.style.display = 'flex';
                 lockScreen.style.pointerEvents = 'auto';
             }
+            try { updateLockscreenAdminLinkVisibility(); } catch (e) {}
             window.scrollTo(0, 0);
         }
 
@@ -15187,7 +15353,11 @@
                 if (validHash && enteredHash === validHash) {
                     try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, enteredHash); } catch (err) {}
                     unlockClubApp();
-                    switchTab('news');
+                    if (isBoardUserForLockscreenFlow()) {
+                        redirectBoardUserToAdminPasswordLogin();
+                    } else {
+                        switchTab('news');
+                    }
                 } else {
                     if (errEl) {
                         errEl.innerText = validHash ? "Falscher Zugangscode" : "Zugangscode noch nicht im System hinterlegt";
