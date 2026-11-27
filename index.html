@@ -268,7 +268,9 @@
 
     <script>
       try {
-        if (window.location.search.includes('mode=schank')) {
+        const searchParams = new URLSearchParams(window.location.search || '');
+        const modeParam = (searchParams.get('mode') || '').trim().toLowerCase();
+        if (modeParam === 'bar' || modeParam === 'schank' || window.location.search.includes('mode=bar') || window.location.search.includes('mode=schank')) {
           localStorage.setItem('kb_sv_kiosk_schank', '1');
         }
       } catch (e) {}
@@ -4424,22 +4426,20 @@
             word-break: break-all;
         }
 
-        /* --- AUSSCHANK-TABLET KIOSK-MODUS (?mode=schank) --- */
-        #schank-kiosk-badge {
+        /* --- AUSSCHANK-TABLET KIOSK-MODUS (?mode=bar) --- */
+        #exit-schank-kiosk-btn {
             display: none;
             align-items: center;
             justify-content: center;
             gap: 6px;
-            padding: 8px 14px;
-            border-radius: 999px;
-            background: rgba(15, 23, 42, 0.58);
-            border: 1.5px solid rgba(250, 204, 21, 0.72);
-            color: #fef9c3;
-            font-size: 0.82rem;
+            padding: 8px 13px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1.5px solid #eab308;
+            color: #ffffff;
+            font-size: 0.85rem;
             font-weight: 800;
-            letter-spacing: 0.02em;
             line-height: 1.2;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
             cursor: pointer;
             user-select: none;
             -webkit-user-select: none;
@@ -4447,6 +4447,12 @@
             touch-action: manipulation;
             flex-shrink: 0;
             font-family: inherit;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.24);
+            transition: transform 0.12s ease, background 0.15s ease;
+        }
+        #exit-schank-kiosk-btn:active {
+            transform: scale(0.96);
+            background: rgba(255, 255, 255, 0.24);
         }
         body.schank-kiosk-mode {
             max-width: 820px;
@@ -4465,6 +4471,7 @@
         body.schank-kiosk-mode #nav-admin-btn,
         body.schank-kiosk-mode #page-news,
         body.schank-kiosk-mode #page-events,
+        body.schank-kiosk-mode #page-guide,
         body.schank-kiosk-mode #page-weapons,
         body.schank-kiosk-mode #page-card,
         body.schank-kiosk-mode #chat-drawer,
@@ -4480,6 +4487,7 @@
         html.schank-kiosk-mode #header-help-btn,
         html.schank-kiosk-mode #page-news,
         html.schank-kiosk-mode #page-events,
+        html.schank-kiosk-mode #page-guide,
         html.schank-kiosk-mode #page-weapons,
         html.schank-kiosk-mode #page-card,
         html.schank-kiosk-mode #member-name-setup-modal {
@@ -4489,7 +4497,7 @@
         body.schank-kiosk-mode:not(.app-locked) #page-drinks {
             display: block !important;
         }
-        body.schank-kiosk-mode:not(.app-locked) #schank-kiosk-badge {
+        body.schank-kiosk-mode:not(.app-locked) #exit-schank-kiosk-btn {
             display: inline-flex !important;
         }
         body.schank-kiosk-mode #app-header-crest-btn.has-active-status {
@@ -4705,9 +4713,9 @@
                 </svg>
                 <span style="font-size: 0.78rem; font-weight: 900; color: #7f1d1d; line-height: 1;">Hilfe</span>
             </button>
-            <button type="button" id="schank-kiosk-badge" aria-label="Ausschank-Tablet Kiosk-Modus" title="Ausschank-Tablet">
-                <span aria-hidden="true">🍺</span>
-                <span>Ausschank-Tablet</span>
+            <button type="button" id="exit-schank-kiosk-btn" onclick="promptExitSchankKioskMode()" aria-label="Schankbuch beenden und App sperren" title="Schankbuch beenden">
+                <span aria-hidden="true">🚪</span>
+                <span>Schankbuch beenden</span>
             </button>
         </div>
         <div class="app-header-title-wrap" id="app-header-title-secret-trigger" onclick="handleHeaderTitleSecretTap(event)">
@@ -7270,12 +7278,7 @@
 
         const SCHANK_KIOSK_STORAGE_KEY = 'kb_sv_kiosk_schank';
         const SCHANK_KIOSK_MEMBER_NAME = 'Schankdienst (Tablet)';
-        let schankKioskHoldTimer = null;
-        let schankKioskHoldTriggered = false;
-        let schankKioskTapCount = 0;
-        let schankKioskTapTimer = null;
         let schankKioskExitPromptOpen = false;
-        let schankKioskBadgeBound = false;
 
         function ensureSchankKioskIdentity() {
             if (!isSchankKioskMode()) return;
@@ -7295,113 +7298,37 @@
             }
         }
 
-        function promptExitSchankKioskMode() {
+        async function promptExitSchankKioskMode() {
             if (!isSchankKioskMode() || schankKioskExitPromptOpen) return;
             schankKioskExitPromptOpen = true;
-            const finishExit = () => {
-                try { localStorage.removeItem(SCHANK_KIOSK_STORAGE_KEY); } catch (e) {}
+            try {
+                const confirmed = await showClubConfirm({
+                    icon: '🚪',
+                    tone: 'danger',
+                    title: 'Schankbuch beenden?',
+                    htmlMessage: 'Möchtest du das Schankbuch auf diesem Tablet jetzt beenden und die App sperren?',
+                    okText: '🚪 Ja, beenden & sperren',
+                    isDanger: true
+                });
+                if (!confirmed) return;
+
+                try { localStorage.setItem(SCHANK_KIOSK_STORAGE_KEY, '1'); } catch (e) {}
+                try { localStorage.removeItem('kb_sv_unlocked'); } catch (e) {}
+                try { localStorage.removeItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+                try { localStorage.removeItem('kbsv_club_pin'); } catch (e) {}
                 try {
-                    if (localStorage.getItem('kb_sv_member_name') === SCHANK_KIOSK_MEMBER_NAME) {
-                        localStorage.removeItem('kb_sv_member_name');
-                    }
-                    if (localStorage.getItem('kbsv_member_name') === SCHANK_KIOSK_MEMBER_NAME) {
-                        localStorage.removeItem('kbsv_member_name');
+                    if (typeof firebase !== 'undefined' && firebase && typeof firebase.auth === 'function') {
+                        await firebase.auth().signOut();
                     }
                 } catch (e) {}
-                try {
-                    const cleanUrl = new URL(window.location.href);
-                    cleanUrl.searchParams.delete('mode');
-                    window.location.replace(cleanUrl.toString());
-                } catch (e) {
-                    window.location.href = window.location.pathname || './';
-                }
-            };
-            if (typeof showClubConfirm === 'function') {
-                showClubConfirm({
-                    icon: '🍺',
-                    tone: 'warning',
-                    title: 'Ausschank-Kiosk-Modus beenden?',
-                    htmlMessage: 'Möchtest du den <strong>Ausschank-Kiosk-Modus</strong> auf diesem Tablet wirklich beenden und in den normalen App-Modus wechseln?',
-                    okText: '✅ Ja, beenden',
-                    isDanger: true
-                }).then((confirmed) => {
-                    schankKioskExitPromptOpen = false;
-                    if (confirmed) finishExit();
-                });
-            } else if (typeof showCustomConfirm === 'function') {
-                showCustomConfirm(
-                    'Ausschank-Kiosk-Modus beenden?',
-                    'Ausschank-Kiosk-Modus auf diesem Tablet beenden?',
-                    function(confirmed) {
-                        schankKioskExitPromptOpen = false;
-                        if (confirmed) finishExit();
-                    }
-                );
-            } else {
-                const confirmed = window.confirm('Ausschank-Kiosk-Modus auf diesem Tablet beenden?');
+                window.location.reload();
+            } finally {
                 schankKioskExitPromptOpen = false;
-                if (confirmed) finishExit();
             }
         }
 
         function bindSchankKioskBadgeExit() {
-            if (schankKioskBadgeBound) return;
-            const badge = document.getElementById('schank-kiosk-badge');
-            if (!badge) return;
-            schankKioskBadgeBound = true;
-
-            const cancelHold = () => {
-                if (schankKioskHoldTimer) {
-                    clearTimeout(schankKioskHoldTimer);
-                    schankKioskHoldTimer = null;
-                }
-            };
-            const startHold = () => {
-                if (!isSchankKioskMode()) return;
-                cancelHold();
-                schankKioskHoldTriggered = false;
-                schankKioskHoldTimer = setTimeout(() => {
-                    schankKioskHoldTimer = null;
-                    schankKioskHoldTriggered = true;
-                    schankKioskTapCount = 0;
-                    if (schankKioskTapTimer) {
-                        clearTimeout(schankKioskTapTimer);
-                        schankKioskTapTimer = null;
-                    }
-                    promptExitSchankKioskMode();
-                }, 3000);
-            };
-
-            badge.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-            });
-            badge.addEventListener('pointerdown', startHold);
-            badge.addEventListener('pointerup', cancelHold);
-            badge.addEventListener('pointerleave', cancelHold);
-            badge.addEventListener('pointercancel', cancelHold);
-            badge.addEventListener('click', (e) => {
-                if (!isSchankKioskMode()) return;
-                e.preventDefault();
-                e.stopPropagation();
-                if (schankKioskHoldTriggered) {
-                    schankKioskHoldTriggered = false;
-                    return;
-                }
-                schankKioskTapCount += 1;
-                if (schankKioskTapTimer) {
-                    clearTimeout(schankKioskTapTimer);
-                }
-                if (schankKioskTapCount >= 5) {
-                    schankKioskTapCount = 0;
-                    schankKioskTapTimer = null;
-                    promptExitSchankKioskMode();
-                    return;
-                }
-                schankKioskTapTimer = setTimeout(() => {
-                    schankKioskTapCount = 0;
-                    schankKioskTapTimer = null;
-                }, 1800);
-            });
+            // Direkt über #exit-schank-kiosk-btn (onclick="promptExitSchankKioskMode()") gebunden
         }
 
         function updateAppFooterVisibility(tabId) {
