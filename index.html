@@ -4496,6 +4496,116 @@
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
             cursor: default !important;
         }
+
+        /* --- GROßES VEREINS-BESTÄTIGUNGS-POPUP (#club-confirm-modal) --- */
+        body.club-confirm-open .bottom-nav,
+        body.club-alert-open .bottom-nav {
+            z-index: 1000 !important;
+            pointer-events: none !important;
+        }
+        #club-confirm-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 10098;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            pointer-events: none;
+            box-sizing: border-box;
+        }
+        #club-confirm-modal .club-confirm-card {
+            background: #ffffff;
+            border: 3.5px solid #eab308;
+            border-radius: 28px;
+            max-width: 480px;
+            width: 100%;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55);
+            box-sizing: border-box;
+        }
+        #club-confirm-icon-wrap {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            margin: 0 auto 14px auto;
+            font-size: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #dcfce7;
+            border: 2px solid #86efac;
+            line-height: 1;
+        }
+        #club-confirm-title {
+            font-size: 1.48rem;
+            font-weight: 900;
+            color: #0f172a;
+            line-height: 1.25;
+            margin: 0 0 12px 0;
+        }
+        #club-confirm-text {
+            font-size: 1.22rem;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.45;
+            margin: 0 0 24px 0;
+            word-break: break-word;
+        }
+        .club-confirm-actions {
+            display: grid;
+            grid-template-columns: 1fr 1.35fr;
+            gap: 12px;
+            width: 100%;
+        }
+        #club-confirm-cancel {
+            min-height: 60px;
+            border-radius: 16px;
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            color: #334155;
+            font-size: 1.12rem;
+            font-weight: 800;
+            cursor: pointer;
+            padding: 12px 14px;
+            font-family: inherit;
+            touch-action: manipulation;
+            transition: transform 0.12s ease, background 0.15s ease;
+        }
+        #club-confirm-cancel:active {
+            transform: scale(0.97);
+        }
+        #club-confirm-ok {
+            min-height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            border: 2px solid #eab308;
+            color: #ffffff;
+            font-size: 1.16rem;
+            font-weight: 900;
+            cursor: pointer;
+            padding: 12px 14px;
+            font-family: inherit;
+            box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35);
+            touch-action: manipulation;
+            transition: transform 0.12s ease, filter 0.15s ease;
+        }
+        #club-confirm-ok:active {
+            transform: scale(0.97);
+        }
+        #club-confirm-ok.is-danger {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.35);
+        }
+        @media (max-width: 390px) {
+            .club-confirm-actions {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body class="app-locked">
@@ -6783,14 +6893,29 @@
     </nav>
 
     <!-- GROßES VEREINS-POPUP (ERSETZT STANDARD-BROWSER-ALERT) -->
-    <div id="club-alert-modal" role="dialog" aria-modal="true" aria-labelledby="club-alert-title" aria-describedby="club-alert-text" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.78); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 10090; display: none; align-items: center; justify-content: center; padding: 20px; pointer-events: none;">
-        <div style="background: #ffffff; border: 2.5px solid #eab308; border-radius: 24px; max-width: 390px; width: 100%; padding: 26px 22px; text-align: center; box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);">
-            <div id="club-alert-icon-wrap" style="width: 64px; height: 64px; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 2rem; background: #dcfce7;">
+    <div id="club-alert-modal" role="dialog" aria-modal="true" aria-labelledby="club-alert-title" aria-describedby="club-alert-text" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.82); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 10099; display: none; align-items: center; justify-content: center; padding: 20px; pointer-events: none; box-sizing: border-box;">
+        <div class="modal-anim" style="background: #ffffff; border: 3.5px solid #eab308; border-radius: 28px; max-width: 480px; width: 100%; padding: 28px 24px; text-align: center; box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55); box-sizing: border-box;">
+            <div id="club-alert-icon-wrap" style="width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 14px auto; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; background: #dcfce7; border: 2px solid #86efac; line-height: 1;">
                 <span id="club-alert-icon" aria-hidden="true">✅</span>
             </div>
-            <h3 id="club-alert-title" style="font-size: 1.3rem; font-weight: 900; color: #0f172a; line-height: 1.25; margin: 14px 0 8px 0;">Vereins-Info</h3>
-            <p id="club-alert-text" style="font-size: 1.06rem; font-weight: 600; color: #334155; line-height: 1.45; margin: 0 0 22px 0; white-space: pre-line; word-break: break-word;"></p>
-            <button type="button" id="club-alert-ok-btn" onclick="closeClubAlert()" style="width: 100%; min-height: 52px; border-radius: 16px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: 2px solid #eab308; font-size: 1.08rem; font-weight: 800; letter-spacing: 0.02em; cursor: pointer;">✅ OK / Verstanden</button>
+            <h3 id="club-alert-title" style="font-size: 1.48rem; font-weight: 900; color: #0f172a; line-height: 1.25; margin: 0 0 12px 0;">Vereins-Info</h3>
+            <div id="club-alert-text" style="font-size: 1.22rem; font-weight: 700; color: #1e293b; line-height: 1.45; margin: 0 0 24px 0; white-space: pre-line; word-break: break-word;"></div>
+            <button type="button" id="club-alert-ok-btn" onclick="closeClubAlert()" style="width: 100%; min-height: 60px; border-radius: 16px; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: #ffffff; border: 2px solid #eab308; font-size: 1.16rem; font-weight: 900; letter-spacing: 0.02em; cursor: pointer; font-family: inherit; box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35); touch-action: manipulation;">✅ OK / Verstanden</button>
+        </div>
+    </div>
+
+    <!-- GROßES VEREINS-BESTÄTIGUNGS-POPUP (SCHANKBUCH & TABLET) -->
+    <div id="club-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="club-confirm-title" aria-describedby="club-confirm-text">
+        <div class="club-confirm-card modal-anim">
+            <div id="club-confirm-icon-wrap">
+                <span id="club-confirm-icon" aria-hidden="true">💵</span>
+            </div>
+            <h3 id="club-confirm-title">Bestätigung</h3>
+            <div id="club-confirm-text"></div>
+            <div class="club-confirm-actions">
+                <button type="button" id="club-confirm-cancel" onclick="closeClubConfirm(false)">✕ Abbrechen</button>
+                <button type="button" id="club-confirm-ok" onclick="closeClubConfirm(true)">✅ Bestätigen</button>
+            </div>
         </div>
     </div>
 
@@ -6801,6 +6926,19 @@
             : null;
         const _clubAlertQueue = [];
         let _clubAlertActive = null;
+
+        function _resolveClubModalToneStyles(tone, isDanger) {
+            if (isDanger || tone === 'danger' || tone === 'error') {
+                return { bg: '#fee2e2', border: '#fca5a5', defaultIcon: '🗑️' };
+            }
+            if (tone === 'invoice' || tone === 'blue') {
+                return { bg: '#dbeafe', border: '#93c5fd', defaultIcon: '🧾' };
+            }
+            if (tone === 'warning') {
+                return { bg: '#fef9c3', border: '#fde047', defaultIcon: '⚠️' };
+            }
+            return { bg: '#dcfce7', border: '#86efac', defaultIcon: '✅' };
+        }
 
         function _renderNextClubAlert() {
             if (_clubAlertActive || _clubAlertQueue.length === 0) return;
@@ -6813,19 +6951,34 @@
             const item = _clubAlertQueue.shift();
 
             if (!modal || !titleEl || !textEl) {
-                if (__nativeBrowserAlert) __nativeBrowserAlert(item.message);
+                if (__nativeBrowserAlert) __nativeBrowserAlert(item.message || '');
                 try { item.resolve(); } catch (e) {}
                 _renderNextClubAlert();
                 return;
             }
 
             _clubAlertActive = item;
-            const isWarning = item.type === 'warning' || item.type === 'error' || item.type === 'danger';
-            if (iconWrap) iconWrap.style.background = isWarning ? '#fef9c3' : '#dcfce7';
-            if (iconEl) iconEl.textContent = isWarning ? '⚠️' : '✅';
+            const toneKey = item.tone || item.type || 'success';
+            const toneStyles = _resolveClubModalToneStyles(toneKey, toneKey === 'danger' || toneKey === 'error');
+            const isWarning = toneKey === 'warning' || toneKey === 'error' || toneKey === 'danger';
+            if (iconWrap) {
+                iconWrap.style.background = toneStyles.bg;
+                iconWrap.style.borderColor = toneStyles.border;
+            }
+            if (iconEl) iconEl.textContent = item.icon || (isWarning ? '⚠️' : '✅');
             titleEl.textContent = item.title || (isWarning ? 'Hinweis' : 'Vereins-Info');
-            textEl.textContent = item.message;
+            if (item.htmlMessage) {
+                textEl.style.whiteSpace = 'normal';
+                textEl.innerHTML = item.htmlMessage;
+            } else {
+                textEl.style.whiteSpace = 'pre-line';
+                textEl.textContent = item.message;
+            }
+            if (okBtn) {
+                okBtn.textContent = item.okText || '✅ OK / Verstanden';
+            }
 
+            try { if (document.body) document.body.classList.add('club-alert-open'); } catch (e) {}
             modal.style.display = 'flex';
             modal.style.pointerEvents = 'auto';
             if (okBtn) {
@@ -6839,6 +6992,7 @@
                 modal.style.display = 'none';
                 modal.style.pointerEvents = 'none';
             }
+            try { if (document.body) document.body.classList.remove('club-alert-open'); } catch (e) {}
             const current = _clubAlertActive;
             _clubAlertActive = null;
             if (current && typeof current.resolve === 'function') {
@@ -6849,40 +7003,155 @@
             }
         }
 
-        function showClubAlert(message, title = 'Vereins-Info', type = 'success') {
-            const cleanMessage = String(message == null ? '' : message);
-            const cleanTitle = String(title || '').trim() || (type === 'warning' || type === 'error' ? 'Hinweis' : 'Vereins-Info');
-            const cleanType = String(type || 'success').trim().toLowerCase();
-            return new Promise((resolve) => {
-                _clubAlertQueue.push({
-                    message: cleanMessage,
-                    title: cleanTitle,
+        function showClubAlert(messageOrOptions, title = 'Vereins-Info', type = 'success') {
+            let entry;
+            if (messageOrOptions && typeof messageOrOptions === 'object') {
+                const opts = messageOrOptions;
+                const cleanType = String(opts.tone || opts.type || 'success').trim().toLowerCase();
+                entry = {
+                    icon: opts.icon ? String(opts.icon) : '',
+                    tone: cleanType,
                     type: cleanType,
+                    title: String(opts.title || '').trim() || (cleanType === 'warning' || cleanType === 'error' || cleanType === 'danger' ? 'Hinweis' : 'Vereins-Info'),
+                    message: String(opts.message == null ? '' : opts.message),
+                    htmlMessage: opts.htmlMessage ? String(opts.htmlMessage) : '',
+                    okText: opts.okText ? String(opts.okText) : '✅ OK / Verstanden'
+                };
+            } else {
+                const cleanMessage = String(messageOrOptions == null ? '' : messageOrOptions);
+                const cleanType = String(type || 'success').trim().toLowerCase();
+                const cleanTitle = String(title || '').trim() || (cleanType === 'warning' || cleanType === 'error' || cleanType === 'danger' ? 'Hinweis' : 'Vereins-Info');
+                entry = {
+                    icon: '',
+                    tone: cleanType,
+                    type: cleanType,
+                    title: cleanTitle,
+                    message: cleanMessage,
+                    htmlMessage: '',
+                    okText: '✅ OK / Verstanden'
+                };
+            }
+            return new Promise((resolve) => {
+                _clubAlertQueue.push({ ...entry, resolve });
+                _renderNextClubAlert();
+            });
+        }
+
+        const _clubConfirmQueue = [];
+        let _clubConfirmActive = null;
+
+        function _renderNextClubConfirm() {
+            if (_clubConfirmActive || _clubConfirmQueue.length === 0) return;
+            const modal = document.getElementById('club-confirm-modal');
+            const iconWrap = document.getElementById('club-confirm-icon-wrap');
+            const iconEl = document.getElementById('club-confirm-icon');
+            const titleEl = document.getElementById('club-confirm-title');
+            const textEl = document.getElementById('club-confirm-text');
+            const cancelBtn = document.getElementById('club-confirm-cancel');
+            const okBtn = document.getElementById('club-confirm-ok');
+            const item = _clubConfirmQueue.shift();
+
+            if (!modal || !titleEl || !textEl || !okBtn || !cancelBtn) {
+                const fallbackConfirmed = (typeof window !== 'undefined' && typeof window.confirm === 'function')
+                    ? window.confirm(item.title || 'Bestätigen?')
+                    : false;
+                try { item.resolve(!!fallbackConfirmed); } catch (e) {}
+                _renderNextClubConfirm();
+                return;
+            }
+
+            _clubConfirmActive = item;
+            const inferredTone = item.tone
+                || (item.isDanger ? 'danger' : (item.icon === '🧾' ? 'invoice' : (item.icon === '⚠️' ? 'warning' : 'cash')));
+            const toneStyles = _resolveClubModalToneStyles(inferredTone, item.isDanger);
+
+            if (iconWrap) {
+                iconWrap.style.background = toneStyles.bg;
+                iconWrap.style.borderColor = toneStyles.border;
+            }
+            if (iconEl) {
+                iconEl.textContent = item.icon || toneStyles.defaultIcon;
+            }
+            titleEl.textContent = item.title || 'Bestätigung';
+            if (item.htmlMessage) {
+                textEl.innerHTML = item.htmlMessage;
+            } else {
+                textEl.textContent = item.message || '';
+            }
+            cancelBtn.textContent = item.cancelText || '✕ Abbrechen';
+            okBtn.textContent = item.okText || '✅ Bestätigen';
+            okBtn.classList.toggle('is-danger', !!item.isDanger);
+
+            try { if (document.body) document.body.classList.add('club-confirm-open'); } catch (e) {}
+            modal.style.display = 'flex';
+            modal.style.pointerEvents = 'auto';
+            try { okBtn.focus(); } catch (e) {}
+        }
+
+        function closeClubConfirm(confirmed) {
+            const modal = document.getElementById('club-confirm-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+            }
+            try { if (document.body) document.body.classList.remove('club-confirm-open'); } catch (e) {}
+            const current = _clubConfirmActive;
+            _clubConfirmActive = null;
+            if (current && typeof current.resolve === 'function') {
+                try { current.resolve(!!confirmed); } catch (e) {}
+            }
+            if (_clubConfirmQueue.length > 0) {
+                _renderNextClubConfirm();
+            }
+        }
+
+        function showClubConfirm(options = {}) {
+            const opts = (options && typeof options === 'object') ? options : {};
+            return new Promise((resolve) => {
+                _clubConfirmQueue.push({
+                    icon: opts.icon ? String(opts.icon) : '',
+                    tone: opts.tone ? String(opts.tone).trim().toLowerCase() : '',
+                    title: String(opts.title || 'Bestätigung'),
+                    htmlMessage: opts.htmlMessage ? String(opts.htmlMessage) : '',
+                    message: opts.message ? String(opts.message) : '',
+                    okText: String(opts.okText || '✅ Bestätigen'),
+                    cancelText: String(opts.cancelText || '✕ Abbrechen'),
+                    isDanger: !!opts.isDanger,
                     resolve
                 });
-                _renderNextClubAlert();
+                _renderNextClubConfirm();
             });
         }
 
         if (typeof window !== 'undefined') {
             window.showClubAlert = showClubAlert;
             window.closeClubAlert = closeClubAlert;
+            window.showClubConfirm = showClubConfirm;
+            window.closeClubConfirm = closeClubConfirm;
             window.alert = function(msg) {
                 const text = String(msg == null ? '' : msg);
                 const isAccessDenied = /⛔|zugriff verweigert|nur obmann|nur berechtigte|geschützt/i.test(text);
                 const isError = /fehler|konnte nicht|ungültig|blockiert/i.test(text);
                 const isWarning = isAccessDenied || isError || /bitte|🔒|⚠️|🚨|nicht unterstützt|nicht verfügbar|nicht möglich|kein(e|en)?\b|zu groß|leider|gesperrt/i.test(text);
-                const inferredType = isWarning ? 'warning' : 'success';
+                const inferredType = isError ? 'danger' : (isWarning ? 'warning' : 'success');
                 const inferredTitle = isAccessDenied
                     ? 'Zugriff verweigert'
                     : (isError ? 'Fehler' : (isWarning ? 'Hinweis' : 'Vereins-Info'));
                 return showClubAlert(text, inferredTitle, inferredType);
             };
             document.addEventListener('keydown', (evt) => {
-                if (!_clubAlertActive) return;
-                if (evt.key === 'Escape' || evt.key === 'Enter') {
-                    evt.preventDefault();
-                    closeClubAlert();
+                if (_clubAlertActive) {
+                    if (evt.key === 'Escape' || evt.key === 'Enter') {
+                        evt.preventDefault();
+                        closeClubAlert();
+                    }
+                    return;
+                }
+                if (_clubConfirmActive) {
+                    if (evt.key === 'Escape') {
+                        evt.preventDefault();
+                        closeClubConfirm(false);
+                    }
                 }
             });
         }
@@ -7047,7 +7316,19 @@
                     window.location.href = window.location.pathname || './';
                 }
             };
-            if (typeof showCustomConfirm === 'function') {
+            if (typeof showClubConfirm === 'function') {
+                showClubConfirm({
+                    icon: '🍺',
+                    tone: 'warning',
+                    title: 'Ausschank-Kiosk-Modus beenden?',
+                    htmlMessage: 'Möchtest du den <strong>Ausschank-Kiosk-Modus</strong> auf diesem Tablet wirklich beenden und in den normalen App-Modus wechseln?',
+                    okText: '✅ Ja, beenden',
+                    isDanger: true
+                }).then((confirmed) => {
+                    schankKioskExitPromptOpen = false;
+                    if (confirmed) finishExit();
+                });
+            } else if (typeof showCustomConfirm === 'function') {
                 showCustomConfirm(
                     'Ausschank-Kiosk-Modus beenden?',
                     'Ausschank-Kiosk-Modus auf diesem Tablet beenden?',
@@ -14156,7 +14437,12 @@
             const name = guestEl ? guestEl.value.trim() : '';
 
             if (!name) {
-                alert("Bitte einen Namen, Gast oder Tisch eingeben!");
+                await showClubAlert({
+                    icon: '⚠️',
+                    tone: 'warning',
+                    title: 'Name oder Tisch fehlt',
+                    htmlMessage: 'Bitte zuerst einen <strong>Namen, Gast oder Tisch</strong> für den neuen Deckel eingeben.'
+                });
                 if (guestEl) guestEl.focus();
                 return;
             }
@@ -14540,18 +14826,30 @@
             }
         }
 
-        function confirmResetDrinks() {
+        async function confirmResetDrinks() {
             const activeTab = getActiveOpenTab();
             const tabLabel = activeTab ? activeTab.name : DEFAULT_BAR_TAB_NAME;
-            showCustomConfirm(
-                "ACHTUNG: Aktuellen Deckel leeren/löschen?",
-                `Alle nicht abgerechneten Einträge auf dem Deckel „${tabLabel}“ werden gelöscht!`,
-                function(confirmed) {
-                    if (confirmed) {
-                        closeSettledOpenTab(activeTab.id);
-                    }
-                }
-            );
+            const tabTotal = activeTab ? computeCountsTotal(normalizeDrinkCounts(activeTab.counts)) : 0;
+            const tabTotalFormatted = tabTotal.toFixed(2).replace('.', ',');
+            const confirmed = await showClubConfirm({
+                icon: '🗑️',
+                tone: 'danger',
+                title: 'Deckel wirklich löschen?',
+                htmlMessage: `Alle nicht abgerechneten Einträge auf dem Deckel<br><strong style="font-size: 1.36rem; color: #0f172a;">„${escapeHtml(tabLabel)}“</strong>`
+                    + (tabTotal > 0 ? `<br><span style="display: inline-block; margin: 10px 0 4px 0; padding: 6px 16px; border-radius: 14px; background: #fee2e2; border: 2px solid #fca5a5; font-size: 1.5rem; font-weight: 900; color: #dc2626;">€ ${tabTotalFormatted}</span>` : '')
+                    + `<br><span style="display: inline-block; margin-top: 6px; font-size: 1.06rem; color: #475569;">werden unwiderruflich gelöscht!</span>`,
+                okText: '🗑️ Ja, löschen',
+                isDanger: true
+            });
+            if (confirmed && activeTab) {
+                await closeSettledOpenTab(activeTab.id);
+                await showClubAlert({
+                    icon: '✅',
+                    tone: 'cash',
+                    title: 'Deckel gelöscht',
+                    htmlMessage: `Der Deckel <strong style="color: #0f172a;">„${escapeHtml(tabLabel)}“</strong> wurde geleert und geschlossen.`
+                });
+            }
         }
 
         function getBarServiceMemberName() {
@@ -14590,15 +14888,41 @@
             const activeTab = getActiveOpenTab();
             const countsCopy = normalizeDrinkCounts(activeTab.counts);
             const total = computeCountsTotal(countsCopy);
-            if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
+            if (total <= 0) {
+                await showClubAlert({
+                    icon: '⚠️',
+                    tone: 'warning',
+                    title: 'Keine Produkte gewählt',
+                    htmlMessage: 'Bitte zuerst mindestens ein <strong>Produkt</strong> auf dem Deckel auswählen!'
+                });
+                return;
+            }
 
             const itemsArray = buildItemsArrayFromCounts(countsCopy);
-            if (!itemsArray || itemsArray.length === 0) { alert("Bitte Produkte auswählen!"); return; }
+            if (!itemsArray || itemsArray.length === 0) {
+                await showClubAlert({
+                    icon: '⚠️',
+                    tone: 'warning',
+                    title: 'Keine Produkte gewählt',
+                    htmlMessage: 'Bitte zuerst mindestens ein <strong>Produkt</strong> auf dem Deckel auswählen!'
+                });
+                return;
+            }
             const typedCustName = document.getElementById('cust-name') ? document.getElementById('cust-name').value.trim() : '';
             const saleTabName = (activeTab.isDefaultBar && typedCustName) ? typedCustName : activeTab.name;
             const deckelName = String(saleTabName || DEFAULT_BAR_TAB_NAME).trim() || DEFAULT_BAR_TAB_NAME;
             const gesamtBetragFormatiert = total.toFixed(2).replace('.', ',');
-            if (!confirm("💶 Deckel „" + deckelName + "“ über " + gesamtBetragFormatiert + " € wirklich als BAR BEZAHLT in der Schankkassa speichern und den Deckel schließen?")) return;
+            const confirmedCash = await showClubConfirm({
+                icon: '💵',
+                tone: 'cash',
+                title: 'Bar-Zahlung abschließen?',
+                htmlMessage: `Deckel / Tisch:<br><strong style="font-size: 1.38rem; color: #0f172a;">${escapeHtml(deckelName)}</strong><br>`
+                    + `<span style="display: inline-block; margin: 10px 0 8px 0; padding: 6px 18px; border-radius: 14px; background: #dcfce7; border: 2px solid #86efac; font-size: 1.58rem; font-weight: 900; color: #15803d;">€ ${gesamtBetragFormatiert}</span><br>`
+                    + `<span style="font-size: 1.06rem; color: #475569;">Als <strong>BAR BEZAHLT</strong> in der Schankkassa speichern und den Deckel schließen?</span>`,
+                okText: '✅ Ja, Bar bezahlt',
+                isDanger: false
+            });
+            if (!confirmedCash) return;
 
             const currentMemberName = getBarServiceMemberName();
             const tabOpenedBy = String(activeTab && activeTab.openedBy ? activeTab.openedBy : currentMemberName).trim() || currentMemberName;
@@ -14637,8 +14961,21 @@
 
                 const amountText = total.toFixed(2).replace('.', ',');
                 showSchankbuchFeedback(`Bar-Abrechnung (€ ${amountText}) in der Schankkassa gespeichert!`);
+                await showClubAlert({
+                    icon: '✅',
+                    tone: 'cash',
+                    title: 'Bar-Zahlung gespeichert!',
+                    htmlMessage: `Deckel <strong style="color: #0f172a;">„${escapeHtml(deckelName)}“</strong><br>`
+                        + `<span style="display: inline-block; margin: 10px 0 6px 0; padding: 6px 18px; border-radius: 14px; background: #dcfce7; border: 2px solid #86efac; font-size: 1.52rem; font-weight: 900; color: #15803d;">€ ${amountText}</span><br>`
+                        + `wurde erfolgreich in der Schankkassa verbucht.`
+                });
             } catch (err) {
-                alert("Fehler beim Speichern der Bar-Abrechnung: " + err.message);
+                await showClubAlert({
+                    icon: '⚠️',
+                    tone: 'danger',
+                    title: 'Fehler beim Speichern',
+                    htmlMessage: `Die Bar-Abrechnung konnte nicht gespeichert werden:<br><strong style="color: #b91c1c;">${escapeHtml(err && err.message ? err.message : String(err))}</strong>`
+                });
             } finally {
                 isCashSaleInFlight = false;
                 if (btnEl) btnEl.disabled = false;
@@ -14650,7 +14987,15 @@
             const activeTab = getActiveOpenTab();
             const countsCopy = normalizeDrinkCounts(activeTab.counts);
             const total = computeCountsTotal(countsCopy);
-            if (total <= 0) { alert("Bitte Produkte auswählen!"); return; }
+            if (total <= 0) {
+                await showClubAlert({
+                    icon: '⚠️',
+                    tone: 'warning',
+                    title: 'Keine Produkte gewählt',
+                    htmlMessage: 'Bitte zuerst mindestens ein <strong>Produkt</strong> für die Rechnung auswählen!'
+                });
+                return;
+            }
 
             const custNameEl = document.getElementById('cust-name');
             const custAttnEl = document.getElementById('cust-attn');
@@ -14662,6 +15007,19 @@
             const clientAttn = custAttnEl ? custAttnEl.value.trim() : "";
             const clientAddress = custAddrEl ? custAddrEl.value.trim() : "";
             const clientZipCity = custZipEl ? custZipEl.value.trim() : "";
+
+            const gesamtBetragFormatiert = total.toFixed(2).replace('.', ',');
+            const confirmedInvoice = await showClubConfirm({
+                icon: '🧾',
+                tone: 'invoice',
+                title: 'Firmen-Rechnung erstellen?',
+                htmlMessage: `Empfänger:<br><strong style="font-size: 1.38rem; color: #0f172a;">${escapeHtml(clientName)}</strong><br>`
+                    + `<span style="display: inline-block; margin: 10px 0 8px 0; padding: 6px 18px; border-radius: 14px; background: #dbeafe; border: 2px solid #93c5fd; font-size: 1.58rem; font-weight: 900; color: #1d4ed8;">€ ${gesamtBetragFormatiert}</span><br>`
+                    + `<span style="font-size: 1.06rem; color: #475569;">Als Firmen- / Feier-Rechnung speichern und den Deckel abschließen?</span>`,
+                okText: '✅ Ja, Rechnung drucken',
+                isDanger: false
+            });
+            if (!confirmedInvoice) return;
 
             const itemsArray = buildItemsArrayFromCounts(countsCopy);
 
@@ -14701,17 +15059,27 @@
                 const amountText = total.toFixed(2).replace('.', ',');
                 showSchankbuchFeedback(`Firmen- / Feier-Rechnung (€ ${amountText}) gespeichert!`);
 
-                showCustomConfirm(
-                    `Rechnung ${invoiceObj.invoiceNum} gespeichert!`,
-                    "Möchtest du das Rechnungs-PDF jetzt direkt herunterladen?",
-                    function(confirmed) {
-                        if (confirmed) {
-                            generateInvoicePDF(docRef.id);
-                        }
-                    }
-                );
+                const downloadPdf = await showClubConfirm({
+                    icon: '🧾',
+                    tone: 'invoice',
+                    title: `Rechnung ${invoiceObj.invoiceNum} gespeichert!`,
+                    htmlMessage: `Empfänger: <strong style="color: #0f172a;">${escapeHtml(clientName)}</strong><br>`
+                        + `<span style="display: inline-block; margin: 10px 0 8px 0; padding: 6px 18px; border-radius: 14px; background: #dbeafe; border: 2px solid #93c5fd; font-size: 1.52rem; font-weight: 900; color: #1d4ed8;">€ ${amountText}</span><br>`
+                        + `Möchtest du das Rechnungs-PDF jetzt direkt herunterladen?`,
+                    okText: '📄 Ja, PDF laden',
+                    cancelText: '✕ Schließen',
+                    isDanger: false
+                });
+                if (downloadPdf) {
+                    generateInvoicePDF(docRef.id);
+                }
             } catch (err) {
-                alert("Fehler beim Speichern: " + err.message);
+                await showClubAlert({
+                    icon: '⚠️',
+                    tone: 'danger',
+                    title: 'Fehler beim Speichern',
+                    htmlMessage: `Die Firmen-Rechnung konnte nicht gespeichert werden:<br><strong style="color: #b91c1c;">${escapeHtml(err && err.message ? err.message : String(err))}</strong>`
+                });
             } finally {
                 isTallyBillingInFlight = false;
                 if (btnEl) btnEl.disabled = false;
