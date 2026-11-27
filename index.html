@@ -182,7 +182,8 @@
         appId: "1:1015802588615:web:bcecb74526a2096d2ebde2"
       };
       try { firebase.initializeApp(firebaseConfig); } catch(e) {}
-      const db = firebase.firestore();
+      let db = firebase.firestore();
+      const _liveFirestoreDb = db;
       try { db.enablePersistence({ synchronizeTabs: true }).catch(() => {}); } catch(e) {}
       const auth = firebase.auth();
 
@@ -242,6 +243,7 @@
 
       async function ensureFirebaseSession() {
         try {
+          if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) return null;
           if (firebase.auth().currentUser) return firebase.auth().currentUser;
           if (ensureFirebaseSessionPromise) return await ensureFirebaseSessionPromise;
           ensureFirebaseSessionPromise = (async () => {
@@ -267,6 +269,43 @@
     </script>
 
     <script>
+      let _jhvDemoActiveRuntime = false;
+
+      function isJhvDemoPreAuthorized() {
+        try {
+          const params = new URLSearchParams(window.location.search || '');
+          return params.get('demo') === 'jhv' && sessionStorage.getItem('kb_sv_jhv_demo_authorized') === '1';
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function isJhvDemoMode() {
+        try {
+          const params = new URLSearchParams(window.location.search || '');
+          if (params.get('demo') !== 'jhv') {
+            _jhvDemoActiveRuntime = false;
+            return false;
+          }
+          const hasChairmanAuth = (typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn())
+            || sessionStorage.getItem('kb_sv_jhv_demo_authorized') === '1';
+          if (!hasChairmanAuth) {
+            _jhvDemoActiveRuntime = false;
+            try {
+              if (window.history && typeof window.history.replaceState === 'function') {
+                window.history.replaceState({}, '', window.location.pathname);
+              }
+            } catch (e) {}
+            return false;
+          }
+          _jhvDemoActiveRuntime = true;
+          return true;
+        } catch (e) {
+          _jhvDemoActiveRuntime = false;
+          return false;
+        }
+      }
+
       try {
         const searchParams = new URLSearchParams(window.location.search || '');
         const modeParam = (searchParams.get('mode') || '').trim().toLowerCase();
@@ -276,21 +315,28 @@
       } catch (e) {}
       const isSchankKioskMode = () => {
         try {
+          if (_jhvDemoActiveRuntime || isJhvDemoPreAuthorized()) return false;
           return localStorage.getItem('kb_sv_kiosk_schank') === '1';
         } catch (e) {
           return false;
         }
       };
       try {
-        if (isSchankKioskMode()) {
-          document.documentElement.classList.add('schank-kiosk-mode');
-          localStorage.setItem('kb_sv_member_name', 'Schankdienst (Tablet)');
-          localStorage.setItem('kbsv_member_name', 'Schankdienst (Tablet)');
-        }
-        if (localStorage.getItem('kbsv_club_pin')) {
-          document.documentElement.classList.add('kbsv-pre-unlocked');
+        if (isJhvDemoPreAuthorized()) {
+          _jhvDemoActiveRuntime = true;
+          document.documentElement.classList.add('jhv-demo-mode', 'kbsv-pre-unlocked');
+          document.documentElement.classList.remove('kbsv-pre-locked', 'schank-kiosk-mode');
         } else {
-          document.documentElement.classList.add('kbsv-pre-locked');
+          if (isSchankKioskMode()) {
+            document.documentElement.classList.add('schank-kiosk-mode');
+            localStorage.setItem('kb_sv_member_name', 'Schankdienst (Tablet)');
+            localStorage.setItem('kbsv_member_name', 'Schankdienst (Tablet)');
+          }
+          if (localStorage.getItem('kbsv_club_pin')) {
+            document.documentElement.classList.add('kbsv-pre-unlocked');
+          } else {
+            document.documentElement.classList.add('kbsv-pre-locked');
+          }
         }
         if (localStorage.getItem('kbsv_large_font') === '1') {
           document.documentElement.classList.add('large-font-mode');
@@ -3620,12 +3666,14 @@
         }
         .admin-dark-tile-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
+            align-items: stretch;
         }
         .admin-dark-tile {
             position: relative;
             width: 100%;
+            height: 100%;
             background: #161b26;
             border: 1px solid #232a3b;
             border-radius: 14px;
@@ -3653,13 +3701,21 @@
             border-color: rgba(234, 179, 8, 0.5);
         }
         .admin-dark-tile-icon {
-            font-size: 1.45rem;
+            font-size: 1.4rem;
             line-height: 1;
             margin-bottom: 10px;
-            display: block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            flex-shrink: 0;
         }
         .admin-dark-tile-title {
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: #f1f5f9;
             line-height: 1.25;
@@ -3668,59 +3724,161 @@
         }
         .admin-dark-status-dot {
             display: none;
-            position: absolute;
-            top: 12px;
-            right: 12px;
             width: 10px;
             height: 10px;
             border-radius: 50%;
             background: #22c55e;
             box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22), 0 0 8px rgba(34, 197, 94, 0.65);
+            flex-shrink: 0;
+        }
+        #admin-menu-home:not(.is-chairman-mode) .chairman-only-item {
+            display: none !important;
         }
         #chairman-own-menu-view {
             display: none;
-            margin-top: 16px;
-            padding-top: 14px;
-            border-top: 1px solid #232a3b;
+            margin: 0 0 16px 0;
+            padding: 0;
+            border-top: none;
             box-sizing: border-box;
         }
+        .admin-menu-group {
+            margin-top: 16px;
+        }
+        .admin-menu-group:first-of-type {
+            margin-top: 0;
+        }
         .admin-dark-section-divider {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 800;
             letter-spacing: 0.09em;
             text-transform: uppercase;
             color: #94a3b8;
-            margin: 0 0 10px 2px;
+            margin: 0 0 8px 2px;
             line-height: 1.2;
         }
         #chairman-status-upload-btn {
             position: relative;
             width: 100%;
-            background: #161b26;
-            border: 1px solid #232a3b;
-            border-radius: 14px;
-            padding: 14px;
-            min-height: 92px;
+            background: linear-gradient(135deg, rgba(22, 163, 74, 0.22) 0%, #161b26 62%, rgba(234, 179, 8, 0.14) 100%);
+            border: 1.5px solid rgba(34, 197, 94, 0.45);
+            border-radius: 15px;
+            padding: 13px 15px;
+            min-height: 64px;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
+            gap: 12px;
             text-align: left;
             cursor: pointer;
             font-family: inherit;
-            color: #f1f5f9;
+            color: #f8fafc;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.24);
             box-sizing: border-box;
             transition: background 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
         }
         #chairman-status-upload-btn:hover {
-            background: #1c2230;
-            border-color: rgba(34, 197, 94, 0.55);
+            background: linear-gradient(135deg, rgba(22, 163, 74, 0.3) 0%, #1c2230 62%, rgba(234, 179, 8, 0.2) 100%);
+            border-color: rgba(34, 197, 94, 0.72);
         }
         #chairman-status-upload-btn:active {
-            transform: scale(0.985);
+            transform: scale(0.988);
+        }
+        .admin-quick-action-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex: 1;
+        }
+        .admin-quick-action-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(34, 197, 94, 0.18);
+            border: 1px solid rgba(34, 197, 94, 0.45);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .admin-quick-action-text {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        .admin-quick-action-title {
+            font-size: 0.96rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+        .admin-quick-action-sub {
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-top: 2px;
+            line-height: 1.25;
+        }
+        .admin-quick-action-right {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .admin-dark-settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .admin-dark-setting-row {
+            width: 100%;
+            min-height: 46px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: #121722;
+            border: 1px solid #232a3b;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            color: #e2e8f0;
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 700;
+            line-height: 1.25;
+            text-align: left;
+            cursor: pointer;
+            box-sizing: border-box;
+            transition: background 0.16s ease, border-color 0.16s ease, transform 0.12s ease;
+        }
+        .admin-dark-setting-row:hover {
+            background: #1a2130;
+            border-color: #334155;
+            color: #ffffff;
+        }
+        .admin-dark-setting-row:active {
+            transform: scale(0.99);
+        }
+        .admin-dark-setting-row-left {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+        .admin-dark-setting-icon {
+            font-size: 1.08rem;
+            line-height: 1;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
         }
         .admin-dark-bottom-actions {
-            margin-top: 12px;
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid #1e2638;
             display: flex;
             flex-direction: column;
             gap: 0;
@@ -3730,8 +3888,8 @@
             background: #161b26;
             border: 1px solid #232a3b;
             border-radius: 14px;
-            padding: 14px 16px;
-            margin-top: 12px;
+            padding: 13px 15px;
+            margin-top: 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -3739,7 +3897,7 @@
             color: #f1f5f9;
             font-family: inherit;
             font-weight: 700;
-            font-size: 0.92rem;
+            font-size: 0.9rem;
             line-height: 1.25;
             text-align: left;
             cursor: pointer;
@@ -4427,6 +4585,45 @@
         }
 
         /* --- AUSSCHANK-TABLET KIOSK-MODUS (?mode=bar) --- */
+        #schank-kiosk-header-actions {
+            display: none;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+        #refresh-schank-kiosk-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 13px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.16);
+            border: 1.5px solid rgba(255, 255, 255, 0.45);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 800;
+            line-height: 1.2;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            touch-action: manipulation;
+            flex-shrink: 0;
+            font-family: inherit;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.12s ease, background 0.15s ease, opacity 0.15s ease;
+        }
+        #refresh-schank-kiosk-btn:active {
+            transform: scale(0.96);
+            background: rgba(255, 255, 255, 0.24);
+        }
+        #refresh-schank-kiosk-btn:disabled {
+            opacity: 0.8;
+            cursor: wait;
+        }
         #exit-schank-kiosk-btn {
             display: none;
             align-items: center;
@@ -4497,12 +4694,94 @@
         body.schank-kiosk-mode:not(.app-locked) #page-drinks {
             display: block !important;
         }
+        body.schank-kiosk-mode:not(.app-locked) #schank-kiosk-header-actions,
+        body.schank-kiosk-mode:not(.app-locked) #refresh-schank-kiosk-btn,
         body.schank-kiosk-mode:not(.app-locked) #exit-schank-kiosk-btn {
             display: inline-flex !important;
         }
         body.schank-kiosk-mode #app-header-crest-btn.has-active-status {
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
             cursor: default !important;
+        }
+
+        /* --- JHV-DEMO-MODUS BANNER (EXKLUSIV FÜR OBMANN SIMON) --- */
+        #jhv-demo-banner {
+            display: none;
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 99998;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #fef9c3;
+            border-bottom: 2.5px solid #eab308;
+            padding: 10px 14px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.35);
+            box-sizing: border-box;
+        }
+        body.jhv-demo-mode #jhv-demo-banner {
+            display: flex !important;
+        }
+        body.jhv-demo-mode #club-lock-screen,
+        body.jhv-demo-mode #member-name-setup-modal {
+            display: none !important;
+            pointer-events: none !important;
+        }
+        .jhv-demo-banner-info {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-width: 0;
+            flex: 1;
+        }
+        .jhv-demo-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #eab308;
+            color: #0f172a;
+            font-size: 0.74rem;
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            padding: 4px 9px;
+            border-radius: 8px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .jhv-demo-banner-text {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #f8fafc;
+            line-height: 1.3;
+        }
+        #jhv-demo-exit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            background: #dc2626;
+            color: #ffffff;
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            font-family: inherit;
+            font-size: 0.84rem;
+            font-weight: 800;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+            transition: transform 0.14s ease, background 0.14s ease;
+        }
+        #jhv-demo-exit-btn:hover {
+            background: #b91c1c;
+        }
+        #jhv-demo-exit-btn:active {
+            transform: scale(0.97);
         }
 
         /* --- GROßES VEREINS-BESTÄTIGUNGS-POPUP (#club-confirm-modal) --- */
@@ -4835,6 +5114,15 @@
 </head>
 <body class="app-locked">
 
+    <!-- JHV-DEMO-MODUS BANNER (NUR AKTIV FÜR OBMANN SIMON IM DEMO-MODUS) -->
+    <div id="jhv-demo-banner" role="region" aria-label="JHV-Demo-Modus">
+        <div class="jhv-demo-banner-info">
+            <span class="jhv-demo-pill">🎬 JHV-DEMO</span>
+            <span class="jhv-demo-banner-text">Musterdaten aktiv · Keine echten Vereinsdaten · Waffenbuch ohne QR geöffnet</span>
+        </div>
+        <button type="button" id="jhv-demo-exit-btn" onclick="exitJhvDemoMode()">✕ Demo beenden</button>
+    </div>
+
     <!-- OFFLINE-EMPFANGS-HINWEIS -->
     <div id="offline-warning-banner" role="alert" style="display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 999999999; background: linear-gradient(135deg, #b91c1c, #d97706); color: #ffffff; border-bottom: 2px solid #fef08a; padding: 10px 16px; text-align: center; font-weight: 800; font-size: 0.86em; line-height: 1.35; box-shadow: 0 6px 20px rgba(185, 28, 28, 0.35);">
         ⚠️ Keine Internetverbindung – Bitte erst speichern, wenn wieder Empfang besteht!
@@ -4897,14 +5185,21 @@
 
     <script>
         try {
-            if (typeof isSchankKioskMode === 'function' && isSchankKioskMode()) {
-                document.documentElement.classList.add('schank-kiosk-mode');
-                document.body.classList.add('schank-kiosk-mode');
-            }
-            if (localStorage.getItem('kbsv_club_pin')) {
-                document.documentElement.classList.add('kbsv-pre-unlocked');
-                document.documentElement.classList.remove('kbsv-pre-locked');
-                document.body.classList.remove('app-locked');
+            if (typeof isJhvDemoPreAuthorized === 'function' && isJhvDemoPreAuthorized()) {
+                document.documentElement.classList.add('jhv-demo-mode', 'kbsv-pre-unlocked');
+                document.documentElement.classList.remove('kbsv-pre-locked', 'schank-kiosk-mode');
+                document.body.classList.add('jhv-demo-mode');
+                document.body.classList.remove('app-locked', 'schank-kiosk-mode');
+            } else {
+                if (typeof isSchankKioskMode === 'function' && isSchankKioskMode()) {
+                    document.documentElement.classList.add('schank-kiosk-mode');
+                    document.body.classList.add('schank-kiosk-mode');
+                }
+                if (localStorage.getItem('kbsv_club_pin')) {
+                    document.documentElement.classList.add('kbsv-pre-unlocked');
+                    document.documentElement.classList.remove('kbsv-pre-locked');
+                    document.body.classList.remove('app-locked');
+                }
             }
         } catch(e) {}
     </script>
@@ -4930,10 +5225,13 @@
                 </svg>
                 <span style="font-size: 0.78rem; font-weight: 900; color: #7f1d1d; line-height: 1;">Hilfe</span>
             </button>
-            <button type="button" id="exit-schank-kiosk-btn" onclick="promptExitSchankKioskMode()" aria-label="Schankbuch beenden und App sperren" title="Schankbuch beenden">
-                <span aria-hidden="true">🚪</span>
-                <span>Schankbuch beenden</span>
-            </button>
+            <div id="schank-kiosk-header-actions">
+                <button type="button" id="refresh-schank-kiosk-btn" onclick="refreshSchankKioskApp(this)" aria-label="App-Daten und neueste Version neu laden" title="Aktualisieren">🔄 Aktualisieren</button>
+                <button type="button" id="exit-schank-kiosk-btn" onclick="promptExitSchankKioskMode()" aria-label="Schankbuch beenden und App sperren" title="Schankbuch beenden">
+                    <span aria-hidden="true">🚪</span>
+                    <span>Schankbuch beenden</span>
+                </button>
+            </div>
         </div>
         <div class="app-header-title-wrap" id="app-header-title-secret-trigger" onclick="handleHeaderTitleSecretTap(event)">
             <h1>KAMERADSCHAFTSBUND &amp; SCHÜTZENVEREIN</h1>
@@ -5428,73 +5726,123 @@
                     <button type="button" id="btn-mode-chairman" class="admin-mode-tab-btn" role="tab" aria-selected="false" onclick="switchAdminMenuMode('chairman')">👑 Obmann-Steuerzentrale</button>
                 </div>
 
-                <!-- ADMIN START-ÜBERSICHT IM 2-SPALTEN-DARK-GRID-DESIGN -->
+                <!-- ADMIN START-ÜBERSICHT IM STRUKTURIERTEN 2-SPALTEN-DARK-GRID-DESIGN -->
                 <div id="admin-menu-home">
                     <h2 id="admin-dark-menu-heading" class="admin-dark-menu-heading">Admin-Menü</h2>
 
-                    <!-- 4 VORSTANDS-KACHELN (FÜR ALLE 4 ADMINS SICHTBAR) -->
-                    <div id="admin-menu-general-group" role="navigation" aria-label="Vorstands-Bereich">
-                        <div class="admin-dark-tile-grid">
-                            <button type="button" class="admin-dark-tile" id="admin-nav-btn-members" data-admin-view="members" onclick="openAdminView('members')">
-                                <span class="admin-dark-tile-icon" aria-hidden="true">🔑</span>
-                                <span class="admin-dark-tile-title">Schlüsselliste &amp; PDF</span>
-                            </button>
-                            <button type="button" class="admin-dark-tile" id="admin-nav-btn-inventory" data-admin-view="inventory" onclick="openAdminView('inventory')">
-                                <span class="admin-dark-tile-icon" aria-hidden="true">📦</span>
-                                <span class="admin-dark-tile-title">Lagerbestand</span>
-                            </button>
-                            <button type="button" class="admin-dark-tile" id="admin-nav-btn-drinks-cash" data-admin-view="drinks-cash" onclick="openAdminView('drinks-cash')">
-                                <span class="admin-dark-tile-icon" aria-hidden="true">💵</span>
-                                <span class="admin-dark-tile-title">Bar-Abrechnungen</span>
-                            </button>
-                            <button type="button" class="admin-dark-tile" id="admin-nav-btn-drinks-invoices" data-admin-view="drinks-invoices" onclick="openAdminView('drinks-invoices')">
-                                <span class="admin-dark-tile-icon" aria-hidden="true">🧾</span>
-                                <span class="admin-dark-tile-title">Firmen-Rechnungen</span>
+                    <!-- HERVORGEHOBENE SCHNELLAKTION (AUSSCHLIESSLICH FÜR OBMANN SIMON SICHTBAR) -->
+                    <div id="chairman-own-menu-view" style="display: none !important;">
+                        <div id="admin-menu-chairman-group" style="display: none !important;">
+                            <button type="button" class="chairman-tile chairman-only-item" id="chairman-status-upload-btn" onclick="openClubStatusUploadModal(event)" style="display: none;">
+                                <span class="admin-quick-action-left">
+                                    <span class="admin-quick-action-icon" aria-hidden="true">📸</span>
+                                    <span class="admin-quick-action-text">
+                                        <span class="admin-quick-action-title">24h-Status-Foto</span>
+                                        <span class="admin-quick-action-sub">Neues Status-Foto oder Video teilen</span>
+                                    </span>
+                                </span>
+                                <span class="admin-quick-action-right">
+                                    <span id="chairman-status-active-dot" class="admin-dark-status-dot" aria-hidden="true"></span>
+                                    <span class="admin-dark-bar-chevron" aria-hidden="true">›</span>
+                                </span>
                             </button>
                         </div>
                     </div>
 
-                    <!-- 9 EXKLUSIVE OBMANN-KACHELN (AUSSCHLIESSLICH FÜR OBMANN SIMON SICHTBAR) -->
-                    <div id="chairman-own-menu-view" style="display: none !important;">
-                        <div id="admin-menu-chairman-group" style="display: none !important;" role="navigation" aria-label="Obmann-Steuerung">
-                            <div class="admin-dark-section-divider">OBMANN-STEUERUNG</div>
+                    <!-- STRUKTURIERTE 2-SPALTEN-BEREICHE (ROLLEN-SICHTBARKEIT FÜR ALLE 4 ADMINS & OBMANN) -->
+                    <div id="admin-menu-general-group" role="navigation" aria-label="Admin- und Obmann-Bereiche">
+                        <!-- 1. BETRIEB & TERMINE -->
+                        <div class="admin-menu-group" data-menu-group="betrieb">
+                            <div class="admin-dark-section-divider">BETRIEB &amp; TERMINE</div>
                             <div class="admin-dark-tile-grid">
-                                <button type="button" class="admin-dark-tile chairman-tile" id="chairman-status-upload-btn" onclick="openClubStatusUploadModal(event)" style="display: none;">
-                                    <span id="chairman-status-active-dot" class="admin-dark-status-dot" aria-hidden="true"></span>
-                                    <span class="admin-dark-tile-icon" aria-hidden="true">📸</span>
-                                    <span class="admin-dark-tile-title">24h-Status-Foto</span>
-                                </button>
-                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-news-events" data-admin-view="news-events" onclick="openAdminView('news-events')">
+                                <button type="button" class="admin-dark-tile chairman-tile chairman-only-item" id="admin-nav-btn-news-events" data-admin-view="news-events" onclick="openAdminView('news-events')">
                                     <span class="admin-dark-tile-icon" aria-hidden="true">📰</span>
                                     <span class="admin-dark-tile-title">News &amp; Termine</span>
                                 </button>
-                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-duty" data-admin-view="duty" onclick="openAdminView('duty')">
+                                <button type="button" class="admin-dark-tile chairman-tile chairman-only-item" id="admin-nav-btn-duty" data-admin-view="duty" onclick="openAdminView('duty')">
                                     <span class="admin-dark-tile-icon" aria-hidden="true">📅</span>
                                     <span class="admin-dark-tile-title">Dienstplan &amp; Push</span>
                                 </button>
-                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-chairman-comm" data-admin-view="chairman-comm" onclick="openAdminView('chairman-comm')">
+                                <button type="button" class="admin-dark-tile chairman-tile chairman-only-item" id="admin-nav-btn-chairman-comm" data-admin-view="chairman-comm" onclick="openAdminView('chairman-comm')">
                                     <span class="admin-dark-tile-icon" aria-hidden="true">📢</span>
                                     <span class="admin-dark-tile-title">Eilmeldung &amp; Chat</span>
                                 </button>
-                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-chairman-members" data-admin-view="chairman-members" onclick="openAdminView('chairman-members')">
-                                    <span class="admin-dark-tile-icon" aria-hidden="true">👥</span>
-                                    <span class="admin-dark-tile-title">Mitglieder &amp; Rechte</span>
+                                <button type="button" class="admin-dark-tile" id="admin-nav-btn-inventory" data-admin-view="inventory" onclick="openAdminView('inventory')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">📦</span>
+                                    <span class="admin-dark-tile-title">Lagerbestand</span>
                                 </button>
-                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-chairman-bar" data-admin-view="chairman-bar" onclick="openAdminView('chairman-bar')">
+                            </div>
+                        </div>
+
+                        <!-- 2. SCHANK & FINANZEN -->
+                        <div class="admin-menu-group" data-menu-group="schank">
+                            <div class="admin-dark-section-divider">SCHANK &amp; FINANZEN</div>
+                            <div class="admin-dark-tile-grid">
+                                <button type="button" class="admin-dark-tile" id="admin-nav-btn-drinks-cash" data-admin-view="drinks-cash" onclick="openAdminView('drinks-cash')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">💵</span>
+                                    <span class="admin-dark-tile-title">Bar-Abrechnungen</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile" id="admin-nav-btn-drinks-invoices" data-admin-view="drinks-invoices" onclick="openAdminView('drinks-invoices')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">🧾</span>
+                                    <span class="admin-dark-tile-title">Firmen-Rechnungen</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile chairman-tile chairman-only-item" id="admin-nav-btn-chairman-bar" data-admin-view="chairman-bar" onclick="openAdminView('chairman-bar')">
                                     <span class="admin-dark-tile-icon" aria-hidden="true">🍺</span>
                                     <span class="admin-dark-tile-title">Schankbuch-Preise</span>
                                 </button>
-                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-weapons" data-admin-view="chairman-logs" onclick="openAdminView('chairman-logs')">
+                            </div>
+                        </div>
+
+                        <!-- 3. VERWALTUNG & SICHERHEIT -->
+                        <div class="admin-menu-group" data-menu-group="verwaltung">
+                            <div class="admin-dark-section-divider">VERWALTUNG &amp; SICHERHEIT</div>
+                            <div class="admin-dark-tile-grid">
+                                <button type="button" class="admin-dark-tile" id="admin-nav-btn-members" data-admin-view="members" onclick="openAdminView('members')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">🔑</span>
+                                    <span class="admin-dark-tile-title">Schlüsselliste &amp; PDF</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile chairman-tile chairman-only-item" id="admin-nav-btn-chairman-members" data-admin-view="chairman-members" onclick="openAdminView('chairman-members')">
+                                    <span class="admin-dark-tile-icon" aria-hidden="true">👥</span>
+                                    <span class="admin-dark-tile-title">Mitglieder &amp; Rechte</span>
+                                </button>
+                                <button type="button" class="admin-dark-tile chairman-tile chairman-only-item" id="admin-nav-btn-weapons" data-admin-view="chairman-logs" onclick="openAdminView('chairman-logs')">
                                     <span class="admin-dark-tile-icon" aria-hidden="true">📋</span>
                                     <span class="admin-dark-tile-title">Waffenbuch &amp; Log</span>
                                 </button>
-                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-chairman-theme" data-admin-view="chairman-theme" onclick="openAdminView('chairman-theme')">
-                                    <span class="admin-dark-tile-icon" aria-hidden="true">🎨</span>
-                                    <span class="admin-dark-tile-title">App-Farbdesign</span>
+                            </div>
+                        </div>
+
+                        <!-- 4. KOMPAKTE SYSTEMEINSTELLUNGEN -->
+                        <div class="admin-menu-group" data-menu-group="system">
+                            <div class="admin-dark-section-divider">SYSTEMEINSTELLUNGEN</div>
+                            <div class="admin-dark-settings-list">
+                                <button type="button" class="admin-dark-setting-row chairman-only-item" id="admin-nav-btn-chairman-theme" data-admin-view="chairman-theme" onclick="openAdminView('chairman-theme')">
+                                    <span class="admin-dark-setting-row-left">
+                                        <span class="admin-dark-setting-icon" aria-hidden="true">🎨</span>
+                                        <span>App-Farbdesign</span>
+                                    </span>
+                                    <span class="admin-dark-bar-chevron" aria-hidden="true">›</span>
                                 </button>
-                                <button type="button" class="admin-dark-tile chairman-tile" id="admin-nav-btn-chairman-security" data-admin-view="chairman-security" onclick="openAdminView('chairman-security')">
-                                    <span class="admin-dark-tile-icon" aria-hidden="true">📲</span>
-                                    <span class="admin-dark-tile-title">Code &amp; QR-Codes</span>
+                                <button type="button" class="admin-dark-setting-row chairman-only-item" id="admin-nav-btn-chairman-security" data-admin-view="chairman-security" onclick="openAdminView('chairman-security')">
+                                    <span class="admin-dark-setting-row-left">
+                                        <span class="admin-dark-setting-icon" aria-hidden="true">📲</span>
+                                        <span>Zugangscode &amp; QR-Codes</span>
+                                    </span>
+                                    <span class="admin-dark-bar-chevron" aria-hidden="true">›</span>
+                                </button>
+                                <button type="button" class="admin-dark-setting-row chairman-only-item" id="admin-jhv-demo-btn" onclick="openJhvDemoMode()">
+                                    <span class="admin-dark-setting-row-left">
+                                        <span class="admin-dark-setting-icon" aria-hidden="true">🎬</span>
+                                        <span>JHV-Demo-Modus öffnen</span>
+                                    </span>
+                                    <span class="admin-dark-bar-chevron" aria-hidden="true">›</span>
+                                </button>
+                                <button type="button" class="admin-dark-setting-row" id="admin-clean-reload-btn" onclick="forceCleanAppReload(this)">
+                                    <span class="admin-dark-setting-row-left">
+                                        <span class="admin-dark-setting-icon" aria-hidden="true">🔄</span>
+                                        <span>App-Stand frisch laden</span>
+                                    </span>
+                                    <span class="admin-dark-bar-chevron" aria-hidden="true">›</span>
                                 </button>
                             </div>
                         </div>
@@ -5504,10 +5852,6 @@
                     <div class="admin-dark-bottom-actions">
                         <button type="button" id="admin-dark-handbook-bar-btn" class="admin-dark-bar-btn" onclick="openAdminHelpModal()">
                             <span>📘 Vorstands- &amp; Admin-Handbuch</span>
-                            <span class="admin-dark-bar-chevron" aria-hidden="true">›</span>
-                        </button>
-                        <button type="button" id="admin-clean-reload-btn" class="admin-dark-bar-btn secondary-bar" onclick="forceCleanAppReload(this)">
-                            <span>🔄 App-Stand jetzt frisch laden</span>
                             <span class="admin-dark-bar-chevron" aria-hidden="true">›</span>
                         </button>
                         <button type="button" id="admin-home-logout-btn" class="admin-dark-logout-btn" onclick="logoutAdmin()">🚪 Abmelden</button>
@@ -7710,6 +8054,25 @@
             }
         }
 
+        let schankKioskRefreshInFlight = false;
+
+        async function refreshSchankKioskApp(btnEl) {
+            if (!isSchankKioskMode() || schankKioskRefreshInFlight) return;
+            schankKioskRefreshInFlight = true;
+            const targetBtn = btnEl || document.getElementById('refresh-schank-kiosk-btn');
+            if (targetBtn) {
+                targetBtn.disabled = true;
+                targetBtn.textContent = '⏳ Lädt neu...';
+            }
+            try {
+                if ('caches' in window) {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map(k => caches.delete(k)));
+                }
+            } catch (e) {}
+            window.location.reload();
+        }
+
         function bindSchankKioskBadgeExit() {
             // Direkt über #exit-schank-kiosk-btn (onclick="promptExitSchankKioskMode()") gebunden
         }
@@ -7751,7 +8114,7 @@
                 tabId = 'news';
             }
             stopQrScanner();
-            if (tabId !== 'weapons' && typeof weaponSessionUnlocked !== 'undefined' && weaponSessionUnlocked) {
+            if (tabId !== 'weapons' && typeof weaponSessionUnlocked !== 'undefined' && weaponSessionUnlocked && !(typeof isJhvDemoMode === 'function' && isJhvDemoMode())) {
                 try { lockWeaponFormUI(); } catch(e) {}
             }
             if (tabId !== 'card') {
@@ -7776,9 +8139,12 @@
                     }
                 } catch (e) {}
             } else if (tabId === 'weapons') {
-                try { if (typeof ensureHtml5QrcodeLoaded === 'function') ensureHtml5QrcodeLoaded().catch(() => {}); } catch(e) {}
+                try { if (!(typeof isJhvDemoMode === 'function' && isJhvDemoMode()) && typeof ensureHtml5QrcodeLoaded === 'function') ensureHtml5QrcodeLoaded().catch(() => {}); } catch(e) {}
                 try { populateWeaponMemberSelects(); } catch(e) {}
                 try { collapseWeaponReserveList(); } catch(e) {}
+                if (typeof isJhvDemoMode === 'function' && isJhvDemoMode() && typeof unlockJhvDemoWeaponForm === 'function') {
+                    try { unlockJhvDemoWeaponForm(); } catch(e) {}
+                }
             } else if (tabId === 'events') {
                 if (!officialActiveMembers || officialActiveMembers.length === 0) {
                     officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
@@ -7881,6 +8247,15 @@
             const headingEl = document.getElementById('admin-dark-menu-heading');
             if (headingEl) {
                 headingEl.textContent = isChairman ? '👑 Obmann-Menü' : 'Admin-Menü';
+            }
+            const homeEl = document.getElementById('admin-menu-home');
+            if (homeEl) {
+                homeEl.classList.toggle('is-chairman-mode', isChairman);
+                homeEl.querySelectorAll('.admin-menu-group').forEach(groupEl => {
+                    const buttons = Array.from(groupEl.querySelectorAll('button'));
+                    const hasVisible = buttons.some(btn => isChairman || !btn.classList.contains('chairman-only-item'));
+                    groupEl.style.display = hasVisible ? 'block' : 'none';
+                });
             }
             const modeSwitcherEl = document.getElementById('admin-mode-switcher');
             if (modeSwitcherEl) {
@@ -8232,6 +8607,9 @@
         }
 
         function getSavedClubMemberName() {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) {
+                return 'Max Mustermann';
+            }
             if (isSchankKioskMode()) {
                 ensureSchankKioskIdentity();
                 return SCHANK_KIOSK_MEMBER_NAME;
@@ -8300,6 +8678,9 @@
         }
 
         function hasCurrentMemberSchankbuchAccess() {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) {
+                return true;
+            }
             if (isSchankKioskMode()) {
                 return true;
             }
@@ -8319,6 +8700,9 @@
         }
 
         function hasCurrentMemberWeaponAccess() {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) {
+                return true;
+            }
             if (isSchankKioskMode()) {
                 return false;
             }
@@ -8343,15 +8727,16 @@
             const currentSelectedName = getCurrentMemberNameForAccess();
             const barMembers = Array.isArray(officialBarMembers) ? officialBarMembers : null;
             const weaponWardens = Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [];
+            const inJhvDemo = (typeof isJhvDemoMode === 'function' && isJhvDemoMode());
 
-            const hasBarAccess = (typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn())
+            const hasBarAccess = inJhvDemo || ((typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn())
                 ? true
                 : (Array.isArray(barMembers)
                     ? (barMembers.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, barMembers))
-                    : hasCurrentMemberSchankbuchAccess());
-            const hasWeaponAccess = (typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn())
+                    : hasCurrentMemberSchankbuchAccess()));
+            const hasWeaponAccess = inJhvDemo || ((typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn())
                 ? true
-                : (Array.isArray(weaponWardens) && (weaponWardens.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, weaponWardens)));
+                : (Array.isArray(weaponWardens) && (weaponWardens.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, weaponWardens))));
 
             const navNewsEl = document.getElementById('nav-news');
             const navEventsEl = document.getElementById('nav-events');
@@ -10265,6 +10650,7 @@
         }
 
         function saveDutyPlanToCache(list, isFromFirebase) {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) return;
             try {
                 localStorage.setItem(DUTY_PLAN_CACHE_KEY, JSON.stringify({
                     list: list,
@@ -10278,6 +10664,9 @@
         let midnightCheckerInterval = null;
 
         function loadDutyPlanFromCache() {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) {
+                return false;
+            }
             if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) {
                 return false;
             }
@@ -12726,6 +13115,9 @@
         window.__weaponBookLockedAfterReturn = false;
 
         function isWeaponVaultUnlocked() {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) {
+                return true;
+            }
             const valid = Boolean(
                 weaponSessionUnlocked &&
                 weaponVaultScanToken &&
@@ -12824,6 +13216,13 @@
         }
 
         function lockWeaponFormUI() {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) {
+                try {
+                    document.querySelectorAll('input[name="weapons"]').forEach(cb => { cb.checked = false; });
+                    if (typeof unlockJhvDemoWeaponForm === 'function') unlockJhvDemoWeaponForm();
+                } catch (e) {}
+                return;
+            }
             revokeWeaponVaultUnlock();
             try {
                 const formCard = document.getElementById('weapon-form-card');
@@ -12868,6 +13267,14 @@
         }
 
         function lockWeaponBookAfterReturn() {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) {
+                try {
+                    resetWeaponScanState();
+                    loadWeaponHistory();
+                    if (typeof unlockJhvDemoWeaponForm === 'function') unlockJhvDemoWeaponForm();
+                } catch (e) {}
+                return;
+            }
             resetWeaponScanState();
             revokeWeaponVaultUnlock();
             window.__weaponBookLockedAfterReturn = true;
@@ -12993,6 +13400,9 @@
         }
 
         function isAuthorizedForTresorScan() {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) {
+                return true;
+            }
             const email = (typeof auth !== 'undefined' && auth && getAdminAuthUser() && getAdminAuthUser().email)
                 ? String(getAdminAuthUser().email).trim().toLowerCase()
                 : '';
@@ -14512,6 +14922,7 @@
         window.cashSalesList = [];
 
         function saveOpenTabsLocalBackup(tabsList = openTabsList) {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) return;
             try {
                 if (!Array.isArray(tabsList)) return;
                 const serializedTabs = tabsList.map(tab => ({
@@ -14534,6 +14945,7 @@
         }
 
         function restoreOpenTabsLocalBackup() {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) return false;
             try {
                 const raw = localStorage.getItem(OPEN_TABS_BACKUP_STORAGE_KEY);
                 if (!raw) return false;
@@ -16984,6 +17396,7 @@
         let clubAccessGuardUnsubscribe = null;
 
         function initClubAccessGuard() {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) return;
             if (clubAccessGuardUnsubscribe) return;
             try {
                 clubAccessGuardUnsubscribe = db.collection("settings").doc("access").onSnapshot(async (doc) => {
@@ -18405,6 +18818,7 @@
         }
 
         auth.onAuthStateChanged(async (user) => {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) return;
             if (isBoardAdminUser(user)) {
                 const resolvedKey = resolveAdminKeyFromUser(user, '') || resolveAdminKeyFromUser(user, activeAdminName);
                 if (resolvedKey) {
@@ -18776,6 +19190,7 @@
         }
 
         function initPushNotificationsUI() {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) return;
             unregisterLegacyFirebaseServiceWorkers();
             const btn = document.getElementById('push-activate-btn');
             if (btn && !btn.dataset.pushListenerBound) {
@@ -19289,6 +19704,7 @@
         }
 
         async function sendObmannSecurityPush(title, message) {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) return;
             const cleanTitle = String(title || '🔐 Tresor- & Waffenbuch-Info').trim();
             const cleanMessage = String(message || '').trim() || cleanTitle;
             const targetUrl = "https://" + "kb-sv-push" + "." + "simonpoeschel33" + "." + "workers.dev";
@@ -19387,6 +19803,7 @@
         }
 
         async function sendDutyReminderPush(dateStr, team, names, btnEl) {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) return;
             if (!isChairmanSimonLoggedIn()) return;
             const reminderText = `⏰ Dienst-Erinnerung: ${dateStr} – ${team} (${names})`;
             if (btnEl) btnEl.disabled = true;
@@ -23790,6 +24207,7 @@
         }
 
         async function sendChatPushNotificationImmediately(senderName, messageText) {
+            if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) return;
             const targetUrl = "https://" + "kb-sv-push" + "." + "simonpoeschel33" + "." + "workers.dev";
             const cleanTitle = `💬 Vereins-Chat: ${String(senderName || 'Mitglied').trim()}`;
             const rawText = String(messageText || '').trim();
@@ -25572,6 +25990,611 @@
             checkForServiceWorkerUpdate();
         }
 
+        // =========================================================================
+        // JHV-DEMO-MODUS (EXKLUSIV FÜR OBMANN SIMON – REINE MUSTERDATEN IM SPEICHER)
+        // =========================================================================
+        function openJhvDemoMode() {
+            if (typeof isChairmanSimonLoggedIn !== 'function' || !isChairmanSimonLoggedIn()) {
+                return;
+            }
+            try {
+                sessionStorage.setItem('kb_sv_jhv_demo_authorized', '1');
+            } catch (e) {}
+            window.location.href = window.location.pathname + '?demo=jhv';
+        }
+
+        function exitJhvDemoMode() {
+            try {
+                sessionStorage.removeItem('kb_sv_jhv_demo_authorized');
+            } catch (e) {}
+            window.location.href = window.location.pathname;
+        }
+
+        function unlockJhvDemoWeaponForm() {
+            if (typeof isJhvDemoMode !== 'function' || !isJhvDemoMode()) return;
+            try {
+                if (typeof hideWeaponTimeoutNotice === 'function') hideWeaponTimeoutNotice();
+                weaponVaultUnlockedUntil = Date.now() + 3600000;
+                weaponVaultScanToken = 'JHV-DEMO-UNLOCKED';
+                weaponSessionUnlocked = true;
+                if (typeof clearWeaponAutoLockTimer === 'function') clearWeaponAutoLockTimer();
+                const formCard = document.getElementById('weapon-form-card');
+                const issueForm = document.getElementById('weapon-issue-form');
+                const lockOverlay = document.getElementById('weapon-lock-overlay');
+                const badge = document.getElementById('scanner-status-badge');
+                if (formCard) {
+                    formCard.style.opacity = '1';
+                    formCard.style.pointerEvents = 'auto';
+                }
+                if (issueForm) {
+                    issueForm.style.opacity = '1';
+                    issueForm.style.pointerEvents = 'auto';
+                }
+                if (lockOverlay) {
+                    lockOverlay.style.display = 'none';
+                }
+                if (badge) {
+                    badge.style.background = '#16a34a';
+                    badge.innerText = '🎬 JHV-DEMO-MODUS (Waffenbuch sofort geöffnet – ohne QR-Scan)';
+                }
+                const occInput = document.getElementById('weapon-occasion');
+                if (occInput && !String(occInput.value || '').trim()) occInput.value = 'Salut Ausrückung';
+                const locInput = document.getElementById('weapon-location');
+                if (locInput && !String(locInput.value || '').trim()) locInput.value = 'Gaschurn';
+                if (typeof syncWeaponLocationChips === 'function') syncWeaponLocationChips();
+            } catch (e) {}
+        }
+
+        function createJhvDemoFirestore() {
+            const makeTs = (ms) => ({
+                toMillis: () => ms,
+                toDate: () => new Date(ms),
+                seconds: Math.floor(ms / 1000),
+                nanoseconds: (ms % 1000) * 1000000
+            });
+            const fmtFutureDeDate = (daysAhead) => {
+                const d = new Date(Date.now() + daysAhead * 86400000);
+                const dd = String(d.getDate()).padStart(2, '0');
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                return `${dd}.${mm}.${d.getFullYear()}`;
+            };
+            const nowMs = Date.now();
+            const demoMembers = [
+                'Max Mustermann',
+                'Lukas Muster',
+                'Thomas Beispiel',
+                'Stefan Berg',
+                'Martin Tal',
+                'Andreas Wald',
+                'Klaus Moser',
+                'Franz Huber',
+                'Georg Steiner'
+            ];
+
+            const store = {
+                settings: {
+                    members: {
+                        activeMembers: [...demoMembers],
+                        passive: ['Josef Altmann (Ehrenmitglied)', 'Peter Ehrenberg'],
+                        barMembers: [...demoMembers],
+                        weaponMembers: ['Max Mustermann', 'Lukas Muster', 'Thomas Beispiel', 'Stefan Berg'],
+                        adminMembers: []
+                    },
+                    bar_menu: {
+                        items: (typeof DEFAULT_BAR_MENU_ITEMS !== 'undefined' && Array.isArray(DEFAULT_BAR_MENU_ITEMS))
+                            ? DEFAULT_BAR_MENU_ITEMS.map(item => ({ ...item }))
+                            : []
+                    },
+                    inventory: {
+                        bier: 48,
+                        radler: 24,
+                        limo: 30,
+                        mineral: 24,
+                        wein4: 18,
+                        schnaps: 20,
+                        hauswuerste: 16,
+                        wienerle: 14
+                    },
+                    banner: {
+                        active: true,
+                        text: '🎬 JHV-Präsentation: Alle angezeigten Einträge sind reine Musterdaten.',
+                        color: '#15803d'
+                    },
+                    chat_lock: { locked: false },
+                    chat_typing: {},
+                    pinned_chat: { messageId: '' },
+                    theme: { activeTheme: 'schuetzen_gruen' }
+                },
+                news: {
+                    'demo-news-1': {
+                        title: 'Willkommen zur Jahreshauptversammlung – App-Vorstellung',
+                        text: 'Liebe Kameraden! In diesem geschützten Demo-Modus zeigen wir heute live alle Funktionen unserer Vereins-App: Aktuelles mit Vorlesefunktion, Termin-Zusagen, digitales Schankbuch, Waffenbuch und Vereins-Chat.',
+                        likes: ['Lukas Muster', 'Thomas Beispiel', 'Stefan Berg', 'Martin Tal'],
+                        createdAt: makeTs(nowMs - 3600000)
+                    },
+                    'demo-news-2': {
+                        title: 'Eröffnung der neuen Schießsaison im Schützenhaus',
+                        text: 'Ab kommendem Freitag starten unsere wöchentlichen Trainingsabende. Das Schützenhaus ist ab 19:00 Uhr geöffnet, für Speis und Trank ist bestens gesorgt!',
+                        likes: ['Max Mustermann', 'Andreas Wald', 'Klaus Moser'],
+                        createdAt: makeTs(nowMs - 86400000 * 2)
+                    },
+                    'demo-news-3': {
+                        title: 'Rückblick auf das Kameradschaftsfest',
+                        text: 'Ein herzliches Vergelt’s Gott an alle Helferinnen, Helfer und Schankdienste für den gelungenen Ablauf und die großartige Kameradschaft!',
+                        likes: ['Franz Huber', 'Georg Steiner'],
+                        createdAt: makeTs(nowMs - 86400000 * 5)
+                    }
+                },
+                events: {
+                    'demo-ev-1': {
+                        title: 'Monatsschießen & Kameradschaftsabend',
+                        date: `${fmtFutureDeDate(5)} 19:00`,
+                        location: 'Schützenhaus Gaschurn',
+                        description: 'Gemeinsames Luftgewehrschießen und gemütlicher Ausklang in der Schützenstube.',
+                        votes: {
+                            'Max Mustermann': 'Dabei',
+                            'Lukas Muster': 'Dabei',
+                            'Thomas Beispiel': 'Dabei',
+                            'Stefan Berg': 'maybe',
+                            'Martin Tal': 'absage'
+                        },
+                        createdAt: makeTs(nowMs - 7200000)
+                    },
+                    'demo-ev-2': {
+                        title: 'Fronleichnam – Salut-Ausrückung',
+                        date: `${fmtFutureDeDate(18)} 08:30`,
+                        location: 'Gaschurn Dorfplatz',
+                        description: 'Treffpunkt in Tracht beim Schützenhaus, anschließend gemeinsamer Frühschoppen.',
+                        votes: {
+                            'Lukas Muster': 'Dabei',
+                            'Thomas Beispiel': 'Dabei',
+                            'Andreas Wald': 'Dabei',
+                            'Klaus Moser': 'Dabei',
+                            'Franz Huber': 'maybe'
+                        },
+                        createdAt: makeTs(nowMs - 3600000)
+                    },
+                    'demo-ev-3': {
+                        title: 'Bezirksschützenfest – Ausflug',
+                        date: `${fmtFutureDeDate(34)} 09:00`,
+                        location: 'Montafon',
+                        description: 'Gemeinsame Busabfahrt um 09:00 Uhr beim Parkplatz Gaschurn.',
+                        votes: {
+                            'Max Mustermann': 'Dabei',
+                            'Georg Steiner': 'Dabei',
+                            'Stefan Berg': 'Dabei'
+                        },
+                        createdAt: makeTs(nowMs - 1800000)
+                    }
+                },
+                duty_plan: {
+                    'demo-duty-1': {
+                        dateStr: fmtFutureDeDate(3),
+                        team: 'Team 1 (Muster)',
+                        time: '19:00 Uhr',
+                        startTime: '19:00',
+                        names: 'Max Mustermann, Lukas Muster',
+                        members: ['Max Mustermann', 'Lukas Muster'],
+                        status: 'open',
+                        createdAt: makeTs(nowMs - 30000)
+                    },
+                    'demo-duty-2': {
+                        dateStr: fmtFutureDeDate(10),
+                        team: 'Team 2 (Muster)',
+                        time: '19:00 Uhr',
+                        startTime: '19:00',
+                        names: 'Thomas Beispiel, Stefan Berg',
+                        members: ['Thomas Beispiel', 'Stefan Berg'],
+                        status: 'open',
+                        createdAt: makeTs(nowMs - 20000)
+                    },
+                    'demo-duty-3': {
+                        dateStr: fmtFutureDeDate(17),
+                        team: 'Team 3 (Muster)',
+                        time: '19:00 Uhr',
+                        startTime: '19:00',
+                        names: 'Martin Tal, Andreas Wald',
+                        members: ['Martin Tal', 'Andreas Wald'],
+                        status: 'open',
+                        createdAt: makeTs(nowMs - 10000)
+                    }
+                },
+                open_tabs: {
+                    'demo-tab-1': {
+                        name: 'Stammtisch (Demo)',
+                        openedBy: 'Max Mustermann',
+                        counts: { bier: 2, radler: 1, hauswuerste: 1 },
+                        total: 18.00,
+                        isDefaultBar: false,
+                        createdAt: makeTs(nowMs - 1800000),
+                        updatedAt: makeTs(nowMs - 600000)
+                    },
+                    'demo-tab-2': {
+                        name: 'Tisch 3 – Kameraden (Demo)',
+                        openedBy: 'Lukas Muster',
+                        counts: { limo: 2, weingespr: 2, wienerle: 1 },
+                        total: 20.00,
+                        isDefaultBar: false,
+                        createdAt: makeTs(nowMs - 1200000),
+                        updatedAt: makeTs(nowMs - 300000)
+                    }
+                },
+                weapons: {
+                    'W1': { id: 'W1', art: 'Büchse', hersteller: 'Steyr', modell: 'Mannlicher M95 (Demo)', kaliber: '8x56R', kat: 'C', zuweisung: 'Max Mustermann', nummer: 'DEMO-001' },
+                    'W2': { id: 'W2', art: 'Büchse', hersteller: 'Mauser', modell: 'K98k Salut (Demo)', kaliber: '8x57IS', kat: 'C', zuweisung: 'Lukas Muster', nummer: 'DEMO-002' },
+                    'W3': { id: 'W3', art: 'Büchse', hersteller: 'Steyr', modell: 'Mannlicher M95 (Demo)', kaliber: '8x56R', kat: 'C', zuweisung: 'Thomas Beispiel', nummer: 'DEMO-003' },
+                    'W4': { id: 'W4', art: 'Büchse', hersteller: 'Mauser', modell: 'K98k Reserve (Demo)', kaliber: '8x57IS', kat: 'C', zuweisung: 'Reserve', nummer: 'DEMO-004' }
+                },
+                weapon_log: {
+                    'WB-DEMO-1': {
+                        id: 'WB-DEMO-1',
+                        primaryName: 'Lukas Muster',
+                        secondaryName: 'Thomas Beispiel',
+                        collectorStr: 'Lukas Muster (+ Thomas Beispiel)',
+                        selectedWeapons: [
+                            'Steyr Mannlicher M95 (Demo) (8x56R / Nr. DEMO-001 / ZVR-624291509 / Zuw: Max Mustermann)'
+                        ],
+                        occasion: 'Salut-Ausrückung (JHV-Muster)',
+                        location: 'Gaschurn',
+                        issueTime: `${new Date().toLocaleDateString('de-AT')} 18:30`,
+                        returnTime: null,
+                        status: 'Entnommen',
+                        pdfData: '',
+                        createdAt: makeTs(nowMs - 900000)
+                    }
+                },
+                club_chat: {
+                    'demo-chat-1': {
+                        sender: 'Lukas Muster',
+                        text: 'Servus zusammen! Freue mich schon auf den heutigen Abend im Schützenhaus 🎯',
+                        timeText: '18:15',
+                        clientTimeMs: nowMs - 2700000,
+                        createdAt: makeTs(nowMs - 2700000),
+                        reactions: { '👍': ['Thomas Beispiel', 'Stefan Berg'] },
+                        readBy: ['Max Mustermann', 'Lukas Muster', 'Thomas Beispiel']
+                    },
+                    'demo-chat-2': {
+                        sender: 'Thomas Beispiel',
+                        text: 'Perfekt, ich bringe die neuen Zielscheiben mit!',
+                        timeText: '18:22',
+                        clientTimeMs: nowMs - 2200000,
+                        createdAt: makeTs(nowMs - 2200000),
+                        reactions: { '🎯': ['Lukas Muster'] },
+                        readBy: ['Max Mustermann', 'Lukas Muster', 'Thomas Beispiel']
+                    },
+                    'demo-chat-3': {
+                        sender: 'Stefan Berg',
+                        text: 'Die Schank ist schon vorgekühlt – bis gleich Kameraden! 🍺',
+                        timeText: '18:35',
+                        clientTimeMs: nowMs - 1500000,
+                        createdAt: makeTs(nowMs - 1500000),
+                        reactions: { '🍺': ['Max Mustermann', 'Lukas Muster'] },
+                        readBy: ['Max Mustermann', 'Lukas Muster', 'Stefan Berg']
+                    }
+                },
+                club_status: {},
+                cash_sales: {
+                    'demo-cash-1': {
+                        date: new Date().toLocaleDateString('de-AT'),
+                        time: '18:10',
+                        dateTime: `${new Date().toLocaleDateString('de-AT')} 18:10`,
+                        tabName: 'Schützenstube (Demo)',
+                        openedBy: 'Max Mustermann',
+                        cashier: 'Max Mustermann',
+                        items: [{ label: 'Bier 0,33 lt.', count: 3, price: 3.50, total: 10.50 }],
+                        total: 10.50,
+                        type: 'bar',
+                        createdAt: makeTs(nowMs - 3600000)
+                    }
+                },
+                tally_billings: {},
+                audit_logs: {}
+            };
+
+            const listeners = {};
+            let autoIdCounter = 1;
+
+            const cloneVal = (v) => {
+                if (v === null || v === undefined || typeof v !== 'object') return v;
+                if (typeof v.toMillis === 'function') return v;
+                if (Array.isArray(v)) return v.map(cloneVal);
+                const out = {};
+                for (const k of Object.keys(v)) out[k] = cloneVal(v[k]);
+                return out;
+            };
+
+            const isServerTimestampSentinel = (v) => {
+                try {
+                    if (!v || typeof v !== 'object') return false;
+                    if (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue && typeof v.isEqual === 'function') {
+                        return v.isEqual(firebase.firestore.FieldValue.serverTimestamp());
+                    }
+                    const mn = (v._delegate && v._delegate._methodName) || v._methodName || '';
+                    return mn === 'serverTimestamp';
+                } catch (e) { return false; }
+            };
+
+            const isDeleteSentinel = (v) => {
+                try {
+                    if (!v || typeof v !== 'object') return false;
+                    if (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue && typeof v.isEqual === 'function') {
+                        return v.isEqual(firebase.firestore.FieldValue.delete());
+                    }
+                    const mn = (v._delegate && v._delegate._methodName) || v._methodName || '';
+                    return mn === 'deleteField';
+                } catch (e) { return false; }
+            };
+
+            const getIncrementOperand = (v) => {
+                if (!v || typeof v !== 'object') return null;
+                const d = v._delegate || v;
+                if (d._methodName === 'increment' && typeof d._operand === 'number') return d._operand;
+                if (typeof d.operand === 'number') return d.operand;
+                return null;
+            };
+
+            const getArrayUnionElements = (v) => {
+                if (!v || typeof v !== 'object') return null;
+                const d = v._delegate || v;
+                if (d._methodName === 'arrayUnion' && Array.isArray(d._elements)) return d._elements;
+                if (Array.isArray(d.elements) && String(d._methodName || '').toLowerCase().includes('union')) return d.elements;
+                return null;
+            };
+
+            const applyFieldValue = (targetObj, keyPath, rawVal) => {
+                const parts = String(keyPath).split('.');
+                let cur = targetObj;
+                for (let i = 0; i < parts.length - 1; i++) {
+                    const p = parts[i];
+                    if (!cur[p] || typeof cur[p] !== 'object' || Array.isArray(cur[p])) {
+                        cur[p] = {};
+                    }
+                    cur = cur[p];
+                }
+                const leaf = parts[parts.length - 1];
+                if (isDeleteSentinel(rawVal)) {
+                    delete cur[leaf];
+                    return;
+                }
+                if (isServerTimestampSentinel(rawVal)) {
+                    cur[leaf] = makeTs(Date.now());
+                    return;
+                }
+                const inc = getIncrementOperand(rawVal);
+                if (inc !== null) {
+                    cur[leaf] = (Number(cur[leaf]) || 0) + inc;
+                    return;
+                }
+                const unionEls = getArrayUnionElements(rawVal);
+                if (unionEls !== null) {
+                    const arr = Array.isArray(cur[leaf]) ? [...cur[leaf]] : [];
+                    unionEls.forEach(el => {
+                        if (!arr.includes(el)) arr.push(cloneVal(el));
+                    });
+                    cur[leaf] = arr;
+                    return;
+                }
+                if (rawVal && typeof rawVal === 'object' && !Array.isArray(rawVal) && typeof rawVal.toMillis !== 'function') {
+                    const cleaned = {};
+                    for (const k of Object.keys(rawVal)) {
+                        applyFieldValue(cleaned, k, rawVal[k]);
+                    }
+                    cur[leaf] = cleaned;
+                    return;
+                }
+                cur[leaf] = cloneVal(rawVal);
+            };
+
+            const ensureCol = (colName) => {
+                if (!store[colName]) store[colName] = {};
+                return store[colName];
+            };
+
+            const notifyCol = (colName) => {
+                const list = listeners[colName];
+                if (!Array.isArray(list)) return;
+                list.slice().forEach(fn => {
+                    try { fn(); } catch (e) {}
+                });
+            };
+
+            const makeDocSnap = (colName, id) => {
+                const col = ensureCol(colName);
+                const exists = Object.prototype.hasOwnProperty.call(col, id);
+                const raw = exists ? cloneVal(col[id]) : undefined;
+                return {
+                    id,
+                    exists,
+                    data: () => (exists ? cloneVal(raw) : undefined)
+                };
+            };
+
+            const getValForSort = (v) => {
+                if (v && typeof v.toMillis === 'function') return v.toMillis();
+                if (typeof v === 'number') return v;
+                if (typeof v === 'string') return v;
+                return 0;
+            };
+
+            const buildQuery = (colName, filters = [], orders = [], limitNum = null, limitToLastNum = null) => {
+                const runSnapshot = () => {
+                    const col = ensureCol(colName);
+                    let docs = Object.keys(col).map(id => makeDocSnap(colName, id));
+                    filters.forEach(f => {
+                        docs = docs.filter(ds => {
+                            const d = ds.data() || {};
+                            const val = d[f.field];
+                            if (f.op === '==') return val === f.val;
+                            if (f.op === '!=') return val !== f.val;
+                            if (f.op === '>') return getValForSort(val) > getValForSort(f.val);
+                            if (f.op === '>=') return getValForSort(val) >= getValForSort(f.val);
+                            if (f.op === '<') return getValForSort(val) < getValForSort(f.val);
+                            if (f.op === '<=') return getValForSort(val) <= getValForSort(f.val);
+                            return true;
+                        });
+                    });
+                    if (orders.length > 0) {
+                        docs.sort((a, b) => {
+                            for (const o of orders) {
+                                const av = getValForSort((a.data() || {})[o.field]);
+                                const bv = getValForSort((b.data() || {})[o.field]);
+                                let cmp = 0;
+                                if (typeof av === 'string' && typeof bv === 'string') cmp = av.localeCompare(bv);
+                                else cmp = av < bv ? -1 : (av > bv ? 1 : 0);
+                                if (cmp !== 0) return o.dir === 'desc' ? -cmp : cmp;
+                            }
+                            return 0;
+                        });
+                    }
+                    if (typeof limitNum === 'number' && limitNum >= 0) {
+                        docs = docs.slice(0, limitNum);
+                    }
+                    if (typeof limitToLastNum === 'number' && limitToLastNum >= 0 && docs.length > limitToLastNum) {
+                        docs = docs.slice(docs.length - limitToLastNum);
+                    }
+                    return {
+                        empty: docs.length === 0,
+                        size: docs.length,
+                        docs,
+                        forEach: (cb) => docs.forEach(cb)
+                    };
+                };
+
+                return {
+                    where: (field, op, val) => buildQuery(colName, [...filters, { field, op, val }], orders, limitNum, limitToLastNum),
+                    orderBy: (field, dir = 'asc') => buildQuery(colName, filters, [...orders, { field, dir }], limitNum, limitToLastNum),
+                    limit: (n) => buildQuery(colName, filters, orders, n, limitToLastNum),
+                    limitToLast: (n) => buildQuery(colName, filters, orders, limitNum, n),
+                    get: () => Promise.resolve(runSnapshot()),
+                    onSnapshot: (onNext) => {
+                        const emit = () => {
+                            try { if (typeof onNext === 'function') onNext(runSnapshot()); } catch (e) {}
+                        };
+                        if (!listeners[colName]) listeners[colName] = [];
+                        listeners[colName].push(emit);
+                        setTimeout(emit, 0);
+                        return () => {
+                            if (Array.isArray(listeners[colName])) {
+                                listeners[colName] = listeners[colName].filter(fn => fn !== emit);
+                            }
+                        };
+                    }
+                };
+            };
+
+            const makeDocRef = (colName, docId) => {
+                const id = docId || ('demo-' + Date.now() + '-' + (autoIdCounter++));
+                return {
+                    id,
+                    get: () => Promise.resolve(makeDocSnap(colName, id)),
+                    set: (data, opts) => {
+                        const col = ensureCol(colName);
+                        const base = (opts && opts.merge && col[id]) ? cloneVal(col[id]) : {};
+                        if (data && typeof data === 'object') {
+                            for (const k of Object.keys(data)) {
+                                applyFieldValue(base, k, data[k]);
+                            }
+                        }
+                        col[id] = base;
+                        notifyCol(colName);
+                        return Promise.resolve();
+                    },
+                    update: (data) => {
+                        const col = ensureCol(colName);
+                        const base = col[id] ? cloneVal(col[id]) : {};
+                        if (data && typeof data === 'object') {
+                            for (const k of Object.keys(data)) {
+                                applyFieldValue(base, k, data[k]);
+                            }
+                        }
+                        col[id] = base;
+                        notifyCol(colName);
+                        return Promise.resolve();
+                    },
+                    delete: () => {
+                        const col = ensureCol(colName);
+                        delete col[id];
+                        notifyCol(colName);
+                        return Promise.resolve();
+                    },
+                    onSnapshot: (onNext) => {
+                        const emit = () => {
+                            try { if (typeof onNext === 'function') onNext(makeDocSnap(colName, id)); } catch (e) {}
+                        };
+                        if (!listeners[colName]) listeners[colName] = [];
+                        listeners[colName].push(emit);
+                        setTimeout(emit, 0);
+                        return () => {
+                            if (Array.isArray(listeners[colName])) {
+                                listeners[colName] = listeners[colName].filter(fn => fn !== emit);
+                            }
+                        };
+                    }
+                };
+            };
+
+            return {
+                enablePersistence: () => Promise.resolve(),
+                collection: (colName) => {
+                    const q = buildQuery(colName);
+                    return {
+                        ...q,
+                        doc: (docId) => makeDocRef(colName, docId),
+                        add: (data) => {
+                            const ref = makeDocRef(colName);
+                            return ref.set(data).then(() => ref);
+                        }
+                    };
+                },
+                batch: () => {
+                    const ops = [];
+                    return {
+                        set: (ref, data, opts) => ops.push(() => ref.set(data, opts)),
+                        update: (ref, data) => ops.push(() => ref.update(data)),
+                        delete: (ref) => ops.push(() => ref.delete()),
+                        commit: () => Promise.all(ops.map(fn => fn())).then(() => undefined)
+                    };
+                },
+                runTransaction: async (updateFn) => {
+                    const tx = {
+                        get: (ref) => ref.get(),
+                        set: (ref, data, opts) => { ref.set(data, opts); return tx; },
+                        update: (ref, data) => { ref.update(data); return tx; },
+                        delete: (ref) => { ref.delete(); return tx; }
+                    };
+                    return await updateFn(tx);
+                }
+            };
+        }
+
+        async function activateJhvDemoMode() {
+            if (!isJhvDemoMode()) return false;
+            try { sessionStorage.setItem('kb_sv_jhv_demo_authorized', '1'); } catch (e) {}
+            _jhvDemoActiveRuntime = true;
+            db = createJhvDemoFirestore();
+
+            document.documentElement.classList.add('jhv-demo-mode', 'kbsv-pre-unlocked');
+            document.documentElement.classList.remove('kbsv-pre-locked', 'schank-kiosk-mode');
+            document.body.classList.add('jhv-demo-mode');
+            document.body.classList.remove('app-locked', 'admin-direct-login', 'schank-kiosk-mode');
+
+            const lockScreen = document.getElementById('club-lock-screen');
+            if (lockScreen) {
+                lockScreen.style.display = 'none';
+                lockScreen.style.pointerEvents = 'none';
+            }
+            try { closeMemberNameSetupModal(); } catch (e) {}
+            try { updateFooterMemberIdentity(); } catch (e) {}
+            try { updateMemberNavigationMode(); } catch (e) {}
+
+            appDataLoadedAfterUnlock = false;
+            await loadAppDataAfterUnlock();
+
+            try { unlockJhvDemoWeaponForm(); } catch (e) {}
+            try { switchTab('news'); } catch (e) {}
+            return true;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             let shouldOpenAdminAfterReload = false;
             try {
@@ -25604,54 +26627,84 @@
                 });
             } catch(e) {}
             try { initLargeFontMode(); } catch(e) {}
-            try {
-                const newsPage = document.getElementById('page-news');
-                updateAppFooterVisibility((newsPage && newsPage.classList.contains('active')) ? 'news' : '');
-            } catch(e) {}
-            try { updateFooterMemberIdentity(); } catch(e) {}
-            try { updateMemberNavigationMode(); } catch(e) {}
-            try { updateAdminTabVisibility(); } catch(e) {}
-            try { populateWeaponMemberSelects(); } catch(e) {}
-            try { updateChatMuteButtonUI(); } catch(e) {}
-            try { updateChatIdentityLabel(); } catch(e) {}
-            try { updateChatActionButtonUI(); } catch(e) {}
-            try { bindChatViewportListeners(); } catch(e) {}
-            try {
-                if (!document.body.classList.contains('app-locked') && !hasOpenTabsSnapshotLoaded) {
-                    restoreOpenTabsLocalBackup();
-                }
-            } catch(e) {}
-            try { renderOpenTabsBar(); } catch(e) {}
-            try { initPushNotificationsUI(); } catch(e) {}
-            try {
-                let isDeviceAlreadyUnlocked = false;
+
+            const runStandardLiveStartup = () => {
                 try {
-                    isDeviceAlreadyUnlocked = !!(localStorage.getItem(CLUB_PIN_STORAGE_KEY) || localStorage.getItem('kb_sv_unlocked') === '1');
+                    const newsPage = document.getElementById('page-news');
+                    updateAppFooterVisibility((newsPage && newsPage.classList.contains('active')) ? 'news' : '');
                 } catch(e) {}
-                if (isDeviceAlreadyUnlocked) {
-                    ensureFirebaseSession().finally(() => {
-                        try { initClubAccessGuard(); } catch(e) {}
-                    });
-                } else {
-                    initClubAccessGuard();
-                }
-            } catch(e) {}
-            try { initWeaponBookNavigationGuard(); } catch(e) {}
-            try { bindWeaponFormActivityListeners(); } catch(e) {}
-            try { setDefaultNewEventDate(); } catch(e) {}
-            try { bindSchankKioskBadgeExit(); } catch(e) {}
-            if (isSchankKioskMode()) {
-                try { applySchankKioskMode(); } catch(e) {}
-            } else if (shouldOpenAdminAfterReload) {
-                try { closeMemberNameSetupModal(); } catch(e) {}
+                try { updateFooterMemberIdentity(); } catch(e) {}
+                try { updateMemberNavigationMode(); } catch(e) {}
                 try { updateAdminTabVisibility(); } catch(e) {}
+                try { populateWeaponMemberSelects(); } catch(e) {}
+                try { updateChatMuteButtonUI(); } catch(e) {}
+                try { updateChatIdentityLabel(); } catch(e) {}
+                try { updateChatActionButtonUI(); } catch(e) {}
+                try { bindChatViewportListeners(); } catch(e) {}
                 try {
-                    if (document.body.classList.contains('app-locked')) {
-                        openAdminDirectLogin();
-                    } else {
-                        redirectBoardUserToAdminPasswordLogin();
+                    if (!document.body.classList.contains('app-locked') && !hasOpenTabsSnapshotLoaded) {
+                        restoreOpenTabsLocalBackup();
                     }
                 } catch(e) {}
+                try { renderOpenTabsBar(); } catch(e) {}
+                try { initPushNotificationsUI(); } catch(e) {}
+                try {
+                    let isDeviceAlreadyUnlocked = false;
+                    try {
+                        isDeviceAlreadyUnlocked = !!(localStorage.getItem(CLUB_PIN_STORAGE_KEY) || localStorage.getItem('kb_sv_unlocked') === '1');
+                    } catch(e) {}
+                    if (isDeviceAlreadyUnlocked) {
+                        ensureFirebaseSession().finally(() => {
+                            try { initClubAccessGuard(); } catch(e) {}
+                        });
+                    } else {
+                        initClubAccessGuard();
+                    }
+                } catch(e) {}
+                try { initWeaponBookNavigationGuard(); } catch(e) {}
+                try { bindWeaponFormActivityListeners(); } catch(e) {}
+                try { setDefaultNewEventDate(); } catch(e) {}
+                try { bindSchankKioskBadgeExit(); } catch(e) {}
+                if (isSchankKioskMode()) {
+                    try { applySchankKioskMode(); } catch(e) {}
+                } else if (shouldOpenAdminAfterReload) {
+                    try { closeMemberNameSetupModal(); } catch(e) {}
+                    try { updateAdminTabVisibility(); } catch(e) {}
+                    try {
+                        if (document.body.classList.contains('app-locked')) {
+                            openAdminDirectLogin();
+                        } else {
+                            redirectBoardUserToAdminPasswordLogin();
+                        }
+                    } catch(e) {}
+                }
+            };
+
+            let hasDemoJhvQuery = false;
+            try {
+                hasDemoJhvQuery = new URLSearchParams(window.location.search || '').get('demo') === 'jhv';
+            } catch (e) {}
+
+            if (hasDemoJhvQuery) {
+                (async () => {
+                    try {
+                        if (!isJhvDemoPreAuthorized()) {
+                            await waitForInitialFirebaseAuthState();
+                        }
+                        if (isJhvDemoMode()) {
+                            try { updateChatMuteButtonUI(); } catch(e) {}
+                            try { updateChatIdentityLabel(); } catch(e) {}
+                            try { updateChatActionButtonUI(); } catch(e) {}
+                            try { bindChatViewportListeners(); } catch(e) {}
+                            try { setDefaultNewEventDate(); } catch(e) {}
+                            await activateJhvDemoMode();
+                            return;
+                        }
+                    } catch (e) {}
+                    runStandardLiveStartup();
+                })();
+            } else {
+                runStandardLiveStartup();
             }
         });
     </script>
