@@ -147,6 +147,85 @@
       const db = firebase.firestore();
       try { db.enablePersistence({ synchronizeTabs: true }).catch(() => {}); } catch(e) {}
       const auth = firebase.auth();
+
+      function isBoardAdminUser(user) {
+        return !!(user && !user.isAnonymous && user.email);
+      }
+
+      function getAdminAuthUser() {
+        try {
+          const u = (typeof firebase !== 'undefined' && firebase && typeof firebase.auth === 'function')
+            ? firebase.auth().currentUser
+            : null;
+          return isBoardAdminUser(u) ? u : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      let firebaseAuthStateHydrated = false;
+      let firebaseAuthHydrationPromise = null;
+      let ensureFirebaseSessionPromise = null;
+
+      function waitForInitialFirebaseAuthState() {
+        try {
+          if (firebaseAuthStateHydrated || firebase.auth().currentUser) {
+            firebaseAuthStateHydrated = true;
+            return Promise.resolve(firebase.auth().currentUser);
+          }
+          if (!firebaseAuthHydrationPromise) {
+            firebaseAuthHydrationPromise = new Promise((resolve) => {
+              let done = false;
+              let unsub = null;
+              const finish = (user) => {
+                if (done) return;
+                done = true;
+                firebaseAuthStateHydrated = true;
+                try { if (typeof unsub === 'function') unsub(); } catch (e) {}
+                resolve(user || firebase.auth().currentUser || null);
+              };
+              const timer = setTimeout(() => finish(firebase.auth().currentUser), 1500);
+              try {
+                unsub = firebase.auth().onAuthStateChanged((user) => {
+                  clearTimeout(timer);
+                  finish(user);
+                });
+              } catch (e) {
+                clearTimeout(timer);
+                finish(null);
+              }
+            });
+          }
+          return firebaseAuthHydrationPromise;
+        } catch (e) {
+          return Promise.resolve(null);
+        }
+      }
+
+      async function ensureFirebaseSession() {
+        try {
+          if (firebase.auth().currentUser) return firebase.auth().currentUser;
+          if (ensureFirebaseSessionPromise) return await ensureFirebaseSessionPromise;
+          ensureFirebaseSessionPromise = (async () => {
+            try {
+              const existingUser = await waitForInitialFirebaseAuthState();
+              if (existingUser) return existingUser;
+              if (firebase.auth().currentUser) return firebase.auth().currentUser;
+              const cred = await firebase.auth().signInAnonymously();
+              return cred && cred.user ? cred.user : firebase.auth().currentUser;
+            } catch (e) {
+              console.warn('Anonymous Auth:', e);
+              return firebase.auth().currentUser || null;
+            } finally {
+              ensureFirebaseSessionPromise = null;
+            }
+          })();
+          return await ensureFirebaseSessionPromise;
+        } catch (e) {
+          console.warn('Anonymous Auth:', e);
+          return null;
+        }
+      }
     </script>
 
     <script>
@@ -1654,7 +1733,7 @@
             inset: 0;
             z-index: 99999;
             background-color: #0f172a;
-            background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.38) 0%, rgba(15, 23, 42, 0.68) 100%), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=80');
+            background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.18) 0%, rgba(15, 23, 42, 0.45) 100%), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=80');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -1716,13 +1795,13 @@
         .lock-screen-card {
             width: 100%;
             max-width: 420px;
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(15, 23, 42, 0.42);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1.5px solid rgba(234, 179, 8, 0.55);
             border-radius: 26px;
             padding: 26px 22px;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
             text-align: center;
             margin: auto 0;
             position: relative;
@@ -1762,17 +1841,23 @@
             display: block;
             background: #0f172a;
         }
+        .lock-pin-input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
         .lock-pin-input {
             width: 100%;
             min-height: 52px;
-            padding: 12px 14px;
+            padding: 12px 46px;
             font-size: 1.15rem;
             font-weight: 800;
             letter-spacing: 0.14em;
             text-align: center;
             border-radius: 14px;
-            border: 2px solid #cbd5e1;
-            background: #ffffff;
+            border: 2px solid #eab308;
+            background: rgba(255, 255, 255, 0.92);
             color: #0f172a;
             font-family: inherit;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1789,12 +1874,56 @@
             border-color: #991b1b;
             box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.35), 0 0 0 5px rgba(153, 27, 27, 0.14);
         }
+        .lock-pin-input:disabled {
+            background: #f1f5f9;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+        .lock-pin-eye-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 4;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-size: 1.1rem;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            opacity: 0.72;
+            transition: opacity 0.15s ease, background 0.15s ease;
+            touch-action: manipulation;
+        }
+        .lock-pin-eye-btn:hover,
+        .lock-pin-eye-btn[aria-pressed="true"] {
+            opacity: 1;
+            background: rgba(15, 23, 42, 0.06);
+        }
+        .lock-pin-eye-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
         #club-pin-submit-btn {
             border-radius: 14px;
             min-height: 52px;
             font-weight: 800;
             font-size: 1.02rem;
             box-shadow: 0 8px 20px rgba(153, 27, 27, 0.32);
+        }
+        #club-pin-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        #lockscreen-admin-login-link {
+            display: none !important;
         }
         .lock-screen-footer-pill {
             display: inline-flex;
@@ -2308,32 +2437,10 @@
             color: #475569;
             font-weight: 600;
         }
-        .chat-messages-watermark-stage {
-            flex: 1;
-            min-height: 0;
+        #chat-messages-list,
+        .chat-messages-area {
             position: relative;
-            display: flex;
-            flex-direction: column;
-            background: #efeae2;
-            overflow: hidden;
-        }
-        .chat-bg-watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 210px;
-            height: 210px;
-            object-fit: contain;
-            opacity: 0.04;
-            pointer-events: none;
-            user-select: none;
-            -webkit-user-select: none;
-            z-index: 0;
-        }
-        #chat-messages-list {
-            position: relative;
-            z-index: 1;
+            isolation: isolate;
             flex: 1;
             min-height: 0;
             overflow-y: auto;
@@ -2341,11 +2448,32 @@
             display: flex;
             flex-direction: column;
             gap: 9px;
-            background: transparent;
+            background-color: #efeae2;
+        }
+        .chat-messages-area::before {
+            content: "";
+            position: fixed;
+            top: 52%;
+            left: 50%;
+            width: 220px;
+            height: 220px;
+            transform: translate(-50%, -50%);
+            background-image: url('./chat-wappen.png'), url('./logo.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 50%;
+            opacity: 0.14;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .chat-messages-area > * {
+            position: relative;
+            z-index: 2;
         }
         .chat-msg-bubble {
             position: relative;
-            z-index: 1;
+            z-index: 2;
             max-width: 85%;
             width: fit-content;
             min-width: 150px;
@@ -4030,6 +4158,11 @@
             color: #1e40af;
             border-color: #93c5fd;
         }
+        .chairman-unified-count-tag.admin-tag {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1.5px solid #fca5a5;
+        }
         .chairman-unified-search-wrap {
             margin: 10px 0 12px 0;
         }
@@ -4098,16 +4231,16 @@
         }
         .chairman-unified-rights-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 6px;
         }
         .chairman-right-toggle-btn {
             width: 100%;
             min-height: 40px;
             border-radius: 10px;
-            padding: 7px 8px;
+            padding: 7px 5px;
             font-family: inherit;
-            font-size: 0.8rem;
+            font-size: 0.76rem;
             line-height: 1.25;
             cursor: pointer;
             display: flex;
@@ -4123,7 +4256,7 @@
             background: #f8fafc;
             border: 1.5px solid #cbd5e1;
             color: #64748b;
-            font-weight: 600;
+            font-weight: 700;
         }
         .chairman-right-toggle-btn.bar-active {
             background: #dcfce7;
@@ -4138,6 +4271,13 @@
             color: #1e40af;
             font-weight: 800;
             box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
+        }
+        .chairman-right-toggle-btn.admin-active {
+            background: #fef2f2;
+            border: 1.5px solid #dc2626;
+            color: #991b1b;
+            font-weight: 800;
+            box-shadow: 0 2px 6px rgba(220, 38, 38, 0.14);
         }
         .chairman-bar-menu-row {
             display: flex;
@@ -4248,19 +4388,22 @@
                     <span style="font-size: 0.52rem; color: #fde047; margin-top: 2px; letter-spacing: 0.07em;">GASCHURN</span>
                 </div>
             </div>
-            <div id="lock-screen-title-secret-trigger" onclick="handleLockscreenCrestSecretTap(event)" style="font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.25; color: #0f172a; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation;">Kameradschaftsbund &amp; Schützenverein</div>
-            <div onclick="handleLockscreenCrestSecretTap(event)" style="font-size: 0.86rem; font-weight: 800; color: #991b1b; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation;">GASCHURN-PARTENEN</div>
+            <div id="lock-screen-title-secret-trigger" onclick="handleLockscreenCrestSecretTap(event)" style="font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.25; color: #ffffff; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation;">Kameradschaftsbund &amp; Schützenverein</div>
+            <div onclick="handleLockscreenCrestSecretTap(event)" style="font-size: 0.86rem; font-weight: 800; color: #fde047; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation;">GASCHURN-PARTENEN</div>
 
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 14px; margin: 14px 0 18px 0;">
-                <div style="color: #15803d; font-size: 1.02rem; font-weight: 800; margin-bottom: 6px; line-height: 1.35;">Herzlich willkommen im digitalen Vereinsheim!</div>
-                <p style="color: #334155; font-size: 0.9rem; line-height: 1.55; margin: 0; font-weight: 500;">
+            <div style="background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 16px; padding: 14px; margin: 14px 0 18px 0;">
+                <div style="color: #86efac; font-size: 1.02rem; font-weight: 800; margin-bottom: 6px; line-height: 1.35;">Herzlich willkommen im digitalen Vereinsheim!</div>
+                <p style="color: #f8fafc; font-size: 0.9rem; line-height: 1.55; margin: 0; font-weight: 500;">
                     Schön, dass du da bist! Hier findest du alle aktuellen Vereins-News, Termine, den Dienstplan sowie unsere digitalen Vereinsbücher. Bitte gib den Vereins-Zugangscode ein, um einzutreten.
                 </p>
             </div>
 
             <form onsubmit="verifyClubAccessCode(event)">
                 <div class="form-group" style="margin-bottom: 12px;">
-                    <input type="password" inputmode="numeric" id="club-pin-input" class="lock-pin-input" placeholder="Code eingeben" required autocomplete="off">
+                    <div class="lock-pin-input-wrap">
+                        <input type="password" id="club-pin-input" class="lock-pin-input" placeholder="Code eingeben" required autocomplete="off" spellcheck="false" autocapitalize="characters">
+                        <button type="button" id="club-pin-eye-btn" class="lock-pin-eye-btn" onclick="toggleClubPinVisibility()" aria-label="Code kurz anzeigen" aria-pressed="false" title="Code kurz anzeigen">👁️</button>
+                    </div>
                 </div>
                 <div id="club-pin-error" style="display: none; color: #dc2626; background: #fee2e2; border: 1px solid #fecaca; border-radius: 12px; padding: 9px 12px; font-size: 0.85em; font-weight: 700; margin-bottom: 12px;">
                     Falscher Zugangscode
@@ -4271,7 +4414,7 @@
             </form>
             <div style="display: flex; flex-direction: column; align-items: center; margin-top: 20px; gap: 6px;">
                 <img src="siegel.png" alt="" loading="eager" decoding="sync" fetchpriority="high" style="width: 68px; height: 68px; border-radius: 50%; object-fit: cover; background: #0f172a; border: 2px solid #eab308; animation: sealGoldPulse 2.6s ease-in-out infinite;" onerror="this.style.display='none';">
-                <span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; letter-spacing: 0.05em; text-transform: uppercase;">Powered by Simon Schweighofer</span>
+                <span style="font-size: 0.72rem; font-weight: 700; color: rgba(255, 255, 255, 0.72); letter-spacing: 0.05em; text-transform: uppercase;">Powered by Simon Schweighofer</span>
             </div>
         </div>
 
@@ -5305,7 +5448,7 @@
                                     <div class="chairman-subcard">
                                         <div class="chairman-subcard-title"><span>👥 Mitglieder &amp; Schank-Rechte</span></div>
                                         <p class="chairman-subcard-desc">
-                                            Alle Vereinsmitglieder auf einen Blick: Schankbuch-Tab (<code>barMembers</code>) und Waffenwart-Rechte (<code>weaponWardens</code>) direkt pro Person umschalten.
+                                            Alle Vereinsmitglieder auf einen Blick: Schankbuch-Tab (<code>barMembers</code>), Waffenwart-Rechte (<code>weaponWardens</code>) und Admin-Button (<code>adminMembers</code>) direkt pro Person umschalten.
                                         </p>
 
                                         <div id="chairman-unified-counts" class="chairman-unified-counts"></div>
@@ -6189,11 +6332,8 @@
 
         <div id="chat-pinned-banner" style="display: none; flex-shrink: 0; padding: 10px 12px 0 12px; background: #ffffff;"></div>
 
-        <div class="chat-messages-watermark-stage">
-            <img src="./siegel.png" alt="" aria-hidden="true" class="chat-bg-watermark" onerror="this.style.display='none';">
-            <div id="chat-messages-list">
-                <p style="font-size: 0.84em; color: #64748b; text-align: center; margin-top: 20px;">Lade Vereins-Chat...</p>
-            </div>
+        <div id="chat-messages-list" class="chat-messages-area">
+            <p style="font-size: 0.84em; color: #64748b; text-align: center; margin-top: 20px;">Lade Vereins-Chat...</p>
         </div>
 
         <button type="button" id="chat-scroll-bottom-btn" onclick="scrollChatToBottom(true)" title="Nach unten springen" aria-label="Nach unten springen" style="position: absolute; right: 14px; bottom: 74px; z-index: 25; width: 38px; height: 38px; border-radius: 50%; background: #ffffff; color: #475569; border: 1px solid #cbd5e1; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.16); display: none; align-items: center; justify-content: center; cursor: pointer; padding: 0;">
@@ -6723,10 +6863,10 @@
         const INACTIVITY_LIMIT = 5 * 60 * 1000;
 
         function resetInactivityTimer() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             clearTimeout(inactivityTimer);
             inactivityTimer = setTimeout(() => {
-                if (auth.currentUser) {
+                if (getAdminAuthUser()) {
                     logoutAdmin('inactivity');
                     showAdminLogoutModal("Du wurdest wegen Inaktivität (5 Minuten) automatisch abgemeldet.", "ℹ️ Sicherheitshinweis");
                 }
@@ -6776,7 +6916,14 @@
             if(targetPage) targetPage.classList.add('active');
             if(targetNav) targetNav.classList.add('active');
             updateAppFooterVisibility(tabId);
-            if (tabId === 'weapons') {
+            if (tabId === 'news') {
+                adminLoginFlowActive = false;
+                try {
+                    if (typeof flushPendingAppUpdateUI === 'function') {
+                        flushPendingAppUpdateUI();
+                    }
+                } catch (e) {}
+            } else if (tabId === 'weapons') {
                 try { if (typeof ensureHtml5QrcodeLoaded === 'function') ensureHtml5QrcodeLoaded().catch(() => {}); } catch(e) {}
                 try { populateWeaponMemberSelects(); } catch(e) {}
                 try { collapseWeaponReserveList(); } catch(e) {}
@@ -7172,6 +7319,7 @@
         let officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
         let officialPassiveMembers = [];
         let officialBarMembers = null;
+        let adminMembers = [];
         let officialWeaponList = [];
 
         const MEMBER_IDENTITY_STORAGE_KEY = 'kbsv_member_name';
@@ -7202,6 +7350,16 @@
             return BOARD_ADMIN_FIRST_NAMES.some(firstName => normalized.includes(firstName));
         }
 
+        function isBoardAdminLoggedIn() {
+            return !!(typeof auth !== 'undefined' && auth && getAdminAuthUser());
+        }
+
+        function memberHasAdminTabRight(memberName, list) {
+            const cleanName = String(memberName || '').trim();
+            if (!cleanName || !Array.isArray(list) || list.length === 0) return false;
+            return list.includes(cleanName) || memberNameMatchesList(cleanName, list);
+        }
+
         function isAdminProtectedMemberName(name) {
             const normalized = String(name || '').trim().replace(/\s+/g, ' ').toLowerCase();
             if (!normalized) return false;
@@ -7227,7 +7385,7 @@
             try { stored = String(localStorage.getItem(MEMBER_IDENTITY_STORAGE_KEY) || '').trim(); } catch (e) {}
             try { verifiedAdmin = String(localStorage.getItem(VERIFIED_ADMIN_MEMBER_STORAGE_KEY) || '').trim(); } catch (e) {}
             if (!stored) return '';
-            const isAdmin = !!(typeof auth !== 'undefined' && auth && auth.currentUser);
+            const isAdmin = !!(typeof auth !== 'undefined' && auth && getAdminAuthUser());
             const isDeviceVerifiedAdmin = !!(verifiedAdmin && verifiedAdmin === stored);
             if (!isAdmin && !isDeviceVerifiedAdmin && isAdminProtectedMemberName(stored)) {
                 try { localStorage.removeItem(MEMBER_IDENTITY_STORAGE_KEY); } catch (e) {}
@@ -7240,8 +7398,8 @@
             const el = document.getElementById('footer-member-identity');
             if (!el) return;
             let saved = getSavedClubMemberName();
-            if (!saved && typeof auth !== 'undefined' && auth && auth.currentUser) {
-                const resolvedKey = resolveAdminKeyFromUser(auth.currentUser, typeof activeAdminName !== 'undefined' ? activeAdminName : '');
+            if (!saved && typeof auth !== 'undefined' && auth && getAdminAuthUser()) {
+                const resolvedKey = resolveAdminKeyFromUser(getAdminAuthUser(), typeof activeAdminName !== 'undefined' ? activeAdminName : '');
                 if (resolvedKey && ADMIN_KEY_TO_MEMBER_NAME[resolvedKey]) {
                     saved = ADMIN_KEY_TO_MEMBER_NAME[resolvedKey];
                 }
@@ -7274,9 +7432,9 @@
         function getCurrentMemberNameForAccess() {
             let saved = '';
             try { saved = getSavedClubMemberName(); } catch (e) {}
-            if (!saved && typeof auth !== 'undefined' && auth && auth.currentUser) {
+            if (!saved && typeof auth !== 'undefined' && auth && getAdminAuthUser()) {
                 try {
-                    const resolvedKey = resolveAdminKeyFromUser(auth.currentUser, typeof activeAdminName !== 'undefined' ? activeAdminName : '');
+                    const resolvedKey = resolveAdminKeyFromUser(getAdminAuthUser(), typeof activeAdminName !== 'undefined' ? activeAdminName : '');
                     if (resolvedKey && ADMIN_KEY_TO_MEMBER_NAME[resolvedKey]) {
                         saved = ADMIN_KEY_TO_MEMBER_NAME[resolvedKey];
                     }
@@ -7339,7 +7497,7 @@
             const navWeaponsEl = document.getElementById('nav-weapons');
             const navChatBtnEl = document.getElementById('nav-chat-btn');
             const navChatBadgeEl = document.getElementById('nav-chat-btn-badge');
-            const navCardEl = document.getElementById('nav-card');
+            const navCardEl = document.getElementById('nav-card') || document.getElementById('nav-admin-btn');
             const homeChatCardEl = document.getElementById('news-open-chat-banner-btn') || document.getElementById('home-chat-card');
             const bannerBadgeEl = document.getElementById('news-chat-new-badge');
 
@@ -7438,6 +7596,21 @@
                 }
             }
 
+            let isBoardDeviceForNav = false;
+            try { isBoardDeviceForNav = localStorage.getItem('kb_sv_is_board_device') === '1'; } catch (e) {}
+            const hasAdminTabAccess = (Array.isArray(adminMembers) && (adminMembers.includes(currentSelectedName) || memberHasAdminTabRight(currentSelectedName, adminMembers)))
+                || isBoardDeviceForNav
+                || isBoardAdminLoggedIn();
+            if (navCardEl) {
+                if (hasAdminTabAccess) {
+                    navCardEl.style.setProperty('display', 'flex', 'important');
+                    navCardEl.style.order = '5';
+                } else {
+                    navCardEl.style.setProperty('display', 'none', 'important');
+                    navCardEl.classList.remove('active');
+                }
+            }
+
             try { updateAdminTabVisibility(); } catch (e) {}
 
             // 4. Startseiten-Fußzeile in allen 4 Kombinationen sauber sichtbar halten
@@ -7449,23 +7622,22 @@
         }
 
         function updateAdminTabVisibility() {
-            const navCardEl = document.getElementById('nav-card');
+            const navCardEl = document.getElementById('nav-card') || document.getElementById('nav-admin-btn');
             if (!navCardEl) return;
+            const currentSelectedName = getCurrentMemberNameForAccess();
             let isBoardDevice = false;
-            let storedMemberName = '';
-            let verifiedAdminName = '';
-            try { isBoardDevice = localStorage.getItem(BOARD_DEVICE_STORAGE_KEY) === '1'; } catch (e) {}
-            try { storedMemberName = String(localStorage.getItem(MEMBER_IDENTITY_STORAGE_KEY) || '').trim(); } catch (e) {}
-            try { verifiedAdminName = String(localStorage.getItem(VERIFIED_ADMIN_MEMBER_STORAGE_KEY) || '').trim(); } catch (e) {}
+            try { isBoardDevice = localStorage.getItem('kb_sv_is_board_device') === '1'; } catch (e) {}
 
-            const currentMemberName = getCurrentMemberNameForAccess();
-            const isAdminLoggedIn = !!(typeof auth !== 'undefined' && auth && auth.currentUser);
-            const hasBoardName = isBoardMemberName(currentMemberName) || isBoardMemberName(storedMemberName) || isBoardMemberName(verifiedAdminName);
+            const hasAdminTabAccess = (Array.isArray(adminMembers) && (adminMembers.includes(currentSelectedName) || memberHasAdminTabRight(currentSelectedName, adminMembers)))
+                || isBoardDevice
+                || isBoardAdminLoggedIn();
 
-            if (isBoardDevice || isAdminLoggedIn || hasBoardName) {
-                navCardEl.style.removeProperty('display');
+            if (hasAdminTabAccess) {
+                navCardEl.style.setProperty('display', 'flex', 'important');
+                navCardEl.style.order = '5';
             } else {
                 navCardEl.style.setProperty('display', 'none', 'important');
+                navCardEl.classList.remove('active');
             }
             try { updateLockscreenAdminLinkVisibility(); } catch (e) {}
         }
@@ -7612,11 +7784,46 @@
             return isBoardDevice || isBoardNameMatchForRedirect(savedName) || isBoardNameMatchForRedirect(savedNameMain) || isBoardNameMatchForRedirect(verifiedAdminName) || isBoardNameMatchForRedirect(extraName);
         }
 
+        const OPEN_ADMIN_AFTER_RELOAD_STORAGE_KEY = 'kb_sv_open_admin_after_reload';
+        let adminLoginFlowActive = false;
+
+        function isAdminLoginOrNameModalOpen() {
+            if (adminLoginFlowActive) return true;
+            try {
+                if (localStorage.getItem(OPEN_ADMIN_AFTER_RELOAD_STORAGE_KEY) === '1') return true;
+            } catch (e) {}
+            const nameModal = document.getElementById('member-name-setup-modal');
+            if (nameModal) {
+                if (nameModal.style.display === 'flex' || nameModal.style.display === 'block') return true;
+                try {
+                    const cs = typeof getComputedStyle === 'function' ? getComputedStyle(nameModal) : null;
+                    if (cs && cs.display && cs.display !== 'none') return true;
+                } catch (e) {}
+            }
+            if (document.body && document.body.classList.contains('admin-direct-login')) {
+                return true;
+            }
+            const pageCard = document.getElementById('page-card');
+            const loginCard = document.getElementById('admin-login-card');
+            if (pageCard && pageCard.classList.contains('active') && (!loginCard || loginCard.style.display !== 'none')) {
+                return true;
+            }
+            return false;
+        }
+
         function redirectBoardUserToAdminPasswordLogin(preferredName = '') {
+            adminLoginFlowActive = true;
             try { localStorage.setItem('kb_sv_is_board_device', '1'); } catch (e) {}
             try { markDeviceAsBoardDevice(); } catch (e) {}
-            try { updateAdminTabVisibility(); } catch (e) {}
             try { closeMemberNameSetupModal(); } catch (e) {}
+            try {
+                const updateModal = document.getElementById('app-update-modal');
+                if (updateModal) {
+                    updateModal.style.display = 'none';
+                    updateModal.style.pointerEvents = 'none';
+                }
+            } catch (e) {}
+            try { updateAdminTabVisibility(); } catch (e) {}
 
             try {
                 const candidate = String(
@@ -7633,13 +7840,18 @@
                 }
             } catch (e) {}
 
+            const loginCard = document.getElementById('admin-login-card');
+            if (loginCard && !(typeof auth !== 'undefined' && auth && getAdminAuthUser())) {
+                loginCard.style.display = 'block';
+            }
+
             switchTab('card');
 
             const focusAdminPassword = () => {
-                const loginCard = document.getElementById('admin-login-card');
-                const isLoginVisible = !!(loginCard && loginCard.style.display !== 'none');
-                if (isLoginVisible && typeof loginCard.scrollIntoView === 'function') {
-                    loginCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const cardEl = document.getElementById('admin-login-card');
+                const isLoginVisible = !!(cardEl && cardEl.style.display !== 'none');
+                if (isLoginVisible && typeof cardEl.scrollIntoView === 'function') {
+                    cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
                 const pwdInput = document.getElementById('admin-password-input');
                 if (isLoginVisible && pwdInput && typeof pwdInput.focus === 'function') {
@@ -7676,7 +7888,15 @@
         }
 
         function openMemberNameSetupModal(allowCancel = false) {
-            if (document.body.classList.contains('app-locked') && !(typeof auth !== 'undefined' && auth && auth.currentUser)) return;
+            if (document.body.classList.contains('app-locked') && !(typeof auth !== 'undefined' && auth && getAdminAuthUser())) return;
+            if (!allowCancel) {
+                let openAdminFlag = false;
+                try { openAdminFlag = localStorage.getItem(OPEN_ADMIN_AFTER_RELOAD_STORAGE_KEY) === '1'; } catch (e) {}
+                if (adminLoginFlowActive || openAdminFlag) {
+                    closeMemberNameSetupModal();
+                    return;
+                }
+            }
             const modal = document.getElementById('member-name-setup-modal');
             populateMemberNameSetupSelect();
             const errEl = document.getElementById('member-name-setup-error');
@@ -7707,8 +7927,13 @@
         }
 
         function openAdminLoginFromMemberSetup() {
+            try { localStorage.setItem('kb_sv_is_board_device', '1'); } catch (e) {}
+            try { localStorage.setItem('kb_sv_open_admin_after_reload', '1'); } catch (e) {}
+            adminLoginFlowActive = true;
             pendingEventVoteAfterSetup = null;
             pendingNewsLikeAfterSetup = null;
+            try { closeMemberNameSetupModal(); } catch (e) {}
+            try { updateAdminTabVisibility(); } catch (e) {}
             redirectBoardUserToAdminPasswordLogin();
         }
 
@@ -7716,7 +7941,7 @@
             const selectEl = document.getElementById('member-name-setup-select');
             const errEl = document.getElementById('member-name-setup-error');
             const chosen = selectEl ? String(selectEl.value || '').trim() : '';
-            const isAdmin = !!(typeof auth !== 'undefined' && auth && auth.currentUser);
+            const isAdmin = !!(typeof auth !== 'undefined' && auth && getAdminAuthUser());
             const isExcludedBoardName = /^(Simon|Heimo|Karin|Sabrina)\b/i.test(chosen)
                 || /\b(Simon|Heimo|Karin|Sabrina)\b/i.test(chosen)
                 || isAdminProtectedMemberName(chosen);
@@ -7726,6 +7951,11 @@
                 return;
             }
             if (errEl) errEl.style.display = 'none';
+            if (!isAdmin && !isExcludedBoardName) {
+                try { localStorage.removeItem('kb_sv_is_board_device'); } catch (e) {}
+                try { localStorage.removeItem('kb_sv_open_admin_after_reload'); } catch (e) {}
+                adminLoginFlowActive = false;
+            }
             try { localStorage.setItem(MEMBER_IDENTITY_STORAGE_KEY, chosen); } catch (e) {}
             const pendingVote = pendingEventVoteAfterSetup;
             const pendingNewsLikeId = pendingNewsLikeAfterSetup;
@@ -7733,6 +7963,11 @@
             pendingNewsLikeAfterSetup = null;
             closeMemberNameSetupModal();
             refreshMemberIdentityViews();
+            try {
+                if (typeof flushPendingAppUpdateUI === 'function') {
+                    flushPendingAppUpdateUI();
+                }
+            } catch (e) {}
             if (pendingVote && pendingVote.eventId) {
                 await toggleEventVote(pendingVote.eventId, pendingVote.voteMode, chosen);
             }
@@ -7833,11 +8068,18 @@
                 } else {
                     WEAPON_AUTHORIZED_MEMBERS = [...DEFAULT_WEAPON_AUTHORIZED_MEMBERS];
                 }
+
+                if (Array.isArray(data.adminMembers)) {
+                    adminMembers = sanitizeActiveMembersList(data.adminMembers, true);
+                } else {
+                    adminMembers = [];
+                }
             } else {
                 officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
                 officialPassiveMembers = [];
                 officialBarMembers = null;
                 WEAPON_AUTHORIZED_MEMBERS = [...DEFAULT_WEAPON_AUTHORIZED_MEMBERS];
+                adminMembers = [];
             }
             try { populateWeaponMemberSelects(); } catch(e) {}
             try { populateMemberNameSetupSelect(); } catch(e) {}
@@ -7845,6 +8087,7 @@
             try { renderAdminMembersOverview(); } catch(e) {}
             try { if (typeof renderChairmanMembersManager === 'function') renderChairmanMembersManager(); } catch(e) {}
             try { updateMemberNavigationMode(); } catch(e) {}
+            try { updateAdminTabVisibility(); } catch(e) {}
         }
 
         async function loadMembersFromFirestore() {
@@ -7859,7 +8102,7 @@
         function renderAdminMembersOverview() {
             const container = document.getElementById('admin-members-overview');
             if (!container) return;
-            if (typeof auth === 'undefined' || !auth || !auth.currentUser) {
+            if (typeof auth === 'undefined' || !auth || !getAdminAuthUser()) {
                 container.innerHTML = '';
                 return;
             }
@@ -8206,7 +8449,7 @@
         }
 
         async function loadInventory() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             try {
                 const doc = await db.collection("settings").doc("inventory").get();
                 if (doc.exists) {
@@ -8301,7 +8544,7 @@
         };
 
         function handleInventoryNumberInput(key, rawValue, normalizeField) {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             if (!INVENTORY_ITEM_META[key]) return;
             if (!inventoryDraftData) syncInventoryDraftFromSaved();
             const trimmed = String(rawValue === undefined || rawValue === null ? '' : rawValue).trim().replace(',', '.');
@@ -8323,7 +8566,7 @@
         }
 
         function adjustInventoryDraft(key, delta) {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             if (!INVENTORY_ITEM_META[key]) return;
             if (!inventoryDraftData) syncInventoryDraftFromSaved();
             const inputEl = document.getElementById('inv-input-' + key);
@@ -8350,7 +8593,7 @@
         }
 
         async function saveInventoryChanges() {
-            if (!auth.currentUser || inventorySavingInFlight) return;
+            if (!getAdminAuthUser() || inventorySavingInFlight) return;
             if (!inventoryDraftData) syncInventoryDraftFromSaved();
 
             Object.keys(INVENTORY_ITEM_META).forEach(k => {
@@ -9166,7 +9409,7 @@
         let midnightCheckerInterval = null;
 
         function loadDutyPlanFromCache() {
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) {
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) {
                 return false;
             }
             try {
@@ -9236,7 +9479,7 @@
                 if (isFromFirebase) {
                     saveDutyPlanToCache(globalDutyList, isFromFirebase);
                 }
-                if (typeof auth !== 'undefined' && auth && auth.currentUser) {
+                if (typeof auth !== 'undefined' && auth && getAdminAuthUser()) {
                     checkAndTriggerDutyReminders(globalDutyList);
                 }
             }, (error) => {
@@ -9488,7 +9731,7 @@
 
         async function getOptionalStoredOneSignalRestKey() {
             try {
-                if (typeof auth === 'undefined' || !auth || !auth.currentUser) return '';
+                if (typeof auth === 'undefined' || !auth || !getAdminAuthUser()) return '';
                 if (typeof db === 'undefined' || !db) return '';
                 const doc = await db.collection("settings").doc("push").get();
                 const rawKey = (doc && doc.exists && doc.data() && doc.data().restApiKey)
@@ -9667,7 +9910,7 @@
 
         async function checkAndTriggerDutyReminders(dutySourceList, referenceDate) {
             if (isCheckingDutyReminders) return;
-            if (typeof auth === 'undefined' || !auth || !auth.currentUser) return;
+            if (typeof auth === 'undefined' || !auth || !getAdminAuthUser()) return;
             if (typeof db === 'undefined' || !db) return;
 
             isCheckingDutyReminders = true;
@@ -9840,7 +10083,7 @@
                 if (globalDutyList.length > 0) {
                     renderDutyPlanViews(globalDutyList, globalDutyIsFromFirebase);
                 }
-                if (typeof auth !== 'undefined' && auth && auth.currentUser) {
+                if (typeof auth !== 'undefined' && auth && getAdminAuthUser()) {
                     checkAndTriggerDutyReminders(globalDutyList);
                 }
             }, 60 * 1000);
@@ -10914,8 +11157,8 @@
 
         function getCurrentNewsLikerName() {
             let memberName = String(getSavedClubMemberName() || '').trim();
-            if (!memberName && typeof auth !== 'undefined' && auth && auth.currentUser) {
-                const resolvedKey = resolveAdminKeyFromUser(auth.currentUser, typeof activeAdminName !== 'undefined' ? activeAdminName : '');
+            if (!memberName && typeof auth !== 'undefined' && auth && getAdminAuthUser()) {
+                const resolvedKey = resolveAdminKeyFromUser(getAdminAuthUser(), typeof activeAdminName !== 'undefined' ? activeAdminName : '');
                 if (resolvedKey && ADMIN_KEY_TO_MEMBER_NAME[resolvedKey]) {
                     memberName = ADMIN_KEY_TO_MEMBER_NAME[resolvedKey];
                 }
@@ -11276,7 +11519,7 @@
         }
 
         async function loadKeyList() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             let loaded = [];
             try {
                 const [pdfKeysRes, keysRes] = await Promise.allSettled([
@@ -11294,7 +11537,7 @@
         }
 
         async function persistKeyListToFirestore() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             if (!isChairmanSimonLoggedIn()) return;
             const payload = {
                 items: exactPdfKeyList,
@@ -11333,7 +11576,7 @@
         }
 
         function startEditKeyListItem(index) {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             if (!isChairmanSimonLoggedIn()) return;
             const item = exactPdfKeyList[index];
             if (!item) return;
@@ -11379,7 +11622,7 @@
 
         async function saveKeyListItem(e) {
             if (e && typeof e.preventDefault === 'function') e.preventDefault();
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             if (!isChairmanSimonLoggedIn()) return;
             const editIdxEl = document.getElementById('key-edit-index');
             const isHeaderEl = document.getElementById('key-edit-is-header');
@@ -11433,7 +11676,7 @@
         }
 
         async function deleteKeyListItem(index) {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             if (!isChairmanSimonLoggedIn()) return;
             const item = exactPdfKeyList[index];
             if (!item) return;
@@ -11454,7 +11697,7 @@
         }
 
         function exportKeyListPDF() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             if (!exactPdfKeyList || exactPdfKeyList.length === 0) {
                 alert("Keine Einträge in der Schlüsselliste vorhanden.");
                 return;
@@ -11881,8 +12124,8 @@
         }
 
         function isAuthorizedForTresorScan() {
-            const email = (typeof auth !== 'undefined' && auth && auth.currentUser && auth.currentUser.email)
-                ? String(auth.currentUser.email).trim().toLowerCase()
+            const email = (typeof auth !== 'undefined' && auth && getAdminAuthUser() && getAdminAuthUser().email)
+                ? String(getAdminAuthUser().email).trim().toLowerCase()
                 : '';
             if (email && (email.includes('simon') || email.includes('heimo'))) {
                 return true;
@@ -12962,7 +13205,7 @@
 
                 const adminLabel = String(
                     (typeof activeAdminName !== 'undefined' && activeAdminName) ||
-                    (auth.currentUser && auth.currentUser.email) ||
+                    (getAdminAuthUser() && getAdminAuthUser().email) ||
                     'Admin'
                 ).trim();
                 await logAdminAudit(
@@ -14106,7 +14349,7 @@
                     if (el) el.value = '';
                 });
 
-                if (auth.currentUser) {
+                if (getAdminAuthUser()) {
                     loadCashSales();
                 }
 
@@ -14169,7 +14412,7 @@
                 if (custAddrEl) custAddrEl.value = '';
                 if (custZipEl) custZipEl.value = '';
 
-                if (auth.currentUser) {
+                if (getAdminAuthUser()) {
                     loadInvoices();
                 }
 
@@ -14194,7 +14437,7 @@
         }
 
         async function loadCashSales() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             const container = document.getElementById('admin-cash-sales-list');
             const sumEl = document.getElementById('admin-cash-sales-sum-value');
             const countEl = document.getElementById('admin-cash-sales-count');
@@ -14281,7 +14524,7 @@
         }
 
         async function exportCashSalesPDF() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             try {
                 if (!window.cashSalesList || window.cashSalesList.length === 0) {
                     await loadCashSales();
@@ -14454,7 +14697,7 @@
         }
 
         async function previewCashSalesReport() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             const modal = document.getElementById('cash-report-preview-modal');
             const bodyEl = document.getElementById('cash-report-preview-body');
             if (!modal || !bodyEl) return;
@@ -14543,7 +14786,7 @@
         }
 
         async function loadInvoices() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             const container = document.getElementById('admin-tally-history-list');
             if (!container) return;
             try {
@@ -14595,7 +14838,7 @@
         }
 
         function viewInvoiceModal(docId) {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             const inv = window.invoicesMap[docId];
             if (!inv) return;
             let itemsHtml = "";
@@ -14656,7 +14899,7 @@
         }
 
         async function generateInvoicePDF(docId) {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             const invoiceData = window.invoicesMap[docId];
             if (!invoiceData) return;
             const sealBase64 = await loadSealImageBase64();
@@ -14831,7 +15074,7 @@
         }
 
         function openAdminCashEditModal(collectionName, docId) {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             if (!isChairmanSimonLoggedIn()) return;
             if (collectionName !== 'cash_sales' && collectionName !== 'tally_billings') return;
             const modal = document.getElementById('admin-cash-edit-modal');
@@ -14889,7 +15132,7 @@
 
         async function saveAdminCashEditModal(evt) {
             if (evt && typeof evt.preventDefault === 'function') evt.preventDefault();
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             if (!isChairmanSimonLoggedIn()) return;
             const colEl = document.getElementById('admin-cash-edit-collection');
             const docIdEl = document.getElementById('admin-cash-edit-docid');
@@ -14935,7 +15178,7 @@
         }
 
         async function deleteItem(collectionName, docId) {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             if ((collectionName === 'weapon_log' || collectionName === 'news' || collectionName === 'events' || collectionName === 'duty_plan' || collectionName === 'cash_sales' || collectionName === 'tally_billings') && !isChairmanSimonLoggedIn()) {
                 return;
             }
@@ -14974,7 +15217,8 @@
             return typeof val === 'string' && /^[a-f0-9]{64}$/i.test(val.trim());
         }
 
-        function loadAppDataAfterUnlock() {
+        async function loadAppDataAfterUnlock() {
+            await ensureFirebaseSession();
             if (!officialActiveMembers || officialActiveMembers.length === 0) {
                 officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
             }
@@ -15006,7 +15250,16 @@
             try { initPushNotificationsUI(); } catch(e) {}
             try { initClubChat(); } catch(e) {}
             try {
-                if (!document.body.classList.contains('app-locked') && !auth.currentUser && !getSavedClubMemberName()) {
+                let openAdminFlag = false;
+                try { openAdminFlag = localStorage.getItem('kb_sv_open_admin_after_reload') === '1'; } catch (e) {}
+                if (openAdminFlag) {
+                    try { localStorage.removeItem('kb_sv_open_admin_after_reload'); } catch (e) {}
+                    adminLoginFlowActive = true;
+                    closeMemberNameSetupModal();
+                    redirectBoardUserToAdminPasswordLogin();
+                } else if (adminLoginFlowActive) {
+                    closeMemberNameSetupModal();
+                } else if (!document.body.classList.contains('app-locked') && !getAdminAuthUser() && !getSavedClubMemberName()) {
                     openMemberNameSetupModal(false);
                 }
             } catch(e) {}
@@ -15021,12 +15274,12 @@
 
         async function logAdminAudit(action, details) {
             try {
-                if (typeof auth === 'undefined' || !auth || !auth.currentUser) return;
+                if (typeof auth === 'undefined' || !auth || !getAdminAuthUser()) return;
                 if (typeof db === 'undefined' || !db) return;
                 await db.collection("audit_logs").add({
                     action: String(action || '').trim(),
                     details: String(details || '').trim(),
-                    adminEmail: String(auth.currentUser.email || '').trim(),
+                    adminEmail: String(getAdminAuthUser().email || '').trim(),
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
             } catch (e) {}
@@ -15044,7 +15297,7 @@
         function renderAdminAuditLogs(entries) {
             const container = document.getElementById('admin-audit-logs-list');
             if (!container) return;
-            if (!auth || !auth.currentUser) {
+            if (!auth || !getAdminAuthUser()) {
                 container.innerHTML = '';
                 return;
             }
@@ -15122,8 +15375,8 @@
         }
 
         function loadAdminProtectedData(forceReload = false) {
-            if (!auth.currentUser) return;
-            const currentUid = String(auth.currentUser.uid || auth.currentUser.email || '');
+            if (!getAdminAuthUser()) return;
+            const currentUid = String(getAdminAuthUser().uid || getAdminAuthUser().email || '');
             const now = Date.now();
             showAdminMenuImmediately();
 
@@ -15134,7 +15387,7 @@
             lastAdminProtectedLoadAt = now;
 
             const runBackgroundAdminLoad = () => {
-                if (!auth.currentUser) return;
+                if (!getAdminAuthUser()) return;
                 const bgTasks = [
                     () => loadAppDataAfterUnlock(),
                     () => renderAdminMembersOverview(),
@@ -15294,6 +15547,7 @@
             officialActiveMembers = [];
             officialPassiveMembers = [];
             officialBarMembers = null;
+            adminMembers = [];
             officialWeaponList = [];
             try { updateMemberNavigationMode(); } catch(e) {}
             exactPdfKeyList = [];
@@ -15378,7 +15632,136 @@
             return convertedToken;
         }
 
-        function unlockClubApp() {
+        const CLUB_CODE_FAILS_STORAGE_KEY = 'kb_sv_code_fails';
+        const CLUB_CODE_LOCK_UNTIL_STORAGE_KEY = 'kb_sv_code_lock_until';
+        let clubPinLockoutTimerId = null;
+
+        function resetClubPinVisibility() {
+            const inputEl = document.getElementById('club-pin-input');
+            const eyeBtn = document.getElementById('club-pin-eye-btn');
+            if (inputEl) inputEl.type = 'password';
+            if (eyeBtn) {
+                eyeBtn.setAttribute('aria-pressed', 'false');
+                eyeBtn.setAttribute('aria-label', 'Code kurz anzeigen');
+                eyeBtn.title = 'Code kurz anzeigen';
+                eyeBtn.textContent = '👁️';
+            }
+        }
+
+        function toggleClubPinVisibility() {
+            const inputEl = document.getElementById('club-pin-input');
+            const eyeBtn = document.getElementById('club-pin-eye-btn');
+            if (!inputEl || inputEl.disabled) return;
+            const reveal = inputEl.type === 'password';
+            inputEl.type = reveal ? 'text' : 'password';
+            if (eyeBtn) {
+                eyeBtn.setAttribute('aria-pressed', reveal ? 'true' : 'false');
+                eyeBtn.setAttribute('aria-label', reveal ? 'Code verbergen' : 'Code kurz anzeigen');
+                eyeBtn.title = reveal ? 'Code verbergen' : 'Code kurz anzeigen';
+                eyeBtn.textContent = reveal ? '🙈' : '👁️';
+            }
+        }
+
+        function getClubCodeFails() {
+            try {
+                const parsed = parseInt(localStorage.getItem(CLUB_CODE_FAILS_STORAGE_KEY) || '0', 10);
+                return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+            } catch (e) {
+                return 0;
+            }
+        }
+
+        function getClubCodeLockUntil() {
+            try {
+                const parsed = parseInt(localStorage.getItem(CLUB_CODE_LOCK_UNTIL_STORAGE_KEY) || '0', 10);
+                return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+            } catch (e) {
+                return 0;
+            }
+        }
+
+        function resetClubCodeLockoutState() {
+            if (clubPinLockoutTimerId) {
+                clearInterval(clubPinLockoutTimerId);
+                clubPinLockoutTimerId = null;
+            }
+            try { localStorage.setItem(CLUB_CODE_FAILS_STORAGE_KEY, '0'); } catch (e) {}
+            try { localStorage.removeItem(CLUB_CODE_LOCK_UNTIL_STORAGE_KEY); } catch (e) {}
+            const inputEl = document.getElementById('club-pin-input');
+            const submitBtn = document.getElementById('club-pin-submit-btn');
+            const eyeBtn = document.getElementById('club-pin-eye-btn');
+            const errEl = document.getElementById('club-pin-error');
+            if (inputEl) inputEl.disabled = false;
+            if (submitBtn) submitBtn.disabled = false;
+            if (eyeBtn) eyeBtn.disabled = false;
+            if (errEl && errEl.dataset.lockoutMsg === '1') {
+                errEl.style.display = 'none';
+                delete errEl.dataset.lockoutMsg;
+            }
+        }
+
+        function syncClubPinLockoutState() {
+            const inputEl = document.getElementById('club-pin-input');
+            const submitBtn = document.getElementById('club-pin-submit-btn');
+            const eyeBtn = document.getElementById('club-pin-eye-btn');
+            const errEl = document.getElementById('club-pin-error');
+            const lockUntil = getClubCodeLockUntil();
+            const remainingMs = lockUntil - Date.now();
+
+            if (remainingMs > 0) {
+                const remainingSec = Math.max(1, Math.ceil(remainingMs / 1000));
+                if (inputEl) inputEl.disabled = true;
+                if (submitBtn) submitBtn.disabled = true;
+                if (eyeBtn) eyeBtn.disabled = true;
+                if (errEl) {
+                    errEl.dataset.lockoutMsg = '1';
+                    errEl.innerText = `🔒 Zu viele Fehlversuche. Bitte ${remainingSec} Sekunden warten...`;
+                    errEl.style.display = 'block';
+                }
+                if (!clubPinLockoutTimerId) {
+                    clubPinLockoutTimerId = setInterval(() => {
+                        syncClubPinLockoutState();
+                    }, 250);
+                }
+                return true;
+            }
+
+            if (clubPinLockoutTimerId) {
+                clearInterval(clubPinLockoutTimerId);
+                clubPinLockoutTimerId = null;
+            }
+            if (lockUntil > 0) {
+                try { localStorage.removeItem(CLUB_CODE_LOCK_UNTIL_STORAGE_KEY); } catch (e) {}
+            }
+            if (inputEl) inputEl.disabled = false;
+            if (submitBtn) submitBtn.disabled = false;
+            if (eyeBtn) eyeBtn.disabled = false;
+            if (errEl && errEl.dataset.lockoutMsg === '1') {
+                errEl.style.display = 'none';
+                delete errEl.dataset.lockoutMsg;
+            }
+            return false;
+        }
+
+        function registerClubCodeFailure() {
+            const fails = getClubCodeFails() + 1;
+            try { localStorage.setItem(CLUB_CODE_FAILS_STORAGE_KEY, String(fails)); } catch (e) {}
+            if (fails >= 6) {
+                try { localStorage.setItem(CLUB_CODE_LOCK_UNTIL_STORAGE_KEY, String(Date.now() + 300 * 1000)); } catch (e) {}
+                syncClubPinLockoutState();
+                return true;
+            }
+            if (fails >= 3) {
+                try { localStorage.setItem(CLUB_CODE_LOCK_UNTIL_STORAGE_KEY, String(Date.now() + 60 * 1000)); } catch (e) {}
+                syncClubPinLockoutState();
+                return true;
+            }
+            return false;
+        }
+
+        async function unlockClubApp() {
+            resetClubCodeLockoutState();
+            resetClubPinVisibility();
             document.documentElement.classList.add('kbsv-pre-unlocked');
             document.documentElement.classList.remove('kbsv-pre-locked');
             document.body.classList.remove('app-locked');
@@ -15398,7 +15781,8 @@
                 inputEl.readOnly = false;
                 inputEl.value = '';
             }
-            loadAppDataAfterUnlock();
+            await ensureFirebaseSession();
+            await loadAppDataAfterUnlock();
             try {
                 if (typeof flushPendingAppUpdateUI === 'function') {
                     flushPendingAppUpdateUI();
@@ -15408,6 +15792,7 @@
 
         function lockClubApp(forceClearInput = true) {
             try { localStorage.removeItem(CLUB_PIN_STORAGE_KEY); } catch (e) {}
+            resetClubPinVisibility();
             document.documentElement.classList.remove('kbsv-pre-unlocked');
             document.documentElement.classList.add('kbsv-pre-locked');
             document.body.classList.remove('admin-direct-login');
@@ -15432,12 +15817,12 @@
             if (pageCard) pageCard.style.display = '';
             const inputEl = document.getElementById('club-pin-input');
             if (inputEl) {
-                inputEl.disabled = false;
                 inputEl.readOnly = false;
                 if (forceClearInput && document.activeElement !== inputEl) {
                     inputEl.value = '';
                 }
             }
+            syncClubPinLockoutState();
             clearSensitiveAppData();
             try { if (typeof updateDeviceAppBadge === 'function') updateDeviceAppBadge(0); } catch (e) {}
         }
@@ -15481,52 +15866,87 @@
                 lockScreen.style.pointerEvents = 'auto';
             }
             try { updateLockscreenAdminLinkVisibility(); } catch (e) {}
+            try { syncClubPinLockoutState(); } catch (e) {}
             window.scrollTo(0, 0);
         }
 
         async function verifyClubAccessCode(e) {
             if (e && e.preventDefault) e.preventDefault();
+            if (syncClubPinLockoutState()) return;
+
             const inputEl = document.getElementById('club-pin-input');
             const errEl = document.getElementById('club-pin-error');
             const submitBtn = document.getElementById('club-pin-submit-btn');
-            const enteredPin = inputEl ? inputEl.value.trim() : "";
+            const trimmedPin = inputEl ? inputEl.value.trim() : "";
+            const upperPin = trimmedPin.toUpperCase();
 
-            if (errEl) errEl.style.display = 'none';
-            if (!enteredPin) {
+            if (errEl) {
+                delete errEl.dataset.lockoutMsg;
+                errEl.style.display = 'none';
+            }
+            if (!trimmedPin) {
                 if (inputEl) inputEl.focus();
                 return;
             }
 
             if (submitBtn) submitBtn.disabled = true;
             try {
-                const enteredHash = await sha256Hex(enteredPin);
-                const validHash = await fetchOrInitClubPinFromFirestore(false);
-                if (validHash && enteredHash === validHash) {
-                    try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, enteredHash); } catch (err) {}
-                    unlockClubApp();
-                    switchTab('news');
-                } else {
-                    if (errEl) {
-                        errEl.innerText = validHash ? "Falscher Zugangscode" : "Zugangscode noch nicht im System hinterlegt";
-                        errEl.style.display = 'block';
+                const lowerPin = trimmedPin.toLowerCase();
+                const [upperHash, exactHash, lowerHash, validHash] = await Promise.all([
+                    sha256Hex(upperPin),
+                    exactHashNeeded(trimmedPin, upperPin) ? sha256Hex(trimmedPin) : Promise.resolve(null),
+                    (lowerPin !== trimmedPin && lowerPin !== upperPin) ? sha256Hex(lowerPin) : Promise.resolve(null),
+                    fetchOrInitClubPinFromFirestore(false)
+                ]);
+                const matchedHash = (validHash && upperHash === validHash)
+                    ? upperHash
+                    : (validHash && exactHash && exactHash === validHash)
+                        ? exactHash
+                        : (validHash && lowerHash && lowerHash === validHash)
+                            ? lowerHash
+                            : null;
+
+                if (matchedHash) {
+                    resetClubCodeLockoutState();
+                    try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, matchedHash); } catch (err) {}
+                    await ensureFirebaseSession();
+                    await unlockClubApp();
+                    if (!adminLoginFlowActive) {
+                        switchTab('news');
                     }
+                } else {
                     if (inputEl) {
                         inputEl.value = '';
-                        inputEl.focus();
+                    }
+                    const lockedNow = validHash ? registerClubCodeFailure() : false;
+                    if (!lockedNow) {
+                        if (errEl) {
+                            delete errEl.dataset.lockoutMsg;
+                            errEl.innerText = validHash ? "Falscher Zugangscode" : "Zugangscode noch nicht im System hinterlegt";
+                            errEl.style.display = 'block';
+                        }
+                        if (inputEl) inputEl.focus();
                     }
                 }
             } catch (err) {
                 if (errEl) {
+                    delete errEl.dataset.lockoutMsg;
                     errEl.innerText = "Verbindungsfehler beim Prüfen des Zugangscodes";
                     errEl.style.display = 'block';
                 }
             } finally {
-                if (submitBtn) submitBtn.disabled = false;
+                if (submitBtn && !syncClubPinLockoutState()) {
+                    submitBtn.disabled = false;
+                }
             }
         }
 
+        function exactHashNeeded(trimmedPin, upperPin) {
+            return trimmedPin !== upperPin;
+        }
+
         async function loadAdminClubPin() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             const adminPinInput = document.getElementById('admin-club-pin-input');
             if (!adminPinInput) return;
             try {
@@ -15546,7 +15966,7 @@
             if (!isChairmanSimonLoggedIn()) return;
             const adminPinInput = document.getElementById('admin-club-pin-input');
             const feedbackEl = document.getElementById('chairman-club-pin-feedback');
-            const newPin = adminPinInput ? adminPinInput.value.trim() : "";
+            const newPin = adminPinInput ? adminPinInput.value.trim().toUpperCase() : "";
             if (!newPin || newPin.length < 4) {
                 alert("Bitte mindestens 4 Zeichen für den neuen Vereins-Zugangscode eingeben!");
                 if (adminPinInput) adminPinInput.focus();
@@ -15594,7 +16014,7 @@
                 clubAccessGuardUnsubscribe = db.collection("settings").doc("access").onSnapshot(async (doc) => {
                     let remoteHash = null;
                     if (doc.exists && doc.data()) {
-                        remoteHash = await resolveClubPinHashFromData(doc.data(), !!auth.currentUser);
+                        remoteHash = await resolveClubPinHashFromData(doc.data(), !!getAdminAuthUser());
                     }
 
                     currentFirestoreClubPinHash = remoteHash;
@@ -15605,12 +16025,13 @@
                         adminPinInput.placeholder = 'Neuen Vereins-Zugangscode eingeben';
                     }
 
-                    const isAdminLoggedIn = !!auth.currentUser;
+                    const isAdminLoggedIn = !!getAdminAuthUser();
                     const isDirectAdminFlow = document.body.classList.contains('admin-direct-login');
                     const savedToken = await getNormalizedSavedClubToken();
 
                     if (savedToken && remoteHash && savedToken === remoteHash) {
-                        unlockClubApp();
+                        await ensureFirebaseSession();
+                        await unlockClubApp();
                     } else if (!isAdminLoggedIn && !isDirectAdminFlow) {
                         const wasUnlocked = !document.body.classList.contains('app-locked');
                         if (wasUnlocked || savedToken) {
@@ -15626,7 +16047,7 @@
         let activeAdminName = '';
 
         function isMainPushAdmin() {
-            const user = (typeof auth !== 'undefined' && auth) ? auth.currentUser : null;
+            const user = (typeof auth !== 'undefined' && auth) ? getAdminAuthUser() : null;
             if (!user) return false;
             const email = String(user.email || '').trim().toLowerCase();
             if (email) {
@@ -15640,7 +16061,7 @@
         }
 
         function isChairmanSimonLoggedIn() {
-            return !!(typeof auth !== 'undefined' && auth && auth.currentUser && auth.currentUser.email && auth.currentUser.email.toLowerCase() === 'admin+simon@kb-sv-gaschurn.at');
+            return !!(typeof auth !== 'undefined' && auth && getAdminAuthUser() && getAdminAuthUser().email && getAdminAuthUser().email.toLowerCase() === 'admin+simon@kb-sv-gaschurn.at');
         }
 
         function isObmannSimonLoggedIn() {
@@ -15954,6 +16375,7 @@
         let pendingChairmanActiveMembers = null;
         let pendingChairmanBarMembers = null;
         let pendingChairmanWeaponWardens = null;
+        let pendingChairmanAdminMembers = null;
         let chairmanMembersSaveSeq = 0;
         let chairmanMembersInFlightSaves = 0;
 
@@ -15981,6 +16403,9 @@
             const liveWeapons = Array.isArray(WEAPON_AUTHORIZED_MEMBERS)
                 ? [...WEAPON_AUTHORIZED_MEMBERS]
                 : [...DEFAULT_WEAPON_AUTHORIZED_MEMBERS];
+            const liveAdmins = Array.isArray(adminMembers)
+                ? [...adminMembers]
+                : [];
 
             if (forceSync || !Array.isArray(pendingChairmanActiveMembers)) {
                 pendingChairmanActiveMembers = liveActive;
@@ -15994,6 +16419,9 @@
             if (forceSync || !Array.isArray(pendingChairmanWeaponWardens)) {
                 pendingChairmanWeaponWardens = liveWeapons;
             }
+            if (forceSync || !Array.isArray(pendingChairmanAdminMembers)) {
+                pendingChairmanAdminMembers = liveAdmins;
+            }
         }
 
         function renderChairmanMembersManager(preserveDraft = false) {
@@ -16005,6 +16433,7 @@
                 pendingChairmanActiveMembers = null;
                 pendingChairmanBarMembers = null;
                 pendingChairmanWeaponWardens = null;
+                pendingChairmanAdminMembers = null;
                 return;
             }
 
@@ -16013,14 +16442,17 @@
             const allActive = Array.isArray(pendingChairmanActiveMembers) ? pendingChairmanActiveMembers : [];
             const barSet = new Set((Array.isArray(pendingChairmanBarMembers) ? pendingChairmanBarMembers : []).map(n => normalizeMemberNameForMatch(n)));
             const weaponSet = new Set((Array.isArray(pendingChairmanWeaponWardens) ? pendingChairmanWeaponWardens : []).map(n => normalizeMemberNameForMatch(n)));
+            const adminSet = new Set((Array.isArray(pendingChairmanAdminMembers) ? pendingChairmanAdminMembers : []).map(n => normalizeMemberNameForMatch(n)));
 
             if (countsEl) {
                 const barCount = allActive.filter(n => barSet.has(normalizeMemberNameForMatch(n))).length;
                 const weaponCount = allActive.filter(n => weaponSet.has(normalizeMemberNameForMatch(n))).length;
+                const adminCount = allActive.filter(n => adminSet.has(normalizeMemberNameForMatch(n))).length;
                 countsEl.innerHTML = `
                     <span class="chairman-unified-count-tag">👥 ${allActive.length} Mitglieder</span>
                     <span class="chairman-unified-count-tag bar-tag">🍺 ${barCount} Schankbuch</span>
                     <span class="chairman-unified-count-tag weapon-tag">🎯 ${weaponCount} Waffenwarte</span>
+                    <span class="chairman-unified-count-tag admin-tag">🔐 ${adminCount} Admin</span>
                 `;
             }
 
@@ -16045,12 +16477,16 @@
                     const norm = normalizeMemberNameForMatch(name);
                     const hasBar = barSet.has(norm);
                     const hasWeapon = weaponSet.has(norm);
+                    const hasAdmin = adminSet.has(norm);
                     const barBtnClass = hasBar ? 'chairman-right-toggle-btn bar-active' : 'chairman-right-toggle-btn inactive';
                     const barBtnLabel = hasBar ? '✅ 🍺 Schankbuch' : '⬜ 🍺 Kein Schankbuch';
                     const barBtnTitle = hasBar ? 'Schankbuch-Tab aktiv (tippen zum Deaktivieren)' : 'Kein Schankbuch – zeigt stattdessen Direkt-Chat';
                     const weaponBtnClass = hasWeapon ? 'chairman-right-toggle-btn weapon-active' : 'chairman-right-toggle-btn inactive';
                     const weaponBtnLabel = hasWeapon ? '✅ 🎯 Waffenwart' : '⬜ 🎯 Kein Waffenwart';
                     const weaponBtnTitle = hasWeapon ? 'Als Waffenwart berechtigt (tippen zum Entfernen)' : 'Kein Waffenwart (tippen zum Freischalten)';
+                    const adminBtnClass = hasAdmin ? 'chairman-right-toggle-btn admin-active' : 'chairman-right-toggle-btn inactive';
+                    const adminBtnLabel = hasAdmin ? '✅ 🔐 Admin' : '⬜ 🔐 Kein Admin';
+                    const adminBtnTitle = hasAdmin ? 'Admin-Button unten rechts sichtbar (tippen zum Ausblenden)' : 'Kein Admin-Button (tippen zum Freischalten)';
 
                     return `
                         <div class="chairman-unified-member-card" data-member-card="${safe}">
@@ -16061,6 +16497,7 @@
                             <div class="chairman-unified-rights-row">
                                 <button type="button" class="${barBtnClass}" data-member-name="${safe}" aria-pressed="${hasBar ? 'true' : 'false'}" title="${barBtnTitle}" onclick="toggleChairmanMemberRight(this.dataset.memberName, 'bar')">${barBtnLabel}</button>
                                 <button type="button" class="${weaponBtnClass}" data-member-name="${safe}" aria-pressed="${hasWeapon ? 'true' : 'false'}" title="${weaponBtnTitle}" onclick="toggleChairmanMemberRight(this.dataset.memberName, 'weapon')">${weaponBtnLabel}</button>
+                                <button type="button" class="${adminBtnClass}" data-member-name="${safe}" aria-pressed="${hasAdmin ? 'true' : 'false'}" title="${adminBtnTitle}" onclick="toggleChairmanMemberRight(this.dataset.memberName, 'admin')">${adminBtnLabel}</button>
                             </div>
                         </div>
                     `;
@@ -16084,10 +16521,12 @@
                 true
             );
             const cleanWeapons = sanitizeActiveMembersList(pendingChairmanWeaponWardens || [], true);
+            const cleanAdminMembers = sanitizeActiveMembersList(pendingChairmanAdminMembers || [], true);
 
             pendingChairmanActiveMembers = [...cleanActive];
             pendingChairmanBarMembers = [...cleanBarMembers];
             pendingChairmanWeaponWardens = [...cleanWeapons];
+            pendingChairmanAdminMembers = [...cleanAdminMembers];
 
             const mySeq = ++chairmanMembersSaveSeq;
             chairmanMembersInFlightSaves++;
@@ -16101,6 +16540,7 @@
                     barMembers: cleanBarMembers,
                     weaponMembers: cleanWeapons,
                     weaponWardens: cleanWeapons,
+                    adminMembers: cleanAdminMembers,
                     updatedBy: 'Simon',
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
@@ -16111,12 +16551,14 @@
                     barMembers: cleanBarMembers,
                     weaponMembers: cleanWeapons,
                     weaponWardens: cleanWeapons,
+                    adminMembers: cleanAdminMembers,
                     passive: officialPassiveMembers
                 });
                 try { updateMemberNavigationMode(); } catch (e) {}
-                try { logAdminAudit('Mitglieder & Rechte gespeichert', auditMsg || `${cleanActive.length} Mitglieder · ${cleanBarMembers.length} Schankbuch · ${cleanWeapons.length} Waffenwarte`); } catch (e) {}
+                try { updateAdminTabVisibility(); } catch (e) {}
+                try { logAdminAudit('Mitglieder & Rechte gespeichert', auditMsg || `${cleanActive.length} Mitglieder · ${cleanBarMembers.length} Schankbuch · ${cleanWeapons.length} Waffenwarte · ${cleanAdminMembers.length} Admin`); } catch (e) {}
                 setChairmanMembersFeedback(
-                    showSuccessText || `✅ Gespeichert (${cleanActive.length} Mitglieder · ${cleanBarMembers.length} Schankbuch · ${cleanWeapons.length} Waffenwarte).`,
+                    showSuccessText || `✅ Gespeichert (${cleanActive.length} Mitglieder · ${cleanBarMembers.length} Schankbuch · ${cleanWeapons.length} Waffenwarte · ${cleanAdminMembers.length} Admin).`,
                     false
                 );
             } catch (err) {
@@ -16146,11 +16588,13 @@
             if (!isChairmanSimonLoggedIn()) return;
             const cleanName = String(memberName || '').trim();
             if (!cleanName) return;
-            if (rightType !== 'bar' && rightType !== 'weapon') return;
+            if (rightType !== 'bar' && rightType !== 'weapon' && rightType !== 'admin') return;
             syncChairmanUnifiedDraftFromLive(false);
 
             const targetNorm = normalizeMemberNameForMatch(cleanName);
-            const targetList = rightType === 'bar' ? pendingChairmanBarMembers : pendingChairmanWeaponWardens;
+            const targetList = rightType === 'bar'
+                ? pendingChairmanBarMembers
+                : (rightType === 'weapon' ? pendingChairmanWeaponWardens : pendingChairmanAdminMembers);
             const idx = targetList.findIndex(n => normalizeMemberNameForMatch(n) === targetNorm);
             let nowActive = false;
             if (idx >= 0) {
@@ -16164,7 +16608,9 @@
             renderChairmanMembersManager(true);
             const label = rightType === 'bar'
                 ? (nowActive ? `🍺 Schankbuch für ${cleanName} aktiviert` : `💬 Schankbuch für ${cleanName} deaktiviert`)
-                : (nowActive ? `🎯 Waffenwart für ${cleanName} aktiviert` : `🎯 Waffenwart für ${cleanName} entfernt`);
+                : (rightType === 'weapon'
+                    ? (nowActive ? `🎯 Waffenwart für ${cleanName} aktiviert` : `🎯 Waffenwart für ${cleanName} entfernt`)
+                    : (nowActive ? `🔐 Admin-Button für ${cleanName} aktiviert` : `🔐 Admin-Button für ${cleanName} deaktiviert`));
             persistAllChairmanMembersAndRights(label, `✅ ${label} & sofort gespeichert.`);
         }
 
@@ -16210,6 +16656,7 @@
             pendingChairmanActiveMembers = pendingChairmanActiveMembers.filter(n => normalizeMemberNameForMatch(n) !== targetNorm);
             pendingChairmanBarMembers = pendingChairmanBarMembers.filter(n => normalizeMemberNameForMatch(n) !== targetNorm);
             pendingChairmanWeaponWardens = pendingChairmanWeaponWardens.filter(n => normalizeMemberNameForMatch(n) !== targetNorm);
+            pendingChairmanAdminMembers = (pendingChairmanAdminMembers || []).filter(n => normalizeMemberNameForMatch(n) !== targetNorm);
 
             renderChairmanMembersManager(true);
             await persistAllChairmanMembersAndRights(
@@ -16225,7 +16672,7 @@
             if (typeof showCustomConfirm === 'function') {
                 showCustomConfirm(
                     'Mitglied entfernen?',
-                    `Möchtest du „${cleanName}“ wirklich komplett aus allen Listen (Mitglieder, Schankbuch & Waffenwarte) entfernen?`,
+                    `Möchtest du „${cleanName}“ wirklich komplett aus allen Listen (Mitglieder, Schankbuch, Waffenwarte & Admin) entfernen?`,
                     (confirmed) => {
                         if (confirmed) {
                             executeRemoveChairmanUnifiedMember(cleanName);
@@ -16486,7 +16933,8 @@
 
             const activeCount = Array.isArray(officialActiveMembers) ? officialActiveMembers.length : 0;
             const weaponCount = Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS.length : 0;
-            setStatus('tile-status-members', (activeCount > 0 || weaponCount > 0) ? `${activeCount} Aktiv · ${weaponCount} Waffenwarte` : 'Schank & Waffenwarte');
+            const adminCount = Array.isArray(adminMembers) ? adminMembers.length : 0;
+            setStatus('tile-status-members', (activeCount > 0 || weaponCount > 0 || adminCount > 0) ? `${activeCount} Aktiv · ${weaponCount} Waffen · ${adminCount} Admin` : 'Schank, Waffen & Admin');
 
             setStatus('tile-status-security', 'Zugang & Tresor-QR');
 
@@ -16692,7 +17140,7 @@
                 }
             } catch (e) {}
             try {
-                if (!auth || !auth.currentUser) {
+                if (!auth || !getAdminAuthUser()) {
                     inventoryHasUnsavedChanges = false;
                     inventoryDraftData = null;
                 }
@@ -16971,6 +17419,7 @@
                 if (!savedToken || !currentFirestoreClubPinHash || savedToken !== currentFirestoreClubPinHash) {
                     lockClubApp(true);
                 } else {
+                    await ensureFirebaseSession();
                     loadNews();
                     loadWeaponHistory();
                 }
@@ -16981,7 +17430,7 @@
         }
 
         auth.onAuthStateChanged(async (user) => {
-            if (user) {
+            if (isBoardAdminUser(user)) {
                 const resolvedKey = resolveAdminKeyFromUser(user, '') || resolveAdminKeyFromUser(user, activeAdminName);
                 if (resolvedKey) {
                     activeAdminName = resolvedKey;
@@ -16996,6 +17445,8 @@
                         } catch (e) {}
                     }
                 }
+                try { localStorage.removeItem('kb_sv_open_admin_after_reload'); } catch (e) {}
+                adminLoginFlowActive = false;
                 try { closeMemberNameSetupModal(); } catch (e) {}
                 document.documentElement.classList.add('kbsv-pre-unlocked');
                 document.documentElement.classList.remove('kbsv-pre-locked');
@@ -17017,11 +17468,14 @@
                 updateAdminPushVisibility();
                 refreshMemberIdentityViews();
             } else {
+                const wasAdminMode = document.body.classList.contains('admin-mode') || !!activeAdminName;
                 activeAdminName = '';
                 clearTimeout(inactivityTimer);
-                const pwdInput = document.getElementById('admin-password-input');
-                if (pwdInput) pwdInput.value = '';
-                resetAdminPasswordVisibility();
+                if (wasAdminMode) {
+                    const pwdInput = document.getElementById('admin-password-input');
+                    if (pwdInput) pwdInput.value = '';
+                    resetAdminPasswordVisibility();
+                }
                 clearAdminSensitiveData();
                 updateAdminPushVisibility();
                 refreshMemberIdentityViews();
@@ -17036,6 +17490,9 @@
                         lockClubApp(false);
                     }
                 } else {
+                    if (!user) {
+                        await ensureFirebaseSession();
+                    }
                     loadWeaponHistory();
                 }
             }
@@ -17494,7 +17951,7 @@
         }
 
         async function openMasterPinModal() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
 
             const modal = document.getElementById('master-pin-modal');
             const titleEl = document.getElementById('master-pin-modal-title');
@@ -17564,7 +18021,7 @@
 
         async function submitMasterPinModal(e) {
             if (e && e.preventDefault) e.preventDefault();
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             const input1 = document.getElementById('master-pin-input-1');
             const input2 = document.getElementById('master-pin-input-2');
             const errEl = document.getElementById('master-pin-modal-error');
@@ -17640,7 +18097,7 @@
         }
 
         async function loadAdminOneSignalKey() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             const inputEl = document.getElementById('admin-onesignal-key-input');
             if (!inputEl) return;
             try {
@@ -17740,7 +18197,7 @@
         }
 
         function getCurrentAdminFirstName() {
-            const user = (typeof auth !== 'undefined' && auth && auth.currentUser) ? auth.currentUser : null;
+            const user = (typeof auth !== 'undefined' && auth && getAdminAuthUser()) ? getAdminAuthUser() : null;
             const resolvedKey = (typeof resolveAdminKeyFromUser === 'function')
                 ? resolveAdminKeyFromUser(user, typeof activeAdminName !== 'undefined' ? activeAdminName : '')
                 : '';
@@ -17771,7 +18228,7 @@
             if (explicitName) {
                 return extractMemberFirstNameForOneSignal(explicitName);
             }
-            if (typeof auth !== 'undefined' && auth && auth.currentUser) {
+            if (typeof auth !== 'undefined' && auth && getAdminAuthUser()) {
                 const adminFirst = getCurrentAdminFirstName();
                 if (adminFirst && adminFirst !== 'Vorstand') return adminFirst;
             }
@@ -17825,7 +18282,7 @@
         }
 
         async function sendAdminInventoryChangePush(summary) {
-            if (typeof auth === 'undefined' || !auth || !auth.currentUser) return;
+            if (typeof auth === 'undefined' || !auth || !getAdminAuthUser()) return;
             const currentAdminFirstName = getCurrentAdminFirstName();
             const filters = buildInventoryChangePushFilters(currentAdminFirstName);
             const targetUrl = "https://" + "kb-sv-push" + "." + "simonpoeschel33" + "." + "workers.dev";
@@ -18590,7 +19047,7 @@
         initHelpSpeechVoicesListener();
 
         function openAdminHelpModal() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             const chairmanExtra = document.getElementById('admin-help-modal-chairman-extra');
             if (chairmanExtra) {
                 chairmanExtra.style.display = isChairmanSimonLoggedIn() ? 'block' : 'none';
@@ -18612,7 +19069,7 @@
         }
 
         function printAdminHelpModal() {
-            if (!auth.currentUser) return;
+            if (!getAdminAuthUser()) return;
             document.body.classList.add('printing-admin-help');
             try {
                 window.print();
@@ -18746,7 +19203,7 @@
         }
 
         async function fetchAnnualBackupData() {
-            if (!auth.currentUser) return null;
+            if (!getAdminAuthUser()) return null;
             const [cashSnap, tallySnap, weaponSnap, eventsSnap] = await Promise.all([
                 db.collection("cash_sales").orderBy("createdAt", "desc").get(),
                 db.collection("tally_billings").orderBy("createdAt", "desc").get(),
@@ -19367,7 +19824,7 @@
 
         function showIncomingChatToast(msg) {
             if (isChatMuted() || isChatDrawerOpen) return false;
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return false;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return false;
             const toast = document.getElementById('chat-popup-toast');
             const titleEl = document.getElementById('chat-popup-toast-title');
             const bodyEl = document.getElementById('chat-popup-toast-body');
@@ -20044,7 +20501,7 @@
         }
 
         async function sendClubSticker(stickerKey) {
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             const key = String(stickerKey || '').trim();
             if (!Object.prototype.hasOwnProperty.call(CLUB_STICKERS, key)) return;
             const sticker = CLUB_STICKERS[key];
@@ -20104,7 +20561,7 @@
 
         function toggleChatEmojiPanel(event) {
             if (event) event.stopPropagation();
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             renderClubStickerBar();
             closeChatReactionPicker();
             closeChatAttachOnly();
@@ -20163,7 +20620,7 @@
 
         function toggleChatAttachMenu(event) {
             if (event) event.stopPropagation();
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             closeChatReactionPicker();
             closeChatEmojiPanel();
             updateChatAttachEventButtonVisibility();
@@ -20215,7 +20672,7 @@
         }
 
         function triggerChatCameraPicker() {
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             const cameraInput = document.getElementById('chat-camera-input');
             if (cameraInput) {
                 cameraInput.value = '';
@@ -20224,7 +20681,7 @@
         }
 
         function triggerChatImagePicker() {
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             const fileInput = document.getElementById('chat-image-input');
             if (fileInput) {
                 fileInput.value = '';
@@ -20236,7 +20693,7 @@
         let isChatPdfUploadInFlight = false;
 
         function triggerChatPdfPicker() {
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             const senderName = getSavedClubMemberName();
             if (!senderName) {
                 openMemberNameSetupModal(true);
@@ -20277,7 +20734,7 @@
         }
 
         async function handleChatPdfUpload(file) {
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             if (window.isClubChatLocked && !isChairmanSimonLoggedIn()) {
                 alert('🔒 Der Vereins-Chat ist vorübergehend nur für Durchsagen des Obmanns geöffnet.');
                 return;
@@ -20782,7 +21239,7 @@
         async function insertNextEventIntoChat() {
             if (!isChairmanSimonLoggedIn()) return;
             closeChatAttachMenu();
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
 
             let eventsArr = [];
             try {
@@ -20999,7 +21456,7 @@
         }
 
         function openChatDrawer() {
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             isChatDrawerOpen = true;
             if (savedBodyOverflowBeforeChat === null) {
                 savedBodyOverflowBeforeChat = document.body.style.overflow || '';
@@ -21152,7 +21609,7 @@
 
         function toggleChatReactionPicker(event, docId) {
             if (event) event.stopPropagation();
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             const targetId = String(docId || '').trim();
             if (!targetId) return;
 
@@ -21188,7 +21645,7 @@
 
         async function toggleChatReaction(event, docId, emoji) {
             if (event) event.stopPropagation();
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
 
             const targetId = String(docId || '').trim();
             const chosenEmoji = String(emoji || '').trim();
@@ -21424,7 +21881,7 @@
 
         function openChatPollCreator() {
             closeChatAttachMenu();
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             const senderName = getSavedClubMemberName();
             if (!senderName) {
                 openMemberNameSetupModal(true);
@@ -21450,7 +21907,7 @@
         }
 
         async function submitClubChatPoll() {
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             if (window.isClubChatLocked && !isChairmanSimonLoggedIn()) {
                 alert('🔒 Der Vereins-Chat ist vorübergehend nur für Durchsagen des Obmanns geöffnet.');
                 return;
@@ -21521,7 +21978,7 @@
 
         async function voteClubChatPoll(event, docId, optionIndex) {
             if (event) event.stopPropagation();
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
 
             const targetId = String(docId || '').trim();
             const optIdx = Number(optionIndex);
@@ -21847,7 +22304,7 @@
 
         async function markVisibleChatMessagesAsRead() {
             if (!isChatDrawerOpen) return;
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             const memberName = String(getSavedClubMemberName() || '').trim();
             if (!memberName) return;
             if (!Array.isArray(clubChatMessages) || clubChatMessages.length === 0) return;
@@ -22231,7 +22688,7 @@
 
         function handleChatTypingInput() {
             if (!isChatDrawerOpen) return;
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
 
             const memberName = String(getSavedClubMemberName() || '').trim();
             if (!memberName) return;
@@ -22488,7 +22945,7 @@
         }
 
         async function startChatVoiceRecording() {
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             if (isChatVoiceRecording) return;
 
             const senderName = getSavedClubMemberName();
@@ -22672,7 +23129,7 @@
 
         async function sendClubChatMessage(event, sendOptions) {
             if (event) event.preventDefault();
-            if (document.body.classList.contains('app-locked') && !auth.currentUser) return;
+            if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             if (window.isClubChatLocked && !isChairmanSimonLoggedIn()) {
                 alert('🔒 Der Vereins-Chat ist vorübergehend nur für Durchsagen des Obmanns geöffnet.');
                 return;
@@ -23910,6 +24367,15 @@
                     return;
                 }
                 if (newHash !== initialHtmlHash) {
+                    hasPendingAppUpdate = true;
+                    if (typeof isAdminLoginOrNameModalOpen === 'function' && isAdminLoginOrNameModalOpen()) {
+                        const modal = document.getElementById('app-update-modal');
+                        if (modal) {
+                            modal.style.display = 'none';
+                            modal.style.pointerEvents = 'none';
+                        }
+                        return;
+                    }
                     showAppUpdateModal();
                 }
             } catch (e) {
@@ -23922,6 +24388,9 @@
         function isAppUnlockedForUpdateUI() {
             if (!document.body) return false;
             if (document.body.classList.contains('app-locked') || document.body.classList.contains('admin-direct-login')) {
+                return false;
+            }
+            if (typeof isAdminLoginOrNameModalOpen === 'function' && isAdminLoginOrNameModalOpen()) {
                 return false;
             }
             const lockScreen = document.getElementById('club-lock-screen');
@@ -24126,12 +24595,19 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            let shouldOpenAdminAfterReload = false;
+            try {
+                if (localStorage.getItem('kb_sv_open_admin_after_reload') === '1') {
+                    shouldOpenAdminAfterReload = true;
+                    localStorage.removeItem('kb_sv_open_admin_after_reload');
+                    adminLoginFlowActive = true;
+                }
+            } catch (e) {}
             try { updateOfflineWarningBanner(); } catch(e) {}
             try { setupAppUpdateNotifier(); } catch(e) {}
             try {
                 const pinInput = document.getElementById('club-pin-input');
                 if (pinInput) {
-                    pinInput.disabled = false;
                     pinInput.readOnly = false;
                     pinInput.addEventListener('keydown', (evt) => {
                         if (evt.key === 'Enter') {
@@ -24140,6 +24616,8 @@
                         }
                     });
                 }
+                try { updateLockscreenAdminLinkVisibility(); } catch(e) {}
+                try { syncClubPinLockoutState(); } catch(e) {}
                 ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'cash-report-preview-modal', 'annual-backup-preview-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'chat-image-lightbox', 'member-name-setup-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'master-pin-modal', 'admin-logout-modal', 'app-update-modal', 'club-status-viewer', 'club-status-upload-modal', 'admin-cash-edit-modal', 'club-alert-modal'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el && getComputedStyle(el).display === 'none') {
@@ -24167,10 +24645,33 @@
             } catch(e) {}
             try { renderOpenTabsBar(); } catch(e) {}
             try { initPushNotificationsUI(); } catch(e) {}
-            try { initClubAccessGuard(); } catch(e) {}
+            try {
+                let isDeviceAlreadyUnlocked = false;
+                try {
+                    isDeviceAlreadyUnlocked = !!(localStorage.getItem(CLUB_PIN_STORAGE_KEY) || localStorage.getItem('kb_sv_unlocked') === '1');
+                } catch(e) {}
+                if (isDeviceAlreadyUnlocked) {
+                    ensureFirebaseSession().finally(() => {
+                        try { initClubAccessGuard(); } catch(e) {}
+                    });
+                } else {
+                    initClubAccessGuard();
+                }
+            } catch(e) {}
             try { initWeaponBookNavigationGuard(); } catch(e) {}
             try { bindWeaponFormActivityListeners(); } catch(e) {}
             try { setDefaultNewEventDate(); } catch(e) {}
+            if (shouldOpenAdminAfterReload) {
+                try { closeMemberNameSetupModal(); } catch(e) {}
+                try { updateAdminTabVisibility(); } catch(e) {}
+                try {
+                    if (document.body.classList.contains('app-locked')) {
+                        openAdminDirectLogin();
+                    } else {
+                        redirectBoardUserToAdminPasswordLogin();
+                    }
+                } catch(e) {}
+            }
         });
     </script>
 </body>
