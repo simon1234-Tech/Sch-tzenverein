@@ -13,11 +13,49 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous" defer></script>
 
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="KB & SV App">
-    <link rel="apple-touch-icon" href="maskottchen.png">
-    <link rel="icon" type="image/png" href="maskottchen.png">
+    <meta name="theme-color" content="#7f1d1d">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://simon1234-tech.github.io/Sch-tzenverein/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://simon1234-tech.github.io/Sch-tzenverein/logo.png">
+    <link rel="apple-touch-icon" href="https://simon1234-tech.github.io/Sch-tzenverein/logo.png">
+    <link rel="manifest" id="app-web-manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22KB%20%26%20SV%20Gaschurn-Partenen%22%2C%22short_name%22%3A%22KB%20%26%20SV%20App%22%2C%22start_url%22%3A%22https%3A%2F%2Fsimon1234-tech.github.io%2FSch-tzenverein%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f1f5f9%22%2C%22theme_color%22%3A%22%237f1d1d%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fsimon1234-tech.github.io%2FSch-tzenverein%2Flogo.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22https%3A%2F%2Fsimon1234-tech.github.io%2FSch-tzenverein%2Flogo.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+    <script>
+      (function () {
+        try {
+          var manifestData = {
+            name: 'KB & SV Gaschurn-Partenen',
+            short_name: 'KB & SV App',
+            start_url: window.location.href,
+            display: 'standalone',
+            background_color: '#f1f5f9',
+            theme_color: '#7f1d1d',
+            icons: [
+              {
+                src: 'https://simon1234-tech.github.io/Sch-tzenverein/logo.png',
+                sizes: '192x192',
+                type: 'image/png',
+                purpose: 'any maskable'
+              },
+              {
+                src: 'https://simon1234-tech.github.io/Sch-tzenverein/logo.png',
+                sizes: '512x512',
+                type: 'image/png',
+                purpose: 'any maskable'
+              }
+            ]
+          };
+          var blob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
+          var manifestUrl = URL.createObjectURL(blob);
+          var link = document.getElementById('app-web-manifest');
+          if (link) {
+            link.setAttribute('href', manifestUrl);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preload" as="image" href="vereinslogo.png" fetchpriority="high">
 
     <!-- Firebase SDKs (v10.14.1 compat) -->
@@ -230,6 +268,23 @@
 
     <script>
       try {
+        if (window.location.search.includes('mode=schank')) {
+          localStorage.setItem('kb_sv_kiosk_schank', '1');
+        }
+      } catch (e) {}
+      const isSchankKioskMode = () => {
+        try {
+          return localStorage.getItem('kb_sv_kiosk_schank') === '1';
+        } catch (e) {
+          return false;
+        }
+      };
+      try {
+        if (isSchankKioskMode()) {
+          document.documentElement.classList.add('schank-kiosk-mode');
+          localStorage.setItem('kb_sv_member_name', 'Schankdienst (Tablet)');
+          localStorage.setItem('kbsv_member_name', 'Schankdienst (Tablet)');
+        }
         if (localStorage.getItem('kbsv_club_pin')) {
           document.documentElement.classList.add('kbsv-pre-unlocked');
         } else {
@@ -4368,6 +4423,79 @@
             text-align: center;
             word-break: break-all;
         }
+
+        /* --- AUSSCHANK-TABLET KIOSK-MODUS (?mode=schank) --- */
+        #schank-kiosk-badge {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.58);
+            border: 1.5px solid rgba(250, 204, 21, 0.72);
+            color: #fef9c3;
+            font-size: 0.82rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            touch-action: manipulation;
+            flex-shrink: 0;
+            font-family: inherit;
+        }
+        body.schank-kiosk-mode {
+            max-width: 820px;
+            padding-bottom: 28px !important;
+        }
+        body.schank-kiosk-mode nav,
+        body.schank-kiosk-mode .bottom-nav,
+        body.schank-kiosk-mode #header-help-btn,
+        body.schank-kiosk-mode #club-status-add-btn,
+        body.schank-kiosk-mode #club-status-video-badge,
+        body.schank-kiosk-mode #chat-side-trigger,
+        body.schank-kiosk-mode #news-open-chat-banner-btn,
+        body.schank-kiosk-mode #home-emergency-banner,
+        body.schank-kiosk-mode #push-setup-banner-btn,
+        body.schank-kiosk-mode #nav-card,
+        body.schank-kiosk-mode #nav-admin-btn,
+        body.schank-kiosk-mode #page-news,
+        body.schank-kiosk-mode #page-events,
+        body.schank-kiosk-mode #page-weapons,
+        body.schank-kiosk-mode #page-card,
+        body.schank-kiosk-mode #chat-drawer,
+        body.schank-kiosk-mode #chat-drawer-overlay,
+        body.schank-kiosk-mode #chat-popup-toast,
+        body.schank-kiosk-mode #member-name-setup-modal,
+        body.schank-kiosk-mode #member-help-modal,
+        body.schank-kiosk-mode #club-status-viewer,
+        body.schank-kiosk-mode #club-status-upload-modal,
+        body.schank-kiosk-mode #app-main-footer,
+        html.schank-kiosk-mode nav,
+        html.schank-kiosk-mode .bottom-nav,
+        html.schank-kiosk-mode #header-help-btn,
+        html.schank-kiosk-mode #page-news,
+        html.schank-kiosk-mode #page-events,
+        html.schank-kiosk-mode #page-weapons,
+        html.schank-kiosk-mode #page-card,
+        html.schank-kiosk-mode #member-name-setup-modal {
+            display: none !important;
+            pointer-events: none !important;
+        }
+        body.schank-kiosk-mode:not(.app-locked) #page-drinks {
+            display: block !important;
+        }
+        body.schank-kiosk-mode:not(.app-locked) #schank-kiosk-badge {
+            display: inline-flex !important;
+        }
+        body.schank-kiosk-mode #app-header-crest-btn.has-active-status {
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+            cursor: default !important;
+        }
     </style>
 </head>
 <body class="app-locked">
@@ -4434,6 +4562,10 @@
 
     <script>
         try {
+            if (typeof isSchankKioskMode === 'function' && isSchankKioskMode()) {
+                document.documentElement.classList.add('schank-kiosk-mode');
+                document.body.classList.add('schank-kiosk-mode');
+            }
             if (localStorage.getItem('kbsv_club_pin')) {
                 document.documentElement.classList.add('kbsv-pre-unlocked');
                 document.documentElement.classList.remove('kbsv-pre-locked');
@@ -4462,6 +4594,10 @@
                     <circle cx="12" cy="17.2" r="0.6" fill="#7f1d1d"/>
                 </svg>
                 <span style="font-size: 0.78rem; font-weight: 900; color: #7f1d1d; line-height: 1;">Hilfe</span>
+            </button>
+            <button type="button" id="schank-kiosk-badge" aria-label="Ausschank-Tablet Kiosk-Modus" title="Ausschank-Tablet">
+                <span aria-hidden="true">🍺</span>
+                <span>Ausschank-Tablet</span>
             </button>
         </div>
         <div class="app-header-title-wrap" id="app-header-title-secret-trigger" onclick="handleHeaderTitleSecretTap(event)">
@@ -5052,52 +5188,47 @@
                             <div class="admin-accordion-inner">
                                 <div class="admin-accordion-content" style="border-top-color: #e2e8f0; display: flex; flex-direction: column; gap: 10px; font-size: 0.85em; line-height: 1.52; color: #1e293b;">
                                     <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #991b1b; border-radius: 10px; padding: 10px 12px;">
-                                        <div style="font-weight: 800; color: #991b1b; margin-bottom: 6px;">Kapitel 1 – 🔐 Zugang, unsichtbarer Admin-Tab &amp; neues Vorstands-Handy</div>
+                                        <div style="font-weight: 800; color: #991b1b; margin-bottom: 6px;">Kapitel 1 – 🔐 Zugang, Login-Ablauf, Brute-Force-Schutz &amp; 5-Minuten-Auto-Logout</div>
                                         <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                            <div><strong>4 berechtigte Vorstands-Konten:</strong> <strong>Simon</strong> (Obmann / Haupt-Admin), <strong>Heimo</strong>, <strong>Karin</strong> und <strong>Sabrina</strong>.</div>
-                                            <div><strong>Unsichtbar für normale Mitglieder:</strong> Auf normalen Mitglieder-Handys ist der Admin-Tab unten rechts komplett ausgeblendet. Sobald sich ein Vorstandsmitglied einmal anmeldet, bleibt der Tab auf diesem Gerät dauerhaft gespeichert.</div>
-                                            <div><strong>Geheimer Zugang bei neuem Handy:</strong> Einfach <strong>3× schnell hintereinander auf den Vereinsnamen oben im Header tippen</strong> – sofort erscheint der Admin-Tab wieder und der Login öffnet sich.</div>
-                                            <div><strong>5-Minuten-Auto-Logout:</strong> Nach <strong>5 Minuten Inaktivität</strong> meldet sich der Admin-Bereich aus Sicherheitsgründen automatisch ab.</div>
+                                            <div><strong>Berechtigte Vorstands-Konten:</strong> <strong>Simon</strong> (Obmann / Haupt-Admin), <strong>Heimo</strong>, <strong>Karin</strong> und <strong>Sabrina</strong> (authentifiziert über Firebase Authentication).</div>
+                                            <div><strong>Sauberer Login-Weg:</strong> Auf dem ersten Milchglas-Berg-Sperrbildschirm ist kein Admin-Link sichtbar. Erst nach Eingabe des Vereins-Codes erscheint unten im Namensauswahl-Fenster der Link <strong>„🔐 Vorstand / Admin: Direkt zum Admin-Login“</strong> (während Simon, Heimo, Karin &amp; Sabrina aus der normalen Namensliste ausgeblendet bleiben).</div>
+                                            <div><strong>Sichtbarkeit des Admin-Tabs (<code>#nav-admin-btn</code>):</strong> Wird für normale Mitglieder über den 3. Schalter <strong><code>🔐 Admin</code></strong> in der Mitglieder-Verwaltung komplett ausgeblendet (oder per geheimem <strong>3× Tippen auf den Vereinsnamen im Header</strong> auf einem neuen Vorstands-Handy freigeschaltet).</div>
+                                            <div><strong>Sicherheit &amp; Blitz-Login:</strong> Parallele Vorstands-Anmeldung (<code>Promise.any</code>) ohne Wartezeit, automatische Sperre (60 Sek. nach 3 Fehlversuchen, 5 Min. nach 6 Fehlversuchen) inklusive stiller Sicherheits-Push-Warnung exklusiv an Obmann Simon, sowie automatischer Logout nach <strong>5 Minuten Inaktivität</strong>.</div>
                                         </div>
                                     </div>
                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 10px; padding: 10px 12px;">
-                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Schlüsselliste, Lagerbestand &amp; Schankkassa)</div>
+                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Dunkles 2-Spalten-Menü für alle 4 Admins)</div>
                                         <div style="display: flex; flex-direction: column; gap: 6px; color: #334155;">
-                                            <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins können sämtliche Schlüsselinhaber (Name, Schlüssel-Nr., Adresse, Geburtsdatum, Telefon) einsehen und als PDF mit Vereinssiegel drucken. Hinzufügen, Bearbeiten und Löschen ist exklusiv für Obmann Simon freigeschaltet.</div>
-                                            <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Kinderleichte Anpassung über <code>[ − ]</code> <code>[ Zahl ]</code> <code>[ + ]</code> pro Artikel (lädt immer den echten Altbestand aus Firebase, sodass Zugänge sauber aufaddiert werden). Oben zeigt die Gold-Box jederzeit sichtbar an, wann und von wem zuletzt geändert wurde. <strong>Push-Regel:</strong> Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Info; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Info.</div>
-                                            <div><strong>🍺 Schankkassa (Grün &amp; Blau):</strong> Alle 4 Admins sehen alle <strong style="color: #15803d;">💵 Bar-Abrechnungen (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnungen (Blau)</strong> inklusive PDF-Download; Stornos oder Löschungen sind exklusiv dem Obmann vorbehalten.</div>
+                                            <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins sehen sämtliche Schlüsselinhaber als geordnete Karten und können das offizielle PDF mit Vereinssiegel drucken. Hinzufügen, Bearbeiten &amp; Löschen ist exklusiv Obmann Simon vorbehalten.</div>
+                                            <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Einfache Bedienung über <strong><code>[ − ]</code> <code>[ Zahl ]</code> <code>[ + ]</code></strong> pro Artikel (lädt immer den echten Altbestand aus Firebase). Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Info; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Info.</div>
+                                            <div><strong>💵 Bar-Abrechnungen &amp; 🧾 Firmen-Rechnungen:</strong> Getrennte Kacheln für Einsicht &amp; PDF-Download durch alle 4 Admins; Stornos/Löschungen sind exklusiv dem Obmann vorbehalten.</div>
                                         </div>
                                     </div>
                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 10px; padding: 10px 12px;">
-                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 📱 Überblick über alle Mitglieder-Funktionen (für Rückfragen im Verein)</div>
+                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 🛡️ Server-Sicherheit (<code>Firebase Anonymous Auth</code> &amp; Firestore Rules)</div>
                                         <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                            <div><strong>📸 24h-Vereinsstatus:</strong> Leuchtet der runde Vereinslogo-Kreis oben links grün-gold, hat der Obmann aktuelle Fotos eingestellt (antippen zum Ansehen; verschwindet nach 24 Stunden vollautomatisch).</div>
-                                            <div><strong>📰 News &amp; 📅 Termine:</strong> Vereins-News mit „👍 Gefällt mir“, Eilmeldungen sowie Termine mit direkter Zu-/Absage-Abstimmung und <code>.ics</code>-Kalender-Export fürs Smartphone.</div>
-                                            <div><strong>🗓️ Dienstplan:</strong> Alle eingeteilten Schankdienste übersichtlich im Blick; automatische Push-Erinnerungen laufen <strong>1 Tag vorher (18:00 Uhr)</strong> und <strong>2 Stunden</strong> vor Dienstbeginn.</div>
-                                            <div><strong>💬 Vereins-Chat:</strong> Dynamische Leisten-Position je nach Rechten (unten in der Hauptleiste oder oben auf der Startseite), Blaulicht-Alarm bei neuen Nachrichten, Texte, Fotos, Sprachnachrichten, Umfragen, 3D-Sticker &amp; PDFs sowie Wischgeste von rechts nach links zum Schließen.</div>
-                                            <div><strong>🍺 Schankbuch &amp; 🎯 Digitales Waffenbuch:</strong> Schankbuch mit offenen Tisch-Deckeln und Grün/Blau-Abrechnung. Im Waffenbuch sind Reservewaffen ausblendbar, <strong>„Salut Ausrückung“</strong> &amp; Orts-Chips vorausgefüllt, der kompakte Rückgabe-Button sitzt direkt oben und alle Hinweise erscheinen als große Vereins-Popups (5-Minuten-Tresor-Scan).</div>
+                                            <div>Alle Mitglieder-Sitzungen melden sich beim Start und Entsperren unsichtbar über <strong><code>signInAnonymously()</code></strong> an (<code>isSignedIn()</code>), sodass unauthentifizierte Zugriffe von außen auf Datenbank-Sammlungen (<code>open_tabs</code>, <code>club_chat</code>, <code>news</code>, <code>events</code>, <code>duty_plan</code>, <code>weapons</code>, <code>weapon_log</code>, <code>settings/inventory</code>) durch die Google-Server blockiert werden.</div>
+                                            <div>Wichtigste Admin-Aktionen werden im <strong>unveränderlichen Sicherheits-Audit-Log (<code>audit_logs</code>)</strong> protokolliert (weder änderbar noch löschbar).</div>
                                         </div>
                                     </div>
                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #7c3aed; border-radius: 10px; padding: 10px 12px;">
                                         <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet (<code>?mode=schank</code>) &amp; Offline-Tresor</div>
                                         <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                            <div><strong>Reiner Schank-Kiosk-Modus:</strong> Wird die App auf dem Schützenhaus-Tablet einmalig mit <code>?mode=schank</code> am Ende der Web-Adresse geöffnet und zum Startbildschirm hinzugefügt, startet das Tablet nach einmaliger Code-Eingabe ausschließlich im Vollbild-Schankbuch (ohne Chat, News oder Admin-Zugang; Beenden nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
-                                            <div><strong>Doppelter Offline-Schutz:</strong> Dank Sofort-Start-Cache (<code>Stale-While-Revalidate</code>) und lokalem Tisch-Deckel-Tresor arbeitet das Schankbuch bei WLAN-Ausfall lückenlos weiter und synchronisiert automatisch bei Rückkehr des Internets.</div>
+                                            <div>Wird die App auf dem Schützenhaus-Tablet einmalig mit <strong><code>?mode=schank</code></strong> geöffnet und zum Startbildschirm hinzugefügt, läuft das Tablet nach einmaliger Code-Eingabe im reinen Vollbild-Schankmodus ohne Chat, News oder Admin-Zugang (Ausstieg nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
+                                            <div>Dank Sofort-Start-Cache (<code>kb-sv-offline-v5</code>) und lokalem Tisch-Deckel-Tresor funktioniert die Kassa auch bei WLAN-Ausfall lückenlos.</div>
                                         </div>
                                     </div>
                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; border-radius: 10px; padding: 10px 12px;">
-                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 Aktualisieren &amp; Push-Einrichtung für Mitglieder</div>
+                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 Automatische App-Updates &amp; Push-Infrastruktur</div>
                                         <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                            <div><strong>Aktualisieren ohne Datenverlust:</strong> Auf der Startseite einfach <strong>nach unten ziehen (Pull-to-Refresh)</strong> oder unten den Refresh-Button nutzen – die neueste Version wird ohne Verlust von Name, Login oder Verlauf geladen.</div>
-                                            <div><strong>iPhone-Pflichtschritt für Push:</strong> iPhones benötigen zwingend die Installation über <strong>Teilen → „Zum Startbildschirm“</strong> und das Öffnen über dieses Icon, damit Push-Benachrichtigungen ankommen.</div>
+                                            <div>Bei jeder neuen <code>index.html</code> auf GitHub erkennt die App automatisch den neuen Stand und zeigt allen Mitgliedern ein Update-Popup (<strong>„🔄 Jetzt aktualisieren“</strong>) an, ohne dass Login oder Name verloren gehen.</div>
+                                            <div>Push-Nachrichten laufen über den geschützten <strong>Cloudflare Worker</strong> (inklusive automatischem Cron-Job für die Dienstplan-Erinnerungen 1 Tag &amp; 2 Stunden vorher) und OneSignal (ohne störendes rechtes Vorschaubild).</div>
                                         </div>
                                     </div>
                                     <div id="admin-guide-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 10px; padding: 10px 12px;">
-                                        <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Kapitel 6 – 👑 Obmann-Steuerzentrale (exklusiv für Obmann Simon)</div>
+                                        <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Kapitel 6 – 👑 Exklusive Obmann-Steuerzentrale (9 Kacheln nur für Obmann Simon)</div>
                                         <div style="display: flex; flex-direction: column; gap: 6px; color: #334155;">
-                                            <div><strong>1. Verein &amp; Betrieb:</strong> <strong>📸 24h-Status-Foto</strong> (HD-Fotos bis 15 MB), <strong>News &amp; Termine</strong> erstellen/löschen, <strong>Dienstplan &amp; Push</strong> verwalten, <strong>Startseiten-Eilmeldung</strong>, <strong>Chat-Schreibsperre</strong> sowie exklusives Versenden von <strong>📅 Termin-Karten im Vereins-Chat</strong> (nur für Obmann Simon sichtbar).</div>
-                                            <div><strong>2. Schank, Mitglieder &amp; Protokolle:</strong> <strong>1-Listen-Mitgliederverwaltung</strong> (Mitglieder anlegen/suchen und per Schalter individuell für <strong>🍺 Schankbuch</strong> und <strong>🎯 Waffenbuch</strong> freischalten – steuert live die untere Navigationsleiste der Mitglieder), <strong>Schankbuch-Preise</strong>, <strong>Waffenprotokolle</strong>, <strong>unveränderliches Sicherheits-Audit-Log</strong> und <strong>Jahresabschluss-Backup</strong>.</div>
-                                            <div><strong>3. App &amp; Zugänge:</strong> Live-Umschaltung zwischen <strong>8 Vereins-Farbdesigns</strong>, Änderung des <strong>Vereins-Zugangscodes</strong> sowie Abruf &amp; Druck von <strong>Mitglieder-QR-Code</strong> und <strong>Tresor-QR-Code</strong>.</div>
+                                            <div><strong>📸 24h-Status-Foto</strong> (mit grünem Aktiv-Punkt), <strong>📰 News &amp; Termine</strong>, <strong>📅 Dienstplan &amp; Push</strong>, <strong>📢 Eilmeldung &amp; Chat</strong> (inkl. Schreibsperre &amp; exklusivem <strong>„Termin“</strong>-Button im Chat-Anhangsmenü), <strong>👥 Mitglieder &amp; Rechte</strong> (3 Schalter pro Mitglied: <code>🍺 Schankbuch</code>, <code>🎯 Waffenwart</code>, <code>🔐 Admin</code>), <strong>🍺 Schankbuch-Preise</strong>, <strong>📋 Waffenbuch &amp; Log</strong> (inkl. Audit-Log &amp; Jahresabschluss-Backup), <strong>🎨 App-Farbdesign</strong> (8 Themes) und <strong>📲 Code &amp; QR-Codes</strong> (Vereins-Code ändern + Mitglieder- &amp; Tresor-QR-Code drucken).</div>
                                         </div>
                                     </div>
                                 </div>
@@ -5912,7 +6043,21 @@
                 <div id="push-status-hint" style="display: none; margin: 0 0 10px 0; padding: 9px 12px; border-radius: 12px; font-size: 0.82rem; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
 
                 <div id="member-help-guide-container" style="display: none; margin-top: 6px;">
-                <div class="member-help-card" data-speech="24 Stunden Vereinsstatus, News und Termine. Leuchtet der runde Vereinslogo Kreis oben links grün gold, hat der Obmann aktuelle Fotos in den 24 Stunden Status gestellt. Einfach antippen zum Ansehen. Nach 24 Stunden verschwindet der Status automatisch und das Vereinslogo erscheint wieder. Darunter findest du alle Vereins News mit Gefällt mir, Eilmeldungen sowie Termine mit direkter Zu und Absage Abstimmung und Kalender Export fürs Smartphone." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Zugang, Sperrbildschirm und automatischer Schutz. Beim ersten Öffnen gibst du unseren Vereins Zugangscode mit optionalem Auge Symbol zum Prüfen auf dem alpinen Startbildschirm ein und wählst einmalig deinen Namen aus. Deine Sitzung wird automatisch im Hintergrund verschlüsselt abgesichert und bleibt dauerhaft gespeichert. Bei mehrfachen Fehleingaben sperrt sich die Eingabe automatisch zum Schutz vor Fremden." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
+                        <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
+                            <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">🔐</span>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Zugang, Sperrbildschirm &amp; automatischer Schutz</div>
+                        </div>
+                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
+                    </div>
+                    <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
+                        <div>• Beim ersten Öffnen gibst du unseren <strong>Vereins-Zugangscode</strong> (mit optionalem 👁️-Auge zum Prüfen) auf dem alpinen Startbildschirm ein und wählst einmalig deinen Namen aus.</div>
+                        <div>• Deine Sitzung wird automatisch im Hintergrund verschlüsselt abgesichert (<code>Firebase Anonymous Auth</code>) und bleibt dauerhaft gespeichert – bei mehrfachen Fehleingaben sperrt sich die Eingabe automatisch zum Schutz vor Fremden.</div>
+                    </div>
+                </div>
+
+                <div class="member-help-card" data-speech="24 Stunden Vereinsstatus, News und Termine. Leuchtet der runde Vereinslogo Kreis oben links grün gold, hat der Obmann aktuelle Fotos in den 24 Stunden Status gestellt. Einfach antippen zum Ansehen, der Status verschwindet nach 24 Stunden von selbst. Darunter findest du alle Vereins News mit Gefällt mir, Eilmeldungen sowie Termine mit direkter Zu und Absage Abstimmung und Kalender Export fürs Smartphone." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
                         <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
                             <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">📸</span>
@@ -5921,82 +6066,64 @@
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
                     </div>
                     <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
-                        <div>• <strong>24h-Vereinsstatus:</strong> Leuchtet das runde Logo oben links grün-gold, antippen zum Ansehen aktueller Fotos (verschwindet nach 24 Std. automatisch).</div>
-                        <div>• <strong>Vereins-News &amp; Eilmeldungen:</strong> Alle Beiträge mit „👍 Gefällt mir“ direkt auf der Startseite.</div>
-                        <div>• <strong>Termine:</strong> Direkt zu-/absagen und per <code>.ics</code>-Export im Smartphone-Kalender speichern.</div>
+                        <div>• Leuchtet der runde Vereinslogo-Kreis oben links grün-gold, hat der Obmann aktuelle Fotos in den <strong>24-Stunden-Status</strong> gestellt – einfach antippen zum Ansehen (verschwindet nach 24 Stunden von selbst).</div>
+                        <div>• Darunter findest du alle <strong>Vereins-News</strong> (mit „👍 Gefällt mir“), <strong>Eilmeldungen</strong> sowie <strong>Termine</strong> mit direkter Zu-/Absage-Abstimmung und <code>.ics</code>-Kalender-Export fürs Smartphone.</div>
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Dienstplan und Erinnerungen. Sieh alle eingeteilten Schankdienste übersichtlich ein. Wer im Dienstplan eingetragen ist, erhält automatisch einen Tag vorher um 18 Uhr und zwei Stunden vor Dienstbeginn eine Push Erinnerung aufs Handy." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Dienstplan und automatische Push Erinnerungen. Alle eingeteilten Schankdienste übersichtlich einsehen. Wer im Dienstplan eingetragen ist, erhält automatisch einen Tag vorher um 18 Uhr und zwei Stunden vor Dienstbeginn eine Push Erinnerung aufs Handy." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
                         <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
-                            <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">📅</span>
-                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Dienstplan &amp; Erinnerungen</div>
+                            <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">🗓️</span>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Dienstplan &amp; automatische Push-Erinnerungen</div>
                         </div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
                     </div>
                     <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
-                        <div>• <strong>Übersicht:</strong> Alle eingeteilten Schankdienste inklusive Archiv auf einen Blick einsehen.</div>
-                        <div>• <strong>Automatische Erinnerung:</strong> Eingeteilte Mitglieder erhalten <strong>1 Tag vorher (18:00 Uhr)</strong> und <strong>2 Std. vor Dienstbeginn</strong> eine Push-Nachricht.</div>
+                        <div>• Alle eingeteilten Schankdienste übersichtlich einsehen.</div>
+                        <div>• Wer im Dienstplan eingetragen ist, erhält automatisch <strong>1 Tag vorher (18:00 Uhr)</strong> und <strong>2 Stunden vor Dienstbeginn</strong> eine Push-Erinnerung aufs Handy.</div>
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Vereins Chat mit dynamischer Leiste, Blaulicht und Wischgeste. Je nachdem, welche Bereiche für dich freigeschaltet sind, sitzt der Vereins Chat entweder direkt unten in der Hauptleiste an der Stelle von Schankbuch oder Waffenbuch, oder als große Karte oben auf der Startseite. Geht eine neue Nachricht ein, blinkt der Chat Button oder die Chat Karte blau auf und zeigt die Anzahl ungelesener Nachrichten. Du kannst Texte, Galerie und Kamera Fotos, Sprachnachrichten, Umfragen, 3D Sticker und PDFs versenden. Zum Schließen des Chats einfach von rechts nach links wischen oder oben rechts auf das Kreuz tippen." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Vereins Chat mit dynamischer Leiste, Blaulicht und Wischgeste. Je nach freigeschalteten Bereichen sitzt der Vereins Chat unten in der Hauptleiste oder als große Karte oben auf der Startseite und blinkt bei neuen Nachrichten blau auf als Blaulicht Alarm. Im Chat mit rundem Vereins Wasserzeichen kannst du Texte, Fotos, Sprachnachrichten, Umfragen, Sticker und PDFs teilen. Zum Schließen einfach von rechts nach links wischen oder oben rechts auf das Kreuz tippen." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
                         <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
                             <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">💬</span>
-                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Vereins-Chat &amp; Blaulicht</div>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Vereins-Chat (Dynamische Leiste, Blaulicht &amp; Wischgeste)</div>
                         </div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
                     </div>
                     <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
-                        <div>• <strong>Position &amp; Blaulicht:</strong> Sitzt je nach Freischaltung unten in der Leiste oder auf der Startseite und blinkt bei neuen Nachrichten blau mit Zähler.</div>
-                        <div>• <strong>Inhalte:</strong> Texte, Galerie-/Kamera-Fotos, Sprachnachrichten, Umfragen, 3D-Sticker &amp; PDFs teilen.</div>
-                        <div>• <strong>Schnell schließen:</strong> Einfach <strong>von rechts nach links wischen</strong> oder oben rechts auf <code>✕</code> tippen.</div>
+                        <div>• Je nach freigeschalteten Bereichen sitzt der <strong>💬 Vereins-Chat</strong> unten in der Hauptleiste oder als große Karte oben auf der Startseite und blinkt bei neuen Nachrichten blau auf (<strong>Blaulicht-Alarm</strong>).</div>
+                        <div>• Im Chat mit rundem Vereins-Wasserzeichen kannst du Texte, Fotos, Sprachnachrichten, Umfragen, Sticker und PDFs teilen; zum Schließen einfach <strong>von rechts nach links wischen</strong> (oder oben rechts auf <code>✕</code> tippen).</div>
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Schankbuch, nur für freigeschaltete Schank Mitglieder. Dieser Bereich ist nur sichtbar, wenn du vom Obmann für das Schankbuch freigeschaltet bist. Buche Getränke auf offene Tisch Deckel und trenne beim Kassieren sauber zwischen grüner Bar Abrechnung und blauer Firmen oder Feier Rechnung." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Schankbuch und Digitales Waffenbuch für freigeschaltete Rollen. Im Schankbuch buchst du Getränke auf offene Deckel und trennst beim Kassieren sauber zwischen grüner Bar Abrechnung und blauer Firmen oder Feier Rechnung. Im Waffenbuch scannst du den Tresor QR Code, wählst die aktiven Waffen aus, Reserve Waffen lassen sich bei Bedarf einblenden, Salut Ausrückung und der Ort per Schnellauswahl Chip sind vorbereitet, dann unterschreiben. Für die Rückgabe tippst du oben auf den grünen Button QR Code scannen und Waffen zurückbringen." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
                         <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
                             <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">🍺</span>
-                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Schankbuch (Schank-Mitglieder)</div>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Schankbuch &amp; 🎯 Digitales Waffenbuch (für freigeschaltete Rollen)</div>
                         </div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
                     </div>
                     <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
-                        <div>• <strong>Freischaltung:</strong> Nur sichtbar, wenn du vom Obmann für das Schankbuch berechtigt bist.</div>
-                        <div>• <strong>Deckel &amp; Kassieren:</strong> Getränke auf offene Tisch-Deckel buchen und sauber zwischen <strong style="color: #15803d;">💵 Bar-Abrechnung (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnung (Blau)</strong> trennen.</div>
+                        <div>• <strong>🍺 Schankbuch:</strong> Getränke auf offene Deckel buchen und beim Kassieren sauber zwischen <strong style="color: #15803d;">💵 Bar-Abrechnung (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnung (Blau)</strong> trennen.</div>
+                        <div>• <strong>🎯 Waffenbuch:</strong> Tresor-QR-Code scannen → aktive Waffen wählen (Reserve-Waffen einblendbar), <strong>„Salut Ausrückung“</strong> und <strong>Ort</strong> (per Schnellauswahl-Chip) sind vorbereitet → unterschreiben; für die Rückgabe oben auf den grünen Button <strong>„📷 QR-Code scannen &amp; Waffe(n) zurückbringen“</strong> tippen.</div>
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Digitales Waffenbuch, nur für freigeschaltete Waffenwarte. Dieser Bereich ist nur sichtbar, wenn du als Waffenwart freigeschaltet bist. Zur Entnahme den Tresor QR Code scannen, das öffnet den Tresor für fünf Minuten. Danach aktive Waffen anhaken, Reserve Waffen lassen sich bei Bedarf per Button einblenden. Salut Ausrückung und der Ort per Schnellauswahl Chip sind bereits vorbereitet. Dann unterschreiben und speichern. Zur Rückgabe einfach oben auf den grünen Button QR Code scannen und Waffen zurückbringen tippen, den Tresor QR Code scannen und die Rückgabe abschließen." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
-                        <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
-                            <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">🎯</span>
-                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Digitales Waffenbuch (Waffenwarte)</div>
-                        </div>
-                        <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
-                    </div>
-                    <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
-                        <div>• <strong>Freischaltung:</strong> Nur für berechtigte Waffenwarte sichtbar.</div>
-                        <div>• <strong>Entnahme:</strong> Tresor-QR-Code scannen (5 Min. offen), aktive Waffen anhaken (Reserve einblendbar), <strong>Salut Ausrückung &amp; Ort</strong> sind vorbereitet – unterschreiben &amp; speichern.</div>
-                        <div>• <strong>Rückgabe:</strong> Oben auf <strong>„📷 QR-Code scannen &amp; Waffe(n) zurückbringen“</strong> tippen, Tresor-Code scannen und abschließen.</div>
-                    </div>
-                </div>
-
-                <div class="member-help-card" data-speech="Installation, Push Nachrichten, Offline Modus und Aktualisieren. Installiere die App über das Browser Menü mit Zum Startbildschirm hinzufügen. Auf iPhones funktionieren Push Nachrichten nur, wenn die App über Teilen und Zum Startbildschirm installiert und über dieses Icon geöffnet wird. Dank eingebautem Offline Speicher bleiben geladene Inhalte auch bei kurzem WLAN Ausfall erhalten. Zum Aktualisieren ohne Datenverlust auf der Startseite einfach nach unten ziehen oder unten den Button App Stand jetzt frisch laden nutzen. Name, Entsperr Status und Verlauf bleiben dabei vollständig erhalten." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Installation, Push Nachrichten und automatische Updates. Für iPhone und Android installiere die App beim iPhone über Teilen und Zum Home Bildschirm, beziehungsweise bei Android über das Menü und Zum Startbildschirm, damit Push Nachrichten zuverlässig ankommen. Sobald der Obmann eine Neuerung veröffentlicht, erscheint automatisch ein Update Popup mit Jetzt aktualisieren. Oder du ziehst auf der Startseite nach unten oder tippst oben im Hilfe Menü auf App aktualisieren. Name und Zugang bleiben dabei erhalten." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
                         <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
                             <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">🔔</span>
-                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Installation, Push, Offline &amp; Update</div>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Installation, Push-Nachrichten &amp; automatische Updates</div>
                         </div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
                     </div>
                     <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
-                        <div>• <strong>Installation &amp; iPhone-Push:</strong> Über Browser-Menü zum Startbildschirm hinzufügen (auf <strong>iPhones</strong> funktionieren Push-Infos nur über <strong>Teilen → Zum Home-Bildschirm</strong>).</div>
-                        <div>• <strong>Offline-Speicher:</strong> Geladene Inhalte bleiben auch bei kurzem WLAN-Ausfall erhalten.</div>
-                        <div>• <strong>Frisch laden ohne Datenverlust:</strong> Auf der Startseite nach unten ziehen oder oben <strong>„🔄 App aktualisieren“</strong> nutzen – Name &amp; Status bleiben erhalten.</div>
+                        <div>• <strong>iPhone- &amp; Android-Installation:</strong> App über <strong>Teilen → „Zum Home-Bildschirm“</strong> (iPhone) bzw. <strong>Menü → „Zum Startbildschirm“</strong> (Android) installieren, damit Push-Nachrichten zuverlässig ankommen.</div>
+                        <div>• <strong>Automatische Updates &amp; Refresh:</strong> Sobald der Obmann eine Neuerung veröffentlicht, erscheint automatisch ein Update-Popup (<strong>„🔄 Jetzt aktualisieren“</strong>) – oder du ziehst auf der Startseite nach unten / tippst oben im Hilfe-Menü auf <strong>„🔄 App aktualisieren“</strong> (Name &amp; Zugang bleiben erhalten).</div>
                     </div>
                 </div>
                 </div>
@@ -6026,57 +6153,52 @@
             </div>
             <div style="padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; font-size: 0.87em; line-height: 1.55; color: #1e293b;">
                 <div style="background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid #991b1b; border-radius: 12px; padding: 12px 14px; color: #1e293b; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #991b1b; margin-bottom: 6px;">Kapitel 1 – 🔐 Zugang, unsichtbarer Admin-Tab &amp; neues Vorstands-Handy</div>
+                    <div style="font-weight: 800; color: #991b1b; margin-bottom: 6px;">Kapitel 1 – 🔐 Zugang, Login-Ablauf, Brute-Force-Schutz &amp; 5-Minuten-Auto-Logout</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div><strong>4 berechtigte Vorstands-Konten:</strong> <strong>Simon</strong> (Obmann / Haupt-Admin), <strong>Heimo</strong>, <strong>Karin</strong> und <strong>Sabrina</strong>.</div>
-                        <div><strong>Unsichtbar für normale Mitglieder:</strong> Auf normalen Mitglieder-Handys ist der Admin-Tab unten rechts komplett ausgeblendet. Sobald sich ein Vorstandsmitglied einmal anmeldet, bleibt der Tab auf diesem Gerät dauerhaft gespeichert.</div>
-                        <div><strong>Geheimer Zugang bei neuem Handy:</strong> Einfach <strong>3× schnell hintereinander auf den Vereinsnamen oben im Header tippen</strong> – sofort erscheint der Admin-Tab wieder und der Login öffnet sich.</div>
-                        <div><strong>5-Minuten-Auto-Logout:</strong> Nach <strong>5 Minuten Inaktivität</strong> meldet sich der Admin-Bereich aus Sicherheitsgründen automatisch ab.</div>
+                        <div><strong>Berechtigte Vorstands-Konten:</strong> <strong>Simon</strong> (Obmann / Haupt-Admin), <strong>Heimo</strong>, <strong>Karin</strong> und <strong>Sabrina</strong> (authentifiziert über Firebase Authentication).</div>
+                        <div><strong>Sauberer Login-Weg:</strong> Auf dem ersten Milchglas-Berg-Sperrbildschirm ist kein Admin-Link sichtbar. Erst nach Eingabe des Vereins-Codes erscheint unten im Namensauswahl-Fenster der Link <strong>„🔐 Vorstand / Admin: Direkt zum Admin-Login“</strong> (während Simon, Heimo, Karin &amp; Sabrina aus der normalen Namensliste ausgeblendet bleiben).</div>
+                        <div><strong>Sichtbarkeit des Admin-Tabs (<code>#nav-admin-btn</code>):</strong> Wird für normale Mitglieder über den 3. Schalter <strong><code>🔐 Admin</code></strong> in der Mitglieder-Verwaltung komplett ausgeblendet (oder per geheimem <strong>3× Tippen auf den Vereinsnamen im Header</strong> auf einem neuen Vorstands-Handy freigeschaltet).</div>
+                        <div><strong>Sicherheit &amp; Blitz-Login:</strong> Parallele Vorstands-Anmeldung (<code>Promise.any</code>) ohne Wartezeit, automatische Sperre (60 Sek. nach 3 Fehlversuchen, 5 Min. nach 6 Fehlversuchen) inklusive stiller Sicherheits-Push-Warnung exklusiv an Obmann Simon, sowie automatischer Logout nach <strong>5 Minuten Inaktivität</strong>.</div>
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #1e40af; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Schlüsselliste, Lagerbestand &amp; Schankkassa)</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Dunkles 2-Spalten-Menü für alle 4 Admins)</div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins können sämtliche Schlüsselinhaber (Name, Schlüssel-Nr., Adresse, Geburtsdatum, Telefon) einsehen und als PDF mit Vereinssiegel drucken. Hinzufügen, Bearbeiten und Löschen ist exklusiv für Obmann Simon freigeschaltet.</div>
-                        <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Kinderleichte Anpassung über <code>[ − ]</code> <code>[ Zahl ]</code> <code>[ + ]</code> pro Artikel (lädt immer den echten Altbestand aus Firebase, sodass Zugänge sauber aufaddiert werden). Oben zeigt die Gold-Box jederzeit sichtbar an, wann und von wem zuletzt geändert wurde. <strong>Push-Regel:</strong> Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Info; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Info.</div>
-                        <div><strong>🍺 Schankkassa (Grün &amp; Blau):</strong> Alle 4 Admins sehen alle <strong style="color: #15803d;">💵 Bar-Abrechnungen (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnungen (Blau)</strong> inklusive PDF-Download; Stornos oder Löschungen sind exklusiv dem Obmann vorbehalten.</div>
+                        <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins sehen sämtliche Schlüsselinhaber als geordnete Karten und können das offizielle PDF mit Vereinssiegel drucken. Hinzufügen, Bearbeiten &amp; Löschen ist exklusiv Obmann Simon vorbehalten.</div>
+                        <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Einfache Bedienung über <strong><code>[ − ]</code> <code>[ Zahl ]</code> <code>[ + ]</code></strong> pro Artikel (lädt immer den echten Altbestand aus Firebase). Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Info; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Info.</div>
+                        <div><strong>💵 Bar-Abrechnungen &amp; 🧾 Firmen-Rechnungen:</strong> Getrennte Kacheln für Einsicht &amp; PDF-Download durch alle 4 Admins; Stornos/Löschungen sind exklusiv dem Obmann vorbehalten.</div>
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 📱 Überblick über alle Mitglieder-Funktionen (für Rückfragen im Verein)</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 🛡️ Server-Sicherheit (<code>Firebase Anonymous Auth</code> &amp; Firestore Rules)</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div><strong>📸 24h-Vereinsstatus:</strong> Leuchtet der runde Vereinslogo-Kreis oben links grün-gold, hat der Obmann aktuelle Fotos eingestellt (antippen zum Ansehen; verschwindet nach 24 Stunden vollautomatisch).</div>
-                        <div><strong>📰 News &amp; 📅 Termine:</strong> Vereins-News mit „👍 Gefällt mir“, Eilmeldungen sowie Termine mit direkter Zu-/Absage-Abstimmung und <code>.ics</code>-Kalender-Export fürs Smartphone.</div>
-                        <div><strong>🗓️ Dienstplan:</strong> Alle eingeteilten Schankdienste übersichtlich im Blick; automatische Push-Erinnerungen laufen <strong>1 Tag vorher (18:00 Uhr)</strong> und <strong>2 Stunden</strong> vor Dienstbeginn.</div>
-                        <div><strong>💬 Vereins-Chat:</strong> Dynamische Leisten-Position je nach Rechten (unten in der Hauptleiste oder oben auf der Startseite), Blaulicht-Alarm bei neuen Nachrichten, Texte, Fotos, Sprachnachrichten, Umfragen, 3D-Sticker &amp; PDFs sowie Wischgeste von rechts nach links zum Schließen.</div>
-                        <div><strong>🍺 Schankbuch &amp; 🎯 Digitales Waffenbuch:</strong> Schankbuch mit offenen Tisch-Deckeln und Grün/Blau-Abrechnung. Im Waffenbuch sind Reservewaffen ausblendbar, <strong>„Salut Ausrückung“</strong> &amp; Orts-Chips vorausgefüllt, der kompakte Rückgabe-Button sitzt direkt oben und alle Hinweise erscheinen als große Vereins-Popups (5-Minuten-Tresor-Scan).</div>
+                        <div>Alle Mitglieder-Sitzungen melden sich beim Start und Entsperren unsichtbar über <strong><code>signInAnonymously()</code></strong> an (<code>isSignedIn()</code>), sodass unauthentifizierte Zugriffe von außen auf Datenbank-Sammlungen (<code>open_tabs</code>, <code>club_chat</code>, <code>news</code>, <code>events</code>, <code>duty_plan</code>, <code>weapons</code>, <code>weapon_log</code>, <code>settings/inventory</code>) durch die Google-Server blockiert werden.</div>
+                        <div>Wichtigste Admin-Aktionen werden im <strong>unveränderlichen Sicherheits-Audit-Log (<code>audit_logs</code>)</strong> protokolliert (weder änderbar noch löschbar).</div>
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #7c3aed; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
                     <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet (<code>?mode=schank</code>) &amp; Offline-Tresor</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div><strong>Reiner Schank-Kiosk-Modus:</strong> Wird die App auf dem Schützenhaus-Tablet einmalig mit <code>?mode=schank</code> am Ende der Web-Adresse geöffnet und zum Startbildschirm hinzugefügt, startet das Tablet nach einmaliger Code-Eingabe ausschließlich im Vollbild-Schankbuch (ohne Chat, News oder Admin-Zugang; Beenden nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
-                        <div><strong>Doppelter Offline-Schutz:</strong> Dank Sofort-Start-Cache (<code>Stale-While-Revalidate</code>) und lokalem Tisch-Deckel-Tresor arbeitet das Schankbuch bei WLAN-Ausfall lückenlos weiter und synchronisiert automatisch bei Rückkehr des Internets.</div>
+                        <div>Wird die App auf dem Schützenhaus-Tablet einmalig mit <strong><code>?mode=schank</code></strong> geöffnet und zum Startbildschirm hinzugefügt, läuft das Tablet nach einmaliger Code-Eingabe im reinen Vollbild-Schankmodus ohne Chat, News oder Admin-Zugang (Ausstieg nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
+                        <div>Dank Sofort-Start-Cache (<code>kb-sv-offline-v5</code>) und lokalem Tisch-Deckel-Tresor funktioniert die Kassa auch bei WLAN-Ausfall lückenlos.</div>
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 Aktualisieren &amp; Push-Einrichtung für Mitglieder</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 Automatische App-Updates &amp; Push-Infrastruktur</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div><strong>Aktualisieren ohne Datenverlust:</strong> Auf der Startseite einfach <strong>nach unten ziehen (Pull-to-Refresh)</strong> oder unten den Refresh-Button nutzen – die neueste Version wird ohne Verlust von Name, Login oder Verlauf geladen.</div>
-                        <div><strong>iPhone-Pflichtschritt für Push:</strong> iPhones benötigen zwingend die Installation über <strong>Teilen → „Zum Startbildschirm“</strong> und das Öffnen über dieses Icon, damit Push-Benachrichtigungen ankommen.</div>
+                        <div>Bei jeder neuen <code>index.html</code> auf GitHub erkennt die App automatisch den neuen Stand und zeigt allen Mitgliedern ein Update-Popup (<strong>„🔄 Jetzt aktualisieren“</strong>) an, ohne dass Login oder Name verloren gehen.</div>
+                        <div>Push-Nachrichten laufen über den geschützten <strong>Cloudflare Worker</strong> (inklusive automatischem Cron-Job für die Dienstplan-Erinnerungen 1 Tag &amp; 2 Stunden vorher) und OneSignal (ohne störendes rechtes Vorschaubild).</div>
                     </div>
                 </div>
 
                 <div id="admin-help-modal-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Kapitel 6 – 👑 Obmann-Steuerzentrale (3 ruhige Rubriken · exklusiv für Obmann Simon)</div>
+                    <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Kapitel 6 – 👑 Exklusive Obmann-Steuerzentrale (9 Kacheln nur für Obmann Simon)</div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <div><strong>1. Verein &amp; Betrieb:</strong> <strong>📸 24h-Status-Foto</strong> (HD-Fotos bis 15 MB), <strong>News &amp; Termine</strong> erstellen/löschen, <strong>Dienstplan &amp; Push</strong> verwalten, <strong>Startseiten-Eilmeldung</strong>, <strong>Chat-Schreibsperre</strong> sowie exklusives Versenden von <strong>📅 Termin-Karten im Vereins-Chat</strong> (nur für Obmann Simon sichtbar).</div>
-                        <div><strong>2. Schank, Mitglieder &amp; Protokolle:</strong> <strong>1-Listen-Mitgliederverwaltung</strong> (Mitglieder anlegen/suchen und per Schalter individuell für <strong>🍺 Schankbuch</strong> und <strong>🎯 Waffenbuch</strong> freischalten – steuert live die untere Navigationsleiste der Mitglieder), <strong>Schankbuch-Preise</strong>, <strong>Waffenprotokolle</strong>, <strong>unveränderliches Sicherheits-Audit-Log</strong> und <strong>Jahresabschluss-Backup</strong>.</div>
-                        <div><strong>3. App &amp; Zugänge:</strong> Live-Umschaltung zwischen <strong>8 Vereins-Farbdesigns</strong>, Änderung des <strong>Vereins-Zugangscodes</strong> sowie Abruf &amp; Druck von <strong>Mitglieder-QR-Code</strong> und <strong>Tresor-QR-Code</strong>.</div>
+                        <div><strong>📸 24h-Status-Foto</strong> (mit grünem Aktiv-Punkt), <strong>📰 News &amp; Termine</strong>, <strong>📅 Dienstplan &amp; Push</strong>, <strong>📢 Eilmeldung &amp; Chat</strong> (inkl. Schreibsperre &amp; exklusivem <strong>„Termin“</strong>-Button im Chat-Anhangsmenü), <strong>👥 Mitglieder &amp; Rechte</strong> (3 Schalter pro Mitglied: <code>🍺 Schankbuch</code>, <code>🎯 Waffenwart</code>, <code>🔐 Admin</code>), <strong>🍺 Schankbuch-Preise</strong>, <strong>📋 Waffenbuch &amp; Log</strong> (inkl. Audit-Log &amp; Jahresabschluss-Backup), <strong>🎨 App-Farbdesign</strong> (8 Themes) und <strong>📲 Code &amp; QR-Codes</strong> (Vereins-Code ändern + Mitglieder- &amp; Tresor-QR-Code drucken).</div>
                     </div>
                 </div>
 
@@ -6877,7 +6999,140 @@
             document.addEventListener(evt, resetInactivityTimer, true);
         });
 
+        const SCHANK_KIOSK_STORAGE_KEY = 'kb_sv_kiosk_schank';
+        const SCHANK_KIOSK_MEMBER_NAME = 'Schankdienst (Tablet)';
+        let schankKioskHoldTimer = null;
+        let schankKioskHoldTriggered = false;
+        let schankKioskTapCount = 0;
+        let schankKioskTapTimer = null;
+        let schankKioskExitPromptOpen = false;
+        let schankKioskBadgeBound = false;
+
+        function ensureSchankKioskIdentity() {
+            if (!isSchankKioskMode()) return;
+            try { localStorage.setItem('kb_sv_member_name', SCHANK_KIOSK_MEMBER_NAME); } catch (e) {}
+            try { localStorage.setItem('kbsv_member_name', SCHANK_KIOSK_MEMBER_NAME); } catch (e) {}
+        }
+
+        function applySchankKioskMode() {
+            if (!isSchankKioskMode()) return;
+            ensureSchankKioskIdentity();
+            try { document.documentElement.classList.add('schank-kiosk-mode'); } catch (e) {}
+            try { if (document.body) document.body.classList.add('schank-kiosk-mode'); } catch (e) {}
+            try { if (typeof closeMemberNameSetupModal === 'function') closeMemberNameSetupModal(); } catch (e) {}
+            try { if (typeof closeChatDrawer === 'function') closeChatDrawer(); } catch (e) {}
+            if (document.body && !document.body.classList.contains('app-locked')) {
+                switchTab('schank');
+            }
+        }
+
+        function promptExitSchankKioskMode() {
+            if (!isSchankKioskMode() || schankKioskExitPromptOpen) return;
+            schankKioskExitPromptOpen = true;
+            const finishExit = () => {
+                try { localStorage.removeItem(SCHANK_KIOSK_STORAGE_KEY); } catch (e) {}
+                try {
+                    if (localStorage.getItem('kb_sv_member_name') === SCHANK_KIOSK_MEMBER_NAME) {
+                        localStorage.removeItem('kb_sv_member_name');
+                    }
+                    if (localStorage.getItem('kbsv_member_name') === SCHANK_KIOSK_MEMBER_NAME) {
+                        localStorage.removeItem('kbsv_member_name');
+                    }
+                } catch (e) {}
+                try {
+                    const cleanUrl = new URL(window.location.href);
+                    cleanUrl.searchParams.delete('mode');
+                    window.location.replace(cleanUrl.toString());
+                } catch (e) {
+                    window.location.href = window.location.pathname || './';
+                }
+            };
+            if (typeof showCustomConfirm === 'function') {
+                showCustomConfirm(
+                    'Ausschank-Kiosk-Modus beenden?',
+                    'Ausschank-Kiosk-Modus auf diesem Tablet beenden?',
+                    function(confirmed) {
+                        schankKioskExitPromptOpen = false;
+                        if (confirmed) finishExit();
+                    }
+                );
+            } else {
+                const confirmed = window.confirm('Ausschank-Kiosk-Modus auf diesem Tablet beenden?');
+                schankKioskExitPromptOpen = false;
+                if (confirmed) finishExit();
+            }
+        }
+
+        function bindSchankKioskBadgeExit() {
+            if (schankKioskBadgeBound) return;
+            const badge = document.getElementById('schank-kiosk-badge');
+            if (!badge) return;
+            schankKioskBadgeBound = true;
+
+            const cancelHold = () => {
+                if (schankKioskHoldTimer) {
+                    clearTimeout(schankKioskHoldTimer);
+                    schankKioskHoldTimer = null;
+                }
+            };
+            const startHold = () => {
+                if (!isSchankKioskMode()) return;
+                cancelHold();
+                schankKioskHoldTriggered = false;
+                schankKioskHoldTimer = setTimeout(() => {
+                    schankKioskHoldTimer = null;
+                    schankKioskHoldTriggered = true;
+                    schankKioskTapCount = 0;
+                    if (schankKioskTapTimer) {
+                        clearTimeout(schankKioskTapTimer);
+                        schankKioskTapTimer = null;
+                    }
+                    promptExitSchankKioskMode();
+                }, 3000);
+            };
+
+            badge.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+            });
+            badge.addEventListener('pointerdown', startHold);
+            badge.addEventListener('pointerup', cancelHold);
+            badge.addEventListener('pointerleave', cancelHold);
+            badge.addEventListener('pointercancel', cancelHold);
+            badge.addEventListener('click', (e) => {
+                if (!isSchankKioskMode()) return;
+                e.preventDefault();
+                e.stopPropagation();
+                if (schankKioskHoldTriggered) {
+                    schankKioskHoldTriggered = false;
+                    return;
+                }
+                schankKioskTapCount += 1;
+                if (schankKioskTapTimer) {
+                    clearTimeout(schankKioskTapTimer);
+                }
+                if (schankKioskTapCount >= 5) {
+                    schankKioskTapCount = 0;
+                    schankKioskTapTimer = null;
+                    promptExitSchankKioskMode();
+                    return;
+                }
+                schankKioskTapTimer = setTimeout(() => {
+                    schankKioskTapCount = 0;
+                    schankKioskTapTimer = null;
+                }, 1800);
+            });
+        }
+
         function updateAppFooterVisibility(tabId) {
+            if (isSchankKioskMode()) {
+                const footerEl = document.getElementById('app-main-footer');
+                if (footerEl) footerEl.style.display = 'none';
+                if (document.body) {
+                    document.body.classList.remove('compact-bottom-tab');
+                    document.body.style.setProperty('padding-bottom', '28px', 'important');
+                }
+                return;
+            }
             const isNewsTab = (tabId === 'news');
             const isCompactBottomTab = (tabId === 'events' || tabId === 'drinks' || tabId === 'weapons');
             const footerEl = document.getElementById('app-main-footer');
@@ -6892,6 +7147,12 @@
         }
 
         function switchTab(tabId) {
+            if (tabId === 'schank') {
+                tabId = 'drinks';
+            }
+            if (isSchankKioskMode()) {
+                tabId = 'drinks';
+            }
             if (tabId === 'drinks' && typeof hasCurrentMemberSchankbuchAccess === 'function' && !hasCurrentMemberSchankbuchAccess()) {
                 tabId = 'news';
             }
@@ -7380,6 +7641,10 @@
         }
 
         function getSavedClubMemberName() {
+            if (isSchankKioskMode()) {
+                ensureSchankKioskIdentity();
+                return SCHANK_KIOSK_MEMBER_NAME;
+            }
             let stored = '';
             let verifiedAdmin = '';
             try { stored = String(localStorage.getItem(MEMBER_IDENTITY_STORAGE_KEY) || '').trim(); } catch (e) {}
@@ -7444,6 +7709,9 @@
         }
 
         function hasCurrentMemberSchankbuchAccess() {
+            if (isSchankKioskMode()) {
+                return true;
+            }
             if (typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn()) {
                 return true;
             }
@@ -7460,6 +7728,9 @@
         }
 
         function hasCurrentMemberWeaponAccess() {
+            if (isSchankKioskMode()) {
+                return false;
+            }
             if (typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn()) {
                 return true;
             }
@@ -7652,6 +7923,7 @@
         let lockscreenCrestSecretTapTimer = null;
 
         function handleLockscreenCrestSecretTap(event) {
+            if (isSchankKioskMode()) return;
             if (event && typeof event.stopPropagation === 'function') {
                 event.stopPropagation();
             }
@@ -7708,6 +7980,7 @@
         let headerTitleSecretTapTimer = null;
 
         function handleHeaderTitleSecretTap(event) {
+            if (isSchankKioskMode()) return;
             if (event && typeof event.stopPropagation === 'function') {
                 event.stopPropagation();
             }
@@ -7888,6 +8161,11 @@
         }
 
         function openMemberNameSetupModal(allowCancel = false) {
+            if (isSchankKioskMode()) {
+                ensureSchankKioskIdentity();
+                closeMemberNameSetupModal();
+                return;
+            }
             if (document.body.classList.contains('app-locked') && !(typeof auth !== 'undefined' && auth && getAdminAuthUser())) return;
             if (!allowCancel) {
                 let openAdminFlag = false;
@@ -14277,8 +14555,12 @@
         }
 
         function getBarServiceMemberName() {
+            if (isSchankKioskMode()) {
+                ensureSchankKioskIdentity();
+                return SCHANK_KIOSK_MEMBER_NAME;
+            }
             try {
-                return String(localStorage.getItem('kbsv_member_name') || '').trim() || 'Unbekannt';
+                return String(localStorage.getItem('kbsv_member_name') || localStorage.getItem('kb_sv_member_name') || '').trim() || 'Unbekannt';
             } catch (e) {
                 return 'Unbekannt';
             }
@@ -15219,6 +15501,9 @@
 
         async function loadAppDataAfterUnlock() {
             await ensureFirebaseSession();
+            if (isSchankKioskMode()) {
+                ensureSchankKioskIdentity();
+            }
             if (!officialActiveMembers || officialActiveMembers.length === 0) {
                 officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
             }
@@ -15247,20 +15532,26 @@
             try { loadNews(); } catch(e) {}
             try { loadEvents(); } catch(e) {}
             try { loadWeaponHistory(); } catch(e) {}
-            try { initPushNotificationsUI(); } catch(e) {}
-            try { initClubChat(); } catch(e) {}
+            if (!isSchankKioskMode()) {
+                try { initPushNotificationsUI(); } catch(e) {}
+                try { initClubChat(); } catch(e) {}
+            }
             try {
-                let openAdminFlag = false;
-                try { openAdminFlag = localStorage.getItem('kb_sv_open_admin_after_reload') === '1'; } catch (e) {}
-                if (openAdminFlag) {
-                    try { localStorage.removeItem('kb_sv_open_admin_after_reload'); } catch (e) {}
-                    adminLoginFlowActive = true;
-                    closeMemberNameSetupModal();
-                    redirectBoardUserToAdminPasswordLogin();
-                } else if (adminLoginFlowActive) {
-                    closeMemberNameSetupModal();
-                } else if (!document.body.classList.contains('app-locked') && !getAdminAuthUser() && !getSavedClubMemberName()) {
-                    openMemberNameSetupModal(false);
+                if (isSchankKioskMode()) {
+                    applySchankKioskMode();
+                } else {
+                    let openAdminFlag = false;
+                    try { openAdminFlag = localStorage.getItem('kb_sv_open_admin_after_reload') === '1'; } catch (e) {}
+                    if (openAdminFlag) {
+                        try { localStorage.removeItem('kb_sv_open_admin_after_reload'); } catch (e) {}
+                        adminLoginFlowActive = true;
+                        closeMemberNameSetupModal();
+                        redirectBoardUserToAdminPasswordLogin();
+                    } else if (adminLoginFlowActive) {
+                        closeMemberNameSetupModal();
+                    } else if (!document.body.classList.contains('app-locked') && !getAdminAuthUser() && !getSavedClubMemberName()) {
+                        openMemberNameSetupModal(false);
+                    }
                 }
             } catch(e) {}
             try {
@@ -15782,7 +16073,13 @@
                 inputEl.value = '';
             }
             await ensureFirebaseSession();
+            if (isSchankKioskMode()) {
+                ensureSchankKioskIdentity();
+            }
             await loadAppDataAfterUnlock();
+            if (isSchankKioskMode()) {
+                applySchankKioskMode();
+            }
             try {
                 if (typeof flushPendingAppUpdateUI === 'function') {
                     flushPendingAppUpdateUI();
@@ -15828,6 +16125,7 @@
         }
 
         function openAdminDirectLogin() {
+            if (isSchankKioskMode()) return;
             try { closeMemberNameSetupModal(); } catch (e) {}
             try { updateAdminTabVisibility(); } catch (e) {}
             const lockScreen = document.getElementById('club-lock-screen');
@@ -15910,8 +16208,13 @@
                     resetClubCodeLockoutState();
                     try { localStorage.setItem(CLUB_PIN_STORAGE_KEY, matchedHash); } catch (err) {}
                     await ensureFirebaseSession();
+                    if (isSchankKioskMode()) {
+                        ensureSchankKioskIdentity();
+                    }
                     await unlockClubApp();
-                    if (!adminLoginFlowActive) {
+                    if (isSchankKioskMode()) {
+                        applySchankKioskMode();
+                    } else if (!adminLoginFlowActive) {
                         switchTab('news');
                     }
                 } else {
@@ -19823,6 +20126,7 @@
         }
 
         function showIncomingChatToast(msg) {
+            if (isSchankKioskMode()) return false;
             if (isChatMuted() || isChatDrawerOpen) return false;
             if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return false;
             const toast = document.getElementById('chat-popup-toast');
@@ -21456,6 +21760,7 @@
         }
 
         function openChatDrawer() {
+            if (isSchankKioskMode()) return;
             if (document.body.classList.contains('app-locked') && !getAdminAuthUser()) return;
             isChatDrawerOpen = true;
             if (savedBodyOverflowBeforeChat === null) {
@@ -23645,6 +23950,7 @@
         }
 
         function handleClubStatusCrestClick(evt) {
+            if (isSchankKioskMode()) return;
             if (evt && typeof evt.stopPropagation === 'function') evt.stopPropagation();
             checkAndPurgeExpiredClubStatuses();
             if (!clubStatusItems.length) return;
@@ -24661,7 +24967,10 @@
             try { initWeaponBookNavigationGuard(); } catch(e) {}
             try { bindWeaponFormActivityListeners(); } catch(e) {}
             try { setDefaultNewEventDate(); } catch(e) {}
-            if (shouldOpenAdminAfterReload) {
+            try { bindSchankKioskBadgeExit(); } catch(e) {}
+            if (isSchankKioskMode()) {
+                try { applySchankKioskMode(); } catch(e) {}
+            } else if (shouldOpenAdminAfterReload) {
                 try { closeMemberNameSetupModal(); } catch(e) {}
                 try { updateAdminTabVisibility(); } catch(e) {}
                 try {
