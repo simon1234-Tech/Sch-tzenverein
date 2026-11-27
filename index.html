@@ -5167,7 +5167,7 @@
             border: 1.5px solid #cbd5e1;
             border-radius: 18px;
             padding: 14px;
-            margin: 14px 0 18px 0;
+            margin: 14px 0 0 0;
             box-sizing: border-box;
         }
         .bar-cash-calc-label {
@@ -5247,6 +5247,66 @@
             font-size: 0.88rem;
             font-weight: 700;
             color: #64748b;
+        }
+        .bar-tip-box {
+            background: #fefce8;
+            border: 1.5px solid #fde047;
+            border-radius: 14px;
+            padding: 10px 12px;
+            margin-top: 10px;
+            margin-bottom: 18px;
+            box-sizing: border-box;
+        }
+        .bar-tip-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .bar-tip-label {
+            font-size: 0.86rem;
+            font-weight: 800;
+            color: #854d0e;
+        }
+        #bar-tip-display {
+            font-size: 1rem;
+            font-weight: 900;
+            color: #a16207;
+            background: #ffffff;
+            border: 1.5px solid #fde047;
+            border-radius: 10px;
+            padding: 2px 10px;
+            white-space: nowrap;
+        }
+        .bar-tip-quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+        .bar-tip-btn {
+            min-height: 42px;
+            border-radius: 11px;
+            background: #ffffff;
+            border: 1.5px solid #eab308;
+            font-weight: 800;
+            font-size: 0.78rem;
+            color: #713f12;
+            cursor: pointer;
+            padding: 4px 3px;
+            font-family: inherit;
+            touch-action: manipulation;
+            line-height: 1.15;
+            transition: transform 0.1s ease, background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+        }
+        .bar-tip-btn:active {
+            transform: scale(0.95);
+        }
+        .bar-tip-btn.is-selected {
+            background: #eab308;
+            border-color: #a16207;
+            color: #0f172a;
+            box-shadow: 0 2px 8px rgba(234, 179, 8, 0.35);
         }
         .bar-cash-confirm-actions {
             display: grid;
@@ -6074,38 +6134,40 @@
                                         </div>
                                     </div>
                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #1e40af; border-radius: 10px; padding: 10px 12px;">
-                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Dunkles 2-Spalten-Menü für alle 4 Admins)</div>
+                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 👑 Strukturiertes Obmann- &amp; Vorstands-Menü</div>
                                         <div style="display: flex; flex-direction: column; gap: 6px; color: #334155;">
-                                            <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins sehen sämtliche Schlüsselinhaber als geordnete Karten und können das offizielle PDF mit Vereinssiegel drucken. Hinzufügen, Bearbeiten &amp; Löschen ist exklusiv Obmann Simon vorbehalten.</div>
-                                            <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Einfache Bedienung über <strong><code>[ − ]</code> <code>[ Zahl ]</code> <code>[ + ]</code></strong> pro Artikel (lädt immer den echten Altbestand aus Firebase). Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Info; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Info.</div>
-                                            <div><strong>💵 Bar-Abrechnungen &amp; 🧾 Firmen-Rechnungen:</strong> Getrennte Kacheln für Einsicht &amp; PDF-Download durch alle 4 Admins; Stornos/Löschungen sind exklusiv dem Obmann vorbehalten.</div>
+                                            <div><strong>Schnellaktion oben:</strong> <strong>„📸 24h-Status-Foto“</strong> sitzt als Vollbreite-Banner ganz oben (nur Obmann Simon).</div>
+                                            <div><strong>3 klare Gruppen:</strong> <strong>Betrieb &amp; Termine</strong> (<em>News &amp; Termine</em>, <em>Dienstplan &amp; Push</em>, <em>Eilmeldung &amp; Chat</em>, <em>Lagerbestand</em>), <strong>Schank &amp; Finanzen</strong> (<em>Bar-Abrechnungen</em>, <em>Firmen-Rechnungen</em>, <em>Schankbuch-Preise</em>) sowie <strong>Verwaltung &amp; Sicherheit</strong> (<em>Schlüsselliste &amp; PDF</em>, <em>Mitglieder &amp; Rechte</em>, <em>Waffenbuch &amp; Log</em>).</div>
+                                            <div><strong>Rollen-Trennung:</strong> Heimo, Karin &amp; Sabrina sehen ihre 4 freigegebenen Bereiche (<em>Lagerbestand</em> mit automatischer gegenseitiger Push-Info zwischen Vorstand und Heimo, <em>Bar-Abrechnungen</em>, <em>Firmen-Rechnungen</em> und <em>Schlüsselliste &amp; PDF</em> inklusive Druckfunktion).</div>
+                                            <div><strong>Kompakte Systemzeilen unten:</strong> <em>App-Farbdesign</em>, <em>Zugangscode &amp; QR-Codes</em>, <em>JHV-Demo-Modus öffnen</em> und <em>App-Stand frisch laden</em>.</div>
                                         </div>
                                     </div>
                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 10px; padding: 10px 12px;">
                                         <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 🛡️ Server-Sicherheit (<code>Firebase Anonymous Auth</code> &amp; Firestore Rules)</div>
                                         <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                            <div>Alle Mitglieder-Sitzungen melden sich beim Start und Entsperren unsichtbar über <strong><code>signInAnonymously()</code></strong> an (<code>isSignedIn()</code>), sodass unauthentifizierte Zugriffe von außen auf Datenbank-Sammlungen (<code>open_tabs</code>, <code>club_chat</code>, <code>news</code>, <code>events</code>, <code>duty_plan</code>, <code>weapons</code>, <code>weapon_log</code>, <code>settings/inventory</code>) durch die Google-Server blockiert werden.</div>
+                                            <div>Alle Mitglieder-Sitzungen melden sich beim Start und Entsperren unsichtbar über <strong><code>signInAnonymously()</code></strong> an (<code>isSignedIn()</code>), sodass unauthentifizierte Zugriffe von außen auf Datenbank-Sammlungen durch die Google-Server blockiert werden.</div>
                                             <div>Wichtigste Admin-Aktionen werden im <strong>unveränderlichen Sicherheits-Audit-Log (<code>audit_logs</code>)</strong> protokolliert (weder änderbar noch löschbar).</div>
                                         </div>
                                     </div>
                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #7c3aed; border-radius: 10px; padding: 10px 12px;">
-                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet (<code>?mode=schank</code>) &amp; Offline-Tresor</div>
+                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet (<code>?mode=bar</code>), Großes Bar-Popup &amp; Offline-Tresor</div>
                                         <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                            <div>Wird die App auf dem Schützenhaus-Tablet einmalig mit <strong><code>?mode=schank</code></strong> geöffnet und zum Startbildschirm hinzugefügt, läuft das Tablet nach einmaliger Code-Eingabe im reinen Vollbild-Schankmodus ohne Chat, News oder Admin-Zugang (Ausstieg nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
-                                            <div>Dank Sofort-Start-Cache (<code>kb-sv-offline-v5</code>) und lokalem Tisch-Deckel-Tresor funktioniert die Kassa auch bei WLAN-Ausfall lückenlos.</div>
+                                            <div>Wird die App auf dem Schützenhaus-Tablet mit <strong><code>?mode=bar</code></strong> geöffnet und zum Startbildschirm hinzugefügt, läuft das Tablet nach einmaliger Code-Eingabe im reinen Vollbild-Schankmodus unter <strong>„Schankdienst (Tablet)“</strong> ohne Chat, News, Termine, Waffenbuch oder Admin-Zugang.</div>
+                                            <div>Oben rechts im Tablet-Header stehen <strong>„🔄 Aktualisieren“</strong> (Cache-Refresh ohne Datenverlust) und <strong>„🚪 Schankbuch beenden“</strong> (sperrt das Tablet direkt zurück auf den Sperrbildschirm).</div>
+                                            <div>Beim Kassieren erscheint ein großes, goldumrandetes Vereins-Popup mit Artikelliste und Gesamtbetrag; dank Sofort-Start-Cache und lokalem Deckel-Tresor läuft die Kassa auch offline weiter.</div>
                                         </div>
                                     </div>
                                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; border-radius: 10px; padding: 10px 12px;">
-                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 Automatische App-Updates &amp; Push-Infrastruktur</div>
+                                        <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🎬 Gesicherter JHV-Präsentationsmodus (<code>?demo=jhv</code>) &amp; Automatische Updates</div>
                                         <div style="display: flex; flex-direction: column; gap: 5px; color: #334155;">
-                                            <div>Bei jeder neuen <code>index.html</code> auf GitHub erkennt die App automatisch den neuen Stand und zeigt allen Mitgliedern ein Update-Popup (<strong>„🔄 Jetzt aktualisieren“</strong>) an, ohne dass Login oder Name verloren gehen.</div>
-                                            <div>Push-Nachrichten laufen über den geschützten <strong>Cloudflare Worker</strong> (inklusive automatischem Cron-Job für die Dienstplan-Erinnerungen 1 Tag &amp; 2 Stunden vorher) und OneSignal (ohne störendes rechtes Vorschaubild).</div>
+                                            <div>Exklusiv für Obmann Simon über <strong>System &amp; Einstellungen → „🎬 JHV-Demo-Modus öffnen“</strong> startbar: Läuft komplett mit Musterdaten im Arbeitsspeicher (ohne echte Firebase-Daten zu laden oder zu verändern), öffnet das Waffenbuch ohne QR-Code-Scan und bietet im Demo-Banner Live-Umschalter (<strong><code>🍺 Schankbuch</code></strong>, <strong><code>🎯 Waffenbuch</code></strong>, <strong><code>🔐 Admin</code></strong>) sowie den großen <strong>Mitglieder-QR-Code</strong> für die Leinwand.</div>
+                                            <div>Bei jeder neuen <code>index.html</code> auf GitHub erkennt die App automatisch den neuen Stand und zeigt allen Mitgliedern ein Update-Popup (<strong>„🔄 Jetzt aktualisieren“</strong>) an.</div>
                                         </div>
                                     </div>
                                     <div id="admin-guide-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 10px; padding: 10px 12px;">
-                                        <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Kapitel 6 – 👑 Exklusive Obmann-Steuerzentrale (9 Kacheln nur für Obmann Simon)</div>
+                                        <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Hinweis für Obmann Simon – 👑 Exklusive Haupt-Admin-Rechte</div>
                                         <div style="display: flex; flex-direction: column; gap: 6px; color: #334155;">
-                                            <div><strong>📸 24h-Status-Foto</strong> (mit grünem Aktiv-Punkt), <strong>📰 News &amp; Termine</strong>, <strong>📅 Dienstplan &amp; Push</strong>, <strong>📢 Eilmeldung &amp; Chat</strong> (inkl. Schreibsperre &amp; exklusivem <strong>„Termin“</strong>-Button im Chat-Anhangsmenü), <strong>👥 Mitglieder &amp; Rechte</strong> (3 Schalter pro Mitglied: <code>🍺 Schankbuch</code>, <code>🎯 Waffenwart</code>, <code>🔐 Admin</code>), <strong>🍺 Schankbuch-Preise</strong>, <strong>📋 Waffenbuch &amp; Log</strong> (inkl. Audit-Log &amp; Jahresabschluss-Backup), <strong>🎨 App-Farbdesign</strong> (8 Themes) und <strong>📲 Code &amp; QR-Codes</strong> (Vereins-Code ändern + Mitglieder- &amp; Tresor-QR-Code drucken).</div>
+                                            <div>Zusätzlich zu allen Vorstands-Funktionen stehen dir exklusiv die Schnellaktion <strong>📸 24h-Status-Foto</strong>, das Verwalten aller 3 Rollen-Schalter pro Mitglied (<code>🍺 Schankbuch</code>, <code>🎯 Waffenwart</code>, <code>🔐 Admin</code>), <strong>Schankbuch-Preise</strong>, <strong>Waffenbuch &amp; Audit-Log</strong> inklusive Jahresabschluss-Backup sowie die Systemzeilen (<strong>App-Farbdesign</strong>, <strong>Zugangscode &amp; QR-Codes</strong>, <strong>🎬 JHV-Demo-Modus öffnen</strong> und <strong>App-Stand frisch laden</strong>) zur Verfügung.</div>
                                         </div>
                                     </div>
                                 </div>
@@ -6314,6 +6376,9 @@
                                 <div>
                                     <div style="font-size: 0.95em; color: #14532d; font-weight: 800;">
                                         Gesamt Schankkassa (Bar): <span id="admin-cash-sales-sum-value" style="font-size: 1.15em; color: #15803d;">€ 0,00</span>
+                                    </div>
+                                    <div id="admin-cash-sales-tip-row" style="font-size: 0.84em; color: #a16207; font-weight: 800; margin-top: 2px;">
+                                        Davon Trinkgeld: <span id="admin-cash-sales-tip-value">€ 0,00</span>
                                     </div>
                                     <div id="admin-cash-sales-count" style="font-size: 0.78em; color: #166534; font-weight: 700; margin-top: 2px;">0 Buchungen</div>
                                 </div>
@@ -6920,16 +6985,16 @@
                 <div id="push-status-hint" style="display: none; margin: 0 0 10px 0; padding: 9px 12px; border-radius: 12px; font-size: 0.82rem; font-weight: 600; line-height: 1.4; background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; text-align: center;"></div>
 
                 <div id="member-help-guide-container" style="display: none; margin-top: 6px;">
-                <div class="member-help-card" data-speech="Zugang, Sperrbildschirm und automatischer Schutz. Beim ersten Öffnen gibst du unseren Vereins Zugangscode mit optionalem Auge Symbol zum Prüfen auf dem alpinen Startbildschirm ein und wählst einmalig deinen Namen aus. Deine Sitzung wird automatisch im Hintergrund verschlüsselt abgesichert und bleibt dauerhaft gespeichert. Bei mehrfachen Fehleingaben sperrt sich die Eingabe automatisch zum Schutz vor Fremden." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Zugang, Milchglas-Sperrbildschirm und automatischer Schutz. Beim ersten Öffnen gibst du unseren Vereins-Zugangscode mit optionalem Auge-Symbol zum Prüfen auf dem alpinen Milchglas-Startbildschirm ein und wählst einmalig deinen Namen aus. Deine Sitzung wird automatisch im Hintergrund verschlüsselt abgesichert und bleibt dauerhaft gespeichert. Bei mehrfachen Fehleingaben sperrt sich die Eingabe automatisch zum Schutz vor Fremden." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
                         <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
                             <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">🔐</span>
-                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Zugang, Sperrbildschirm &amp; automatischer Schutz</div>
+                            <div style="font-size: 0.96rem; font-weight: 800; color: #0f172a; line-height: 1.25;">Zugang, Milchglas-Sperrbildschirm &amp; automatischer Schutz</div>
                         </div>
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
                     </div>
                     <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
-                        <div>• Beim ersten Öffnen gibst du unseren <strong>Vereins-Zugangscode</strong> (mit optionalem 👁️-Auge zum Prüfen) auf dem alpinen Startbildschirm ein und wählst einmalig deinen Namen aus.</div>
+                        <div>• Beim ersten Öffnen gibst du unseren <strong>Vereins-Zugangscode</strong> (mit optionalem 👁️-Auge zum Prüfen) auf dem alpinen Milchglas-Startbildschirm ein und wählst einmalig deinen Namen aus.</div>
                         <div>• Deine Sitzung wird automatisch im Hintergrund verschlüsselt abgesichert (<code>Firebase Anonymous Auth</code>) und bleibt dauerhaft gespeichert – bei mehrfachen Fehleingaben sperrt sich die Eingabe automatisch zum Schutz vor Fremden.</div>
                     </div>
                 </div>
@@ -6976,7 +7041,7 @@
                     </div>
                 </div>
 
-                <div class="member-help-card" data-speech="Schankbuch und Digitales Waffenbuch für freigeschaltete Rollen. Im Schankbuch buchst du Getränke auf offene Deckel und trennst beim Kassieren sauber zwischen grüner Bar Abrechnung und blauer Firmen oder Feier Rechnung. Im Waffenbuch scannst du den Tresor QR Code, wählst die aktiven Waffen aus, Reserve Waffen lassen sich bei Bedarf einblenden, Salut Ausrückung und der Ort per Schnellauswahl Chip sind vorbereitet, dann unterschreiben. Für die Rückgabe tippst du oben auf den grünen Button QR Code scannen und Waffen zurückbringen." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
+                <div class="member-help-card" data-speech="Schankbuch und Digitales Waffenbuch für freigeschaltete Rollen. Im Schankbuch buchst du Getränke auf offene Deckel und trennst beim Kassieren sauber zwischen grüner Bar-Abrechnung mit großem Prüf-Popup aller Artikel und Gesamtbetrag sowie blauer Firmen- oder Feier-Rechnung. Im Waffenbuch scannst du den Tresor-QR-Code, wählst die aktiven Waffen aus, Reserve-Waffen lassen sich bei Bedarf einblenden, Salut Ausrückung und der Ort per Schnellauswahl-Chip sind vorbereitet, dann unterschreiben. Für die Rückgabe tippst du oben auf den grünen Button QR-Code scannen und Waffen zurückbringen." style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 4px solid #16a34a; border-radius: 16px; padding: 14px 15px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04); transition: all 0.25s;">
                     <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 9px;">
                         <div style="display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;">
                             <span aria-hidden="true" style="width: 30px; height: 30px; border-radius: 50%; background: #f0fdf4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.96rem; flex-shrink: 0;">🍺</span>
@@ -6985,7 +7050,7 @@
                         <button type="button" class="member-help-card-speak-btn" onclick="speakSingleMemberHelpCard(this)" title="Diese Karte vorlesen" aria-label="Diese Karte vorlesen" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1;">🔊</button>
                     </div>
                     <div style="font-size: 0.88rem; line-height: 1.48; color: #334155; display: flex; flex-direction: column; gap: 5px;">
-                        <div>• <strong>🍺 Schankbuch:</strong> Getränke auf offene Deckel buchen und beim Kassieren sauber zwischen <strong style="color: #15803d;">💵 Bar-Abrechnung (Grün)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnung (Blau)</strong> trennen.</div>
+                        <div>• <strong>🍺 Schankbuch:</strong> Getränke auf offene Deckel buchen und beim Kassieren sauber zwischen <strong style="color: #15803d;">💵 Bar-Abrechnung (Grün – mit großem Prüf-Popup aller Artikel &amp; Gesamtbetrag)</strong> und <strong style="color: #1d4ed8;">🧾 Firmen-/Feier-Rechnung (Blau)</strong> trennen.</div>
                         <div>• <strong>🎯 Waffenbuch:</strong> Tresor-QR-Code scannen → aktive Waffen wählen (Reserve-Waffen einblendbar), <strong>„Salut Ausrückung“</strong> und <strong>Ort</strong> (per Schnellauswahl-Chip) sind vorbereitet → unterschreiben; für die Rückgabe oben auf den grünen Button <strong>„📷 QR-Code scannen &amp; Waffe(n) zurückbringen“</strong> tippen.</div>
                     </div>
                 </div>
@@ -7040,42 +7105,44 @@
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #1e40af; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 📋 Vorstands-Aufgaben (Dunkles 2-Spalten-Menü für alle 4 Admins)</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 2 – 👑 Strukturiertes Obmann- &amp; Vorstands-Menü</div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <div><strong>🔑 Schlüsselliste &amp; PDF:</strong> Alle 4 Admins sehen sämtliche Schlüsselinhaber als geordnete Karten und können das offizielle PDF mit Vereinssiegel drucken. Hinzufügen, Bearbeiten &amp; Löschen ist exklusiv Obmann Simon vorbehalten.</div>
-                        <div><strong>📦 Lagerbestand &amp; Push-Automatik:</strong> Einfache Bedienung über <strong><code>[ − ]</code> <code>[ Zahl ]</code> <code>[ + ]</code></strong> pro Artikel (lädt immer den echten Altbestand aus Firebase). Speichern Simon, Karin oder Sabrina, erhält <strong>Heimo</strong> eine Push-Info; speichert <strong>Heimo</strong> selbst, erhält <strong>Obmann Simon</strong> eine Push-Info.</div>
-                        <div><strong>💵 Bar-Abrechnungen &amp; 🧾 Firmen-Rechnungen:</strong> Getrennte Kacheln für Einsicht &amp; PDF-Download durch alle 4 Admins; Stornos/Löschungen sind exklusiv dem Obmann vorbehalten.</div>
+                        <div><strong>Schnellaktion oben:</strong> <strong>„📸 24h-Status-Foto“</strong> sitzt als Vollbreite-Banner ganz oben (nur Obmann Simon).</div>
+                        <div><strong>3 klare Gruppen:</strong> <strong>Betrieb &amp; Termine</strong> (<em>News &amp; Termine</em>, <em>Dienstplan &amp; Push</em>, <em>Eilmeldung &amp; Chat</em>, <em>Lagerbestand</em>), <strong>Schank &amp; Finanzen</strong> (<em>Bar-Abrechnungen</em>, <em>Firmen-Rechnungen</em>, <em>Schankbuch-Preise</em>) sowie <strong>Verwaltung &amp; Sicherheit</strong> (<em>Schlüsselliste &amp; PDF</em>, <em>Mitglieder &amp; Rechte</em>, <em>Waffenbuch &amp; Log</em>).</div>
+                        <div><strong>Rollen-Trennung:</strong> Heimo, Karin &amp; Sabrina sehen ihre 4 freigegebenen Bereiche (<em>Lagerbestand</em> mit automatischer gegenseitiger Push-Info zwischen Vorstand und Heimo, <em>Bar-Abrechnungen</em>, <em>Firmen-Rechnungen</em> und <em>Schlüsselliste &amp; PDF</em> inklusive Druckfunktion).</div>
+                        <div><strong>Kompakte Systemzeilen unten:</strong> <em>App-Farbdesign</em>, <em>Zugangscode &amp; QR-Codes</em>, <em>JHV-Demo-Modus öffnen</em> und <em>App-Stand frisch laden</em>.</div>
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #16a34a; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
                     <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 3 – 🛡️ Server-Sicherheit (<code>Firebase Anonymous Auth</code> &amp; Firestore Rules)</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div>Alle Mitglieder-Sitzungen melden sich beim Start und Entsperren unsichtbar über <strong><code>signInAnonymously()</code></strong> an (<code>isSignedIn()</code>), sodass unauthentifizierte Zugriffe von außen auf Datenbank-Sammlungen (<code>open_tabs</code>, <code>club_chat</code>, <code>news</code>, <code>events</code>, <code>duty_plan</code>, <code>weapons</code>, <code>weapon_log</code>, <code>settings/inventory</code>) durch die Google-Server blockiert werden.</div>
+                        <div>Alle Mitglieder-Sitzungen melden sich beim Start und Entsperren unsichtbar über <strong><code>signInAnonymously()</code></strong> an (<code>isSignedIn()</code>), sodass unauthentifizierte Zugriffe von außen auf Datenbank-Sammlungen durch die Google-Server blockiert werden.</div>
                         <div>Wichtigste Admin-Aktionen werden im <strong>unveränderlichen Sicherheits-Audit-Log (<code>audit_logs</code>)</strong> protokolliert (weder änderbar noch löschbar).</div>
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #7c3aed; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet (<code>?mode=schank</code>) &amp; Offline-Tresor</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 4 – 🍺 Ausschank-Tablet (<code>?mode=bar</code>), Großes Bar-Popup &amp; Offline-Tresor</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div>Wird die App auf dem Schützenhaus-Tablet einmalig mit <strong><code>?mode=schank</code></strong> geöffnet und zum Startbildschirm hinzugefügt, läuft das Tablet nach einmaliger Code-Eingabe im reinen Vollbild-Schankmodus ohne Chat, News oder Admin-Zugang (Ausstieg nur per Doppelklick/langem Drücken auf das Header-Badge).</div>
-                        <div>Dank Sofort-Start-Cache (<code>kb-sv-offline-v5</code>) und lokalem Tisch-Deckel-Tresor funktioniert die Kassa auch bei WLAN-Ausfall lückenlos.</div>
+                        <div>Wird die App auf dem Schützenhaus-Tablet mit <strong><code>?mode=bar</code></strong> geöffnet und zum Startbildschirm hinzugefügt, läuft das Tablet nach einmaliger Code-Eingabe im reinen Vollbild-Schankmodus unter <strong>„Schankdienst (Tablet)“</strong> ohne Chat, News, Termine, Waffenbuch oder Admin-Zugang.</div>
+                        <div>Oben rechts im Tablet-Header stehen <strong>„🔄 Aktualisieren“</strong> (Cache-Refresh ohne Datenverlust) und <strong>„🚪 Schankbuch beenden“</strong> (sperrt das Tablet direkt zurück auf den Sperrbildschirm).</div>
+                        <div>Beim Kassieren erscheint ein großes, goldumrandetes Vereins-Popup mit Artikelliste und Gesamtbetrag; dank Sofort-Start-Cache und lokalem Deckel-Tresor läuft die Kassa auch offline weiter.</div>
                     </div>
                 </div>
 
                 <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🔄 Automatische App-Updates &amp; Push-Infrastruktur</div>
+                    <div style="font-weight: 800; color: #0f172a; margin-bottom: 6px;">Kapitel 5 – 🎬 Gesicherter JHV-Präsentationsmodus (<code>?demo=jhv</code>) &amp; Automatische Updates</div>
                     <div style="display: flex; flex-direction: column; gap: 5px;">
-                        <div>Bei jeder neuen <code>index.html</code> auf GitHub erkennt die App automatisch den neuen Stand und zeigt allen Mitgliedern ein Update-Popup (<strong>„🔄 Jetzt aktualisieren“</strong>) an, ohne dass Login oder Name verloren gehen.</div>
-                        <div>Push-Nachrichten laufen über den geschützten <strong>Cloudflare Worker</strong> (inklusive automatischem Cron-Job für die Dienstplan-Erinnerungen 1 Tag &amp; 2 Stunden vorher) und OneSignal (ohne störendes rechtes Vorschaubild).</div>
+                        <div>Exklusiv für Obmann Simon über <strong>System &amp; Einstellungen → „🎬 JHV-Demo-Modus öffnen“</strong> startbar: Läuft komplett mit Musterdaten im Arbeitsspeicher (ohne echte Firebase-Daten zu laden oder zu verändern), öffnet das Waffenbuch ohne QR-Code-Scan und bietet im Demo-Banner Live-Umschalter (<strong><code>🍺 Schankbuch</code></strong>, <strong><code>🎯 Waffenbuch</code></strong>, <strong><code>🔐 Admin</code></strong>) sowie den großen <strong>Mitglieder-QR-Code</strong> für die Leinwand.</div>
+                        <div>Bei jeder neuen <code>index.html</code> auf GitHub erkennt die App automatisch den neuen Stand und zeigt allen Mitgliedern ein Update-Popup (<strong>„🔄 Jetzt aktualisieren“</strong>) an.</div>
                     </div>
                 </div>
 
                 <div id="admin-help-modal-chairman-extra" style="display: none; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #eab308; border-radius: 12px; padding: 12px 14px; break-inside: avoid; page-break-inside: avoid;">
-                    <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Kapitel 6 – 👑 Exklusive Obmann-Steuerzentrale (9 Kacheln nur für Obmann Simon)</div>
+                    <div style="font-weight: 800; color: #92400e; margin-bottom: 6px;">Hinweis für Obmann Simon – 👑 Exklusive Haupt-Admin-Rechte</div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
-                        <div><strong>📸 24h-Status-Foto</strong> (mit grünem Aktiv-Punkt), <strong>📰 News &amp; Termine</strong>, <strong>📅 Dienstplan &amp; Push</strong>, <strong>📢 Eilmeldung &amp; Chat</strong> (inkl. Schreibsperre &amp; exklusivem <strong>„Termin“</strong>-Button im Chat-Anhangsmenü), <strong>👥 Mitglieder &amp; Rechte</strong> (3 Schalter pro Mitglied: <code>🍺 Schankbuch</code>, <code>🎯 Waffenwart</code>, <code>🔐 Admin</code>), <strong>🍺 Schankbuch-Preise</strong>, <strong>📋 Waffenbuch &amp; Log</strong> (inkl. Audit-Log &amp; Jahresabschluss-Backup), <strong>🎨 App-Farbdesign</strong> (8 Themes) und <strong>📲 Code &amp; QR-Codes</strong> (Vereins-Code ändern + Mitglieder- &amp; Tresor-QR-Code drucken).</div>
+                        <div>Zusätzlich zu allen Vorstands-Funktionen stehen dir exklusiv die Schnellaktion <strong>📸 24h-Status-Foto</strong>, das Verwalten aller 3 Rollen-Schalter pro Mitglied (<code>🍺 Schankbuch</code>, <code>🎯 Waffenwart</code>, <code>🔐 Admin</code>), <strong>Schankbuch-Preise</strong>, <strong>Waffenbuch &amp; Audit-Log</strong> inklusive Jahresabschluss-Backup sowie die Systemzeilen (<strong>App-Farbdesign</strong>, <strong>Zugangscode &amp; QR-Codes</strong>, <strong>🎬 JHV-Demo-Modus öffnen</strong> und <strong>App-Stand frisch laden</strong>) zur Verfügung.</div>
                     </div>
                 </div>
 
@@ -7710,6 +7777,18 @@
                 <input type="number" id="bar-cash-given-input" inputmode="decimal" step="0.50" min="0" placeholder="Gegeben in €..." oninput="updateBarCashChangeDisplay()" onchange="updateBarCashChangeDisplay()" aria-label="Gegebener Betrag in Euro">
                 <div id="bar-change-output" class="is-idle" aria-live="polite"></div>
             </div>
+            <div class="bar-tip-box" style="background: #fefce8; border: 1.5px solid #fde047; border-radius: 14px; padding: 10px 12px; margin-top: 10px;">
+                <div class="bar-tip-header">
+                    <span class="bar-tip-label">💰 Trinkgeld (optional):</span>
+                    <strong id="bar-tip-display">€ 0,00</strong>
+                </div>
+                <div class="bar-tip-quick-grid">
+                    <button type="button" class="bar-tip-btn is-selected" data-tip-mode="none" onclick="setBarCashTip('none', this)">Keins (0 €)</button>
+                    <button type="button" class="bar-tip-btn" data-tip-mode="add050" onclick="setBarCashTip('add050', this)">+ 0,50 €</button>
+                    <button type="button" class="bar-tip-btn" data-tip-mode="add100" onclick="setBarCashTip('add100', this)">+ 1,00 €</button>
+                    <button type="button" class="bar-tip-btn" data-tip-mode="roundup" onclick="setBarCashTip('roundup', this)">Aufrunden</button>
+                </div>
+            </div>
             <div class="bar-cash-confirm-actions">
                 <button type="button" id="bar-cash-confirm-cancel" onclick="closeBarCashConfirm(false)">✕ Abbrechen</button>
                 <button type="button" id="bar-cash-confirm-ok" onclick="closeBarCashConfirm(true)">✅ Ja, Bar bezahlt</button>
@@ -7935,6 +8014,48 @@
             });
         }
 
+        function _updateBarCashTipUI(activeMode = 'none') {
+            const tipDisplayEl = document.getElementById('bar-tip-display');
+            const tipVal = (_barCashConfirmActive && Number.isFinite(_barCashConfirmActive.tip) && _barCashConfirmActive.tip > 0)
+                ? Math.round(_barCashConfirmActive.tip * 100) / 100
+                : 0;
+            if (tipDisplayEl) {
+                tipDisplayEl.textContent = `€ ${_formatEuroAT(tipVal)}`;
+            }
+            const resolvedMode = tipVal <= 0 ? 'none' : activeMode;
+            document.querySelectorAll('#bar-cash-confirm-modal .bar-tip-btn').forEach(btn => {
+                const mode = btn.getAttribute('data-tip-mode') || '';
+                btn.classList.toggle('is-selected', mode === resolvedMode);
+            });
+        }
+
+        function setBarCashTip(mode, btnEl) {
+            if (!_barCashConfirmActive) return;
+            const totalAmount = Number.isFinite(_barCashConfirmActive.total) ? _barCashConfirmActive.total : 0;
+            const currentTipCents = Number.isFinite(_barCashConfirmActive.tip) && _barCashConfirmActive.tip > 0
+                ? Math.round(_barCashConfirmActive.tip * 100)
+                : 0;
+            let nextTipCents = 0;
+
+            if (mode === 'none') {
+                nextTipCents = 0;
+            } else if (mode === 'add050') {
+                nextTipCents = currentTipCents + 50;
+            } else if (mode === 'add100') {
+                nextTipCents = currentTipCents + 100;
+            } else if (mode === 'roundup') {
+                const totalCents = Math.round(totalAmount * 100);
+                const rem = totalCents % 100;
+                nextTipCents = rem === 0 ? 100 : (100 - rem);
+            } else {
+                nextTipCents = currentTipCents;
+            }
+
+            _barCashConfirmActive.tip = Math.max(0, Math.round(nextTipCents)) / 100;
+            _updateBarCashTipUI(mode);
+            updateBarCashChangeDisplay(true);
+        }
+
         function updateBarCashChangeDisplay(keepQuickSelection = false) {
             const outputEl = document.getElementById('bar-change-output');
             const inputEl = document.getElementById('bar-cash-given-input');
@@ -7957,9 +8078,13 @@
             const totalAmount = (_barCashConfirmActive && Number.isFinite(_barCashConfirmActive.total))
                 ? _barCashConfirmActive.total
                 : 0;
+            const tipAmount = (_barCashConfirmActive && Number.isFinite(_barCashConfirmActive.tip) && _barCashConfirmActive.tip > 0)
+                ? _barCashConfirmActive.tip
+                : 0;
             const totalCents = Math.round(totalAmount * 100);
+            const tipCents = Math.round(tipAmount * 100);
             const givenCents = Math.round(givenNum * 100);
-            const diffCents = givenCents - totalCents;
+            const diffCents = givenCents - totalCents - tipCents;
 
             if (diffCents >= 0) {
                 outputEl.className = 'is-change';
@@ -7976,8 +8101,11 @@
             const totalAmount = (_barCashConfirmActive && Number.isFinite(_barCashConfirmActive.total))
                 ? _barCashConfirmActive.total
                 : 0;
+            const tipAmount = (_barCashConfirmActive && Number.isFinite(_barCashConfirmActive.tip) && _barCashConfirmActive.tip > 0)
+                ? _barCashConfirmActive.tip
+                : 0;
             const targetAmount = (amountOrMode === 'exact')
-                ? Math.round(totalAmount * 100) / 100
+                ? Math.round((totalAmount + tipAmount) * 100) / 100
                 : Number(amountOrMode);
             if (!Number.isFinite(targetAmount)) return;
             inputEl.value = (amountOrMode === 'exact') ? targetAmount.toFixed(2) : String(targetAmount);
@@ -7996,7 +8124,12 @@
             const current = _barCashConfirmActive;
             _barCashConfirmActive = null;
             if (current && typeof current.resolve === 'function') {
-                try { current.resolve(!!confirmed); } catch (e) {}
+                const selectedTip = (Number.isFinite(current.tip) && current.tip > 0)
+                    ? Number(current.tip.toFixed(2))
+                    : 0;
+                try {
+                    current.resolve(confirmed ? { confirmed: true, tip: selectedTip } : false);
+                } catch (e) {}
             }
         }
 
@@ -8036,7 +8169,8 @@
             _clearBarCashQuickSelection();
 
             return new Promise((resolve) => {
-                _barCashConfirmActive = { total: safeTotal, resolve };
+                _barCashConfirmActive = { total: safeTotal, tip: 0, resolve };
+                _updateBarCashTipUI('none');
                 updateBarCashChangeDisplay();
                 try { if (document.body) document.body.classList.add('bar-cash-confirm-open'); } catch (e) {}
                 modal.style.display = 'flex';
@@ -8053,6 +8187,7 @@
             window.openBarCashConfirm = openBarCashConfirm;
             window.closeBarCashConfirm = closeBarCashConfirm;
             window.setBarCashQuickAmount = setBarCashQuickAmount;
+            window.setBarCashTip = setBarCashTip;
             window.updateBarCashChangeDisplay = updateBarCashChangeDisplay;
             window.alert = function(msg) {
                 const text = String(msg == null ? '' : msg);
@@ -15865,12 +16000,19 @@
             const typedCustName = document.getElementById('cust-name') ? document.getElementById('cust-name').value.trim() : '';
             const saleTabName = (activeTab.isDefaultBar && typedCustName) ? typedCustName : activeTab.name;
             const deckelName = String(saleTabName || DEFAULT_BAR_TAB_NAME).trim() || DEFAULT_BAR_TAB_NAME;
-            const confirmedCash = await openBarCashConfirm({
+            const cashConfirmResult = await openBarCashConfirm({
                 deckelName: deckelName,
                 itemsArray: itemsArray,
                 total: total
             });
+            const confirmedCash = (typeof cashConfirmResult === 'object' && cashConfirmResult !== null)
+                ? Boolean(cashConfirmResult.confirmed)
+                : Boolean(cashConfirmResult);
             if (!confirmedCash) return;
+            const rawTip = (typeof cashConfirmResult === 'object' && cashConfirmResult !== null && Number.isFinite(Number(cashConfirmResult.tip)))
+                ? Math.max(0, Number(cashConfirmResult.tip))
+                : 0;
+            const selectedTip = Number(rawTip.toFixed(2));
 
             const currentMemberName = getBarServiceMemberName();
             const tabOpenedBy = String(activeTab && activeTab.openedBy ? activeTab.openedBy : currentMemberName).trim() || currentMemberName;
@@ -15887,6 +16029,7 @@
                 cashier: currentMemberName,
                 items: itemsArray,
                 total: total,
+                tip: Number(selectedTip.toFixed(2)),
                 type: 'bar',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
@@ -15908,13 +16051,22 @@
                 }
 
                 const amountText = total.toFixed(2).replace('.', ',');
-                showSchankbuchFeedback(`Bar-Abrechnung (€ ${amountText}) in der Schankkassa gespeichert!`);
+                const tipText = selectedTip > 0 ? selectedTip.toFixed(2).replace('.', ',') : '';
+                showSchankbuchFeedback(
+                    selectedTip > 0
+                        ? `Bar-Abrechnung (€ ${amountText} + € ${tipText} Trinkgeld) in der Schankkassa gespeichert!`
+                        : `Bar-Abrechnung (€ ${amountText}) in der Schankkassa gespeichert!`
+                );
+                const tipAlertBadgeHtml = selectedTip > 0
+                    ? `<div style="margin: 0 0 8px 0;"><span style="display: inline-block; padding: 3px 12px; border-radius: 10px; background: #fefce8; border: 1.5px solid #fde047; font-size: 0.96rem; font-weight: 800; color: #a16207;">+ € ${tipText} Trinkgeld</span></div>`
+                    : '';
                 await showClubAlert({
                     icon: '✅',
                     tone: 'cash',
                     title: 'Bar-Zahlung gespeichert!',
                     htmlMessage: `<div style="font-size: 1.25rem; line-height: 1.45;">Deckel <strong style="color: #0f172a;">„${escapeHtml(deckelName)}“</strong><br>`
                         + `<span style="display: inline-block; margin: 10px 0 8px 0; padding: 6px 18px; border-radius: 14px; background: #dcfce7; border: 2px solid #86efac; font-size: 1.55rem; font-weight: 900; color: #15803d;">€ ${amountText}</span><br>`
+                        + tipAlertBadgeHtml
                         + `wurde erfolgreich in der Schankkassa verbucht.</div>`
                 });
             } catch (err) {
@@ -16038,6 +16190,7 @@
             if (!getAdminAuthUser()) return;
             const container = document.getElementById('admin-cash-sales-list');
             const sumEl = document.getElementById('admin-cash-sales-sum-value');
+            const tipSumEl = document.getElementById('admin-cash-sales-tip-value');
             const countEl = document.getElementById('admin-cash-sales-count');
             if (!container) return;
 
@@ -16045,6 +16198,7 @@
                 const snapshot = await db.collection("cash_sales").orderBy("createdAt", "desc").get();
                 let html = "";
                 let totalCashSum = 0;
+                let totalTipSum = 0;
                 const list = [];
 
                 snapshot.forEach(doc => {
@@ -16054,7 +16208,17 @@
                         rawTotal = parseFloat(rawTotal.replace('€', '').replace(',', '.').trim());
                     }
                     const totalNum = isNaN(rawTotal) ? 0 : Math.round(Number(rawTotal) * 100) / 100;
-                    totalCashSum = Math.round((totalCashSum + totalNum) * 100) / 100;
+
+                    let rawTip = sale.tip;
+                    if (typeof rawTip === 'string') {
+                        rawTip = parseFloat(rawTip.replace('€', '').replace(',', '.').trim());
+                    }
+                    const tipNum = (Number.isFinite(Number(rawTip)) && Number(rawTip) > 0)
+                        ? Math.round(Number(rawTip) * 100) / 100
+                        : 0;
+
+                    totalTipSum = Math.round((totalTipSum + tipNum) * 100) / 100;
+                    totalCashSum = Math.round((totalCashSum + totalNum + tipNum) * 100) / 100;
 
                     const itemsSummary = Array.isArray(sale.items)
                         ? sale.items.map(it => `${it.count || 0}x ${it.name || it.key || ''}`).join(', ')
@@ -16073,11 +16237,15 @@
                         openedBy: openedByStr,
                         cashier: cashierStr,
                         itemsSummary,
-                        totalNum
+                        totalNum,
+                        tipNum
                     });
 
                     const safeDocId = escapeHtml(doc.id);
                     const amountStr = totalNum.toFixed(2).replace('.', ',');
+                    const tipBadgeHtml = tipNum > 0
+                        ? `<span style="display: inline-block; background: #fefce8; color: #a16207; border: 1px solid #fde047; border-radius: 7px; padding: 1px 6px; font-size: 0.72em; font-weight: 800; white-space: nowrap; margin-top: 2px;">+ € ${tipNum.toFixed(2).replace('.', ',')} Trinkgeld</span>`
+                        : '';
                     const serviceBadgeHtml = serviceText
                         ? ` <span style="color: #64748b; font-size: 0.85em; font-weight: 600;">(${escapeHtml(serviceText)})</span>`
                         : '';
@@ -16091,13 +16259,16 @@
                     html += `
                         <div class="admin-list-row" style="padding: 8px 10px; align-items: center;">
                             <div style="flex: 1; min-width: 0;">
-                                <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; flex-wrap: wrap;">
                                     <div style="min-width: 0; font-size: 0.96em; color: #0f172a;">
                                         <span style="display: inline-block; background: #dcfce7; color: #166534; border: 1px solid #86efac; border-radius: 8px; padding: 2px 7px; font-size: 0.72em; font-weight: 800; letter-spacing: 0.02em; vertical-align: middle; margin-right: 6px;">💵 BAR</span><span style="color: #64748b; font-size: 0.88em; font-weight: 600;">${escapeHtml(dateDisplay || '–')}</span>
                                         <span style="color: #cbd5e1; margin: 0 4px;">|</span>
                                         <strong style="color: #0f172a;">${escapeHtml(tabBaseName)}</strong>${serviceBadgeHtml}
                                     </div>
-                                    <span style="color: #15803d; font-weight: 800; font-size: 1.02em; white-space: nowrap;">€ ${amountStr}</span>
+                                    <div style="display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0;">
+                                        <span style="color: #15803d; font-weight: 800; font-size: 1.02em; white-space: nowrap;">€ ${amountStr}</span>
+                                        ${tipBadgeHtml}
+                                    </div>
                                 </div>
                                 ${itemsSummary ? `<div style="color: #475569; font-size: 0.78em; margin-top: 3px; line-height: 1.35;">${escapeHtml(itemsSummary)}</div>` : ''}
                             </div>
@@ -16109,6 +16280,9 @@
                 window.cashSalesList = list;
                 if (sumEl) {
                     sumEl.innerText = '€ ' + totalCashSum.toFixed(2).replace('.', ',');
+                }
+                if (tipSumEl) {
+                    tipSumEl.innerText = '€ ' + totalTipSum.toFixed(2).replace('.', ',');
                 }
                 if (countEl) {
                     countEl.innerText = list.length === 1 ? '1 Buchung' : `${list.length} Buchungen`;
