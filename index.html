@@ -4715,11 +4715,10 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: #fef9c3;
             border-bottom: 2.5px solid #eab308;
-            padding: 10px 14px;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            flex-wrap: wrap;
+            padding: 9px 12px 10px 12px;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
             box-shadow: 0 6px 20px rgba(15, 23, 42, 0.35);
             box-sizing: border-box;
         }
@@ -4731,10 +4730,17 @@
             display: none !important;
             pointer-events: none !important;
         }
+        .jhv-demo-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
         .jhv-demo-banner-info {
             display: flex;
             align-items: center;
-            gap: 9px;
+            gap: 8px;
             min-width: 0;
             flex: 1;
         }
@@ -4744,32 +4750,63 @@
             gap: 5px;
             background: #eab308;
             color: #0f172a;
-            font-size: 0.74rem;
+            font-size: 0.72rem;
             font-weight: 900;
             letter-spacing: 0.04em;
-            padding: 4px 9px;
+            padding: 4px 8px;
             border-radius: 8px;
             white-space: nowrap;
             flex-shrink: 0;
         }
         .jhv-demo-banner-text {
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 700;
             color: #f8fafc;
-            line-height: 1.3;
+            line-height: 1.25;
+        }
+        .jhv-demo-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+        #jhv-demo-qr-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 7px 11px;
+            border-radius: 10px;
+            background: rgba(234, 179, 8, 0.16);
+            color: #fef08a;
+            border: 1.5px solid rgba(234, 179, 8, 0.65);
+            font-family: inherit;
+            font-size: 0.78rem;
+            font-weight: 800;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: transform 0.14s ease, background 0.14s ease;
+        }
+        #jhv-demo-qr-btn:hover {
+            background: rgba(234, 179, 8, 0.28);
+        }
+        #jhv-demo-qr-btn:active {
+            transform: scale(0.97);
         }
         #jhv-demo-exit-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            padding: 8px 14px;
+            gap: 5px;
+            padding: 7px 12px;
             border-radius: 10px;
             background: #dc2626;
             color: #ffffff;
             border: 1.5px solid rgba(255, 255, 255, 0.25);
             font-family: inherit;
-            font-size: 0.84rem;
+            font-size: 0.78rem;
             font-weight: 800;
             cursor: pointer;
             white-space: nowrap;
@@ -4782,6 +4819,156 @@
         }
         #jhv-demo-exit-btn:active {
             transform: scale(0.97);
+        }
+        .jhv-demo-role-toggles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 6px;
+        }
+        .jhv-demo-role-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 5px 11px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.72);
+            color: #cbd5e1;
+            border: 1.5px solid rgba(148, 163, 184, 0.35);
+            font-family: inherit;
+            font-size: 0.76rem;
+            font-weight: 800;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.16s ease;
+        }
+        .jhv-demo-role-chip:hover {
+            border-color: rgba(234, 179, 8, 0.6);
+            color: #ffffff;
+        }
+        .jhv-demo-role-chip:active {
+            transform: scale(0.96);
+        }
+        .jhv-demo-role-chip.is-active {
+            background: linear-gradient(135deg, #059669 0%, #16a34a 100%);
+            color: #ffffff;
+            border-color: #eab308;
+            box-shadow: 0 3px 10px rgba(22, 163, 74, 0.42);
+        }
+        .jhv-demo-role-chip .jhv-chip-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #64748b;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        .jhv-demo-role-chip.is-active .jhv-chip-dot {
+            background: #fef08a;
+            box-shadow: 0 0 6px #fef08a;
+        }
+
+        /* JHV-Demo Admin-Vorschau (nur Musterdaten, kein echtes Admin-UI) */
+        #jhv-demo-admin-preview {
+            display: none;
+        }
+        body.jhv-demo-mode #jhv-demo-admin-preview {
+            display: block;
+        }
+        body.jhv-demo-mode #page-card #admin-login-card,
+        body.jhv-demo-mode #page-card #admin-dashboard-area,
+        body.jhv-demo-mode #page-card > .admin-delete-btn {
+            display: none !important;
+        }
+        .jhv-demo-admin-shell {
+            background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+            border: 1.5px solid rgba(234, 179, 8, 0.32);
+            border-radius: 20px;
+            padding: 16px 14px 20px 14px;
+            color: #f8fafc;
+            box-shadow: 0 14px 36px rgba(15, 23, 42, 0.28);
+        }
+        .jhv-demo-admin-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(234, 179, 8, 0.16);
+            color: #fde047;
+            border: 1px solid rgba(234, 179, 8, 0.45);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+        }
+        .jhv-demo-admin-section-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin: 14px 0 8px 2px;
+        }
+        .jhv-demo-admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .jhv-demo-admin-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            padding: 12px 11px;
+            border-radius: 14px;
+            background: rgba(30, 41, 59, 0.88);
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            color: #f8fafc;
+            text-align: left;
+            cursor: pointer;
+            font-family: inherit;
+            transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+        }
+        .jhv-demo-admin-tile:hover {
+            border-color: rgba(234, 179, 8, 0.6);
+            background: rgba(30, 41, 59, 1);
+        }
+        .jhv-demo-admin-tile:active {
+            transform: scale(0.98);
+        }
+        .jhv-demo-admin-tile-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.25;
+        }
+        .jhv-demo-admin-tile-sub {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            line-height: 1.25;
+        }
+        .jhv-demo-admin-subcard {
+            background: rgba(30, 41, 59, 0.92);
+            border: 1px solid rgba(148, 163, 184, 0.26);
+            border-radius: 14px;
+            padding: 13px 14px;
+            margin-top: 10px;
+        }
+        .jhv-demo-admin-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+            font-size: 0.83rem;
+        }
+        .jhv-demo-admin-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
         }
 
         /* --- GROßES VEREINS-BESTÄTIGUNGS-POPUP (#club-confirm-modal) --- */
@@ -5116,11 +5303,21 @@
 
     <!-- JHV-DEMO-MODUS BANNER (NUR AKTIV FÜR OBMANN SIMON IM DEMO-MODUS) -->
     <div id="jhv-demo-banner" role="region" aria-label="JHV-Demo-Modus">
-        <div class="jhv-demo-banner-info">
-            <span class="jhv-demo-pill">🎬 JHV-DEMO</span>
-            <span class="jhv-demo-banner-text">Musterdaten aktiv · Keine echten Vereinsdaten · Waffenbuch ohne QR geöffnet</span>
+        <div class="jhv-demo-top-row">
+            <div class="jhv-demo-banner-info">
+                <span class="jhv-demo-pill">🎬 JHV-DEMO</span>
+                <span class="jhv-demo-banner-text">Musterdaten aktiv · Rollen live testen</span>
+            </div>
+            <div class="jhv-demo-actions">
+                <button type="button" id="jhv-demo-qr-btn" onclick="openJhvDemoQrModal()">📲 QR-Code einblenden</button>
+                <button type="button" id="jhv-demo-exit-btn" onclick="exitJhvDemoMode()">✕ Demo beenden</button>
+            </div>
         </div>
-        <button type="button" id="jhv-demo-exit-btn" onclick="exitJhvDemoMode()">✕ Demo beenden</button>
+        <div class="jhv-demo-role-toggles" style="display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 6px;">
+            <button type="button" id="demo-toggle-bar" class="jhv-demo-role-chip" aria-pressed="false" onclick="toggleJhvDemoRole('bar')"><span class="jhv-chip-dot"></span>🍺 Schankbuch</button>
+            <button type="button" id="demo-toggle-weapons" class="jhv-demo-role-chip" aria-pressed="false" onclick="toggleJhvDemoRole('weapons')"><span class="jhv-chip-dot"></span>🎯 Waffenbuch</button>
+            <button type="button" id="demo-toggle-admin" class="jhv-demo-role-chip" aria-pressed="false" onclick="toggleJhvDemoRole('admin')"><span class="jhv-chip-dot"></span>🔐 Admin</button>
+        </div>
     </div>
 
     <!-- OFFLINE-EMPFANGS-HINWEIS -->
@@ -5667,6 +5864,7 @@
 
     <!-- 6. ADMIN-BEREICH -->
     <div id="page-card" class="page-content">
+        <div id="jhv-demo-admin-preview" aria-label="JHV Demo Admin Vorschau"></div>
         <div id="admin-login-card" class="admin-glass-stage">
             <div class="admin-light-glass-card">
                 <div style="text-align: center;">
@@ -8113,6 +8311,9 @@
             if (tabId === 'weapons' && typeof hasCurrentMemberWeaponAccess === 'function' && !hasCurrentMemberWeaponAccess()) {
                 tabId = 'news';
             }
+            if (tabId === 'card' && typeof isJhvDemoMode === 'function' && isJhvDemoMode() && !(typeof demoShowAdmin !== 'undefined' && demoShowAdmin)) {
+                tabId = 'news';
+            }
             stopQrScanner();
             if (tabId !== 'weapons' && typeof weaponSessionUnlocked !== 'undefined' && weaponSessionUnlocked && !(typeof isJhvDemoMode === 'function' && isJhvDemoMode())) {
                 try { lockWeaponFormUI(); } catch(e) {}
@@ -8150,7 +8351,15 @@
                     officialActiveMembers = [...DEFAULT_ACTIVE_MEMBERS];
                 }
             } else if (tabId === 'card') {
-                try { renderAdminMembersOverview(); } catch(e) {}
+                if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) {
+                    try {
+                        if (typeof renderJhvDemoAdminPreview === 'function') {
+                            renderJhvDemoAdminPreview('home');
+                        }
+                    } catch(e) {}
+                } else {
+                    try { renderAdminMembersOverview(); } catch(e) {}
+                }
             } else if (tabId === 'drinks') {
                 try { initOpenTabsListener(); } catch(e) {}
                 try { renderOpenTabsBar(); } catch(e) {}
@@ -8679,7 +8888,7 @@
 
         function hasCurrentMemberSchankbuchAccess() {
             if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) {
-                return true;
+                return Boolean(typeof demoShowBar !== 'undefined' && demoShowBar);
             }
             if (isSchankKioskMode()) {
                 return true;
@@ -8701,7 +8910,7 @@
 
         function hasCurrentMemberWeaponAccess() {
             if (typeof isJhvDemoMode === 'function' && isJhvDemoMode()) {
-                return true;
+                return Boolean(typeof demoShowWeapons !== 'undefined' && demoShowWeapons);
             }
             if (isSchankKioskMode()) {
                 return false;
@@ -8729,14 +8938,18 @@
             const weaponWardens = Array.isArray(WEAPON_AUTHORIZED_MEMBERS) ? WEAPON_AUTHORIZED_MEMBERS : [];
             const inJhvDemo = (typeof isJhvDemoMode === 'function' && isJhvDemoMode());
 
-            const hasBarAccess = inJhvDemo || ((typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn())
-                ? true
-                : (Array.isArray(barMembers)
-                    ? (barMembers.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, barMembers))
-                    : hasCurrentMemberSchankbuchAccess()));
-            const hasWeaponAccess = inJhvDemo || ((typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn())
-                ? true
-                : (Array.isArray(weaponWardens) && (weaponWardens.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, weaponWardens))));
+            const hasBarAccess = inJhvDemo
+                ? Boolean(typeof demoShowBar !== 'undefined' && demoShowBar)
+                : ((typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn())
+                    ? true
+                    : (Array.isArray(barMembers)
+                        ? (barMembers.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, barMembers))
+                        : hasCurrentMemberSchankbuchAccess()));
+            const hasWeaponAccess = inJhvDemo
+                ? Boolean(typeof demoShowWeapons !== 'undefined' && demoShowWeapons)
+                : ((typeof isChairmanSimonLoggedIn === 'function' && isChairmanSimonLoggedIn())
+                    ? true
+                    : (Array.isArray(weaponWardens) && (weaponWardens.includes(currentSelectedName) || memberNameMatchesList(currentSelectedName, weaponWardens))));
 
             const navNewsEl = document.getElementById('nav-news');
             const navEventsEl = document.getElementById('nav-events');
@@ -8845,9 +9058,11 @@
 
             let isBoardDeviceForNav = false;
             try { isBoardDeviceForNav = localStorage.getItem('kb_sv_is_board_device') === '1'; } catch (e) {}
-            const hasAdminTabAccess = (Array.isArray(adminMembers) && (adminMembers.includes(currentSelectedName) || memberHasAdminTabRight(currentSelectedName, adminMembers)))
-                || isBoardDeviceForNav
-                || isBoardAdminLoggedIn();
+            const hasAdminTabAccess = inJhvDemo
+                ? Boolean(typeof demoShowAdmin !== 'undefined' && demoShowAdmin)
+                : ((Array.isArray(adminMembers) && (adminMembers.includes(currentSelectedName) || memberHasAdminTabRight(currentSelectedName, adminMembers)))
+                    || isBoardDeviceForNav
+                    || isBoardAdminLoggedIn());
             if (navCardEl) {
                 if (hasAdminTabAccess) {
                     navCardEl.style.setProperty('display', 'flex', 'important');
@@ -8855,6 +9070,12 @@
                 } else {
                     navCardEl.style.setProperty('display', 'none', 'important');
                     navCardEl.classList.remove('active');
+                }
+            }
+            if (inJhvDemo && !hasAdminTabAccess) {
+                const cardPageEl = document.getElementById('page-card');
+                if (cardPageEl && cardPageEl.classList.contains('active')) {
+                    try { switchTab('news'); } catch (e) {}
                 }
             }
 
@@ -8871,13 +9092,18 @@
         function updateAdminTabVisibility() {
             const navCardEl = document.getElementById('nav-card') || document.getElementById('nav-admin-btn');
             if (!navCardEl) return;
-            const currentSelectedName = getCurrentMemberNameForAccess();
-            let isBoardDevice = false;
-            try { isBoardDevice = localStorage.getItem('kb_sv_is_board_device') === '1'; } catch (e) {}
-
-            const hasAdminTabAccess = (Array.isArray(adminMembers) && (adminMembers.includes(currentSelectedName) || memberHasAdminTabRight(currentSelectedName, adminMembers)))
-                || isBoardDevice
-                || isBoardAdminLoggedIn();
+            const inJhvDemo = (typeof isJhvDemoMode === 'function' && isJhvDemoMode());
+            let hasAdminTabAccess = false;
+            if (inJhvDemo) {
+                hasAdminTabAccess = Boolean(typeof demoShowAdmin !== 'undefined' && demoShowAdmin);
+            } else {
+                const currentSelectedName = getCurrentMemberNameForAccess();
+                let isBoardDevice = false;
+                try { isBoardDevice = localStorage.getItem('kb_sv_is_board_device') === '1'; } catch (e) {}
+                hasAdminTabAccess = (Array.isArray(adminMembers) && (adminMembers.includes(currentSelectedName) || memberHasAdminTabRight(currentSelectedName, adminMembers)))
+                    || isBoardDevice
+                    || isBoardAdminLoggedIn();
+            }
 
             if (hasAdminTabAccess) {
                 navCardEl.style.setProperty('display', 'flex', 'important');
@@ -8885,6 +9111,12 @@
             } else {
                 navCardEl.style.setProperty('display', 'none', 'important');
                 navCardEl.classList.remove('active');
+                if (inJhvDemo) {
+                    const cardPageEl = document.getElementById('page-card');
+                    if (cardPageEl && cardPageEl.classList.contains('active')) {
+                        try { switchTab('news'); } catch (e) {}
+                    }
+                }
             }
             try { updateLockscreenAdminLinkVisibility(); } catch (e) {}
         }
@@ -26567,10 +26799,265 @@
             };
         }
 
+        let demoShowBar = false;
+        let demoShowWeapons = false;
+        let demoShowAdmin = false;
+
+        function syncJhvDemoToggleChipsUI() {
+            const chips = [
+                { id: 'demo-toggle-bar', active: Boolean(demoShowBar) },
+                { id: 'demo-toggle-weapons', active: Boolean(demoShowWeapons) },
+                { id: 'demo-toggle-admin', active: Boolean(demoShowAdmin) }
+            ];
+            chips.forEach(({ id, active }) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.toggle('is-active', active);
+                el.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
+        }
+
+        function toggleJhvDemoRole(roleKey) {
+            if (!(typeof isJhvDemoMode === 'function' && isJhvDemoMode())) return;
+            if (roleKey === 'bar') {
+                demoShowBar = !demoShowBar;
+            } else if (roleKey === 'weapons') {
+                demoShowWeapons = !demoShowWeapons;
+            } else if (roleKey === 'admin') {
+                demoShowAdmin = !demoShowAdmin;
+            }
+            syncJhvDemoToggleChipsUI();
+            try { updateMemberNavigationMode(); } catch (e) {}
+            try { updateAdminTabVisibility(); } catch (e) {}
+        }
+
+        function openJhvDemoQrModal() {
+            if (!(typeof isJhvDemoMode === 'function' && isJhvDemoMode())) return;
+            try {
+                if (typeof generateTresorQrPngDataUrl === 'function') {
+                    lastGeneratedMemberAppQrDataUrl = generateTresorQrPngDataUrl(MEMBER_APP_QR_URL, 500);
+                    const previewImg = document.getElementById('member-app-qr-preview-img');
+                    if (previewImg) previewImg.src = lastGeneratedMemberAppQrDataUrl;
+                }
+                const modal = document.getElementById('member-app-qr-modal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    modal.style.pointerEvents = 'auto';
+                }
+            } catch (e) {}
+        }
+
+        const JHV_DEMO_ADMIN_PREVIEW_SUBVIEWS = {
+            'status': {
+                title: '📸 24h-Status-Foto (Muster-Vorschau)',
+                subtitle: 'Live-Eindrücke vom Vereinsleben erscheinen 24 Stunden lang rund um das Wappen im Header.',
+                rows: [
+                    { left: 'Aktiver Demo-Status', right: '🎉 Jahreshauptversammlung 2026', accent: '#fde047' },
+                    { left: 'Sichtbarkeit', right: 'Alle Mitglieder (24h automatisch)', accent: '#86efac' },
+                    { left: 'Speicherort', right: 'Muster-Vorschau (keine echte Datei)', accent: '#94a3b8' }
+                ]
+            },
+            'news': {
+                title: '📰 News & Termine (Muster-Vorschau)',
+                subtitle: 'Ankündigungen, Einladungen und Termin-Erinnerungen direkt an alle Mitglieder senden.',
+                rows: [
+                    { left: 'Jahreshauptversammlung (Muster)', right: '14.03. · 19:30 Uhr', accent: '#fde047' },
+                    { left: 'Frühjahrs-Standabend (Muster)', right: '28.03. · 18:00 Uhr', accent: '#f8fafc' },
+                    { left: 'Beteiligung (Demo)', right: '14 Zusagen · 2 Absagen', accent: '#86efac' }
+                ]
+            },
+            'duty': {
+                title: '📋 Dienstplan & Push (Muster-Vorschau)',
+                subtitle: 'Schank- und Standdienste übersichtlich einteilen und per Push erinnern.',
+                rows: [
+                    { left: 'Freitag, 20.03. (Muster)', right: 'Mustermann Max & Beispiel Anna', accent: '#f8fafc' },
+                    { left: 'Freitag, 27.03. (Muster)', right: 'Muster Franz & Demo Lukas', accent: '#f8fafc' },
+                    { left: 'Push-Erinnerung', right: 'Aktiviert (Muster)', accent: '#86efac' }
+                ]
+            },
+            'alert': {
+                title: '📢 Eilmeldung & Chat (Muster-Vorschau)',
+                subtitle: 'Wichtige Vereins-Durchsagen prominent ganz oben auf der Startseite anpinnen.',
+                rows: [
+                    { left: 'Aktive Eilmeldung', right: 'Keine (Musterzustand)', accent: '#94a3b8' },
+                    { left: 'Vereins-Chat', right: '3 Muster-Nachrichten aktiv', accent: '#86efac' }
+                ]
+            },
+            'inventory': {
+                title: '📦 Lagerbestand (Muster-Vorschau)',
+                subtitle: 'Getränke- und Vereinsbestand auf einen Blick im Schützenhaus prüfen.',
+                rows: [
+                    { left: 'Mohren Spezial 0,5L (Muster)', right: '12 Kisten · OK', accent: '#86efac' },
+                    { left: 'Almdudler 0,33L (Muster)', right: '3 Kisten · Nachbestellen', accent: '#fde047' },
+                    { left: 'Mineralwasser (Muster)', right: '8 Kisten · OK', accent: '#86efac' }
+                ]
+            },
+            'cash': {
+                title: '💶 Bar-Abrechnungen (Muster-Vorschau)',
+                subtitle: 'Rein fiktive Muster-Zahlen – es werden keinerlei echte Kassen- oder Abrechnungsdaten geladen.',
+                rows: [
+                    { left: 'Muster-Abrechnung (Standabend)', right: '€ 125,00 Muster-Abrechnung', accent: '#86efac' },
+                    { left: 'Muster-Abrechnung (Vereinsabend)', right: '€ 84,50 Muster-Abrechnung', accent: '#86efac' },
+                    { left: 'Muster-Gesamtsumme (Demo)', right: '€ 209,50 (fiktiv)', accent: '#fde047' }
+                ]
+            },
+            'invoices': {
+                title: '🧾 Firmen-Rechnungen (Muster-Vorschau)',
+                subtitle: 'Rechnungen für Firmenfeiern oder Vereine als fertiges PDF erstellen.',
+                rows: [
+                    { left: 'Musterfirma Montafon GmbH', right: '€ 180,00 · Entwurf (Demo)', accent: '#fde047' },
+                    { left: 'Beispiel-Verein Gaschurn', right: '€ 95,00 · Bezahlt (Demo)', accent: '#86efac' }
+                ]
+            },
+            'prices': {
+                title: '🍺 Schankbuch-Preise (Muster-Vorschau)',
+                subtitle: 'Getränke- und Speisenpreise für das Schankbuch zentral pflegen.',
+                rows: [
+                    { left: 'Mohren Spezial 0,5L (Muster)', right: '€ 3,80', accent: '#f8fafc' },
+                    { left: 'Almdudler / Limo (Muster)', right: '€ 3,20', accent: '#f8fafc' },
+                    { left: 'Paar Wiener mit Brot (Muster)', right: '€ 4,50', accent: '#f8fafc' }
+                ]
+            },
+            'keys': {
+                title: '🔑 Schlüsselliste & PDF (Muster-Vorschau)',
+                subtitle: 'Rein fiktive Muster-Einträge – es werden niemals echte Mitgliederdaten oder Schlüssel-PDFs geladen.',
+                rows: [
+                    { left: 'Mustermann Max, Musterstraße 1', right: 'Schlüssel #01 (Demo)', accent: '#fde047' },
+                    { left: 'Musterfrau Anna, Beispielweg 7', right: 'Schlüssel #02 (Demo)', accent: '#f8fafc' },
+                    { left: 'Beispiel Hans, Dorfplatz 3', right: 'Schlüssel #03 (Demo)', accent: '#f8fafc' }
+                ]
+            },
+            'rights': {
+                title: '👥 Mitglieder & Rechte (Muster-Vorschau)',
+                subtitle: 'Individuelle Freigaben für Schankbuch, Waffenbuch und Vorstand gezielt verwalten.',
+                rows: [
+                    { left: 'Mustermann Max (Muster)', right: 'Normales Mitglied', accent: '#94a3b8' },
+                    { left: 'Musterfrau Anna (Muster)', right: '🍺 Schankdienst', accent: '#86efac' },
+                    { left: 'Beispiel Hans (Muster)', right: '🎯 Waffenwart', accent: '#fde047' }
+                ]
+            },
+            'weaponlog': {
+                title: '🎯 Waffenbuch & Log (Muster-Vorschau)',
+                subtitle: 'Lückenlose, digitale Protokollierung aller Entnahmen & Rückgaben (rein fiktive Demo-Einträge).',
+                rows: [
+                    { left: 'Beispiel Hans · Muster-Gewehr #1', right: 'Zurückgegeben (Demo)', accent: '#86efac' },
+                    { left: 'Muster Lukas · Muster-Gewehr #2', right: 'Entnommen (Demo)', accent: '#fde047' }
+                ]
+            }
+        };
+
+        function renderJhvDemoAdminPreview(subViewId = 'home') {
+            if (!(typeof isJhvDemoMode === 'function' && isJhvDemoMode())) return;
+            const host = document.getElementById('jhv-demo-admin-preview');
+            if (!host) return;
+
+            if (subViewId && subViewId !== 'home' && JHV_DEMO_ADMIN_PREVIEW_SUBVIEWS[subViewId]) {
+                const view = JHV_DEMO_ADMIN_PREVIEW_SUBVIEWS[subViewId];
+                const rowsHtml = view.rows.map(r => `
+                    <div class="jhv-demo-admin-row">
+                        <span style="color: #e2e8f0; font-weight: 700;">${r.left}</span>
+                        <span style="color: ${r.accent || '#f8fafc'}; font-weight: 800; text-align: right;">${r.right}</span>
+                    </div>
+                `).join('');
+                host.innerHTML = `
+                    <div class="jhv-demo-admin-shell">
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
+                            <button type="button" onclick="renderJhvDemoAdminPreview('home')" style="background: rgba(255,255,255,0.1); color: #ffffff; border: 1px solid rgba(255,255,255,0.22); border-radius: 10px; padding: 7px 12px; font-weight: 800; font-size: 0.8rem; cursor: pointer; font-family: inherit;">← Zurück zum Demo-Obmann-Menü</button>
+                            <span class="jhv-demo-admin-badge">🎬 NUR MUSTERDATEN</span>
+                        </div>
+                        <h3 style="margin: 0 0 6px 0; font-size: 1.08rem; font-weight: 900; color: #ffffff;">${view.title}</h3>
+                        <p style="margin: 0 0 12px 0; font-size: 0.8rem; color: #cbd5e1; line-height: 1.45;">${view.subtitle}</p>
+                        <div class="jhv-demo-admin-subcard">
+                            ${rowsHtml}
+                        </div>
+                        <div style="margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: rgba(234, 179, 8, 0.12); border: 1px solid rgba(234, 179, 8, 0.32); font-size: 0.76rem; color: #fef08a; font-weight: 700; line-height: 1.4;">
+                            🔒 Datenschutz aktiv: Im JHV-Demo-Modus werden keinerlei echte Firebase-Daten (Schlüsselliste, Kassenbuch, Rechnungen oder Waffen-Log) geladen.
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            host.innerHTML = `
+                <div class="jhv-demo-admin-shell">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;">
+                        <div>
+                            <span class="jhv-demo-admin-badge">🛡️ OBMANN-MENÜ · DEMO-VORSCHAU</span>
+                            <h2 style="margin: 8px 0 2px 0; font-size: 1.18rem; font-weight: 900; color: #ffffff;">Vorstands- &amp; Admin-Bereich</h2>
+                            <div style="font-size: 0.78rem; color: #94a3b8; font-weight: 600;">Rein fiktive Musterdaten · Kein Zugriff auf echte Vereinsdaten</div>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="renderJhvDemoAdminPreview('status')" style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 14px; border-radius: 15px; background: linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(217, 119, 6, 0.14)); border: 1.5px solid rgba(234, 179, 8, 0.55); color: #fef9c3; cursor: pointer; font-family: inherit; text-align: left; margin-bottom: 6px;">
+                        <div>
+                            <div style="font-size: 0.9rem; font-weight: 900; color: #fef08a;">📸 24h-Status-Foto</div>
+                            <div style="font-size: 0.74rem; color: #fde68a; font-weight: 600; margin-top: 2px;">Schnellaktion · Live-Foto rund ums Vereinswappen</div>
+                        </div>
+                        <span style="font-size: 0.76rem; font-weight: 800; background: #eab308; color: #0f172a; padding: 4px 9px; border-radius: 8px; white-space: nowrap;">Demo öffnen →</span>
+                    </button>
+
+                    <div class="jhv-demo-admin-section-title">BETRIEB &amp; TERMINE</div>
+                    <div class="jhv-demo-admin-grid">
+                        <button type="button" class="jhv-demo-admin-tile" onclick="renderJhvDemoAdminPreview('news')">
+                            <span class="jhv-demo-admin-tile-title">📰 News &amp; Termine</span>
+                            <span class="jhv-demo-admin-tile-sub">2 Muster-Termine aktiv</span>
+                        </button>
+                        <button type="button" class="jhv-demo-admin-tile" onclick="renderJhvDemoAdminPreview('duty')">
+                            <span class="jhv-demo-admin-tile-title">📋 Dienstplan &amp; Push</span>
+                            <span class="jhv-demo-admin-tile-sub">Dienste &amp; Erinnerungen</span>
+                        </button>
+                        <button type="button" class="jhv-demo-admin-tile" onclick="renderJhvDemoAdminPreview('alert')">
+                            <span class="jhv-demo-admin-tile-title">📢 Eilmeldung &amp; Chat</span>
+                            <span class="jhv-demo-admin-tile-sub">Startseiten-Durchsage</span>
+                        </button>
+                        <button type="button" class="jhv-demo-admin-tile" onclick="renderJhvDemoAdminPreview('inventory')">
+                            <span class="jhv-demo-admin-tile-title">📦 Lagerbestand</span>
+                            <span class="jhv-demo-admin-tile-sub">Muster-Getränkelager</span>
+                        </button>
+                    </div>
+
+                    <div class="jhv-demo-admin-section-title">SCHANK &amp; FINANZEN</div>
+                    <div class="jhv-demo-admin-grid">
+                        <button type="button" class="jhv-demo-admin-tile" onclick="renderJhvDemoAdminPreview('cash')">
+                            <span class="jhv-demo-admin-tile-title">💶 Bar-Abrechnungen</span>
+                            <span class="jhv-demo-admin-tile-sub">€ 125,00 Muster-Abrechnung</span>
+                        </button>
+                        <button type="button" class="jhv-demo-admin-tile" onclick="renderJhvDemoAdminPreview('invoices')">
+                            <span class="jhv-demo-admin-tile-title">🧾 Firmen-Rechnungen</span>
+                            <span class="jhv-demo-admin-tile-sub">Musterfirma Montafon</span>
+                        </button>
+                        <button type="button" class="jhv-demo-admin-tile" onclick="renderJhvDemoAdminPreview('prices')">
+                            <span class="jhv-demo-admin-tile-title">🍺 Schankbuch-Preise</span>
+                            <span class="jhv-demo-admin-tile-sub">Muster-Preisliste</span>
+                        </button>
+                    </div>
+
+                    <div class="jhv-demo-admin-section-title">VERWALTUNG &amp; SICHERHEIT</div>
+                    <div class="jhv-demo-admin-grid">
+                        <button type="button" class="jhv-demo-admin-tile" onclick="renderJhvDemoAdminPreview('keys')">
+                            <span class="jhv-demo-admin-tile-title">🔑 Schlüsselliste &amp; PDF</span>
+                            <span class="jhv-demo-admin-tile-sub">Mustermann Max, Musterstr. 1</span>
+                        </button>
+                        <button type="button" class="jhv-demo-admin-tile" onclick="renderJhvDemoAdminPreview('rights')">
+                            <span class="jhv-demo-admin-tile-title">👥 Mitglieder &amp; Rechte</span>
+                            <span class="jhv-demo-admin-tile-sub">Rollen-Verwaltung (Demo)</span>
+                        </button>
+                        <button type="button" class="jhv-demo-admin-tile" onclick="renderJhvDemoAdminPreview('weaponlog')">
+                            <span class="jhv-demo-admin-tile-title">🎯 Waffenbuch &amp; Log</span>
+                            <span class="jhv-demo-admin-tile-sub">Muster-Entnahme-Protokoll</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
         async function activateJhvDemoMode() {
             if (!isJhvDemoMode()) return false;
             try { sessionStorage.setItem('kb_sv_jhv_demo_authorized', '1'); } catch (e) {}
             _jhvDemoActiveRuntime = true;
+            demoShowBar = false;
+            demoShowWeapons = false;
+            demoShowAdmin = false;
             db = createJhvDemoFirestore();
 
             document.documentElement.classList.add('jhv-demo-mode', 'kbsv-pre-unlocked');
@@ -26584,12 +27071,17 @@
                 lockScreen.style.pointerEvents = 'none';
             }
             try { closeMemberNameSetupModal(); } catch (e) {}
+            try { syncJhvDemoToggleChipsUI(); } catch (e) {}
             try { updateFooterMemberIdentity(); } catch (e) {}
             try { updateMemberNavigationMode(); } catch (e) {}
+            try { updateAdminTabVisibility(); } catch (e) {}
 
             appDataLoadedAfterUnlock = false;
             await loadAppDataAfterUnlock();
 
+            try { syncJhvDemoToggleChipsUI(); } catch (e) {}
+            try { updateMemberNavigationMode(); } catch (e) {}
+            try { updateAdminTabVisibility(); } catch (e) {}
             try { unlockJhvDemoWeaponForm(); } catch (e) {}
             try { switchTab('news'); } catch (e) {}
             return true;
