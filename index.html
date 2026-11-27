@@ -2025,8 +2025,12 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
-        #lockscreen-admin-login-link {
+        #lockscreen-admin-login-link,
+        #club-lock-screen #lockscreen-admin-login-link,
+        #lock-screen #lockscreen-admin-login-link {
             display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
         }
         .lock-screen-footer-pill {
             display: inline-flex;
@@ -5427,7 +5431,7 @@
         </div>
 
         <div style="padding: 16px 0 8px 0; text-align: center; position: relative; z-index: 5; pointer-events: auto; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-            <button type="button" id="lockscreen-admin-login-link" onclick="openAdminDirectLogin()" style="display: none !important; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(234, 179, 8, 0.45); border-radius: 999px; color: #f8fafc; font-size: 0.8rem; font-weight: 700; text-decoration: none; cursor: pointer; font-family: inherit; padding: 7px 16px; position: relative; z-index: 6; pointer-events: auto;">
+            <button type="button" id="lockscreen-admin-login-link" hidden aria-hidden="true" tabindex="-1" onclick="openAdminDirectLogin()" style="display: none !important; visibility: hidden !important; pointer-events: none !important; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border: 1px solid rgba(234, 179, 8, 0.45); border-radius: 999px; color: #f8fafc; font-size: 0.8rem; font-weight: 700; text-decoration: none; cursor: pointer; font-family: inherit; padding: 7px 16px; position: relative; z-index: 6;">
                 Direkt zum Admin-Login
             </button>
             <div class="lock-screen-footer-pill">
@@ -5859,7 +5863,7 @@
                 <span id="scanner-status-badge" style="font-size: 0.65em; background: #dc2626; color: white; padding: 4px 8px; border-radius: 6px;">GESPERRT (Tresor-Scan erforderlich)</span>
             </div>
             <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 16px;">
-                Erfassung für Ausrückungen gemäß ZVR-XXXXXXXXX (Schützenhaus Partenen).
+                Erfassung für Ausrückungen gemäß ZVR-624291509 (Schützenhaus Partenen).
             </p>
 
             <div id="weapon-timeout-notice" role="alert" style="display: none; margin-bottom: 14px; padding: 12px 14px; border-radius: 12px; background: #fef2f2; border: 1.5px solid #dc2626; color: #991b1b; font-size: 0.88em; font-weight: 700; line-height: 1.45; align-items: flex-start; justify-content: space-between; gap: 10px; box-shadow: 0 6px 18px rgba(220, 38, 38, 0.14);">
@@ -7220,21 +7224,21 @@
         </div>
     </div>
 
-    <!-- MASTER-PIN MODAL FÜR ADMIN SYSTEM & SICHERHEIT -->
+    <!-- OBMANN-BESTÄTIGUNG (FIREBASE-PASSWORT) FÜR ADMIN SYSTEM & SICHERHEIT -->
     <div id="master-pin-modal" style="display:none; pointer-events:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.78); backdrop-filter:blur(8px); z-index:999999999; justify-content:center; align-items:center; padding:16px;">
         <div style="background:linear-gradient(155deg, #0f172a, #064e3b); color:#f8fafc; padding:24px; border-radius:22px; max-width:400px; width:100%; box-shadow:0 25px 50px -12px rgba(0,0,0,0.6); border:1.5px solid rgba(255,255,255,0.22);" class="modal-anim">
-            <h3 id="master-pin-modal-title" style="color:#fde68a; font-size:1.12em; font-weight:800; margin-bottom:8px; text-align:center;">🔐 Haupt-Admin Master-PIN</h3>
+            <h3 id="master-pin-modal-title" style="color:#fde68a; font-size:1.12em; font-weight:800; margin-bottom:8px; text-align:center;">🔐 Obmann-Bestätigung</h3>
             <p id="master-pin-modal-desc" style="font-size:0.84em; color:#cbd5e1; text-align:center; margin-bottom:14px; line-height:1.45;">
-                Bitte Master-PIN eingeben, um Vereins-Zugangscode und OneSignal Key zu entsperren.
+                Bitte gib dein aktuelles Firebase-Passwort von Obmann Simon ein, um Vereins-Zugangscode und OneSignal Key zu entsperren.
             </p>
             <form id="master-pin-form" onsubmit="submitMasterPinModal(event)">
                 <div class="form-group" style="margin-bottom:10px;">
-                    <label id="master-pin-label-1" style="color:#cbd5e1;">Master-PIN</label>
-                    <input type="password" id="master-pin-input-1" class="form-control" placeholder="Master-PIN eingeben" required autocomplete="off" style="background:rgba(15,23,42,0.8); color:#f8fafc; border:1.5px solid rgba(255,255,255,0.25); text-align:center; font-weight:800; letter-spacing:3px;">
+                    <label id="master-pin-label-1" style="color:#cbd5e1;">Aktuelles Firebase-Passwort</label>
+                    <input type="password" id="master-pin-input-1" class="form-control" placeholder="Firebase-Passwort eingeben" required autocomplete="current-password" style="background:rgba(15,23,42,0.8); color:#f8fafc; border:1.5px solid rgba(255,255,255,0.25); text-align:center; font-weight:800; letter-spacing:1.5px;">
                 </div>
                 <div id="master-pin-confirm-wrap" class="form-group" style="display:none; margin-bottom:10px;">
-                    <label style="color:#cbd5e1;">Master-PIN bestätigen</label>
-                    <input type="password" id="master-pin-input-2" class="form-control" placeholder="Master-PIN wiederholen" autocomplete="off" style="background:rgba(15,23,42,0.8); color:#f8fafc; border:1.5px solid rgba(255,255,255,0.25); text-align:center; font-weight:800; letter-spacing:3px;">
+                    <label style="color:#cbd5e1;">Passwort bestätigen</label>
+                    <input type="password" id="master-pin-input-2" class="form-control" placeholder="Passwort wiederholen" autocomplete="off" style="background:rgba(15,23,42,0.8); color:#f8fafc; border:1.5px solid rgba(255,255,255,0.25); text-align:center; font-weight:800; letter-spacing:1.5px;">
                 </div>
                 <div id="master-pin-modal-error" style="display:none; margin-bottom:10px; padding:8px 10px; border-radius:10px; background:rgba(220,38,38,0.25); border:1px solid rgba(248,113,113,0.5); color:#fecaca; font-size:0.82em; font-weight:700; text-align:center;"></div>
                 <div style="display:flex; gap:10px; margin-top:12px;">
@@ -19636,9 +19640,6 @@
         let masterSecurityUnlocked = false;
         let loadedClubPinValue = "";
         let loadedOneSignalKeyValue = "";
-        let masterPinModalMode = "verify";
-        let expectedFirestoreMasterPinHash = "";
-        let expectedFirestoreMasterLegacyPlain = false;
 
         function lockSecuritySettingsFields() {
             masterSecurityUnlocked = false;
@@ -19683,6 +19684,10 @@
         }
 
         function unlockSecuritySettingsFields() {
+            if (!isChairmanSimonLoggedIn()) {
+                lockSecuritySettingsFields();
+                return;
+            }
             masterSecurityUnlocked = true;
             const clubPinInput = document.getElementById('admin-club-pin-input');
             const clubPinBtn = document.getElementById('admin-club-pin-save-btn');
@@ -19725,6 +19730,10 @@
         }
 
         function handleSecurityUnlockToggle() {
+            if (!isChairmanSimonLoggedIn()) {
+                lockSecuritySettingsFields();
+                return;
+            }
             if (masterSecurityUnlocked) {
                 lockSecuritySettingsFields();
             } else {
@@ -19747,7 +19756,8 @@
         }
 
         async function openMasterPinModal() {
-            if (!getAdminAuthUser()) return;
+            const user = getAdminAuthUser();
+            if (!isChairmanSimonLoggedIn() || !user || !user.email) return;
 
             const modal = document.getElementById('master-pin-modal');
             const titleEl = document.getElementById('master-pin-modal-title');
@@ -19759,51 +19769,19 @@
             const errEl = document.getElementById('master-pin-modal-error');
             const submitBtn = document.getElementById('master-pin-submit-btn');
 
-            if (input1) input1.value = '';
+            if (input1) {
+                input1.value = '';
+                input1.placeholder = 'Firebase-Passwort eingeben';
+            }
             if (input2) input2.value = '';
             if (errEl) { errEl.style.display = 'none'; errEl.innerText = ''; }
-
-            masterPinModalMode = 'verify';
-            expectedFirestoreMasterPinHash = '';
-            expectedFirestoreMasterLegacyPlain = false;
-
-            try {
-                const secDoc = await db.collection("settings").doc("security").get();
-                const secData = secDoc.exists ? (secDoc.data() || {}) : {};
-                const storedRaw = String(secData.masterPinHash || secData.masterPin || '').trim();
-                if (storedRaw !== '') {
-                    masterPinModalMode = 'verify';
-                    if (isSha256Hex(storedRaw)) {
-                        expectedFirestoreMasterPinHash = storedRaw.toLowerCase();
-                        expectedFirestoreMasterLegacyPlain = false;
-                    } else {
-                        expectedFirestoreMasterPinHash = await sha256Hex(storedRaw);
-                        expectedFirestoreMasterLegacyPlain = true;
-                    }
-                    if (titleEl) titleEl.innerText = '🔐 Haupt-Admin Master-PIN';
-                    if (descEl) descEl.innerText = 'Bitte Master-PIN eingeben, um Vereins-Zugangscode und OneSignal Key zu entsperren.';
-                    if (label1El) label1El.innerText = 'Master-PIN';
-                    if (confirmWrap) confirmWrap.style.display = 'none';
-                    if (submitBtn) submitBtn.innerText = '🔓 Entsperren';
-                } else {
-                    masterPinModalMode = 'setup';
-                    if (titleEl) titleEl.innerText = '🔐 Master-PIN erstmalig festlegen';
-                    if (descEl) descEl.innerText = 'Es wurde noch kein Master-PIN hinterlegt. Lege jetzt einen separaten Master-PIN (min. 4 Zeichen) fest.';
-                    if (label1El) label1El.innerText = 'Neuer Master-PIN';
-                    if (confirmWrap) confirmWrap.style.display = 'block';
-                    if (submitBtn) submitBtn.innerText = '💾 Festlegen & entsperren';
-                }
-            } catch (e) {
-                masterPinModalMode = 'error';
-                if (titleEl) titleEl.innerText = '🔐 Haupt-Admin Master-PIN';
-                if (descEl) descEl.innerText = 'Sicherheitsdaten konnten nicht aus Firestore geladen werden.';
-                if (label1El) label1El.innerText = 'Master-PIN';
-                if (confirmWrap) confirmWrap.style.display = 'none';
-                if (submitBtn) submitBtn.innerText = '🔓 Prüfen';
-                if (errEl) {
-                    errEl.innerText = 'Firestore settings/security konnte nicht gelesen werden.';
-                    errEl.style.display = 'block';
-                }
+            if (titleEl) titleEl.innerText = '🔐 Obmann-Bestätigung';
+            if (descEl) descEl.innerText = 'Bitte gib dein aktuelles Firebase-Passwort von Obmann Simon ein, um Vereins-Zugangscode und OneSignal Key zu entsperren.';
+            if (label1El) label1El.innerText = 'Aktuelles Firebase-Passwort';
+            if (confirmWrap) confirmWrap.style.display = 'none';
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerText = '🔓 Entsperren';
             }
 
             if (modal) {
@@ -19817,14 +19795,11 @@
 
         async function submitMasterPinModal(e) {
             if (e && e.preventDefault) e.preventDefault();
-            if (!getAdminAuthUser()) return;
+            const user = getAdminAuthUser();
             const input1 = document.getElementById('master-pin-input-1');
-            const input2 = document.getElementById('master-pin-input-2');
             const errEl = document.getElementById('master-pin-modal-error');
             const submitBtn = document.getElementById('master-pin-submit-btn');
 
-            const pin1 = input1 ? input1.value.trim() : '';
-            const pin2 = input2 ? input2.value.trim() : '';
             const showErr = (msg) => {
                 if (errEl) {
                     errEl.innerText = msg;
@@ -19833,63 +19808,42 @@
             };
 
             if (errEl) errEl.style.display = 'none';
-            if (!pin1) {
-                showErr('Bitte einen Master-PIN eingeben.');
+            if (!isChairmanSimonLoggedIn() || !user || !user.email) {
+                showErr('Nur für Obmann Simon mit aktiver Firebase-Sitzung verfügbar.');
                 return;
             }
 
-            if (masterPinModalMode === 'setup') {
-                if (pin1.length < 4) {
-                    showErr('Der Master-PIN muss mindestens 4 Zeichen lang sein.');
-                    return;
-                }
-                if (pin1 !== pin2) {
-                    showErr('Die beiden Master-PIN-Eingaben stimmen nicht überein.');
-                    return;
-                }
-                if (submitBtn) submitBtn.disabled = true;
-                try {
-                    const pinHash = await sha256Hex(pin1);
-                    await db.collection("settings").doc("security").set({
-                        masterPin: pinHash,
-                        masterPinHash: pinHash,
-                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }, { merge: true });
-                    expectedFirestoreMasterPinHash = pinHash;
-                    expectedFirestoreMasterLegacyPlain = false;
-                    closeMasterPinModal();
-                    unlockSecuritySettingsFields();
-                } catch (err) {
-                    showErr('Speichern des Master-PIN in Firestore fehlgeschlagen: ' + (err && err.message ? err.message : String(err)));
-                } finally {
-                    if (submitBtn) submitBtn.disabled = false;
-                }
+            const enteredPassword = input1 ? input1.value : '';
+            if (!enteredPassword.trim()) {
+                showErr('Bitte dein aktuelles Firebase-Passwort eingeben.');
+                if (input1) input1.focus();
                 return;
             }
 
-            if (masterPinModalMode === 'verify' && expectedFirestoreMasterPinHash) {
-                const enteredHash = await sha256Hex(pin1);
-                if (enteredHash === expectedFirestoreMasterPinHash) {
-                    if (expectedFirestoreMasterLegacyPlain) {
-                        try {
-                            await db.collection("settings").doc("security").set({
-                                masterPin: enteredHash,
-                                masterPinHash: enteredHash,
-                                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                            }, { merge: true });
-                            expectedFirestoreMasterLegacyPlain = false;
-                        } catch (migErr) {}
-                    }
-                    closeMasterPinModal();
-                    unlockSecuritySettingsFields();
+            if (submitBtn) submitBtn.disabled = true;
+            try {
+                const credential = firebase.auth.EmailAuthProvider.credential(user.email, enteredPassword);
+                await user.reauthenticateWithCredential(credential);
+                closeMasterPinModal();
+                unlockSecuritySettingsFields();
+            } catch (err) {
+                const code = (err && err.code) ? String(err.code) : '';
+                if (code === 'auth/wrong-password' || code === 'auth/invalid-credential' || code === 'auth/invalid-login-credentials') {
+                    showErr('Falsches Firebase-Passwort!');
+                } else if (code === 'auth/too-many-requests') {
+                    showErr('Zu viele Fehlversuche. Bitte kurz warten.');
+                } else if (code === 'auth/network-request-failed') {
+                    showErr('Keine Internetverbindung – Passwort-Prüfung nicht möglich.');
                 } else {
-                    showErr('Falscher Master-PIN!');
-                    if (input1) { input1.value = ''; input1.focus(); }
+                    showErr('Passwort-Bestätigung fehlgeschlagen. Bitte erneut versuchen.');
                 }
-                return;
+                if (input1) {
+                    input1.value = '';
+                    input1.focus();
+                }
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
             }
-
-            showErr('Master-PIN-Prüfung nicht verfügbar – bitte Firestore settings/security prüfen.');
         }
 
         async function loadAdminOneSignalKey() {
@@ -19915,7 +19869,7 @@
             e.preventDefault();
             if (!isChairmanSimonLoggedIn()) return;
             if (!masterSecurityUnlocked) {
-                alert("Dieser Bereich ist geschützt. Bitte zuerst mit dem Haupt-Admin Master-PIN entsperren.");
+                alert("Dieser Bereich ist geschützt. Bitte zuerst mit dem Firebase-Passwort von Obmann Simon entsperren.");
                 return;
             }
             const inputEl = document.getElementById('admin-onesignal-key-input');
