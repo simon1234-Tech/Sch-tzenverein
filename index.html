@@ -4507,7 +4507,8 @@
 
         /* --- GROßES VEREINS-BESTÄTIGUNGS-POPUP (#club-confirm-modal) --- */
         body.club-confirm-open .bottom-nav,
-        body.club-alert-open .bottom-nav {
+        body.club-alert-open .bottom-nav,
+        body.bar-cash-confirm-open .bottom-nav {
             z-index: 1000 !important;
             pointer-events: none !important;
         }
@@ -4611,6 +4612,222 @@
         }
         @media (max-width: 390px) {
             .club-confirm-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* --- BAR-ZAHLUNGS-POPUP MIT WECHSELGELD-RECHNER (#bar-cash-confirm-modal) --- */
+        #bar-cash-confirm-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 10098;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            pointer-events: none;
+            box-sizing: border-box;
+        }
+        #bar-cash-confirm-modal .bar-cash-confirm-card {
+            background: #ffffff;
+            border: 3.5px solid #eab308;
+            border-radius: 26px;
+            max-width: 480px;
+            width: 100%;
+            max-height: 92dvh;
+            overflow-y: auto;
+            padding: 24px 22px;
+            text-align: center;
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55);
+            box-sizing: border-box;
+        }
+        #bar-cash-confirm-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #0f172a;
+            margin: 0 0 6px 0;
+            line-height: 1.25;
+        }
+        #bar-cash-meta {
+            font-size: 0.96rem;
+            color: #475569;
+            margin: 0 0 12px 0;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        #bar-cash-tab-name {
+            display: block;
+            font-size: 1.08rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+        #bar-cash-items-summary {
+            display: block;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #475569;
+            max-height: 76px;
+            overflow-y: auto;
+            line-height: 1.38;
+        }
+        .bar-cash-total-box {
+            background: #f0fdf4;
+            border: 2px solid #86efac;
+            border-radius: 16px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .bar-cash-total-label {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #334155;
+        }
+        #bar-cash-total-amount {
+            font-size: 1.85rem;
+            font-weight: 900;
+            color: #0f172a;
+            line-height: 1.15;
+        }
+        .bar-cash-calc-box {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 18px;
+            padding: 14px;
+            margin: 14px 0 18px 0;
+            box-sizing: border-box;
+        }
+        .bar-cash-calc-label {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        .bar-cash-quick-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .bar-cash-quick-btn {
+            min-height: 44px;
+            border-radius: 12px;
+            background: #ffffff;
+            border: 1.5px solid #94a3b8;
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #0f172a;
+            cursor: pointer;
+            padding: 4px 2px;
+            font-family: inherit;
+            touch-action: manipulation;
+            transition: transform 0.1s ease, background 0.14s ease, border-color 0.14s ease, color 0.14s ease;
+        }
+        .bar-cash-quick-btn:active {
+            transform: scale(0.95);
+        }
+        .bar-cash-quick-btn.is-selected {
+            background: #dcfce7;
+            border-color: #16a34a;
+            color: #15803d;
+        }
+        #bar-cash-given-input {
+            width: 100%;
+            min-height: 48px;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            font-size: 1.15rem;
+            font-weight: 800;
+            text-align: center;
+            color: #0f172a;
+            background: #ffffff;
+            padding: 8px 12px;
+            font-family: inherit;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        #bar-cash-given-input:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+        }
+        #bar-change-output {
+            margin-top: 10px;
+            min-height: 30px;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+        #bar-change-output.is-change {
+            font-size: 1.45rem;
+            font-weight: 900;
+            color: #15803d;
+        }
+        #bar-change-output.is-short {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #dc2626;
+        }
+        #bar-change-output.is-idle {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+        .bar-cash-confirm-actions {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 10px;
+            width: 100%;
+        }
+        #bar-cash-confirm-cancel {
+            min-height: 58px;
+            border-radius: 16px;
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            color: #334155;
+            font-size: 1.08rem;
+            font-weight: 800;
+            cursor: pointer;
+            padding: 10px 12px;
+            font-family: inherit;
+            touch-action: manipulation;
+            transition: transform 0.12s ease, background 0.15s ease;
+        }
+        #bar-cash-confirm-cancel:active {
+            transform: scale(0.97);
+        }
+        #bar-cash-confirm-ok {
+            min-height: 58px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            border: 2px solid #eab308;
+            color: #ffffff;
+            font-size: 1.12rem;
+            font-weight: 900;
+            cursor: pointer;
+            padding: 10px 12px;
+            font-family: inherit;
+            box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35);
+            touch-action: manipulation;
+            transition: transform 0.12s ease, filter 0.15s ease;
+        }
+        #bar-cash-confirm-ok:active {
+            transform: scale(0.97);
+        }
+        @media (max-width: 390px) {
+            .bar-cash-quick-btn {
+                font-size: 0.8rem;
+            }
+            .bar-cash-confirm-actions {
                 grid-template-columns: 1fr;
             }
         }
@@ -6927,6 +7144,37 @@
         </div>
     </div>
 
+    <!-- GROßES BAR-ZAHLUNGS-POPUP MIT WECHSELGELD-RECHNER -->
+    <div id="bar-cash-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="bar-cash-confirm-title" aria-describedby="bar-cash-meta">
+        <div class="bar-cash-confirm-card modal-anim">
+            <h3 id="bar-cash-confirm-title">💵 Bar-Zahlung abschließen</h3>
+            <div id="bar-cash-meta">
+                <span id="bar-cash-tab-name"></span>
+                <span id="bar-cash-items-summary"></span>
+            </div>
+            <div class="bar-cash-total-box">
+                <span class="bar-cash-total-label">Zu zahlen:</span>
+                <strong id="bar-cash-total-amount">€ 0,00</strong>
+            </div>
+            <div class="bar-cash-calc-box">
+                <div class="bar-cash-calc-label">Wechselgeld-Rechner (optional)</div>
+                <div class="bar-cash-quick-grid">
+                    <button type="button" class="bar-cash-quick-btn" data-quick-mode="exact" onclick="setBarCashQuickAmount('exact', this)">Passend</button>
+                    <button type="button" class="bar-cash-quick-btn" data-quick-amount="10" onclick="setBarCashQuickAmount(10, this)">10 €</button>
+                    <button type="button" class="bar-cash-quick-btn" data-quick-amount="20" onclick="setBarCashQuickAmount(20, this)">20 €</button>
+                    <button type="button" class="bar-cash-quick-btn" data-quick-amount="50" onclick="setBarCashQuickAmount(50, this)">50 €</button>
+                    <button type="button" class="bar-cash-quick-btn" data-quick-amount="100" onclick="setBarCashQuickAmount(100, this)">100 €</button>
+                </div>
+                <input type="number" id="bar-cash-given-input" inputmode="decimal" step="0.50" min="0" placeholder="Gegeben in €..." oninput="updateBarCashChangeDisplay()" onchange="updateBarCashChangeDisplay()" aria-label="Gegebener Betrag in Euro">
+                <div id="bar-change-output" class="is-idle" aria-live="polite"></div>
+            </div>
+            <div class="bar-cash-confirm-actions">
+                <button type="button" id="bar-cash-confirm-cancel" onclick="closeBarCashConfirm(false)">✕ Abbrechen</button>
+                <button type="button" id="bar-cash-confirm-ok" onclick="closeBarCashConfirm(true)">✅ Ja, Bar bezahlt</button>
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT LOGIK -->
     <script>
         const __nativeBrowserAlert = (typeof window !== 'undefined' && typeof window.alert === 'function')
@@ -7131,11 +7379,139 @@
             });
         }
 
+        let _barCashConfirmActive = null;
+
+        function _formatEuroAT(val) {
+            const num = Number(val);
+            const safe = Number.isFinite(num) ? Math.round(num * 100) / 100 : 0;
+            return safe.toFixed(2).replace('.', ',');
+        }
+
+        function _clearBarCashQuickSelection() {
+            document.querySelectorAll('#bar-cash-confirm-modal .bar-cash-quick-btn').forEach(btn => {
+                btn.classList.remove('is-selected');
+            });
+        }
+
+        function updateBarCashChangeDisplay(keepQuickSelection = false) {
+            const outputEl = document.getElementById('bar-change-output');
+            const inputEl = document.getElementById('bar-cash-given-input');
+            if (!outputEl || !inputEl) return;
+            if (!keepQuickSelection) {
+                _clearBarCashQuickSelection();
+            }
+            const rawVal = String(inputEl.value == null ? '' : inputEl.value).trim().replace(',', '.');
+            if (!rawVal) {
+                outputEl.className = 'is-idle';
+                outputEl.textContent = 'Gegebenen Betrag antippen oder eingeben';
+                return;
+            }
+            const givenNum = parseFloat(rawVal);
+            if (!Number.isFinite(givenNum) || givenNum < 0) {
+                outputEl.className = 'is-idle';
+                outputEl.textContent = '';
+                return;
+            }
+            const totalAmount = (_barCashConfirmActive && Number.isFinite(_barCashConfirmActive.total))
+                ? _barCashConfirmActive.total
+                : 0;
+            const totalCents = Math.round(totalAmount * 100);
+            const givenCents = Math.round(givenNum * 100);
+            const diffCents = givenCents - totalCents;
+
+            if (diffCents >= 0) {
+                outputEl.className = 'is-change';
+                outputEl.textContent = `Rückgeld: € ${_formatEuroAT(diffCents / 100)}`;
+            } else {
+                outputEl.className = 'is-short';
+                outputEl.textContent = `Es fehlen noch: € ${_formatEuroAT(Math.abs(diffCents) / 100)}`;
+            }
+        }
+
+        function setBarCashQuickAmount(amountOrMode, btnEl) {
+            const inputEl = document.getElementById('bar-cash-given-input');
+            if (!inputEl) return;
+            const totalAmount = (_barCashConfirmActive && Number.isFinite(_barCashConfirmActive.total))
+                ? _barCashConfirmActive.total
+                : 0;
+            const targetAmount = (amountOrMode === 'exact')
+                ? Math.round(totalAmount * 100) / 100
+                : Number(amountOrMode);
+            if (!Number.isFinite(targetAmount)) return;
+            inputEl.value = (amountOrMode === 'exact') ? targetAmount.toFixed(2) : String(targetAmount);
+            _clearBarCashQuickSelection();
+            if (btnEl) btnEl.classList.add('is-selected');
+            updateBarCashChangeDisplay(true);
+        }
+
+        function closeBarCashConfirm(confirmed) {
+            const modal = document.getElementById('bar-cash-confirm-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.style.pointerEvents = 'none';
+            }
+            try { if (document.body) document.body.classList.remove('bar-cash-confirm-open'); } catch (e) {}
+            const current = _barCashConfirmActive;
+            _barCashConfirmActive = null;
+            if (current && typeof current.resolve === 'function') {
+                try { current.resolve(!!confirmed); } catch (e) {}
+            }
+        }
+
+        function openBarCashConfirm({ deckelName = '', itemsArray = [], total = 0 } = {}) {
+            const modal = document.getElementById('bar-cash-confirm-modal');
+            const tabNameEl = document.getElementById('bar-cash-tab-name');
+            const itemsSummaryEl = document.getElementById('bar-cash-items-summary');
+            const totalEl = document.getElementById('bar-cash-total-amount');
+            const givenInput = document.getElementById('bar-cash-given-input');
+            const okBtn = document.getElementById('bar-cash-confirm-ok');
+
+            if (!modal || !tabNameEl || !itemsSummaryEl || !totalEl || !givenInput) {
+                return showClubConfirm({
+                    icon: '💵',
+                    tone: 'cash',
+                    title: 'Bar-Zahlung abschließen',
+                    htmlMessage: `Deckel: <strong>${escapeHtml(deckelName)}</strong><br>Zu zahlen: <strong>€ ${_formatEuroAT(total)}</strong>`,
+                    okText: '✅ Ja, Bar bezahlt',
+                    isDanger: false
+                });
+            }
+
+            if (_barCashConfirmActive && typeof _barCashConfirmActive.resolve === 'function') {
+                try { _barCashConfirmActive.resolve(false); } catch (e) {}
+                _barCashConfirmActive = null;
+            }
+
+            const safeTotal = Number.isFinite(Number(total)) ? Math.round(Number(total) * 100) / 100 : 0;
+            const summaryText = Array.isArray(itemsArray) && itemsArray.length > 0
+                ? itemsArray.map(it => `${Number(it.count) || 0}× ${String(it.name || it.key || '').trim()}`).join(' · ')
+                : '';
+
+            tabNameEl.textContent = String(deckelName || 'Allgemein / Bar');
+            itemsSummaryEl.textContent = summaryText;
+            totalEl.textContent = `€ ${_formatEuroAT(safeTotal)}`;
+            givenInput.value = '';
+            _clearBarCashQuickSelection();
+
+            return new Promise((resolve) => {
+                _barCashConfirmActive = { total: safeTotal, resolve };
+                updateBarCashChangeDisplay();
+                try { if (document.body) document.body.classList.add('bar-cash-confirm-open'); } catch (e) {}
+                modal.style.display = 'flex';
+                modal.style.pointerEvents = 'auto';
+                try { if (okBtn) okBtn.focus(); } catch (e) {}
+            });
+        }
+
         if (typeof window !== 'undefined') {
             window.showClubAlert = showClubAlert;
             window.closeClubAlert = closeClubAlert;
             window.showClubConfirm = showClubConfirm;
             window.closeClubConfirm = closeClubConfirm;
+            window.openBarCashConfirm = openBarCashConfirm;
+            window.closeBarCashConfirm = closeBarCashConfirm;
+            window.setBarCashQuickAmount = setBarCashQuickAmount;
+            window.updateBarCashChangeDisplay = updateBarCashChangeDisplay;
             window.alert = function(msg) {
                 const text = String(msg == null ? '' : msg);
                 const isAccessDenied = /⛔|zugriff verweigert|nur obmann|nur berechtigte|geschützt/i.test(text);
@@ -7152,6 +7528,13 @@
                     if (evt.key === 'Escape' || evt.key === 'Enter') {
                         evt.preventDefault();
                         closeClubAlert();
+                    }
+                    return;
+                }
+                if (_barCashConfirmActive) {
+                    if (evt.key === 'Escape') {
+                        evt.preventDefault();
+                        closeBarCashConfirm(false);
                     }
                     return;
                 }
@@ -14838,16 +15221,10 @@
             const typedCustName = document.getElementById('cust-name') ? document.getElementById('cust-name').value.trim() : '';
             const saleTabName = (activeTab.isDefaultBar && typedCustName) ? typedCustName : activeTab.name;
             const deckelName = String(saleTabName || DEFAULT_BAR_TAB_NAME).trim() || DEFAULT_BAR_TAB_NAME;
-            const gesamtBetragFormatiert = total.toFixed(2).replace('.', ',');
-            const confirmedCash = await showClubConfirm({
-                icon: '💵',
-                tone: 'cash',
-                title: 'Bar-Zahlung abschließen?',
-                htmlMessage: `Deckel / Tisch:<br><strong style="font-size: 1.38rem; color: #0f172a;">${escapeHtml(deckelName)}</strong><br>`
-                    + `<span style="display: inline-block; margin: 10px 0 8px 0; padding: 6px 18px; border-radius: 14px; background: #dcfce7; border: 2px solid #86efac; font-size: 1.58rem; font-weight: 900; color: #15803d;">€ ${gesamtBetragFormatiert}</span><br>`
-                    + `<span style="font-size: 1.06rem; color: #475569;">Als <strong>BAR BEZAHLT</strong> in der Schankkassa speichern und den Deckel schließen?</span>`,
-                okText: '✅ Ja, Bar bezahlt',
-                isDanger: false
+            const confirmedCash = await openBarCashConfirm({
+                deckelName: deckelName,
+                itemsArray: itemsArray,
+                total: total
             });
             if (!confirmedCash) return;
 
@@ -14892,9 +15269,9 @@
                     icon: '✅',
                     tone: 'cash',
                     title: 'Bar-Zahlung gespeichert!',
-                    htmlMessage: `Deckel <strong style="color: #0f172a;">„${escapeHtml(deckelName)}“</strong><br>`
-                        + `<span style="display: inline-block; margin: 10px 0 6px 0; padding: 6px 18px; border-radius: 14px; background: #dcfce7; border: 2px solid #86efac; font-size: 1.52rem; font-weight: 900; color: #15803d;">€ ${amountText}</span><br>`
-                        + `wurde erfolgreich in der Schankkassa verbucht.`
+                    htmlMessage: `<div style="font-size: 1.25rem; line-height: 1.45;">Deckel <strong style="color: #0f172a;">„${escapeHtml(deckelName)}“</strong><br>`
+                        + `<span style="display: inline-block; margin: 10px 0 8px 0; padding: 6px 18px; border-radius: 14px; background: #dcfce7; border: 2px solid #86efac; font-size: 1.55rem; font-weight: 900; color: #15803d;">€ ${amountText}</span><br>`
+                        + `wurde erfolgreich in der Schankkassa verbucht.</div>`
                 });
             } catch (err) {
                 await showClubAlert({
@@ -25219,7 +25596,7 @@
                 }
                 try { updateLockscreenAdminLinkVisibility(); } catch(e) {}
                 try { syncClubPinLockoutState(); } catch(e) {}
-                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'cash-report-preview-modal', 'annual-backup-preview-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'chat-image-lightbox', 'member-name-setup-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'master-pin-modal', 'admin-logout-modal', 'app-update-modal', 'club-status-viewer', 'club-status-upload-modal', 'admin-cash-edit-modal', 'club-alert-modal'].forEach(id => {
+                ['legal-modal', 'invoice-modal', 'weapon-pdf-modal', 'tresor-qr-modal', 'member-app-qr-modal', 'cash-report-preview-modal', 'annual-backup-preview-modal', 'install-help-modal', 'member-help-modal', 'admin-help-modal', 'chat-image-lightbox', 'member-name-setup-modal', 'customConfirm', 'admin-success-modal', 'admin-error-modal', 'master-pin-modal', 'admin-logout-modal', 'app-update-modal', 'club-status-viewer', 'club-status-upload-modal', 'admin-cash-edit-modal', 'club-alert-modal', 'club-confirm-modal', 'bar-cash-confirm-modal'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el && getComputedStyle(el).display === 'none') {
                         el.style.pointerEvents = 'none';
